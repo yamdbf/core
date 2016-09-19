@@ -6,5 +6,5 @@
 # exact purpose; to pull the latest changes)
 while true; do
 	git pull
-	node bot/main --color
+	node src/main --color
 done

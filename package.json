@@ -4,10 +4,10 @@
 	"description": "A scaffold for quickly creating new Discord.js bots in an object-oriented coding style.",
 	"author": "Zackary Campbell <zajrik@gmail.com>",
 	"scripts": {
-		"main": "node bot/main",
+		"main": "node src/main",
 		"update": "git pull"
 	},
-	"main": "bot/main.js",
+	"main": "src/main.js",
 	"dependencies": {
 		"discord.js": "9.2.0",
 		"node-json-db": "*",
