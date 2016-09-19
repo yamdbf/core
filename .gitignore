@@ -1,0 +1,4 @@
+data-store.json
+settings.json
+/out/*
+/node_modules/*
