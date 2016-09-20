@@ -19,22 +19,17 @@ class Bot extends Client
 		this.name = name;
 		this.token = token;
 
-		// Create bot command registry
+		// Create command registry for the bot
 		this.commands = new CommandRegistry(this);
+
+		// Load commands
+		this.LoadCommands();
 
 		// Create an action scheduler for the bot
 		this.scheduler = new Scheduler(this);
 
 		// Initialize a database for the bot
 		this.db = new JsonDB("data-store", true, true);
-
-		// Register commands
-		this.commands.Register(new Command_Help());
-		this.commands.Register(new Command_Uptime());
-		this.commands.Register(new Command_Version());
-
-		// Register admin commands
-		this.commands.Register(new Command_Update());
 
 		// Schedule tasks
 
@@ -110,6 +105,37 @@ class Bot extends Client
 		this.on("error", (e) =>
 		{
 		    this.Say(e.error);
+		});
+	}
+
+	/**
+	 * Load and register all commands. Can be called
+	 * again to reload commands
+	 * @returns {null}
+	 */
+	LoadCommands()
+	{
+		let cmds = new Array();
+		fs.readdir("./src/commands", (err, files) =>
+		{
+			if (err) throw new Error("Failed to load Commands.");
+
+			// Load each command
+			files.forEach( (filename, index) =>
+			{
+				let command = filename.replace(/.js/, "");
+				delete require.cache[require.resolve(`../commands/${command}`)];
+				cmds[index] = require(`../commands/${command}`);
+				this.Say(`Command ${command} loaded.`.green);
+			});
+
+			// Register each command
+			cmds.forEach( (command, index) =>
+			{
+				this.commands.Register(new command(), index);
+			});
+
+			this.Say("Commands registered!");
 		});
 	}
 

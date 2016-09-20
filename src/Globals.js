@@ -12,29 +12,26 @@
 	Bot    = require("./lib/Bot");
 
 	// My lib classes
-	ScheduledTask         = require("./lib/ScheduledTask");
-	Scheduler             = require("./lib/Scheduler");
-	Command               = require("./lib/Command");
-	CommandRegistry       = require("./lib/CommandRegistry");
-
-	// Commands
-	Command_Help       = require("./commands/Help");
-	Command_Uptime     = require("./commands/Uptime");
-	Command_Version    = require("./commands/Version");
-
-	// Admin commands
-	Command_Update = require("./commands/Update");
+	ScheduledTask   = require("./lib/ScheduledTask");
+	Scheduler       = require("./lib/Scheduler");
+	Command         = require("./lib/Command");
+	CommandRegistry = require("./lib/CommandRegistry");
 
 	// Tasks
 
 	// Static classes
-	Time           = require("./lib/Time");
+	Time = require("./lib/Time");
 
-	// Node Modules
-	assert    = require("../node_modules/assert");
-	JsonDB    = require("../node_modules/node-json-db");
-	colors    = require("../node_modules/colors");
-	inspect   = require("../node_modules/util").inspect;
+	// Dependency Node Modules
+	JsonDB = require("../node_modules/node-json-db");
+	colors = require("../node_modules/colors");
+	now    = require("../node_modules/performance-now");
+
+	// Native Node Modules
+	assert  = require("assert");
+	inspect = require("util").inspect;
+	fs      = require("fs");
+	path    = require("path");
 
 
 // End class imports ///////////////////////////////////////////////////////////

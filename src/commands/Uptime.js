@@ -2,7 +2,6 @@ require("../Globals");
 
 /**
  * Command to see the time since the bot was launched
- * Call with /uptime
  * @extends {command}
  */
 class Uptime extends Command

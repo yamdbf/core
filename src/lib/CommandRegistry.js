@@ -4,16 +4,16 @@
  * for what is being done when initializing commands.
  * @extends {Array}
  */
-class CommandRegistry extends Array
+class CommandRegistry
 {
 	/**
 	 * @param {Bot} bot Discord.js client instance
 	 */
 	constructor(bot)
 	{
-		super();
-		this.bot = bot;
-		this.info = {};
+		this.bot      = bot;
+		this.info     = {};
+		this.commands = [];
 
 		this.bot.on("message", (message) =>
 		{
@@ -29,7 +29,7 @@ class CommandRegistry extends Array
 
 			// Check for command matches and execute the
 			// appropriate command action
-			this.forEach( (item) =>
+			this.commands.forEach( (item) =>
 			{
 				if (item instanceof Command)
 				{
@@ -53,12 +53,13 @@ class CommandRegistry extends Array
 	 * command to parent Array, and push command helptext
 	 * fields to the info array for helpdocs
 	 * @param {Command} command Command to be registered
+	 * @param {number} index    The command registry index to place the command
 	 * @returns {null}
 	 */
-	Register(command)
+	Register(command, index)
 	{
 		command.Register(this.bot);
-		this.push(command);
+		this.commands[index] = command;
 		this.info[command.name] =
 		{
 			description: command.description,
