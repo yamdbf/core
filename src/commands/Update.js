@@ -3,7 +3,6 @@ require("../Globals");
 /**
  * Admin command to remotely shut down the bot and pull updates.
  * The bot will automatically restart after updating.
- * Call with /update
  * @extends {command}
  */
 class Update extends Command
@@ -12,6 +11,14 @@ class Update extends Command
 	{
 		super();
 		this.admin = true;
+
+		// Helptext values
+		this.name         = `update`;
+		this.description  = `Shuts down the bot to pull updates`;
+		this.alias        = ``;
+		this.usage        = `${settings.prefix}update`;
+		this.help         = `Update command must be sent as a PM. As long as the bot is launched via the run.sh script it will do a git pull and relaunch the bot.`;
+		this.permsissions = [];
 
 		// Activation command regex
 		this.command = /^update$/;

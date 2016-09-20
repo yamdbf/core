@@ -1,23 +1,19 @@
 require("../Globals");
 
 /**
- * Description
+ * Command to reload commands;
  * @extends {command}
  */
-class CommandName extends Command
+class Reload extends Command
 {
 	constructor()
 	{
 		super();
-		// Admin defaults to false in parent class so the admin property
-		// can safely be removed if the command is not admin only.
-		// Set to true, however, if it is an admin only command.
-		// Helptext values can also be safely removed for admin commands.
-		this.admin = false;
+		this.admin = true;
 
 		// Helptext values
-		this.name         = ``;
-		this.description  = ``;
+		this.name         = `reload`;
+		this.description  = `Reloads commands`;
 		this.alias        = ``;
 		this.usage        = ``;
 		this.help         = ``;
@@ -35,9 +31,16 @@ class CommandName extends Command
 		 */
 		this.action = (message, resolve, reject) =>
 		{
-
+			this.bot.Say("Reloading commands.".yellow);
+			let start = now();
+			this.bot.LoadCommands();
+			message.channel.sendCode("css", `Commands reloaded. (${(now() - start).toFixed(4)}ms)`)
+				.then(message =>
+				{
+					message.delete(3 * 1000);
+				});
 		}
 	}
 }
 
-module.exports = CommandName;
+module.exports = Reload;

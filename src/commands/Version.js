@@ -2,7 +2,6 @@ require("../Globals");
 
 /**
  * Command to have the bot print its current version to the chat
- * Call with /version
  * @extends {command}
  */
 class Version extends Command
