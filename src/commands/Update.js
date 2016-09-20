@@ -17,7 +17,7 @@ class Update extends Command
 		this.description  = `Shuts down the bot to pull updates`;
 		this.alias        = ``;
 		this.usage        = `${settings.prefix}update`;
-		this.help         = `Update command must be sent as a PM. As long as the bot is launched via the run.sh script it will do a git pull and relaunch the bot.`;
+		this.help         = `Update command must be sent as a DM. As long as the bot is launched via the run.sh script it will do a git pull and relaunch the bot.`;
 		this.permsissions = [];
 
 		// Activation command regex

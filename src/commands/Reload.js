@@ -13,9 +13,9 @@ class Reload extends Command
 
 		// Helptext values
 		this.name         = `reload`;
-		this.description  = `Reloads commands`;
+		this.description  = `Reloads commands to incorporate changes`;
 		this.alias        = ``;
-		this.usage        = ``;
+		this.usage        = `${settings.prefix}reload`;
 		this.help         = ``;
 		this.permsissions = [];
 

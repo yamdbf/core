@@ -71,7 +71,7 @@ ${settings.prefix}help <command> will print the helptext for the given command.`
 				// Send helptext, delete after 20 secs
 				message.channel.sendMessage(
 					`\`\`\`xl\nDescription: ${cmd.description}` +
-					`${cmd.perrmissions.length > 0 ? "\nPermissions: " + cmd.permissions.join(", ") : ""}` +
+					`${cmd.permissions.length > 0 ? "\nPermissions: " + cmd.permissions.join(", ") : ""}` +
 					`${cmd.alias ? "\nAlias: " + cmd.alias : ""}` +
 					`\nUsage: ${cmd.usage}\n\n${cmd.help}\n\`\`\``)
 						.then(message =>
