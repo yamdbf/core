@@ -38,27 +38,36 @@ class Bot extends Client
 		// Ready event
 		this.on("ready", () =>
 		{
-			// Message the admin specified in settings.json the update
-			// completed if restarting after an update
+			// Send restart success message if coming online from
+			// a restart via restart command
 			try
 			{
-				var doUpdate = this.db.getData("/doUpdate");
+				var doRestart = this.db.getData("/doRestart");
+				var restartID = this.db.getData("/restartID");
+				var restartTime = this.db.getData("/restartTime");
 			}
 			catch (e)
 			{
-				this.db.push("/doUpdate", false);
-				var doUpdate = this.db.getData("/doUpdate");
+				this.db.push("/doRestart", false);
+				var doRestart = this.db.getData("/doRestart");
+				this.db.push("/restartID", undefined);
+				var restartID = this.db.getData("/restartID");
+				this.db.push("/restartTime", 1);
+				var restartTime = this.db.getData("/restartTime");
 			}
-			if (doUpdate)
+			if (doRestart)
 			{
-				this.Say("Update was completed.");
-				this.db.push("/doUpdate", false);
+				this.Say("Restart completed.");
+				this.db.push("/doRestart", false);
 
-				var admin = this.fetchUser(settings.admin);
-				admin.then( (admin) =>
-				{
-					admin.sendCode("css", "Update completed.");
-				});
+				// Send restart complete message to channel
+				var channel = this.channels.find("id", restartID);
+				channel.sendCode("css", `Restart completed. (${(Time.now() - restartTime) / 1000} secs)`)
+					.then(message =>
+					{
+						// Remove the message after 3 seconds
+						message.delete(3 * 1000);
+					});
 			}
 
 			this.user.setStatus(null, settings.status)
@@ -115,28 +124,35 @@ class Bot extends Client
 	 */
 	LoadCommands()
 	{
+		let start = now();
 		let cmds = new Array();
-		fs.readdir("./src/commands", (err, files) =>
+		let files;
+
+		try
 		{
-			if (err) throw new Error("Failed to load Commands.");
+			files = fs.readdirSync("./src/commands");
+		}
+		catch (e)
+		{
+			throw new Error("Failed to load Commands.");
+		}
 
-			// Load each command
-			files.forEach( (filename, index) =>
-			{
-				let command = filename.replace(/.js/, "");
-				delete require.cache[require.resolve(`../commands/${command}`)];
-				cmds[index] = require(`../commands/${command}`);
-				this.Say(`Command ${command} loaded.`.green);
-			});
-
-			// Register each command
-			cmds.forEach( (command, index) =>
-			{
-				this.commands.Register(new command(), index);
-			});
-
-			this.Say("Commands registered!");
+		// Load each command
+		files.forEach( (filename, index) =>
+		{
+			let command = filename.replace(/.js/, "");
+			delete require.cache[require.resolve(`../commands/${command}`)];
+			cmds[index] = require(`../commands/${command}`);
+			this.Say(`Command ${command} loaded.`.green);
 		});
+
+		// Register each command
+		cmds.forEach( (command, index) =>
+		{
+			this.commands.Register(new command(), index);
+		});
+
+		this.Say(`${this.commands.commands.length} commands loaded and registered! (${(now() - start).toFixed(3)}ms)`);
 	}
 
 	/**

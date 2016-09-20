@@ -6,7 +6,7 @@ bot.Login();
 
 bot.Say("Starting...");
 
-// Receive console input. If command "update" is received
+// Receive console input. If command "restart" is received
 // the bot will exit. Assuming the bot is run through run.sh,
 // which it should be, it will pull the latest updates from
 // the repo and restart the bot
@@ -14,10 +14,10 @@ var readline = require("readline");
 var rl = readline.createInterface(process.stdin, process.stdout);
 rl.on("line", (input) =>
 {
-	if (input == "update")
+	if (input == "restart")
 	{
-		bot.Say("Shutting down for updates.");
-		bot.db.push("/doUpdate", true);
-		setTimeout(() => { process.exit(1); }, 1000);
+		bot.Say("Restarting...".yellow);
+		bot.db.push("/doRestart", true);
+		process.exit();
 	};
 });

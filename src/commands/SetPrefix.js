@@ -16,7 +16,7 @@ class SetPrefix extends Command
 		this.description = `Set command prefix`;
 		this.alias       = `prefix`
 		this.usage       = `${settings.prefix}setprefix <char>`;
-		this.help        = `It's recommended to reload the bot after changing the command prefix to update helptext with the new prefix.`;
+		this.help        = `After setting the command prefix, commands will automatically be reloaded.`;
 		this.permissions = [];
 
 		// Activation command regex
@@ -33,6 +33,17 @@ class SetPrefix extends Command
 		{
 			let char = message.content.match(this.command)[1];
 
+			// Break if no prefix is provided
+			if (!char)
+			{
+				message.channel.sendCode("css", `You must provide a prefix to set.`)
+					.then(message =>
+					{
+						message.delete(5 * 1000);
+					});
+				return;
+			}
+
 			// Set prefix for current session, reload commands
 			// to reflect the changes, and write updated
 			// settings to file
@@ -40,7 +51,6 @@ class SetPrefix extends Command
 
 			this.bot.Say("Set new prefix, reloading commands.".yellow);
 			this.bot.LoadCommands();
-			var fs = require('fs');
 			fs.writeFile("./settings.json", JSON.stringify(settings, null, "\t"), (err) =>
 			{
 				if (err) console.log(err);
@@ -49,9 +59,8 @@ class SetPrefix extends Command
 			// Notify user of changed prefix
 			message.channel.sendCode("css", `Command prefix set to "${char}"`).then(msg =>
 			{
-				msg.delete(3 * 1000);
-			})
-
+				msg.delete(5 * 1000);
+			});
 		}
 	}
 }
