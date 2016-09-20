@@ -3,6 +3,9 @@ require("../Globals");
 /**
  * Admin command to restart the bot. Updates will be pulled
  * from the repo if available (assuming launched from run.sh)
+ * Used to incorporate changes to files outside of commands
+ * folder. If only commands were updated, the reload command
+ * can be used instead to reload commands without restarting
  * @extends {command}
  */
 class Restart extends Command

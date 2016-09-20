@@ -34,6 +34,14 @@ class CommandRegistry
 			{
 				if (item instanceof Command && command.match(item.command))
 				{
+					// Break on admin commands if user is not in settings.admin list
+					// This is for commands that should only be executed by those in control
+					// of bot operations. For commands intended for server administrators
+					// the "ADMINSTRATOR" permission should be used in the permissions array
+					// property for the command rather than the admin boolean property
+					if (settings.admin.filter(admin =>
+						message.author.id == admin).length == 0) return;
+
 					// Check permissions
 					if (item.permissions.length > 0)
 					{
