@@ -38,27 +38,36 @@ class Bot extends Client
 		// Ready event
 		this.on("ready", () =>
 		{
-			// Message the admin specified in settings.json the update
-			// completed if restarting after an update
+			// Send restart success message if coming online from
+			// a restart via restart command
 			try
 			{
-				var doUpdate = this.db.getData("/doUpdate");
+				var doRestart = this.db.getData("/doRestart");
+				var restartID = this.db.getData("/restartID");
+				var restartTime = this.db.getData("/restartTime");
 			}
 			catch (e)
 			{
-				this.db.push("/doUpdate", false);
-				var doUpdate = this.db.getData("/doUpdate");
+				this.db.push("/doRestart", false);
+				var doRestart = this.db.getData("/doRestart");
+				this.db.push("/restartID", undefined);
+				var restartID = this.db.getData("/restartID");
+				this.db.push("/restartTime", 1);
+				var restartTime = this.db.getData("/restartTime");
 			}
-			if (doUpdate)
+			if (doRestart)
 			{
-				this.Say("Update was completed.");
-				this.db.push("/doUpdate", false);
+				this.Say("Restart completed.");
+				this.db.push("/doRestart", false);
 
-				var admin = this.fetchUser(settings.admin);
-				admin.then( (admin) =>
-				{
-					admin.sendCode("css", "Update completed.");
-				});
+				// Send restart complete message to channel
+				var channel = this.channels.find("id", restartID);
+				channel.sendCode("css", `Selfbot restart completed. (${(Time.now() - restartTime) / 1000} secs)`)
+					.then(message =>
+					{
+						// Remove the message after 3 seconds
+						message.delete(3 * 1000);
+					});
 			}
 
 			this.user.setStatus(null, settings.status)
