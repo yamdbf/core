@@ -143,7 +143,7 @@ class Bot extends Client
 			this.commands.Register(new command(), index);
 		});
 
-		this.Say(`Commands registered! (${(now() - start).toFixed(4)}ms)`);
+		this.Say(`Commands loaded and registered! (${(now() - start).toFixed(4)}ms)`);
 	}
 
 	/**

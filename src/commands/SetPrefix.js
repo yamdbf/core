@@ -33,6 +33,17 @@ class SetPrefix extends Command
 		{
 			let char = message.content.match(this.command)[1];
 
+			// Break if no prefix is provided
+			if (!char)
+			{
+				message.channel.sendCode("css", `You must provide a prefix to set.`)
+					.then(message =>
+					{
+						message.delete(5 * 1000);
+					});
+				return;
+			}
+
 			// Set prefix for current session, reload commands
 			// to reflect the changes, and write updated
 			// settings to file
@@ -49,9 +60,8 @@ class SetPrefix extends Command
 			// Notify user of changed prefix
 			message.channel.sendCode("css", `Command prefix set to "${char}"`).then(msg =>
 			{
-				msg.delete(3 * 1000);
-			})
-
+				msg.delete(5 * 1000);
+			});
 		}
 	}
 }

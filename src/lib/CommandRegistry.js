@@ -28,13 +28,41 @@ class CommandRegistry
 			message.content = command;
 
 			// Check for command matches and execute the
-			// appropriate command action
+			// appropriate command if the user has valid
+			// permissions
 			this.commands.forEach( (item) =>
 			{
 				if (item instanceof Command)
 				{
 					if (command.match(item.command))
 					{
+						// Check permissions
+						if (item.permissions.length > 0)
+						{
+							let missingPermissions = new Array();
+							item.permissions.forEach( (permission) =>
+							{
+								if (!message.channel.permissionsFor(message.author).hasPermission(permission))
+									missingPermissions.push(permission);
+							});
+
+							// Missing permissions, break
+							if (missingPermissions.length > 0)
+							{
+								message.channel.sendMessage(
+									`**You're missing the following permission` +
+									`${missingPermissions.length > 1 ? "s" : ""} ` +
+									`for that command:**\n\`\`\`css\n` +
+									`${missingPermissions.join(", ")}\n\`\`\``)
+										.then(message =>
+										{
+											message.delete(5 * 1000);
+										});
+								return;
+							}
+						}
+
+						// Execute command action
 						item.DoAction(message).then( (result) =>
 						{
 							this.bot.Say(result);
