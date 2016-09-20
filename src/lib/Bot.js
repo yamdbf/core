@@ -62,7 +62,7 @@ class Bot extends Client
 
 				// Send restart complete message to channel
 				var channel = this.channels.find("id", restartID);
-				channel.sendCode("css", `Selfbot restart completed. (${(Time.now() - restartTime) / 1000} secs)`)
+				channel.sendCode("css", `Restart completed. (${(Time.now() - restartTime) / 1000} secs)`)
 					.then(message =>
 					{
 						// Remove the message after 3 seconds
