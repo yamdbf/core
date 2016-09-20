@@ -115,28 +115,35 @@ class Bot extends Client
 	 */
 	LoadCommands()
 	{
+		let start = now();
 		let cmds = new Array();
-		fs.readdir("./src/commands", (err, files) =>
+		let files;
+
+		try
 		{
-			if (err) throw new Error("Failed to load Commands.");
+			files = fs.readdirSync("./src/commands");
+		}
+		catch (e)
+		{
+			throw new Error("Failed to load Commands.");
+		}
 
-			// Load each command
-			files.forEach( (filename, index) =>
-			{
-				let command = filename.replace(/.js/, "");
-				delete require.cache[require.resolve(`../commands/${command}`)];
-				cmds[index] = require(`../commands/${command}`);
-				this.Say(`Command ${command} loaded.`.green);
-			});
-
-			// Register each command
-			cmds.forEach( (command, index) =>
-			{
-				this.commands.Register(new command(), index);
-			});
-
-			this.Say("Commands registered!");
+		// Load each command
+		files.forEach( (filename, index) =>
+		{
+			let command = filename.replace(/.js/, "");
+			delete require.cache[require.resolve(`../commands/${command}`)];
+			cmds[index] = require(`../commands/${command}`);
+			this.Say(`Command ${command} loaded.`.green);
 		});
+
+		// Register each command
+		cmds.forEach( (command, index) =>
+		{
+			this.commands.Register(new command(), index);
+		});
+
+		this.Say(`Commands registered! (${(now() - start).toFixed(4)}ms)`);
 	}
 
 	/**
