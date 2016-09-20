@@ -16,7 +16,7 @@ class SetPrefix extends Command
 		this.description = `Set command prefix`;
 		this.alias       = `prefix`
 		this.usage       = `${settings.prefix}setprefix <char>`;
-		this.help        = `It's recommended to reload the bot after changing the command prefix to update helptext with the new prefix.`;
+		this.help        = `After setting the command prefix, commands will automatically be reloaded.`;
 		this.permissions = [];
 
 		// Activation command regex
@@ -51,7 +51,6 @@ class SetPrefix extends Command
 
 			this.bot.Say("Set new prefix, reloading commands.".yellow);
 			this.bot.LoadCommands();
-			var fs = require('fs');
 			fs.writeFile("./settings.json", JSON.stringify(settings, null, "\t"), (err) =>
 			{
 				if (err) console.log(err);
