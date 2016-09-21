@@ -1,8 +1,8 @@
-# botlib-base
-A Discord.js-based Discord Bot library to be used as a base for quick bot development.
+# botframework-base
+A Discord.js-based Discord Bot framework to be used as a base for quick bot development.
 
 
-This repo contains a fully-functioning Discord Bot to use as a base for new bots. 
+This repo contains a fully-functioning Discord Bot to use as a base for new bots.
 
 
 # Getting started

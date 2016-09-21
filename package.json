@@ -1,7 +1,7 @@
 {
-	"name": "botlib-demo",
+	"name": "botframework-demo",
 	"version": "1.2.1",
-	"description": "A scaffold for quickly creating new Discord.js bots in an object-oriented coding style.",
+	"description": "A framework for quickly creating new Discord.js bots.",
 	"author": "Zackary Campbell <zajrik@gmail.com>",
 	"scripts": {
 		"main": "node src/main",
