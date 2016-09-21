@@ -28,7 +28,7 @@ class ScheduledTask
 		// Assert valid ScheduledTask properties
 		let name = this.constructor.name;
 		assert(this.interval, `SheduledTask#${name}.command: expected integer, got: ${typeof this.interval}`);
-		// assert(Number.isInteger(this.interval), `SheduledTask#${name}.command: expected integer, got: ${typeof this.interval}`);
+		assert(Number.isInteger(this.interval), `SheduledTask#${name}.command: expected integer, got: ${typeof this.interval}`);
 		assert(this.task, `SheduledTask#${name}.task: expected function, got: ${typeof this.task}`);
 		assert(this.task instanceof Function, `SheduledTask#${name}.task: expected function, got: ${typeof this.task}`);
 

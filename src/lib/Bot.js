@@ -186,7 +186,6 @@ class Bot extends Client
 		files.forEach( (filename, index) =>
 		{
 			let task = filename.replace(/.js/, "");
-			delete require.cache[require.resolve(`../tasks/${task}`)];
 			tasks[index] = require(`../tasks/${task}`);
 			this.Say(`Task ${task} loaded.`.green);
 		});
