@@ -50,8 +50,6 @@ class Command
 	 */
 	Register(bot)
 	{
-		this.bot = bot;
-
 		// Assert valid Command properties
 		let name = this.constructor.name;
 		assert(this.command, `Command#${name}.command: expected regex, got: ${typeof this.command}`);
@@ -74,6 +72,8 @@ class Command
 				}
 			})
 		}
+
+		this.bot = bot;
 	}
 
 	/**

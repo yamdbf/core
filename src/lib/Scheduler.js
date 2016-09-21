@@ -1,17 +1,17 @@
 /**
- * An Array wrapper that handles registering ScheduledTask tasks and
- * passing the bot instance to them
+ * Used for initializing ScheduledTasks and storing them
+ * for later access
  * @extends {Array}
  */
-class Scheduler extends Array
+class Scheduler
 {
 	/**
 	 * @param {Bot} bot Discord.js Client instance
 	 */
 	constructor(bot)
 	{
-		super();
 		this.bot = bot;
+		this.tasks = [];
 	}
 
 	/**
@@ -20,10 +20,10 @@ class Scheduler extends Array
 	 * @param {ScheduledTask} task Task to be scheduled
 	 * @returns {null}
 	 */
-	Schedule(task)
+	Schedule(task, index)
 	{
 		task.Register(this.bot);
-		this.push(task);
+		this.tasks[index] = task;
 	}
 }
 
