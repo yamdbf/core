@@ -46,7 +46,6 @@ colors.setTheme(
 });
 
 // Add method to capitalize every word in a string to String prototype
-// Use for capitalizing item names to match warframe.market standards
 String.prototype.toTitleCase = function()
 {
 	return this.replace(/([^\W_]+[^\s-]*) */g, (text) =>
