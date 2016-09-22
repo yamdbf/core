@@ -173,7 +173,7 @@ class Bot extends Client
 				this.commands.Register(new command(), index);
 			});
 
-			this.Say(`${modules.length.toString().cyan} module${modules.length > 1 ? "s" : ""},` +
+			this.Say(`${modules.length.toString().cyan} module${modules.length > 1 ? "s" : ""}, ` +
 				`${cmds.length.toString().cyan} commands loaded and registered! ` +
 				`(${(now() - start).toFixed(3).toString().cyan}ms)`);
 
