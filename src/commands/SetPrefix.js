@@ -1,4 +1,4 @@
-require("../Globals");
+require(Globals);
 
 /**
  * Command to set the prefix for the bot

@@ -1,4 +1,4 @@
-require("../Globals");
+require(Globals);
 
 /**
  * Admin command to restart the bot. Updates will be pulled

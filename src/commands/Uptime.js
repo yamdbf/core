@@ -1,4 +1,4 @@
-require("../Globals");
+require(Globals);
 
 /**
  * Command to see the time since the bot was launched

@@ -1,4 +1,4 @@
-require("../Globals");
+require(Globals);
 
 /**
  * Extend the Discord.js Client class to provide a wrapper for the old

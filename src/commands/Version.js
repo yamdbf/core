@@ -1,4 +1,4 @@
-require("../Globals");
+require(Globals);
 
 /**
  * Command to have the bot print its current version to the chat

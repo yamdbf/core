@@ -1,4 +1,4 @@
-require("../Globals");
+require(Globals);
 
 /**
  * Command to reload commands;

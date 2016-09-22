@@ -1,4 +1,5 @@
-require("./Globals");
+global.Globals = `${__dirname}\\Globals`;
+require(Globals);
 
 // Initialize bot and log in
 const bot = new Bot(settings.name, settings.token);
