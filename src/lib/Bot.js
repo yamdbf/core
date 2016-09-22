@@ -19,8 +19,11 @@ class Bot extends Client
 		this.name = name;
 		this.token = token;
 
+		// Initialize a database for the bot
+		this.db = new JsonDB("data-store", true, true);
+
 		// Create command registry for the bot
-		this.commands = new CommandRegistry(this);
+		this.commands = new CommandManager(this);
 
 		// Load commands
 		this.LoadCommands();
@@ -30,9 +33,6 @@ class Bot extends Client
 
 		// Load tasks
 		this.LoadTasks();
-
-		// Initialize a database for the bot
-		this.db = new JsonDB("data-store", true, true);
 
 		// Schedule tasks
 
@@ -129,6 +129,18 @@ class Bot extends Client
 	LoadCommands(callback)
 	{
 		let start = now();
+		let modules = GetDirs("./src/commands");
+
+		// Get currently disabled modules
+		try
+		{
+			var disabledModules = this.db.getData("/disabledModules");
+		}
+		catch (e)
+		{
+			this.db.push("/disabledModules", [], true);
+			var disabledModules = this.db.getData("/disabledModules");
+		}
 
 		glob("./src/commands/**/*.js", (err, filenames) =>
 		{
@@ -140,9 +152,15 @@ class Bot extends Client
 			// No commands to load, break
 			if (files.length < 1) return;
 
+			// Remove disabled modules from commands to load
+			files = files.filter(filename =>
+				disabledModules.filter(dm =>
+					filename.includes(dm + "/")).length == 0);
+
 			// Load each command
 			files.forEach( (filename, index) =>
 			{
+				// Load command and push to cmds
 				let command = filename.replace(/.js/, "");
 				delete require.cache[require.resolve(`../commands/${command}`)];
 				cmds[index] = require(`../commands/${command}`);
@@ -152,10 +170,12 @@ class Bot extends Client
 			// Register each command
 			cmds.forEach( (command, index) =>
 			{
-				this.commands.Register(new command(), index);
+					this.commands.Register(new command(), index);
 			});
 
-			this.Say(`${this.commands.commands.length} commands loaded and registered! (${(now() - start).toFixed(3)}ms)`);
+			this.Say(`${modules.length.toString().cyan} module${modules.length > 1 ? "s" : ""},` +
+				`${cmds.length.toString().cyan} commands loaded and registered! ` +
+				`(${(now() - start).toFixed(3).toString().cyan}ms)`);
 
 			if (callback) callback();
 		});
@@ -200,7 +220,8 @@ class Bot extends Client
 				this.scheduler.Schedule(new task(), index);
 			});
 
-			this.Say(`${this.scheduler.tasks.length} tasks loaded and registered! (${(now() - start).toFixed(3)}ms)`);
+			this.Say(`${this.scheduler.tasks.length.toString().cyan} tasks loaded ` +
+				`and registered! (${(now() - start).toFixed(3).toString().cyan}ms)`);
 		});
 
 		this.tasksLoaded = true;

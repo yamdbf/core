@@ -15,7 +15,7 @@
 	ScheduledTask   = require("./lib/ScheduledTask");
 	Scheduler       = require("./lib/Scheduler");
 	Command         = require("./lib/Command");
-	CommandRegistry = require("./lib/CommandRegistry");
+	CommandManager = require("./lib/CommandManager");
 
 	// Tasks
 
@@ -60,3 +60,18 @@ Pad = (text, length) =>
 {
 	return text + ' '.repeat(length - text.length);
 }
+
+// get all directories within a directory
+GetDirs = (dir) =>
+{
+    var files = fs.readdirSync(dir);
+    var list = new Array();
+    files.forEach(function(file)
+    {
+        if (fs.statSync(dir + '/' + file).isDirectory())
+        {
+            list.push(file);
+        }
+    });
+    return list;
+};

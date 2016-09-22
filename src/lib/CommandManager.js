@@ -4,7 +4,7 @@
  * for what is being done when initializing commands.
  * @extends {Array}
  */
-class CommandRegistry
+class CommandManager
 {
 	/**
 	 * @param {Bot} bot Discord.js client instance
@@ -110,4 +110,4 @@ class CommandRegistry
 	}
 }
 
-module.exports = CommandRegistry;
+module.exports = CommandManager;
