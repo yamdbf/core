@@ -17,14 +17,20 @@ class CommandRegistry
 
 		this.bot.on("message", (message) =>
 		{
+			// Check if bot was mentioned
+			let botMention = message.mentions.users.array().length > 0 &&
+				message.mentions.users.first().id == this.bot.user.id;
+
 			// Not a command, break
-			if (message.content[0] != settings.prefix) return;
+			if (message.content[0] != settings.prefix && !botMention) return;
 
 			// Prevent bot messages triggering commands
 			if (message.author.bot) return;
 
-			// Get everything after prefex from command
-			let command = message.content.slice(settings.prefix.length);
+			// Get everything after mention/prefix from command
+			let command;
+			if (botMention) command = message.content.replace(/\<\@\d+\>/, "").trim();
+			else command = message.content.slice(settings.prefix.length).trim();
 			message.content = command;
 
 			// Check for command matches and execute the
