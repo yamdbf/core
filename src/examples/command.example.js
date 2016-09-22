@@ -24,7 +24,7 @@ class CommandName extends Command
 		this.permsissions = [];
 
 		// Activation command regex
-		this.command = /^reload$/;
+		this.command = /^command$/;
 
 		/**
 		 * Action to take when the command is received

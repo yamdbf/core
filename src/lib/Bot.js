@@ -133,12 +133,16 @@ class Bot extends Client
 
 		try
 		{
-			files = fs.readdirSync("./src/commands");
+			files = GetFiles("./src/commands");
+
 		}
 		catch (e)
 		{
-			throw new Error("Failed to load Commands.");
+			throw new Error("Failed to load commands");
 		}
+
+		// No commands to load, break
+		if (files.length < 1) return;
 
 		// Load each command
 		files.forEach( (filename, index) =>
@@ -181,6 +185,9 @@ class Bot extends Client
 		{
 			throw new Error("Failed to load Tasks.");
 		}
+
+		// No tasks to load, break
+		if (files.length < 1) return;
 
 		// Load each task
 		files.forEach( (filename, index) =>
