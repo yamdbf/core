@@ -121,8 +121,8 @@ class Bot extends Client
 	}
 
 	/**
-	 * Load and register all commands. Can be called
-	 * again to reload commands
+	 * Load and register all command modules and commands.
+	 * Can be called again to reload commands
 	 * @param {method} callback callback method to be executed on completion
 	 * @returns {null}
 	 */
@@ -170,7 +170,7 @@ class Bot extends Client
 			// Register each command
 			cmds.forEach( (command, index) =>
 			{
-					this.commands.Register(new command(), index);
+				this.commands.Register(new command(), index);
 			});
 
 			this.Say(`${modules.length.toString().cyan} module${modules.length > 1 ? "s" : ""},` +

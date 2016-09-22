@@ -15,7 +15,7 @@
 	ScheduledTask   = require("./lib/ScheduledTask");
 	Scheduler       = require("./lib/Scheduler");
 	Command         = require("./lib/Command");
-	CommandManager = require("./lib/CommandManager");
+	CommandManager  = require("./lib/CommandManager");
 
 	// Tasks
 

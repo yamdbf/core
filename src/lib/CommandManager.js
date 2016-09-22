@@ -1,8 +1,6 @@
 /**
- * An array wrapper for initializing commands without having to create
- * individual variables for each command. This provides a clearer syntax
- * for what is being done when initializing commands.
- * @extends {Array}
+ * Registers commands and dispatches command calls to the
+ * appropriate command classes
  */
 class CommandManager
 {
