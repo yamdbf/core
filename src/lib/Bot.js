@@ -130,6 +130,7 @@ class Bot extends Client
 	{
 		let start = now();
 		let modules = GetDirs("./src/commands");
+		this.commands.info = {};
 
 		// Get currently disabled modules
 		try

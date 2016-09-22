@@ -89,6 +89,7 @@ class DisableModule extends Command
 				.then(message => { message.delete(3 * 1000) });
 
 			// Reload commands
+			this.bot.Say("Reloading commands.".yellow);
 			this.bot.LoadCommands();
 		}
 	}
