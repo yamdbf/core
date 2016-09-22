@@ -1,6 +1,6 @@
 {
 	"name": "botframework-demo",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"description": "A framework for quickly creating new Discord.js bots.",
 	"author": "Zackary Campbell <zajrik@gmail.com>",
 	"scripts": {
