@@ -33,12 +33,14 @@ class Reload extends Command
 		{
 			this.bot.Say("Reloading commands.".yellow);
 			let start = now();
-			this.bot.LoadCommands();
-			message.channel.sendCode("css", `Commands reloaded. (${(now() - start).toFixed(4)}ms)`)
-				.then(message =>
-				{
-					message.delete(3 * 1000);
-				});
+			this.bot.LoadCommands( () =>
+			{
+				message.channel.sendCode("css", `Commands reloaded. (${(now() - start).toFixed(4)}ms)`)
+					.then(message =>
+					{
+						message.delete(3 * 1000);
+					});
+			});
 		}
 	}
 }

@@ -23,6 +23,7 @@
 	Time = require("./lib/Time");
 
 	// Dependency Node Modules
+	glob   = require("../node_modules/glob");
 	JsonDB = require("../node_modules/node-json-db");
 	colors = require("../node_modules/colors");
 	now    = require("../node_modules/performance-now");
@@ -60,26 +61,3 @@ Pad = (text, length) =>
 {
 	return text + ' '.repeat(length - text.length);
 }
-
-// Get filenames in a directory with subdirectories up to 1-deep
-// Anything deeper is unecessary anyway.
-GetFiles = (dir, list, subdir) =>
-{
-	var files = fs.readdirSync(dir);
-	var list = list || new Array();
-	var subdir = subdir || "";
-	files.forEach(function(file)
-	{
-		if (fs.statSync(dir + '/' + file).isDirectory())
-		{
-			subdir = `${file}/`;
-			list = GetFiles(dir + '/' + file, list, subdir);
-			subdir = "";
-		}
-		else
-		{
-			list.push(subdir + file);
-		}
-	});
-	return list;
-};

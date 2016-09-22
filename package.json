@@ -12,7 +12,8 @@
 		"discord.js": "9.2.0",
 		"node-json-db": "*",
 		"colors": "*",
-		"performance-now": "*"
+		"performance-now": "*",
+		"glob": "*"
 	},
 	"private": true
 }

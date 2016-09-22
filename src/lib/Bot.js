@@ -123,49 +123,49 @@ class Bot extends Client
 	/**
 	 * Load and register all commands. Can be called
 	 * again to reload commands
+	 * @param {method} callback callback method to be executed on completion
 	 * @returns {null}
 	 */
-	LoadCommands()
+	LoadCommands(callback)
 	{
 		let start = now();
-		let cmds = new Array();
-		let files;
 
-		try
+		glob("./src/commands/**/*.js", (err, filenames) =>
 		{
-			files = GetFiles("./src/commands");
+			if (err) throw new Error("Failed to load commands.");
 
-		}
-		catch (e)
-		{
-			throw new Error("Failed to load commands");
-		}
+			let cmds = new Array();
+			let files = filenames.map(file => file.replace("./src/commands/", ""));
 
-		// No commands to load, break
-		if (files.length < 1) return;
+			// No commands to load, break
+			if (files.length < 1) return;
 
-		// Load each command
-		files.forEach( (filename, index) =>
-		{
-			let command = filename.replace(/.js/, "");
-			delete require.cache[require.resolve(`../commands/${command}`)];
-			cmds[index] = require(`../commands/${command}`);
-			this.Say(`Command ${command} loaded.`.green);
+			// Load each command
+			files.forEach( (filename, index) =>
+			{
+				let command = filename.replace(/.js/, "");
+				delete require.cache[require.resolve(`../commands/${command}`)];
+				cmds[index] = require(`../commands/${command}`);
+				this.Say(`Command ${command} loaded.`.green);
+			});
+
+			// Register each command
+			cmds.forEach( (command, index) =>
+			{
+				this.commands.Register(new command(), index);
+			});
+
+			this.Say(`${this.commands.commands.length} commands loaded and registered! (${(now() - start).toFixed(3)}ms)`);
+
+			if (callback) callback();
 		});
-
-		// Register each command
-		cmds.forEach( (command, index) =>
-		{
-			this.commands.Register(new command(), index);
-		});
-
-		this.Say(`${this.commands.commands.length} commands loaded and registered! (${(now() - start).toFixed(3)}ms)`);
 	}
 
 	/**
 	 * Load and register all ScheduledTask classes. Not meant to be run
 	 * more than once as ScheduledTasks will continue to run asynchronously
 	 * and reloading tasks will only spawn more instances of the tasks
+	 * @param {method} callback callback method to be executed on completion
 	 * @returns {null}
 	 */
 	LoadTasks()
@@ -174,36 +174,34 @@ class Bot extends Client
 		if (this.tasksLoaded) return;
 
 		let start = now();
-		let tasks = new Array();
-		let files;
 
-		try
+		glob("./src/tasks/**/*.js", (err, filenames) =>
 		{
-			files = fs.readdirSync("./src/tasks");
-		}
-		catch (e)
-		{
-			throw new Error("Failed to load Tasks.");
-		}
+			if (err) throw new Error("Failed to load tasks.");
 
-		// No tasks to load, break
-		if (files.length < 1) return;
+			let tasks = new Array();
+			let files = filenames.map(file => file.replace("./src/tasks/", ""));
 
-		// Load each task
-		files.forEach( (filename, index) =>
-		{
-			let task = filename.replace(/.js/, "");
-			tasks[index] = require(`../tasks/${task}`);
-			this.Say(`Task ${task} loaded.`.green);
+			// No tasks to load, break
+			if (files.length < 1) return;
+
+			// Load each task
+			files.forEach( (filename, index) =>
+			{
+				let task = filename.replace(/.js/, "");
+				delete require.cache[require.resolve(`../tasks/${task}`)];
+				tasks[index] = require(`../tasks/${task}`);
+				this.Say(`Task ${task} loaded.`.green);
+			});
+
+			// Schedule each task
+			tasks.forEach( (task, index) =>
+			{
+				this.scheduler.Schedule(new task(), index);
+			});
+
+			this.Say(`${this.scheduler.tasks.length} tasks loaded and registered! (${(now() - start).toFixed(3)}ms)`);
 		});
-
-		// Schedule each task
-		tasks.forEach( (task, index) =>
-		{
-			this.scheduler.Schedule(new task(), index);
-		});
-
-		this.Say(`${this.scheduler.tasks.length} tasks loaded and registered! (${(now() - start).toFixed(3)}ms)`);
 
 		this.tasksLoaded = true;
 	}

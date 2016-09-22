@@ -1,3 +1,5 @@
+require(Globals);
+
 /**
  * Description
  * @extends {ScheduledTask}
