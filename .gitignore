@@ -1,0 +1,7 @@
+data-store.json
+settings.json
+/out/*
+/node_modules/*
+/bin/*
+guild-settings.json
+bot-storage.json
