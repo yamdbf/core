@@ -4,6 +4,8 @@
 import { Client } from 'discord.js';
 import LocalStorage from '../storage/LocalStorage';
 import GuildStorageLoader from '../storage/GuildStorageLoader';
+import CommandLoader from '../command/CommandLoader';
+import CommandRegistry from '../command/CommandRegistry';
 
 export default class Bot extends Client
 {
@@ -23,6 +25,9 @@ export default class Bot extends Client
 
 		this.guildSettingStorage = new LocalStorage('guild-settings');
 		this.guildStorages = new GuildStorageLoader();
+
+		this.commandLoader = new CommandLoader(this);
+		this.commands = new CommandRegistry();
 	}
 
 	// Login and create necessary event listeners
@@ -35,6 +40,7 @@ export default class Bot extends Client
 			console.log('Ready'); // eslint-disable-line no-console
 			this.user.setStatus(null, this.statusText);
 			this.guildStorages.load(this, this.guildSettingStorage);
+			this.commandLoader.loadCommands();
 		});
 
 		this.on('guildCreate', () =>

@@ -2,7 +2,7 @@
     "name": "botframework-base",
     "version": "2.0.0",
     "description": "A framework for quickly creating new Discord.js bots.",
-    "main": "index.js",
+    "main": "src/main.js",
     "scripts": {
         "build": "gulp build",
         "clean": "gulp clean",
