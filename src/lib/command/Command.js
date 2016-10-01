@@ -21,7 +21,7 @@ export default class Command
 			{
 				try
 				{
-					info.bot.resolver.resolvePermission(perm);
+					bot.resolver.resolvePermission(perm);
 				}
 				catch (err)
 				{
@@ -44,9 +44,6 @@ export default class Command
 		this.action = this.action || null;
 	}
 
-	// get command() { return this._command; }
-	// get action() { return this._action; }
-
 	async doAction(message)
 	{
 		this.action(message);
@@ -59,7 +56,7 @@ export default class Command
 		let name = this.constructor.name;
 		if (!this.command) throw new Error(`Command#${name}.command: expected RegExp, got: ${typeof this.command}`);
 		if (this.command.constructor.name !== 'RegExp') throw new Error(`Command#${name}.command: expected RegExp, got: ${typeof this.command}`);
-		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${this.action}`);
+		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 		if (!this.action instanceof Function) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 	}
 }

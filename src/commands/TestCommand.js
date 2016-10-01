@@ -13,7 +13,8 @@ export default class TestCommand extends Command
 			description: 'a test command',
 			usage: `<prefix>test`,
 			group: 'test',
-			command: /test/
+			permissions: ['ADMINISTRATOR'],
+			command: /^test$/
 		});
 	}
 

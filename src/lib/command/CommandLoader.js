@@ -18,7 +18,7 @@ export default class CommandLoader
 	{
 		let cmds = [];
 		let commandFiles = [];
-		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
+		commandFiles.push(...glob.sync(`${path.join(__dirname, './basecommands')}/**/*.js`));
 		commandFiles.push(...glob.sync(`${this.bot.commandsDir}/**/*.js`));
 		commandFiles.forEach(fileName =>
 		{
@@ -31,7 +31,5 @@ export default class CommandLoader
 			let command = new Command(this.bot);
 			this.bot.commands.register(command, command.name);
 		});
-
-		console.log(this.bot.commands);
 	}
 }

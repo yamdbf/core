@@ -1,0 +1,6 @@
+{
+	"token": "token",
+	"name": "botname",
+	"status": "try @mention help",
+	"owner": ["ownerid"]
+}

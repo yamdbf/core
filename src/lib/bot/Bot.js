@@ -6,6 +6,7 @@ import LocalStorage from '../storage/LocalStorage';
 import GuildStorageLoader from '../storage/GuildStorageLoader';
 import CommandLoader from '../command/CommandLoader';
 import CommandRegistry from '../command/CommandRegistry';
+import CommandDispatcher from '../command/CommandDispatcher';
 
 export default class Bot extends Client
 {
@@ -28,6 +29,7 @@ export default class Bot extends Client
 
 		this.commandLoader = new CommandLoader(this);
 		this.commands = new CommandRegistry();
+		this.dispatcher = new CommandDispatcher(this);
 	}
 
 	// Login and create necessary event listeners
@@ -56,8 +58,8 @@ export default class Bot extends Client
 	}
 
 	// Shortcut to return the command prefix for the given guild
-	prefix(guild)
+	getPrefix(guild)
 	{
-		return this.guildStorages.get(guild.id || guild).getSetting('prefix') || null;
+		return this.guildStorages.get(guild).getSetting('prefix') || null;
 	}
 }

@@ -11,6 +11,12 @@ export default class GuildStorageLoader extends Map
 		super();
 	}
 
+	// Allow guild lookup by Guild object or id string
+	get(guild)
+	{
+		return super.get(guild.id ? guild.id : guild);
+	}
+
 	// Load all guild storages from localStorage
 	load(bot, localStorage)
 	{

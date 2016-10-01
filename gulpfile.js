@@ -13,6 +13,8 @@ gulp.task('build', (done) =>
 		.pipe(gulp.dest('bin'));
 	gulp.src('src/**/*.json')
 		.pipe(gulp.dest('bin'));
+	gulp.src('settings.json')
+		.pipe(gulp.dest('bin'));
 	done();
 });
 
