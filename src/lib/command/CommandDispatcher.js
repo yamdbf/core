@@ -79,10 +79,14 @@ export default class CommandDispatcher
 						}
 					}
 
-					item.action().then(console.log('action complete')); // eslint-disable-line no-console
-					return;
+					this.dispatch(message, item);
 				}
 			});
 		});
+	}
+
+	async dispatch(message, item)
+	{
+		await item.action(message);
 	}
 }

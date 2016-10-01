@@ -4,16 +4,16 @@
 import Command from '../../Command';
 
 // Command class to extend to create commands users can execute
-export default class Test extends Command
+export default class Help extends Command
 {
 	constructor(bot)
 	{
 		super(bot, {
-			name: 'test',
-			description: 'a test command',
-			usage: `<prefix>foo`,
+			name: 'help',
+			description: 'Provides information on bot commands',
+			usage: `<prefix>help`,
 			group: 'base',
-			command: /^foo$/
+			command: /^help(?: (.+))?$/
 		});
 	}
 
