@@ -17,8 +17,9 @@ export default class Help extends Command
 		});
 	}
 
-	async action(message)
+	async action(message, args, mentions)
 	{
-		console.log(message.content); // eslint-disable-line no-console
+		console.log(args[0]); // eslint-disable-line no-console
+		console.log(mentions);
 	}
 }

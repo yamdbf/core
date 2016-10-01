@@ -14,12 +14,27 @@ export default class CommandDispatcher
 		{
 			if (settings.selfbot && message.author !== this.bot.user) return;
 			if (message.author.bot) return;
-			let botMention = message.mentions.users.size > 0
-				&& message.mentions.users.first().id === this.bot.user.id
+			let duplicateMention;
+			let regexMentions = message.content.match(/<@!?\d+>/g);
+			if (regexMentions && regexMentions.length > 1)
+			{
+				let firstMention = regexMentions.shift();
+				if (regexMentions.includes(firstMention)) duplicateMention = true;
+			}
+			let mentions;
+			mentions = message.mentions.users.array().sort((a, b) =>
+				message.content.indexOf(a.id) - message.content.indexOf(b.id));
+			let botMention = mentions.length > 0
+				&& !message.content.startsWith(this.bot.getPrefix(message.guild))
+				&& mentions[0].id === this.bot.user.id
 				&& !settings.selfbot;
-
 			let command;
-			if (botMention)
+			if (botMention && !duplicateMention)
+			{
+				command = message.content.replace(/<@!?\d+>/, '').trim();
+				mentions = mentions.slice(1);
+			}
+			else if (botMention && duplicateMention)
 			{
 				command = message.content.replace(/<@!?\d+>/, '').trim();
 			}
@@ -78,15 +93,17 @@ export default class CommandDispatcher
 							return;
 						}
 					}
+					let args = message.content.match(item.command)
+						.filter(match => typeof match === 'string').slice(1);
 
-					this.dispatch(message, item);
+					this.dispatch(item, message, args, mentions);
 				}
 			});
 		});
 	}
 
-	async dispatch(message, item)
+	async dispatch(item, message, args, mentions)
 	{
-		await item.action(message);
+		await item.action(message, args, mentions);
 	}
 }
