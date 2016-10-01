@@ -13,7 +13,7 @@ export default class Command
 		if (!info.description) throw new Error(`You must provide a description for command: ${name}`);
 		if (!info.usage) throw new Error(`You must provide usage information for command: ${name}`);
 		if (!info.group) throw new Error(`You must provide a group for command: ${name}`);
-		if (info.aliases && !Array.isArray(info.aliases)) throw new Error(`Aliases for command ${name} must be an array.`);
+		if (info.aliases && !Array.isArray(info.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
 		if (info.permissions && !Array.isArray(info.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
 		if (info.permissions && info.permissions.length > 0)
 		{
@@ -29,6 +29,7 @@ export default class Command
 				}
 			});
 		}
+		if (info.roles && !Array.isArray(info.roles)) throw new Error(`Roles for command ${name} must be an array`);
 
 		this.bot = bot;
 		this.name = info.name;
@@ -38,6 +39,7 @@ export default class Command
 		this.group = info.group;
 		this.aliases = info.aliases || [];
 		this.permissions = info.permissions || [];
+		this.roles = info.roles || [];
 		this.ownerOnly = info.ownerOnly || false;
 
 		this.command = info.command || null;

@@ -38,6 +38,8 @@ export default class CommandDispatcher
 			{
 				if (item instanceof Command && command.match(item.command))
 				{
+					if (this.bot.guildStorages.get(message.guild)
+						.getSetting('disabledGroups').includes(item.group)) return;
 					if (item.ownerOnly && !settings.owner.includes(message.author.id)) return;
 					if (item.permissions.length > 0)
 					{
@@ -57,6 +59,21 @@ export default class CommandDispatcher
 								+ `${missingPermissions.length > 1 ? 's' : ''} `
 								+ `for that command:**\n\`\`\`css\n`
 								+ `${missingPermissions.join(', ')}\n\`\`\``)
+									.then(response => response.delete(10 * 1000));
+							return;
+						}
+					}
+					if (item.roles.length > 0)
+					{
+						let matchedRoles = message.member.roles
+							.filter(role => item.roles.includes(role.name));
+						if (!matchedRoles.size > 0)
+						{
+							message.channel.sendMessage(``
+								+ `**You must have ${item.roles.length > 1
+									? 'one of the following roles' : 'the following role'}`
+								+ ` to use that command:**\n\`\`\`css\n`
+								+ `${item.roles.join(', ')}\n\`\`\``)
 									.then(response => response.delete(10 * 1000));
 							return;
 						}

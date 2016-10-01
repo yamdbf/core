@@ -30,6 +30,8 @@ export default class Bot extends Client
 		this.commandLoader = new CommandLoader(this);
 		this.commands = new CommandRegistry();
 		this.dispatcher = new CommandDispatcher(this);
+
+		this.commandLoader.loadCommands();
 	}
 
 	// Login and create necessary event listeners
@@ -42,7 +44,6 @@ export default class Bot extends Client
 			console.log('Ready'); // eslint-disable-line no-console
 			this.user.setStatus(null, this.statusText);
 			this.guildStorages.load(this, this.guildSettingStorage);
-			this.commandLoader.loadCommands();
 		});
 
 		this.on('guildCreate', () =>
