@@ -13,6 +13,7 @@ export default class Test extends Command
 			description: 'a test command',
 			usage: `<prefix>foo`,
 			group: 'base',
+			guildOnly: true,
 			command: /^foo$/
 		});
 	}

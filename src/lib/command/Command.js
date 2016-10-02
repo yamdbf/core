@@ -38,6 +38,7 @@ export default class Command
 		this.extraHelp = info.extraHelp;
 		this.group = info.group;
 		this.aliases = info.aliases || [];
+		this.guildOnly = info.guildOnly || false;
 		this.permissions = info.permissions || [];
 		this.roles = info.roles || [];
 		this.ownerOnly = info.ownerOnly || false;

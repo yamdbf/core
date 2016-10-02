@@ -32,6 +32,8 @@ export default class Bot extends Client
 		this.dispatcher = new CommandDispatcher(this);
 
 		this.commandLoader.loadCommands();
+
+		this.settings = require('../../settings.json');
 	}
 
 	// Login and create necessary event listeners

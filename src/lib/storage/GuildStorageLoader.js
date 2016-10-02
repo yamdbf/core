@@ -36,7 +36,8 @@ export default class GuildStorageLoader extends Map
 	}
 
 	// Assign guild storage to guilds that lack one due to the bot
-	// being in the guild before adopting this storage spec
+	// being in the guild before adopting this storage spec or adding
+	// the bot to a new guild
 	initNewGuilds(bot, localStorage)
 	{
 		let storagelessGuilds = bot.guilds.filter(guild =>

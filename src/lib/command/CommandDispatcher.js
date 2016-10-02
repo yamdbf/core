@@ -8,27 +8,29 @@ export default class CommandDispatcher
 	constructor(bot)
 	{
 		this.bot = bot;
-		let settings = require('../../settings.json');
 
 		this.bot.on('message', message =>
 		{
+			let settings = this.bot.settings;
 			if (settings.selfbot && message.author !== this.bot.user) return;
 			if (message.author.bot) return;
+			let dm = message.channel.type === 'dm';
 			let duplicateMention;
 			let regexMentions = message.content.match(/<@!?\d+>/g);
 			if (regexMentions && regexMentions.length > 1)
 			{
 				let firstMention = regexMentions.shift();
-				if (regexMentions.includes(firstMention)) duplicateMention = true;
+				duplicateMention = regexMentions.includes(firstMention);
 			}
 			let mentions;
 			mentions = message.mentions.users.array().sort((a, b) =>
 				message.content.indexOf(a.id) - message.content.indexOf(b.id));
 			let botMention = mentions.length > 0
-				&& !message.content.startsWith(this.bot.getPrefix(message.guild))
+				&& (!dm && !message.content.startsWith(this.bot.getPrefix(message.guild)))
 				&& mentions[0].id === this.bot.user.id
 				&& !settings.selfbot;
 			let command;
+
 			if (botMention && !duplicateMention)
 			{
 				command = message.content.replace(/<@!?\d+>/, '').trim();
@@ -38,10 +40,22 @@ export default class CommandDispatcher
 			{
 				command = message.content.replace(/<@!?\d+>/, '').trim();
 			}
-			else if (message.content.startsWith(this.bot.getPrefix(message.guild)))
+			else if (!dm && message.content.startsWith(this.bot.getPrefix(message.guild)))
 			{
 				command = message.content.slice(
 					this.bot.getPrefix(message.guild).length).trim();
+			}
+			else if (dm)
+			{
+				if (message.content.match(/<@!?\d+>.+/))
+				{
+					command = message.content.replace(/<@!?\d+>/, '').trim();
+					mentions = mentions.slice(1);
+				}
+				else
+				{
+					command = message.content.trim();
+				}
 			}
 			else
 			{
@@ -49,19 +63,29 @@ export default class CommandDispatcher
 			}
 			message.content = command;
 
+			let commandMatchFound = false;
+			let wrongChannel = false;
 			this.bot.commands.forEach(item =>
 			{
 				if (item instanceof Command && command.match(item.command))
 				{
-					if (this.bot.guildStorages.get(message.guild)
+					if (!dm && this.bot.guildStorages.get(message.guild)
 						.getSetting('disabledGroups').includes(item.group)) return;
 					if (item.ownerOnly && !settings.owner.includes(message.author.id)) return;
-					if (item.permissions.length > 0)
+					if (dm && item.guildOnly)
+					{
+						message.channel.sendMessage(``
+							+ `That command is for servers only. Try saying "help" to see a `
+							+ `list of commands you can use in this DM`);
+						wrongChannel = true;
+						return;
+					}
+					if (!dm && item.permissions.length > 0)
 					{
 						let missingPermissions = [];
 						item.permissions.forEach(permission =>
 						{
-							if (!message.channel // eslint-disable-line curly
+							if (!dm && !message.channel // eslint-disable-line curly
 								.permissionsFor(message.author)
 								.hasPermission(permission))
 								missingPermissions.push(permission);
@@ -78,7 +102,7 @@ export default class CommandDispatcher
 							return;
 						}
 					}
-					if (item.roles.length > 0)
+					if (!dm && item.roles.length > 0)
 					{
 						let matchedRoles = message.member.roles
 							.filter(role => item.roles.includes(role.name));
@@ -96,14 +120,23 @@ export default class CommandDispatcher
 					let args = message.content.match(item.command)
 						.filter(match => typeof match === 'string').slice(1);
 
+					commandMatchFound = true;
 					this.dispatch(item, message, args, mentions);
 				}
 			});
+			if (dm && !commandMatchFound && !wrongChannel)
+			{
+				message.channel.sendMessage(``
+					+ `Sorry, I didn't recognize any command in your message.\n`
+					+ `Try saying "help" to view a list of commands you can use in `
+					+ `this DM, or try calling the\n\nhelp command in a server channel `
+					+ `to see what commands you can use there!`);
+			}
 		});
 	}
 
 	async dispatch(item, message, args, mentions)
 	{
-		await item.action(message, args, mentions);
+		await item.action(message, args, mentions).catch(console.log); // eslint-disable-line no-unused-expressions, no-console
 	}
 }
