@@ -11,10 +11,11 @@ export default class TestCommand extends Command
 		super(bot, {
 			name: 'testcommand',
 			description: 'a test command',
-			usage: `<prefix>test`,
-			group: 'test',
+			usage: `<prefix>testcommand`,
+			group: 'foo',
+			// guildOnly: true,
 			permissions: ['ADMINISTRATOR'],
-			command: /^test$/
+			command: /^testcommand$/
 		});
 	}
 

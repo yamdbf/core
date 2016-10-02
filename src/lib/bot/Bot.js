@@ -18,6 +18,7 @@ export default class Bot extends Client
 		this.token = options.token;
 		this.commandsDir = options.commandsDir;
 		this.statusText = options.statusText || '@mention help';
+		this.selfbot = options.selfbot || false;
 
 		if (!this.token) throw new Error('You must provide a token for the bot.');
 		if (!this.commandsDir) throw new Error('You must provide a directory to load commands from via commandDir');

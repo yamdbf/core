@@ -8,8 +8,9 @@ import path from 'path';
 
 let settings = require('./settings.json');
 let bot = new Bot({ // eslint-disable-line no-unused-vars
-	name: settings.name,
+	name: 'botframework-rewrite',
 	token: settings.token,
-	statusText: settings.status,
+	selfbot: false,
+	statusText: 'try @mention help',
 	commandsDir: path.join(__dirname, 'commands')
 }).start();

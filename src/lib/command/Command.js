@@ -44,6 +44,8 @@ export default class Command
 		this.ownerOnly = info.ownerOnly || false;
 
 		this.command = info.command || null;
+
+		if (this.permissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
 	}
 
 	async action()

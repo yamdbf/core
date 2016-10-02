@@ -12,7 +12,7 @@ export default class CommandDispatcher
 		this.bot.on('message', message =>
 		{
 			let settings = this.bot.settings;
-			if (settings.selfbot && message.author !== this.bot.user) return;
+			if (this.bot.selfbot && message.author !== this.bot.user) return;
 			if (message.author.bot) return;
 			let dm = message.channel.type === 'dm';
 			let duplicateMention;
@@ -28,7 +28,7 @@ export default class CommandDispatcher
 			let botMention = mentions.length > 0
 				&& (!dm && !message.content.startsWith(this.bot.getPrefix(message.guild)))
 				&& mentions[0].id === this.bot.user.id
-				&& !settings.selfbot;
+				&& !this.bot.selfbot;
 			let command;
 
 			if (botMention && !duplicateMention)
@@ -93,12 +93,15 @@ export default class CommandDispatcher
 
 						if (missingPermissions.length > 0)
 						{
-							message.channel.sendMessage(``
+							message[`${this.bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
 								+ `**You're missing the following permission`
 								+ `${missingPermissions.length > 1 ? 's' : ''} `
 								+ `for that command:**\n\`\`\`css\n`
 								+ `${missingPermissions.join(', ')}\n\`\`\``)
-									.then(response => response.delete(10 * 1000));
+									.then(response =>
+									{
+										if (this.bot.selfbot) response.delete(10 * 1000);
+									});
 							return;
 						}
 					}
@@ -108,17 +111,21 @@ export default class CommandDispatcher
 							.filter(role => item.roles.includes(role.name));
 						if (!matchedRoles.size > 0)
 						{
-							message.channel.sendMessage(``
+							message[`${this.bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
 								+ `**You must have ${item.roles.length > 1
 									? 'one of the following roles' : 'the following role'}`
 								+ ` to use that command:**\n\`\`\`css\n`
 								+ `${item.roles.join(', ')}\n\`\`\``)
-									.then(response => response.delete(10 * 1000));
+									.then(response =>
+									{
+										if (this.bot.selfbot) response.delete(10 * 1000);
+									});
 							return;
 						}
 					}
 					let args = message.content.match(item.command)
-						.filter(match => typeof match === 'string').slice(1);
+						.filter(match => typeof match === 'string').slice(1)
+						.map(a => !isNaN(a) ? parseFloat(a) : a);
 
 					commandMatchFound = true;
 					this.dispatch(item, message, args, mentions);
@@ -129,14 +136,14 @@ export default class CommandDispatcher
 				message.channel.sendMessage(``
 					+ `Sorry, I didn't recognize any command in your message.\n`
 					+ `Try saying "help" to view a list of commands you can use in `
-					+ `this DM, or try calling the\n\nhelp command in a server channel `
+					+ `this DM, or try calling the\nhelp command in a server channel `
 					+ `to see what commands you can use there!`);
 			}
 		});
 	}
 
-	async dispatch(item, message, args, mentions)
+	async dispatch(command, message, args, mentions)
 	{
-		await item.action(message, args, mentions).catch(console.log); // eslint-disable-line no-unused-expressions, no-console
+		await command.action(message, args, mentions).catch(console.log); // eslint-disable-line no-unused-expressions, no-console
 	}
 }

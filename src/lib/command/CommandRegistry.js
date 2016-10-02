@@ -1,6 +1,8 @@
 'use babel';
 'use strict';
 
+import CommandArray from './CommandArray';
+
 export default class CommandRegistry extends Map
 {
 	constructor()
@@ -14,5 +16,10 @@ export default class CommandRegistry extends Map
 		if (super.has(command.name)) throw new Error(`A command with the name "${command.name}" already exists.`);
 		command.register();
 		super.set(key, command);
+	}
+
+	commandArray()
+	{
+		return CommandArray.from(this);
 	}
 }
