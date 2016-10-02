@@ -13,7 +13,7 @@ export default class Example extends Command
 			description: 'an example command',
 			usage: `<prefix>example`,
 			group: 'example',
-			permissions: ['READ_MESSAGES'],
+			guildOnly: true,
 			command: /^example$/
 		});
 	}
