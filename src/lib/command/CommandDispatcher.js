@@ -47,7 +47,7 @@ export default class CommandDispatcher
 			}
 			else if (dm)
 			{
-				if (message.content.match(/<@!?\d+>.+/))
+				if (/<@!?\d+>.+/.test(message.content))
 				{
 					command = message.content.replace(/<@!?\d+>/, '').trim();
 					mentions = mentions.slice(1);
@@ -67,7 +67,7 @@ export default class CommandDispatcher
 			let wrongChannel = false;
 			this.bot.commands.forEach(item =>
 			{
-				if (item instanceof Command && command.match(item.command))
+				if (item instanceof Command && item.command.test(command))
 				{
 					if (!dm && this.bot.guildStorages.get(message.guild)
 						.getSetting('disabledGroups').includes(item.group)) return;
