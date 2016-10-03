@@ -6,11 +6,12 @@ import path from 'path';
 // Store settings and other data for an individual guild
 export default class GuildStorage
 {
-	constructor(guild, localStorage)
+	constructor(bot, guild, localStorage)
 	{
+		this.bot = bot;
 		this.guild = guild.id || guild;
 		this.localStorage = localStorage;
-		this.data = this.localStorage.getItem(this.guild);
+		this.data = this.localStorage.getItem(this.guild) || null;
 
 		// Create blank storage for the guild if no storage is present
 		if (!this.data)
@@ -22,15 +23,9 @@ export default class GuildStorage
 		// Set default settings if no settings are present
 		if (!this.data.settings)
 		{
-			this.data.settings = this.defaultSettings;
+			this.data.settings = this.bot.storage.getItem('defaultGuildSettings');
 			this.save();
 		}
-	}
-
-	// Return the default guild settings from file
-	get defaultSettings()
-	{
-		return require(path.join(__dirname, 'defaultGuildSettings.json'));
 	}
 
 	// Load the data from localStorage for this guild
@@ -73,6 +68,7 @@ export default class GuildStorage
 	// Return the value of the given key in this guild's settings
 	getSetting(key)
 	{
+		if (!key) return null;
 		this.load();
 		return this.data.settings[key] || null;
 	}
@@ -93,10 +89,16 @@ export default class GuildStorage
 		this.save();
 	}
 
+	// Check if a setting exists
+	settingExists(key)
+	{
+		return !!this.getSetting(key);
+	}
+
 	// Reset the settings for this guild to default
 	resetSettings()
 	{
-		this.data.settings = this.defaultSettings;
+		this.data.settings = this.bot.storage.getItem('defaultGuildSettings');
 		this.save();
 	}
 
@@ -149,6 +151,12 @@ export default class GuildStorage
 		this.load();
 		delete this.data[key];
 		this.save();
+	}
+
+	// Check if guild storage key/value pair exists
+	exists(key)
+	{
+		return !!this.getItem(key);
 	}
 
 	// Delete all non-settings items from storage

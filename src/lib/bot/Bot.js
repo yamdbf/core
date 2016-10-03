@@ -19,13 +19,17 @@ export default class Bot extends Client
 		this.commandsDir = options.commandsDir;
 		this.statusText = options.statusText || '@mention help';
 		this.selfbot = options.selfbot || false;
+		this.config = require('../../config.json');
 
 		if (!this.token) throw new Error('You must provide a token for the bot.');
 		if (!this.commandsDir) throw new Error('You must provide a directory to load commands from via commandDir');
 
-		this.botStorage = new LocalStorage('bot-storage');
+		this.storage = new LocalStorage('bot-storage');
+		if (!this.storage.exists('defaultGuildSettings')) // eslint-disable-line curly
+			this.storage.setItem('defaultGuildSettings',
+				require('../storage/defaultGuildSettings.json'));
 
-		this.guildSettingStorage = new LocalStorage('guild-settings');
+		this.guildSettingStorage = new LocalStorage('guild-storage');
 		this.guildStorages = new GuildStorageLoader();
 
 		this.commandLoader = new CommandLoader(this);
@@ -33,8 +37,6 @@ export default class Bot extends Client
 		this.dispatcher = new CommandDispatcher(this);
 
 		this.commandLoader.loadCommands();
-
-		this.settings = require('../../settings.json');
 	}
 
 	// Login and create necessary event listeners
@@ -59,6 +61,26 @@ export default class Bot extends Client
 			this.guildStorages.delete(guild.id);
 			this.guildSettingStorage.removeItem(guild.id);
 		});
+	}
+
+	// Set the value of a default setting key and push it to all guild
+	// setting storages
+	setDefaultSetting(key, value)
+	{
+		let defaults = this.storage.getItem('defaultGuildSettings');
+		if (!defaults) return;
+		defaults[key] = value;
+		this.storage.setItem('defaultGuildSettings', defaults);
+		this.guildStorages.forEach(guild =>
+		{
+			if (!guild.settingExists(key)) guild.setSetting(key, value);
+		});
+	}
+
+	// See if a guild default setting exists
+	defaultSettingExists(key)
+	{
+		return !!this.storage.getItem('defaultGuildSettings')[key];
 	}
 
 	// Shortcut to return the command prefix for the given guild

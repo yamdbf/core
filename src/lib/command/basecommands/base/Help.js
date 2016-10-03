@@ -23,7 +23,7 @@ export default class Help extends Command
 	async action(message, args)
 	{
 		let dm = message.channel.type === 'dm';
-		let settings = this.bot.settings;
+		let config = this.bot.config;
 		if (this.bot.selfbot) message.delete();
 
 		let command;
@@ -44,7 +44,7 @@ export default class Help extends Command
 			command = true;
 			output += `These are the commands available to you within this DM:\n\`\`\`ldif\n`;
 			let usableCommands = this.bot.commands.commandArray()
-				.filter(c => !c.guildOnly && ((this.bot.settings.owner
+				.filter(c => !c.guildOnly && ((config.owner
 					.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly));
 			let widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			output += usableCommands.map(c =>
@@ -62,7 +62,7 @@ export default class Help extends Command
 			else
 			{
 				command = this.bot.commands.commandArray()
-					.filter(c => !c.guildOnly && ((this.bot.settings.owner
+					.filter(c => !c.guildOnly && ((config.owner
 						.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly))
 					.filter(c => args[0] === c.name)[0];
 			}

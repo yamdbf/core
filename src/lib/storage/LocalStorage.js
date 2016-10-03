@@ -75,6 +75,12 @@ export default class LocalStorage
 		this.save();
 	}
 
+	// See if a key/value pair exists
+	exists(key)
+	{
+		return !!this.getItem(key);
+	}
+
 	// Delete all items from storage
 	clear()
 	{

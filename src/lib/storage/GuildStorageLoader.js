@@ -22,7 +22,7 @@ export default class GuildStorageLoader extends Map
 	{
 		Object.keys(localStorage.data).forEach((key) =>
 		{
-			super.set(key, new GuildStorage(key, localStorage));
+			super.set(key, new GuildStorage(bot, key, localStorage));
 		});
 
 		// If the number of guilds in localStorage doesn't match
@@ -46,7 +46,7 @@ export default class GuildStorageLoader extends Map
 		{
 			storagelessGuilds.forEach(guild =>
 			{
-				super.set(guild.id, new GuildStorage(guild.id, localStorage));
+				super.set(guild.id, new GuildStorage(bot, guild.id, localStorage));
 			});
 		}
 	}

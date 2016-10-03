@@ -1,8 +1,7 @@
 data-store.json
-settings.json
-/out/*
+config.json
 /node_modules/*
 /bin/*
-guild-settings.json
+guild-storage.json
 bot-storage.json
 npm-debug*

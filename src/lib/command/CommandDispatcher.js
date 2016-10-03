@@ -11,7 +11,7 @@ export default class CommandDispatcher
 
 		this.bot.on('message', message =>
 		{
-			let settings = this.bot.settings;
+			let config = this.bot.config;
 			if (this.bot.selfbot && message.author !== this.bot.user) return;
 			if (message.author.bot) return;
 			let dm = message.channel.type === 'dm';
@@ -71,7 +71,7 @@ export default class CommandDispatcher
 				{
 					if (!dm && this.bot.guildStorages.get(message.guild)
 						.getSetting('disabledGroups').includes(item.group)) return;
-					if (item.ownerOnly && !settings.owner.includes(message.author.id)) return;
+					if (item.ownerOnly && !config.owner.includes(message.author.id)) return;
 					if (dm && item.guildOnly)
 					{
 						message.channel.sendMessage(``
