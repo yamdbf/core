@@ -12,7 +12,7 @@ export default class Test extends Command
 			name: 'test',
 			description: 'a test command',
 			usage: `<prefix>test`,
-			group: 'base',
+			group: 'test',
 			guildOnly: false,
 			// roles: ['test'],
 			ownerOnly: true,

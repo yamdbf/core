@@ -29,6 +29,16 @@ export default class CommandRegistry extends Map
 		});
 	}
 
+	get groups()
+	{
+		let groups = [];
+		this.forEach(c =>
+		{
+			if (!groups.includes(c.group)) groups.push(c.group);
+		});
+		return groups;
+	}
+
 	commandArray()
 	{
 		return CommandArray.from(this);

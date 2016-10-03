@@ -12,7 +12,7 @@ export default class Example extends Command
 			name: 'example',
 			description: 'an example command',
 			aliases: [],
-			usage: `<prefix>example`,
+			usage: '<prefix>example',
 			extraHelp: 'this command is an example command, it just tells you the command has been called',
 			group: 'example',
 			guildOnly: true,
