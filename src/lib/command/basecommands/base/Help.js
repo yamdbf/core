@@ -14,7 +14,7 @@ export default class Help extends Command
 			description: 'Provides information on bot commands',
 			aliases: ['h'],
 			usage: `<prefix>help`,
-			extraHelp: 'Will DM bot command help information to the user to keep clutter down in guild channels',
+			extraHelp: 'Will DM bot command help information to the user to keep clutter down in guild channels. If you use the help command from within a DM you will only receive information for the commands you can use within the DM. If you want help with commands usable in a guild, call the help command in a guild channel. You will receive a list of the commands that you have permissions/roles for in that channel.',
 			group: 'base',
 			command: /^(?:help|h)(?: (.+))?$/
 		});
@@ -33,7 +33,9 @@ export default class Help extends Command
 			command = true;
 			output += `These are the commands available to you in the channel you requested help:\n\`\`\`ldif\n`;
 			let usableCommands = this.bot.commands.commandArray()
-				.filterByUsability(this.bot, message);
+				.filterByUsability(this.bot, message)
+				.filter(c => (config.owner.includes(message.author.id)
+					&& c.ownerOnly) || !c.ownerOnly);
 			let widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			output += usableCommands.map(c =>
 				`${padRight(c.name, widest + 1)}: ${c.description}`).join('\n');

@@ -11,14 +11,18 @@ export default class Example extends Command
 		super(bot, {
 			name: 'example',
 			description: 'an example command',
+			aliases: [],
 			usage: `<prefix>example`,
+			extraHelp: 'this command is an example command, it just tells you the command has been called',
 			group: 'example',
 			guildOnly: true,
+			roles: [],
+			permissions: [],
 			command: /^example$/
 		});
 	}
 
-	async action(message, args, mentions)
+	async action(message, args, mentions) // eslint-disable-line no-unused-vars
 	{
 		message.channel.sendMessage('Example command called');
 	}
