@@ -1,8 +1,8 @@
 'use babel';
 'use strict';
 
-import Command from '../../Command';
-import { padRight } from '../../../Util';
+import Command from '../Command';
+import { padRight } from '../../Util';
 
 // Command class to extend to create commands users can execute
 export default class Help extends Command

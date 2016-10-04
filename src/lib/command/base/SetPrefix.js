@@ -1,7 +1,7 @@
 'use babel';
 'use strict';
 
-import Command from '../../Command';
+import Command from '../Command';
 
 export default class SetPrefix extends Command
 {

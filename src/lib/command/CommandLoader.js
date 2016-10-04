@@ -19,7 +19,7 @@ export default class CommandLoader
 		if (this.bot.commands.length > 0) this.bot.commands = new CommandRegistry();
 		let cmds = [];
 		let commandFiles = [];
-		commandFiles.push(...glob.sync(`${path.join(__dirname, './basecommands')}/**/*.js`));
+		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
 		commandFiles.push(...glob.sync(`${this.bot.commandsDir}/**/*.js`));
 		commandFiles.forEach(fileName =>
 		{
