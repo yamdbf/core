@@ -3,7 +3,7 @@
 
 import { Collection } from 'discord.js';
 
-// Handle loading all GuildStorage objects
+// Handle storage of all GuildStorage objects
 export default class GuildStorageRegistry extends Collection
 {
 	constructor()
