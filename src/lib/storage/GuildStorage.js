@@ -1,29 +1,26 @@
 'use babel';
 'use strict';
 
-import path from 'path';
-
 // Store settings and other data for an individual guild
 export default class GuildStorage
 {
 	constructor(bot, guild, localStorage)
 	{
-		this.bot = bot;
-		this.guild = guild.id || guild;
+		this.id = guild.id || guild;
 		this.localStorage = localStorage;
-		this.data = this.localStorage.getItem(this.guild) || null;
+		this.data = this.localStorage.getItem(this.id) || null;
 
 		// Create blank storage for the guild if no storage is present
 		if (!this.data)
 		{
-			this.localStorage.setItem(this.guild, {});
-			this.data = this.localStorage.getItem(this.guild);
+			this.localStorage.setItem(this.id, {});
+			this.data = this.localStorage.getItem(this.id);
 		}
 
 		// Set default settings if no settings are present
 		if (!this.data.settings)
 		{
-			this.data.settings = this.bot.storage.getItem('defaultGuildSettings');
+			this.data.settings = bot.storage.getItem('defaultGuildSettings');
 			this.save();
 		}
 	}
@@ -31,13 +28,13 @@ export default class GuildStorage
 	// Load the data from localStorage for this guild
 	load()
 	{
-		this.data = this.localStorage.getItem(this.guild);
+		this.data = this.localStorage.getItem(this.id);
 	}
 
 	// Write to localStorage
 	save()
 	{
-		this.localStorage.setItem(this.guild, this.data);
+		this.localStorage.setItem(this.id, this.data);
 	}
 
 	// Settings storage ////////////////////////////////////////////////////////
@@ -96,9 +93,9 @@ export default class GuildStorage
 	}
 
 	// Reset the settings for this guild to default
-	resetSettings()
+	resetSettings(defaults)
 	{
-		this.data.settings = this.bot.storage.getItem('defaultGuildSettings');
+		this.data.settings = defaults;
 		this.save();
 	}
 

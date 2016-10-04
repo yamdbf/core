@@ -4,6 +4,7 @@
 import { Client } from 'discord.js';
 import LocalStorage from '../storage/LocalStorage';
 import GuildStorageLoader from '../storage/GuildStorageLoader';
+import GuildStorageRegistry from '../storage/GuildStorageRegistry';
 import CommandLoader from '../command/CommandLoader';
 import CommandRegistry from '../command/CommandRegistry';
 import CommandDispatcher from '../command/CommandDispatcher';
@@ -30,7 +31,8 @@ export default class Bot extends Client
 				require('../storage/defaultGuildSettings.json'));
 
 		this.guildSettingStorage = new LocalStorage('guild-storage');
-		this.guildStorages = new GuildStorageLoader();
+		this.guildStorageLoader = new GuildStorageLoader(this);
+		this.guildStorages = new GuildStorageRegistry();
 
 		this.commandLoader = new CommandLoader(this);
 		this.commands = new CommandRegistry();
@@ -48,12 +50,12 @@ export default class Bot extends Client
 		{
 			console.log('Ready'); // eslint-disable-line no-console
 			this.user.setStatus(null, this.statusText);
-			this.guildStorages.load(this, this.guildSettingStorage);
+			this.guildStorageLoader.loadStorages(this.guildSettingStorage);
 		});
 
 		this.on('guildCreate', () =>
 		{
-			this.guildStorages.initNewGuilds(this, this.guildSettingStorage);
+			this.guildStorageLoader.initNewGuilds(this.guildSettingStorage);
 		});
 
 		this.on('guildDelete', (guild) =>
