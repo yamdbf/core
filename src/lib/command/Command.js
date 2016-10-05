@@ -43,8 +43,6 @@ export default class Command
 		this.roles = info.roles || [];
 		this.ownerOnly = info.ownerOnly || false;
 
-		this.command = info.command || null;
-
 		if (this.permissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
 	}
 
@@ -57,8 +55,6 @@ export default class Command
 	register()
 	{
 		let name = this.constructor.name;
-		if (!this.command) throw new Error(`Command#${name}.command: expected RegExp, got: ${typeof this.command}`);
-		if (this.command.constructor.name !== 'RegExp') throw new Error(`Command#${name}.command: expected RegExp, got: ${typeof this.command}`);
 		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 		if (!this.action instanceof Function) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 	}

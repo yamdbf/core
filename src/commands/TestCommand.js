@@ -14,8 +14,7 @@ export default class TestCommand extends Command
 			usage: `<prefix>testcommand`,
 			group: 'test',
 			// guildOnly: true,
-			permissions: ['ADMINISTRATOR'],
-			command: /^testcommand$/
+			permissions: ['ADMINISTRATOR']
 		});
 	}
 

@@ -14,10 +14,7 @@ export default class SetPrefix extends Command
 			usage: '<prefix>setprefix',
 			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks',
 			group: 'base',
-			guildOnly: true,
-			permissions: ['ADMINISTRATOR'],
-			ownerOnly: false,
-			command: /^(?:setprefix|prefix)(?: (.+))?$/
+			permissions: ['ADMINISTRATOR']
 		});
 	}
 

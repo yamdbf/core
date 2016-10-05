@@ -14,9 +14,8 @@ export default class Test extends Command
 			usage: `<prefix>test`,
 			group: 'test',
 			guildOnly: false,
-			// roles: ['test'],
-			ownerOnly: true,
-			command: /^test$/
+			roles: ['test'],
+			ownerOnly: false
 		});
 	}
 

@@ -16,8 +16,7 @@ export default class SetPrefix extends Command
 			group: 'base',
 			guildOnly: true,
 			permissions: ['ADMINISTRATOR'],
-			ownerOnly: false,
-			command: /^(?:enablegroup|enable)(?: (.+))?$$/
+			ownerOnly: false
 		});
 	}
 
