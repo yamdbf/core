@@ -23,7 +23,6 @@ export default class Help extends Command
 	async action(message, args)
 	{
 		let dm = message.channel.type === 'dm';
-		let config = this.bot.config;
 		if (this.bot.selfbot) message.delete();
 
 		let command;
@@ -32,10 +31,8 @@ export default class Help extends Command
 		{
 			command = true;
 			output += `These are the commands available to you in the channel you requested help:\n\`\`\`ldif\n`;
-			let usableCommands = this.bot.commands.commandArray()
-				.filterByUsability(this.bot, message)
-				.filter(c => (config.owner.includes(message.author.id)
-					&& c.ownerOnly) || !c.ownerOnly);
+			let usableCommands = this.bot.commands
+				.filterGuildUsable(this.bot, message);
 			let widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			output += usableCommands.map(c =>
 				`${padRight(c.name, widest + 1)}: ${c.description}`).join('\n');
@@ -45,9 +42,8 @@ export default class Help extends Command
 		{
 			command = true;
 			output += `These are the commands available to you within this DM:\n\`\`\`ldif\n`;
-			let usableCommands = this.bot.commands.commandArray()
-				.filter(c => !c.guildOnly && ((config.owner
-					.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly));
+			let usableCommands = this.bot.commands
+				.filterDMUsable(this.bot, message);
 			let widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			output += usableCommands.map(c =>
 				`${padRight(c.name, widest + 1)}: ${c.description}`).join('\n');
@@ -57,16 +53,17 @@ export default class Help extends Command
 		{
 			if (!dm)
 			{
-				command = this.bot.commands.commandArray()
-					.filterByUsability(this.bot, message)
-					.filter(c => args[0] === c.name)[0];
+				command = this.bot.commands
+					.filterGuildUsable(this.bot, message)
+					.filter(c => c.name === args[0]
+						|| c.aliases.includes(args[0])).first();
 			}
 			else
 			{
-				command = this.bot.commands.commandArray()
-					.filter(c => !c.guildOnly && ((config.owner
-						.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly))
-					.filter(c => args[0] === c.name)[0];
+				command = this.bot.commands
+					.filterDMHelp(this.bot, message)
+					.filter(c => c.name === args[0]
+						|| c.aliases.includes(args[0])).first();
 			}
 			if (!command)
 			{
