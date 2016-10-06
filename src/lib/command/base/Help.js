@@ -71,6 +71,7 @@ export default class Help extends Command
 			else
 			{
 				output += '```ldif\n' // eslint-disable-line prefer-template
+					+ `Command: ${command.name}\n`
 					+ `Description: ${command.description}\n`
 					+ (command.aliases.length > 0 ? `Aliases: ${command.aliases.join(', ')}\n` : '')
 					+ `Usage: ${command.usage}\n`

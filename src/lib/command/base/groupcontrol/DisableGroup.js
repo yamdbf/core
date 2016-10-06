@@ -10,7 +10,7 @@ export default class DisableGroup extends Command
 		super(bot, {
 			name: 'disablegroup',
 			description: 'Disable a command group',
-			aliases: ['disable'],
+			aliases: ['disable', 'dg'],
 			usage: '<prefix>disablegroup <group>',
 			extraHelp: 'Disables a command group so that all of the commands in the group cannot be used on this server.',
 			group: 'base',

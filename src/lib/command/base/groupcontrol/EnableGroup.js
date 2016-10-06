@@ -10,7 +10,7 @@ export default class EnableGroup extends Command
 		super(bot, {
 			name: 'enablegroup',
 			description: 'Enable a command group',
-			aliases: ['enable'],
+			aliases: ['enable', 'eg'],
 			usage: '<prefix>enablegroup <group>',
 			extraHelp: 'Enables a command group so that all of the commands in the group can be used on this server.',
 			group: 'base',
