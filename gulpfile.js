@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
+const exec = require('gulp-exec');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 
@@ -16,9 +17,38 @@ gulp.task('build', (done) =>
 	done();
 });
 
+gulp.task('package', (done) =>
+{
+	gulp.src('src/**/*js')
+		.pipe(babel())
+		.pipe(gulp.dest('yamdbf/bin'));
+	gulp.src('src/**/*.json')
+		.pipe(gulp.dest('yamdbf/bin'));
+	gulp.src('package.json')
+		.pipe(gulp.dest('yamdbf'));
+	done();
+});
+
 // Clean bin directory
 gulp.task('clean', (done) =>
 {
 	del.sync(['bin/**', '!bin']);
 	done();
+});
+
+// Clean package directory
+gulp.task('clean-package', (done) =>
+{
+	del.sync(['yamdbf/bin/**', '!yamdbf/bin']);
+	done();
+});
+
+// Commit & tag version
+gulp.task('tag-release', () =>
+{
+	const version = require('./package.json').version;
+	return gulp.src('.')
+		.pipe(exec(`git commit -am "Prepare ${version} release"`))
+		.pipe(exec(`git tag v${version}`))
+		.pipe(exec(`git push origin : v${version}`));
 });
