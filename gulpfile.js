@@ -24,7 +24,7 @@ gulp.task('package', (done) =>
 		.pipe(gulp.dest('yamdbf/bin'));
 	gulp.src('src/**/*.json')
 		.pipe(gulp.dest('yamdbf/bin'));
-	gulp.src('package.json')
+	gulp.src(['package.json', '*.md', 'config.json.example'])
 		.pipe(gulp.dest('yamdbf'));
 	done();
 });

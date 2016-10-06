@@ -17,7 +17,7 @@ exports.default = class Example extends Command
 		});
 	}
 
-	action(message)
+	action(message, args, mentions, original)
 	{
 		console.log(message.content); // eslint-disable-line no-console
 	}
