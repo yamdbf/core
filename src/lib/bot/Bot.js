@@ -20,6 +20,7 @@ export default class Bot extends Client
 		this.commandsDir = options.commandsDir;
 		this.statusText = options.statusText || '@mention help';
 		this.selfbot = options.selfbot || false;
+		this.version = options.version || '0.0.0';
 		this.config = require('../../config.json');
 
 		if (!this.token) throw new Error('You must provide a token for the bot.');
