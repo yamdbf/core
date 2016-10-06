@@ -21,11 +21,11 @@ gulp.task('package', (done) =>
 {
 	gulp.src('src/**/*js')
 		.pipe(babel())
-		.pipe(gulp.dest('yamdbf/bin'));
+		.pipe(gulp.dest('pkg/yamdbf/bin'));
 	gulp.src('src/**/*.json')
-		.pipe(gulp.dest('yamdbf/bin'));
+		.pipe(gulp.dest('pkg/yamdbf/bin'));
 	gulp.src(['package.json', '*.md', 'config.json.example'])
-		.pipe(gulp.dest('yamdbf'));
+		.pipe(gulp.dest('pkg/yamdbf'));
 	done();
 });
 
@@ -39,7 +39,7 @@ gulp.task('clean', (done) =>
 // Clean package directory
 gulp.task('clean-package', (done) =>
 {
-	del.sync(['yamdbf/bin/**', '!yamdbf/bin']);
+	del.sync(['pkg/yamdbf/bin/**', '!pkg/yamdbf/bin']);
 	done();
 });
 
