@@ -12,9 +12,9 @@ export default class CommandRegistry extends Collection
 
 	// Complete registration of command and add to CommandRegistry storage,
 	// prevent duplicate names and aliases between commands
-	register(command, key)
+	register(command, key, reload)
 	{
-		if (super.has(command.name)) throw new Error(`A command with the name "${command.name}" already exists.`);
+		if (super.has(command.name) && !reload) throw new Error(`A command with the name "${command.name}" already exists.`);
 		command.register();
 		super.set(key, command);
 		this.forEach(a =>
@@ -38,6 +38,11 @@ export default class CommandRegistry extends Collection
 			if (!groups.includes(c.group)) groups.push(c.group);
 		});
 		return groups;
+	}
+
+	findByNameOrAlias(text)
+	{
+		return this.filter(c => c.name === text || c.aliases.includes(text)).first();
 	}
 
 	// Return all commands usable by the user in the guild channel the

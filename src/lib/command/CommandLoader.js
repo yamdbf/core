@@ -16,21 +16,31 @@ export default class CommandLoader
 
 	loadCommands()
 	{
-		if (this.bot.commands.length > 0) this.bot.commands = new CommandRegistry();
-		let cmds = [];
+		if (this.bot.commands.size > 0) this.bot.commands = new CommandRegistry();
 		let commandFiles = [];
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
 		commandFiles.push(...glob.sync(`${this.bot.commandsDir}/**/*.js`));
 		commandFiles.forEach(fileName =>
 		{
-			let command = fileName.replace('.js', '');
-			delete require.cache[require.resolve(`${command}`)];
-			cmds.push(require(`${command}`).default);
-		});
-		cmds.forEach(Command =>
-		{
+			let commandLocation = fileName.replace('.js', '');
+			delete require.cache[require.resolve(commandLocation)];
+			let Command = require(commandLocation).default;
 			let command = new Command(this.bot);
+			command.classloc = commandLocation;
 			this.bot.commands.register(command, command.name);
 		});
+	}
+
+	reloadCommand(nameOrAlias)
+	{
+		let name = this.bot.commands.findByNameOrAlias(nameOrAlias).name;
+		if (!name) return false;
+		let commandLocation = this.bot.commands.get(name).classloc;
+		delete require.cache[require.resolve(commandLocation)];
+		let Command = require(commandLocation).default;
+		let command = new Command(this.bot);
+		command.classloc = commandLocation;
+		this.bot.commands.register(command, command.name, true);
+		return true;
 	}
 }
