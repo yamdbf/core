@@ -22,7 +22,7 @@ export default class Example extends Command
 		});
 	}
 
-	async action(message, args, mentions) // eslint-disable-line no-unused-vars
+	async action(message, args, mentions, original) // eslint-disable-line no-unused-vars
 	{
 		message.channel.sendMessage('Example command called');
 	}

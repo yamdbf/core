@@ -11,7 +11,7 @@ export default class SetPrefix extends Command
 			name: 'setprefix',
 			description: 'Set the bot command prefix for this guild.',
 			aliases: ['prefix'],
-			usage: '<prefix>setprefix',
+			usage: '<prefix>setprefix <text>',
 			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks',
 			group: 'base',
 			permissions: ['ADMINISTRATOR']

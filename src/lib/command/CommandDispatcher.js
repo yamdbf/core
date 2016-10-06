@@ -19,38 +19,30 @@ export default class CommandDispatcher
 		if (this.bot.selfbot && message.author !== this.bot.user) return false;
 		if (message.author.bot) return false;
 
-		let { command, mentions, args, content, dm } = this.processContent(message);
+		let { command, mentions, args, content, dm, original } = this.processContent(message);
 		message.content = content;
 
-		if (dm && !command)
-		{
-			return this.commandNotFoundError(message);
-		}
-		else if (!command)
-		{
-			return false;
-		}
+		if (dm && !command)	return this.commandNotFoundError(message);
+		else if (!command) return false;
+
 		if (!dm && this.bot.guildStorages.get(message.guild)
 			.getSetting('disabledGroups').includes(command.group)) return false;
 		if (command.ownerOnly && !config.owner.includes(message.author.id)) return false;
-		if (dm && command.guildOnly)
-		{
-			return this.guildOnlyError(message);
-		}
+		if (dm && command.guildOnly) return this.guildOnlyError(message);
 
 		let missingPermissions = this.checkPermissions(dm, message, command);
-		if (missingPermissions.length > 0)
-		{
-			return this.missingPermissionsError(missingPermissions, message);
-		}
+		if (missingPermissions.length > 0) return this.missingPermissionsError(missingPermissions, message);
+
 		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
 
-		return this.dispatch(command, message, args, mentions);
+		return this.dispatch(command, message, args, mentions, original);
 	}
 
 	processContent(message)
 	{
+		let original = message.content;
 		let dm = message.channel.type === 'dm';
+		let mentions;
 		let duplicateMention;
 		let regexMentions = message.content.match(/<@!?\d+>/g);
 		if (regexMentions && regexMentions.length > 1)
@@ -58,34 +50,34 @@ export default class CommandDispatcher
 			let firstMention = regexMentions.shift();
 			duplicateMention = regexMentions.includes(firstMention);
 		}
-		let mentions;
 		mentions = message.mentions.users.array().sort((a, b) =>
 			message.content.indexOf(a.id) - message.content.indexOf(b.id));
+
 		let botMention = mentions.length > 0
 			&& (!dm && !message.content.startsWith(this.bot.getPrefix(message.guild)))
 			&& mentions[0].id === this.bot.user.id
 			&& !this.bot.selfbot;
-		let content;
 
+		let content;
 		if (botMention && !duplicateMention)
 		{
-			content = message.content.replace(/<@!?\d+>/, '').trim();
+			content = message.content.replace(/<@!?\d+>/g, '').trim();
 			mentions = mentions.slice(1);
 		}
 		else if (botMention && duplicateMention)
 		{
-			content = message.content.replace(/<@!?\d+>/, '').trim();
+			content = message.content.replace(/<@!?\d+>/g, '').trim();
 		}
 		else if (!dm && message.content.startsWith(this.bot.getPrefix(message.guild)))
 		{
 			content = message.content.slice(
-				this.bot.getPrefix(message.guild).length).trim();
+				this.bot.getPrefix(message.guild).length).replace(/<@!?\d+>/g, '').trim();
 		}
 		else if (dm)
 		{
 			if (/<@!?\d+>.+/.test(message.content))
 			{
-				content = message.content.replace(/<@!?\d+>/, '').trim();
+				content = message.content.replace(/<@!?\d+>/g, '').trim();
 				mentions = mentions.slice(1);
 			}
 			else
@@ -97,15 +89,16 @@ export default class CommandDispatcher
 		{
 			return false;
 		}
+		content = content.replace(/ +/g, ' ');
 
 		let commandName = content.split(' ')[0];
-		let args = content.split(' ').slice(1)
-			.map(a => !isNaN(a) ? parseFloat(a) : a);
+		let args = content.match(/(\w+)|("|')(?:(?!\2).)+\2/g).slice(1)
+			.map(a => !isNaN(a) ? parseFloat(a) : a.replace(/("|')(.+)\1/, '$2'));
 
 		let command = this.bot.commands.filter(c =>
 			c.name === commandName || c.aliases.includes(commandName)).first();
 
-		return { command: command, mentions: mentions, args: args, content: content, dm: dm };
+		return { command: command, mentions: mentions, args: args, content: content, dm: dm, original: original };
 	}
 
 	checkPermissions(dm, message, command)
@@ -172,8 +165,8 @@ export default class CommandDispatcher
 				});
 	}
 
-	async dispatch(command, message, args, mentions)
+	async dispatch(command, message, args, mentions, original)
 	{
-		await command.action(message, args, mentions).catch(console.log); // eslint-disable-line no-unused-expressions, no-console
+		await command.action(message, args, mentions, original).catch(console.log); // eslint-disable-line no-unused-expressions, no-console
 	}
 }

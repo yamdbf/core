@@ -11,12 +11,10 @@ export default class SetPrefix extends Command
 			name: 'enablegroup',
 			description: 'Enable a command group',
 			aliases: ['enable'],
-			usage: '<prefix>enablegroup',
+			usage: '<prefix>enablegroup <group>',
 			extraHelp: 'Enables a command group so that all of the commands in the group can be used.',
 			group: 'base',
-			guildOnly: true,
-			permissions: ['ADMINISTRATOR'],
-			ownerOnly: false
+			permissions: ['ADMINISTRATOR']
 		});
 	}
 
