@@ -24,7 +24,7 @@ export default class DisableGroup extends Command
 		const err =	{
 			NO_GROUP: 'You must provide a command group to disable.',
 			NO_EXIST: `Command group ${args[0]} does not exist.`,
-			DISABLED: `Command group ${args[0]} is already disabled.`
+			DISABLED: `Command group ${args[0]} is already disabled or is not allowed to be disabled.`
 		};
 
 		function sendError(text)

@@ -5,3 +5,4 @@ config.json
 guild-storage.json
 bot-storage.json
 npm-debug*
+bottest.js

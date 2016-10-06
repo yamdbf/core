@@ -92,8 +92,8 @@ export default class CommandDispatcher
 		content = content.replace(/ +/g, ' ');
 
 		let commandName = content.split(' ')[0];
-		let args = content.match(/(\w+)|("|')(?:(?!\2).)+\2/g).slice(1)
-			.map(a => !isNaN(a) ? parseFloat(a) : a.replace(/("|')(.+)\1/, '$2'));
+		let args = content.slice(' ').slice(1)
+			.map(a => !isNaN(a) ? parseFloat(a) : a);
 
 		let command = this.bot.commands.filter(c =>
 			c.name === commandName || c.aliases.includes(commandName)).first();

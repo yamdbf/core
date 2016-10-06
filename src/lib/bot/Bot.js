@@ -21,11 +21,11 @@ export default class Bot extends Client
 		this.statusText = options.statusText || '@mention help';
 		this.selfbot = options.selfbot || false;
 		this.version = options.version || '0.0.0';
-		this.config = require('../../config.json');
+		this.config = options.config || null;
 
 		if (!this.token) throw new Error('You must provide a token for the bot.');
 		if (!this.commandsDir) throw new Error('You must provide a directory to load commands from via commandDir');
-
+		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
 		this.storage = new LocalStorage('bot-storage');
 		if (!this.storage.exists('defaultGuildSettings')) // eslint-disable-line curly
 			this.storage.setItem('defaultGuildSettings',
@@ -64,6 +64,8 @@ export default class Bot extends Client
 			this.guildStorages.delete(guild.id);
 			this.guildSettingStorage.removeItem(guild.id);
 		});
+
+		return this;
 	}
 
 	// Set the value of a default setting key and push it to all guild
