@@ -22,7 +22,17 @@ export default class Reload extends Command
 	async action(message, args, mentions) // eslint-disable-line no-unused-vars
 	{
 		let start = now();
-		if (args[0]) this.bot.commandLoader.reloadCommand(args[0]);
+		let command = this.bot.commands.findByNameOrAlias(args[0]);
+		if (args[0] && !command)
+		{
+			message.channel.sendMessage(`Command "${args[0]}" could not be found.`)
+				.then(response =>
+				{
+					response.delete(5 * 1000);
+				});
+			return;
+		}
+		if (command) this.bot.commandLoader.reloadCommand(command.name);
 		else this.bot.commandLoader.loadCommands();
 		let end = now();
 		let name = args[0] ? this.bot.commands.findByNameOrAlias(args[0]).name : null;
