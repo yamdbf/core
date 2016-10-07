@@ -1,15 +1,15 @@
 let Command = require('yamdbf').Command;
 
-exports.default = class Example extends Command
+exports.default = class Ping extends Command
 {
 	constructor(bot)
 	{
 		super(bot, {
-			name: 'example',
-			aliases: ['ex, e'],
-			description: 'An example command',
-			usage: '<prefix>example',
-			extraHelp: 'An example command to show the basic boilerplate for writing a command.',
+			name: 'ping',
+			aliases: ['p'],
+			description: 'Pong!',
+			usage: '<prefix>ping',
+			extraHelp: 'A basic ping/pong command example.',
 			group: 'example',
 			guildOnly: false,
 			permissions: [],
@@ -20,7 +20,6 @@ exports.default = class Example extends Command
 
 	action(message, args, mentions, original) // eslint-disable-line no-unused-vars
 	{
-		message.channel.sendMessage(message.content);
-		console.log(this.bot.version); // eslint-disable-line no-console
+		message.reply('Pong!');
 	}
 };

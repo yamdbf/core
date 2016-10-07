@@ -32,16 +32,16 @@ And that's all it takes! Just that and you have a fully functioning bot with the
 ```js
 let Command = require('yamdbf').Command;
 
-exports.default = class Example extends Command
+exports.default = class Ping extends Command
 {
 	constructor(bot)
 	{
 		super(bot, {
-			name: 'example',
-			aliases: ['ex, e'],
-			description: 'An example command',
-			usage: '<prefix>example',
-			extraHelp: 'An example command to show the basic boilerplate for writing a command.',
+			name: 'ping',
+			aliases: ['p'],
+			description: 'Pong!',
+			usage: '<prefix>ping',
+			extraHelp: 'A basic ping/pong command example.',
 			group: 'example',
 			guildOnly: false,
 			permissions: [],
@@ -50,15 +50,13 @@ exports.default = class Example extends Command
 		});
 	}
 
-	action(message, args, mentions, original)
+	action(message, args, mentions, original) // eslint-disable-line no-unused-vars
 	{
-		message.channel.sendMessage(message.content);
-    	console.log(this.bot.version);
+		message.reply('Pong!');
 	}
 };
-
 ```
 
-It should be noted that command actions have access to the Discord.js Client instance via `this.bot` as seen in the example command above.
+It should be noted that command actions have access to the Discord.js Client instance via `this.bot`.
 
 That's about it for creating a bot and adding commands. Proper documentation will come soon. 👌
