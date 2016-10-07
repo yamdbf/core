@@ -52,8 +52,8 @@ exports.default = class Example extends Command
 
 	action(message, args, mentions, original)
 	{
-		console.log(message.content);
-    console.log(this.bot.version);
+		message.channel.sendMessage(message.content);
+    	console.log(this.bot.version);
 	}
 };
 

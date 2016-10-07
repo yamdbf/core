@@ -1,29 +1,29 @@
 'use babel';
 'use strict';
 
-import Command from '../lib/command/Command';
+import { Command } from 'yamdbf';
 
-// Command class to extend to create commands users can execute
 export default class Example extends Command
 {
 	constructor(bot)
 	{
 		super(bot, {
 			name: 'example',
-			description: 'an example command',
-			aliases: [],
+			aliases: ['ex, e'],
+			description: 'An example command',
 			usage: '<prefix>example',
-			extraHelp: 'this command is an example command, it just tells you the command has been called',
+			extraHelp: 'An example command to show the basic boilerplate for writing a command.',
 			group: 'example',
-			guildOnly: true,
-			roles: [],
+			guildOnly: false,
 			permissions: [],
-			command: /^example$/
+			roles: [],
+			ownerOnly: false
 		});
 	}
 
 	async action(message, args, mentions, original) // eslint-disable-line no-unused-vars
 	{
-		message.channel.sendMessage('Example command called');
+		message.channel.sendMessage(message.content);
+		console.log(this.bot.version); // eslint-disable-line no-console
 	}
 }

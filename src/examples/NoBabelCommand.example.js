@@ -1,6 +1,5 @@
-let Command = require('../lib/command/Command').default;
+let Command = require('yamdbf').Command;
 
-// Command class to extend to create commands users can execute
 exports.default = class Example extends Command
 {
 	constructor(bot)
@@ -12,13 +11,16 @@ exports.default = class Example extends Command
 			usage: '<prefix>example',
 			extraHelp: 'An example command to show the basic boilerplate for writing a command.',
 			group: 'example',
-			// guildOnly: true,
-			permissions: ['ADMINISTRATOR']
+			guildOnly: false,
+			permissions: [],
+			roles: [],
+			ownerOnly: false
 		});
 	}
 
-	action(message, args, mentions, original)
+	action(message, args, mentions, original) // eslint-disable-line no-unused-vars
 	{
-		console.log(message.content); // eslint-disable-line no-console
+		message.channel.sendMessage(message.content);
+		console.log(this.bot.version); // eslint-disable-line no-console
 	}
 };
