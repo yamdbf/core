@@ -59,4 +59,9 @@ exports.default = class Ping extends Command
 
 It should be noted that command actions have access to the Discord.js Client instance via `this.bot`.
 
-That's about it for creating a bot and adding commands. Proper documentation will come soon. 👌
+That's about it for creating a bot and adding commands.
+
+#Documentation
+
+I've only just started on the documentation but I don't think it should take too long. I intend to finish it up before I start rewriting my bots using the framework.
+- [Documentation](https://zajrik.github.io/yamdbf/index.html)
