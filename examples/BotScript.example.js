@@ -6,7 +6,7 @@ const bot = new Bot({
 	token: config.token,
 	config: config,
 	selfbot: false,
-	version: '1.0.2',
+	version: '1.0.0',
 	statusText: 'try @mention help',
 	commandsDir: path.join(__dirname, 'commands')
 }).start();
