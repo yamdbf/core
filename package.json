@@ -8,7 +8,7 @@
     "clean": "gulp clean",
     "rebuild": "gulp clean && gulp build",
     "package": "gulp clean-package && gulp package",
-	"tag-release": "gulp tag-release"
+    "tag-release": "gulp tag-release"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
@@ -31,6 +31,7 @@
     "gulp-babel": "^6.1.2",
     "gulp-exec": "^2.1.2",
     "gulp-sourcemaps": "^1.6.0",
+    "jsdoc": "^3.4.2",
     "source-map-support": "^0.4.2"
   },
   "babel": {
