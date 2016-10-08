@@ -1,10 +1,22 @@
 'use babel';
 'use strict';
 
+/**
+ * Handles dispatching commands
+ * @class CommandDispatcher
+ * @param {Bot} bot - Bot instance
+ */
 export default class CommandDispatcher
 {
 	constructor(bot)
 	{
+		/**
+		 * Bot instance
+		 * @memberof CommandDispatcher
+		 * @type {Bot}
+		 * @name bot
+		 * @instance
+		 */
 		this.bot = bot;
 
 		this.bot.on('message', message =>
@@ -13,6 +25,13 @@ export default class CommandDispatcher
 		});
 	}
 
+	/**
+	 * Determine if message is a valid command call and send to {@link CommandDispatcher#dispatch}
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {external:Message} message - Discord.js message object
+	 * @returns {*}
+	 */
 	handleMessage(message)
 	{
 		let config = this.bot.config;
@@ -38,6 +57,15 @@ export default class CommandDispatcher
 		return this.dispatch(command, message, args, mentions, original);
 	}
 
+	/**
+	 * Processes message content, finding the command to execute and creating an
+	 * object containing the found command, mentions, args, processed content, dm?,
+	 * and original raw message content
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {external:Message} message - Discord.js message object
+	 * @returns {Object}
+	 */
 	processContent(message)
 	{
 		let original = message.content;
@@ -101,6 +129,15 @@ export default class CommandDispatcher
 		return { command: command, mentions: mentions, args: args, content: content, dm: dm, original: original };
 	}
 
+	/**
+	 * Get a list of missing permissions for the given command, if any
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {boolean} dm - Whether the message is a DM
+	 * @param {external:Message} message - Discord.js message object
+	 * @param {Command} command - Command found by the dispatcher
+	 * @returns {Object}
+	 */
 	checkPermissions(dm, message, command)
 	{
 		let missing = [];
@@ -114,6 +151,15 @@ export default class CommandDispatcher
 		return missing;
 	}
 
+	/**
+	 * Checks if the user has roles for the given command
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {boolean} dm - Whether the message is a DM
+	 * @param {external:Message} message - Discord.js message object
+	 * @param {Command} command - Command found by the dispatcher
+	 * @returns {boolean}
+	 */
 	hasRoles(dm, message, command)
 	{
 		if (command.roles.length === 0) return true;
@@ -123,6 +169,13 @@ export default class CommandDispatcher
 		return false;
 	}
 
+	/**
+	 * Send a 'command not found' error message to the channel
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {external:Message} message - Discord.js message object
+	 * @returns {Promise<external:Message>}
+	 */
 	commandNotFoundError(message)
 	{
 		return message.channel.sendMessage(``
@@ -132,6 +185,13 @@ export default class CommandDispatcher
 			+ `to see what commands you can use there!`);
 	}
 
+	/**
+	 * Send a 'guild only' error message to the channel
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {external:Message} message - Discord.js message object
+	 * @returns {Promise<external:Message>}
+	 */
 	guildOnlyError(message)
 	{
 		return message.channel.sendMessage(``
@@ -139,6 +199,14 @@ export default class CommandDispatcher
 			+ `list of commands you can use in this DM`);
 	}
 
+	/**
+	 * Send a 'missing permissions' error message to the channel
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {external:PermissionResolvable[]} missing - Array of missing permissions
+	 * @param {external:Message} message - Discord.js message object
+	 * @returns {Promise<external:Message>}
+	 */
 	missingPermissionsError(missing, message)
 	{
 		return message[`${this.bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
@@ -152,6 +220,14 @@ export default class CommandDispatcher
 				});
 	}
 
+	/**
+	 * Send a 'missing roles' error message to the channel
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {external:Message} message - Discord.js message object
+	 * @param {Command} command - Command found by the dispatcher
+	 * @returns {Promise<external:Message>}
+	 */
 	missingRolesError(message, command)
 	{
 		return message[`${this.bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
@@ -165,6 +241,17 @@ export default class CommandDispatcher
 				});
 	}
 
+	/**
+	 * Pass the necessary items to the found Command's {@link Command#action} method
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {Command} command - The command found by the dispatcher
+	 * @param {external:Message} message - Discord.js message object
+	 * @param {args[]} args - An array containing the args parsed from the command calling message
+	 * @param {external:User[]} mentions - An array containing the Discord.js User
+	 * objects parsed from the mentions contained in a message
+	 * @param {string} original - The original raw content of the message that called the command
+	 */
 	async dispatch(command, message, args, mentions, original)
 	{
 		await command.action(message, args, mentions, original).catch(console.log); // eslint-disable-line no-unused-expressions, no-console

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>GuildStorageLoader - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,15 +28,99 @@
 
 <div id="main">
     
+    <h1 class="page-title">GuildStorageLoader</h1>
+    
 
     
 
 
 
+
+<section>
+
+<header>
+    
+        <h2>
+        GuildStorageLoader
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="GuildStorageLoader"><span class="type-signature"></span>new GuildStorageLoader<span class="signature">()</span><span class="type-signature"></span></h4>
+
     
 
 
 
+<div class="description">
+    Handles loading all guild-specific data from persistent storage into
+<a href="GuildStorage.html"><code>GuildStorage</code></a> objects
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -44,62 +128,358 @@
 
 
     
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="bot"><span class="type-signature"></span>bot<span class="type-signature"> :<a href="Bot.html">Bot</a></span></h4>
 
 
-    <section class="readme">
-        <article><h1>YAMDBF: Yet Another Modular Discord Bot Framework</h1><p><a href="https://discord.gg/WN78NuR"><img src="https://discordapp.com/api/guilds/233751981838041090/embed.png" alt="Discord"></a>
-<a href="https://www.npmjs.com/package/yamdbf"><img src="https://img.shields.io/npm/v/yamdbf.svg?maxAge=3600" alt="npm"></a>
-<a href="https://david-dm.org/zajrik/yamdbf"><img src="https://img.shields.io/david/zajrik/yamdbf.svg?maxAge=3600" alt="David"></a></p>
-<p><a href="https://nodei.co/npm/yamdbf/"><img src="https://nodei.co/npm/yamdbf.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
-<p>A Discord.js-based Discord Bot framework to be used as a base for quick bot development.</p>
-<p>Usage of the framework is pretty simple. <code>npm install --save yamdbf</code> in your project folder, create a folder to put commands in, rename <code>config.json.example</code> to <code>config.json</code>, fill in the values, and create a basic bot script.</p>
-<p>A basic bot script will look something like this</p>
-<pre class="prettyprint source lang-js"><code>const Bot = require('yamdbf').Bot;
-const config = require('./config.json');
-const path = require('path');
-const bot = new Bot({
-    name: 'bot',
-    token: config.token,
-    config: config,
-    selfbot: false,
-    version: '1.0.0',
-    statusText: 'try @mention help',
-    commandsDir: path.join(__dirname, 'commands')
-}).start();</code></pre><p>And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. I prefer using Babel so that I can use syntax that Node doesn't yet have but for the sake of usability I'll provide an example command using currently-native Node syntax:</p>
-<pre class="prettyprint source lang-js"><code>let Command = require('yamdbf').Command;
-
-exports.default = class Ping extends Command
-{
-    constructor(bot)
-    {
-        super(bot, {
-            name: 'ping',
-            aliases: ['p'],
-            description: 'Pong!',
-            usage: '&lt;prefix>ping',
-            extraHelp: 'A basic ping/pong command example.',
-            group: 'example',
-            guildOnly: false,
-            permissions: [],
-            roles: [],
-            ownerOnly: false
-        });
-    }
-
-    action(message, args, mentions, original) // eslint-disable-line no-unused-vars
-    {
-        message.reply('Pong!');
-    }
-};</code></pre><p>It should be noted that command actions have access to the Discord.js Client instance via <code>this.bot</code>.</p>
-<p>That's about it for creating a bot and adding commands.</p>
-<p>#Documentation</p>
-<p>I've only just started on the documentation but I don't think it should take too long. I intend to finish it up before I start rewriting my bots using the framework.</p>
-<ul>
-<li><a href="https://zajrik.github.io/yamdbf/index.html">Documentation</a></li>
-</ul></article>
-    </section>
 
 
+<div class="description">
+    Bot instance
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Bot.html">Bot</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="initNewGuilds"><span class="type-signature"></span>initNewGuilds<span class="signature">(localStorage)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Assign a GuildStorage to guilds that lack one due to the bot being
+in the guild before adopting this storage spec or the bot being
+added to a new guild
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>localStorage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LocalStorage.html">LocalStorage</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">LocalStorage instance containing all guild-specific data stores</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="loadStorages"><span class="type-signature"></span>loadStorages<span class="signature">(localStorage)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Load data for each guild from persistent storage and store it in a
+<a href="GuildStorage.html"><code>GuildStorage</code></a> object
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>localStorage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LocalStorage.html">LocalStorage</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">LocalStorage instance containing all guild-specific data stores</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

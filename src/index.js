@@ -20,3 +20,9 @@ export const Command = _Command;
 export const CommandLoader = _CommandLoader;
 export const CommandRegistry = _CommandRegistry;
 export const CommandDispatcher = _CommandDispatcher;
+
+/** @external {Collection} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Collection} */
+/** @external {Guild} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Guild} */
+/** @external {Message} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Message} */
+/** @external {User} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/User} */
+/** @external {PermissionResolvable} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/typedef/PermissionResolvable} */

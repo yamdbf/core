@@ -1,13 +1,44 @@
 'use babel';
 'use strict';
 
-// Store settings and other data for an individual guild
+/**
+ * Handle loading, saving, and storing Guild data and settings
+ * via persistent storage. Created automatically per-guild
+ * by {@link GuildStorageLoader}
+ * @class GuildStorage
+ * @param {Bot} bot - Bot instance
+ * @param {(external:Guild|string)} guild - Discord.js Guild object or guild ID string
+ * @param {LocalStorage} localStorage - LocalStorage instance containing all guild-specific data
+ */
 export default class GuildStorage
 {
 	constructor(bot, guild, localStorage)
 	{
+		/**
+		 * Discord.js Guild ID string
+		 * @memberof GuildStorage
+		 * @type {string}
+		 * @name id
+		 * @instance
+		 */
 		this.id = guild.id || guild;
+
+		/**
+		 * LocalStorage instance containing all guild-specific data
+		 * @memberof GuildStorage
+		 * @type {LocalStorage}
+		 * @name localStorage
+		 * @instance
+		 */
 		this.localStorage = localStorage;
+
+		/**
+		 * The data loaded from persistent storage kept in memory
+		 * @memberof GuildStorage
+		 * @type {Object}
+		 * @name data
+		 * @instance
+		 */
 		this.data = this.localStorage.getItem(this.id) || null;
 
 		// Create blank storage for the guild if no storage is present
@@ -25,13 +56,21 @@ export default class GuildStorage
 		}
 	}
 
-	// Load the data from localStorage for this guild
+	/**
+	 * Load the data from localStorage for this guild
+	 * @memberof GuildStorage
+	 * @instance
+	 */
 	load()
 	{
 		this.data = this.localStorage.getItem(this.id);
 	}
 
-	// Write to localStorage
+	/**
+	 * Write to the localStorage for this guild
+	 * @memberof GuildStorage
+	 * @instance
+	 */
 	save()
 	{
 		this.localStorage.setItem(this.id, this.data);
@@ -39,21 +78,37 @@ export default class GuildStorage
 
 	// Settings storage ////////////////////////////////////////////////////////
 
-	// Return the number of keys in this guild's settings
-	get settingLength()
+	/**
+	 * The number of keys in this Guild's settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @type {number}
+	 */
+	get settingsLength()
 	{
 		this.load();
 		return this.data.settings.length;
 	}
 
-	// Return the names of all keys in this guild's settings
-	get settingKeys()
+	/**
+	 * The names of all keys in this guild's settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @type {string[]}
+	 */
+	get settingsKeys()
 	{
 		this.load();
 		return Object.keys(this.data.settings);
 	}
 
-	// Return the name of the key at the given index in this guild's settings
+	/**
+	 * Get the name of the key at the given index in this guild's settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {number} index - The index of the key to find
+	 * @returns {string}
+	 */
 	settingKey(index)
 	{
 		if (!index || index < 0) return null;
@@ -62,7 +117,13 @@ export default class GuildStorage
 		return Object.keys(this.data.settings)[index];
 	}
 
-	// Return the value of the given key in this guild's settings
+	/**
+	 * Get the value of the given key in this guild's settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the setting to get
+	 * @returns {*}
+	 */
 	getSetting(key)
 	{
 		if (!key) return null;
@@ -70,7 +131,13 @@ export default class GuildStorage
 		return this.data.settings[key] || null;
 	}
 
-	// Set the value of a settings in this guild's settings
+	/**
+	 * Set the value of a setting in this guild's settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the setting to set
+	 * @param {*} value - The value to set
+	 */
 	setSetting(key, value)
 	{
 		if (!key || !value) return;
@@ -78,7 +145,12 @@ export default class GuildStorage
 		this.save();
 	}
 
-	// Delete a setting in this guild's settings
+	/**
+	 * Delete a setting in this guild's settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the setting to delete
+	 */
 	removeSetting(key)
 	{
 		if (!key) return;
@@ -86,13 +158,25 @@ export default class GuildStorage
 		this.save();
 	}
 
-	// Check if a setting exists
+	/**
+	 * Check if a setting exists
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the setting to check for
+	 * @returns {boolean}
+	 */
 	settingExists(key)
 	{
 		return !!this.getSetting(key);
 	}
 
-	// Reset the settings for this guild to default
+	/**
+	 * Reset the settings for this guild to default, deleting any
+	 * extra settings that are not part of the [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {Object} defaults - Should always use [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 */
 	resetSettings(defaults)
 	{
 		this.data.settings = defaults;
@@ -101,21 +185,37 @@ export default class GuildStorage
 
 	// Non-settings storage ////////////////////////////////////////////////////
 
-	// Return the number of keys in storage for this guild, not counting settings
+	/**
+	 * The number of keys in this guild's storage, not counting settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @type {number}
+	 */
 	get length()
 	{
 		this.load();
 		return Object.keys(this.data).length - 1 || 0;
 	}
 
-	// Return the names of all keys in storage for this guild, not counting settings
+	/**
+	 * The names of all keys in this guild's storage, not counting settings
+	 * @memberof GuildStorage
+	 * @instance
+	 * @type {string[]}
+	 */
 	get keys()
 	{
 		this.load();
 		return Object.keys(this.data).filter(key => key !== 'settings');
 	}
 
-	// Return the name of the key at the given index in this guild's storage
+	/**
+	 * Get the name of the key at the given index in this guild's storage
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {number} index - The index of the key to find
+	 * @returns {string}
+	 */
 	key(index)
 	{
 		if (!index || index < 0) return null;
@@ -124,7 +224,13 @@ export default class GuildStorage
 		return Object.keys(this.data)[index];
 	}
 
-	// Return the value of the given key in this guild's storage
+	/**
+	 * Get the value of the given key in this guild's storage
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to get
+	 * @returns {*}
+	 */
 	getItem(key)
 	{
 		if (!key || key === 'settings') return null;
@@ -132,7 +238,13 @@ export default class GuildStorage
 		return this.data[key] || null;
 	}
 
-	// Set the value of a given key in this guild's storage
+	/**
+	 * Set the value of a given key in this guild's storage
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to set
+	 * @param {*} value - The value to set
+	 */
 	setItem(key, value)
 	{
 		if (!key || key === 'settings') return;
@@ -141,7 +253,12 @@ export default class GuildStorage
 		this.save();
 	}
 
-	// Delete the item from this guild's storage
+	/**
+	 * Delete an item in this guild's storage
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to delete
+	 */
 	removeItem(key)
 	{
 		if (!key || key === 'settings') return;
@@ -150,15 +267,26 @@ export default class GuildStorage
 		this.save();
 	}
 
-	// Check if guild storage key/value pair exists
+	/**
+	 * Check if key/value pair exists in this guild's storage
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to check for
+	 * @returns {boolean}
+	 */
 	exists(key)
 	{
 		return !!this.getItem(key);
 	}
 
-	// Delete all non-settings items from storage
+	/**
+	 * Delete all non-settings items from this guild's storage
+	 * @memberof GuildStorage
+	 * @instance
+	 */
 	clear()
 	{
+		this.load();
 		this.data = { settings: this.data.settings };
 		this.save();
 	}

@@ -6,14 +6,32 @@ import path from 'path';
 
 import CommandRegistry from './CommandRegistry';
 
-// Load all commands from the bots commandsDir
+/**
+ * Handles loading all commands from the given Bot's commandsDir
+ * @class CommandLoader
+ * @param {Bot} bot - Bot instance
+ */
 export default class CommandLoader
 {
 	constructor(bot)
 	{
+		/**
+		 * Bot instance
+		 * @memberof CommandLoader
+		 * @type {Bot}
+		 * @name bot
+		 * @instance
+		 */
 		this.bot = bot;
 	}
 
+	/**
+	 * Load or reload all commands from the base commands directory and the
+	 * user-specified {@link Bot#commandsDir} directory and stores them in
+	 * the Bot's {@link CommandRegistry} instance ({@link Bot#commands})
+	 * @memberof CommandLoader
+	 * @instance
+	 */
 	loadCommands()
 	{
 		if (this.bot.commands.size > 0) this.bot.commands = new CommandRegistry();
@@ -31,6 +49,13 @@ export default class CommandLoader
 		});
 	}
 
+	/**
+	 * Reload the given command in the Bot's {@link CommandRegistry} ({@link Bot#commands})
+	 * @memberof CommandLoader
+	 * @instance
+	 * @param {string} nameOrAlias - {@link Command#name} or {@link Command#aliases} alias
+	 * @returns {boolean}
+	 */
 	reloadCommand(nameOrAlias)
 	{
 		let name = this.bot.commands.findByNameOrAlias(nameOrAlias).name;

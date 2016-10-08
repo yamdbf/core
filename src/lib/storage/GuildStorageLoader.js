@@ -3,15 +3,32 @@
 
 import GuildStorage from './GuildStorage';
 
-// Handle loading all GuildStorage objects
+/**
+ * Handles loading all guild-specific data from persistent storage into
+ * {@link GuildStorage} objects
+ * @class GuildStorageLoader
+ */
 export default class GuildStorageLoader
 {
 	constructor(bot)
 	{
+		/**
+		 * Bot instance
+		 * @memberof GuildStorageLoader
+		 * @type {Bot}
+		 * @name bot
+		 * @instance
+		 */
 		this.bot = bot;
 	}
 
-	// Load all guild storages from localStorage
+	/**
+	 * Load data for each guild from persistent storage and store it in a
+	 * {@link GuildStorage} object
+	 * @memberof GuildStorageLoader
+	 * @instance
+	 * @param {LocalStorage} localStorage - LocalStorage instance containing all guild-specific data stores
+	 */
 	loadStorages(localStorage)
 	{
 		Object.keys(localStorage.data).forEach((key) =>
@@ -29,9 +46,14 @@ export default class GuildStorageLoader
 		}
 	}
 
-	// Assign guild storage to guilds that lack one due to the bot
-	// being in the guild before adopting this storage spec or adding
-	// the bot to a new guild
+	/**
+	 * Assign a GuildStorage to guilds that lack one due to the bot being
+	 * in the guild before adopting this storage spec or the bot being
+	 * added to a new guild
+	 * @memberof GuildStorageLoader
+	 * @instance
+	 * @param {LocalStorage} localStorage - LocalStorage instance containing all guild-specific data stores
+	 */
 	initNewGuilds(localStorage)
 	{
 		let storagelessGuilds = this.bot.guilds.filter(guild =>

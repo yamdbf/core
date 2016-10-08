@@ -14,7 +14,7 @@ import CommandDispatcher from '../command/CommandDispatcher';
  * guilds it is a member of
  * @class Bot
  * @extends {Client}
- * @param {BotOptions} options - [BotOptions]{@link Bot.BotOptions} object containing required bot properties
+ * @param {BotOptions} options - [BotOptions]{@link BotOptions} object containing required bot properties
  */
 export default class Bot extends Client
 {
@@ -102,6 +102,7 @@ export default class Bot extends Client
 		this.storage = new LocalStorage('bot-storage');
 
 		// Load defaultGuildSettings into storage the first time the bot is run
+		/** @typedef {defaultGuildSettings} The default settings to apply to new guilds */
 		if (!this.storage.exists('defaultGuildSettings')) // eslint-disable-line curly
 			this.storage.setItem('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
@@ -148,7 +149,7 @@ export default class Bot extends Client
 		this.commandLoader = new CommandLoader(this);
 
 		/**
-		 * Collection containing all loaded commands
+		 * [Collection]{@link external:Collection} containing all loaded commands
 		 * @memberof Bot
 		 * @type {CommandRegistry<string, Command>}
 		 * @name commands
@@ -174,7 +175,6 @@ export default class Bot extends Client
 	 * Logs the Bot in and registers some event handlers
 	 * @memberof Bot
 	 * @instance
-	 * @method start
 	 * @returns {Bot}
 	 */
 	start()
@@ -251,8 +251,8 @@ export default class Bot extends Client
 }
 
 /**
- * @typedef {Object} BotOptions Object containing required {@link Bot} properties
- * @memberof Bot
+ * @typedef {Object} BotOptions Object containing required {@link Bot} properties to be
+ * passed to a Bot on construction
  * @property {string} [name='botname'] - See: {@link Bot#name}
  * @property {string} token - See: {@link Bot#token}
  * @property {string} commandsDir - See: {@link Bot#commandsDir}

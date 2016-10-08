@@ -4,8 +4,8 @@
 /**
  * Command class to extend to create commands users can execute
  * @class Command
- * @param {Bot} bot - {@link Bot} instance
- * @param {CommandInfo} info - [CommandInfo]{@link Command.CommandInfo} object containing required command properties
+ * @param {Bot} bot - Bot instance
+ * @param {CommandInfo} info - [CommandInfo]{@link CommandInfo} object containing required command properties
  */
 export default class Command
 {
@@ -118,11 +118,10 @@ export default class Command
 		/**
 		 * Array of permissions required by the command
 		 * caller to be able to execute the command in the guild the command is called in.
-		 * See: [PermissionResolvable]{@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/typedef/PermissionResolvable}
 		 * <br><br>
 		 * If any permissions are provided the command's `guildOnly` property will be automatically set to true
 		 * @memberof Command
-		 * @type {PermissionResolvable[]}
+		 * @type {external:PermissionResolvable[]}
 		 * @name permissions
 		 * @instance
 		 */
@@ -158,7 +157,6 @@ export default class Command
 	/**
 	 * Action to be executed when the command is called
 	 * @memberof Command
-	 * @method action
 	 * @instance
 	 */
 	async action()
@@ -170,7 +168,6 @@ export default class Command
 	 * Assert {@link Command#action} is typeof Function, finishing the
 	 * command creation process.<br>Called by {@link CommandRegistry#register}
 	 * @memberof Command
-	 * @method register
 	 * @instance
 	 */
 	register()
@@ -184,7 +181,6 @@ export default class Command
 /**
  * @typedef {Object} CommandInfo - Object containing required {@link Command} properties
  * to be passed to a Command on construction
- * @memberof Command
  * @property {string} name - See: {@link Command#name}
  * @property {string} description - See: {@link Command#description}
  * @property {string} usage - See: {@link Command#usage}

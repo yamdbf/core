@@ -9,7 +9,7 @@
     "rebuild": "gulp clean && gulp build",
     "package": "gulp clean-package && gulp package",
     "tag-release": "gulp tag-release",
-    "docs": "./node_modules/.bin/jsdoc -R README.md -c .jsdoc.json -r src"
+    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r src"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
@@ -34,7 +34,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "jsdoc": "^3.4.2",
     "jsdoc-strip-async-await": "^0.1.0",
-    "minami": "^1.1.1",
+    "minami": "1.1.1",
     "source-map-support": "^0.4.2"
   },
   "babel": {

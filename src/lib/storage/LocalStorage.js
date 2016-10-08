@@ -3,24 +3,68 @@
 
 import Database from 'node-json-db';
 
+/**
+ * Creates a persistent storage file and handles interacting with the persistent
+ * storage
+ * @class LocalStorage
+ * @param {string} fileName - The name of the persistent storage file. Will be json format
+ */
 export default class LocalStorage
 {
 	constructor(fileName)
 	{
 		if (!fileName) throw new Error('You must provide a file name for the LocalStorage');
 
+		/**
+		 * The data loaded from persistent storage kept in memory
+		 * @memberof LocalStorage
+		 * @type {Object}
+		 * @name data
+		 * @instance
+		 */
 		this.data = null;
+
+		/**
+		 * Create or load the node-json-db database json file
+		 * @memberof LocalStorage
+		 * @type {Object}
+		 * @name db
+		 * @instance
+		 */
 		this.db = new Database(fileName, true, true);
+
+		// Load the data from persistent storage
 		this.load();
 	}
 
-	// Return the number of keys in LocalStorage
+	/**
+	 * The number of keys in this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 * @type {number}
+	 */
 	get length()
 	{
 		return Object.keys(this.data).length || 0;
 	}
 
-	// Load the data from the persistent storage into memory
+	/**
+	 * The names of all keys in this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 * @type {string[]}
+	 */
+	get keys()
+	{
+		this.load();
+		return Object.keys(this.data);
+	}
+
+	/**
+	 * Load the data from persistent storage into memory
+	 * @memberof LocalStorage
+	 * @instance
+	 */
 	load()
 	{
 		try
@@ -34,13 +78,23 @@ export default class LocalStorage
 		}
 	}
 
-	// Write to persistent storage
+	/**
+	 * Write to persistent storage
+	 * @memberof LocalStorage
+	 * @instance
+	 */
 	save()
 	{
 		this.db.push('/', this.data, true);
 	}
 
-	// Return the name of key at the given index
+	/**
+	 * Get the name of the key at the given index in this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {number} index - The index of the key to find
+	 * @returns {string}
+	 */
 	key(index)
 	{
 		if (!index || index < 0) return null;
@@ -49,7 +103,13 @@ export default class LocalStorage
 		return Object.keys(this.data)[index];
 	}
 
-	// Return the value of the given key LocalStorage
+	/**
+	 * Get the value of the given key in this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {string} key - The key of the item to get
+	 * @returns {*}
+	 */
 	getItem(key)
 	{
 		if (!key) return null;
@@ -58,6 +118,13 @@ export default class LocalStorage
 	}
 
 	// Set the value of a key
+	/**
+	 * Set the value of a given key in this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {string} key - The key of the item to set
+	 * @param {*} value - The value to set
+	 */
 	setItem(key, value)
 	{
 		if (!value) return;
@@ -66,7 +133,12 @@ export default class LocalStorage
 		this.save();
 	}
 
-	// Delete the item from storage
+	/**
+	 * Delete an item in this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {string} key - The key of the item to delete
+	 */
 	removeItem(key)
 	{
 		if (!key) return;
@@ -75,13 +147,23 @@ export default class LocalStorage
 		this.save();
 	}
 
-	// See if a key/value pair exists
+	/**
+	 * Check if key/value pair exists in this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {string} key - The key of the item to check for
+	 * @returns {boolean}
+	 */
 	exists(key)
 	{
 		return !!this.getItem(key);
 	}
 
-	// Delete all items from storage
+	/**
+	 * Delete all non-settings items from this storage
+	 * @memberof LocalStorage
+	 * @instance
+	 */
 	clear()
 	{
 		this.data = {};

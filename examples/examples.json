@@ -1,0 +1,9 @@
+{
+	"UsingBotStorage": {
+		"title": "Using bot-specific storage"
+	},
+	"UsingGuildStorage": {
+		"title": "Using guild-specific storage"
+	}
+
+}

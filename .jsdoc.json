@@ -3,7 +3,10 @@
 	"templates": {
         "cleverLinks": true,
         "monospaceLinks": true,
-        "useLongnameInNav": false
+        "useLongnameInNav": false,
+		"default": {
+            "outputSourceFiles": false
+        }
     },
 	"opts": {
         "destination": "./docs/",

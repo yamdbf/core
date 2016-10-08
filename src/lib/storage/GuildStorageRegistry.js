@@ -3,7 +3,11 @@
 
 import { Collection } from 'discord.js';
 
-// Handle storage of all GuildStorage objects
+/**
+ * Stores all guild-specific storages as &lt;[id]{@link GuildStorage#id}, {@link GuildStorage}&gt; pairs
+ * @class GuildStorageRegistry
+ * @extends {external:Collection}
+ */
 export default class GuildStorageRegistry extends Collection
 {
 	constructor()
@@ -11,13 +15,27 @@ export default class GuildStorageRegistry extends Collection
 		super();
 	}
 
-	// Allow guild lookup by Guild object or id string
+	/**
+	 * Get the GuildStorage by [Guild]{@link external:Guild} or guild id string
+	 * @memberof GuildStorageRegistry
+	 * @instance
+	 * @param {(external:Guild|string)} guild - Guild object or guild id string
+	 * @returns {GuildStorage}
+	 */
 	get(guild)
 	{
 		return super.get(guild.id ? guild.id : guild);
 	}
 
-	// Return a collection of of guilds with a specific setting value
+	/**
+	 * Return a [Collection]{@link external:Collection} of GuildStorage items that
+	 * have the setting key and value
+	 * @memberof GuildStorageRegistry
+	 * @instance
+	 * @param {string} key - Setting key to match
+	 * @param {*} value - Value to match
+	 * @returns {external:Collection<string, GuildStorage>}
+	 */
 	findAllBySetting(key, value)
 	{
 		let collection = new Collection();
@@ -29,7 +47,13 @@ export default class GuildStorageRegistry extends Collection
 		return collection;
 	}
 
-	// Reset all guild settings to default
+	/**
+	 * Reset all guild settings to default, deleting any extra settings that are
+	 * not part of the [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 * @memberof GuildStorageRegistry
+	 * @instance
+	 * @param {Object} defaults - Should always use [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 */
 	resetAllGuildSettings(defaults)
 	{
 		super.forEach(guild => guild.resetSettings(defaults));
