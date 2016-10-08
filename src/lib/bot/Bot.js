@@ -9,47 +9,82 @@ import CommandLoader from '../command/CommandLoader';
 import CommandRegistry from '../command/CommandRegistry';
 import CommandDispatcher from '../command/CommandDispatcher';
 
+/**
+ * The Discord.js Client instance. Contains its own storage as well as storage for
+ * guilds it is a member of
+ * @class Bot
+ * @extends {Client}
+ * @param {BotOptions} options - [BotOptions]{@link Bot.BotOptions} object containing required bot properties
+ */
 export default class Bot extends Client
 {
-	/**
-	 * The Discord.js Client instance. Contains its own storage as well as storage for
-	 * guilds it is a member of
-	 * @class Bot
-	 * @constructor Bot
-	 * @extends {Client}
-	 * @param {Object} options - Options to pass to the bot
-	 * @param {string} [options.name='botname'] - The name to give the bot
-	 * @param {string} options.token - Discord login token for the bot
-	 * @param {string} options.commandsDir - Directory to find command class files
-	 * @param {string} [options.statusText='@mention help'] - Status text for the bot
-	 * @param {string} [options.version='0.0.0'] - Bot version, best taken from package.json
-	 * @param {Object} options.config - Object containing token and and owner ids
-	 * @param {string} options.config.token - Discord login token for the bot
-	 * @param {string[]} options.config.owner - Array of owner id strings
-	 */
 	constructor(options = null)
 	{
 		super();
 
-		/** @type {string} */
+		/**
+		 * The name of the Bot
+		 * @memberof Bot
+		 * @type {string}
+		 * @name name
+		 * @instance
+		 */
 		this.name = options.name || 'botname';
 
-		/** @type {string} */
+		/**
+		 * Discord login token for the Bot
+		 * @memberof Bot
+		 * @type {string}
+		 * @name token
+		 * @instance
+		 */
 		this.token = options.token;
 
-		/** @type {string} */
+		/**
+		 * Directory to find command class files
+		 * @memberof Bot
+		 * @type {string}
+		 * @name commandsDir
+		 * @instance
+		 */
 		this.commandsDir = options.commandsDir;
 
-		/** @type {string} */
+		/**
+		 * Status text for the bot
+		 * @memberof Bot
+		 * @type {string}
+		 * @name statusText
+		 * @instance
+		 */
 		this.statusText = options.statusText || '@mention help';
 
-		/** @type {boolean} */
+		/**
+		 * Whether or not the bot is a selfbot
+		 * @memberof Bot
+		 * @type {boolean}
+		 * @name selfbot
+		 * @instance
+		 */
 		this.selfbot = options.selfbot || false;
 
-		/** @type {string} */
+		/**
+		 * Bot version, best taken from package.json
+		 * @memberof Bot
+		 * @type {string}
+		 * @name version
+		 * @instance
+		 */
 		this.version = options.version || '0.0.0';
 
-		/** @type {Object} */
+		/**
+		 * Object containing token and owner ids
+		 * @memberof Bot
+		 * @type {Object}
+		 * @name config
+		 * @instance
+		 * @property {string} token - Discord login token for the bot
+		 * @property {string[]} owner - Array of owner id strings
+		 */
 		this.config = options.config || null;
 
 		// Make some asserts
@@ -65,6 +100,8 @@ export default class Bot extends Client
 		 * @instance
 		 */
 		this.storage = new LocalStorage('bot-storage');
+
+		// Load defaultGuildSettings into storage the first time the bot is run
 		if (!this.storage.exists('defaultGuildSettings')) // eslint-disable-line curly
 			this.storage.setItem('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
@@ -138,7 +175,7 @@ export default class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @method start
-	 * @returns {Bot} this - This bot instance
+	 * @returns {Bot}
 	 */
 	start()
 	{
@@ -169,7 +206,8 @@ export default class Bot extends Client
 
 	/**
 	 * Set the value of a default setting key and push it to all guild
-	 * setting storages
+	 * setting storages. Will not overwrite a setting in guild settings
+	 * storage if there is already an existing key with the given value
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key to use in settings storage
@@ -211,3 +249,15 @@ export default class Bot extends Client
 		return this.guildStorages.get(guild).getSetting('prefix') || null;
 	}
 }
+
+/**
+ * @typedef {Object} BotOptions Object containing required {@link Bot} properties
+ * @memberof Bot
+ * @property {string} [name='botname'] - See: {@link Bot#name}
+ * @property {string} token - See: {@link Bot#token}
+ * @property {string} commandsDir - See: {@link Bot#commandsDir}
+ * @property {string} [statusText='@mention help'] - See: {@link Bot#statusText}
+ * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
+ * @property {string} [version='0.0.0'] - See: {@link Bot#version}
+ * @property {Object} config - See: {@link Bot#config}
+ */

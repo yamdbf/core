@@ -2,22 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Bot.js</title>
+    <title>bot/Bot.js - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: Bot.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Bot.html">Bot</a><ul class='methods'><li data-type='method'><a href="Bot.html#defaultSettingExists">defaultSettingExists</a></li><li data-type='method'><a href="Bot.html#getPrefix">getPrefix</a></li><li data-type='method'><a href="Bot.html#setDefaultSetting">setDefaultSetting</a></li><li data-type='method'><a href="Bot.html#start">start</a></li></ul></li><li><a href="Command.html">Command</a><ul class='methods'><li data-type='method'><a href="Command.html#action">action</a></li><li data-type='method'><a href="Command.html#register">register</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">bot/Bot.js</h1>
+    
 
     
 
@@ -37,47 +49,82 @@ import CommandLoader from '../command/CommandLoader';
 import CommandRegistry from '../command/CommandRegistry';
 import CommandDispatcher from '../command/CommandDispatcher';
 
+/**
+ * The Discord.js Client instance. Contains its own storage as well as storage for
+ * guilds it is a member of
+ * @class Bot
+ * @extends {Client}
+ * @param {BotOptions} options - [BotOptions]{@link Bot.BotOptions} object containing required bot properties
+ */
 export default class Bot extends Client
 {
-	/**
-	 * The Discord.js Client instance. Contains its own storage as well as storage for
-	 * guilds it is a member of
-	 * @class Bot
-	 * @constructor Bot
-	 * @extends {Client}
-	 * @param {Object} options - Options to pass to the bot
-	 * @param {string} [options.name='botname'] - The name to give the bot
-	 * @param {string} options.token - Discord login token for the bot
-	 * @param {string} options.commandsDir - Directory to find command class files
-	 * @param {string} [options.statusText='@mention help'] - Status text for the bot
-	 * @param {string} [options.version='0.0.0'] - Bot version, best taken from package.json
-	 * @param {Object} options.config - Object containing token and and owner ids
-	 * @param {string} options.config.token - Discord login token for the bot
-	 * @param {string[]} options.config.owner - Array of owner id strings
-	 */
 	constructor(options = null)
 	{
 		super();
 
-		/** @type {string} */
+		/**
+		 * The name of the Bot
+		 * @memberof Bot
+		 * @type {string}
+		 * @name name
+		 * @instance
+		 */
 		this.name = options.name || 'botname';
 
-		/** @type {string} */
+		/**
+		 * Discord login token for the Bot
+		 * @memberof Bot
+		 * @type {string}
+		 * @name token
+		 * @instance
+		 */
 		this.token = options.token;
 
-		/** @type {string} */
+		/**
+		 * Directory to find command class files
+		 * @memberof Bot
+		 * @type {string}
+		 * @name commandsDir
+		 * @instance
+		 */
 		this.commandsDir = options.commandsDir;
 
-		/** @type {string} */
+		/**
+		 * Status text for the bot
+		 * @memberof Bot
+		 * @type {string}
+		 * @name statusText
+		 * @instance
+		 */
 		this.statusText = options.statusText || '@mention help';
 
-		/** @type {boolean} */
+		/**
+		 * Whether or not the bot is a selfbot
+		 * @memberof Bot
+		 * @type {boolean}
+		 * @name selfbot
+		 * @instance
+		 */
 		this.selfbot = options.selfbot || false;
 
-		/** @type {string} */
+		/**
+		 * Bot version, best taken from package.json
+		 * @memberof Bot
+		 * @type {string}
+		 * @name version
+		 * @instance
+		 */
 		this.version = options.version || '0.0.0';
 
-		/** @type {Object} */
+		/**
+		 * Object containing token and owner ids
+		 * @memberof Bot
+		 * @type {Object}
+		 * @name config
+		 * @instance
+		 * @property {string} token - Discord login token for the bot
+		 * @property {string[]} owner - Array of owner id strings
+		 */
 		this.config = options.config || null;
 
 		// Make some asserts
@@ -93,6 +140,8 @@ export default class Bot extends Client
 		 * @instance
 		 */
 		this.storage = new LocalStorage('bot-storage');
+
+		// Load defaultGuildSettings into storage the first time the bot is run
 		if (!this.storage.exists('defaultGuildSettings')) // eslint-disable-line curly
 			this.storage.setItem('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
@@ -166,7 +215,7 @@ export default class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @method start
-	 * @returns {Bot} this - This bot instance
+	 * @returns {Bot}
 	 */
 	start()
 	{
@@ -197,7 +246,8 @@ export default class Bot extends Client
 
 	/**
 	 * Set the value of a default setting key and push it to all guild
-	 * setting storages
+	 * setting storages. Will not overwrite a setting in guild settings
+	 * storage if there is already an existing key with the given value
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key to use in settings storage
@@ -239,6 +289,18 @@ export default class Bot extends Client
 		return this.guildStorages.get(guild).getSetting('prefix') || null;
 	}
 }
+
+/**
+ * @typedef {Object} BotOptions Object containing required {@link Bot} properties
+ * @memberof Bot
+ * @property {string} [name='botname'] - See: {@link Bot#name}
+ * @property {string} token - See: {@link Bot#token}
+ * @property {string} commandsDir - See: {@link Bot#commandsDir}
+ * @property {string} [statusText='@mention help'] - See: {@link Bot#statusText}
+ * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
+ * @property {string} [version='0.0.0'] - See: {@link Bot#version}
+ * @property {Object} config - See: {@link Bot#config}
+ */
 </code></pre>
         </article>
     </section>
@@ -248,17 +310,13 @@ export default class Bot extends Client
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Bot.html">Bot</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Fri Oct 07 2016 16:03:55 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Fri Oct 07 2016 20:43:55 GMT-0500 (Central Daylight Time) using the Minami theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

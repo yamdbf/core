@@ -1,0 +1,13 @@
+{
+	"plugins": ["node_modules/jsdoc-strip-async-await"],
+	"templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true,
+        "useLongnameInNav": false
+    },
+	"opts": {
+        "destination": "./docs/",
+        "recurse": true,
+        "template": "./node_modules/minami"
+    }
+}

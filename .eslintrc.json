@@ -10,7 +10,8 @@
 			"nestedBinaryExpressions": false
 		}],
 		"valid-jsdoc": ["error", {
-			"requireReturn": false
+			"requireReturn": false,
+			"requireReturnDescription": false
 		}],
 
 		"accessor-pairs": "warn",

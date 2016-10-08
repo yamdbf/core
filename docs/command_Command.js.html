@@ -1,4 +1,44 @@
-'use babel';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>command/Command.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Bot.html">Bot</a><ul class='methods'><li data-type='method'><a href="Bot.html#defaultSettingExists">defaultSettingExists</a></li><li data-type='method'><a href="Bot.html#getPrefix">getPrefix</a></li><li data-type='method'><a href="Bot.html#setDefaultSetting">setDefaultSetting</a></li><li data-type='method'><a href="Bot.html#start">start</a></li></ul></li><li><a href="Command.html">Command</a><ul class='methods'><li data-type='method'><a href="Command.html#action">action</a></li><li data-type='method'><a href="Command.html#register">register</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">command/Command.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use babel';
 'use strict';
 
 /**
@@ -18,9 +58,9 @@ export default class Command
 		if (!info.description) throw new Error(`You must provide a description for command: ${name}`);
 		if (!info.usage) throw new Error(`You must provide usage information for command: ${name}`);
 		if (!info.group) throw new Error(`You must provide a group for command: ${name}`);
-		if (info.aliases && !Array.isArray(info.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
-		if (info.permissions && !Array.isArray(info.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
-		if (info.permissions && info.permissions.length > 0)
+		if (info.aliases &amp;&amp; !Array.isArray(info.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
+		if (info.permissions &amp;&amp; !Array.isArray(info.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
+		if (info.permissions &amp;&amp; info.permissions.length > 0)
 		{
 			info.permissions.forEach((perm, index) =>
 			{
@@ -34,7 +74,7 @@ export default class Command
 				}
 			});
 		}
-		if (info.roles && !Array.isArray(info.roles)) throw new Error(`Roles for command ${name} must be an array`);
+		if (info.roles &amp;&amp; !Array.isArray(info.roles)) throw new Error(`Roles for command ${name} must be an array`);
 
 		/**
 		 * Bot instance
@@ -66,9 +106,9 @@ export default class Command
 		this.description = info.description;
 
 		/**
-		 * An example of command usage. The token '&lt;prefix&gt;' will
+		 * An example of command usage. The token '&amp;lt;prefix&amp;gt;' will
 		 * be replaced by the guild-specific command prefix in the Help command when
-		 * 'help &lt;command&gt;' is called
+		 * 'help &amp;lt;command&amp;gt;' is called
 		 * @memberof Command
 		 * @type {string}
 		 * @name usage
@@ -78,7 +118,7 @@ export default class Command
 
 		/**
 		 * Extra information about the command to be displayed
-		 * by the Help command when 'help &lt;command&gt;' is called
+		 * by the Help command when 'help &amp;lt;command&amp;gt;' is called
 		 * @memberof Command
 		 * @type {string}
 		 * @name extraHelp
@@ -119,7 +159,7 @@ export default class Command
 		 * Array of permissions required by the command
 		 * caller to be able to execute the command in the guild the command is called in.
 		 * See: [PermissionResolvable]{@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/typedef/PermissionResolvable}
-		 * <br><br>
+		 * &lt;br>&lt;br>
 		 * If any permissions are provided the command's `guildOnly` property will be automatically set to true
 		 * @memberof Command
 		 * @type {PermissionResolvable[]}
@@ -131,7 +171,7 @@ export default class Command
 		/**
 		 * Array of roles required to use the command. If the command caller
 		 * has any of the roles in the array, they will be able to use the command
-		 * <br><br>
+		 * &lt;br>&lt;br>
 		 * If any roles are provided the command's `guildOnly` property will be automatically set to true
 		 * @memberof Command
 		 * @type {string[]}
@@ -142,7 +182,7 @@ export default class Command
 
 		/**
 		 * Whether or not the command can be used by the bot owner(s).
-		 * <br><br>
+		 * &lt;br>&lt;br>
 		 * (See: [Bot constructor options.config.owner]{@link Bot})
 		 * @memberof Command
 		 * @type {boolean}
@@ -168,7 +208,7 @@ export default class Command
 
 	/**
 	 * Assert {@link Command#action} is typeof Function, finishing the
-	 * command creation process.<br>Called by {@link CommandRegistry#register}
+	 * command creation process.&lt;br>Called by {@link CommandRegistry#register}
 	 * @memberof Command
 	 * @method register
 	 * @instance
@@ -196,3 +236,22 @@ export default class Command
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}
  */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Fri Oct 07 2016 20:43:55 GMT-0500 (Central Daylight Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
