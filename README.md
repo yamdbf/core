@@ -1,6 +1,6 @@
 # YAMDBF: Yet Another Modular Discord Bot Framework
 
-[![Discord](https://discordapp.com/api/guilds/233751981838041090/embed.png)](https://discord.gg/WN78NuR)
+[![Discord](https://discordapp.com/api/guilds/233751981838041090/embed.png)](https://discord.gg/cMXkbXV)
 [![npm](https://img.shields.io/npm/v/yamdbf.svg?maxAge=3600)](https://www.npmjs.com/package/yamdbf)
 [![David](https://img.shields.io/david/zajrik/yamdbf.svg?maxAge=3600)](https://david-dm.org/zajrik/yamdbf)
 
@@ -61,7 +61,9 @@ It should be noted that command actions have access to the Discord.js Client ins
 
 That's about it for creating a bot and adding commands.
 
-#Documentation
-
-I've only just started on the documentation but I don't think it should take too long. I intend to finish it up before I start rewriting my bots using the framework.
-- [Documentation](https://zajrik.github.io/yamdbf/index.html)
+# Links
+- [YAMDBF Documentation](https://zajrik.github.io/yamdbf/index.html)
+- [YAMDBF Discord server](https://discord.gg/cMXkbXV)
+- [YAMDBF GitHub](https://github.com/zajrik/yamdbf)
+- [YAMDBF Issues](https://github.com/zajrik/yamdbf/issues)
+- [YAMDBF NPM](https://www.npmjs.com/package/yamdbf)
