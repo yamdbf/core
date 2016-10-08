@@ -136,7 +136,7 @@ export default class CommandDispatcher
 	 * @param {boolean} dm - Whether the message is a DM
 	 * @param {external:Message} message - Discord.js message object
 	 * @param {Command} command - Command found by the dispatcher
-	 * @returns {Object}
+	 * @returns {external:PermissionResolvable[]}
 	 */
 	checkPermissions(dm, message, command)
 	{
