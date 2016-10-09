@@ -216,5 +216,5 @@ export default class Command
  * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}
- * @property {boolean} [overload=false] - See: {@link Command#overload}
+ * @property {string} [overload=null] - See: {@link Command#overload}
  */
