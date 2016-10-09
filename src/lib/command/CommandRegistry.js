@@ -27,7 +27,10 @@ export default class CommandRegistry extends Collection
 	 */
 	register(command, key, reload)
 	{
-		if (super.has(command.name) && !reload && !command.overload) throw new Error(`A command with the name "${command.name}" already exists.`);
+		if (super.has(command.name) && !reload && (command.overload && command.overload !== super.get(command.overload).name))
+		{
+			throw new Error(`A command with the name "${command.name}" already exists.`);
+		}
 		command.register();
 		super.set(key, command);
 		this.forEach(a =>

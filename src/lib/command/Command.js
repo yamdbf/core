@@ -150,15 +150,15 @@ export default class Command
 		this.ownerOnly = info.ownerOnly || false;
 
 		/**
-		 * Whether or not to overload a base command. Commands may only overload
+		 * The name of a base command to overload. Commands may only overload
 		 * base commands so the {@link Command#group} must be set to 'base' in
-		 * order to overload
+		 * order to overload. Commands may only be overloaded by name, not by alias
 		 * @memberof Command
-		 * @type {boolean}
+		 * @type {string}
 		 * @name overload
 		 * @instance
 		 */
-		this.overload = info.overload || false;
+		this.overload = info.overload || null;
 
 		if (this.overload && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
 

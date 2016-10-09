@@ -57,10 +57,10 @@ export default class CommandLoader
 			}
 			else
 			{
-				console.log(`Command '${command.name}' overloaded.`); // eslint-disable-line no-console
+				console.log(`Command '${command.name}' loaded, overloading command '${command.overload}'.`); // eslint-disable-line no-console
 			}
 		});
-		console.log(`Loaded ${loadedCommands} commands in ${this.bot.commands.groups.length} groups.`); // eslint-disable-line no-console
+		console.log(`Loaded ${loadedCommands} total commands in ${this.bot.commands.groups.length} groups.`); // eslint-disable-line no-console
 	}
 
 	/**
