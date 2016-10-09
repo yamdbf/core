@@ -88,10 +88,21 @@ export default class Bot extends Client
 		 */
 		this.config = options.config || null;
 
+		/**
+		 * Array of base command names to skip when loading commands. Base commands
+		 * may only be disabled by name, not by alias
+		 * @memberof Bot
+		 * @type {string[]}
+		 * @name disableBase
+		 * @instance
+		 */
+		this.disableBase = options.disableBase || [];
+
 		// Make some asserts
 		if (!this.token) throw new Error('You must provide a token for the bot.');
 		if (!this.commandsDir) throw new Error('You must provide a directory to load commands from via commandDir');
 		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
+		if (this.disableBase.includes('help')) throw new Error('Help command may be overloaded but not disabled. Check your disableBase');
 
 		/**
 		 * Bot-specific storage available everywhere that has access
@@ -265,4 +276,5 @@ export default class Bot extends Client
  * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
  * @property {string} [version='0.0.0'] - See: {@link Bot#version}
  * @property {Object} config - See: {@link Bot#config}
+ * @property {string[]} disableBase - See: {@link Bot#disableBase}
  */

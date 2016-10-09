@@ -38,15 +38,29 @@ export default class CommandLoader
 		let commandFiles = [];
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
 		commandFiles.push(...glob.sync(`${this.bot.commandsDir}/**/*.js`));
+		let loadedCommands = 0;
 		commandFiles.forEach(fileName =>
 		{
 			let commandLocation = fileName.replace('.js', '');
 			delete require.cache[require.resolve(commandLocation)];
 			let Command = require(commandLocation).default;
 			let command = new Command(this.bot);
+			if (this.bot.disableBase.includes(command.name)) return;
 			command.classloc = commandLocation;
+			let overload;
+			if (command.overload) overload = true;
 			this.bot.commands.register(command, command.name);
+			if (!overload)
+			{
+				loadedCommands++;
+				console.log(`Command '${command.name}' loaded.`); // eslint-disable-line no-console
+			}
+			else
+			{
+				console.log(`Command '${command.name}' overloaded.`); // eslint-disable-line no-console
+			}
 		});
+		console.log(`Loaded ${loadedCommands} commands in ${this.bot.commands.groups.length} groups.`); // eslint-disable-line no-console
 	}
 
 	/**
@@ -66,6 +80,7 @@ export default class CommandLoader
 		let command = new Command(this.bot);
 		command.classloc = commandLocation;
 		this.bot.commands.register(command, command.name, true);
+		console.log(`Command '${command.name}' reloaded.`); // eslint-disable-line no-console
 		return true;
 	}
 }
