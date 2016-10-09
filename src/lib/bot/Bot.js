@@ -15,7 +15,7 @@ import CommandDispatcher from '../command/CommandDispatcher';
  * fields for access within commands
  * @class Bot
  * @extends {external:Client}
- * @param {BotOptions} options - [BotOptions]{@link BotOptions} object containing required bot properties
+ * @param {BotOptions} options - Object containing required bot properties
  */
 export default class Bot extends Client
 {
@@ -276,5 +276,5 @@ export default class Bot extends Client
  * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
  * @property {string} [version='0.0.0'] - See: {@link Bot#version}
  * @property {Object} config - See: {@link Bot#config}
- * @property {string[]} disableBase - See: {@link Bot#disableBase}
+ * @property {string[]} [disableBase=[]] - See: {@link Bot#disableBase}
  */

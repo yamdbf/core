@@ -5,7 +5,7 @@
  * Command class to extend to create commands users can execute
  * @class Command
  * @param {Bot} bot - Bot instance
- * @param {CommandInfo} info - [CommandInfo]{@link CommandInfo} object containing required command properties
+ * @param {CommandInfo} info - Object containing required command properties
  */
 export default class Command
 {
@@ -151,7 +151,8 @@ export default class Command
 
 		/**
 		 * Whether or not to overload a base command. Commands may only overload
-		 * base commands so the {@link Command#group} must be set to 'base' to overload
+		 * base commands so the {@link Command#group} must be set to 'base' in
+		 * order to overload
 		 * @memberof Command
 		 * @type {boolean}
 		 * @name overload
