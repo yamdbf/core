@@ -52,7 +52,11 @@
 <a href="https://david-dm.org/zajrik/yamdbf"><img src="https://img.shields.io/david/zajrik/yamdbf.svg?maxAge=3600" alt="David"></a></p>
 <p><a href="https://nodei.co/npm/yamdbf/"><img src="https://nodei.co/npm/yamdbf.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
 <p>A Discord.js-based Discord Bot framework to be used as a base for quick bot development.</p>
-<p>Usage of the framework is pretty simple. <code>npm install --save yamdbf</code> in your project folder, create a folder to put commands in, rename <code>config.json.example</code> to <code>config.json</code>, fill in the values, and create a basic bot script.</p>
+<p>Usage of the framework is pretty simple. Run <code>npm install --save yamdbf</code> in your project folder, create a folder to put commands in, create a file named <code>config.json</code> that looks like this:</p>
+<pre class="prettyprint source"><code>{
+    &quot;token&quot;: &quot;token&quot;,
+    &quot;owner&quot;: [&quot;ownerid&quot;]
+}</code></pre><p>Then fill in the values and create a basic bot script.</p>
 <p>A basic bot script will look something like this</p>
 <pre class="prettyprint source lang-js"><code>const Bot = require('yamdbf').Bot;
 const config = require('./config.json');
