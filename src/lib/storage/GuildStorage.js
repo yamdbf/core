@@ -140,7 +140,8 @@ export default class GuildStorage
 	 */
 	setSetting(key, value)
 	{
-		if (!key || !value) return;
+		if (!key) return;
+		if (!value) value = '';
 		this.data.settings[key] = value;
 		this.save();
 	}
@@ -248,6 +249,7 @@ export default class GuildStorage
 	setItem(key, value)
 	{
 		if (!key || key === 'settings') return;
+		if (!value) value = '';
 		this.load();
 		this.data[key] = value;
 		this.save();

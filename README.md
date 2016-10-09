@@ -8,7 +8,14 @@
 
 A Discord.js-based Discord Bot framework to be used as a base for quick bot development.
 
-Usage of the framework is pretty simple. `npm install --save yamdbf` in your project folder, create a folder to put commands in, rename `config.json.example` to `config.json`, fill in the values, and create a basic bot script.
+Usage of the framework is pretty simple. Run `npm install --save yamdbf` in your project folder, create a folder to put commands in, create a file named `config.json` that looks like this:
+```
+{
+	"token": "token",
+	"owner": ["ownerid"]
+}
+```
+Then fill in the values and create a basic bot script.
 
 A basic bot script will look something like this
 

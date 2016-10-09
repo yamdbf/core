@@ -96,10 +96,11 @@ export default class CommandDispatcher
 		{
 			content = message.content.replace(/<@!?\d+>/g, '').trim();
 		}
-		else if (!dm && message.content.startsWith(this.bot.getPrefix(message.guild)))
+		else if (!dm && (message.content.startsWith(this.bot.getPrefix(message.guild))
+			|| !this.bot.getPrefix(message.guild)))
 		{
-			content = message.content.slice(
-				this.bot.getPrefix(message.guild).length).replace(/<@!?\d+>/g, '').trim();
+			content = message.content.slice(this.bot.getPrefix(message.guild)
+				? this.bot.getPrefix(message.guild).length : 0).replace(/<@!?\d+>/g, '').trim();
 		}
 		else if (dm)
 		{

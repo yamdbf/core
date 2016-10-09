@@ -127,7 +127,8 @@ export default class LocalStorage
 	 */
 	setItem(key, value)
 	{
-		if (!value) return;
+		if (!key) return;
+		if (!value) value = '';
 		this.load();
 		this.data[key] = value;
 		this.save();

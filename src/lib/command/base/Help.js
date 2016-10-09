@@ -80,7 +80,7 @@ export default class Help extends Command
 			}
 		}
 		output = dm ? output.replace(/<prefix>/g, '')
-			: output.replace(/<prefix>/g, this.bot.getPrefix(message.guild));
+			: output.replace(/<prefix>/g, this.bot.getPrefix(message.guild) || '');
 
 		if (!dm && !this.bot.selfbot && command) message.reply(`Sent you a DM with help information.`);
 		if (!dm && !this.bot.selfbot && !command) message.reply(`Sent you a DM with information.`);

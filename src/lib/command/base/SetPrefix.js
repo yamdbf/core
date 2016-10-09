@@ -12,7 +12,7 @@ export default class SetPrefix extends Command
 			description: 'Set the bot command prefix for this guild.',
 			aliases: ['prefix'],
 			usage: '<prefix>setprefix <text>',
-			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks',
+			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Set the prefix to "noprefix" to allow commands to be called without a prefix.',
 			group: 'base',
 			permissions: ['ADMINISTRATOR']
 		});
@@ -22,7 +22,9 @@ export default class SetPrefix extends Command
 	{
 		if (!args[0])
 		{
-			message.channel.sendMessage(`You must provide a prefix to set. Prefixes may be up to 10 chars in length.`)
+			message.channel.sendMessage(`${this.bot.getPrefix(message.guild)
+				? 'Current prefix is \'' + this.bot.getPrefix(message.guild) + '\''// eslint-disable-line prefer-template
+				: 'There is currently no prefix.'}`)
 				.then(response =>
 				{
 					response.delete(5 * 1000);
@@ -47,9 +49,11 @@ export default class SetPrefix extends Command
 				});
 			return;
 		}
+		if (args[0] === 'noprefix') args[0] = '';
 
 		this.bot.guildStorages.get(message.guild).setSetting('prefix', args[0]);
-		message.channel.sendMessage(`Command prefix set to "${args[0]}"`)
+		message.channel.sendMessage(`${args[0] === '' ? 'Command prefix removed.'
+			: 'Command prefix set to "' + args[0] + '"'}`) // eslint-disable-line prefer-template
 			.then(response =>
 			{
 				response.delete(5 * 1000);
