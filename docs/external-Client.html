@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>GuildStorageLoader - Documentation</title>
+    <title>Client - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">GuildStorageLoader</h1>
+    <h1 class="page-title">Client</h1>
     
 
     
@@ -41,7 +41,7 @@
 <header>
     
         <h2>
-        GuildStorageLoader
+        Client
         </h2>
         
     
@@ -51,33 +51,10 @@
     <div class="container-overview">
     
         
+            <div class="description">See: <a href="http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Client">http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Client</a></div>
+        
 
-    
-
-    <h4 class="name" id="GuildStorageLoader">
-		<span class="type-signature"></span>new <a href='#GuildStorageLoader' style='color: black'>GuildStorageLoader</a><span class="signature">()</span><span class="type-signature"></span>
-	</h4>
-
-    
-
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-<div class="description">
-    Handles loading all guild-specific data from persistent storage into
-<a href="GuildStorage.html"><code>GuildStorage</code></a> objects
-</div>
-
-
-
-
-
-
-
-
-
-
-
+        
 
 
 <dl class="details">
@@ -116,21 +93,7 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
+        
     
     </div>
 
@@ -145,345 +108,7 @@
     
 
     
-        <h3 class="subsection-title">Properties</h3>
 
-        
-            
-<h4 class="name" id="bot"><span class="type-signature"></span>.<a href='#bot' style='color: black'>bot</a><span class="type-signature"> :<a href="Bot.html">Bot</a></span></h4>
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-
-
-<div class="description">
-    Bot instance
-</div>
-
-
-
-    <b>Type:</b> 
-<span class="param-type"><dd><a href="Bot.html">Bot</a></dd></span>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="initNewGuilds">
-		<span class="type-signature"></span>.<a href='#initNewGuilds' style='color: black'>initNewGuilds</a><span class="signature">(localStorage)</span><span class="type-signature"></span>
-	</h4>
-
-    
-
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-<div class="description">
-    Assign a GuildStorage to guilds that lack one due to the bot being
-in the guild before adopting this storage spec or the bot being
-added to a new guild
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>localStorage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd><a href="LocalStorage.html">LocalStorage</a></dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">LocalStorage instance containing all guild-specific data stores</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-        
-            
-
-    
-
-    <h4 class="name" id="loadStorages">
-		<span class="type-signature"></span>.<a href='#loadStorages' style='color: black'>loadStorages</a><span class="signature">(localStorage)</span><span class="type-signature"></span>
-	</h4>
-
-    
-
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-<div class="description">
-    Load data for each guild from persistent storage and store it in a
-<a href="GuildStorage.html"><code>GuildStorage</code></a> object
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>localStorage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd><a href="LocalStorage.html">LocalStorage</a></dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">LocalStorage instance containing all guild-specific data stores</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-        
     
 
     

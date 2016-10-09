@@ -10,10 +10,11 @@ import CommandRegistry from '../command/CommandRegistry';
 import CommandDispatcher from '../command/CommandDispatcher';
 
 /**
- * The Discord.js Client instance. Contains its own storage as well as storage for
- * guilds it is a member of
+ * The Discord.js Client instance. Contains bot-specific [storage]{@link Bot#storage},
+ * guild specific [storages]{@link Bot#guildStorages}, and contains important
+ * fields for access within commands
  * @class Bot
- * @extends {Client}
+ * @extends {external:Client}
  * @param {BotOptions} options - [BotOptions]{@link BotOptions} object containing required bot properties
  */
 export default class Bot extends Client
@@ -93,7 +94,8 @@ export default class Bot extends Client
 		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
 
 		/**
-		 * Bot-specific storage available everywhere
+		 * Bot-specific storage available everywhere that has access
+		 * to the Bot instance
 		 * @memberof Bot
 		 * @type {LocalStorage}
 		 * @name storage
@@ -101,8 +103,13 @@ export default class Bot extends Client
 		 */
 		this.storage = new LocalStorage('bot-storage');
 
+		/**
+		 * @typedef {Object} defaultGuildSettings - The default settings to apply to new guilds
+		 * @property {string} [prefix='/'] - Prefix to prepend commands
+		 * @property {Array} [disabledGroups=[]] - Command groups to ignore
+		 */
+
 		// Load defaultGuildSettings into storage the first time the bot is run
-		/** @typedef {defaultGuildSettings} The default settings to apply to new guilds */
 		if (!this.storage.exists('defaultGuildSettings')) // eslint-disable-line curly
 			this.storage.setItem('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
@@ -124,7 +131,6 @@ export default class Bot extends Client
 		 * @type {GuildStorageLoader}
 		 * @name guildStorageLoader
 		 * @instance
-		 * @see {@link GuildStorageLoader}
 		 */
 		this.guildStorageLoader = new GuildStorageLoader(this);
 
@@ -154,7 +160,6 @@ export default class Bot extends Client
 		 * @type {CommandRegistry<string, Command>}
 		 * @name commands
 		 * @instance
-		 * @see {@link Command}
 		 */
 		this.commands = new CommandRegistry();
 
@@ -230,7 +235,7 @@ export default class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key in storage to check
-	 * @returns {boolean} Whether or not the key has a value
+	 * @returns {boolean}
 	 */
 	defaultSettingExists(key)
 	{
@@ -242,7 +247,7 @@ export default class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @param {(Guild|string)} guild - The guild or guild id to get the prefix of
-	 * @returns {string} The command prefix for the provided guild
+	 * @returns {string}
 	 */
 	getPrefix(guild)
 	{

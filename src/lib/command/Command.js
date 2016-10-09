@@ -141,12 +141,11 @@ export default class Command
 
 		/**
 		 * Whether or not the command can be used by the bot owner(s).
-		 * <br><br>
-		 * (See: [Bot constructor options.config.owner]{@link Bot})
 		 * @memberof Command
 		 * @type {boolean}
 		 * @name ownerOnly
 		 * @instance
+		 * @see [Bot#config.owner]{@link Bot#config}
 		 */
 		this.ownerOnly = info.ownerOnly || false;
 
@@ -155,9 +154,22 @@ export default class Command
 	}
 
 	/**
-	 * Action to be executed when the command is called
+	 * @typedef {Array<*>} args - Array of values parsed from {@link external:Message} content
+	 * that will be passed to a command. Can contain a mix of string and number values.
+	 */
+
+	/**
+	 * Action to be executed when the command is called. The following parameters
+	 * are what command actions will be passed by the {@link CommandDispatcher} whenever
+	 * a command is called. Be sure to receive these in proper order when writing
+	 * new commands
 	 * @memberof Command
 	 * @instance
+	 * @param {external:Message} message - Discord.js message object
+	 * @param {args[]} args - An array containing the args parsed from the command calling message
+	 * @param {external:User[]} mentions - An array containing the Discord.js User
+	 * objects parsed from the mentions contained in a message
+	 * @param {string} original - The original raw content of the message that called the command
 	 */
 	async action()
 	{

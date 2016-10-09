@@ -21,6 +21,7 @@ export const CommandLoader = _CommandLoader;
 export const CommandRegistry = _CommandRegistry;
 export const CommandDispatcher = _CommandDispatcher;
 
+/** @external {Client} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Client} */
 /** @external {Collection} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Collection} */
 /** @external {Guild} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Guild} */
 /** @external {Message} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Message} */

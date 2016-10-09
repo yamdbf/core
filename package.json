@@ -16,6 +16,9 @@
     "type": "git",
     "url": "https://github.com/zajrik/yamdbf"
   },
+  "bugs": {
+	  "url": "https://github.com/zajrik/yamdbf/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "discord.js": "^9.3.0",
@@ -34,7 +37,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "jsdoc": "^3.4.2",
     "jsdoc-strip-async-await": "^0.1.0",
-    "minami": "1.1.1",
+    "minami": "zajrik/minami",
     "source-map-support": "^0.4.2"
   },
   "babel": {
