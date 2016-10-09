@@ -149,6 +149,18 @@ export default class Command
 		 */
 		this.ownerOnly = info.ownerOnly || false;
 
+		/**
+		 * Whether or not to overload a base command. Commands may only overload
+		 * base commands so the {@link Command#group} must be set to 'base' to overload
+		 * @memberof Command
+		 * @type {boolean}
+		 * @name overload
+		 * @instance
+		 */
+		this.overload = info.overload || false;
+
+		if (this.overload && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
+
 		// Default guildOnly to true if permissions/roles are given
 		if (this.permissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
 	}
@@ -203,4 +215,5 @@ export default class Command
  * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}
+ * @property {boolean} [overload=false] - See: {@link Command#overload}
  */
