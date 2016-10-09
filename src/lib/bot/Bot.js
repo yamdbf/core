@@ -257,8 +257,8 @@ export default class Bot extends Client
 	 * Shortcut to return the command prefix for the provided guild
 	 * @memberof Bot
 	 * @instance
-	 * @param {(Guild|string)} guild - The guild or guild id to get the prefix of
-	 * @returns {string}
+	 * @param {(external:Guild|string)} guild - The guild or guild id to get the prefix of
+	 * @returns {string|null}
 	 */
 	getPrefix(guild)
 	{
