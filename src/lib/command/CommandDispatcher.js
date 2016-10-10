@@ -54,7 +54,7 @@ export default class CommandDispatcher
 
 		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
 
-		return this.dispatch(command, message, args, mentions, original);
+		return this.dispatch(command, message, args, mentions, original).catch(console.error); // eslint-disable-line no-console
 	}
 
 	/**
@@ -254,6 +254,6 @@ export default class CommandDispatcher
 	 */
 	async dispatch(command, message, args, mentions, original)
 	{
-		await command.action(message, args, mentions, original).catch(console.log); // eslint-disable-line no-unused-expressions, no-console
+		await command.action(message, args, mentions, original); // eslint-disable-line no-unused-expressions
 	}
 }
