@@ -81,8 +81,7 @@ export default class CommandDispatcher
 		mentions = message.mentions.users.array().sort((a, b) =>
 			message.content.indexOf(a.id) - message.content.indexOf(b.id));
 
-		let botMention = mentions.length > 0
-			&& (!dm && !message.content.startsWith(this.bot.getPrefix(message.guild)))
+		let botMention = /^<@!?\d+>.+/.test(message.content)
 			&& mentions[0].id === this.bot.user.id
 			&& !this.bot.selfbot;
 
