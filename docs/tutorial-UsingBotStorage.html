@@ -40,7 +40,45 @@
 </header>
 
 <article>
-    <p>TODO: Writeup on using Bot storage</p>
+    <p>Using the bot's default persistent storage is very easy, but it should be noted that this storage is universal, unlike guild-specific storage. If you want to use storage for values specific to an individual guild, you should head on over to <a href="tutorial-UsingGuildStorage.html">Using guild-specific storage</a>.</p>
+<p>The bot's default storage can be accessed via <code>storage</code> property of the Bot instance. We'll assume here that you're going to be accessing the storage from within a command action, and thus have access to the Bot instance via <code>this.bot</code>:</p>
+<pre class="prettyprint source lang-js"><code>let storage = this.bot.storage;</code></pre><p>We'll be using this <code>storage</code> variable for the rest of the examples.</p>
+<h2>Storing values</h2><p>Storing values is done with the <a href="LocalStorage.html#setItem"><code>setItem()</code></a> method. Let's say we know the storage contains the key <code>'foo'</code>. We want to assign the vale <code>'bar'</code> to the key <code>'foo'</code> in storage:</p>
+<pre class="prettyprint source lang-js"><code>storage.setItem('foo', 'bar');</code></pre><p>If you only need to interact when storage once, there's no need to load the storage into a variable first. You can interact with storage directly, in-line, like so:</p>
+<pre class="prettyprint source lang-js"><code>this.bot.storage.setItem('foo', 'bar');</code></pre><p>It should be noted that if a key does not exist in storage it will be created when using <code>setItem()</code>.</p>
+<h2>Retrieving and modifying values</h2><p>Earlier we set the value of the key <code>'foo'</code>, so now we'll pull it back out of storage.</p>
+<pre class="prettyprint source lang-js"><code>let foo = storage.getItem('foo');
+// foo === 'bar'
+
+// Now we'll modify it:
+
+storage.setItem('foo', 'boo');
+foo = storage.getItem('foo');
+// foo === 'boo'</code></pre><h2>Storing and modifying stored objects</h2><p>Objects can be placed in storage just as easily as any other value, but modifying them requires a little extra effort. You'll need to pull the object out of storage, modify it, and then put it back in:</p>
+<pre class="prettyprint source lang-js"><code>let oldObject = {
+    foo: 'bar',
+    bar: 'baz'
+}
+
+storage.setItem('object', oldObject);
+
+// Now, let's modify it!
+
+let newObject = storage.getItem('object');
+newObject.foo = 'boo';
+storage.setItem('object', newObject);
+console.log(storage.getItem('object'));
+// logs: { foo: 'boo', bar: 'baz' }</code></pre><p>Of course, you can store Arrays as well:</p>
+<pre class="prettyprint source lang-js"><code>let array = ['foo', 'bar'];
+
+storage.setItem('array', array);
+
+let newArray = storage.getItem('array')
+newArray.push('baz');
+storage.setItem('array', newArray);
+console.log(storage.getItem('array'));
+// logs: ['foo', 'bar', 'baz']</code></pre><p>As far as the basics of storage go, that's about it. Make sure to check out <a href="LocalStorage.html"><code>LocalStorage</code></a> to read up on the methods available for interacting with storages using the <code>LocalStorage</code> class. You can even declare your own storages separate from the bot's default storage. The docs should point you in the right direction for this, but as always you can ask questions on the YAMDB Discord server if you have any.</p>
+<p>If you haven't already, take a look at <a href="tutorial-UsingGuildStorage.html">Using guild-specific storage</a> to read up on using guild-specific storages in your bot.</p>
 </article>
 
 </section>

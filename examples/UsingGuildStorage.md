@@ -7,7 +7,7 @@ let guildStorage = this.bot.guildStorages.get(message.guild);
 ```
 We will be using this `guildStorage` variable for the remainder of this example page.
 
-# Storing values
+## Storing values
 Storing values is done using the [setItem()]{@link GuildStorage#setItem} method.
 Let's say we know the storage for this guild contains the key `'foo'`. We want to assign the value `'bar'` to the key `'foo'` in this guild's storage:
 
@@ -23,7 +23,7 @@ this.bot.guildStorages.get(message.guild).setItem('foo', 'bar');
 
 It should be noted that if a key does not yet exist in storage, it will be created when using `setItem()`.
 
-# Retrieving values
+## Retrieving values
 
 Retrieving values from a guild's storage is just as easy as setting them. Assuming you still have the guild storage loaded into a local variable as demonstrated earlier, use [getItem()]{@link GuildStorage#getItem}:
 
@@ -34,7 +34,7 @@ let foo = guildStorage.getItem('foo');
 
 This can also be done in-line as before in the storing values example.
 
-# Interacting with guild settings
+## Interacting with guild settings
 In addition to guild-specific storage, every guild has settings within its own storage that are able to be interacted with via different methods than regular guild storage. See: {@link GuildStorage} for more information.
 
 Interacting with settings values is just as easy as interacting with storage values. Settings are keys that have default values that are applied to all new guilds whenever the bot is added to a guild. New default settings can also be added
@@ -56,7 +56,7 @@ console.log(guildStorage.getSetting('prefix'));
 // logs: +
 ```
 
-# Storing Objects
+## Storing Objects
 Objects can be stored in guild-specific storage just as easily as any other value, but modifying them requires a little extra effort. You'll need to pull the object out of storage, modify it, and then put it back in:
 
 ```js
@@ -76,4 +76,4 @@ console.log(guildStorage.getItem('object'));
 // logs: { foo: 'boo', bar: 'baz' }
 ```
 
-And that's about it for using guild specific storage! There is so much that can be done by utilizing guild-specific data but it's up to find your own uses for it! Don't forget to check out the docs for {@link GuildStorage} to read up on all the methods available for interacting with guild-specific storage and settings.
+And that's about it for using guild specific storage! There is so much that can be done by utilizing guild-specific data but it's up to find your own uses for it! Don't forget to check out the docs for {@link GuildStorage} to read up on all the methods available for interacting with guild-specific storage and settings. It would also be good to read {@tutorial UsingBotStorage} if you haven't already. Knowing the applications and differences between the two storages will leave you with a pretty handy tool for writing your bots!
