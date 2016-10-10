@@ -155,12 +155,12 @@ export default class Command
 		 * order to overload. Commands may only be overloaded by name, not by alias
 		 * @memberof Command
 		 * @type {string}
-		 * @name overload
+		 * @name overloads
 		 * @instance
 		 */
-		this.overload = info.overload || null;
+		this.overloads = info.overloads || null;
 
-		if (this.overload && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
+		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
 
 		// Default guildOnly to true if permissions/roles are given
 		if (this.permissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
@@ -216,5 +216,5 @@ export default class Command
  * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}
- * @property {string} [overload=null] - See: {@link Command#overload}
+ * @property {string} [overloads=null] - See: {@link Command#overloads}
  */

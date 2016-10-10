@@ -47,17 +47,25 @@ export default class CommandLoader
 			let command = new Command(this.bot);
 			if (this.bot.disableBase.includes(command.name)) return;
 			command.classloc = commandLocation;
-			let overload;
-			if (command.overload) overload = true;
-			this.bot.commands.register(command, command.name);
-			if (!overload)
+			if (command.overloads)
+			{
+				if (!this.bot.commands.has(command.overloads)) // eslint-disable-line curly
+					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
+				this.bot.commands.delete(command.overloads);
+				this.bot.commands.register(command, command.name);
+			}
+			else
+			{
+				this.bot.commands.register(command, command.name);
+			}
+			if (!command.overloads)
 			{
 				loadedCommands++;
 				console.log(`Command '${command.name}' loaded.`); // eslint-disable-line no-console
 			}
 			else
 			{
-				console.log(`Command '${command.name}' loaded, overloading command '${command.overload}'.`); // eslint-disable-line no-console
+				console.log(`Command '${command.name}' loaded, overloading command '${command.overloads}'.`); // eslint-disable-line no-console
 			}
 		});
 		console.log(`Loaded ${loadedCommands} total commands in ${this.bot.commands.groups.length} groups.`); // eslint-disable-line no-console
