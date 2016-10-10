@@ -4,6 +4,9 @@
 	},
 	"UsingGuildStorage": {
 		"title": "Using guild-specific storage"
+	},
+	"NoCommandErrors": {
+		"title": "Not getting Command errors?"
 	}
 
 }
