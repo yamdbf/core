@@ -1,6 +1,6 @@
 {
   "name": "yamdbf",
-  "version": "2.0.11",
+  "version": "2.0.13",
   "description": "Yet Another Modular Discord Bot Framework: A somewhat simple framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
   "scripts": {
@@ -17,11 +17,12 @@
     "url": "https://github.com/zajrik/yamdbf"
   },
   "bugs": {
-	  "url": "https://github.com/zajrik/yamdbf/issues"
+    "url": "https://github.com/zajrik/yamdbf/issues"
   },
   "license": "MIT",
   "dependencies": {
     "discord.js": "^9.3.0",
+    "glob": "^7.1.1",
     "node-json-db": "^0.7.3",
     "performance-now": "^0.2.0"
   },
