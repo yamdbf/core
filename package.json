@@ -20,6 +20,14 @@
     "url": "https://github.com/zajrik/yamdbf/issues"
   },
   "license": "MIT",
+  "keywords": [
+    "discord",
+    "framework",
+    "bot",
+    "client",
+    "node",
+    "discordapp"
+  ],
   "dependencies": {
     "discord.js": "^9.3.0",
     "glob": "^7.1.1",
