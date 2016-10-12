@@ -57,7 +57,7 @@ export default class Bot extends Client
 		 * @name statusText
 		 * @instance
 		 */
-		this.statusText = options.statusText || '@mention help';
+		this.statusText = options.statusText || null;
 
 		/**
 		 * Whether or not the bot is a selfbot
