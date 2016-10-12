@@ -15,7 +15,7 @@ export default class Reload extends Command
 			usage: '<prefix>reload [command]',
 			extraHelp: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
 			group: 'base',
-			permissions: ['ADMINISTRATOR']
+			ownerOnly: true
 		});
 	}
 
