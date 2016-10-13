@@ -116,6 +116,15 @@ export default class Command
 		this.guildOnly = info.guildOnly || false;
 
 		/**
+		 * Whether or not to pass all args as strings, skipping number parsing
+		 * @memberof Command
+		 * @type {boolean}
+		 * @name stringArgs
+		 * @instance
+		 */
+		this.stringArgs = info.stringArgs || false;
+
+		/**
 		 * Array of permissions required by the command
 		 * caller to be able to execute the command in the guild the command is called in.
 		 * <br><br>
@@ -213,6 +222,7 @@ export default class Command
  * @property {string} group - See: {@link Command#group}
  * @property {string[]} [aliases=[]] - See: {@link Command#aliases}
  * @property {boolean} [guildOnly=false] - See: {@link Command#guildOnly}
+ * @property {boolean} [stringArgs=false] - See: {@link Command#stringArgs}
  * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}
