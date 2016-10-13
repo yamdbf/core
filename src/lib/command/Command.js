@@ -116,7 +116,11 @@ export default class Command
 		this.guildOnly = info.guildOnly || false;
 
 		/**
-		 * Whether or not to pass all args as strings, skipping number parsing
+		 * Whether or not to pass all args as strings, skipping number parsing.
+		 * Should definitely be used when writing commands that take Discord.js
+		 * object (Guild, User, Message, etc) ids as arguments as Javascript
+		 * loses accuracy on integers above 2^53 and it will not parse
+		 * your ids correctly as a result.
 		 * @memberof Command
 		 * @type {boolean}
 		 * @name stringArgs
