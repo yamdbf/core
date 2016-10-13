@@ -37,12 +37,20 @@ export default class CommandDispatcher
 		let config = this.bot.config;
 		if (this.bot.selfbot && message.author !== this.bot.user) return false;
 		if (message.author.bot) return false;
+		let original = message.content;
 
-		let { command, mentions, args, content, dm, original } = this.processContent(message);
+		let { command, mentions, args, content, dm } = this.processContent(message);
 		message.content = content;
 
-		if (dm && !command)	return this.commandNotFoundError(message);
-		else if (!command) return false;
+		if (dm && !command)
+		{
+			return this.commandNotFoundError(message);
+		}
+		else if (!command)
+		{
+			message.content = original;
+			return false;
+		}
 
 		if (!dm && this.bot.guildStorages.get(message.guild)
 			.getSetting('disabledGroups').includes(command.group)) return false;
@@ -68,7 +76,6 @@ export default class CommandDispatcher
 	 */
 	processContent(message)
 	{
-		let original = message.content;
 		let dm = message.channel.type === 'dm';
 		let mentions;
 		let duplicateMention;
@@ -126,7 +133,7 @@ export default class CommandDispatcher
 		let command = this.bot.commands.filter(c =>
 			c.name === commandName || c.aliases.includes(commandName)).first();
 
-		return { command: command, mentions: mentions, args: args, content: content, dm: dm, original: original };
+		return { command: command, mentions: mentions, args: args, content: content, dm: dm };
 	}
 
 	/**
