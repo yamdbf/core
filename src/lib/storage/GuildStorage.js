@@ -41,6 +41,15 @@ export default class GuildStorage
 		 */
 		this.data = this.localStorage.getItem(this.id) || null;
 
+		/**
+		 * Temporary key/value storage, cleared on creation
+		 * @memberof GuildStorage
+		 * @type {Object}
+		 * @name temp
+		 * @instance
+		 */
+		this.temp = {};
+
 		// Create blank storage for the guild if no storage is present
 		if (!this.data)
 		{
@@ -126,7 +135,7 @@ export default class GuildStorage
 	 */
 	getSetting(key)
 	{
-		if (!key) return null;
+		if (typeof key === 'undefined') return null;
 		this.load();
 		return this.data.settings[key] || null;
 	}
@@ -140,8 +149,9 @@ export default class GuildStorage
 	 */
 	setSetting(key, value)
 	{
-		if (!key) return;
-		if (!value) value = '';
+		if (typeof key === 'undefined') return;
+		if (typeof value === 'undefined') value = '';
+		this.load();
 		this.data.settings[key] = value;
 		this.save();
 	}
@@ -154,7 +164,8 @@ export default class GuildStorage
 	 */
 	removeSetting(key)
 	{
-		if (!key) return;
+		if (typeof key === 'undefined') return;
+		this.load();
 		delete this.data.settings[key];
 		this.save();
 	}
@@ -168,6 +179,8 @@ export default class GuildStorage
 	 */
 	settingExists(key)
 	{
+		if (typeof key === 'undefined') return false;
+		this.load();
 		return !!this.getSetting(key);
 	}
 
@@ -234,7 +247,7 @@ export default class GuildStorage
 	 */
 	getItem(key)
 	{
-		if (!key || key === 'settings') return null;
+		if (typeof key === 'undefined' || key === 'settings') return null;
 		this.load();
 		return this.data[key] || null;
 	}
@@ -248,8 +261,8 @@ export default class GuildStorage
 	 */
 	setItem(key, value)
 	{
-		if (!key || key === 'settings') return;
-		if (!value) value = '';
+		if (typeof key === 'undefined' || key === 'settings') return;
+		if (typeof value === 'undefined') value = '';
 		this.load();
 		this.data[key] = value;
 		this.save();
@@ -263,7 +276,7 @@ export default class GuildStorage
 	 */
 	removeItem(key)
 	{
-		if (!key || key === 'settings') return;
+		if (typeof key === 'undefined' || key === 'settings') return;
 		this.load();
 		delete this.data[key];
 		this.save();
@@ -278,6 +291,7 @@ export default class GuildStorage
 	 */
 	exists(key)
 	{
+		this.load();
 		return !!this.getItem(key);
 	}
 
@@ -291,5 +305,36 @@ export default class GuildStorage
 		this.load();
 		this.data = { settings: this.data.settings };
 		this.save();
+	}
+
+	/**
+	 * Allow access to a storage item only when it is not currently being
+	 * accessed. Waits for other nonConcurrentAccess operations to finish
+	 * before proceeding with callback
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - the storage key you will be accessing
+	 * @param {function} callback - callback to execute that will be accessing the key
+	 * @returns {Promise}
+	 */
+	nonConcurrentAccess(key, callback)
+	{
+		let access = new Promise((resolve, reject) =>
+		{
+			try
+			{
+				while(this.temp[`checking${key}`]) {} // eslint-disable-line
+				this.temp[`checking${key}`] = true;
+				callback(key); // eslint-disable-line
+				delete this.temp[`checking${key}`];
+				resolve();
+			}
+			catch (err)
+			{
+				delete this.temp[`checking${key}`];
+				reject(err);
+			}
+		});
+		return access;
 	}
 }

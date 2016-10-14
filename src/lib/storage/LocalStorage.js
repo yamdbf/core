@@ -33,6 +33,15 @@ export default class LocalStorage
 		 */
 		this.db = new Database(fileName, true, true);
 
+		/**
+		 * Temporary key/value storage, cleared on creation
+		 * @memberof LocalStorage
+		 * @type {Object}
+		 * @name temp
+		 * @instance
+		 */
+		this.temp = {};
+
 		// Load the data from persistent storage
 		this.load();
 	}
@@ -112,7 +121,7 @@ export default class LocalStorage
 	 */
 	getItem(key)
 	{
-		if (!key) return null;
+		if (typeof key === 'undefined') return null;
 		this.load();
 		return this.data[key] || null;
 	}
@@ -127,8 +136,8 @@ export default class LocalStorage
 	 */
 	setItem(key, value)
 	{
-		if (!key) return;
-		if (!value) value = '';
+		if (typeof key === 'undefined') return;
+		if (typeof value === 'undefined') value = '';
 		this.load();
 		this.data[key] = value;
 		this.save();
@@ -142,7 +151,7 @@ export default class LocalStorage
 	 */
 	removeItem(key)
 	{
-		if (!key) return;
+		if (typeof key === 'undefined') return;
 		this.load();
 		delete this.data[key];
 		this.save();
@@ -169,5 +178,36 @@ export default class LocalStorage
 	{
 		this.data = {};
 		this.save();
+	}
+
+	/**
+	 * Allow access to a storage item only when it is not currently being
+	 * accessed. Waits for other nonConcurrentAccess operations to finish
+	 * before proceeding with callback
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {string} key - the storage key you will be accessing
+	 * @param {function} callback - callback to execute that will be accessing the key
+	 * @returns {Promise}
+	 */
+	nonConcurrentAccess(key, callback)
+	{
+		let access = new Promise((resolve, reject) =>
+		{
+			try
+			{
+				while(this.temp[`checking${key}`]) {} // eslint-disable-line
+				this.temp[`checking${key}`] = true;
+				callback(key); // eslint-disable-line
+				delete this.temp[`checking${key}`];
+				resolve();
+			}
+			catch (err)
+			{
+				delete this.temp[`checking${key}`];
+				reject(err);
+			}
+		});
+		return access;
 	}
 }
