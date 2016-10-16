@@ -27,22 +27,23 @@ export default class GuildStorageLoader
 	 * {@link GuildStorage} object
 	 * @memberof GuildStorageLoader
 	 * @instance
-	 * @param {LocalStorage} localStorage - LocalStorage instance containing all guild-specific data stores
+	 * @param {LocalStorage} dataStorage - LocalStorage instance containing all guild-specific data
+	 * @param {LocalStorage} settingsStorage - LocalStorage instance containing all guild-specific settings
 	 */
-	loadStorages(localStorage)
+	loadStorages(dataStorage, settingsStorage)
 	{
-		Object.keys(localStorage.data).forEach((key) =>
+		Object.keys(dataStorage.data).forEach((key) =>
 		{
-			this.bot.guildStorages.set(key, new GuildStorage(this.bot, key, localStorage));
+			this.bot.guildStorages.set(key, new GuildStorage(this.bot, key, dataStorage, settingsStorage));
 		});
 
 		// If the number of guilds in localStorage doesn't match
 		// the number of guilds the bot is a member of, assume
 		// this means there are guilds that have not yet been
 		// assigned storage and create storage for them
-		if (localStorage.data.length !== this.bot.guilds.size)
+		if (dataStorage.data.length !== this.bot.guilds.size)
 		{
-			this.initNewGuilds(localStorage);
+			this.initNewGuilds(dataStorage, settingsStorage);
 		}
 	}
 
@@ -52,17 +53,18 @@ export default class GuildStorageLoader
 	 * added to a new guild
 	 * @memberof GuildStorageLoader
 	 * @instance
-	 * @param {LocalStorage} localStorage - LocalStorage instance containing all guild-specific data stores
+	 * @param {LocalStorage} dataStorage - LocalStorage instance containing all guild-specific data
+	 * @param {LocalStorage} settingsStorage - LocalStorage instance containing all guild-specific settings
 	 */
-	initNewGuilds(localStorage)
+	initNewGuilds(dataStorage, settingsStorage)
 	{
 		let storagelessGuilds = this.bot.guilds.filter(guild =>
-			!Object.keys(localStorage.data).includes(guild.id));
+			!Object.keys(dataStorage.data).includes(guild.id));
 		if (storagelessGuilds.size > 0)
 		{
 			storagelessGuilds.forEach(guild =>
 			{
-				this.bot.guildStorages.set(guild.id, new GuildStorage(this.bot, guild.id, localStorage));
+				this.bot.guildStorages.set(guild.id, new GuildStorage(this.bot, guild.id, dataStorage, settingsStorage));
 			});
 		}
 	}

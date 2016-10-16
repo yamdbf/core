@@ -29,7 +29,27 @@ export default class GuildStorageRegistry extends Collection
 
 	/**
 	 * Return a [Collection]{@link external:Collection} of GuildStorage items that
-	 * have the setting key and value
+	 * have the provided key and value
+	 * @memberof GuildStorageRegistry
+	 * @instance
+	 * @param {string} key - Setting key to match
+	 * @param {*} value - Value to match
+	 * @returns {external:Collection<string, GuildStorage>}
+	 */
+	findAll(key, value)
+	{
+		let collection = new Collection();
+		this.forEach(guild =>
+		{
+			if (guild.getItem(key) === value) collection.set(guild.id, guild);
+		});
+		if (collection.size === 0) return null;
+		return collection;
+	}
+
+	/**
+	 * Return a [Collection]{@link external:Collection} of GuildStorage items that
+	 * have the provided setting key and value
 	 * @memberof GuildStorageRegistry
 	 * @instance
 	 * @param {string} key - Setting key to match

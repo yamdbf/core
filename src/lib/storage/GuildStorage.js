@@ -12,7 +12,7 @@
  */
 export default class GuildStorage
 {
-	constructor(bot, guild, localStorage)
+	constructor(bot, guild, dataStorage, settingsStorage)
 	{
 		/**
 		 * Discord.js Guild ID string
@@ -27,19 +27,34 @@ export default class GuildStorage
 		 * LocalStorage instance containing all guild-specific data
 		 * @memberof GuildStorage
 		 * @type {LocalStorage}
-		 * @name localStorage
+		 * @name dataStorage
 		 * @instance
 		 */
-		this.localStorage = localStorage;
+		this.dataStorage = dataStorage;
 
 		/**
-		 * The data loaded from persistent storage kept in memory
+		 * LocalStorage instance containing all guild-specific settings
+		 * @memberof GuildStorage
+		 * @type {LocalStorage}
+		 * @name settingsStorage
+		 * @instance
+		 */
+		this.settingsStorage = settingsStorage;
+
+		/**
+		 * The storage data, loaded from persistent storage, kept in memory
 		 * @memberof GuildStorage
 		 * @type {Object}
 		 * @name data
 		 * @instance
 		 */
-		this.data = this.localStorage.getItem(this.id) || null;
+		this.data = this.dataStorage.getItem(this.id) || null;
+
+		/**
+		 * The settings data, loaded from persistent storage, kept in memory
+		 * @type {[type]}
+		 */
+		this.settings = this.settingsStorage.getItem(this.id) || null;
 
 		/**
 		 * Temporary key/value storage, cleared on creation
@@ -53,36 +68,38 @@ export default class GuildStorage
 		// Create blank storage for the guild if no storage is present
 		if (!this.data)
 		{
-			this.localStorage.setItem(this.id, {});
-			this.data = this.localStorage.getItem(this.id);
+			this.data = {};
+			this.save();
 		}
 
 		// Set default settings if no settings are present
-		if (!this.data.settings)
+		if (!this.settings)
 		{
-			this.data.settings = bot.storage.getItem('defaultGuildSettings');
+			this.settings = bot.storage.getItem('defaultGuildSettings');
 			this.save();
 		}
 	}
 
 	/**
-	 * Load the data from localStorage for this guild
+	 * Load the data for this guild from dataStorage, settingsStorage
 	 * @memberof GuildStorage
 	 * @instance
 	 */
 	load()
 	{
-		this.data = this.localStorage.getItem(this.id);
+		this.data = this.dataStorage.getItem(this.id);
+		this.settings = this.settingsStorage.getItem(this.id);
 	}
 
 	/**
-	 * Write to the localStorage for this guild
+	 * Write to dataStorage, settingsStorage for this guild
 	 * @memberof GuildStorage
 	 * @instance
 	 */
 	save()
 	{
-		this.localStorage.setItem(this.id, this.data);
+		this.dataStorage.setItem(this.id, this.data);
+		this.settingsStorage.setItem(this.id, this.settings);
 	}
 
 	// Settings storage ////////////////////////////////////////////////////////
@@ -96,7 +113,7 @@ export default class GuildStorage
 	get settingsLength()
 	{
 		this.load();
-		return this.data.settings.length;
+		return this.settings.length;
 	}
 
 	/**
@@ -108,7 +125,7 @@ export default class GuildStorage
 	get settingsKeys()
 	{
 		this.load();
-		return Object.keys(this.data.settings);
+		return Object.keys(this.settings);
 	}
 
 	/**
@@ -122,8 +139,8 @@ export default class GuildStorage
 	{
 		if (!index || index < 0) return null;
 		this.load();
-		if (index >= this.data.settings.length) return null;
-		return Object.keys(this.data.settings)[index];
+		if (index >= this.settings.length) return null;
+		return Object.keys(this.settings)[index];
 	}
 
 	/**
@@ -137,7 +154,7 @@ export default class GuildStorage
 	{
 		if (typeof key !== 'string') return null;
 		this.load();
-		return this.data.settings[key] || null;
+		return this.settings[key] || null;
 	}
 
 	/**
@@ -151,7 +168,7 @@ export default class GuildStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		this.data.settings[key] = value;
+		this.settings[key] = value;
 		this.save();
 	}
 
@@ -164,7 +181,7 @@ export default class GuildStorage
 	removeSetting(key)
 	{
 		if (typeof key !== 'string') return;
-		delete this.data.settings[key];
+		delete this.settings[key];
 		this.save();
 	}
 
@@ -190,7 +207,7 @@ export default class GuildStorage
 	 */
 	resetSettings(defaults)
 	{
-		this.data.settings = defaults;
+		this.settings = defaults;
 		this.save();
 	}
 
@@ -217,7 +234,7 @@ export default class GuildStorage
 	get keys()
 	{
 		this.load();
-		return Object.keys(this.data).filter(key => key !== 'settings');
+		return Object.keys(this.data);
 	}
 
 	/**
@@ -244,7 +261,7 @@ export default class GuildStorage
 	 */
 	getItem(key)
 	{
-		if (typeof key !== 'string' || key === 'settings') return null;
+		if (typeof key !== 'string') return null;
 		this.load();
 		return this.data[key] || null;
 	}
@@ -258,7 +275,7 @@ export default class GuildStorage
 	 */
 	setItem(key, value)
 	{
-		if (typeof key !== 'string' || key === 'settings') return;
+		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
 		this.load();
 		this.data[key] = value;
@@ -273,7 +290,7 @@ export default class GuildStorage
 	 */
 	removeItem(key)
 	{
-		if (typeof key !== 'string' || key === 'settings') return;
+		if (typeof key !== 'string') return;
 		this.load();
 		delete this.data[key];
 		this.save();
@@ -293,19 +310,19 @@ export default class GuildStorage
 	}
 
 	/**
-	 * Delete all non-settings items from this guild's storage
+	 * Delete all data from this guild's storage
 	 * @memberof GuildStorage
 	 * @instance
 	 */
 	clear()
 	{
 		this.load();
-		this.data = { settings: this.data.settings };
+		this.data = {};
 		this.save();
 	}
 
 	/**
-	 * Allow access to a storage item only when it is not currently being
+	 * Allow access to a storage/settings item only when it is not currently being
 	 * accessed. Waits for other nonConcurrentAccess operations to finish
 	 * before proceeding with callback
 	 * @memberof GuildStorage
