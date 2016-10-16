@@ -115,7 +115,8 @@ export default class Bot extends Client
 		this.storage = new LocalStorage('storage/bot-storage');
 
 		/**
-		 * @typedef {Object} defaultGuildSettings - The default settings to apply to new guilds
+		 * @typedef {Object} defaultGuildSettings - The default settings to apply to new guilds.
+		 * Stored under the key <code>'defaultGuildSettings'</code> in {@link Bot#storage}
 		 * @property {string} [prefix='/'] - Prefix to prepend commands
 		 * @property {Array} [disabledGroups=[]] - Command groups to ignore
 		 */
@@ -283,7 +284,7 @@ export default class Bot extends Client
  * @property {string} [name='botname'] - See: {@link Bot#name}
  * @property {string} token - See: {@link Bot#token}
  * @property {string} commandsDir - See: {@link Bot#commandsDir}
- * @property {string} [statusText='@mention help'] - See: {@link Bot#statusText}
+ * @property {string} [statusText=null] - See: {@link Bot#statusText}
  * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
  * @property {string} [version='0.0.0'] - See: {@link Bot#version}
  * @property {Object} config - See: {@link Bot#config}

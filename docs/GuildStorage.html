@@ -2101,7 +2101,7 @@ before proceeding with callback
 
 <div class="description">
     Reset the settings for this guild to default, deleting any
-extra settings that are not part of the <code>defaultGuildSettings</code>
+extra settings that are not part of the provided defaults
 </div>
 
 
@@ -2154,7 +2154,7 @@ extra settings that are not part of the <code>defaultGuildSettings</code>
 
             
 
-            <td class="description last">Should always use <code>defaultGuildSettings</code></td>
+            <td class="description last">Should always use <a href="global.html#defaultGuildSettings"><code>defaultGuildSettings</code></a></td>
         </tr>
 
     
@@ -2212,6 +2212,12 @@ extra settings that are not part of the <code>defaultGuildSettings</code>
 
 
 
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;GuildStorage>.resetSettings(&lt;Bot>.storage.getItem('defaultGuildSettings'));</code></pre>
 
 
 
