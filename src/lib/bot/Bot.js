@@ -112,7 +112,7 @@ export default class Bot extends Client
 		 * @name storage
 		 * @instance
 		 */
-		this.storage = new LocalStorage('bot-storage');
+		this.storage = new LocalStorage('storage/bot-storage');
 
 		/**
 		 * @typedef {Object} defaultGuildSettings - The default settings to apply to new guilds
@@ -129,11 +129,21 @@ export default class Bot extends Client
 		 * The storage that holds all persistent data for each guild-specific storage
 		 * @memberof Bot
 		 * @type {LocalStorage}
+		 * @name guildDataStorage
+		 * @instance
+		 * @see {@link Bot#guildStorages}
+		 */
+		this.guildDataStorage = new LocalStorage('storage/guild-storage');
+
+		/**
+		 * The storage that holds all persistent data for each guild's settings
+		 * @memberof Bot
+		 * @type {LocalStorage}
 		 * @name guildSettingStorage
 		 * @instance
 		 * @see {@link Bot#guildStorages}
 		 */
-		this.guildSettingStorage = new LocalStorage('guild-storage');
+		this.guildSettingStorage = new LocalStorage('storage/guild-settings');
 
 		/**
 		 * Loads all guild-specific storages from persistent storage into an
@@ -203,17 +213,18 @@ export default class Bot extends Client
 			this.user.setStatus(null, this.statusText);
 
 			// Load all guild storages
-			this.guildStorageLoader.loadStorages(this.guildSettingStorage);
+			this.guildStorageLoader.loadStorages(this.guildDataStorage, this.guildSettingStorage);
 		});
 
 		this.on('guildCreate', () =>
 		{
-			this.guildStorageLoader.initNewGuilds(this.guildSettingStorage);
+			this.guildStorageLoader.initNewGuilds(this.guildDataStorage, this.guildSettingStorage);
 		});
 
 		this.on('guildDelete', (guild) =>
 		{
 			this.guildStorages.delete(guild.id);
+			this.guildDataStorage.removeItem(guild.id);
 			this.guildSettingStorage.removeItem(guild.id);
 		});
 
