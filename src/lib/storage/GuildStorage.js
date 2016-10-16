@@ -135,7 +135,7 @@ export default class GuildStorage
 	 */
 	getSetting(key)
 	{
-		if (typeof key === 'undefined') return null;
+		if (typeof key !== 'string') return null;
 		this.load();
 		return this.data.settings[key] || null;
 	}
@@ -149,9 +149,8 @@ export default class GuildStorage
 	 */
 	setSetting(key, value)
 	{
-		if (typeof key === 'undefined') return;
+		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		this.load();
 		this.data.settings[key] = value;
 		this.save();
 	}
@@ -164,8 +163,7 @@ export default class GuildStorage
 	 */
 	removeSetting(key)
 	{
-		if (typeof key === 'undefined') return;
-		this.load();
+		if (typeof key !== 'string') return;
 		delete this.data.settings[key];
 		this.save();
 	}
@@ -179,8 +177,7 @@ export default class GuildStorage
 	 */
 	settingExists(key)
 	{
-		if (typeof key === 'undefined') return false;
-		this.load();
+		if (typeof key !== 'string') return false;
 		return !!this.getSetting(key);
 	}
 
@@ -247,7 +244,7 @@ export default class GuildStorage
 	 */
 	getItem(key)
 	{
-		if (typeof key === 'undefined' || key === 'settings') return null;
+		if (typeof key !== 'string' || key === 'settings') return null;
 		this.load();
 		return this.data[key] || null;
 	}
@@ -261,7 +258,7 @@ export default class GuildStorage
 	 */
 	setItem(key, value)
 	{
-		if (typeof key === 'undefined' || key === 'settings') return;
+		if (typeof key !== 'string' || key === 'settings') return;
 		if (typeof value === 'undefined') value = '';
 		this.load();
 		this.data[key] = value;
@@ -276,7 +273,7 @@ export default class GuildStorage
 	 */
 	removeItem(key)
 	{
-		if (typeof key === 'undefined' || key === 'settings') return;
+		if (typeof key !== 'string' || key === 'settings') return;
 		this.load();
 		delete this.data[key];
 		this.save();
@@ -291,7 +288,7 @@ export default class GuildStorage
 	 */
 	exists(key)
 	{
-		this.load();
+		if (typeof key !== 'string') return false;
 		return !!this.getItem(key);
 	}
 
@@ -319,7 +316,7 @@ export default class GuildStorage
 	 */
 	nonConcurrentAccess(key, callback)
 	{
-		let access = new Promise((resolve, reject) =>
+		return new Promise((resolve, reject) =>
 		{
 			try
 			{
@@ -335,6 +332,5 @@ export default class GuildStorage
 				reject(err);
 			}
 		});
-		return access;
 	}
 }

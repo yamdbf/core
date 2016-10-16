@@ -121,7 +121,7 @@ export default class LocalStorage
 	 */
 	getItem(key)
 	{
-		if (typeof key === 'undefined') return null;
+		if (typeof key !== 'string') return null;
 		this.load();
 		return this.data[key] || null;
 	}
@@ -136,7 +136,7 @@ export default class LocalStorage
 	 */
 	setItem(key, value)
 	{
-		if (typeof key === 'undefined') return;
+		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
 		this.load();
 		this.data[key] = value;
@@ -151,7 +151,7 @@ export default class LocalStorage
 	 */
 	removeItem(key)
 	{
-		if (typeof key === 'undefined') return;
+		if (typeof key !== 'string') return;
 		this.load();
 		delete this.data[key];
 		this.save();
@@ -166,6 +166,7 @@ export default class LocalStorage
 	 */
 	exists(key)
 	{
+		if (typeof key !== 'string') return false;
 		return !!this.getItem(key);
 	}
 
@@ -192,7 +193,7 @@ export default class LocalStorage
 	 */
 	nonConcurrentAccess(key, callback)
 	{
-		let access = new Promise((resolve, reject) =>
+		return new Promise((resolve, reject) =>
 		{
 			try
 			{
@@ -208,6 +209,5 @@ export default class LocalStorage
 				reject(err);
 			}
 		});
-		return access;
 	}
 }
