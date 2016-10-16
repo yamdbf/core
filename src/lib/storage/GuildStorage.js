@@ -17,51 +17,54 @@ export default class GuildStorage
 		/**
 		 * Discord.js Guild ID string
 		 * @memberof GuildStorage
+		 * @instance
 		 * @type {string}
 		 * @name id
-		 * @instance
 		 */
 		this.id = guild.id || guild;
 
 		/**
 		 * LocalStorage instance containing all guild-specific data
 		 * @memberof GuildStorage
+		 * @instance
 		 * @type {LocalStorage}
 		 * @name dataStorage
-		 * @instance
 		 */
 		this.dataStorage = dataStorage;
 
 		/**
 		 * LocalStorage instance containing all guild-specific settings
 		 * @memberof GuildStorage
+		 * @instance
 		 * @type {LocalStorage}
 		 * @name settingsStorage
-		 * @instance
 		 */
 		this.settingsStorage = settingsStorage;
 
 		/**
 		 * The storage data, loaded from persistent storage, kept in memory
 		 * @memberof GuildStorage
+		 * @instance
 		 * @type {Object}
 		 * @name data
-		 * @instance
 		 */
 		this.data = this.dataStorage.getItem(this.id) || null;
 
 		/**
 		 * The settings data, loaded from persistent storage, kept in memory
-		 * @type {[type]}
+		 * @memberof GuildStorage
+		 * @instance
+		 * @type {Object}
+		 * @name settings
 		 */
 		this.settings = this.settingsStorage.getItem(this.id) || null;
 
 		/**
 		 * Temporary key/value storage, cleared on creation
 		 * @memberof GuildStorage
+		 * @instance
 		 * @type {Object}
 		 * @name temp
-		 * @instance
 		 */
 		this.temp = {};
 
