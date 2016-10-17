@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title> - Documentation</title>
+    <title>CommandLoader - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,56 +28,54 @@
 
 <div id="main">
     
-    <h1 class="page-title"></h1>
+    <h1 class="page-title">CommandLoader</h1>
     
 
-    <section>
+    
+
+
+
+
+<section>
 
 <header>
     
-
-    <h2>Not getting Command errors?</h2>
+        
+    
 </header>
 
 <article>
-    <p>If you're not receiving any error output from your commands and you are writing your commands without babel following the example on the main page, this is because error catching is handled in the pre-compiled code via a Promise catch. This doesn't translate well to non-babel code if you're using the example command as a base due to the Command action not being declared as <code>async</code>. Because commands are executed within a promise via <code>async</code>, they are effectively sandboxed so errors within your commands won't crash your bot but without access to that Promise catch, you won't see anything either.</p>
-<p>If you're not receiving errors from your commands as a result of this, until <code>async</code>/<code>await</code> is implemented in Node, the best course of action is to surround the content of your Command action in a try/catch block. I'll demonstrate using the same <code>ping</code> command example from the main page.</p>
-<pre class="prettyprint source lang-js"><code>let Command = require('yamdbf').Command;
+    <div class="container-overview">
+    
+        
 
-exports.default = class Ping extends Command
-{
-    constructor(bot)
-    {
-        super(bot, {
-            name: 'ping',
-            aliases: ['p'],
-            description: 'Pong!',
-            usage: '&lt;prefix>ping',
-            extraHelp: 'A basic ping/pong command example.',
-            group: 'example',
-            guildOnly: false,
-            permissions: [],
-            roles: [],
-            ownerOnly: false
-        });
-    }
+        
+    
+    </div>
 
-    action(message, args, mentions, original) // eslint-disable-line no-unused-vars
-    {
-        try
-        {
-            message.reply('Pong!');
-        }
-        catch (err)
-        {
-            console.error(err);
-        }
-    }
-};</code></pre><p>Just remember that despite not having access to <code>async</code> without babel, commands are still being executed asynchronously by the framework, and even still would be just by the fact that they're being dispatched from within the <code>'message'</code> event handler.</p>
-<p>I'll make sure to make a big announcement when <code>async</code>/<code>await</code> can be used for writing commands with YAMDBF. In the meantime, this will have to do if you don't want to have to use babel to write commands with <code>async</code> in mind and want to be able to catch errors when debugging your commands.</p>
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
 </article>
 
 </section>
+
+
+
 
 </div>
 
