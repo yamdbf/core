@@ -203,10 +203,12 @@ export default class GuildStorage
 
 	/**
 	 * Reset the settings for this guild to default, deleting any
-	 * extra settings that are not part of the [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 * extra settings that are not part of the provided defaults
+	 * @example
+	 * <GuildStorage>.resetSettings(<Bot>.storage.getItem('defaultGuildSettings'));
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {Object} defaults - Should always use [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 * @param {Object} defaults - Should always use {@link defaultGuildSettings}
 	 */
 	resetSettings(defaults)
 	{
