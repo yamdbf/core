@@ -250,18 +250,18 @@ footer {
 
 .details {
   margin-top: 14px;
-  /*border-left: 2px solid #DDD;*/
+  border-left: 2px solid #DDD;
   line-height: 30px;
 }
 
 .details dt {
-   /*width: 120px;*/
+   width: 120px;
    float: left;
-   padding-left: 0px;
+   padding-left: 10px;
 }
 
 .details dd {
-   margin-left: 0px
+   margin-left: 70px
 }
 
 .details ul {
@@ -414,8 +414,7 @@ dl.param-type {
 }
 
 .param-type dt, .param-type dd {
-  display: inline-block;
-  margin-left: 0px;
+  display: inline-block
 }
 
 .param-type dd {
