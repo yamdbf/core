@@ -90,8 +90,8 @@ export default class CommandRegistry extends Collection
 				.hasPermission(a)).length > 0 : true)
 			.filter(c => !(c.roles.length > 0 && !message.member.roles.filter(role =>
 				c.roles.includes(role.name)).size > 0))
-			.filter(c => !bot.guildStorages.get(message.guild)
-				.getSetting('disabledGroups').includes(c.group))
+			.filter(c => !bot.guildStorages.get(message.guild).settingExists('disabledGroups')
+				|| !bot.guildStorages.get(message.guild).getSetting('disabledGroups').includes(c.group))
 			.filter(c => (bot.config.owner
 				.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly);
 	}

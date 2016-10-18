@@ -52,8 +52,9 @@ export default class CommandDispatcher
 			return false;
 		}
 
-		if (!dm && this.bot.guildStorages.get(message.guild)
-			.getSetting('disabledGroups').includes(command.group)) return false;
+		let guildStorage = !dm ? this.bot.guildStorages.get(message.guild) : null;
+		if (!dm && guildStorage.settingExists('disabledGroups')
+			&& guildStorage.getSetting('disabledGroups').includes(command.group)) return false;
 		if (command.ownerOnly && !config.owner.includes(message.author.id)) return false;
 		if (dm && command.guildOnly) return this.guildOnlyError(message);
 
