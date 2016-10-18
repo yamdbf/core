@@ -54,6 +54,7 @@ export default class LocalStorage
 	 */
 	get length()
 	{
+		this.load();
 		return Object.keys(this.data).length || 0;
 	}
 
@@ -70,7 +71,7 @@ export default class LocalStorage
 	}
 
 	/**
-	 * Load the data from persistent storage into memory
+	 * Load all data from persistent storage into memory
 	 * @memberof LocalStorage
 	 * @instance
 	 */
@@ -88,7 +89,7 @@ export default class LocalStorage
 	}
 
 	/**
-	 * Write to persistent storage
+	 * Write all data persistent storage
 	 * @memberof LocalStorage
 	 * @instance
 	 */
@@ -122,11 +123,17 @@ export default class LocalStorage
 	getItem(key)
 	{
 		if (typeof key !== 'string') return null;
-		this.load();
-		return this.data[key] || null;
+		try
+		{
+			let data = this.db.getData(`/${key}`);
+			return data || null;
+		}
+		catch (err)
+		{
+			return null;
+		}
 	}
 
-	// Set the value of a key
 	/**
 	 * Set the value of a given key in this storage
 	 * @memberof LocalStorage
@@ -138,9 +145,7 @@ export default class LocalStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		this.load();
-		this.data[key] = value;
-		this.save();
+		this.db.push(`/${key}`, value, true);
 	}
 
 	/**
@@ -152,9 +157,7 @@ export default class LocalStorage
 	removeItem(key)
 	{
 		if (typeof key !== 'string') return;
-		this.load();
-		delete this.data[key];
-		this.save();
+		this.db.delete(`/${key}`);
 	}
 
 	/**
@@ -171,7 +174,7 @@ export default class LocalStorage
 	}
 
 	/**
-	 * Delete all non-settings items from this storage
+	 * Delete all items from this storage
 	 * @memberof LocalStorage
 	 * @instance
 	 */
