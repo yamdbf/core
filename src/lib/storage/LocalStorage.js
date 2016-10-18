@@ -41,9 +41,6 @@ export default class LocalStorage
 		 * @instance
 		 */
 		this.temp = {};
-
-		// Load the data from persistent storage
-		this.load();
 	}
 
 	/**
@@ -54,8 +51,15 @@ export default class LocalStorage
 	 */
 	get length()
 	{
-		this.load();
-		return Object.keys(this.data).length || 0;
+		try
+		{
+			let data = this.db.getData('/');
+			return Object.keys(data).length || 0;
+		}
+		catch (err)
+		{
+			return 0;
+		}
 	}
 
 	/**
@@ -66,36 +70,15 @@ export default class LocalStorage
 	 */
 	get keys()
 	{
-		this.load();
-		return Object.keys(this.data);
-	}
-
-	/**
-	 * Load all data from persistent storage into memory
-	 * @memberof LocalStorage
-	 * @instance
-	 */
-	load()
-	{
 		try
 		{
-			this.data = this.db.getData('/');
+			let data = this.db.getData('/');
+			return Object.keys(data);
 		}
 		catch (err)
 		{
-			this.db.push('/', {}, true);
-			this.data = this.db.getData('/');
+			return null;
 		}
-	}
-
-	/**
-	 * Write all data persistent storage
-	 * @memberof LocalStorage
-	 * @instance
-	 */
-	save()
-	{
-		this.db.push('/', this.data, true);
 	}
 
 	/**
@@ -108,9 +91,16 @@ export default class LocalStorage
 	key(index)
 	{
 		if (!index || index < 0) return null;
-		this.load();
-		if (index >= this.data.length) return null;
-		return Object.keys(this.data)[index];
+		try
+		{
+			let data = this.db.getData('/');
+			if (index >= data.length) return null;
+			return Object.keys(data)[index];
+		}
+		catch (err)
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -126,7 +116,7 @@ export default class LocalStorage
 		try
 		{
 			let data = this.db.getData(`/${key}`);
-			return data || null;
+			return data;
 		}
 		catch (err)
 		{
@@ -170,7 +160,7 @@ export default class LocalStorage
 	exists(key)
 	{
 		if (typeof key !== 'string') return false;
-		return !!this.getItem(key);
+		return this.getItem(key) !== null;
 	}
 
 	/**
@@ -180,8 +170,7 @@ export default class LocalStorage
 	 */
 	clear()
 	{
-		this.data = {};
-		this.save();
+		this.db.push('/', {}, true);
 	}
 
 	/**

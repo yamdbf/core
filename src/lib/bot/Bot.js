@@ -243,14 +243,24 @@ export default class Bot extends Client
 	 */
 	setDefaultSetting(key, value)
 	{
-		let defaults = this.storage.getItem('defaultGuildSettings');
-		if (!defaults) return;
-		defaults[key] = value;
-		this.storage.setItem('defaultGuildSettings', defaults);
+		this.storage.setItem(`defaultGuildSettings/${key}`, value);
 		this.guildStorages.forEach(guild =>
 		{
 			if (!guild.settingExists(key)) guild.setSetting(key, value);
 		});
+	}
+
+	/**
+	 * Remove a defaultGuildSettings item. Will not remove from ALL guild
+	 * settings, but will prevent the item from being added to new guild
+	 * settings storage upon creation
+	 * @memberof Bot
+	 * @instance
+	 * @param {string} key - The key to use in settings storage
+	 */
+	removeDefaultSetting(key)
+	{
+		this.storage.removeItem(`defaultGuildSettings/${key}`);
 	}
 
 	/**

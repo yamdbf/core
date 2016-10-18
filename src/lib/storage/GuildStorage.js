@@ -59,7 +59,12 @@ export default class GuildStorage
 		// Set default settings if no settings are present
 		if (!this.settingsStorage.getItem(this.id))
 		{
-			this.settingsStorage.setItem(this.id, bot.storage.getItem('defaultGuildSettings'));
+			this.settingsStorage.setItem(this.id, {});
+			let defaults = bot.storage.getItem('defaultGuildSettings');
+			Object.keys(defaults).forEach(key =>
+			{
+				this.settingsStorage.setItem(`${this.id}/${key}`, defaults[key]);
+			});
 		}
 	}
 
@@ -73,8 +78,7 @@ export default class GuildStorage
 	 */
 	get settingsLength()
 	{
-		let settings = this.settingsStorage.getItem(this.id);
-		return settings.length;
+		return Object.keys(this.settingsStorage.getItem(this.id)).length || 0;
 	}
 
 	/**
@@ -85,8 +89,7 @@ export default class GuildStorage
 	 */
 	get settingsKeys()
 	{
-		let settings = this.settingsStorage.getItem(this.id);
-		return Object.keys(settings);
+		return Object.keys(this.settingsStorage.getItem(this.id));
 	}
 
 	/**
@@ -114,8 +117,7 @@ export default class GuildStorage
 	getSetting(key)
 	{
 		if (typeof key !== 'string') return null;
-		let settings = this.settingsStorage.getItem(this.id);
-		return settings[key] || null;
+		return this.settingsStorage.getItem(`${this.id}/${key}`);
 	}
 
 	/**
@@ -129,9 +131,7 @@ export default class GuildStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		let settings = this.settingsStorage.getItem(this.id);
-		settings[key] = value;
-		this.settingsStorage.setItem(this.id, settings);
+		this.settingsStorage.setItem(`${this.id}/${key}`, value);
 	}
 
 	/**
@@ -143,9 +143,7 @@ export default class GuildStorage
 	removeSetting(key)
 	{
 		if (typeof key !== 'string') return;
-		let settings = this.settingsStorage.getItem(this.id);
-		delete settings[key];
-		this.settingsStorage.setItem(this.id, settings);
+		this.settingsStorage.removeItem(`${this.id}/${key}`);
 	}
 
 	/**
@@ -158,7 +156,7 @@ export default class GuildStorage
 	settingExists(key)
 	{
 		if (typeof key !== 'string') return false;
-		return !!this.getSetting(key);
+		return this.getSetting(key) !== null;
 	}
 
 	/**
@@ -172,34 +170,31 @@ export default class GuildStorage
 	 */
 	resetSettings(defaults)
 	{
-		let settings = defaults;
-		this.settingsStorage.setItem(this.id, settings);
+		this.settingsStorage.setItem(this.id, defaults);
 	}
 
 	// Non-settings storage ////////////////////////////////////////////////////
 
 	/**
-	 * The number of keys in this guild's storage, not counting settings
+	 * The number of keys in this guild's storage
 	 * @memberof GuildStorage
 	 * @instance
 	 * @type {number}
 	 */
 	get length()
 	{
-		let data = this.dataStorage.getItem(this.id);
-		return Object.keys(data).length - 1 || 0;
+		return Object.keys(this.dataStorage.getItem(this.id)).length || 0;
 	}
 
 	/**
-	 * The names of all keys in this guild's storage, not counting settings
+	 * The names of all keys in this guild's storage
 	 * @memberof GuildStorage
 	 * @instance
 	 * @type {string[]}
 	 */
 	get keys()
 	{
-		let data = this.dataStorage.getItem(this.id);
-		return Object.keys(data);
+		return Object.keys(this.dataStorage.getItem(this.id));
 	}
 
 	/**
@@ -227,8 +222,7 @@ export default class GuildStorage
 	getItem(key)
 	{
 		if (typeof key !== 'string') return null;
-		let data = this.dataStorage.getItem(this.id);
-		return data[key] || null;
+		return this.dataStorage.getItem(`${this.id}/${key}`);
 	}
 
 	/**
@@ -242,9 +236,7 @@ export default class GuildStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		let data = this.dataStorage.getItem(this.id);
-		data[key] = value;
-		this.dataStorage.setItem(this.id, data);
+		this.dataStorage.setItem(`${this.id}/${key}`, value);
 	}
 
 	/**
@@ -256,9 +248,7 @@ export default class GuildStorage
 	removeItem(key)
 	{
 		if (typeof key !== 'string') return;
-		let data = this.dataStorage.getItem(this.id);
-		delete data[key];
-		this.dataStorage.setItem(this.id, data);
+		this.dataStorage.removeItem(`${this.id}/${key}`);
 	}
 
 	/**

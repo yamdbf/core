@@ -35,7 +35,7 @@ export default class Help extends Command
 			let widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			output += usableCommands.map(c =>
 				`${padRight(c.name, widest + 1)}: ${c.description}`).join('\n');
-			output += `\`\`\`Use "<prefix>help <command>" or "${this.bot.user} help <command>" for more information.\n\n`;
+			output += `\`\`\`Use "help <command>" or "${this.bot.user} help <command>" for more information.\n\n`;
 		}
 		else if (!args[0] && dm)
 		{
@@ -46,7 +46,7 @@ export default class Help extends Command
 			let widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			output += usableCommands.map(c =>
 				`${padRight(c.name, widest + 1)}: ${c.description}`).join('\n');
-			output += `\`\`\`Use "<prefix>help <command>" or "${this.bot.user} help <command>" for more information.\n\n`;
+			output += `\`\`\`Use "help <command>" or "${this.bot.user} help <command>" for more information.\n\n`;
 		}
 		else if (args[0])
 		{
