@@ -1,6 +1,6 @@
 {
   "name": "yamdbf",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Yet Another Modular Discord Bot Framework: A somewhat simple framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
   "scripts": {
@@ -30,8 +30,8 @@
   ],
   "dependencies": {
     "discord.js": "^9.3.0",
-    "glob": "^7.1.1",
-    "node-json-db": "^0.7.3",
+    "glob": "7.1.1",
+    "node-json-db": "0.7.3",
     "performance-now": "^0.2.0"
   },
   "devDependencies": {
