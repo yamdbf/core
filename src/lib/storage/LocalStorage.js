@@ -116,7 +116,7 @@ export default class LocalStorage
 		try
 		{
 			let data = this.db.getData(`/${key}`);
-			return data;
+			return JSON.parse(JSON.stringify(data));
 		}
 		catch (err)
 		{
@@ -135,7 +135,7 @@ export default class LocalStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		this.db.push(`/${key}`, value, true);
+		this.db.push(`/${key}`, JSON.parse(JSON.stringify(value)), true);
 	}
 
 	/**
