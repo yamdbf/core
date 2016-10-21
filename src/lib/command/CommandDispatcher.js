@@ -262,6 +262,13 @@ export default class CommandDispatcher
 	 */
 	async dispatch(command, message, args, mentions, original)
 	{
-		command.action(message, args, mentions, original).catch(console.log); // eslint-disable-line no-unused-expressions, no-console
+		try
+		{
+			command.action(message, args, mentions, original); // eslint-disable-line no-unused-expressions, no-console
+		}
+		catch (err)
+		{
+			console.log(err);
+		}
 	}
 }
