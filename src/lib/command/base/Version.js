@@ -3,7 +3,6 @@
 
 import Command from '../Command';
 
-// Command class to extend to create commands users can execute
 export default class Version extends Command
 {
 	constructor(bot)
