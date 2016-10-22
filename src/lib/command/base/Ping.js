@@ -20,6 +20,6 @@ export default class Ping extends Command
 	async action(message)
 	{
 		message.channel.sendMessage(`Pong!`).then(msg =>
-            msg.edit(`Pong! (${msg.timestamp - message.timestamp}ms)`));
+			msg.edit(`Pong! (${msg.timestamp - message.timestamp}ms)`));
 	}
 }
