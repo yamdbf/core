@@ -240,6 +240,7 @@ export default class Bot extends Client
 	 * @instance
 	 * @param {string} key - The key to use in settings storage
 	 * @param {string} value - The value to use in settings storage
+	 * @returns {Bot}
 	 */
 	setDefaultSetting(key, value)
 	{
@@ -248,6 +249,7 @@ export default class Bot extends Client
 		{
 			if (!guild.settingExists(key)) guild.setSetting(key, value);
 		});
+		return this;
 	}
 
 	/**
@@ -257,10 +259,12 @@ export default class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key to use in settings storage
+	 * @returns {Bot}
 	 */
 	removeDefaultSetting(key)
 	{
 		this.storage.removeItem(`defaultGuildSettings/${key}`);
+		return this;
 	}
 
 	/**
