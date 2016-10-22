@@ -128,8 +128,7 @@ export default class CommandDispatcher
 		content = content.replace(/ +/g, ' ');
 
 		let commandName = content.split(' ')[0];
-		let command = this.bot.commands.filter(c =>
-			c.name === commandName || c.aliases.includes(commandName)).first();
+		let command = this.bot.commands.findByNameOrAlias(commandName);
 
 		let args = content.split(' ').slice(1)
 			.map(a => !isNaN(a) && !command.stringArgs ? parseFloat(a) : a);
@@ -148,15 +147,8 @@ export default class CommandDispatcher
 	 */
 	checkPermissions(dm, message, command)
 	{
-		let missing = [];
-		command.permissions.forEach(permission =>
-		{
-			if (!dm && !message.channel // eslint-disable-line curly
-				.permissionsFor(message.author)
-				.hasPermission(permission))
-				missing.push(permission);
-		});
-		return missing;
+		return dm ? [] : command.permissions.filter(a =>
+			!message.channel.permissionsFor(message.author).hasPermission(a));
 	}
 
 	/**
@@ -170,11 +162,9 @@ export default class CommandDispatcher
 	 */
 	hasRoles(dm, message, command)
 	{
-		if (command.roles.length === 0) return true;
-		let matchedRoles = message.member.roles
-			.filter(role => !dm && command.roles.includes(role.name));
-		if (matchedRoles.size > 0) return true;
-		return false;
+		return command.roles.length === 0 || dm
+			|| message.member.roles.filter(role =>
+				command.roles.includes(role.name)).size > 0;
 	}
 
 	/**
