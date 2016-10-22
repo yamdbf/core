@@ -54,12 +54,7 @@ export default class CommandRegistry extends Collection
 	 */
 	get groups()
 	{
-		let groups = [];
-		this.forEach(c =>
-		{
-			if (!groups.includes(c.group)) groups.push(c.group);
-		});
-		return groups;
+		return this.map(a => a.group).filter((a, i, self) => self.indexOf(a) === i);
 	}
 
 	/**
