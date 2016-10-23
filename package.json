@@ -9,7 +9,7 @@
     "rebuild": "gulp clean && gulp build",
     "package": "gulp clean-package && gulp package",
     "tag-release": "gulp tag-release",
-    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r src"
+    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r src && jsdoc -c .jsdoc.json -t templates/haruki -r src -d console > docs/docs.json"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {

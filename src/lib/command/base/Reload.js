@@ -21,26 +21,19 @@ export default class Reload extends Command
 
 	async action(message, args, mentions) // eslint-disable-line no-unused-vars
 	{
-		let start = now();
-		let command = this.bot.commands.findByNameOrAlias(args[0]);
+		const start = now();
+		const command = this.bot.commands.findByNameOrAlias(args[0]);
 		if (args[0] && !command)
 		{
-			message.channel.sendMessage(`Command "${args[0]}" could not be found.`)
-				.then(response =>
-				{
-					response.delete(5 * 1000);
-				});
-			return;
+			return message.channel.sendMessage(`Command "${args[0]}" could not be found.`)
+				.then(response => response.delete(5 * 1000));
 		}
-		if (command) this.bot.commandLoader.reloadCommand(command.name);
-		else this.bot.commandLoader.loadCommands();
-		let end = now();
-		let name = args[0] ? this.bot.commands.findByNameOrAlias(args[0]).name : null;
-		let text = name ? ` "${name}"` : 's';
-		message.channel.sendMessage(`Command${text} reloaded. (${(end - start).toFixed(3)} ms)`)
-			.then(response =>
-			{
-				response.delete(5 * 1000);
-			});
+		if (command) this.bot.loadCommand(command.name);
+		else this.bot.loadCommand('all');
+		const end = now();
+		const name = command ? command.name : null;
+		const text = name ? ` "${name}"` : 's';
+		return message.channel.sendMessage(`Command${text} reloaded. (${(end - start).toFixed(3)} ms)`)
+			.then(response => response.delete(5 * 1000));
 	}
 }
