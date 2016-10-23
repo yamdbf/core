@@ -15,16 +15,17 @@ import CommandDispatcher from '../command/CommandDispatcher';
  * fields for access within commands
  * @class Bot
  * @extends {external:Client}
- * @param {BotOptions} options - Object containing required bot properties
+ * @param {?BotOptions} botOptions - Object containing required bot properties
+ * @param {external:ClientOptions} [clientOptions] - Discord.js ClientOptions
  */
 export default class Bot extends Client
 {
-	constructor(options = null)
+	constructor(botOptions = null, clientOptions)
 	{
-		super();
+		super(clientOptions);
 
 		/** @type {string} */
-		this._token = options.token;
+		this._token = botOptions.token;
 
 		/**
 		 * The name of the Bot
@@ -33,7 +34,7 @@ export default class Bot extends Client
 		 * @name name
 		 * @instance
 		 */
-		this.name = options.name || 'botname';
+		this.name = botOptions.name || 'botname';
 
 		/**
 		 * Directory to find command class files
@@ -42,7 +43,7 @@ export default class Bot extends Client
 		 * @name commandsDir
 		 * @instance
 		 */
-		this.commandsDir = options.commandsDir;
+		this.commandsDir = botOptions.commandsDir;
 
 		/**
 		 * Status text for the bot
@@ -51,7 +52,7 @@ export default class Bot extends Client
 		 * @name statusText
 		 * @instance
 		 */
-		this.statusText = options.statusText || null;
+		this.statusText = botOptions.statusText || null;
 
 		/**
 		 * Whether or not the bot is a selfbot
@@ -60,7 +61,7 @@ export default class Bot extends Client
 		 * @name selfbot
 		 * @instance
 		 */
-		this.selfbot = options.selfbot || false;
+		this.selfbot = botOptions.selfbot || false;
 
 		/**
 		 * Bot version, best taken from package.json
@@ -69,7 +70,7 @@ export default class Bot extends Client
 		 * @name version
 		 * @instance
 		 */
-		this.version = options.version || '0.0.0';
+		this.version = botOptions.version || '0.0.0';
 
 		/**
 		 * Object containing token and owner ids
@@ -80,7 +81,7 @@ export default class Bot extends Client
 		 * @property {string} token - Discord login token for the bot
 		 * @property {string[]} owner - Array of owner id strings
 		 */
-		this.config = options.config || null;
+		this.config = botOptions.config || null;
 
 		/**
 		 * Array of base command names to skip when loading commands. Base commands
@@ -90,7 +91,7 @@ export default class Bot extends Client
 		 * @name disableBase
 		 * @instance
 		 */
-		this.disableBase = options.disableBase || [];
+		this.disableBase = botOptions.disableBase || [];
 
 		// Make some asserts
 		if (!this._token) throw new Error('You must provide a token for the bot.');
