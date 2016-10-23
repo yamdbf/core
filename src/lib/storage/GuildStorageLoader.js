@@ -52,14 +52,11 @@ export default class GuildStorageLoader
 	 */
 	initNewGuilds(dataStorage, settingsStorage)
 	{
-		let storagelessGuilds = this._bot.guilds.filter(guild =>
-			!dataStorage.keys.includes(guild.id));
-		if (storagelessGuilds.size > 0)
+		let storagelessGuilds = this._bot.guilds.filter(guild => !dataStorage.keys.includes(guild.id));
+		if (storagelessGuilds.size === 0) return;
+		storagelessGuilds.forEach(guild =>
 		{
-			storagelessGuilds.forEach(guild =>
-			{
-				this._bot.guildStorages.set(guild.id, new GuildStorage(this._bot, guild.id, dataStorage, settingsStorage));
-			});
-		}
+			this._bot.guildStorages.set(guild.id, new GuildStorage(this._bot, guild.id, dataStorage, settingsStorage));
+		});
 	}
 }
