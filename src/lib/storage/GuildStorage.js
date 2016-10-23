@@ -14,59 +14,44 @@ export default class GuildStorage
 {
 	constructor(bot, guild, dataStorage, settingsStorage)
 	{
-		/**
-		 * Discord.js Guild ID string
-		 * @memberof GuildStorage
-		 * @instance
-		 * @type {string}
-		 * @name id
-		 */
-		this.id = guild.id || guild;
+		/** @type {string} */
+		this._id = guild.id || guild;
 
-		/**
-		 * LocalStorage instance containing all guild-specific data
-		 * @memberof GuildStorage
-		 * @instance
-		 * @type {LocalStorage}
-		 * @name dataStorage
-		 */
-		this.dataStorage = dataStorage;
+		/** @type {LocalStorage} */
+		this._dataStorage = dataStorage;
 
-		/**
-		 * LocalStorage instance containing all guild-specific settings
-		 * @memberof GuildStorage
-		 * @instance
-		 * @type {LocalStorage}
-		 * @name settingsStorage
-		 */
-		this.settingsStorage = settingsStorage;
+		/** @type {LocalStorage} */
+		this._settingsStorage = settingsStorage;
 
-		/**
-		 * Temporary key/value storage, cleared on creation
-		 * @memberof GuildStorage
-		 * @instance
-		 * @type {Object}
-		 * @name temp
-		 */
-		this.temp = {};
+		/** @type {Object} */
+		this._temp = {};
 
 		// Create blank storage for the guild if no storage is present
-		if (!this.dataStorage.getItem(this.id))
+		if (!this._dataStorage.getItem(this.id))
 		{
-			this.dataStorage.setItem(this.id, {});
+			this._dataStorage.setItem(this.id, {});
 		}
 
 		// Set default settings if no settings are present
-		if (!this.settingsStorage.getItem(this.id))
+		if (!this._settingsStorage.getItem(this.id))
 		{
-			this.settingsStorage.setItem(this.id, {});
+			this._settingsStorage.setItem(this.id, {});
 			let defaults = bot.storage.getItem('defaultGuildSettings');
 			Object.keys(defaults).forEach(key =>
 			{
-				this.settingsStorage.setItem(`${this.id}/${key}`, defaults[key]);
+				this._settingsStorage.setItem(`${this.id}/${key}`, defaults[key]);
 			});
 		}
 	}
+
+	/**
+	 * Discord.js Guild ID string
+	 * @memberof GuildStorage
+	 * @instance
+	 * @type {string}
+	 * @name id
+	 */
+	get id() { return this._id; }
 
 	// Settings storage ////////////////////////////////////////////////////////
 
@@ -76,10 +61,7 @@ export default class GuildStorage
 	 * @instance
 	 * @type {number}
 	 */
-	get settingsLength()
-	{
-		return Object.keys(this.settingsStorage.getItem(this.id)).length || 0;
-	}
+	get settingsLength() { return Object.keys(this._settingsStorage.getItem(this.id)).length || 0; }
 
 	/**
 	 * The names of all keys in this guild's settings
@@ -87,10 +69,7 @@ export default class GuildStorage
 	 * @instance
 	 * @type {string[]}
 	 */
-	get settingsKeys()
-	{
-		return Object.keys(this.settingsStorage.getItem(this.id));
-	}
+	get settingsKeys() { return Object.keys(this._settingsStorage.getItem(this.id)); }
 
 	/**
 	 * Get the name of the key at the given index in this guild's settings
@@ -102,7 +81,7 @@ export default class GuildStorage
 	settingKey(index)
 	{
 		if (!index || index < 0) return null;
-		let settings = this.settingsStorage.getItem(this.id);
+		let settings = this._settingsStorage.getItem(this.id);
 		if (index >= settings.length) return null;
 		return Object.keys(settings)[index];
 	}
@@ -117,7 +96,7 @@ export default class GuildStorage
 	getSetting(key)
 	{
 		if (typeof key !== 'string') return null;
-		return this.settingsStorage.getItem(`${this.id}/${key}`);
+		return this._settingsStorage.getItem(`${this.id}/${key}`);
 	}
 
 	/**
@@ -131,7 +110,7 @@ export default class GuildStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		this.settingsStorage.setItem(`${this.id}/${key}`, value);
+		this._settingsStorage.setItem(`${this.id}/${key}`, value);
 	}
 
 	/**
@@ -143,7 +122,7 @@ export default class GuildStorage
 	removeSetting(key)
 	{
 		if (typeof key !== 'string') return;
-		this.settingsStorage.removeItem(`${this.id}/${key}`);
+		this._settingsStorage.removeItem(`${this.id}/${key}`);
 	}
 
 	/**
@@ -170,7 +149,7 @@ export default class GuildStorage
 	 */
 	resetSettings(defaults)
 	{
-		this.settingsStorage.setItem(this.id, defaults);
+		this._settingsStorage.setItem(this.id, defaults);
 	}
 
 	// Non-settings storage ////////////////////////////////////////////////////
@@ -183,7 +162,7 @@ export default class GuildStorage
 	 */
 	get length()
 	{
-		return Object.keys(this.dataStorage.getItem(this.id)).length || 0;
+		return Object.keys(this._dataStorage.getItem(this.id)).length || 0;
 	}
 
 	/**
@@ -194,7 +173,7 @@ export default class GuildStorage
 	 */
 	get keys()
 	{
-		return Object.keys(this.dataStorage.getItem(this.id));
+		return Object.keys(this._dataStorage.getItem(this.id));
 	}
 
 	/**
@@ -207,7 +186,7 @@ export default class GuildStorage
 	key(index)
 	{
 		if (!index || index < 0) return null;
-		let data = this.dataStorage.getItem(this.id);
+		let data = this._dataStorage.getItem(this.id);
 		if (index >= data.length) return null;
 		return Object.keys(data)[index];
 	}
@@ -222,7 +201,7 @@ export default class GuildStorage
 	getItem(key)
 	{
 		if (typeof key !== 'string') return null;
-		return this.dataStorage.getItem(`${this.id}/${key}`);
+		return this._dataStorage.getItem(`${this.id}/${key}`);
 	}
 
 	/**
@@ -236,7 +215,7 @@ export default class GuildStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		this.dataStorage.setItem(`${this.id}/${key}`, value);
+		this._dataStorage.setItem(`${this.id}/${key}`, value);
 	}
 
 	/**
@@ -248,7 +227,7 @@ export default class GuildStorage
 	removeItem(key)
 	{
 		if (typeof key !== 'string') return;
-		this.dataStorage.removeItem(`${this.id}/${key}`);
+		this._dataStorage.removeItem(`${this.id}/${key}`);
 	}
 
 	/**
@@ -271,7 +250,7 @@ export default class GuildStorage
 	 */
 	clear()
 	{
-		this.dataStorage.setItem(this.id, {});
+		this._dataStorage.setItem(this.id, {});
 	}
 
 	/**
@@ -290,15 +269,15 @@ export default class GuildStorage
 		{
 			try
 			{
-				while(this.temp[`checking${key}`]) {} // eslint-disable-line
-				this.temp[`checking${key}`] = true;
+				while(this._temp[`checking${key}`]) {} // eslint-disable-line
+				this._temp[`checking${key}`] = true;
 				callback(key); // eslint-disable-line
-				delete this.temp[`checking${key}`];
+				delete this._temp[`checking${key}`];
 				resolve();
 			}
 			catch (err)
 			{
-				delete this.temp[`checking${key}`];
+				delete this._temp[`checking${key}`];
 				reject(err);
 			}
 		});
