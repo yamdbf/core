@@ -23,6 +23,9 @@ export default class Bot extends Client
 	{
 		super();
 
+		/** @type {string} */
+		this._token = options.token;
+
 		/**
 		 * The name of the Bot
 		 * @memberof Bot
@@ -31,15 +34,6 @@ export default class Bot extends Client
 		 * @instance
 		 */
 		this.name = options.name || 'botname';
-
-		/**
-		 * Discord login token for the Bot
-		 * @memberof Bot
-		 * @type {string}
-		 * @name token
-		 * @instance
-		 */
-		this.token = options.token;
 
 		/**
 		 * Directory to find command class files
@@ -53,7 +47,7 @@ export default class Bot extends Client
 		/**
 		 * Status text for the bot
 		 * @memberof Bot
-		 * @type {string}
+		 * @type {?string}
 		 * @name statusText
 		 * @instance
 		 */
@@ -99,20 +93,52 @@ export default class Bot extends Client
 		this.disableBase = options.disableBase || [];
 
 		// Make some asserts
-		if (!this.token) throw new Error('You must provide a token for the bot.');
+		if (!this._token) throw new Error('You must provide a token for the bot.');
 		if (!this.commandsDir) throw new Error('You must provide a directory to load commands from via commandDir');
 		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
 		if (this.disableBase.includes('help')) throw new Error('Help command may be overloaded but not disabled. Check your disableBase');
 
+		/** @type {LocalStorage} */
+		this._guildDataStorage = new LocalStorage('storage/guild-storage');
+
+		/** @type {LocalStorage} */
+		this._guildSettingStorage = new LocalStorage('storage/guild-settings');
+
+		/** @type {GuildStorageLoader} */
+		this._guildStorageLoader = new GuildStorageLoader(this);
+
+		/** @type {CommandLoader} */
+		this._commandLoader = new CommandLoader(this);
+
+		/** @type {CommandDispatcher} */
+		this._dispatcher = new CommandDispatcher(this);
+
 		/**
-		 * Bot-specific storage available everywhere that has access
-		 * to the Bot instance
+		 * Bot-specific storage
 		 * @memberof Bot
 		 * @type {LocalStorage}
 		 * @name storage
 		 * @instance
 		 */
 		this.storage = new LocalStorage('storage/bot-storage');
+
+		/**
+		 * Collection containing all GuildStorage instances
+		 * @memberof Bot
+		 * @type {GuildStorageRegistry<string, GuildStorage>}
+		 * @name guildStorages
+		 * @instance
+		 */
+		this.guildStorages = new GuildStorageRegistry();
+
+		/**
+		 * [Collection]{@link external:Collection} containing all loaded commands
+		 * @memberof Bot
+		 * @type {CommandRegistry<string, Command>}
+		 * @name commands
+		 * @instance
+		 */
+		this.commands = new CommandRegistry();
 
 		/**
 		 * @typedef {Object} defaultGuildSettings - The default settings to apply to new guilds.
@@ -126,76 +152,8 @@ export default class Bot extends Client
 			this.storage.setItem('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
 
-		/**
-		 * The storage that holds all persistent data for each guild-specific storage
-		 * @memberof Bot
-		 * @type {LocalStorage}
-		 * @name guildDataStorage
-		 * @instance
-		 * @see {@link Bot#guildStorages}
-		 */
-		this.guildDataStorage = new LocalStorage('storage/guild-storage');
-
-		/**
-		 * The storage that holds all persistent data for each guild's settings
-		 * @memberof Bot
-		 * @type {LocalStorage}
-		 * @name guildSettingStorage
-		 * @instance
-		 * @see {@link Bot#guildStorages}
-		 */
-		this.guildSettingStorage = new LocalStorage('storage/guild-settings');
-
-		/**
-		 * Loads all guild-specific storages from persistent storage into an
-		 * accessible Collection of GuildStorage objects
-		 * @memberof Bot
-		 * @type {GuildStorageLoader}
-		 * @name guildStorageLoader
-		 * @instance
-		 */
-		this.guildStorageLoader = new GuildStorageLoader(this);
-
-		/**
-		 * Collection containing all GuildStorage instances
-		 * @memberof Bot
-		 * @type {GuildStorageRegistry<string, GuildStorage>}
-		 * @name guildStorages
-		 * @instance
-		 */
-		this.guildStorages = new GuildStorageRegistry();
-
-		/**
-		 * Loads all base commands and commands from the user-specified
-		 * commandsDir directory
-		 * @memberof Bot
-		 * @type {CommandLoader}
-		 * @name commandLoader
-		 * @instance
-		 * @see {@link Command}
-		 */
-		this.commandLoader = new CommandLoader(this);
-
-		/**
-		 * [Collection]{@link external:Collection} containing all loaded commands
-		 * @memberof Bot
-		 * @type {CommandRegistry<string, Command>}
-		 * @name commands
-		 * @instance
-		 */
-		this.commands = new CommandRegistry();
-
-		/**
-		 * Dispatcher that handles detection and execution of command actions
-		 * @memberof Bot
-		 * @type {CommandDispatcher}
-		 * @name dispatcher
-		 * @instance
-		 */
-		this.dispatcher = new CommandDispatcher(this);
-
 		// Load commands
-		this.commandLoader.loadCommands();
+		this._commandLoader.loadCommands();
 	}
 
 	/**
@@ -206,7 +164,8 @@ export default class Bot extends Client
 	 */
 	start()
 	{
-		this.login(this.token);
+		this.login(this._token);
+		this._token = '[REDACTED]';
 
 		this.on('ready', () =>
 		{
@@ -214,19 +173,19 @@ export default class Bot extends Client
 			this.user.setStatus(null, this.statusText);
 
 			// Load all guild storages
-			this.guildStorageLoader.loadStorages(this.guildDataStorage, this.guildSettingStorage);
+			this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
 		});
 
 		this.on('guildCreate', () =>
 		{
-			this.guildStorageLoader.initNewGuilds(this.guildDataStorage, this.guildSettingStorage);
+			this._guildStorageLoader.initNewGuilds(this._guildDataStorage, this._guildSettingStorage);
 		});
 
 		this.on('guildDelete', (guild) =>
 		{
 			this.guildStorages.delete(guild.id);
-			this.guildDataStorage.removeItem(guild.id);
-			this.guildSettingStorage.removeItem(guild.id);
+			this._guildDataStorage.removeItem(guild.id);
+			this._guildSettingStorage.removeItem(guild.id);
 		});
 
 		return this;

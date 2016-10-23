@@ -31,8 +31,7 @@ export default class CommandRegistry extends Collection
 		{
 			throw new Error(`A command with the name "${command.name}" already exists.`);
 		}
-		command.register();
-		super.set(key, command);
+
 		this.forEach(a =>
 		{
 			a.aliases.forEach(b =>
@@ -44,6 +43,9 @@ export default class CommandRegistry extends Collection
 				}
 			});
 		});
+
+		command.register();
+		super.set(key, command);
 	}
 
 	/**
