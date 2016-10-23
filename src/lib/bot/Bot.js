@@ -153,7 +153,20 @@ export default class Bot extends Client
 				require('../storage/defaultGuildSettings.json'));
 
 		// Load commands
-		this._commandLoader.loadCommands();
+		this.loadCommand('all');
+	}
+
+	/**
+	 * Loads/reloads all/specific commands
+	 * @memberof Bot
+	 * @instance
+	 * @param {string} command - The name of a command to reload, or 'all' to load all commands
+	 */
+	loadCommand(command)
+	{
+		if (!command) throw new Error(`You must provide a command name to load, or 'all' to load all commands`);
+		if (command === 'all') this._commandLoader.loadCommands();
+		else this._commandLoader.reloadCommand(command);
 	}
 
 	/**
