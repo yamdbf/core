@@ -1048,9 +1048,17 @@
                         "nullable": ""
                     },
                     {
-                        "name": "localStorage",
+                        "name": "dataStorage",
                         "type": "LocalStorage",
                         "description": "LocalStorage instance containing all guild-specific data",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "settingsStorage",
+                        "type": "LocalStorage",
+                        "description": "LocalStorage instance containing all guild-specific settings",
                         "default": "",
                         "optional": "",
                         "nullable": ""
