@@ -4,7 +4,8 @@
 import { Collection } from 'discord.js';
 
 /**
- * Stores all guild-specific storages as &lt;[id]{@link GuildStorage#id}, {@link GuildStorage}&gt; pairs
+ * Stores all guild-specific storages as &lt;{@link string}, {@link GuildStorage}&gt; pairs,
+ * where {@link string} is the guild's ID string
  * @class GuildStorageRegistry
  * @extends {external:Collection}
  */
@@ -22,10 +23,7 @@ export default class GuildStorageRegistry extends Collection
 	 * @param {(external:Guild|string)} guild - Guild object or guild id string
 	 * @returns {GuildStorage}
 	 */
-	get(guild)
-	{
-		return super.get(guild.id ? guild.id : guild);
-	}
+	get(guild) { return super.get(guild.id ? guild.id : guild); }
 
 	/**
 	 * Return a [Collection]{@link external:Collection} of GuildStorage items that
@@ -38,13 +36,7 @@ export default class GuildStorageRegistry extends Collection
 	 */
 	findAll(key, value)
 	{
-		let collection = new Collection();
-		this.forEach(guild =>
-		{
-			if (guild.getItem(key) === value) collection.set(guild.id, guild);
-		});
-		if (collection.size === 0) return null;
-		return collection;
+		return super.filter(a => a.getItem(key) === value);
 	}
 
 	/**
@@ -58,13 +50,7 @@ export default class GuildStorageRegistry extends Collection
 	 */
 	findAllBySetting(key, value)
 	{
-		let collection = new Collection();
-		this.forEach(guild =>
-		{
-			if (guild.getSetting(key) === value) collection.set(guild.id, guild);
-		});
-		if (collection.size === 0) return null;
-		return collection;
+		return super.filter(a => a.getSetting(key) === value);
 	}
 
 	/**
