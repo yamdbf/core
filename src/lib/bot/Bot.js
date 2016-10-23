@@ -96,7 +96,6 @@ export default class Bot extends Client
 		if (!this._token) throw new Error('You must provide a token for the bot.');
 		if (!this.commandsDir) throw new Error('You must provide a directory to load commands from via commandDir');
 		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
-		if (this.disableBase.includes('help')) throw new Error('Help command may be overloaded but not disabled. Check your disableBase');
 
 		/** @type {LocalStorage} */
 		this._guildDataStorage = new LocalStorage('storage/guild-storage');
@@ -123,7 +122,7 @@ export default class Bot extends Client
 		this.storage = new LocalStorage('storage/bot-storage');
 
 		/**
-		 * Collection containing all GuildStorage instances
+		 * [Collection]{@link external:Collection} containing all GuildStorage instances
 		 * @memberof Bot
 		 * @type {GuildStorageRegistry<string, GuildStorage>}
 		 * @name guildStorages
