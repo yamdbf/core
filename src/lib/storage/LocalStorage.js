@@ -15,32 +15,11 @@ export default class LocalStorage
 	{
 		if (!fileName) throw new Error('You must provide a file name for the LocalStorage');
 
-		/**
-		 * The data loaded from persistent storage kept in memory
-		 * @memberof LocalStorage
-		 * @type {Object}
-		 * @name data
-		 * @instance
-		 */
-		this.data = null;
+		/** @type {Object} */
+		this._db = new Database(fileName, true, true);
 
-		/**
-		 * Create or load the node-json-db database json file
-		 * @memberof LocalStorage
-		 * @type {Object}
-		 * @name db
-		 * @instance
-		 */
-		this.db = new Database(fileName, true, true);
-
-		/**
-		 * Temporary key/value storage, cleared on creation
-		 * @memberof LocalStorage
-		 * @type {Object}
-		 * @name temp
-		 * @instance
-		 */
-		this.temp = {};
+		/** @type {Object} */
+		this._temp = {};
 	}
 
 	/**
@@ -53,7 +32,7 @@ export default class LocalStorage
 	{
 		try
 		{
-			let data = this.db.getData('/');
+			let data = this._db.getData('/');
 			return Object.keys(data).length || 0;
 		}
 		catch (err)
@@ -72,12 +51,12 @@ export default class LocalStorage
 	{
 		try
 		{
-			let data = this.db.getData('/');
+			let data = this._db.getData('/');
 			return Object.keys(data);
 		}
 		catch (err)
 		{
-			return null;
+			return [];
 		}
 	}
 
@@ -93,7 +72,7 @@ export default class LocalStorage
 		if (!index || index < 0) return null;
 		try
 		{
-			let data = this.db.getData('/');
+			let data = this._db.getData('/');
 			if (index >= data.length) return null;
 			return Object.keys(data)[index];
 		}
@@ -115,7 +94,7 @@ export default class LocalStorage
 		if (typeof key !== 'string') return null;
 		try
 		{
-			let data = this.db.getData(`/${key}`);
+			let data = this._db.getData(`/${key}`);
 			return JSON.parse(JSON.stringify(data));
 		}
 		catch (err)
@@ -135,7 +114,7 @@ export default class LocalStorage
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
-		this.db.push(`/${key}`, JSON.parse(JSON.stringify(value)), true);
+		this._db.push(`/${key}`, JSON.parse(JSON.stringify(value)), true);
 	}
 
 	/**
@@ -147,7 +126,7 @@ export default class LocalStorage
 	removeItem(key)
 	{
 		if (typeof key !== 'string') return;
-		this.db.delete(`/${key}`);
+		this._db.delete(`/${key}`);
 	}
 
 	/**
@@ -170,7 +149,7 @@ export default class LocalStorage
 	 */
 	clear()
 	{
-		this.db.push('/', {}, true);
+		this._db.push('/', {}, true);
 	}
 
 	/**
@@ -189,15 +168,15 @@ export default class LocalStorage
 		{
 			try
 			{
-				while(this.temp[`checking${key}`]) {} // eslint-disable-line
-				this.temp[`checking${key}`] = true;
+				while(this._temp[`checking${key}`]) {} // eslint-disable-line
+				this._temp[`checking${key}`] = true;
 				callback(key); // eslint-disable-line
-				delete this.temp[`checking${key}`];
+				delete this._temp[`checking${key}`];
 				resolve();
 			}
 			catch (err)
 			{
-				delete this.temp[`checking${key}`];
+				delete this._temp[`checking${key}`];
 				reject(err);
 			}
 		});

@@ -10,16 +10,11 @@ export default class CommandDispatcher
 {
 	constructor(bot)
 	{
-		/**
-		 * Bot instance
-		 * @memberof CommandDispatcher
-		 * @type {Bot}
-		 * @name bot
-		 * @instance
-		 */
-		this.bot = bot;
+		/** @type {Bot} */
+		this._bot = bot;
 
-		this.bot.on('message', message =>
+		// Register message listener
+		this._bot.on('message', message =>
 		{
 			this.handleMessage(message);
 		});
@@ -34,8 +29,8 @@ export default class CommandDispatcher
 	 */
 	handleMessage(message)
 	{
-		let config = this.bot.config;
-		if (this.bot.selfbot && message.author !== this.bot.user) return false;
+		let config = this._bot.config;
+		if (this._bot.selfbot && message.author !== this._bot.user) return false;
 		if (message.author.bot) return false;
 		let original = message.content;
 
@@ -52,7 +47,7 @@ export default class CommandDispatcher
 			return false;
 		}
 
-		let guildStorage = !dm ? this.bot.guildStorages.get(message.guild) : null;
+		let guildStorage = !dm ? this._bot.guildStorages.get(message.guild) : null;
 		if (!dm && guildStorage.settingExists('disabledGroups')
 			&& guildStorage.getSetting('disabledGroups').includes(command.group)) return false;
 		if (command.ownerOnly && !config.owner.includes(message.author.id)) return false;
@@ -90,8 +85,8 @@ export default class CommandDispatcher
 			message.content.indexOf(a.id) - message.content.indexOf(b.id));
 
 		let botMention = /^<@!?\d+>.+/.test(message.content)
-			&& mentions[0].id === this.bot.user.id
-			&& !this.bot.selfbot;
+			&& mentions[0].id === this._bot.user.id
+			&& !this._bot.selfbot;
 
 		let content;
 		if (botMention && !duplicateMention)
@@ -103,11 +98,11 @@ export default class CommandDispatcher
 		{
 			content = message.content.replace(/<@!?\d+>/g, '').trim();
 		}
-		else if (!dm && (message.content.startsWith(this.bot.getPrefix(message.guild))
-			|| !this.bot.getPrefix(message.guild)))
+		else if (!dm && (message.content.startsWith(this._bot.getPrefix(message.guild))
+			|| !this._bot.getPrefix(message.guild)))
 		{
-			content = message.content.slice(this.bot.getPrefix(message.guild)
-				? this.bot.getPrefix(message.guild).length : 0).replace(/<@!?\d+>/g, '').trim();
+			content = message.content.slice(this._bot.getPrefix(message.guild)
+				? this._bot.getPrefix(message.guild).length : 0).replace(/<@!?\d+>/g, '').trim();
 		}
 		else if (dm)
 		{
@@ -128,8 +123,7 @@ export default class CommandDispatcher
 		content = content.replace(/ +/g, ' ');
 
 		let commandName = content.split(' ')[0];
-		let command = this.bot.commands.filter(c =>
-			c.name === commandName || c.aliases.includes(commandName)).first();
+		let command = this._bot.commands.findByNameOrAlias(commandName);
 
 		let args = content.split(' ').slice(1)
 			.map(a => !isNaN(a) && !command.stringArgs ? parseFloat(a) : a);
@@ -138,7 +132,8 @@ export default class CommandDispatcher
 	}
 
 	/**
-	 * Get a list of missing permissions for the given command, if any
+	 * Get a list of missing permissions for the command caller for the
+	 * given command, if any
 	 * @memberof CommandDispatcher
 	 * @instance
 	 * @param {boolean} dm - Whether the message is a DM
@@ -148,19 +143,12 @@ export default class CommandDispatcher
 	 */
 	checkPermissions(dm, message, command)
 	{
-		let missing = [];
-		command.permissions.forEach(permission =>
-		{
-			if (!dm && !message.channel // eslint-disable-line curly
-				.permissionsFor(message.author)
-				.hasPermission(permission))
-				missing.push(permission);
-		});
-		return missing;
+		return dm ? [] : command.permissions.filter(a =>
+			!message.channel.permissionsFor(message.author).hasPermission(a));
 	}
 
 	/**
-	 * Checks if the user has roles for the given command
+	 * Checks if the command caller has roles for the given command
 	 * @memberof CommandDispatcher
 	 * @instance
 	 * @param {boolean} dm - Whether the message is a DM
@@ -170,11 +158,9 @@ export default class CommandDispatcher
 	 */
 	hasRoles(dm, message, command)
 	{
-		if (command.roles.length === 0) return true;
-		let matchedRoles = message.member.roles
-			.filter(role => !dm && command.roles.includes(role.name));
-		if (matchedRoles.size > 0) return true;
-		return false;
+		return command.roles.length === 0 || dm
+			|| message.member.roles.filter(role =>
+				command.roles.includes(role.name)).size > 0;
 	}
 
 	/**
@@ -217,14 +203,14 @@ export default class CommandDispatcher
 	 */
 	missingPermissionsError(missing, message)
 	{
-		return message[`${this.bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
+		return message[`${this._bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
 			+ `**You're missing the following permission`
 			+ `${missing.length > 1 ? 's' : ''} `
 			+ `for that command:**\n\`\`\`css\n`
 			+ `${missing.join(', ')}\n\`\`\``)
 				.then(response =>
 				{
-					if (this.bot.selfbot) response.delete(10 * 1000);
+					if (this._bot.selfbot) response.delete(10 * 1000);
 				});
 	}
 
@@ -238,14 +224,14 @@ export default class CommandDispatcher
 	 */
 	missingRolesError(message, command)
 	{
-		return message[`${this.bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
+		return message[`${this._bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
 			+ `**You must have ${command.roles.length > 1
 				? 'one of the following roles' : 'the following role'}`
 			+ ` to use that command:**\n\`\`\`css\n`
 			+ `${command.roles.join(', ')}\n\`\`\``)
 				.then(response =>
 				{
-					if (this.bot.selfbot) response.delete(10 * 1000);
+					if (this._bot.selfbot) response.delete(10 * 1000);
 				});
 	}
 

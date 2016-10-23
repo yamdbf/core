@@ -12,14 +12,8 @@ export default class GuildStorageLoader
 {
 	constructor(bot)
 	{
-		/**
-		 * Bot instance
-		 * @memberof GuildStorageLoader
-		 * @type {Bot}
-		 * @name bot
-		 * @instance
-		 */
-		this.bot = bot;
+		/** @type {Bot} */
+		this._bot = bot;
 	}
 
 	/**
@@ -32,25 +26,16 @@ export default class GuildStorageLoader
 	 */
 	loadStorages(dataStorage, settingsStorage)
 	{
-		let data;
-		try
+		dataStorage.keys.forEach((key) =>
 		{
-			data = dataStorage.db.getData('/');
-		}
-		catch (err)
-		{
-			data = {};
-		}
-		Object.keys(data).forEach((key) =>
-		{
-			this.bot.guildStorages.set(key, new GuildStorage(this.bot, key, dataStorage, settingsStorage));
+			this._bot.guildStorages.set(key, new GuildStorage(this._bot, key, dataStorage, settingsStorage));
 		});
 
 		// If the number of guilds in localStorage doesn't match
 		// the number of guilds the bot is a member of, assume
 		// this means there are guilds that have not yet been
 		// assigned storage and create storage for them
-		if (Object.keys(data).length !== this.bot.guilds.size)
+		if (dataStorage.length !== this._bot.guilds.size)
 		{
 			this.initNewGuilds(dataStorage, settingsStorage);
 		}
@@ -67,23 +52,11 @@ export default class GuildStorageLoader
 	 */
 	initNewGuilds(dataStorage, settingsStorage)
 	{
-		let data;
-		try
+		let storagelessGuilds = this._bot.guilds.filter(guild => !dataStorage.keys.includes(guild.id));
+		if (storagelessGuilds.size === 0) return;
+		storagelessGuilds.forEach(guild =>
 		{
-			data = dataStorage.db.getData('/');
-		}
-		catch (err)
-		{
-			data = {};
-		}
-		let storagelessGuilds = this.bot.guilds.filter(guild =>
-			!Object.keys(data).includes(guild.id));
-		if (storagelessGuilds.size > 0)
-		{
-			storagelessGuilds.forEach(guild =>
-			{
-				this.bot.guildStorages.set(guild.id, new GuildStorage(this.bot, guild.id, dataStorage, settingsStorage));
-			});
-		}
+			this._bot.guildStorages.set(guild.id, new GuildStorage(this._bot, guild.id, dataStorage, settingsStorage));
+		});
 	}
 }

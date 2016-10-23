@@ -49,6 +49,7 @@ export const Util = _Util;
 export const version = require(path.join(__dirname, '..', 'package')).version;
 
 /** @external {Client} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Client} */
+/** @external {ClientOptions} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/typedef/ClientOptions} */
 /** @external {Collection} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Collection} */
 /** @external {Guild} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Guild} */
 /** @external {Message} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Message} */
