@@ -15,14 +15,8 @@ export default class CommandLoader
 {
 	constructor(bot)
 	{
-		/**
-		 * Bot instance
-		 * @memberof CommandLoader
-		 * @type {Bot}
-		 * @name bot
-		 * @instance
-		 */
-		this.bot = bot;
+		/** @type {Bot} */
+		this._bot = bot;
 	}
 
 	/**
@@ -34,29 +28,29 @@ export default class CommandLoader
 	 */
 	loadCommands()
 	{
-		if (this.bot.commands.size > 0) this.bot.commands = new CommandRegistry();
+		if (this._bot.commands.size > 0) this._bot.commands = new CommandRegistry();
 		let commandFiles = [];
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
-		commandFiles.push(...glob.sync(`${this.bot.commandsDir}/**/*.js`));
+		commandFiles.push(...glob.sync(`${this._bot.commandsDir}/**/*.js`));
 		let loadedCommands = 0;
 		commandFiles.forEach(fileName =>
 		{
 			let commandLocation = fileName.replace('.js', '');
 			delete require.cache[require.resolve(commandLocation)];
 			let Command = require(commandLocation).default;
-			let command = new Command(this.bot);
-			if (this.bot.disableBase.includes(command.name)) return;
+			let command = new Command(this._bot);
+			if (this._bot.disableBase.includes(command.name)) return;
 			command.classloc = commandLocation;
 			if (command.overloads)
 			{
-				if (!this.bot.commands.has(command.overloads)) // eslint-disable-line curly
+				if (!this._bot.commands.has(command.overloads)) // eslint-disable-line curly
 					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
-				this.bot.commands.delete(command.overloads);
-				this.bot.commands.register(command, command.name);
+				this._bot.commands.delete(command.overloads);
+				this._bot.commands.register(command, command.name);
 			}
 			else
 			{
-				this.bot.commands.register(command, command.name);
+				this._bot.commands.register(command, command.name);
 			}
 			if (!command.overloads)
 			{
@@ -68,7 +62,7 @@ export default class CommandLoader
 				console.log(`Command '${command.name}' loaded, overloading command '${command.overloads}'.`); // eslint-disable-line no-console
 			}
 		});
-		console.log(`Loaded ${loadedCommands} total commands in ${this.bot.commands.groups.length} groups.`); // eslint-disable-line no-console
+		console.log(`Loaded ${loadedCommands} total commands in ${this._bot.commands.groups.length} groups.`); // eslint-disable-line no-console
 	}
 
 	/**
@@ -80,14 +74,14 @@ export default class CommandLoader
 	 */
 	reloadCommand(nameOrAlias)
 	{
-		let name = this.bot.commands.findByNameOrAlias(nameOrAlias).name;
+		let name = this._bot.commands.findByNameOrAlias(nameOrAlias).name;
 		if (!name) return false;
-		let commandLocation = this.bot.commands.get(name).classloc;
+		let commandLocation = this._bot.commands.get(name).classloc;
 		delete require.cache[require.resolve(commandLocation)];
 		let Command = require(commandLocation).default;
-		let command = new Command(this.bot);
+		let command = new Command(this._bot);
 		command.classloc = commandLocation;
-		this.bot.commands.register(command, command.name, true);
+		this._bot.commands.register(command, command.name, true);
 		console.log(`Command '${command.name}' reloaded.`); // eslint-disable-line no-console
 		return true;
 	}
