@@ -132,7 +132,8 @@ export default class CommandDispatcher
 	}
 
 	/**
-	 * Get a list of missing permissions for the given command, if any
+	 * Get a list of missing permissions for the command caller for the
+	 * given command, if any
 	 * @memberof CommandDispatcher
 	 * @instance
 	 * @param {boolean} dm - Whether the message is a DM
@@ -147,7 +148,7 @@ export default class CommandDispatcher
 	}
 
 	/**
-	 * Checks if the user has roles for the given command
+	 * Checks if the command caller has roles for the given command
 	 * @memberof CommandDispatcher
 	 * @instance
 	 * @param {boolean} dm - Whether the message is a DM
