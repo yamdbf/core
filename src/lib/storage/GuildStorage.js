@@ -8,7 +8,8 @@
  * @class GuildStorage
  * @param {Bot} bot - Bot instance
  * @param {(external:Guild|string)} guild - Discord.js Guild object or guild ID string
- * @param {LocalStorage} localStorage - LocalStorage instance containing all guild-specific data
+ * @param {LocalStorage} dataStorage - LocalStorage instance containing all guild-specific data
+ * @param {LocalStorage} settingsStorage - LocalStorage instance containing all guild-specific settings
  */
 export default class GuildStorage
 {
