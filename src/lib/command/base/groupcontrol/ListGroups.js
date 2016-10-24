@@ -30,10 +30,7 @@ export default class ListGroups extends Command
 		});
 		output += '```';
 
-		message.channel.sendMessage(output)
-			.then(response =>
-			{
-				response.delete(10 * 1000);
-			});
+		this._respond(message, output)
+			.then(response => response.delete(10 * 1000));
 	}
 }
