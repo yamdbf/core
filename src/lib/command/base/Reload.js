@@ -25,7 +25,7 @@ export default class Reload extends Command
 		const command = this.bot.commands.findByNameOrAlias(args[0]);
 		if (args[0] && !command)
 		{
-			return message.channel.sendMessage(`Command "${args[0]}" could not be found.`)
+			return this._respond(message, `Command "${args[0]}" could not be found.`)
 				.then(response => response.delete(5 * 1000));
 		}
 		if (command) this.bot.loadCommand(command.name);
@@ -33,7 +33,7 @@ export default class Reload extends Command
 		const end = now();
 		const name = command ? command.name : null;
 		const text = name ? ` "${name}"` : 's';
-		return message.channel.sendMessage(`Command${text} reloaded. (${(end - start).toFixed(3)} ms)`)
+		return this._respond(message, `Command${text} reloaded. (${(end - start).toFixed(3)} ms)`)
 			.then(response => response.delete(5 * 1000));
 	}
 }

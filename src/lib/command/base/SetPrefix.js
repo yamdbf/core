@@ -22,41 +22,29 @@ export default class SetPrefix extends Command
 	{
 		if (!args[0])
 		{
-			message.channel.sendMessage(`${this.bot.getPrefix(message.guild)
+			this._respond(message, `${this.bot.getPrefix(message.guild)
 				? 'Current prefix is \'' + this.bot.getPrefix(message.guild) + '\''// eslint-disable-line prefer-template
 				: 'There is currently no prefix.'}`)
-				.then(response =>
-				{
-					response.delete(5 * 1000);
-				});
+				.then(response => response.delete(5 * 1000));
 			return;
 		}
 		if (args[0].length > 10)
 		{
-			message.channel.sendMessage(`Prefixes may only be up to 10 chars in length.`)
-				.then(response =>
-				{
-					response.delete(5 * 1000);
-				});
+			this._respond(message, `Prefixes may only be up to 10 chars in length.`)
+				.then(response => response.delete(5 * 1000));
 			return;
 		}
 		if (/[\\`]/.test(args[0]))
 		{
-			message.channel.sendMessage(`Prefixes may not contain backticks or backslashes.`)
-				.then(response =>
-				{
-					response.delete(5 * 1000);
-				});
+			this._respond(message, `Prefixes may not contain backticks or backslashes.`)
+				.then(response => response.delete(5 * 1000));
 			return;
 		}
 		if (args[0] === 'noprefix') args[0] = '';
 
 		this.bot.guildStorages.get(message.guild).setSetting('prefix', args[0]);
-		message.channel.sendMessage(`${args[0] === '' ? 'Command prefix removed.'
+		this._respond(message, `${args[0] === '' ? 'Command prefix removed.'
 			: 'Command prefix set to "' + args[0] + '"'}`) // eslint-disable-line prefer-template
-			.then(response =>
-			{
-				response.delete(5 * 1000);
-			});
+			.then(response => response.delete(5 * 1000));
 	}
 }

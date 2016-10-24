@@ -19,10 +19,7 @@ export default class Version extends Command
 
 	async action(message)
 	{
-		message.channel.sendMessage(`Current version is: **${this.bot.version}**`)
-			.then(response =>
-			{
-				response.delete(5 * 1000);
-			});
+		this._respond(message, `Current version is: **${this.bot.version}**`)
+			.then(response => response.delete(5 * 1000));
 	}
 }
