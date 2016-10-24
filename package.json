@@ -44,7 +44,7 @@
     "gulp-babel": "^6.1.2",
     "gulp-exec": "^2.1.2",
     "gulp-sourcemaps": "^1.6.0",
-    "jsdoc": "^3.4.2",
+    "jsdoc": "github:zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "github:zajrik/minami",
     "source-map-support": "^0.4.2"
