@@ -27,13 +27,11 @@ export default class EnableGroup extends Command
 			ENABLED: `Command group ${args[0]} is already enabled.`
 		};
 
+		const self = this; // eslint-disable-line
 		function sendError(text)
 		{
-			message.channel.sendMessage(`**${text}**`)
-				.then(response =>
-				{
-					response.delete(5 * 1000);
-				});
+			self.respond(message, `**${text}**`)
+				.then(response => response.delete(5 * 1000));
 			error = true;
 		}
 
@@ -47,10 +45,7 @@ export default class EnableGroup extends Command
 		disabledGroups.splice(disabledGroups.indexOf(args[0]), 1);
 		this.bot.guildStorages.get(message.guild).setSetting('disabledGroups', disabledGroups);
 
-		message.channel.sendMessage(`**Enabled command group "${args[0]}"**`)
-			.then(response =>
-			{
-				response.delete(5 * 1000);
-			});
+		this._respond(message, `**Enabled command group "${args[0]}"**`)
+			.then(response => response.delete(5 * 1000));
 	}
 }
