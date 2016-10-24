@@ -42,7 +42,8 @@ export default class SetPrefix extends Command
 		}
 		if (args[0] === 'noprefix') args[0] = '';
 
-		this.bot.guildStorages.get(message.guild).setSetting('prefix', args[0]);
+		if (this.bot.selfbot) this.bot.guildStorages.forEach(guild => guild.setSetting('prefix', args[0]));
+		else this.bot.guildStorages.get(message.guild).setSetting('prefix', args[0]);
 		this._respond(message, `${args[0] === '' ? 'Command prefix removed.'
 			: 'Command prefix set to "' + args[0] + '"'}`) // eslint-disable-line prefer-template
 			.then(response => response.delete(5 * 1000));
