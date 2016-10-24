@@ -214,6 +214,17 @@ export default class Command
 		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 		if (!this.action instanceof Function) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 	}
+
+	// Send provided response text to the command's calling channel
+	// via edit, editCode, sendMessage, or sendCode depending on Whether
+	// or not the bot is a selfbot and/or a codeblock language is given
+	_respond(message, response, code)
+	{
+		if (this.bot.selfbot && !code) return message.edit(response);
+		if (this.bot.selfbot && code) return message.editCode(code, response);
+		if (code) return message.channel.sendCode(code, response);
+		return message.channel.sendMessage(response);
+	}
 }
 
 /**
