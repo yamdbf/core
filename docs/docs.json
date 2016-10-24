@@ -1766,5 +1766,206 @@
                 }
             ]
         }
+    ],
+    "typedefs": [
+        {
+            "name": "defaultGuildSettings",
+            "description": "The default settings to apply to new guilds.\nStored under the key <code>'defaultGuildSettings'</code> in {@link Bot#storage}",
+            "properties": [
+                {
+                    "name": "prefix",
+                    "type": "string",
+                    "description": "Prefix to prepend commands",
+                    "default": "'/'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "disabledGroups",
+                    "type": "Array",
+                    "description": "Command groups to ignore",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "BotOptions",
+            "description": "Object containing required {@link Bot} properties to be\npassed to a Bot on construction",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "See: {@link Bot#name}",
+                    "default": "'botname'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "token",
+                    "type": "string",
+                    "description": "See: {@link Bot#token}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "commandsDir",
+                    "type": "string",
+                    "description": "See: {@link Bot#commandsDir}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "statusText",
+                    "type": "string",
+                    "description": "See: {@link Bot#statusText}",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "selfbot",
+                    "type": "boolean",
+                    "description": "See: {@link Bot#selfbot}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "version",
+                    "type": "string",
+                    "description": "See: {@link Bot#version}",
+                    "default": "'0.0.0'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "config",
+                    "type": "Object",
+                    "description": "See: {@link Bot#config}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disableBase",
+                    "type": "Array.<string>",
+                    "description": "See: {@link Bot#disableBase}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "args",
+            "description": "Array of values parsed from {@link external:Message} content\nthat will be passed to a command. Can contain a mix of string and number values.",
+            "properties": []
+        },
+        {
+            "name": "CommandInfo",
+            "description": "Object containing required {@link Command} properties\nto be passed to a Command on construction",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "See: {@link Command#name}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "description": "See: {@link Command#description}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "usage",
+                    "type": "string",
+                    "description": "See: {@link Command#usage}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "extraHelp",
+                    "type": "string",
+                    "description": "See: {@link Command#extraHelp}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "group",
+                    "type": "string",
+                    "description": "See: {@link Command#group}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "aliases",
+                    "type": "Array.<string>",
+                    "description": "See: {@link Command#aliases}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "guildOnly",
+                    "type": "boolean",
+                    "description": "See: {@link Command#guildOnly}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "stringArgs",
+                    "type": "boolean",
+                    "description": "See: {@link Command#stringArgs}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "permissions",
+                    "type": "Array.<PermissionResolvable>",
+                    "description": "See: {@link Command#permissions}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "roles",
+                    "type": "Array.<string>",
+                    "description": "See: {@link Command#roles}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ownerOnly",
+                    "type": "boolean",
+                    "description": "See: {@link Command#ownerOnly}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "overloads",
+                    "type": "string",
+                    "description": "See: {@link Command#overloads}",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        }
     ]
 }
