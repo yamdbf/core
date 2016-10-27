@@ -21,6 +21,6 @@ export default class Ping extends Command
 	{
 		if (this.bot.selfbot) message.delete();
 		message.channel.sendMessage(`Pong!`).then(msg =>
-			msg.edit(`Pong! (${msg.timestamp - message.timestamp}ms)`));
+			msg.edit(`Pong! (${msg.createdTimestamp - message.createdTimestamp}ms)`));
 	}
 }
