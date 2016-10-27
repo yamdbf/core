@@ -183,7 +183,7 @@ export default class Bot extends Client
 		this.on('ready', () =>
 		{
 			console.log('Ready'); // eslint-disable-line no-console
-			this.user.setStatus(null, this.statusText);
+			this.user.setGame(this.statusText);
 
 			// Load all guild storages
 			this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
