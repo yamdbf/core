@@ -37,7 +37,7 @@ export default class CommandDispatcher
 		let { command, mentions, args, content, dm } = this.processContent(message);
 		message.content = content;
 
-		if (dm && !command)
+		if (dm && !command && !this._bot.selfbot)
 		{
 			return this.commandNotFoundError(message);
 		}
