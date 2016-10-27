@@ -55,10 +55,10 @@ export default class GuildStorageRegistry extends Collection
 
 	/**
 	 * Reset all guild settings to default, deleting any extra settings that are
-	 * not part of the [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 * not part of the [DefaultGuildSettings]{@link DefaultGuildSettings}
 	 * @memberof GuildStorageRegistry
 	 * @instance
-	 * @param {Object} defaults - Should always use [defaultGuildSettings]{@link Bot#defaultGuildSettings}
+	 * @param {DefaultGuildSettings} defaults - Should always use [DefaultGuildSettings]{@link DefaultGuildSettings}
 	 */
 	resetAllGuildSettings(defaults)
 	{
