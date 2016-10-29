@@ -11,7 +11,7 @@ export default class Reload extends Command
 		super(bot, {
 			name: 'reload',
 			description: 'Reload a command or all commands',
-			aliases: ['r'],
+			aliases: [],
 			usage: '<prefix>reload [command]',
 			extraHelp: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
 			group: 'base',

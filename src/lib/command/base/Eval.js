@@ -10,7 +10,7 @@ export default class Eval extends Command
 	{
 		super(bot, {
 			name: 'eval',
-			aliases: ['e'],
+			aliases: [],
 			description: 'Evaluate provided Javascript code',
 			usage: '<prefix>eval [code]',
 			extraHelp: '',
