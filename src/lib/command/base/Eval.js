@@ -23,18 +23,18 @@ export default class Eval extends Command
 	async action(message, args)
 	{
 		const code = args.join(' ');
-		if (!code) return message.edit('**ERROR:** ```xl\nNo code provided to evaluate.\n```');
+		if (!code) return this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
 
 		try
 		{
 			var evaled = eval(code);
 			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
-			return message.edit(
+			return this._respond(
 				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
 		}
 		catch (err)
 		{
-			return message.edit(
+			return this._respond(
 				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
 		}
 	}
