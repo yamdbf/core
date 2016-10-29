@@ -12,7 +12,7 @@ export default class Command
 	constructor(bot, info = null)
 	{
 		// Assert necessary command information
-		let name = this.constructor.name;
+		const name = this.constructor.name;
 		if (!info) throw new Error(`You must provide an info object for command: ${name}`);
 		if (!info.name) throw new Error(`You must provide a name for command: ${name}`);
 		if (!info.description) throw new Error(`You must provide a description for command: ${name}`);
