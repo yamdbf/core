@@ -15,7 +15,7 @@ export default class Eval extends Command
 			usage: '<prefix>eval [code]',
 			extraHelp: '',
 			group: 'base',
-			stringArgs: true,
+			argOpts: { stringArgs: true },
 			ownerOnly: true
 		});
 	}

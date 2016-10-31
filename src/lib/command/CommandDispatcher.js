@@ -125,8 +125,9 @@ export default class CommandDispatcher
 		let commandName = content.split(' ')[0];
 		let command = this._bot.commands.findByNameOrAlias(commandName);
 
-		let args = content.split(' ').slice(1)
-			.map(a => !isNaN(a) && command && !command.stringArgs ? parseFloat(a) : a);
+		let args = content.split(command ? command.argOpts.separator : ' ').slice(1)
+			.map(a => !isNaN(a) && command && !command.argOpts.stringArgs ? parseFloat(a) : a)
+			.map(a => a.trim());
 
 		return { command: command, mentions: mentions, args: args, content: content, dm: dm };
 	}
