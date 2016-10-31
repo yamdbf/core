@@ -22,7 +22,6 @@ export default class Eval extends Command
 
 	async action(message, args)
 	{
-		if (this.bot.selfbot) message.delete();
 		const code = args.join(' ');
 		if (!code) return this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
 
