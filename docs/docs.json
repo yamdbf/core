@@ -394,13 +394,13 @@
                     }
                 },
                 {
-                    "name": "stringArgs",
+                    "name": "argOpts",
                     "access": "",
                     "virtual": false,
-                    "description": "Whether or not to pass all args as strings, skipping number parsing.\nShould definitely be used when writing commands that take Discord.js\nobject (Guild, User, Message, etc) ids as arguments as Javascript\nloses accuracy on integers above 2^53 and it will not parse\nyour ids correctly as a result.",
+                    "description": "Options for how arguments should be parsed. See: {@link ArgOpts}",
                     "type": {
                         "names": [
-                            "boolean"
+                            "ArgOpts"
                         ]
                     }
                 },
@@ -1926,10 +1926,10 @@
                     "nullable": ""
                 },
                 {
-                    "name": "stringArgs",
+                    "name": "argOpts",
                     "type": "boolean",
-                    "description": "See: {@link Command#stringArgs}",
-                    "default": false,
+                    "description": "See: {@link Command#stringArgs}, {@link ArgOpts}",
+                    "default": "",
                     "optional": true,
                     "nullable": ""
                 },
@@ -1962,6 +1962,28 @@
                     "type": "string",
                     "description": "See: {@link Command#overloads}",
                     "default": null,
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "ArgOpts",
+            "description": "Object containing options for\ncontrolling how command arguments will be parsed",
+            "properties": [
+                {
+                    "name": "stringArgs",
+                    "type": "boolean",
+                    "description": "Whether or not to parse all args as strings",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "separator",
+                    "type": "string",
+                    "description": "The charactor to separate args by",
+                    "default": "' '",
                     "optional": true,
                     "nullable": ""
                 }
