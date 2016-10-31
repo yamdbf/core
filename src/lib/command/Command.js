@@ -123,8 +123,8 @@ export default class Command
 		 * @instance
 		 */
 		this.argOpts = info.argOpts || {};
-		this.argOpts.stringArgs = info.argOpts.stringArgs || false;
-		this.argOpts.separator = info.argOpts.separator || ' ';
+		this.argOpts.stringArgs = this.argOpts.stringArgs || false;
+		this.argOpts.separator = this.argOpts.separator || ' ';
 
 		/**
 		 * Array of permissions required by the command

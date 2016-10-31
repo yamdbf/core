@@ -127,7 +127,7 @@ export default class CommandDispatcher
 
 		let args = content.split(command ? command.argOpts.separator : ' ').slice(1)
 			.map(a => !isNaN(a) && command && !command.argOpts.stringArgs ? parseFloat(a) : a)
-			.map(a => a.trim());
+			.map(a => typeof a === 'string' ? a.trim() : a);
 
 		return { command: command, mentions: mentions, args: args, content: content, dm: dm };
 	}
