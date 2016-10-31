@@ -116,17 +116,15 @@ export default class Command
 		this.guildOnly = info.guildOnly || false;
 
 		/**
-		 * Whether or not to pass all args as strings, skipping number parsing.
-		 * Should definitely be used when writing commands that take Discord.js
-		 * object (Guild, User, Message, etc) ids as arguments as Javascript
-		 * loses accuracy on integers above 2^53 and it will not parse
-		 * your ids correctly as a result.
+		 * Options for how arguments should be parsed. See: {@link ArgOpts}
 		 * @memberof Command
-		 * @type {boolean}
-		 * @name stringArgs
+		 * @type {ArgOpts}
+		 * @name argOpts
 		 * @instance
 		 */
-		this.stringArgs = info.stringArgs || false;
+		this.argOpts = info.argOpts || {};
+		this.argOpts.stringArgs = this.argOpts.stringArgs || false;
+		this.argOpts.separator = this.argOpts.separator || ' ';
 
 		/**
 		 * Array of permissions required by the command
@@ -237,9 +235,16 @@ export default class Command
  * @property {string} group - See: {@link Command#group}
  * @property {string[]} [aliases=[]] - See: {@link Command#aliases}
  * @property {boolean} [guildOnly=false] - See: {@link Command#guildOnly}
- * @property {boolean} [stringArgs=false] - See: {@link Command#stringArgs}
+ * @property {boolean} [argOpts] - See: {@link Command#stringArgs}, {@link ArgOpts}
  * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}
  * @property {string} [overloads=null] - See: {@link Command#overloads}
+ */
+
+/**
+ * @typedef {Object} ArgOpts - Object containing options for
+ * controlling how command arguments will be parsed
+ * @property {boolean} stringArgs - Whether or not to parse all args as strings
+ * @property {string} [separator=' '] - The charactor to separate args by
  */
