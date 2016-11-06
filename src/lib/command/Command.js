@@ -210,7 +210,7 @@ export default class Command
 	{
 		let name = this.constructor.name;
 		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
-		if (!this.action instanceof Function) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
+		if (!(this.action instanceof Function)) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 	}
 
 	// Send provided response text to the command's calling channel
