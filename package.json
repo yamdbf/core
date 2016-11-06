@@ -40,6 +40,7 @@
     "babel-eslint": "^7.0.0",
     "babel-preset-es2015-node6": "^0.3.0",
     "del": "^2.2.2",
+    "eslint": "^3.9.1",
     "fast-async": "^6.0.34",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-babel": "^6.1.2",
