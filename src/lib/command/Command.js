@@ -9,7 +9,7 @@
  */
 export default class Command
 {
-	constructor(bot, info = null)
+	constructor(bot, info = null) // eslint-disable-line complexity
 	{
 		// Assert necessary command information
 		const name = this.constructor.name;

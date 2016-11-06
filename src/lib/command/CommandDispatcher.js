@@ -251,11 +251,11 @@ export default class CommandDispatcher
 	{
 		try
 		{
-			command.action(message, args, mentions, original); // eslint-disable-line no-unused-expressions, no-console
+			command.action(message, args, mentions, original);
 		}
 		catch (err)
 		{
-			console.log(err);
+			console.log(err); // eslint-disable-line no-console
 		}
 	}
 }
