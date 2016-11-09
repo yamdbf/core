@@ -22,7 +22,7 @@ export default class Eval extends Command
 
 	async action(message, args, mentions, original)
 	{
-		const code = original.replace(`${this.bot.getPrefix(message.guild)}eval `, '');
+		const code = original.replace(`${this.bot.getPrefix(message.guild) || ''}eval `, '');
 		if (!code) return this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
 
 		try
