@@ -260,6 +260,7 @@ export default class Bot extends Client
 	 */
 	getPrefix(guild)
 	{
+		if (!guild) return null;
 		return this.guildStorages.get(guild).getSetting('prefix') || null;
 	}
 }
