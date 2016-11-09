@@ -114,6 +114,177 @@
 
         
                 
+<h4 class="name" id="ArgOpts">.<a href='#ArgOpts' style='color: black'>ArgOpts</a></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Object containing options for
+controlling how command arguments will be parsed
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>Object</dd></span>
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>stringArgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>boolean</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Whether or not to parse all args as strings</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>separator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>' '</code>
+                
+                </td>
+            
+
+            <td class="description last">The charactor to separate args by</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+            
+                
 <h4 class="name" id="args">.<a href='#args' style='color: black'>args</a></h4>
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
@@ -870,7 +1041,7 @@ to be passed to a Command on construction
 
         <tr>
             
-                <td class="name"><code>stringArgs</code></td>
+                <td class="name"><code>argOpts</code></td>
             
 
             <td class="type">
@@ -896,12 +1067,10 @@ to be passed to a Command on construction
             
                 <td class="default">
                 
-                    <code>false</code>
-                
                 </td>
             
 
-            <td class="description last">See: <a href="Command.html#stringArgs"><code>Command#stringArgs</code></a></td>
+            <td class="description last">See: <code>Command#stringArgs</code>, <a href="global.html#ArgOpts"><code>ArgOpts</code></a></td>
         </tr>
 
     

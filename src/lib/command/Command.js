@@ -9,7 +9,7 @@
  */
 export default class Command
 {
-	constructor(bot, info = null)
+	constructor(bot, info = null) // eslint-disable-line complexity
 	{
 		// Assert necessary command information
 		const name = this.constructor.name;
@@ -210,7 +210,7 @@ export default class Command
 	{
 		let name = this.constructor.name;
 		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
-		if (!this.action instanceof Function) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
+		if (!(this.action instanceof Function)) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 	}
 
 	// Send provided response text to the command's calling channel

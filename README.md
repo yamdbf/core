@@ -3,6 +3,7 @@
 [![Discord](https://discordapp.com/api/guilds/233751981838041090/embed.png)](https://discord.gg/cMXkbXV)
 [![npm](https://img.shields.io/npm/v/yamdbf.svg?maxAge=3600)](https://www.npmjs.com/package/yamdbf)
 [![David](https://img.shields.io/david/zajrik/yamdbf.svg?maxAge=3600)](https://david-dm.org/zajrik/yamdbf)
+[![CircleCI](https://circleci.com/gh/zajrik/yamdbf.svg?style=shield)](https://circleci.com/gh/zajrik/yamdbf)
 
 [![NPM](https://nodei.co/npm/yamdbf.png?downloads=true&stars=true)](https://nodei.co/npm/yamdbf/)
 
@@ -69,7 +70,7 @@ It should be noted that command actions have access to the Discord.js Client ins
 That's about it for creating a bot and adding commands.
 
 # Links
-- [YAMDBF Documentation](https://zajrik.github.io/yamdbf/index.html)
+- [YAMDBF Documentation](https://yamdbf.js.org)
 - [YAMDBF Discord server](https://discord.gg/cMXkbXV)
 - [YAMDBF GitHub](https://github.com/zajrik/yamdbf)
 - [YAMDBF Issues](https://github.com/zajrik/yamdbf/issues)

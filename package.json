@@ -1,6 +1,6 @@
 {
   "name": "yamdbf",
-  "version": "2.4.6",
+  "version": "2.5.0",
   "description": "Yet Another Modular Discord Bot Framework: A somewhat simple framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
   "scripts": {
@@ -9,7 +9,8 @@
     "rebuild": "gulp clean && gulp build",
     "package": "gulp clean-package && gulp package",
     "tag-release": "gulp tag-release",
-    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r src && jsdoc -c .jsdoc.json -t templates/haruki -r src -d console > docs/docs.json"
+    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r src && jsdoc -c .jsdoc.json -t templates/haruki -r src -d console > docs/docs.json",
+    "lint": "eslint ./src/"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
@@ -39,6 +40,7 @@
     "babel-eslint": "^7.0.0",
     "babel-preset-es2015-node6": "^0.3.0",
     "del": "^2.2.2",
+    "eslint": "^3.9.1",
     "fast-async": "^6.0.34",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-babel": "^6.1.2",
