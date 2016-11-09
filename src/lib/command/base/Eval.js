@@ -20,9 +20,9 @@ export default class Eval extends Command
 		});
 	}
 
-	async action(message, args)
+	async action(message, args, mentions, original)
 	{
-		const code = args.join(' ');
+		const code = original.replace(`${this.bot.getPrefix(message.guild)}eval `, '');
 		if (!code) return this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
 
 		try

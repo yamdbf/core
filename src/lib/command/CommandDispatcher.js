@@ -63,8 +63,8 @@ export default class CommandDispatcher
 
 	/**
 	 * Processes message content, finding the command to execute and creating an
-	 * object containing the found command, mentions, args, processed content, dm?,
-	 * and original raw message content
+	 * object containing the found command, mentions, args, processed content, and
+	 * if the message is a DM
 	 * @memberof CommandDispatcher
 	 * @instance
 	 * @param {external:Message} message - Discord.js message object
