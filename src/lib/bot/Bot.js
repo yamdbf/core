@@ -15,7 +15,7 @@ import CommandDispatcher from '../command/CommandDispatcher';
  * fields for access within commands
  * @class Bot
  * @extends {external:Client}
- * @param {?BotOptions} botOptions - Object containing required bot properties
+ * @param {BotOptions} botOptions - Object containing required bot properties
  * @param {external:ClientOptions} [clientOptions] - Discord.js ClientOptions
  */
 export default class Bot extends Client
