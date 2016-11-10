@@ -235,7 +235,7 @@ export default class Command
  * @property {string} group - See: {@link Command#group}
  * @property {string[]} [aliases=[]] - See: {@link Command#aliases}
  * @property {boolean} [guildOnly=false] - See: {@link Command#guildOnly}
- * @property {boolean} [argOpts] - See: {@link Command#stringArgs}, {@link ArgOpts}
+ * @property {boolean} [argOpts] - See: {@link Command#argOpts}, {@link ArgOpts}
  * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}

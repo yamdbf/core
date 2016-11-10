@@ -549,7 +549,7 @@
                     "name": "processContent",
                     "access": "",
                     "virtual": false,
-                    "description": "Processes message content, finding the command to execute and creating an\nobject containing the found command, mentions, args, processed content, dm?,\nand original raw message content",
+                    "description": "Processes message content, finding the command to execute and creating an\nobject containing the found command, mentions, args, processed content, and\nif the message is a DM",
                     "parameters": [
                         {
                             "name": "message",
@@ -1928,7 +1928,7 @@
                 {
                     "name": "argOpts",
                     "type": "boolean",
-                    "description": "See: {@link Command#stringArgs}, {@link ArgOpts}",
+                    "description": "See: {@link Command#argOpts}, {@link ArgOpts}",
                     "default": "",
                     "optional": true,
                     "nullable": ""
