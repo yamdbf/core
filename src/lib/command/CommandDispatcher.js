@@ -72,7 +72,7 @@ export default class CommandDispatcher
 	 */
 	processContent(message)
 	{
-		let dm = message.channel.type === 'dm';
+		let dm = message.channel.type === 'dm' || message.channel.type === 'group';
 		let mentions;
 		let duplicateMention;
 		let regexMentions = message.content.match(/<@!?\d+>/g);

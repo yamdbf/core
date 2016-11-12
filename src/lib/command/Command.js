@@ -178,7 +178,7 @@ export default class Command
 	}
 
 	/**
-	 * @typedef {Array<*>} args - Array of values parsed from {@link external:Message} content
+	 * @typedef {Array<string|number>} args - Array of values parsed from {@link external:Message} content
 	 * that will be passed to a command. Can contain a mix of string and number values.
 	 */
 
