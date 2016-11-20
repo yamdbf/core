@@ -35,7 +35,7 @@ const bot = new Bot({
 }).start();
 ```
 
-And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. I prefer using Babel so that I can use syntax that Node doesn't yet have but for the sake of usability I'll provide an example command using currently-native Node syntax:
+And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. Here's an example command:
 
 ```js
 let Command = require('yamdbf').Command;
@@ -67,11 +67,12 @@ exports.default = class Ping extends Command
 
 It should be noted that command actions have access to the Discord.js Client instance via `this.bot`.
 
-That's about it for creating a bot and adding commands.
+That's about it for creating a bot and adding commands. If you don't want to have to copy and paste templates all the time or look at them for examples, a [Yeoman generator](https://github.com/zajrik/generator-yamdbf) has been written that can be used for creating new bot projects and new commands from the command line. It's very handy!
 
 # Links
 - [YAMDBF Documentation](https://yamdbf.js.org)
 - [YAMDBF Discord server](https://discord.gg/cMXkbXV)
 - [YAMDBF GitHub](https://github.com/zajrik/yamdbf)
 - [YAMDBF Issues](https://github.com/zajrik/yamdbf/issues)
+- [YAMDBF Generator](https://github.com/zajrik/generator-yamdbf)
 - [YAMDBF NPM](https://www.npmjs.com/package/yamdbf)
