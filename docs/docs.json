@@ -1455,6 +1455,31 @@
                         }
                     ],
                     "examples": []
+                },
+                {
+                    "name": "cleanGuilds",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Clean out any storages/settings storages for guilds the\nbot is no longer a part of",
+                    "parameters": [
+                        {
+                            "name": "dataStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific data",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "settingsStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific settings",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
                 }
             ]
         },
