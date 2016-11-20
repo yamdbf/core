@@ -26,19 +26,14 @@ export default class GuildStorageLoader
 	 */
 	loadStorages(dataStorage, settingsStorage)
 	{
+		this.cleanGuilds(dataStorage, settingsStorage);
+
 		dataStorage.keys.forEach((key) =>
 		{
 			this._bot.guildStorages.set(key, new GuildStorage(this._bot, key, dataStorage, settingsStorage));
 		});
 
-		// If the number of guilds in localStorage doesn't match
-		// the number of guilds the bot is a member of, assume
-		// this means there are guilds that have not yet been
-		// assigned storage and create storage for them
-		if (dataStorage.length !== this._bot.guilds.size)
-		{
-			this.initNewGuilds(dataStorage, settingsStorage);
-		}
+		this.initNewGuilds(dataStorage, settingsStorage);
 	}
 
 	/**
@@ -53,10 +48,29 @@ export default class GuildStorageLoader
 	initNewGuilds(dataStorage, settingsStorage)
 	{
 		let storagelessGuilds = this._bot.guilds.filter(guild => !dataStorage.keys.includes(guild.id));
-		if (storagelessGuilds.size === 0) return;
 		storagelessGuilds.forEach(guild =>
 		{
 			this._bot.guildStorages.set(guild.id, new GuildStorage(this._bot, guild.id, dataStorage, settingsStorage));
+		});
+	}
+
+	/**
+	 * Clean out any storages/settings storages for guilds the
+	 * bot is no longer a part of
+	 * @memberof GuildStorageLoader
+	 * @instance
+	 * @param {LocalStorage} dataStorage - LocalStorage instance containing all guild-specific data
+	 * @param {LocalStorage} settingsStorage - LocalStorage instance containing all guild-specific settings
+	 */
+	cleanGuilds(dataStorage, settingsStorage)
+	{
+		let guildlessStorages = dataStorage.keys.filter(guild => !this._bot.guilds.has(guild));
+		let guildlessSettings = settingsStorage.keys.filter(guild => !this._bot.guilds.has(guild));
+		guildlessSettings.forEach(settings => settingsStorage.removeItem(settings));
+		guildlessStorages.forEach(storage =>
+		{
+			this._bot.guildStorages.delete(storage);
+			dataStorage.removeItem(storage);
 		});
 	}
 }
