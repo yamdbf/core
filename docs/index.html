@@ -70,7 +70,7 @@ const bot = new Bot({
     version: '1.0.0',
     statusText: 'try @mention help',
     commandsDir: path.join(__dirname, 'commands')
-}).start();</code></pre><p>And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. I prefer using Babel so that I can use syntax that Node doesn't yet have but for the sake of usability I'll provide an example command using currently-native Node syntax:</p>
+}).start();</code></pre><p>And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. Here's an example command:</p>
 <pre class="prettyprint source lang-js"><code>let Command = require('yamdbf').Command;
 
 exports.default = class Ping extends Command
@@ -96,12 +96,13 @@ exports.default = class Ping extends Command
         message.reply('Pong!');
     }
 };</code></pre><p>It should be noted that command actions have access to the Discord.js Client instance via <code>this.bot</code>.</p>
-<p>That's about it for creating a bot and adding commands.</p>
+<p>That's about it for creating a bot and adding commands. If you don't want to have to copy and paste templates all the time or look at them for examples, a <a href="https://github.com/zajrik/generator-yamdbf">Yeoman generator</a> has been written that can be used for creating new bot projects and new commands from the command line. It's very handy!</p>
 <h1>Links</h1><ul>
 <li><a href="https://yamdbf.js.org">YAMDBF Documentation</a></li>
 <li><a href="https://discord.gg/cMXkbXV">YAMDBF Discord server</a></li>
 <li><a href="https://github.com/zajrik/yamdbf">YAMDBF GitHub</a></li>
 <li><a href="https://github.com/zajrik/yamdbf/issues">YAMDBF Issues</a></li>
+<li><a href="https://github.com/zajrik/generator-yamdbf">YAMDBF Generator</a></li>
 <li><a href="https://www.npmjs.com/package/yamdbf">YAMDBF NPM</a></li>
 </ul></article>
     </section>

@@ -19,7 +19,7 @@
                         "description": "Object containing required bot properties",
                         "default": "",
                         "optional": "",
-                        "nullable": true
+                        "nullable": ""
                     },
                     {
                         "name": "clientOptions",
