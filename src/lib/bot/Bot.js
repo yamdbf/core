@@ -55,6 +55,15 @@ export default class Bot extends Client
 		this.statusText = botOptions.statusText || null;
 
 		/**
+		 * Text to output when the bot is ready
+		 * @memberof Bot
+		 * @type {string}
+		 * @name readyText
+		 * @instance
+		 */
+		this.readyText = botOptions.readyText || 'Ready!';
+
+		/**
 		 * Whether or not the bot is a selfbot
 		 * @memberof Bot
 		 * @type {boolean}
@@ -178,11 +187,10 @@ export default class Bot extends Client
 	start()
 	{
 		this.login(this._token);
-		this._token = '[REDACTED]';
 
-		this.on('ready', () =>
+		this.once('ready', () =>
 		{
-			console.log('Ready'); // eslint-disable-line no-console
+			console.log(this.readyText); // eslint-disable-line no-console
 			this.user.setGame(this.statusText);
 
 			// Load all guild storages
@@ -272,6 +280,7 @@ export default class Bot extends Client
  * @property {string} token - See: {@link Bot#token}
  * @property {string} commandsDir - See: {@link Bot#commandsDir}
  * @property {string} [statusText=null] - See: {@link Bot#statusText}
+ * @property {string} [readyText='Ready!'] - See: {@link Bot#readyText}
  * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
  * @property {string} [version='0.0.0'] - See: {@link Bot#version}
  * @property {Object} config - See: {@link Bot#config}
