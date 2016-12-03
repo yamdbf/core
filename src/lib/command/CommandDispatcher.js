@@ -14,10 +14,13 @@ export default class CommandDispatcher
 		this._bot = bot;
 
 		// Register message listener
-		this._bot.on('message', message =>
+		if (!this._bot.passive)
 		{
-			this.handleMessage(message);
-		});
+			this._bot.on('message', message =>
+			{
+				this.handleMessage(message);
+			});
+		}
 	}
 
 	/**

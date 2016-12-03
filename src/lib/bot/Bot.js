@@ -37,13 +37,14 @@ export default class Bot extends Client
 		this.name = botOptions.name || 'botname';
 
 		/**
-		 * Directory to find command class files
+		 * Directory to find command class files. Optional
+		 * if bot is passive. See: {@link Bot#passive}
 		 * @memberof Bot
 		 * @type {string}
 		 * @name commandsDir
 		 * @instance
 		 */
-		this.commandsDir = botOptions.commandsDir;
+		this.commandsDir = botOptions.commandsDir || null;
 
 		/**
 		 * Status text for the bot
@@ -55,6 +56,15 @@ export default class Bot extends Client
 		this.statusText = botOptions.statusText || null;
 
 		/**
+		 * Text to output when the bot is ready
+		 * @memberof Bot
+		 * @type {string}
+		 * @name readyText
+		 * @instance
+		 */
+		this.readyText = botOptions.readyText || 'Ready!';
+
+		/**
 		 * Whether or not the bot is a selfbot
 		 * @memberof Bot
 		 * @type {boolean}
@@ -62,6 +72,19 @@ export default class Bot extends Client
 		 * @instance
 		 */
 		this.selfbot = botOptions.selfbot || false;
+
+		/**
+		 * Whether or not this bot is passive. Passive bots
+		 * will not register a command dispatcher or a message
+		 * listener. This allows passive bots to be created that
+		 * do not respond to any commands but are able to perform
+		 * actions based on whatever the framework user wants
+		 * @memberof Bot
+		 * @type {boolean}
+		 * @name passive
+		 * @instance
+		 */
+		this.passive = botOptions.passive || false;
 
 		/**
 		 * Bot version, best taken from package.json
@@ -93,11 +116,6 @@ export default class Bot extends Client
 		 */
 		this.disableBase = botOptions.disableBase || [];
 
-		// Make some asserts
-		if (!this._token) throw new Error('You must provide a token for the bot.');
-		if (!this.commandsDir) throw new Error('You must provide a directory to load commands from via commandDir');
-		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
-
 		/** @type {LocalStorage} */
 		this._guildDataStorage = new LocalStorage('storage/guild-storage');
 
@@ -109,9 +127,6 @@ export default class Bot extends Client
 
 		/** @type {CommandLoader} */
 		this._commandLoader = new CommandLoader(this);
-
-		/** @type {CommandDispatcher} */
-		this._dispatcher = new CommandDispatcher(this);
 
 		/**
 		 * Bot-specific storage
@@ -152,8 +167,16 @@ export default class Bot extends Client
 			this.storage.setItem('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
 
+		/** @type {CommandDispatcher} */
+		this._dispatcher = new CommandDispatcher(this);
+
+		// Make some asserts
+		if (!this._token) throw new Error('You must provide a token for the bot.');
+		if (!this.commandsDir && !this.passive) throw new Error('You must provide a directory to load commands from via commandDir');
+		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
+
 		// Load commands
-		this.loadCommand('all');
+		if (!this.passive) this.loadCommand('all');
 	}
 
 	/**
@@ -178,11 +201,10 @@ export default class Bot extends Client
 	start()
 	{
 		this.login(this._token);
-		this._token = '[REDACTED]';
 
-		this.on('ready', () =>
+		this.once('ready', () =>
 		{
-			console.log('Ready'); // eslint-disable-line no-console
+			console.log(this.readyText); // eslint-disable-line no-console
 			this.user.setGame(this.statusText);
 
 			// Load all guild storages
@@ -270,9 +292,11 @@ export default class Bot extends Client
  * passed to a Bot on construction
  * @property {string} [name='botname'] - See: {@link Bot#name}
  * @property {string} token - See: {@link Bot#token}
- * @property {string} commandsDir - See: {@link Bot#commandsDir}
+ * @property {string} [commandsDir] - See: {@link Bot#commandsDir}
  * @property {string} [statusText=null] - See: {@link Bot#statusText}
+ * @property {string} [readyText='Ready!'] - See: {@link Bot#readyText}
  * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
+ * @property {boolean} [passive=false] - see {@link Bot#passive}
  * @property {string} [version='0.0.0'] - See: {@link Bot#version}
  * @property {Object} config - See: {@link Bot#config}
  * @property {string[]} [disableBase=[]] - See: {@link Bot#disableBase}
