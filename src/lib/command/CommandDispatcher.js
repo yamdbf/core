@@ -255,6 +255,17 @@ export default class CommandDispatcher
 		try
 		{
 			command.action(message, args, mentions, original);
+
+			/**
+			 * Emitted whenever a command is successfully called
+			 * @memberof Bot
+			 * @instance
+			 * @event event:command
+			 * @param {string} name - name of the called command
+			 * @param {args[]} args - args passed to the called command
+			 * @param {string} original - original content of the message that called the command
+			 */
+			this._bot.emit('command', command.name, args, original);
 		}
 		catch (err)
 		{
