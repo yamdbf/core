@@ -11,7 +11,8 @@
     "package": "gulp clean-package && gulp package",
     "tag-release": "gulp tag-release",
     "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r src && jsdoc -c .jsdoc.json -t templates/haruki -r src -d console > docs/docs.json",
-    "lint": "eslint ./src/"
+    "lint": "eslint ./src/",
+    "lint-typings": "tslint typings/index.d.ts"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
@@ -50,7 +51,11 @@
     "jsdoc": "github:zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "github:zajrik/minami",
-    "source-map-support": "^0.4.2"
+    "source-map-support": "^0.4.2",
+    "@types/node": "^6.0.46",
+    "tslint": "^3.15.1",
+    "tslint-config-typings": "^0.2.4",
+    "typescript": "^2.0.7"
   },
   "babel": {
     "presets": [
