@@ -147,7 +147,7 @@ export default class CommandDispatcher
 	 */
 	checkPermissions(dm, message, command)
 	{
-		return dm ? [] : command.permissions.filter(a =>
+		return this._bot.selfbot || dm ? [] : command.permissions.filter(a =>
 			!message.channel.permissionsFor(message.author).hasPermission(a));
 	}
 
@@ -162,7 +162,7 @@ export default class CommandDispatcher
 	 */
 	hasRoles(dm, message, command)
 	{
-		return command.roles.length === 0 || dm
+		return this._bot.selfbot || command.roles.length === 0 || dm
 			|| message.member.roles.filter(role =>
 				command.roles.includes(role.name)).size > 0;
 	}
