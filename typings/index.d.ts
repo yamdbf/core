@@ -4,13 +4,7 @@
 
 declare module 'yamdbf'
 {
-	import { User } from 'discord.js';
-	import { Guild } from 'discord.js';
-	import { Client } from 'discord.js';
-	import { Message } from 'discord.js';
-	import { Collection } from 'discord.js';
-	import { ClientOptions } from 'discord.js';
-	import { PermissionResolvable } from 'discord.js';
+	import { User, Guild, Client, Message, Collection, ClientOptions, PermissionResolvable } from 'discord.js';
 
 	export const version: string;
 
@@ -85,7 +79,7 @@ declare module 'yamdbf'
 						original: string): any;
 		public register(): void;
 
-		private _respond(message: Message, response: string, code: string): Promise<Message>;
+		protected _respond(message: Message, response: string, code: string): Promise<Message>;
 	}
 
 	type CommandInfo = {
@@ -139,7 +133,7 @@ declare module 'yamdbf'
 		public reloadCommand(): void;
 	}
 
-	export class CommandRegistry<key, value> extends Collection<key, value>
+	export class CommandRegistry<K, V> extends Collection<K, V>
 	{
 		public groups: string[];
 
@@ -197,13 +191,13 @@ declare module 'yamdbf'
 		public initNewGuilds(dataStorage: LocalStorage, settingsStorage: LocalStorage): void;
 	}
 
-	export class GuildStorageRegistry<key, value> extends Collection<key, value>
+	export class GuildStorageRegistry<K, V> extends Collection<K, V>
 	{
-		public get(guild: key): value;
-		public get(guild: Guild): value;
-		public findAll(key: string, value: any): Collection<key, value>;
-		public findAll(key: string, value: any): any;
-		public findAllBySetting(key: string, value: any): Collection<key, value>;
+		public get(guild: K): V;
+		public get(guild: Guild): V;
+		public findAll(key: keyof V, value: any): Collection<K, V>;
+		public findAll(key: keyof V, value: any): any;
+		public findAllBySetting(key: string, value: any): Collection<K, V>;
 		public resetAllGuildSettings(defaults: DefaultGuildSettings): void;
 	}
 
