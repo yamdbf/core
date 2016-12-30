@@ -21,7 +21,6 @@ export default class Command
 		if (info.aliases && !Array.isArray(info.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
 		if (info.permissions && !Array.isArray(info.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
 		if (info.permissions && info.permissions.length > 0)
-		{
 			info.permissions.forEach((perm, index) =>
 			{
 				try
@@ -33,7 +32,6 @@ export default class Command
 					throw new Error(`Command#${name} permission "${info.permissions[index]}" at ${name}.permissions[${index}] is not a valid permission.\n\n${err}`);
 				}
 			});
-		}
 		if (info.roles && !Array.isArray(info.roles)) throw new Error(`Roles for command ${name} must be an array`);
 
 		/**

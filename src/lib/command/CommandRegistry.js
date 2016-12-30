@@ -28,9 +28,7 @@ export default class CommandRegistry extends Collection
 	register(command, key, reload)
 	{
 		if (super.has(command.name) && !reload && !(command.overloads && command.overloads !== super.get(command.overload).name))
-		{
 			throw new Error(`A command with the name "${command.name}" already exists.`);
-		}
 
 		this.forEach(a =>
 		{
@@ -38,9 +36,7 @@ export default class CommandRegistry extends Collection
 			{
 				let duplicates = this.filter(c => c.aliases.includes(b) && c !== a);
 				if (duplicates.size > 0)
-				{
 					throw new Error(`Commands may not share aliases: ${duplicates.first().name}, ${a.name} (shared alias: ${b})`);
-				}
 			});
 		});
 
