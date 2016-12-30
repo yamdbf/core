@@ -54,6 +54,7 @@ export default class CommandDispatcher
 		if (missingPermissions.length > 0) return this.missingPermissionsError(missingPermissions, message);
 
 		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
+		if (guildStorage) message.guild.storage = guildStorage;
 
 		return this.dispatch(command, message, args, mentions, original);
 	}

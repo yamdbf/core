@@ -4,7 +4,7 @@
 
 declare module 'yamdbf'
 {
-	import { User, Guild, Client, Message, Collection, ClientOptions, PermissionResolvable } from 'discord.js';
+	import { User, Guild as DGuild, Client, Message as DMessage, Collection, ClientOptions, PermissionResolvable } from 'discord.js';
 
 	export const version: string;
 
@@ -215,5 +215,15 @@ declare module 'yamdbf'
 		public clear(): void;
 
 		public nonConcurrentAccess(key: string, callback: Function): Promise<any>;
+	}
+
+	export class Message extends DMessage
+	{
+		public guild: Guild;
+	}
+
+	export class Guild extends DGuild
+	{
+		public storage?: GuildStorage;
 	}
 }
