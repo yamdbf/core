@@ -28,10 +28,7 @@ export default class GuildStorage
 		this._temp = {};
 
 		// Create blank storage for the guild if no storage is present
-		if (!this._dataStorage.getItem(this.id))
-		{
-			this._dataStorage.setItem(this.id, {});
-		}
+		if (!this._dataStorage.getItem(this.id)) this._dataStorage.setItem(this.id, {});
 
 		// Set default settings if no settings are present
 		if (!this._settingsStorage.getItem(this.id))

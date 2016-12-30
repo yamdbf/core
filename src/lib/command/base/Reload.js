@@ -23,13 +23,14 @@ export default class Reload extends Command
 	{
 		const start = now();
 		const command = this.bot.commands.findByNameOrAlias(args[0]);
+
 		if (args[0] && !command)
-		{
 			return this._respond(message, `Command "${args[0]}" could not be found.`)
 				.then(response => response.delete(5 * 1000));
-		}
+
 		if (command) this.bot.loadCommand(command.name);
 		else this.bot.loadCommand('all');
+
 		const end = now();
 		const name = command ? command.name : null;
 		const text = name ? ` "${name}"` : 's';
