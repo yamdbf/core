@@ -28,6 +28,7 @@ export default class Eval extends Command
 		try
 		{
 			var evaled = eval(code);
+			if (evaled instanceof Promise) evaled = await evaled;
 			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
 			return this._respond(message,
 				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
