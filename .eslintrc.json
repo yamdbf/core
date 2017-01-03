@@ -125,6 +125,6 @@
 		"rest-spread-spacing": "error",
 		"template-curly-spacing": "error",
 		"yield-star-spacing": "error",
-		"no-console": "warn"
+		"no-console": "off"
 	}
 }

@@ -40,7 +40,7 @@ declare module 'yamdbf'
 		public getPrefix(guild: string | Guild): string;
 
 		public on(event: string, listener: Function): this;
-		public on(event: 'command', listener: (name: string, args: Array<number | string>, original: string) => void): this;
+		public on(event: 'command', listener: (name: string, args: Array<number | string>, original: string, execTime: number) => void): this;
 	}
 
 	type BotOptions = {

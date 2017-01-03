@@ -4,5 +4,16 @@
         "target": "es6",
         "declaration": true,
         "noImplicitAny": false
-    }
+    },
+	"exclude": [
+		"node_modules",
+		"bower_components",
+		"jspm_packages",
+		"tmp",
+		"temp",
+		"bin",
+		"docs",
+		"pkg",
+		"examples"
+	]
 }

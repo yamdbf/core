@@ -1,5 +1,6 @@
 'use babel';
 'use strict';
+import now from 'performance-now';
 
 /**
  * Handles dispatching commands
@@ -24,8 +25,9 @@ export default class CommandDispatcher
 	 * @param {external:Message} message - Discord.js message object
 	 * @returns {*}
 	 */
-	handleMessage(message)
+	async handleMessage(message)
 	{
+		const dispatchStart = now();
 		let config = this._bot.config;
 		if (this._bot.selfbot && message.author !== this._bot.user) return false;
 		if (message.author.bot) return false;
@@ -56,7 +58,20 @@ export default class CommandDispatcher
 		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
 		if (guildStorage) message.guild.storage = guildStorage;
 
-		return this.dispatch(command, message, args, mentions, original);
+		await this.dispatch(command, message, args, mentions, original).catch(console.error);
+		const dispatchEnd = now() - dispatchStart;
+
+		/**
+		 * Emitted whenever a command is successfully called
+		 * @memberof Bot
+		 * @instance
+		 * @event event:command
+		 * @param {string} name - Name of the called command
+		 * @param {args[]} args - Args passed to the called command
+		 * @param {string} original - Original content of the message that called the command
+		 * @param {number} execTime - Time command took to execute
+		 */
+		return this._bot.emit('command', command.name, args, original, dispatchEnd);
 	}
 
 	/**
@@ -207,10 +222,10 @@ export default class CommandDispatcher
 			+ `${missing.length > 1 ? 's' : ''} `
 			+ `for that command:**\n\`\`\`css\n`
 			+ `${missing.join(', ')}\n\`\`\``)
-				.then(response =>
-				{
-					if (this._bot.selfbot) response.delete(10 * 1000);
-				});
+			.then(response =>
+			{
+				if (this._bot.selfbot) response.delete(10e3);
+			});
 	}
 
 	/**
@@ -228,10 +243,10 @@ export default class CommandDispatcher
 				? 'one of the following roles' : 'the following role'}`
 			+ ` to use that command:**\n\`\`\`css\n`
 			+ `${command.roles.join(', ')}\n\`\`\``)
-				.then(response =>
-				{
-					if (this._bot.selfbot) response.delete(10 * 1000);
-				});
+			.then(response =>
+			{
+				if (this._bot.selfbot) response.delete(10e3);
+			});
 	}
 
 	/**
@@ -244,27 +259,22 @@ export default class CommandDispatcher
 	 * @param {external:User[]} mentions - An array containing the Discord.js User
 	 * objects parsed from the mentions contained in a message
 	 * @param {string} original - The original raw content of the message that called the command
+	 * @returns {Promise<*>}
 	 */
 	async dispatch(command, message, args, mentions, original)
 	{
-		try
+		return new Promise((resolve, reject) =>
 		{
-			command.action(message, args, mentions, original);
-
-			/**
-			 * Emitted whenever a command is successfully called
-			 * @memberof Bot
-			 * @instance
-			 * @event event:command
-			 * @param {string} name - name of the called command
-			 * @param {args[]} args - args passed to the called command
-			 * @param {string} original - original content of the message that called the command
-			 */
-			this._bot.emit('command', command.name, args, original);
-		}
-		catch (err)
-		{
-			console.log(err); // eslint-disable-line no-console
-		}
+			try
+			{
+				const action = command.action(message, args, mentions, original);
+				if (action instanceof Promise) action.then(resolve).catch(reject);
+				else resolve(action);
+			}
+			catch (err)
+			{
+				reject(err);
+			}
+		});
 	}
 }
