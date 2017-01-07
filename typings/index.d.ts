@@ -60,10 +60,10 @@ declare module 'yamdbf'
 		config: Object;
 	}
 
-	export class Command
+	export class Command<T>
 	{
-		public constructor(bot: Bot, info: CommandInfo);
-		public bot: Bot;
+		public constructor(bot: T, info: CommandInfo);
+		public bot: T;
 		public name: string;
 		public description: string;
 		public usage: string;
@@ -113,15 +113,15 @@ declare module 'yamdbf'
 
 		public handleMessage(message: Message): Promise<any>;
 		public processContent(message: Message): Object;
-		public checkPermissions(dm: boolean, message: Message, command: Command): PermissionResolvable[];
-		public hasRoles(dm: boolean, message: Message, command: Command): boolean;
+		public checkPermissions(dm: boolean, message: Message, command: Command<Bot>): PermissionResolvable[];
+		public hasRoles(dm: boolean, message: Message, command: Command<Bot>): boolean;
 
 		public commandNotFoundError(message: Message): Promise<Message>;
 		public guildOnlyError(message: Message): Promise<Message>;
 		public missingPermissionsError(missing: PermissionResolvable[], message: Message): Promise<Message>;
-		public missingRolesError(message: Message, command: Command): Promise<Message>;
+		public missingRolesError(message: Message, command: Command<Bot>): Promise<Message>;
 
-		public dispatch(command: Command,
+		public dispatch(command: Command<Bot>,
 						message: Message,
 						args: Array<number | string>,
 						mentions: User[],
@@ -142,10 +142,10 @@ declare module 'yamdbf'
 		public groups: string[];
 
 		public register(): void;
-		public findByNameOrAlias(text: string): Command;
-		public filterGuildUsable(bot: Bot, message: Message): Collection<string, Command>;
-		public filterDMUsable(bot: Bot, message: Message): Collection<string, Command>;
-		public filterDMHelp(bot: Bot, message: Message): Collection<string, Command>;
+		public findByNameOrAlias(text: string): Command<Bot>;
+		public filterGuildUsable(bot: Bot, message: Message): Collection<string, Command<Bot>>;
+		public filterDMUsable(bot: Bot, message: Message): Collection<string, Command<Bot>>;
+		public filterDMHelp(bot: Bot, message: Message): Collection<string, Command<Bot>>;
 	}
 
 	export class GuildStorage
