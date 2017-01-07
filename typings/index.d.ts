@@ -19,7 +19,7 @@ declare module 'yamdbf'
 		public passive: boolean;
 		public version: string;
 		public disableBase: string[];
-		public config: Object;
+		public config: any;
 
 		public storage: LocalStorage;
 		public guildStorages: GuildStorageRegistry<string, GuildStorage>;
