@@ -70,8 +70,9 @@ export default class CommandDispatcher
 		 * @param {args[]} args - Args passed to the called command
 		 * @param {string} original - Original content of the message that called the command
 		 * @param {number} execTime - Time command took to execute
+		 * @param {external:Message} message - Message that triggered the command
 		 */
-		return this._bot.emit('command', command.name, args, original, dispatchEnd);
+		return this._bot.emit('command', command.name, args, original, dispatchEnd, message);
 	}
 
 	/**
