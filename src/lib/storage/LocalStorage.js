@@ -162,7 +162,7 @@ export default class LocalStorage
 	 * @param {function} callback - callback to execute that will be accessing the key
 	 * @returns {Promise}
 	 */
-	nonConcurrentAccess(key, callback)
+	queue(key, callback)
 	{
 		return new Promise((resolve, reject) =>
 		{
@@ -170,9 +170,25 @@ export default class LocalStorage
 			{
 				while(this._temp[`checking${key}`]) {} // eslint-disable-line
 				this._temp[`checking${key}`] = true;
-				callback(key); // eslint-disable-line
-				delete this._temp[`checking${key}`];
-				resolve();
+				const finished = callback(key); // eslint-disable-line
+				if (finished instanceof Promise)
+				{
+					finished.then(() =>
+					{
+						delete this._temp[`checking${key}`];
+						resolve();
+					})
+					.catch(err =>
+					{
+						delete this._temp[`checking${key}`];
+						reject(err);
+					});
+				}
+				else
+				{
+					delete this._temp[`checking${key}`];
+					resolve();
+				}
 			}
 			catch (err)
 			{
@@ -180,5 +196,11 @@ export default class LocalStorage
 				reject(err);
 			}
 		});
+	}
+
+	nonConcurrentAccess(key, callback)
+	{
+		console.warn('LocalStorage#nonConcurrentAccess has been deprecated and will be removed in a future update. Use LocalStorage#queue instead.');
+		return this.queue(key, callback);
 	}
 }

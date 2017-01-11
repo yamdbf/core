@@ -178,6 +178,7 @@ declare module 'yamdbf'
 		public exists(key: string): boolean;
 		public clear(): void;
 
+		public queue(key: string, callback: Function): Promise<any>
 		public nonConcurrentAccess(key: string, callback: Function): Promise<any>;
 	}
 
@@ -218,6 +219,7 @@ declare module 'yamdbf'
 		public exists(key: string): boolean;
 		public clear(): void;
 
+		public queue(key: string, callback: Function): Promise<any>
 		public nonConcurrentAccess(key: string, callback: Function): Promise<any>;
 	}
 
