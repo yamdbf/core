@@ -15,3 +15,15 @@ export function padRight(text, length)
 	let pad = Math.max(0, Math.min(length, length - text.length));
 	return `${text}${' '.repeat(pad)}`;
 }
+
+/**
+ * Returns the given string lowercased with any non
+ * alphanumeric chars removed
+ * @static
+ * @param {string} text - Text to normalize
+ * @returns {string}
+ */
+export function normalize(text)
+{
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
