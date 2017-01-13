@@ -55,7 +55,7 @@ export default class CommandDispatcher
 		let missingPermissions = this.checkPermissions(dm, message, command);
 		if (missingPermissions.length > 0) return this.missingPermissionsError(missingPermissions, message);
 
-		if (!this.checkLimiter(dm, message, command)) return this.failedLimitorError(message, command);
+		if (!this.checkLimiter(dm, message, command)) return this.failedLimiterError(message, command);
 
 		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
 		if (guildStorage) message.guild.storage = guildStorage;
@@ -284,7 +284,7 @@ export default class CommandDispatcher
 	 * @param {Command} command - Command found by the dispatcher
 	 * @returns {Promise<external:Message>}
 	 */
-	failedLimitorError(message, command)
+	failedLimiterError(message, command)
 	{
 		const storage = this._bot.guildStorages.get(message.guild);
 		let limitedCommands = storage.getSetting('limitedCommands');
