@@ -3,6 +3,8 @@
 
 import Command from '../Command';
 import { inspect } from 'util';
+import * as Discord from 'discord.js'; // eslint-disable-line
+import * as Yamdbf from '../../../index'; // eslint-disable-line
 
 export default class Eval extends Command
 {
