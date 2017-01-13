@@ -23,7 +23,7 @@ declare module 'yamdbf'
 
 		public storage: LocalStorage;
 		public guildStorages: GuildStorageRegistry<string, GuildStorage>;
-		public commands: CommandRegistry<string, Command>;
+		public commands: CommandRegistry<string, Command<any>>;
 
 		private _token: string;
 		private _guildDataStorage: LocalStorage;
