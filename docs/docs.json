@@ -851,7 +851,7 @@
                     }
                 },
                 {
-                    "name": "failedLimitorError",
+                    "name": "failedLimiterError",
                     "access": "",
                     "virtual": false,
                     "description": "Send a 'missing roles for role-limited command' error\nmessage to the channel",
