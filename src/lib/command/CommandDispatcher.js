@@ -55,6 +55,8 @@ export default class CommandDispatcher
 		let missingPermissions = this.checkPermissions(dm, message, command);
 		if (missingPermissions.length > 0) return this.missingPermissionsError(missingPermissions, message);
 
+		if (!this.checkLimiter(dm, message, command)) return this.failedLimitorError(message, command);
+
 		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
 		if (guildStorage) message.guild.storage = guildStorage;
 
@@ -164,6 +166,28 @@ export default class CommandDispatcher
 	}
 
 	/**
+	 * Check of the command caller has roles that pass the command
+	 * limiter set by the guild admins if the command is called
+	 * within a guild
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {boolean} dm - Whether the message is a DM
+	 * @param {external:Message} message - Discord.js message object
+	 * @param {Command} command - Command found by the dispatcher
+	 * @returns {boolean}
+	 */
+	checkLimiter(dm, message, command)
+	{
+		if (dm || this._bot.selfbot) return true;
+		let storage = this._bot.guildStorages.get(message.guild);
+		let limitedCommands = storage.getSetting('limitedCommands') || {};
+		if (!limitedCommands[command.name]) return true;
+		if (limitedCommands[command.name].length === 0) return true;
+		return message.member.roles.filter(role =>
+			limitedCommands[command.name].includes(role.id)).size > 0;
+	}
+
+	/**
 	 * Checks if the command caller has roles for the given command
 	 * @memberof CommandDispatcher
 	 * @instance
@@ -249,6 +273,29 @@ export default class CommandDispatcher
 			{
 				if (this._bot.selfbot) response.delete(10e3);
 			});
+	}
+
+	/**
+	 * Send a 'missing roles for role-limited command' error
+	 * message to the channel
+	 * @memberof CommandDispatcher
+	 * @instance
+	 * @param {external:Message} message - Discord.js message object
+	 * @param {Command} command - Command found by the dispatcher
+	 * @returns {Promise<external:Message>}
+	 */
+	failedLimitorError(message, command)
+	{
+		const storage = this._bot.guildStorages.get(message.guild);
+		let limitedCommands = storage.getSetting('limitedCommands');
+		let roles = limitedCommands[command.name];
+		return message[`${this._bot.selfbot ? 'channel' : 'author'}`].send(``
+			+ `**You must have ${roles.length > 1
+				? 'one of the following roles' : 'the following role'}`
+			+ ` to use that command:**\n\`\`\`css\n`
+			+ `${message.guild.roles
+				.filter(role => roles.includes(role.id))
+				.map(role => role.name).join(', ')}\n\`\`\``);
 	}
 
 	/**
