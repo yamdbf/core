@@ -294,6 +294,57 @@
                         "description": ""
                     }
                 }
+            ],
+            "events": [
+                {
+                    "name": "event:command",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Emitted whenever a command is successfully called",
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "description": "Name of the called command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<args>",
+                            "description": "Args passed to the called command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "original",
+                            "type": "string",
+                            "description": "Original content of the message that called the command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "execTime",
+                            "type": "number",
+                            "description": "Time command took to execute",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Message that triggered the command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                }
             ]
         },
         {
@@ -626,6 +677,43 @@
                     }
                 },
                 {
+                    "name": "checkLimiter",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Check of the command caller has roles that pass the command\nlimiter set by the guild admins if the command is called\nwithin a guild",
+                    "parameters": [
+                        {
+                            "name": "dm",
+                            "type": "boolean",
+                            "description": "Whether the message is a DM",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "Command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "hasRoles",
                     "access": "",
                     "virtual": false,
@@ -763,6 +851,35 @@
                     }
                 },
                 {
+                    "name": "failedLimitorError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Send a 'missing roles for role-limited command' error\nmessage to the channel",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "Command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<external:Message>",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "dispatch",
                     "access": "",
                     "virtual": false,
@@ -809,7 +926,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<*>",
+                        "description": ""
+                    }
                 }
             ]
         },
@@ -1384,7 +1505,7 @@
                     "examples": []
                 },
                 {
-                    "name": "nonConcurrentAccess",
+                    "name": "queue",
                     "access": "",
                     "virtual": false,
                     "description": "Allow access to a storage/settings item only when it is not currently being\naccessed. Waits for other nonConcurrentAccess operations to finish\nbefore proceeding with callback",
@@ -1783,7 +1904,7 @@
                     "examples": []
                 },
                 {
-                    "name": "nonConcurrentAccess",
+                    "name": "queue",
                     "access": "",
                     "virtual": false,
                     "description": "Allow access to a storage item only when it is not currently being\naccessed. Waits for other nonConcurrentAccess operations to finish\nbefore proceeding with callback",
