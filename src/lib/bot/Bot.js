@@ -73,7 +73,7 @@ export default class Bot extends Client
 		 * @type {string}
 		 * @instance
 		 */
-		this.noCommandErr = botOptions.noCommandErr || true;
+		this.noCommandErr = botOptions.noCommandErr === undefined ? true : botOptions.noCommandErr;
 
 		/**
 		 * Whether or not the bot is a selfbot
