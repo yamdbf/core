@@ -65,6 +65,17 @@ export default class Bot extends Client
 		this.readyText = botOptions.readyText || 'Ready!';
 
 		/**
+		 * Whether or not a generic 'command not found' message
+		 * should be given in DMs to instruct the user to
+		 * use the `help` command. Set to false to disable
+		 * this message
+		 * @name Bot#noCommandErr
+		 * @type {string}
+		 * @instance
+		 */
+		this.noCommandErr = botOptions.noCommandErr || true;
+
+		/**
 		 * Whether or not the bot is a selfbot
 		 * @memberof Bot
 		 * @type {boolean}
@@ -295,6 +306,7 @@ export default class Bot extends Client
  * @property {string} [commandsDir] - See: {@link Bot#commandsDir}
  * @property {string} [statusText=null] - See: {@link Bot#statusText}
  * @property {string} [readyText='Ready!'] - See: {@link Bot#readyText}
+ * @property {boolean} [noCommandErr=true] - See: {@link Bot#noCommandErr}
  * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
  * @property {boolean} [passive=false] - see {@link Bot#passive}
  * @property {string} [version='0.0.0'] - See: {@link Bot#version}
