@@ -15,6 +15,7 @@ declare module 'yamdbf'
 		public commandsDir: string;
 		public statusText: string;
 		public readyText: string;
+		public noCommandErr: boolean;
 		public selfbot: boolean;
 		public passive: boolean;
 		public version: string;
@@ -53,11 +54,12 @@ declare module 'yamdbf'
 		commandsDir?: string;
 		statusText?: string;
 		readyText?: string;
+		noCommandErr?: boolean;
 		selfbot?: boolean;
 		passive?: boolean;
 		version?: string;
 		disableBase?: string[];
-		config: Object;
+		config: any;
 	}
 
 	export class Command<T>

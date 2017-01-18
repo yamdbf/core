@@ -78,6 +78,17 @@
                     }
                 },
                 {
+                    "name": "noCommandErr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Whether or not a generic 'command not found' message\nshould be given in DMs to instruct the user to\nuse the `help` command. Set to false to disable\nthis message",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
                     "name": "selfbot",
                     "access": "",
                     "virtual": false,
@@ -1999,6 +2010,14 @@
                     "type": "string",
                     "description": "See: {@link Bot#readyText}",
                     "default": "'Ready!'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "noCommandErr",
+                    "type": "boolean",
+                    "description": "See: {@link Bot#noCommandErr}",
+                    "default": true,
                     "optional": true,
                     "nullable": ""
                 },
