@@ -1346,6 +1346,40 @@
                     "examples": []
                 },
                 {
+                    "name": "incrSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Increment a stored integer settings value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "deincrSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Deincrement a stored integer settings value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
                     "name": "removeSetting",
                     "access": "",
                     "virtual": false,
@@ -1462,6 +1496,40 @@
                             "name": "value",
                             "type": "*",
                             "description": "The value to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "incr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Increment a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "deincr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Deincrement a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -1861,6 +1929,40 @@
                             "name": "value",
                             "type": "*",
                             "description": "The value to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "incr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Increment a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "deincr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Deincrement a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
                             "default": "",
                             "optional": "",
                             "nullable": ""
