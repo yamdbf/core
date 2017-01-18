@@ -117,6 +117,32 @@ export default class LocalStorage
 		this._db.push(`/${key}`, JSON.parse(JSON.stringify(value)), true);
 	}
 
+	// Handle increment/deincrement of stored integer values
+	_modifyStoredInt(key, type)
+	{
+		if (typeof key !== 'string') return;
+		if (type !== '++' && type !== '--') return;
+		let value = this.getItem(key);
+		if (!Number.isInteger(value)) return;
+		this.setItem(key, type === '++' ? ++value : --value);
+	}
+
+	/**
+	 * Increment a stored integer value
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {string} key - The key of the item to increment
+	 */
+	incr(key) { this._modifyStoredInt(key, '++'); }
+
+	/**
+	 * Deincrement a stored integer value
+	 * @memberof LocalStorage
+	 * @instance
+	 * @param {string} key - The key of the item to increment
+	 */
+	deincr(key) { this._modifyStoredInt(key, '--'); }
+
 	/**
 	 * Delete an item in this storage
 	 * @memberof LocalStorage

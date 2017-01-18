@@ -51,6 +51,18 @@ export default class GuildStorage
 	 */
 	get id() { return this._id; }
 
+	// Handle increment/deincrement of stored integer values
+	_modifyStoredInt(key, type, storage)
+	{
+		if (typeof key !== 'string') return;
+		if (type !== '++' && type !== '--') return;
+		if (storage !== 'storage' && storage !== 'settings') return;
+		let ls = storage === 'storage' ? this._dataStorage : this._settingsStorage;
+		let value = ls.getItem(`${this._id}/${key}`);
+		if (!Number.isInteger(value)) return;
+		ls.setItem(`${this._id}/${key}`, type === '++' ? ++value : --value);
+	}
+
 	// Settings storage ////////////////////////////////////////////////////////
 
 	/**
@@ -110,6 +122,22 @@ export default class GuildStorage
 		if (typeof value === 'undefined') value = '';
 		this._settingsStorage.setItem(`${this.id}/${key}`, value);
 	}
+
+	/**
+	 * Increment a stored integer settings value
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to increment
+	 */
+	incrSetting(key) { this._modifyStoredInt(key, '++', 'settings'); }
+
+	/**
+	 * Deincrement a stored integer settings value
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to increment
+	 */
+	deincrSetting(key) { this._modifyStoredInt(key, '--', 'settings'); }
 
 	/**
 	 * Delete a setting in this guild's settings
@@ -215,6 +243,22 @@ export default class GuildStorage
 		if (typeof value === 'undefined') value = '';
 		this._dataStorage.setItem(`${this.id}/${key}`, value);
 	}
+
+	/**
+	 * Increment a stored integer value
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to increment
+	 */
+	incr(key) { this._modifyStoredInt(key, '++', 'storage'); }
+
+	/**
+	 * Deincrement a stored integer value
+	 * @memberof GuildStorage
+	 * @instance
+	 * @param {string} key - The key of the item to increment
+	 */
+	deincr(key) { this._modifyStoredInt(key, '--', 'storage'); }
 
 	/**
 	 * Delete an item in this guild's storage
