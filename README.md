@@ -34,6 +34,7 @@ const bot = new Bot({
 	commandsDir: path.join(__dirname, 'commands')
 }).start();
 ```
+>By default, the prefis is /, for all of the selfbot users out there. For regular bots, you can just mention the bot and use setprefix to change it.
 
 And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. Here's an example command:
 
