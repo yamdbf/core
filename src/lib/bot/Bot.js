@@ -185,6 +185,8 @@ export default class Bot extends Client
 		if (!this._token) throw new Error('You must provide a token for the bot.');
 		if (!this.commandsDir && !this.passive) throw new Error('You must provide a directory to load commands from via commandDir');
 		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
+		if (!this.config.owner) throw new Error('You must provide config array of owner ids.');
+		if (typeof this.config.owner !== 'array') throw new Error('Config owner option must be an arrray of user ids.');
 
 		// Load commands
 		if (!this.passive) this.loadCommand('all');
