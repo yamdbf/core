@@ -14,7 +14,7 @@ export default class Limit extends Command
 			usage: '<prefix>limit <command>, <role names, ...>',
 			extraHelp: 'The comma after the command name -- before the role names list -- is necessary.',
 			group: 'base',
-			argOpts: { separator: ',' },
+			argOpts: { stringArgs: true, separator: ',' },
 			permissions: ['ADMINISTRATOR']
 		});
 	}

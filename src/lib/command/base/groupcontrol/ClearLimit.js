@@ -14,7 +14,8 @@ export default class ClearLimit extends Command
 			usage: '<prefix>clearlimit <command>',
 			extraHelp: '',
 			group: 'base',
-			permissions: ['ADMINISTRATOR']
+			permissions: ['ADMINISTRATOR'],
+			argOpts: { stringArgs: true }
 		});
 	}
 
