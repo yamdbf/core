@@ -2231,8 +2231,16 @@
                     "nullable": ""
                 },
                 {
-                    "name": "argOpts",
+                    "name": "hidden",
                     "type": "boolean",
+                    "description": "See: {@link Command#hidden}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "argOpts",
+                    "type": "ArgOpts",
                     "description": "See: {@link Command#argOpts}, {@link ArgOpts}",
                     "default": "",
                     "optional": true,

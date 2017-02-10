@@ -70,7 +70,10 @@ const bot = new Bot({
     version: '1.0.0',
     statusText: 'try @mention help',
     commandsDir: path.join(__dirname, 'commands')
-}).start();</code></pre><p>And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. Here's an example command:</p>
+}).start();</code></pre><blockquote>
+<p>By default the prefix is <code>/</code>, for all of the selfbot users out there. For regular bots, you can just mention the bot and use setprefix to change it.</p>
+</blockquote>
+<p>And that's all it takes! Just that and you have a fully functioning bot with the base commands available in the framework. After that you'll just need to write your own commands. Here's an example command:</p>
 <pre class="prettyprint source lang-js"><code>let Command = require('yamdbf').Command;
 
 exports.default = class Ping extends Command
