@@ -31,17 +31,30 @@ export default class Help extends Command
 
 		if (!args[0])
 		{
-			output += `Available commands in ${dm ? 'this DM' : message.channel}\n\`\`\`ldif\n`;
+			const preText = `Available commands in ${dm ? 'this DM' : message.channel}\n\`\`\`ldif\n`;
+			const postText = `\`\`\`Use \`<prefix>help <command>\` ${this.bot.selfbot ? '' : `or \`${
+				mentionName} help <command>\` `}for more information.\n\n`;
+
 			const usableCommands = this.bot.commands[dm
 				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message)
 				.filter(c => !c.hidden);
 
 			const widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
-			output += usableCommands.map(c =>
+			let commandList = usableCommands.map(c =>
 				`${padRight(c.name, widest + 1)}: ${c.description}`).sort().join('\n');
 
-			output += `\`\`\`Use \`<prefix>help <command>\` ${this.bot.selfbot ? '' : `or \`${
-				mentionName} help <command>\` `}for more information.\n\n`;
+			output = preText + commandList + postText;
+			if (output.length >= 1024)
+			{
+				commandList = '';
+				let mappedCommands = usableCommands.map(c => padRight(c.name, widest + 2)).sort();
+				for (let i = 0; i <= mappedCommands.length; i++)
+				{
+					commandList += mappedCommands[i];
+					if ((i + 1) % 3 === 0) commandList += '\n';
+				}
+				output = preText + commandList + postText;
+			}
 		}
 		else
 		{
