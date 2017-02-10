@@ -114,6 +114,12 @@ export default class Command
 		this.guildOnly = info.guildOnly || false;
 
 		/**
+		 * Whether or not the command is to be hidden from the
+		 * commands list via the default help command
+		 */
+		this.hidden = info.hidden || false;
+
+		/**
 		 * Options for how arguments should be parsed. See: {@link ArgOpts}
 		 * @memberof Command
 		 * @type {ArgOpts}
@@ -233,7 +239,8 @@ export default class Command
  * @property {string} group - See: {@link Command#group}
  * @property {string[]} [aliases=[]] - See: {@link Command#aliases}
  * @property {boolean} [guildOnly=false] - See: {@link Command#guildOnly}
- * @property {boolean} [argOpts] - See: {@link Command#argOpts}, {@link ArgOpts}
+ * @property {boolean} [hidden=false] - See: {@link Command#hidden}
+ * @property {ArgOpts} [argOpts] - See: {@link Command#argOpts}, {@link ArgOpts}
  * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
  * @property {string[]} [roles=[]] - See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}

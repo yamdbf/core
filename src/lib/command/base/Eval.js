@@ -24,7 +24,7 @@ export default class Eval extends Command
 
 	async action(message, args, mentions, original)
 	{
-		const code = original.split(this.name).slice(1).join(this.name).trim();
+		const code = original.split(this.name).slice(1).join(this.name).trim(); // eslint-disable-line
 		if (!code) return this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
 
 		try

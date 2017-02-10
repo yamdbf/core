@@ -96,6 +96,7 @@ declare module 'yamdbf'
 		group: string;
 		aliases?: string[];
 		guildOnly?: boolean;
+		hidden?: boolean;
 		argOpts?: ArgOpts;
 		permissions?: PermissionResolvable[];
 		roles?: string[];

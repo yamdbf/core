@@ -25,23 +25,16 @@ export default class Help extends Command
 		const dm = message.channel.type === 'dm' || message.channel.type === 'group';
 		const mentionName = `@${this.bot.user.username}#${this.bot.user.discriminator}`;
 
-		let usableCommands;
 		let command;
 		let output = '';
 		let embed = new RichEmbed();
 
 		if (!args[0])
 		{
-			if (!dm)
-			{
-				output += `Available commands in ${message.channel}\n\`\`\`ldif\n`;
-				usableCommands = this.bot.commands.filterGuildUsable(this.bot, message);
-			}
-			else
-			{
-				output += `Available commands in this DM:\n\`\`\`ldif\n`;
-				usableCommands = this.bot.commands.filterDMUsable(this.bot, message);
-			}
+			output += `Available commands in ${dm ? 'this DM' : message.channel}\n\`\`\`ldif\n`;
+			const usableCommands = this.bot.commands[dm
+				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message)
+				.filter(c => !c.hidden);
 
 			const widest = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			output += usableCommands.map(c =>
@@ -52,11 +45,10 @@ export default class Help extends Command
 		}
 		else
 		{
-			const filter = c => c.name === args[0] || c.aliases.includes(args[0]);
-			if (!dm) command = this.bot.commands
-				.filterGuildUsable(this.bot, message).filter(filter).first();
-			else command = this.bot.commands
-				.filterDMHelp(this.bot, message).filter(filter).first();
+			command = this.bot.commands[dm
+				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message)
+				.filter(c => c.name === args[0] || c.aliases.includes(args[0]))
+				.first();
 
 			if (!command) output = `A command by that name could not be found or you do\n`
 				+ `not have permissions to view it in this guild or channel`;
@@ -75,11 +67,11 @@ export default class Help extends Command
 		embed.setColor(11854048).setDescription(output);
 
 		let outMessage;
-		if (!dm && !this.bot.selfbot && command) message.reply(`Sent you a DM with help information.`);
-		if (!dm && !this.bot.selfbot && !command) message.reply(`Sent you a DM with information.`);
+		if (!dm && !this.bot.selfbot && command) message.reply(`Sent you a DM with command help information.`);
+		if (!dm && !this.bot.selfbot && !command) message.reply(`Sent you a DM with a list of commands.`);
 		if (this.bot.selfbot) outMessage = await message.channel.sendEmbed(embed);
 		else message.author.sendEmbed(embed);
 
-		if (this.bot.selfbot) outMessage.delete(30e3);
+		if (outMessage) outMessage.delete(30e3);
 	}
 }
