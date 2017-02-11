@@ -26,8 +26,6 @@ export default class GuildStorageLoader
 	 */
 	loadStorages(dataStorage, settingsStorage)
 	{
-		this.cleanGuilds(dataStorage, settingsStorage);
-
 		dataStorage.keys.forEach((key) =>
 		{
 			this._bot.guildStorages.set(key, new GuildStorage(this._bot, key, dataStorage, settingsStorage));

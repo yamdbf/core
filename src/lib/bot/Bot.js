@@ -298,6 +298,17 @@ export default class Bot extends Client
 		if (!guild) return null;
 		return this.guildStorages.get(guild).getSetting('prefix') || null;
 	}
+
+	/**
+	 * Clean out any guild storage/settings that no longer have
+	 * an associated guild
+	 * @memberof Bot
+	 * @instance
+	 */
+	sweepStorages()
+	{
+		this._guildStorageLoader.cleanGuilds(this._guildDataStorage, this._guildSettingStorage);
+	}
 }
 
 /**

@@ -39,6 +39,7 @@ declare module 'yamdbf'
 		public removeDefaultSetting(key: string): this;
 		public defaultSettingExists(key: string): boolean;
 		public getPrefix(guild: string | Guild): string;
+		public sweepStorages(): void;
 
 		public on(event: string, listener: Function): this;
 		public on(event: 'command', listener: (
