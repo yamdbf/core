@@ -1587,7 +1587,7 @@
                     "name": "queue",
                     "access": "",
                     "virtual": false,
-                    "description": "Allow access to a storage/settings item only when it is not currently being\naccessed. Waits for other nonConcurrentAccess operations to finish\nbefore proceeding with callback",
+                    "description": "Allow access to a storage/settings item only when it is not currently being\naccessed. Waits for other queued operations to finish before proceeding\nwith the supplied callback",
                     "parameters": [
                         {
                             "name": "key",
@@ -2020,7 +2020,7 @@
                     "name": "queue",
                     "access": "",
                     "virtual": false,
-                    "description": "Allow access to a storage item only when it is not currently being\naccessed. Waits for other nonConcurrentAccess operations to finish\nbefore proceeding with callback",
+                    "description": "Allow access to a storage item only when it is not currently being\naccessed. Waits for other queued operations to finish before\nproceeding with the provided callback",
                     "parameters": [
                         {
                             "name": "key",
