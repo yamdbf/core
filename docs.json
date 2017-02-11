@@ -1,0 +1,2306 @@
+{
+    "classes": [
+        {
+            "name": "Bot",
+            "description": "",
+            "extends": [
+                "external:Client"
+            ],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Bot",
+                "description": "The Discord.js Client instance. Contains bot-specific [storage]{@link Bot#storage},\nguild specific [storages]{@link Bot#guildStorages}, and contains important\nfields for access within commands",
+                "parameters": [
+                    {
+                        "name": "botOptions",
+                        "type": "BotOptions",
+                        "description": "Object containing required bot properties",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "clientOptions",
+                        "type": "external:ClientOptions",
+                        "description": "Discord.js ClientOptions",
+                        "default": "",
+                        "optional": true,
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "name",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The name of the Bot",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "commandsDir",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Directory to find command class files. Optional\nif bot is passive. See: {@link Bot#passive}",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "statusText",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Status text for the bot",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "readyText",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Text to output when the bot is ready",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "noCommandErr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Whether or not a generic 'command not found' message\nshould be given in DMs to instruct the user to\nuse the `help` command. Set to false to disable\nthis message",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "selfbot",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Whether or not the bot is a selfbot",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "passive",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Whether or not this bot is passive. Passive bots\nwill not register a command dispatcher or a message\nlistener. This allows passive bots to be created that\ndo not respond to any commands but are able to perform\nactions based on whatever the framework user wants",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "version",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Bot version, best taken from package.json",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "config",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Object containing token and owner ids",
+                    "type": {
+                        "names": [
+                            "Object"
+                        ]
+                    }
+                },
+                {
+                    "name": "disableBase",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Array of base command names to skip when loading commands. Base commands\nmay only be disabled by name, not by alias",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
+                    "name": "storage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Bot-specific storage",
+                    "type": {
+                        "names": [
+                            "LocalStorage"
+                        ]
+                    }
+                },
+                {
+                    "name": "guildStorages",
+                    "access": "",
+                    "virtual": false,
+                    "description": "[Collection]{@link external:Collection} containing all GuildStorage instances",
+                    "type": {
+                        "names": [
+                            "GuildStorageRegistry.<string, GuildStorage>"
+                        ]
+                    }
+                },
+                {
+                    "name": "commands",
+                    "access": "",
+                    "virtual": false,
+                    "description": "[Collection]{@link external:Collection} containing all loaded commands",
+                    "type": {
+                        "names": [
+                            "CommandRegistry.<string, Command>"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "loadCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Loads/reloads all/specific commands",
+                    "parameters": [
+                        {
+                            "name": "command",
+                            "type": "string",
+                            "description": "The name of a command to reload, or 'all' to load all commands",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "start",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Logs the Bot in and registers some event handlers",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Bot",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "setDefaultSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Set the value of a default setting key and push it to all guild\nsetting storages. Will not overwrite a setting in guild settings\nstorage if there is already an existing key with the given value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key to use in settings storage",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "description": "The value to use in settings storage",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Bot",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "removeDefaultSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Remove a defaultGuildSettings item. Will not remove from ALL guild\nsettings, but will prevent the item from being added to new guild\nsettings storage upon creation",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key to use in settings storage",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Bot",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "defaultSettingExists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "See if a guild default setting exists",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key in storage to check",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "getPrefix",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Shortcut to return the command prefix for the provided guild",
+                    "parameters": [
+                        {
+                            "name": "guild",
+                            "type": [
+                                "external:Guild",
+                                "string"
+                            ],
+                            "description": "The guild or guild id to get the prefix of",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": ""
+                    }
+                }
+            ],
+            "events": [
+                {
+                    "name": "event:command",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Emitted whenever a command is successfully called",
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "description": "Name of the called command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<args>",
+                            "description": "Args passed to the called command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "original",
+                            "type": "string",
+                            "description": "Original content of the message that called the command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "execTime",
+                            "type": "number",
+                            "description": "Time command took to execute",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Message that triggered the command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "Command",
+            "description": "",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Command",
+                "description": "Command class to extend to create commands users can execute",
+                "parameters": [
+                    {
+                        "name": "bot",
+                        "type": "Bot",
+                        "description": "Bot instance",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "info",
+                        "type": "CommandInfo",
+                        "description": "Object containing required command properties",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "bot",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Bot instance",
+                    "type": {
+                        "names": [
+                            "Bot"
+                        ]
+                    }
+                },
+                {
+                    "name": "name",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The name of the command, used by the dispatcher\nto determine the command being executed",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "description",
+                    "access": "",
+                    "virtual": false,
+                    "description": "A brief description of the command, displayed\nin the commands list via the Help command",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "usage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "An example of command usage. The token '&lt;prefix&gt;' will\nbe replaced by the guild-specific command prefix in the Help command when\n'help &lt;command&gt;' is called",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "extraHelp",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Extra information about the command to be displayed\nby the Help command when 'help &lt;command&gt;' is called",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "group",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The command group that the command belongs to. Allows commands to be\ngrouped for disabling. The group 'base' cannot be disabled.",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "aliases",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Aliases the command can be called by other than its name",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
+                    "name": "guildOnly",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Whether or not a command can only be used within a\nguild text channel",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "argOpts",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Options for how arguments should be parsed. See: {@link ArgOpts}",
+                    "type": {
+                        "names": [
+                            "ArgOpts"
+                        ]
+                    }
+                },
+                {
+                    "name": "permissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Array of permissions required by the command\ncaller to be able to execute the command in the guild the command is called in.\n<br><br>\nIf any permissions are provided the command's `guildOnly` property will be automatically set to true",
+                    "type": {
+                        "names": [
+                            "Array.<external:PermissionResolvable>"
+                        ]
+                    }
+                },
+                {
+                    "name": "roles",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Array of roles required to use the command. If the command caller\nhas any of the roles in the array, they will be able to use the command\n<br><br>\nIf any roles are provided the command's `guildOnly` property will be automatically set to true",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
+                    "name": "ownerOnly",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Whether or not the command can be used by the bot owner(s).",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "overloads",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The name of a base command to overload. Commands may only overload\nbase commands so the {@link Command#group} must be set to 'base' in\norder to overload. Commands may only be overloaded by name, not by alias",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "action",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Action to be executed when the command is called. The following parameters\nare what command actions will be passed by the {@link CommandDispatcher} whenever\na command is called. Be sure to receive these in proper order when writing\nnew commands",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<args>",
+                            "description": "An array containing the args parsed from the command calling message",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "mentions",
+                            "type": "Array.<external:User>",
+                            "description": "An array containing the Discord.js User\nobjects parsed from the mentions contained in a message",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "original",
+                            "type": "string",
+                            "description": "The original raw content of the message that called the command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "register",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Assert {@link Command#action} is typeof Function, finishing the\ncommand creation process.<br>Called by {@link CommandRegistry#register}",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "CommandDispatcher",
+            "description": "",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CommandDispatcher",
+                "description": "Handles dispatching commands",
+                "parameters": [
+                    {
+                        "name": "bot",
+                        "type": "Bot",
+                        "description": "Bot instance",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "handleMessage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Determine if message is a valid command call and send to {@link CommandDispatcher#dispatch}",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "*",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "processContent",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Processes message content, finding the command to execute and creating an\nobject containing the found command, mentions, args, processed content, and\nif the message is a DM",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Object",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "checkPermissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get a list of missing permissions for the command caller for the\ngiven command, if any",
+                    "parameters": [
+                        {
+                            "name": "dm",
+                            "type": "boolean",
+                            "description": "Whether the message is a DM",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "Command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Array.<external:PermissionResolvable>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "checkLimiter",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Check of the command caller has roles that pass the command\nlimiter set by the guild admins if the command is called\nwithin a guild",
+                    "parameters": [
+                        {
+                            "name": "dm",
+                            "type": "boolean",
+                            "description": "Whether the message is a DM",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "Command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "hasRoles",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Checks if the command caller has roles for the given command",
+                    "parameters": [
+                        {
+                            "name": "dm",
+                            "type": "boolean",
+                            "description": "Whether the message is a DM",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "Command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "commandNotFoundError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Send a 'command not found' error message to the channel",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<external:Message>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "guildOnlyError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Send a 'guild only' error message to the channel",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<external:Message>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "missingPermissionsError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Send a 'missing permissions' error message to the channel",
+                    "parameters": [
+                        {
+                            "name": "missing",
+                            "type": "Array.<external:PermissionResolvable>",
+                            "description": "Array of missing permissions",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<external:Message>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "missingRolesError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Send a 'missing roles' error message to the channel",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "Command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<external:Message>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "failedLimiterError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Send a 'missing roles for role-limited command' error\nmessage to the channel",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "Command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<external:Message>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "dispatch",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Pass the necessary items to the found Command's {@link Command#action} method",
+                    "parameters": [
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "The command found by the dispatcher",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<args>",
+                            "description": "An array containing the args parsed from the command calling message",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "mentions",
+                            "type": "Array.<external:User>",
+                            "description": "An array containing the Discord.js User\nobjects parsed from the mentions contained in a message",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "original",
+                            "type": "string",
+                            "description": "The original raw content of the message that called the command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<*>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "CommandLoader",
+            "description": "",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CommandLoader",
+                "description": "Handles loading all commands from the given Bot's commandsDir",
+                "parameters": [
+                    {
+                        "name": "bot",
+                        "type": "Bot",
+                        "description": "Bot instance",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "loadCommands",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Load or reload all commands from the base commands directory and the\nuser-specified {@link Bot#commandsDir} directory and stores them in\nthe Bot's {@link CommandRegistry} instance ({@link Bot#commands})",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "reloadCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Reload the given command in the Bot's {@link CommandRegistry} ({@link Bot#commands})",
+                    "parameters": [
+                        {
+                            "name": "nameOrAlias",
+                            "type": "string",
+                            "description": "{@link Command#name} or {@link Command#aliases} alias",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "CommandRegistry",
+            "description": "",
+            "extends": [
+                "external:Collection"
+            ],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CommandRegistry",
+                "description": "Stores loaded Commands as &lt;[name]{@link Command#name}, [Command]{@link Command}&gt; pairs",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "register",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Complete registration of a command and add to the parent [Collection]{@link external:Collection},\nerroring on duplicate names and aliases",
+                    "parameters": [
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "The Command to be registered",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key to store the Command at. Will be {@link Command#name}",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "reload",
+                            "type": "boolean",
+                            "description": "Whether or not the command is being reloaded and\nreplaced in the collection",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "findByNameOrAlias",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Finds a command by [name]{@link Command#name} or [alias]{@link Command#aliases}",
+                    "parameters": [
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "description": "The name or alias of the Command",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Command",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "filterGuildUsable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Returns all commands usable by the user in the guild text channel\nthe provided message is in",
+                    "parameters": [
+                        {
+                            "name": "bot",
+                            "type": "Bot",
+                            "description": "Bot instance",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js Message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "external:Collection.<string, Command>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "filterDMUsable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Returns all commands usable by the user within the DM channel the provided\nmessage is in",
+                    "parameters": [
+                        {
+                            "name": "bot",
+                            "type": "Bot",
+                            "description": "Bot instance",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js Message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "external:Collection.<string, Command>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "filterDMHelp",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Returns all commands that can have their help looked up by the user\nin the DM channel the message is in",
+                    "parameters": [
+                        {
+                            "name": "bot",
+                            "type": "Bot",
+                            "description": "Bot instance",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "Discord.js Message object",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "external:Collection.<string, Command>",
+                        "description": ""
+                    }
+                }
+            ],
+            "properties": [
+                {
+                    "name": "groups",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Contains all [Command groups]{@link Command#group}",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "GuildStorage",
+            "description": "",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "GuildStorage",
+                "description": "Handle loading, saving, and storing Guild data and settings\nvia persistent storage. Created automatically per-guild\nby {@link GuildStorageLoader}",
+                "parameters": [
+                    {
+                        "name": "bot",
+                        "type": "Bot",
+                        "description": "Bot instance",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "guild",
+                        "type": [
+                            "external:Guild",
+                            "string"
+                        ],
+                        "description": "Discord.js Guild object or guild ID string",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "dataStorage",
+                        "type": "LocalStorage",
+                        "description": "LocalStorage instance containing all guild-specific data",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "settingsStorage",
+                        "type": "LocalStorage",
+                        "description": "LocalStorage instance containing all guild-specific settings",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "id",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Discord.js Guild ID string",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "settingsLength",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The number of keys in this Guild's settings",
+                    "type": {
+                        "names": [
+                            "number"
+                        ]
+                    }
+                },
+                {
+                    "name": "settingsKeys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The names of all keys in this guild's settings",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
+                    "name": "length",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The number of keys in this guild's storage",
+                    "type": {
+                        "names": [
+                            "number"
+                        ]
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The names of all keys in this guild's storage",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "settingKey",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get the name of the key at the given index in this guild's settings",
+                    "parameters": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "description": "The index of the key to find",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "getSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get the value of the given key in this guild's settings",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the setting to get",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "*",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "setSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Set the value of a setting in this guild's settings",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the setting to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "*",
+                            "description": "The value to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "incrSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Increment a stored integer settings value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "deincrSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Deincrement a stored integer settings value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "removeSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Delete a setting in this guild's settings",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the setting to delete",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "settingExists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Check if a setting exists",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the setting to check for",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "resetSettings",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Reset the settings for this guild to default, deleting any\nextra settings that are not part of the provided defaults",
+                    "parameters": [
+                        {
+                            "name": "defaults",
+                            "type": "Object",
+                            "description": "Should always use {@link defaultGuildSettings}",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [
+                        "<GuildStorage>.resetSettings(<Bot>.storage.getItem('defaultGuildSettings'));"
+                    ]
+                },
+                {
+                    "name": "key",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get the name of the key at the given index in this guild's storage",
+                    "parameters": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "description": "The index of the key to find",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "getItem",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get the value of the given key in this guild's storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to get",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "*",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "setItem",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Set the value of a given key in this guild's storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "*",
+                            "description": "The value to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "incr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Increment a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "deincr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Deincrement a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "removeItem",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Delete an item in this guild's storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to delete",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "exists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Check if key/value pair exists in this guild's storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to check for",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Delete all data from this guild's storage",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "queue",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Allow access to a storage/settings item only when it is not currently being\naccessed. Waits for other nonConcurrentAccess operations to finish\nbefore proceeding with callback",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "the storage key you will be accessing",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "callback",
+                            "type": "function",
+                            "description": "callback to execute that will be accessing the key",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "GuildStorageLoader",
+            "description": "",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "GuildStorageLoader",
+                "description": "Handles loading all guild-specific data from persistent storage into\n{@link GuildStorage} objects",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "loadStorages",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Load data for each guild from persistent storage and store it in a\n{@link GuildStorage} object",
+                    "parameters": [
+                        {
+                            "name": "dataStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific data",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "settingsStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific settings",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "initNewGuilds",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Assign a GuildStorage to guilds that lack one due to the bot being\nin the guild before adopting this storage spec or the bot being\nadded to a new guild",
+                    "parameters": [
+                        {
+                            "name": "dataStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific data",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "settingsStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific settings",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "cleanGuilds",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Clean out any storages/settings storages for guilds the\nbot is no longer a part of",
+                    "parameters": [
+                        {
+                            "name": "dataStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific data",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "settingsStorage",
+                            "type": "LocalStorage",
+                            "description": "LocalStorage instance containing all guild-specific settings",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "GuildStorageRegistry",
+            "description": "",
+            "extends": [
+                "external:Collection"
+            ],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "GuildStorageRegistry",
+                "description": "Stores all guild-specific storages as &lt;{@link string}, {@link GuildStorage}&gt; pairs,\nwhere {@link string} is the guild's ID string",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get the GuildStorage by [Guild]{@link external:Guild} or guild id string",
+                    "parameters": [
+                        {
+                            "name": "guild",
+                            "type": [
+                                "external:Guild",
+                                "string"
+                            ],
+                            "description": "Guild object or guild id string",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "GuildStorage",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "findAll",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Return a [Collection]{@link external:Collection} of GuildStorage items that\nhave the provided key and value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "Setting key to match",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "*",
+                            "description": "Value to match",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "external:Collection.<string, GuildStorage>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "findAllBySetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Return a [Collection]{@link external:Collection} of GuildStorage items that\nhave the provided setting key and value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "Setting key to match",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "*",
+                            "description": "Value to match",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "external:Collection.<string, GuildStorage>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "resetAllGuildSettings",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Reset all guild settings to default, deleting any extra settings that are\nnot part of the [DefaultGuildSettings]{@link DefaultGuildSettings}",
+                    "parameters": [
+                        {
+                            "name": "defaults",
+                            "type": "DefaultGuildSettings",
+                            "description": "Should always use [DefaultGuildSettings]{@link DefaultGuildSettings}",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "LocalStorage",
+            "description": "",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "LocalStorage",
+                "description": "Creates a persistent storage file and handles interacting with the persistent\nstorage",
+                "parameters": [
+                    {
+                        "name": "fileName",
+                        "type": "string",
+                        "description": "The name of the persistent storage file. Will be json format",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "length",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The number of keys in this storage",
+                    "type": {
+                        "names": [
+                            "number"
+                        ]
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "The names of all keys in this storage",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "key",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get the name of the key at the given index in this storage",
+                    "parameters": [
+                        {
+                            "name": "index",
+                            "type": "number",
+                            "description": "The index of the key to find",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "getItem",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Get the value of the given key in this storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to get",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "*",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "setItem",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Set the value of a given key in this storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "*",
+                            "description": "The value to set",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "incr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Increment a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "deincr",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Deincrement a stored integer value",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to increment",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "removeItem",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Delete an item in this storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to delete",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "exists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Check if key/value pair exists in this storage",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "The key of the item to check for",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Delete all items from this storage",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "queue",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Allow access to a storage item only when it is not currently being\naccessed. Waits for other nonConcurrentAccess operations to finish\nbefore proceeding with callback",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "the storage key you will be accessing",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "callback",
+                            "type": "function",
+                            "description": "callback to execute that will be accessing the key",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise",
+                        "description": ""
+                    }
+                }
+            ]
+        }
+    ],
+    "typedefs": [
+        {
+            "name": "DefaultGuildSettings",
+            "description": "The default settings to apply to new guilds.\nStored under the key <code>'defaultGuildSettings'</code> in {@link Bot#storage}",
+            "properties": [
+                {
+                    "name": "prefix",
+                    "type": "string",
+                    "description": "Prefix to prepend commands",
+                    "default": "'/'",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disabledGroups",
+                    "type": "Array",
+                    "description": "Command groups to ignore",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "BotOptions",
+            "description": "Object containing required {@link Bot} properties to be\npassed to a Bot on construction",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "See: {@link Bot#name}",
+                    "default": "'botname'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "token",
+                    "type": "string",
+                    "description": "See: {@link Bot#token}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "commandsDir",
+                    "type": "string",
+                    "description": "See: {@link Bot#commandsDir}",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "statusText",
+                    "type": "string",
+                    "description": "See: {@link Bot#statusText}",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "readyText",
+                    "type": "string",
+                    "description": "See: {@link Bot#readyText}",
+                    "default": "'Ready!'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "noCommandErr",
+                    "type": "boolean",
+                    "description": "See: {@link Bot#noCommandErr}",
+                    "default": true,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "selfbot",
+                    "type": "boolean",
+                    "description": "See: {@link Bot#selfbot}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "passive",
+                    "type": "boolean",
+                    "description": "see {@link Bot#passive}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "version",
+                    "type": "string",
+                    "description": "See: {@link Bot#version}",
+                    "default": "'0.0.0'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "config",
+                    "type": "Object",
+                    "description": "See: {@link Bot#config}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disableBase",
+                    "type": "Array.<string>",
+                    "description": "See: {@link Bot#disableBase}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "args",
+            "description": "Array of values parsed from {@link external:Message} content\nthat will be passed to a command. Can contain a mix of string and number values.",
+            "properties": []
+        },
+        {
+            "name": "CommandInfo",
+            "description": "Object containing required {@link Command} properties\nto be passed to a Command on construction",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "See: {@link Command#name}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "description": "See: {@link Command#description}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "usage",
+                    "type": "string",
+                    "description": "See: {@link Command#usage}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "extraHelp",
+                    "type": "string",
+                    "description": "See: {@link Command#extraHelp}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "group",
+                    "type": "string",
+                    "description": "See: {@link Command#group}",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "aliases",
+                    "type": "Array.<string>",
+                    "description": "See: {@link Command#aliases}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "guildOnly",
+                    "type": "boolean",
+                    "description": "See: {@link Command#guildOnly}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "hidden",
+                    "type": "boolean",
+                    "description": "See: {@link Command#hidden}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "argOpts",
+                    "type": "ArgOpts",
+                    "description": "See: {@link Command#argOpts}, {@link ArgOpts}",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "permissions",
+                    "type": "Array.<PermissionResolvable>",
+                    "description": "See: {@link Command#permissions}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "roles",
+                    "type": "Array.<string>",
+                    "description": "See: {@link Command#roles}",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ownerOnly",
+                    "type": "boolean",
+                    "description": "See: {@link Command#ownerOnly}",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "overloads",
+                    "type": "string",
+                    "description": "See: {@link Command#overloads}",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "ArgOpts",
+            "description": "Object containing options for\ncontrolling how command arguments will be parsed",
+            "properties": [
+                {
+                    "name": "stringArgs",
+                    "type": "boolean",
+                    "description": "Whether or not to parse all args as strings",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "separator",
+                    "type": "string",
+                    "description": "The charactor to separate args by",
+                    "default": "' '",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        }
+    ]
+}

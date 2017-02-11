@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Command - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Examples</h3><ul><li><a href="tutorial-NoCommandErrors.html">Not getting Command errors?</a></li><li><a href="tutorial-UsingBotStorage.html">Using bot-specific storage</a></li><li><a href="tutorial-UsingGuildStorage.html">Using guild-specific storage</a></li></ul><h3>Classes</h3><ul><li><a href="Bot.html">Bot</a><ul class='methods'><li data-type='method'><a href="Bot.html#defaultSettingExists">defaultSettingExists</a></li><li data-type='method'><a href="Bot.html#getPrefix">getPrefix</a></li><li data-type='method'><a href="Bot.html#loadCommand">loadCommand</a></li><li data-type='method'><a href="Bot.html#removeDefaultSetting">removeDefaultSetting</a></li><li data-type='method'><a href="Bot.html#setDefaultSetting">setDefaultSetting</a></li><li data-type='method'><a href="Bot.html#start">start</a></li></ul></li><li><a href="Command.html">Command</a><ul class='methods'><li data-type='method'><a href="Command.html#action">action</a></li><li data-type='method'><a href="Command.html#register">register</a></li></ul></li><li><a href="CommandDispatcher.html">CommandDispatcher</a><ul class='methods'><li data-type='method'><a href="CommandDispatcher.html#checkLimiter">checkLimiter</a></li><li data-type='method'><a href="CommandDispatcher.html#checkPermissions">checkPermissions</a></li><li data-type='method'><a href="CommandDispatcher.html#commandNotFoundError">commandNotFoundError</a></li><li data-type='method'><a href="CommandDispatcher.html#dispatch">dispatch</a></li><li data-type='method'><a href="CommandDispatcher.html#failedLimiterError">failedLimiterError</a></li><li data-type='method'><a href="CommandDispatcher.html#guildOnlyError">guildOnlyError</a></li><li data-type='method'><a href="CommandDispatcher.html#handleMessage">handleMessage</a></li><li data-type='method'><a href="CommandDispatcher.html#hasRoles">hasRoles</a></li><li data-type='method'><a href="CommandDispatcher.html#missingPermissionsError">missingPermissionsError</a></li><li data-type='method'><a href="CommandDispatcher.html#missingRolesError">missingRolesError</a></li><li data-type='method'><a href="CommandDispatcher.html#processContent">processContent</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li><li data-type='method'><a href="CommandLoader.html#reloadCommand">reloadCommand</a></li></ul></li><li><a href="CommandRegistry.html">CommandRegistry</a><ul class='methods'><li data-type='method'><a href="CommandRegistry.html#filterDMHelp">filterDMHelp</a></li><li data-type='method'><a href="CommandRegistry.html#filterDMUsable">filterDMUsable</a></li><li data-type='method'><a href="CommandRegistry.html#filterGuildUsable">filterGuildUsable</a></li><li data-type='method'><a href="CommandRegistry.html#findByNameOrAlias">findByNameOrAlias</a></li><li data-type='method'><a href="CommandRegistry.html#register">register</a></li></ul></li><li><a href="GuildStorage.html">GuildStorage</a><ul class='methods'><li data-type='method'><a href="GuildStorage.html#clear">clear</a></li><li data-type='method'><a href="GuildStorage.html#deincr">deincr</a></li><li data-type='method'><a href="GuildStorage.html#deincrSetting">deincrSetting</a></li><li data-type='method'><a href="GuildStorage.html#exists">exists</a></li><li data-type='method'><a href="GuildStorage.html#getItem">getItem</a></li><li data-type='method'><a href="GuildStorage.html#getSetting">getSetting</a></li><li data-type='method'><a href="GuildStorage.html#incr">incr</a></li><li data-type='method'><a href="GuildStorage.html#incrSetting">incrSetting</a></li><li data-type='method'><a href="GuildStorage.html#key">key</a></li><li data-type='method'><a href="GuildStorage.html#queue">queue</a></li><li data-type='method'><a href="GuildStorage.html#removeItem">removeItem</a></li><li data-type='method'><a href="GuildStorage.html#removeSetting">removeSetting</a></li><li data-type='method'><a href="GuildStorage.html#resetSettings">resetSettings</a></li><li data-type='method'><a href="GuildStorage.html#setItem">setItem</a></li><li data-type='method'><a href="GuildStorage.html#setSetting">setSetting</a></li><li data-type='method'><a href="GuildStorage.html#settingExists">settingExists</a></li><li data-type='method'><a href="GuildStorage.html#settingKey">settingKey</a></li></ul></li><li><a href="GuildStorageLoader.html">GuildStorageLoader</a><ul class='methods'><li data-type='method'><a href="GuildStorageLoader.html#cleanGuilds">cleanGuilds</a></li><li data-type='method'><a href="GuildStorageLoader.html#initNewGuilds">initNewGuilds</a></li><li data-type='method'><a href="GuildStorageLoader.html#loadStorages">loadStorages</a></li></ul></li><li><a href="GuildStorageRegistry.html">GuildStorageRegistry</a><ul class='methods'><li data-type='method'><a href="GuildStorageRegistry.html#findAll">findAll</a></li><li data-type='method'><a href="GuildStorageRegistry.html#findAllBySetting">findAllBySetting</a></li><li data-type='method'><a href="GuildStorageRegistry.html#get">get</a></li><li data-type='method'><a href="GuildStorageRegistry.html#resetAllGuildSettings">resetAllGuildSettings</a></li></ul></li><li><a href="LocalStorage.html">LocalStorage</a><ul class='methods'><li data-type='method'><a href="LocalStorage.html#clear">clear</a></li><li data-type='method'><a href="LocalStorage.html#deincr">deincr</a></li><li data-type='method'><a href="LocalStorage.html#exists">exists</a></li><li data-type='method'><a href="LocalStorage.html#getItem">getItem</a></li><li data-type='method'><a href="LocalStorage.html#incr">incr</a></li><li data-type='method'><a href="LocalStorage.html#key">key</a></li><li data-type='method'><a href="LocalStorage.html#queue">queue</a></li><li data-type='method'><a href="LocalStorage.html#removeItem">removeItem</a></li><li data-type='method'><a href="LocalStorage.html#setItem">setItem</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Bot.html">Bot</a></li><li><a href="module-Command.html">Command</a></li><li><a href="module-CommandDispatcher.html">CommandDispatcher</a></li><li><a href="module-CommandLoader.html">CommandLoader</a></li><li><a href="module-CommandRegistry.html">CommandRegistry</a></li><li><a href="module-GuildStorage.html">GuildStorage</a></li><li><a href="module-GuildStorageLoader.html">GuildStorageLoader</a></li><li><a href="module-GuildStorageRegistry.html">GuildStorageRegistry</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-Util.html">Util</a><ul class='methods'><li data-type='method'><a href="module-Util.html#.normalize">normalize</a></li><li data-type='method'><a href="module-Util.html#.padRight">padRight</a></li></ul></li><li><a href="module-version.html">version</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-ClientOptions.html">ClientOptions</a></li><li><a href="external-Collection.html">Collection</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-PermissionResolvable.html">PermissionResolvable</a></li><li><a href="external-User.html">User</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Command</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        Command
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="Command">
+		<span class="type-signature"></span>new <a href='#Command' style='color: black'>Command</a><span class="signature">(bot, info)</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    Command class to extend to create commands users can execute
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>bot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Bot.html">Bot</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Bot instance</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>info</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="global.html#CommandInfo">CommandInfo</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Object containing required command properties</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Properties</h3>
+
+        
+            
+<h4 class="name" id="aliases"><span class="type-signature"></span>.<a href='#aliases' style='color: black'>aliases</a><span class="type-signature"> :Array&lt;string></span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Aliases the command can be called by other than its name
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>Array&lt;string></dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="argOpts"><span class="type-signature"></span>.<a href='#argOpts' style='color: black'>argOpts</a><span class="type-signature"> :<a href="global.html#ArgOpts">ArgOpts</a></span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Options for how arguments should be parsed. See: <a href="global.html#ArgOpts"><code>ArgOpts</code></a>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd><a href="global.html#ArgOpts">ArgOpts</a></dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="bot"><span class="type-signature"></span>.<a href='#bot' style='color: black'>bot</a><span class="type-signature"> :<a href="Bot.html">Bot</a></span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Bot instance
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd><a href="Bot.html">Bot</a></dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="description"><span class="type-signature"></span>.<a href='#description' style='color: black'>description</a><span class="type-signature"> :string</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    A brief description of the command, displayed
+in the commands list via the Help command
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>string</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="extraHelp"><span class="type-signature"></span>.<a href='#extraHelp' style='color: black'>extraHelp</a><span class="type-signature"> :string</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Extra information about the command to be displayed
+by the Help command when 'help &lt;command&gt;' is called
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>string</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="group"><span class="type-signature"></span>.<a href='#group' style='color: black'>group</a><span class="type-signature"> :string</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    The command group that the command belongs to. Allows commands to be
+grouped for disabling. The group 'base' cannot be disabled.
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>string</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="guildOnly"><span class="type-signature"></span>.<a href='#guildOnly' style='color: black'>guildOnly</a><span class="type-signature"> :boolean</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Whether or not a command can only be used within a
+guild text channel
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>boolean</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="name"><span class="type-signature"></span>.<a href='#name' style='color: black'>name</a><span class="type-signature"> :string</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    The name of the command, used by the dispatcher
+to determine the command being executed
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>string</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="overloads"><span class="type-signature"></span>.<a href='#overloads' style='color: black'>overloads</a><span class="type-signature"> :string</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    The name of a base command to overload. Commands may only overload
+base commands so the <a href="Command.html#group"><code>Command#group</code></a> must be set to 'base' in
+order to overload. Commands may only be overloaded by name, not by alias
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>string</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="ownerOnly"><span class="type-signature"></span>.<a href='#ownerOnly' style='color: black'>ownerOnly</a><span class="type-signature"> :boolean</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Whether or not the command can be used by the bot owner(s).
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>boolean</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see"><b>See:</b> <a href="Bot.html#config"><code>Bot#config.owner</code></a></dt>
+	<dd class="tag-see">&#8203;</dd>
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="permissions"><span class="type-signature"></span>.<a href='#permissions' style='color: black'>permissions</a><span class="type-signature"> :Array&lt;<a href="external-PermissionResolvable.html">PermissionResolvable</a>></span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Array of permissions required by the command
+caller to be able to execute the command in the guild the command is called in.
+<br><br>
+If any permissions are provided the command's `guildOnly` property will be automatically set to true
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>Array&lt;<a href="external-PermissionResolvable.html">PermissionResolvable</a>></dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="roles"><span class="type-signature"></span>.<a href='#roles' style='color: black'>roles</a><span class="type-signature"> :Array&lt;string></span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    Array of roles required to use the command. If the command caller
+has any of the roles in the array, they will be able to use the command
+<br><br>
+If any roles are provided the command's `guildOnly` property will be automatically set to true
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>Array&lt;string></dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="usage"><span class="type-signature"></span>.<a href='#usage' style='color: black'>usage</a><span class="type-signature"> :string</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    An example of command usage. The token '&lt;prefix&gt;' will
+be replaced by the guild-specific command prefix in the Help command when
+'help &lt;command&gt;' is called
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>string</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="action">
+		<span class="type-signature"></span>.<a href='#action' style='color: black'>action</a><span class="signature">(message, args, mentions, original)</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    Action to be executed when the command is called. The following parameters
+are what command actions will be passed by the <a href="CommandDispatcher.html"><code>CommandDispatcher</code></a> whenever
+a command is called. Be sure to receive these in proper order when writing
+new commands
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="external-Message.html">Message</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Discord.js message object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>Array&lt;<a href="global.html#args">args</a>></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array containing the args parsed from the command calling message</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mentions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>Array&lt;<a href="external-User.html">User</a>></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array containing the Discord.js User
+objects parsed from the mentions contained in a message</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>original</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The original raw content of the message that called the command</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id="register">
+		<span class="type-signature"></span>.<a href='#register' style='color: black'>register</a><span class="signature">()</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    Assert <a href="Command.html#action"><code>Command#action</code></a> is typeof Function, finishing the
+command creation process.<br>Called by <a href="CommandRegistry.html#register"><code>CommandRegistry#register</code></a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+	<div align="right">
+    	<a href="https://github.com/jsdoc3/jsdoc">JSDoc3.5.0-dev</a> | Minami
+	</div>
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
