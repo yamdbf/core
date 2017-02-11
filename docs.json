@@ -304,6 +304,14 @@
                         ],
                         "description": ""
                     }
+                },
+                {
+                    "name": "sweepStorages",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Clean out any guild storage/settings that no longer have\nan associated guild",
+                    "parameters": [],
+                    "examples": []
                 }
             ],
             "events": [
