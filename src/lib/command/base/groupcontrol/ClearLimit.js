@@ -22,6 +22,7 @@ export default class ClearLimit extends Command
 	async action(message, args, mentions) // eslint-disable-line no-unused-vars
 	{
 		let commandName = args[0];
+		if (!commandName) return this._respond(message, `You must provide a command to clear limits for.`);
 		let command = this.bot.commands.find(c => normalize(c.name) === normalize(commandName));
 		if (!command) return this._respond(message, `Failed to find a command with the name \`${commandName}\``);
 

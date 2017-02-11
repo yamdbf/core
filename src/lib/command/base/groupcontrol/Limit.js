@@ -22,6 +22,7 @@ export default class Limit extends Command
 	async action(message, args, mentions) // eslint-disable-line no-unused-vars
 	{
 		let commandName = args.shift();
+		if (!commandName) return this._respond(message, `You must provide a command to limit.`);
 		const command = this.bot.commands.find(c => normalize(commandName) === normalize(c.name));
 		if (!command) return this._respond(message, `Failed to find a command with the name \`${commandName}\``);
 		if (command.group === 'base') this._respond(message, `Cannot limit base commands.`);
