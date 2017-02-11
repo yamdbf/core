@@ -297,8 +297,8 @@ export default class GuildStorage
 
 	/**
 	 * Allow access to a storage/settings item only when it is not currently being
-	 * accessed. Waits for other nonConcurrentAccess operations to finish
-	 * before proceeding with callback
+	 * accessed. Waits for other queued operations to finish before proceeding
+	 * with the supplied callback
 	 * @memberof GuildStorage
 	 * @instance
 	 * @param {string} key - the storage key you will be accessing

@@ -9,7 +9,7 @@
         }
     },
 	"opts": {
-        "destination": "./docs/",
+        "destination": "../yamdbf-docs/",
         "recurse": true,
         "template": "./node_modules/minami"
     }
