@@ -48,10 +48,10 @@ export const Util = _Util;
 /** @exports version */
 export const version = require(path.join(__dirname, '..', 'package')).version;
 
-/** @external {Client} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Client} */
-/** @external {ClientOptions} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/typedef/ClientOptions} */
-/** @external {Collection} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Collection} */
-/** @external {Guild} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Guild} */
-/** @external {Message} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/Message} */
-/** @external {User} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/class/User} */
-/** @external {PermissionResolvable} See: {@link http://hydrabolt.github.io/discord.js/#!/docs/tag/master/typedef/PermissionResolvable} */
+/** @external {Client} See: {@link https://discord.js.org/#/docs/main/stable/class/Client} */
+/** @external {ClientOptions} See: {@link https://discord.js.org/#/docs/main/stable/typedef/ClientOptions} */
+/** @external {Collection} See: {@link https://discord.js.org/#/docs/main/stable/class/Collection} */
+/** @external {Guild} See: {@link https://discord.js.org/#/docs/main/stable/class/Guild} */
+/** @external {Message} See: {@link https://discord.js.org/#/docs/main/stable/class/Message} */
+/** @external {User} See: {@link https://discord.js.org/#/docs/main/stable/class/User} */
+/** @external {PermissionResolvable} See: {@link https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable} */
