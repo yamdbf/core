@@ -14,6 +14,8 @@ import _CommandRegistry from './lib/command/CommandRegistry';
 import _CommandDispatcher from './lib/command/CommandDispatcher';
 import _Util from './lib/Util';
 
+import _resolveArgs from './lib/command/middleware/ResolveArgs';
+
 /** @exports Bot */
 export const Bot = _Bot;
 export default Bot;
@@ -44,6 +46,8 @@ export const CommandDispatcher = _CommandDispatcher;
 
 /** @exports Util */
 export const Util = _Util;
+
+export const Middleware = { resolveArgs: _resolveArgs };
 
 /** @exports version */
 export const version = require(path.join(__dirname, '..', 'package')).version;

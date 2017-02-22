@@ -85,6 +85,7 @@ declare module 'yamdbf'
 						mentions: User[],
 						original: string): any;
 		public register(): void;
+		public use(fn: (message: Message, args: any[]) => [Message, any[]]): this;
 
 		protected _respond(message: Message, response: string, code: string): Promise<Message>;
 	}

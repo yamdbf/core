@@ -61,10 +61,13 @@ export default class CommandDispatcher
 		if (guildStorage) message.guild.storage = guildStorage;
 
 		let middlewarePassed = true;
-		for (const middleware of command._middleware)
+		for (let middleware of command._middleware)
+		{
+			middleware = middleware.bind(command);
 			try
 			{
 				let result = middleware(message, args);
+				if (result instanceof Promise) result = await result;
 				if (!(result instanceof Array))
 				{
 					if (typeof result === 'string') message.channel.send(result);
@@ -79,6 +82,7 @@ export default class CommandDispatcher
 				message.channel.send(err.toString());
 				break;
 			}
+		}
 
 		if (middlewarePassed)
 			await this.dispatch(command, message, args, mentions, original).catch(console.error);
