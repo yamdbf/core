@@ -175,6 +175,9 @@ export default class Command
 		 */
 		this.overloads = info.overloads || null;
 
+		// Middleware function storage for the Command instance
+		this._middleware = [];
+
 		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
 
 		// Default guildOnly to true if permissions/roles are given
@@ -215,6 +218,44 @@ export default class Command
 		let name = this.constructor.name;
 		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 		if (!(this.action instanceof Function)) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
+	}
+
+	/**
+	 * Adds a middleware function to be used when the command is run
+	 * to make modifications to args or determine if the command can
+	 * be run. Takes a function that will receive the message object
+	 * and the array of args.
+	 *
+	 * A middleware function must return an array where the first item
+	 * is the message object and the second item is the args array.
+	 * If a middleware function returns a string, or throws a string/error,
+	 * it will be sent to the calling channel as a message and the command
+	 * execution will be aborted. If a middleware function does not return
+	 * anything or returns something other than an array or string, it will
+	 * fail silently.
+	 *
+	 * Example:
+	 * ```js
+	 * this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
+	 * ```
+	 * This will add a middleware function to the command that will attempt
+	 * to transform all args to uppercase. This will of course fail if any
+	 * of the args are not a string. This could be ensured with the `stringArgs`
+	 * `argOpts` flag, or via another middleware function added before this one
+	 * that converts all args to strings.
+	 *
+	 * Note: Middleware functions should only be added to a command one time each,
+	 * and thus should be added in the Command's constructor. Multiple middleware
+	 * functions can be added to a command via multiple calls to this method
+	 * @memberof Command
+	 * @instance
+	 * @param {Function} fn - Middleware function. `(message, args) => [message, args]`
+	 * @returns {Command} This command instance
+	 */
+	use(fn)
+	{
+		this._middleware.push(fn);
+		return this;
 	}
 
 	// Send provided response text to the command's calling channel

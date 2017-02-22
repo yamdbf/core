@@ -60,7 +60,29 @@ export default class CommandDispatcher
 		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
 		if (guildStorage) message.guild.storage = guildStorage;
 
-		await this.dispatch(command, message, args, mentions, original).catch(console.error);
+		let middlewarePassed = true;
+		for (const middleware of command._middleware)
+			try
+			{
+				let result = middleware(message, args);
+				if (!(result instanceof Array))
+				{
+					if (typeof result === 'string') message.channel.send(result);
+					middlewarePassed = false;
+					break;
+				}
+				[message, args] = result;
+			}
+			catch (err)
+			{
+				middlewarePassed = false;
+				message.channel.send(err.toString());
+				break;
+			}
+
+		if (middlewarePassed)
+			await this.dispatch(command, message, args, mentions, original).catch(console.error);
+
 		const dispatchEnd = now() - dispatchStart;
 
 		/**
@@ -147,7 +169,7 @@ export default class CommandDispatcher
 			.map(a => typeof a === 'string' ? a.trim() : a)
 			.filter(a => a !== '' && !(typeof a !== 'string' && isNaN(a)));
 
-		return { command: command, mentions: mentions, args: args, content: content, dm: dm };
+		return { command, mentions, args, content, dm };
 	}
 
 	/**
