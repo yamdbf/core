@@ -240,6 +240,7 @@ declare module 'yamdbf'
 
 	type ValidArgTypes = 'String' | 'Number' | 'User' | 'Member' | 'Channel' | 'Role';
 	export class Middleware {
-		static resolveArgs(argTypes: { [name: string]: ValidArgTypes }): (message, any) => [Message, any[]];
+		static resolveArgs(argTypes: { [name: string]: ValidArgTypes }): (message: Message, args: any[]) => [Message, any[]];
+		static expect(argTypes: { [name: string]: ValidArgTypes }): (message: Message, args: any[]) => [Message, any[]];
 	}
 }

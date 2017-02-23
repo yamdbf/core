@@ -15,6 +15,7 @@ import _CommandDispatcher from './lib/command/CommandDispatcher';
 import _Util from './lib/Util';
 
 import _resolveArgs from './lib/command/middleware/ResolveArgs';
+import _expect from './lib/command/middleware/Expect';
 
 /** @exports Bot */
 export const Bot = _Bot;
@@ -47,7 +48,7 @@ export const CommandDispatcher = _CommandDispatcher;
 /** @exports Util */
 export const Util = _Util;
 
-export const Middleware = { resolveArgs: _resolveArgs };
+export const Middleware = { resolveArgs: _resolveArgs, expect: _expect };
 
 /** @exports version */
 export const version = require(path.join(__dirname, '..', 'package')).version;
