@@ -127,7 +127,6 @@ export default class Command
 		 * @instance
 		 */
 		this.argOpts = info.argOpts || {};
-		this.argOpts.stringArgs = this.argOpts.stringArgs || false;
 		this.argOpts.separator = this.argOpts.separator || ' ';
 
 		/**
@@ -291,6 +290,5 @@ export default class Command
 /**
  * @typedef {Object} ArgOpts - Object containing options for
  * controlling how command arguments will be parsed
- * @property {boolean} stringArgs - Whether or not to parse all args as strings
  * @property {string} [separator=' '] - The charactor to separate args by
  */
