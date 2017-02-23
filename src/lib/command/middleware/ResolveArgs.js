@@ -1,28 +1,39 @@
 'use babel';
 'use strict';
 
+import { normalize } from '../../Util';
+
 /** @module Middleware */
 
 /**
- * Takes an array of argument names and an array of associated
- * types matched by index and generates a middleware function
- * that resolves args to their specified type or throws errors
- * for any invalid input.
- * @param {string[]} names - An array of argument names
- * @param {string[]} types - An array of argument types. Valid types are:
- * 							 String, Number, User, Member, Role, Channel
- * @returns {*}
+ * Takes an object mapping argument names to argument types that
+ * resolves args to their specified type or throws errors for
+ * any invalid input.
+ *
+ * Valid types are:
+ * `String`, `Number`, `User`, `Member`, `Role`, `Channel`
+ *
+ * Example:
+ * ```
+ * { '<mem>': 'Member', '<age>': 'Number', '<...desc>': 'String' }
+ * ```
+ *
+ * Supports `...` in the argument name as the final argument to
+ * gather the remaining args into one string
+ * @param {object} argTypes An object of argument names mapped to argument types
+ * @returns {Function}
  */
-export default function resolveArgs(names, types)
+export default function resolveArgs(argTypes)
 {
 	return async function(message, args)
 	{
-		function normalize(text)
-		{
-			return text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
-		}
+		const names = Object.keys(argTypes);
+		const types = names.map(a => argTypes[a]);
+
+		const normalizeUser = text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
 
 		const prefix = message.guild.storage.getSetting('prefix');
+		const usage = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 		const idRegex = /^(?:<@!?)?(\d+)>?$/;
 		for (const [index, arg] of args.entries())
 		{
@@ -49,37 +60,37 @@ export default function resolveArgs(names, types)
 			{
 				args[index] = parseFloat(arg);
 				if (isNaN(args[index])) throw new Error(
-					`Arg \`${names[index]}\` could not be resolved to a number.\nUsage: \`${
-						this.usage.replace('<prefix>', prefix)}\``);
+					`Arg \`${names[index]}\` could not be resolved to a number.\n${usage}`);
 			}
 
 			else if (types[index] === 'User')
 			{
 				let user;
-				if (idRegex.test(args[index]))
+				if (idRegex.test(arg))
 				{
 					try
 					{
-						user = await message.client.fetchUser(args[index].match(idRegex)[1]);
+						user = await message.client.fetchUser(arg.match(idRegex)[1]);
 					}
 					catch (err)
 					{
-						throw new Error(`in arg \`${names[index]}\`: Failed to find a user with that ID.`);
+						throw new Error(`in arg \`${names[index]}\`: Failed to find a user with that ID.\n${usage}`);
 					}
-					if (!user) throw new Error(`in arg \`${names[index]}\`: Failed to find a user with that ID.`);
+					if (!user) throw new Error(`in arg \`${names[index]}\`: Failed to find a user with that ID.\n${usage}`);
 				}
 				else
 				{
-					const normalized = normalize(args[index]);
-					let users = this.bot.users.filter(a => normalize(a.username).includes(normalized)
-						|| normalize(`${a.username}#${a.discriminator}`).includes(normalized));
+					const normalized = normalizeUser(arg);
+					let users = this.bot.users.filter(a => normalizeUser(a.username).includes(normalized)
+						|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
 
 					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${names[index]}\`:\n${
-						users.map(a => `\`${a.username}#${a.discriminator}\``).join(', ')}\nPlease refine your search, or consider using an ID/mention`);
+						users.map(a => `\`${a.username}#${a.discriminator}\``).join(', ')
+						}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
 
 					user = users.first();
 					if (!user) throw new Error(
-						`in arg \`${names[index]}\`: Failed to find a user containing the text \`${args[index]}\``);
+						`in arg \`${names[index]}\`: Failed to find a user containing the text \`${arg}\`\n${usage}`);
 				}
 				args[index] = user;
 			}
@@ -87,45 +98,93 @@ export default function resolveArgs(names, types)
 			else if (types[index] === 'Member')
 			{
 				let member;
-				if (idRegex.test(args[index]))
+				if (idRegex.test(arg))
 				{
 					try
 					{
-						member = await message.guild.fetchMember(args[index].match(idRegex)[1]);
+						member = await message.guild.fetchMember(arg.match(idRegex)[1]);
 					}
 					catch (err)
 					{
-						throw new Error(`in arg \`${names[index]}\`: Failed to find a member with that ID.`);
+						throw new Error(`in arg \`${names[index]}\`: Failed to find a member with that ID.\n${usage}`);
 					}
-					if (!member) throw new Error(`in arg \`${names[index]}\`: Failed to find a member with that ID.`);
+					if (!member) throw new Error(`in arg \`${names[index]}\`: Failed to find a member with that ID.\n${usage}`);
 				}
 				else
 				{
-					const normalized = normalize(args[index]);
-					let members = message.guild.members.filter(a => normalize(a.displayName).includes(normalized)
-						|| normalize(a.user.username).includes(normalized)
-						|| normalize(`${a.user.username}#${a.user.discriminator}`).includes(normalized));
+					const normalized = normalizeUser(arg);
+					let members = message.guild.members.filter(a => normalizeUser(a.displayName).includes(normalized)
+						|| normalizeUser(a.user.username).includes(normalized)
+						|| normalizeUser(`${a.user.username}#${a.user.discriminator}`).includes(normalized));
 
 					if (members.size > 1) throw String(`Found multiple potential matches for arg \`${names[index]}\`:\n${
 						members.map(a => `\`${a.user.username}#${a.user.discriminator}\``)
-							.join(', ')}\nPlease refine your search, or consider using an ID/mention`);
+							.join(', ')}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
 
 					member = members.first();
 					if (!member) throw new Error(
-						`in arg \`${names[index]}\`: Failed to find a member containing the text \`${args[index]}\``);
+						`in arg \`${names[index]}\`: Failed to find a member containing the text \`${arg}\`\n${usage}`);
 				}
 				args[index] = member;
 			}
 
-			// else if (types[index] === 'Channel')
-			// {
+			else if (types[index] === 'Channel')
+			{
+				let channel;
+				const channelRegex = /^(?:<#)?(\d+)>?$/;
+				if (channelRegex.test(arg))
+				{
+					const id = arg.match(channelRegex)[1];
+					channel = message.guild.channels.get(id);
+					if (!channel) throw new Error(`in arg \`${names[index]}\`: Failed to find a channel with that ID.\n${usage}`);
+				}
+				else
+				{
+					const normalized = normalize(arg);
+					let channels = message.guild.channels.filter(a => a.type === 'text')
+						.filter(a => normalize(a.name).includes(normalized));
 
-			// }
+					if (channels.size > 1) throw String(`Found multiple potential matches for arg \`${names[index]}\`:\n${
+						channels.map(a => `\`#${a.name}\``).join(', ')
+						}\nPlease refine your search, or consider using an ID/channel link\n${usage}`);
 
-			// else if (types[index] === 'Role')
-			// {
+					channel = channels.first();
+					if (!channel) throw new Error(
+						`in arg \`${names[index]}\`: Failed to find a channel containing the text \`${arg}\`\n${usage}`);
+				}
+				args[index] = channel;
+			}
 
-			// }
+			else if (types[index] === 'Role')
+			{
+				let role;
+				const roleRegex = /^(?:<@&)?(\d+)>?$/;
+				if (roleRegex.test(arg))
+				{
+					const id = arg.match(roleRegex)[1];
+					role = message.guild.roles.get(id);
+					if (!role) throw new Error(`in arg \`${names[index]}\`: Failed to find a role with that ID.\n${usage}`);
+				}
+				else
+				{
+					const normalized = normalize(arg);
+					let roles = message.guild.roles.filter(a => normalize(a.name).includes(normalized));
+
+					if (roles.size > 1) throw String(`Found multiple potential matches for arg \`${names[index]}\`:\n${
+						roles.map(a => `\`${a.name}\``).join(', ')
+						}\nPlease refine your search, or consider using an ID/role mention\n${usage}`);
+
+					role = roles.first();
+					if (!role) throw new Error(
+						`in arg \`${names[index]}\`: Failed to find a role containing the text \`${arg}\`\n${usage}`);
+				}
+				args[index] = role;
+			}
+
+			else
+			{
+				throw new Error(`in arg \`${names[index]}\`: Type \`${types[index]}\` is not a valid argument type.`);
+			}
 		}
 
 		return [message, args];

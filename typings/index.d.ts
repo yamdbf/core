@@ -238,7 +238,8 @@ declare module 'yamdbf'
 		public storage?: GuildStorage;
 	}
 
+	type ValidArgTypes = 'String' | 'Number' | 'User' | 'Member' | 'Channel' | 'Role';
 	export class Middleware {
-		static resolveArgs(names: string[], types: string[]): (message, any) => [Message, any[]];
+		static resolveArgs(argTypes: { [name: string]: ValidArgTypes }): (message, any) => [Message, any[]];
 	}
 }

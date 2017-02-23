@@ -62,11 +62,9 @@ export default class CommandDispatcher
 
 		let middlewarePassed = true;
 		for (let middleware of command._middleware)
-		{
-			middleware = middleware.bind(command);
 			try
 			{
-				let result = middleware(message, args);
+				let result = middleware.call(command, message, args);
 				if (result instanceof Promise) result = await result;
 				if (!(result instanceof Array))
 				{
@@ -82,7 +80,6 @@ export default class CommandDispatcher
 				message.channel.send(err.toString());
 				break;
 			}
-		}
 
 		if (middlewarePassed)
 			await this.dispatch(command, message, args, mentions, original).catch(console.error);
