@@ -237,4 +237,8 @@ declare module 'yamdbf'
 	{
 		public storage?: GuildStorage;
 	}
+
+	export class Middleware {
+		static resolveArgs(names: string[], types: string[]): (message, any) => [Message, any[]];
+	}
 }

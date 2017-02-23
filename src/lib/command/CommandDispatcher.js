@@ -133,24 +133,24 @@ export default class CommandDispatcher
 		let content;
 		if (botMention && !duplicateMention)
 		{
-			content = message.content.replace(/<@!?\d+>/g, '').trim();
+			content = message.content.replace(/^<@!?\d+>/, '').trim();
 			mentions = mentions.slice(1);
 		}
 		else if (botMention && duplicateMention)
 		{
-			content = message.content.replace(/<@!?\d+>/g, '').trim();
+			content = message.content.replace(/^<@!?\d+>/, '').trim();
 		}
 		else if (!dm && (message.content.startsWith(this._bot.getPrefix(message.guild))
 			|| !this._bot.getPrefix(message.guild)))
 		{
 			content = message.content.slice(this._bot.getPrefix(message.guild)
-				? this._bot.getPrefix(message.guild).length : 0).replace(/<@!?\d+>/g, '').trim();
+				? this._bot.getPrefix(message.guild).length : 0).trim();
 		}
 		else if (dm)
 		{
 			if (/<@!?\d+>.+/.test(message.content))
 			{
-				content = message.content.replace(/<@!?\d+>/g, '').trim();
+				content = message.content.replace(/^<@!?\d+>/, '').trim();
 				mentions = mentions.slice(1);
 			}
 			else
