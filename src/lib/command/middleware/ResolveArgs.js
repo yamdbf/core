@@ -63,7 +63,7 @@ export default function resolveArgs(argTypes)
 			{
 				args[index] = parseFloat(arg);
 				if (isNaN(args[index])) throw new Error(
-					`Arg \`${name}\` could not be resolved to a number.\n${usage}`);
+					`in arg \`${name}\`: \`${arg}\` could not be resolved to a number.\n${usage}`);
 			}
 
 			else if (type === 'User')
@@ -77,9 +77,9 @@ export default function resolveArgs(argTypes)
 					}
 					catch (err)
 					{
-						throw new Error(`in arg \`${name}\`: Failed to find a user with that ID.\n${usage}`);
+						throw new Error(`in arg \`${name}\`: Failed to find a user with ID \`${arg}\`.\n${usage}`);
 					}
-					if (!user) throw new Error(`in arg \`${name}\`: Failed to find a user with that ID.\n${usage}`);
+					if (!user) throw new Error(`in arg \`${name}\`:  Failed to find a user with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
@@ -109,9 +109,9 @@ export default function resolveArgs(argTypes)
 					}
 					catch (err)
 					{
-						throw new Error(`in arg \`${name}\`: Failed to find a member with that ID.\n${usage}`);
+						throw new Error(`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
 					}
-					if (!member) throw new Error(`in arg \`${name}\`: Failed to find a member with that ID.\n${usage}`);
+					if (!member) throw new Error(`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
@@ -139,7 +139,7 @@ export default function resolveArgs(argTypes)
 				{
 					const id = arg.match(channelRegex)[1];
 					channel = message.guild.channels.get(id);
-					if (!channel) throw new Error(`in arg \`${name}\`: Failed to find a channel with that ID.\n${usage}`);
+					if (!channel) throw new Error(`in arg \`${name}\`: Failed to find a channel with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
@@ -166,7 +166,7 @@ export default function resolveArgs(argTypes)
 				{
 					const id = arg.match(roleRegex)[1];
 					role = message.guild.roles.get(id);
-					if (!role) throw new Error(`in arg \`${name}\`: Failed to find a role with that ID.\n${usage}`);
+					if (!role) throw new Error(`in arg \`${name}\`: Failed to find a role with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
