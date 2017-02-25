@@ -10,12 +10,17 @@ export default function expect(argTypes)
 		const names = Object.keys(argTypes);
 		const types = names.map(a => argTypes[a]);
 
-		for (const [index, arg] of args.entries())
-		{
-			if (index > types.length - 1) break;
+		const prefix = message.guild.storage.getSetting('prefix');
+		const usage = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 
-			const name = names[index];
+		for (const [index, name] of names.entries())
+		{
+			const arg = args[index];
 			const type = types[index];
+
+			if (typeof args[index] === 'undefined' || args[index] === null)
+				throw new Error(`Missing or null value for arg: \`${name}\`, expected \`${type}\`\n${usage}`);
+
 			if (type === 'String')
 			{
 				if (typeof arg !== 'string')
@@ -23,8 +28,9 @@ export default function expect(argTypes)
 			}
 			else if (type === 'Number')
 			{
-				if (!(isNaN(arg) && isFinite(arg)))
-					throw new Error(`in arg \`${name}\`: \`Number\` expected, got \`${arg.constructor.name}\``);
+				if (!isNaN(arg) && !isFinite(arg))
+					throw new Error(`in arg \`${name}\`: \`Number\` expected, got \`${
+						arg === Infinity ? Infinity : arg.constructor.name}\``);
 			}
 			else if (type === 'User')
 			{
