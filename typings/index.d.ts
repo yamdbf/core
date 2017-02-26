@@ -63,7 +63,7 @@ declare module 'yamdbf'
 		config: any;
 	}
 
-	export class Command<T>
+	export class Command<T extends Bot>
 	{
 		public constructor(bot: T, info: CommandInfo);
 		public bot: T;
