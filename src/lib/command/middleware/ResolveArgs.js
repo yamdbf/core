@@ -11,7 +11,7 @@ import { normalize } from '../../Util';
  * any invalid input.
  *
  * Valid types are:
- * `String`, `Number`, `User`, `Member`, `Role`, `Channel`
+ * `String`, `Number`, `User`, `Member`, `BannedUser`, `Role`, `Channel`
  *
  * Example:
  * ```

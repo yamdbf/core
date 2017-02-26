@@ -3,6 +3,30 @@
 
 import { User, GuildMember, TextChannel, Role } from 'discord.js';
 
+/** @module Middleware */
+
+/**
+ * Takes an object mapping argument names to argument types that
+ * checks the types of passed arguments and ensures required
+ * arguments are present and valid. Should be added to the
+ * command AFTER any and all middleware functions that modify
+ * args in any way are added.
+ *
+ * Valid types are:
+ * `String`, `Number`, `User`, `Member`, `Role`, `Channel`
+ *
+ * Example:
+ * ```
+ * { '<mem>': 'Member', '<age>': 'Number', '<desc>': 'String' }
+ * ```
+ *
+ * If verifying a `BannedUser` returned from the ResolveArgs middleware,
+ * use the `User` type.
+ *
+ * This middleware does not modify args in any way.
+ * @param {object} argTypes An object of argument names mapped to argument types
+ * @returns {Function}
+ */
 export default function expect(argTypes)
 {
 	return function(message, args)
