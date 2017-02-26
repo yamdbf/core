@@ -13,7 +13,7 @@ import { User, GuildMember, TextChannel, Role } from 'discord.js';
  * args in any way are added.
  *
  * Valid types are:
- * `String`, `Number`, `User`, `Member`, `Role`, `Channel`
+ * `String`, `Number`, `User`, `Member`, `Role`, `Channel`, `Any`
  *
  * Example:
  * ```
@@ -44,6 +44,8 @@ export default function expect(argTypes)
 
 			if (typeof args[index] === 'undefined' || args[index] === null)
 				throw new Error(`Missing or null value for arg: \`${name}\`, expected \`${type}\`\n${usage}`);
+
+			if (type === 'Any') continue;
 
 			if (type === 'String')
 			{
