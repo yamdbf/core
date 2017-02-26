@@ -81,7 +81,7 @@ declare module 'yamdbf'
 		public overloads: string;
 
 		public action(message: Message,
-						args: Array<number | string>,
+						args: any[],
 						mentions: User[],
 						original: string): any;
 		public register(): void;
@@ -107,7 +107,6 @@ declare module 'yamdbf'
 	}
 
 	type ArgOpts = {
-		stringArgs?: boolean;
 		separator?: string;
 	}
 
