@@ -131,6 +131,32 @@ export default function resolveArgs(argTypes)
 				args[index] = member;
 			}
 
+			else if (type === 'BannedUser')
+			{
+				const bannedUsers = await message.guild.fetchBans();
+				let user;
+				if (idRegex.test(arg))
+				{
+					user = bannedUsers.get(arg.match(idRegex)[1]);
+					if (!user) throw new Error(`in arg \`${name}\`:  Failed to find a banned user with ID \`${arg}\`.\n${usage}`);
+				}
+				else
+				{
+					const normalized = normalizeUser(arg);
+					let users = bannedUsers.filter(a => normalizeUser(a.username).includes(normalized)
+						|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
+
+					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
+						users.map(a => `\`${a.username}#${a.discriminator}\``).join(', ')
+						}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
+
+					user = users.first();
+					if (!user) throw new Error(
+						`in arg \`${name}\`: Failed to find a banned user containing the text \`${arg}\`\n${usage}`);
+				}
+				args[index] = user;
+			}
+
 			else if (type === 'Channel')
 			{
 				let channel;
