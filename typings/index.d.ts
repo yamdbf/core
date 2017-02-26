@@ -94,8 +94,8 @@ declare module 'yamdbf'
 		name: string;
 		description: string;
 		usage: string;
-		extraHelp: string;
 		group: string;
+		extraHelp?: string;
 		aliases?: string[];
 		guildOnly?: boolean;
 		hidden?: boolean;
