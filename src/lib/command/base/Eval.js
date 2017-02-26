@@ -12,33 +12,42 @@ export default class Eval extends Command
 	{
 		super(bot, {
 			name: 'eval',
-			aliases: [],
 			description: 'Evaluate provided Javascript code',
-			usage: '<prefix>eval [code]',
-			extraHelp: '',
+			usage: '<prefix>eval <code>',
 			group: 'base',
-			argOpts: { stringArgs: true },
 			ownerOnly: true
 		});
 	}
 
-	async action(message, args, mentions, original)
+	action(message, args, mentions, original)
 	{
 		const code = original.split(this.name).slice(1).join(this.name).trim(); // eslint-disable-line
-		if (!code) return this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
-
-		try
+		if (!code)
 		{
-			let evaled = eval(code);
-			if (evaled instanceof Promise) evaled = await evaled;
-			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
-			return this._respond(message,
-				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
+			this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
+			return;
 		}
-		catch (err)
+
+		let evaled = eval(code);
+		if (evaled instanceof Promise)
 		{
-			return this._respond(message,
-				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
+			evaled.then(res =>
+			{
+				if (typeof res !== 'string') res = inspect(res, { depth: 0 });
+				this._respond(message,
+					`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(res)}\n\`\`\``);
+			})
+			.catch(err =>
+			{
+				this._respond(message,
+					`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
+			});
+		}
+		else
+		{
+			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
+			this._respond(message,
+				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
 		}
 	}
 
