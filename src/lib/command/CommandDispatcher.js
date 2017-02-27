@@ -18,47 +18,36 @@ export default class CommandDispatcher
 		if (!this._bot.passive) this._bot.on('message', message => this.handleMessage(message));
 	}
 
-	/**
-	 * Determine if message is a valid command call and send to {@link CommandDispatcher#dispatch}
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {external:Message} message - Discord.js message object
-	 * @returns {*}
-	 */
+	// Handle received messages
 	async handleMessage(message)
 	{
 		const dispatchStart = now();
-		let config = this._bot.config;
-		if (this._bot.selfbot && message.author !== this._bot.user) return false;
-		if (message.author.bot) return false;
-		let original = message.content;
+		if (this._bot.selfbot && message.author !== this._bot.user) return;
+		if (message.author.bot) return;
 
-		let { command, mentions, args, content, dm } = this.processContent(message);
-		message.content = content;
+		const dm = ['dm', 'group'].includes(message.channel.type);
+		if (!dm) message.guild.storage = this._bot.guildStorages.get(message.guild);
 
-		if (dm && !command && !this._bot.selfbot && this._bot.noCommandErr)
-		{
-			return this.commandNotFoundError(message);
-		}
-		else if (!command)
-		{
-			message.content = original;
-			return false;
-		}
+		const [commandCalled, command, prefix] = this.isCommandCalled(message);
+		if (!commandCalled) return;
 
-		let guildStorage = !dm ? this._bot.guildStorages.get(message.guild) : null;
-		if (!dm && guildStorage.settingExists('disabledGroups')
-			&& guildStorage.getSetting('disabledGroups').includes(command.group)) return false;
-		if (command.ownerOnly && !config.owner.includes(message.author.id)) return false;
-		if (dm && command.guildOnly) return this.guildOnlyError(message);
+		if (!(!dm && prefix === message.guild.storage.getSetting('prefix')) && prefix !== ''
+			&& (message.content.match(new RegExp(`<@!?${this._bot.user.id}>`, 'g')) || []).length === 1)
+			message.mentions.users.delete(this._bot.user.id);
 
-		let missingPermissions = this.checkPermissions(dm, message, command);
-		if (missingPermissions.length > 0) return this.missingPermissionsError(missingPermissions, message);
+		let validCaller = false;
+		try { validCaller = this.testCommand(command, message); }
+		catch (err) { message[this._bot.selfbot ? 'channel' : 'author'].send(err); }
+		if (!validCaller) return;
 
-		if (!this.checkLimiter(dm, message, command)) return this.failedLimiterError(message, command);
-
-		if (!this.hasRoles(dm, message, command)) return this.missingRolesError(message, command);
-		if (guildStorage) message.guild.storage = guildStorage;
+		let args = message.content.trim()
+			.slice(prefix.length).trim()
+			.split(' ')
+			.slice(1)
+			.join(' ')
+			.split(command.argOpts.separator)
+			.map(a => a.trim())
+			.filter(a => a !== '');
 
 		let middlewarePassed = true;
 		for (let middleware of command._middleware)
@@ -82,7 +71,7 @@ export default class CommandDispatcher
 			}
 
 		if (middlewarePassed)
-			await this.dispatch(command, message, args, mentions, original).catch(console.error);
+			await this.dispatch(command, message, args).catch(console.error);
 
 		const dispatchEnd = now() - dispatchStart;
 
@@ -93,113 +82,70 @@ export default class CommandDispatcher
 		 * @event event:command
 		 * @param {string} name - Name of the called command
 		 * @param {args[]} args - Args passed to the called command
-		 * @param {string} original - Original content of the message that called the command
 		 * @param {number} execTime - Time command took to execute
 		 * @param {external:Message} message - Message that triggered the command
 		 */
-		return this._bot.emit('command', command.name, args, original, dispatchEnd, message);
+		this._bot.emit('command', command.name, args, dispatchEnd, message);
 	}
 
-	/**
-	 * Processes message content, finding the command to execute and creating an
-	 * object containing the found command, mentions, args, processed content, and
-	 * if the message is a DM
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {external:Message} message - Discord.js message object
-	 * @returns {Object}
-	 */
-	processContent(message)
+	// Return if a command has been called, the called command
+	// and the prefix used to call the command
+	isCommandCalled(message)
 	{
-		let dm = message.channel.type === 'dm' || message.channel.type === 'group';
-		let mentions;
-		let duplicateMention;
-		let regexMentions = message.content.match(/<@!?\d+>/g);
-		if (regexMentions && regexMentions.length > 1)
-		{
-			let firstMention = regexMentions.shift();
-			duplicateMention = regexMentions.includes(firstMention);
-		}
-		mentions = message.mentions.users.array().sort((a, b) =>
-			message.content.indexOf(a.id) - message.content.indexOf(b.id));
+		const dm = ['dm', 'group'].includes(message.channel.type);
+		const prefixes = [
+			`<@${this._bot.user.id}>`,
+			`<@!${this._bot.user.id}>`
+		];
 
-		let botMention = /^<@!?\d+>.+/.test(message.content)
-			&& mentions[0].id === this._bot.user.id
-			&& !this._bot.selfbot;
+		if (!dm) prefixes.push(message.guild.storage.getSetting('prefix'));
 
-		let content;
-		if (botMention && !duplicateMention)
-		{
-			content = message.content.replace(/^<@!?\d+>/, '').trim();
-			mentions = mentions.slice(1);
-		}
-		else if (botMention && duplicateMention)
-		{
-			content = message.content.replace(/^<@!?\d+>/, '').trim();
-		}
-		else if (!dm && (message.content.startsWith(this._bot.getPrefix(message.guild))
-			|| !this._bot.getPrefix(message.guild)))
-		{
-			content = message.content.slice(this._bot.getPrefix(message.guild)
-				? this._bot.getPrefix(message.guild).length : 0).trim();
-		}
-		else if (dm)
-		{
-			if (/<@!?\d+>.+/.test(message.content))
-			{
-				content = message.content.replace(/^<@!?\d+>/, '').trim();
-				mentions = mentions.slice(1);
-			}
-			else
-			{
-				content = message.content.trim();
-			}
-		}
-		else
-		{
-			return false;
-		}
-		content = content.replace(/ +/g, ' ');
+		let prefix = prefixes.find(a => message.content.trim().startsWith(a));
 
-		let commandName = content.split(' ')[0];
-		let command = this._bot.commands.findByNameOrAlias(commandName);
+		if (dm && !prefix) prefix = '';
+		if (!prefix && !dm) return [false];
 
-		let args = content.split(' ').slice(1).join(' ')
-			.split(command ? command.argOpts.separator : ' ')
-			.map(a => typeof a === 'string' ? a.trim() : a)
-			.filter(a => a !== '' && !(typeof a !== 'string' && isNaN(a)));
+		const commandName = message.content.trim()
+			.slice(prefix.length).trim()
+			.split(' ')[0];
 
-		return { command, mentions, args, content, dm };
+		const command = this._bot.commands.find(c =>
+			c.name === commandName || c.aliases.includes(commandName));
+
+		if (!command) return [false];
+		return [true, command, prefix];
 	}
 
-	/**
-	 * Get a list of missing permissions for the command caller for the
-	 * given command, if any
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {boolean} dm - Whether the message is a DM
-	 * @param {external:Message} message - Discord.js message object
-	 * @param {Command} command - Command found by the dispatcher
-	 * @returns {external:PermissionResolvable[]}
-	 */
-	checkPermissions(dm, message, command)
+	// Test if the command caller is allowed to use the command
+	// under whatever circumstances are present at call-time
+	testCommand(command, message)
+	{
+		const config = this._bot.config;
+		const dm = ['dm', 'group'].includes(message.channel.type);
+		const storage = !dm ? this._bot.guildStorages.get(message.guild) : null;
+
+		if (!dm && storage.settingExists('disabledGroups')
+			&& storage.getSetting('disabledGroups').includes(command.group)) return false;
+		if (command.ownerOnly && !config.owner.includes(message.author.id)) return false;
+
+		if (dm && command.guildOnly) throw this.guildOnlyError();
+		let missingPermissions = this.checkPermissions(command, message, dm);
+		if (missingPermissions.length > 0) throw this.missingPermissionsError(missingPermissions);
+		if (!this.checkLimiter(command, message, dm)) throw this.failedLimiterError(command, message);
+		if (!this.hasRoles(command, message, dm)) throw this.missingRolesError(command);
+
+		return true;
+	}
+
+	// Compare user permissions to the command's requisites
+	checkPermissions(command, message, dm)
 	{
 		return this._bot.selfbot || dm ? [] : command.permissions.filter(a =>
 			!message.channel.permissionsFor(message.author).hasPermission(a));
 	}
 
-	/**
-	 * Check of the command caller has roles that pass the command
-	 * limiter set by the guild admins if the command is called
-	 * within a guild
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {boolean} dm - Whether the message is a DM
-	 * @param {external:Message} message - Discord.js message object
-	 * @param {Command} command - Command found by the dispatcher
-	 * @returns {boolean}
-	 */
-	checkLimiter(dm, message, command)
+	// Compare user roles to the command's limiter
+	checkLimiter(command, message, dm)
 	{
 		if (dm || this._bot.selfbot) return true;
 		let storage = this._bot.guildStorages.get(message.guild);
@@ -210,136 +156,22 @@ export default class CommandDispatcher
 			limitedCommands[command.name].includes(role.id)).size > 0;
 	}
 
-	/**
-	 * Checks if the command caller has roles for the given command
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {boolean} dm - Whether the message is a DM
-	 * @param {external:Message} message - Discord.js message object
-	 * @param {Command} command - Command found by the dispatcher
-	 * @returns {boolean}
-	 */
-	hasRoles(dm, message, command)
+	// Compare user roles to the command's requisites
+	hasRoles(command, message, dm)
 	{
 		return this._bot.selfbot || command.roles.length === 0 || dm
 			|| message.member.roles.filter(role =>
 				command.roles.includes(role.name)).size > 0;
 	}
 
-	/**
-	 * Send a 'command not found' error message to the channel
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {external:Message} message - Discord.js message object
-	 * @returns {Promise<external:Message>}
-	 */
-	commandNotFoundError(message)
-	{
-		return message.channel.sendMessage(``
-			+ `Sorry, I didn't recognize any command in your message.\n`
-			+ `Try saying "help" to view a list of commands you can use in `
-			+ `this DM, or try calling the\nhelp command in a server channel `
-			+ `to see what commands you can use there!`);
-	}
-
-	/**
-	 * Send a 'guild only' error message to the channel
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {external:Message} message - Discord.js message object
-	 * @returns {Promise<external:Message>}
-	 */
-	guildOnlyError(message)
-	{
-		return message.channel.sendMessage(``
-			+ `That command is for servers only. Try saying "help" to see a `
-			+ `list of commands you can use in this DM`);
-	}
-
-	/**
-	 * Send a 'missing permissions' error message to the channel
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {external:PermissionResolvable[]} missing - Array of missing permissions
-	 * @param {external:Message} message - Discord.js message object
-	 * @returns {Promise<external:Message>}
-	 */
-	missingPermissionsError(missing, message)
-	{
-		return message[`${this._bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
-			+ `**You're missing the following permission`
-			+ `${missing.length > 1 ? 's' : ''} `
-			+ `for that command:**\n\`\`\`css\n`
-			+ `${missing.join(', ')}\n\`\`\``)
-			.then(response =>
-			{
-				if (this._bot.selfbot) response.delete(10e3);
-			});
-	}
-
-	/**
-	 * Send a 'missing roles' error message to the channel
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {external:Message} message - Discord.js message object
-	 * @param {Command} command - Command found by the dispatcher
-	 * @returns {Promise<external:Message>}
-	 */
-	missingRolesError(message, command)
-	{
-		return message[`${this._bot.selfbot ? 'channel' : 'author'}`].sendMessage(``
-			+ `**You must have ${command.roles.length > 1
-				? 'one of the following roles' : 'the following role'}`
-			+ ` to use that command:**\n\`\`\`css\n`
-			+ `${command.roles.join(', ')}\n\`\`\``)
-			.then(response =>
-			{
-				if (this._bot.selfbot) response.delete(10e3);
-			});
-	}
-
-	/**
-	 * Send a 'missing roles for role-limited command' error
-	 * message to the channel
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {external:Message} message - Discord.js message object
-	 * @param {Command} command - Command found by the dispatcher
-	 * @returns {Promise<external:Message>}
-	 */
-	failedLimiterError(message, command)
-	{
-		const storage = this._bot.guildStorages.get(message.guild);
-		let limitedCommands = storage.getSetting('limitedCommands');
-		let roles = limitedCommands[command.name];
-		return message[`${this._bot.selfbot ? 'channel' : 'author'}`].send(``
-			+ `**You must have ${roles.length > 1
-				? 'one of the following roles' : 'the following role'}`
-			+ ` to use that command:**\n\`\`\`css\n`
-			+ `${message.guild.roles
-				.filter(role => roles.includes(role.id))
-				.map(role => role.name).join(', ')}\n\`\`\``);
-	}
-
-	/**
-	 * Pass the necessary items to the found Command's {@link Command#action} method
-	 * @memberof CommandDispatcher
-	 * @instance
-	 * @param {Command} command - The command found by the dispatcher
-	 * @param {external:Message} message - Discord.js message object
-	 * @param {args[]} args - An array containing the args parsed from the command calling message
-	 * @param {external:User[]} mentions - An array containing the Discord.js User
-	 * objects parsed from the mentions contained in a message
-	 * @param {string} original - The original raw content of the message that called the command
-	 * @returns {Promise<*>}
-	 */
-	async dispatch(command, message, args, mentions, original)
+	// Execute the provided command with the provided args
+	async dispatch(command, message, args)
 	{
 		return new Promise((resolve, reject) =>
 		{
 			try
 			{
-				const action = command.action(message, args, mentions, original);
+				const action = command.action(message, args);
 				if (action instanceof Promise) action.then(resolve).catch(reject);
 				else resolve(action);
 			}
@@ -348,5 +180,40 @@ export default class CommandDispatcher
 				reject(err);
 			}
 		});
+	}
+
+	guildOnlyError()
+	{
+		return `That command is for servers only. Try saying "help" to see a `
+			+ `list of commands you can use in this DM`;
+	}
+
+	missingPermissionsError(missing)
+	{
+		return `**You're missing the following permission`
+			+ `${missing.length > 1 ? 's' : ''} `
+			+ `for that command:**\n\`\`\`css\n`
+			+ `${missing.join(', ')}\n\`\`\``;
+	}
+
+	failedLimiterError(command, message)
+	{
+		const storage = this._bot.guildStorages.get(message.guild);
+		let limitedCommands = storage.getSetting('limitedCommands');
+		let roles = limitedCommands[command.name];
+		return `**You must have ${roles.length > 1
+			? 'one of the following roles' : 'the following role'}`
+			+ ` to use that command:**\n\`\`\`css\n`
+			+ `${message.guild.roles
+				.filter(role => roles.includes(role.id))
+				.map(role => role.name).join(', ')}\n\`\`\``;
+	}
+
+	missingRolesError(command)
+	{
+		return `**You must have ${command.roles.length > 1
+				? 'one of the following roles' : 'the following role'}`
+			+ ` to use that command:**\n\`\`\`css\n`
+			+ `${command.roles.join(', ')}\n\`\`\``;
 	}
 }
