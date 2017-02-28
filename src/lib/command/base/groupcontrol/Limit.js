@@ -14,12 +14,12 @@ export default class Limit extends Command
 			usage: '<prefix>limit <command>, <role names, ...>',
 			extraHelp: 'The comma after the command name -- before the role names list -- is necessary.',
 			group: 'base',
-			argOpts: { stringArgs: true, separator: ',' },
+			argOpts: { separator: ',' },
 			permissions: ['ADMINISTRATOR']
 		});
 	}
 
-	async action(message, args, mentions) // eslint-disable-line no-unused-vars
+	async action(message, args)
 	{
 		let commandName = args.shift();
 		if (!commandName) return this._respond(message, `You must provide a command to limit.`);

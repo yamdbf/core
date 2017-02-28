@@ -9,10 +9,8 @@ export default class Ping extends Command
 	{
 		super(bot, {
 			name: 'ping',
-			aliases: [],
 			description: 'Pong!',
 			usage: '<prefix>ping',
-			extraHelp: '',
 			group: 'base'
 		});
 	}

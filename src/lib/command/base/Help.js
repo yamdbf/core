@@ -12,7 +12,6 @@ export default class Help extends Command
 		super(bot, {
 			name: 'help',
 			description: 'Provides information on bot commands',
-			aliases: [],
 			usage: `<prefix>help [command]`,
 			extraHelp: 'Will DM bot command help information to the user to keep clutter down in guild channels. If you use the help command from within a DM you will only receive information for the commands you can use within the DM. If you want help with commands usable in a guild, call the help command in a guild channel. You will receive a list of the commands that you have permissions/roles for in that channel.',
 			group: 'base'

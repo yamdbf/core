@@ -12,14 +12,12 @@ export default class ClearLimit extends Command
 			name: 'clearlimit',
 			description: 'Clear role restrictions from a command',
 			usage: '<prefix>clearlimit <command>',
-			extraHelp: '',
 			group: 'base',
-			permissions: ['ADMINISTRATOR'],
-			argOpts: { stringArgs: true }
+			permissions: ['ADMINISTRATOR']
 		});
 	}
 
-	async action(message, args, mentions) // eslint-disable-line no-unused-vars
+	async action(message, args)
 	{
 		let commandName = args[0];
 		if (!commandName) return this._respond(message, `You must provide a command to clear limits for.`);

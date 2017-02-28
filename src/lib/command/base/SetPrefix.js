@@ -18,7 +18,7 @@ export default class SetPrefix extends Command
 		});
 	}
 
-	async action(message, args, mentions) // eslint-disable-line no-unused-vars
+	async action(message, args)
 	{
 		if (!args[0])
 		{

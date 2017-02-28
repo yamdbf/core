@@ -9,7 +9,6 @@ export default class Version extends Command
 	{
 		super(bot, {
 			name: 'version',
-			aliases: [],
 			description: 'Get the version of the bot',
 			usage: `<prefix>version`,
 			group: 'base',

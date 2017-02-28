@@ -11,7 +11,6 @@ export default class Reload extends Command
 		super(bot, {
 			name: 'reload',
 			description: 'Reload a command or all commands',
-			aliases: [],
 			usage: '<prefix>reload [command]',
 			extraHelp: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
 			group: 'base',
@@ -19,7 +18,7 @@ export default class Reload extends Command
 		});
 	}
 
-	async action(message, args, mentions) // eslint-disable-line no-unused-vars
+	async action(message, args)
 	{
 		const start = now();
 		const command = this.bot.commands.findByNameOrAlias(args[0]);

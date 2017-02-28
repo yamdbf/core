@@ -18,7 +18,7 @@ export default class ListGroups extends Command
 		});
 	}
 
-	async action(message, args, mentions) // eslint-disable-line no-unused-vars
+	async action(message)
 	{
 		let groups = this.bot.commands.groups;
 		let disabledGroups = this.bot.guildStorages.get(message.guild).getSetting('disabledGroups');
