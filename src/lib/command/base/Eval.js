@@ -19,9 +19,9 @@ export default class Eval extends Command
 		});
 	}
 
-	action(message, args, mentions, original)
+	action(message)
 	{
-		const code = original.split(this.name).slice(1).join(this.name).trim(); // eslint-disable-line
+		const code = message.content.split(this.name).slice(1).join(this.name).trim(); // eslint-disable-line
 		if (!code)
 		{
 			this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
