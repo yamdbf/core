@@ -28,7 +28,7 @@ export default class CommandDispatcher
 		const dm = ['dm', 'group'].includes(message.channel.type);
 		if (!dm) message.guild.storage = this._bot.guildStorages.get(message.guild);
 
-		const [commandCalled, command, prefix] = this.isCommandCalled(message);
+		const [commandCalled, command, prefix, name] = this.isCommandCalled(message);
 		if (!commandCalled) return;
 
 		if (!(!dm && prefix === message.guild.storage.getSetting('prefix')) && prefix !== ''
@@ -40,11 +40,9 @@ export default class CommandDispatcher
 		catch (err) { message[this._bot.selfbot ? 'channel' : 'author'].send(err); }
 		if (!validCaller) return;
 
-		let args = message.content.trim()
-			.slice(prefix.length).trim()
-			.split(' ')
-			.slice(1)
-			.join(' ')
+		let args = message.content
+			.replace(prefix, '').replace(name, '')
+			.trim()
 			.split(command.argOpts.separator)
 			.map(a => a.trim())
 			.filter(a => a !== '');
@@ -89,7 +87,8 @@ export default class CommandDispatcher
 	}
 
 	// Return if a command has been called, the called command
-	// and the prefix used to call the command
+	// the prefix used to call the command, and the name or aliases
+	// of the command used to call it
 	isCommandCalled(message)
 	{
 		const dm = ['dm', 'group'].includes(message.channel.type);
@@ -113,7 +112,7 @@ export default class CommandDispatcher
 			c.name === commandName || c.aliases.includes(commandName));
 
 		if (!command) return [false];
-		return [true, command, prefix];
+		return [true, command, prefix, commandName];
 	}
 
 	// Test if the command caller is allowed to use the command
@@ -212,7 +211,7 @@ export default class CommandDispatcher
 	missingRolesError(command)
 	{
 		return `**You must have ${command.roles.length > 1
-				? 'one of the following roles' : 'the following role'}`
+			? 'one of the following roles' : 'the following role'}`
 			+ ` to use that command:**\n\`\`\`css\n`
 			+ `${command.roles.join(', ')}\n\`\`\``;
 	}
