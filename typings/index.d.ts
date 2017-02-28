@@ -110,26 +110,25 @@ declare module 'yamdbf'
 		separator?: string;
 	}
 
-	export class CommandDispatcher
+	class CommandDispatcher<T extends Bot>
 	{
-		public constructor(bot: Bot);
-		private _bot: Bot;
+		public constructor(bot: T);
+		private _bot: T;
 
-		public handleMessage(message: Message): Promise<any>;
-		public processContent(message: Message): Object;
-		public checkPermissions(dm: boolean, message: Message, command: Command<Bot>): PermissionResolvable[];
-		public hasRoles(dm: boolean, message: Message, command: Command<Bot>): boolean;
+		private handleMessage(message: Message): Promise<any>;
+		private isCommandCalled(message: Message): [boolean, Command<T>, string, string];
+		private testCommand(command: Command<T>, message: Message): boolean;
 
-		public commandNotFoundError(message: Message): Promise<Message>;
-		public guildOnlyError(message: Message): Promise<Message>;
-		public missingPermissionsError(missing: PermissionResolvable[], message: Message): Promise<Message>;
-		public missingRolesError(message: Message, command: Command<Bot>): Promise<Message>;
+		private checkPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[];
+		private checkLimiter(command: Command<T>, message: Message, dm: boolean)
+		private hasRoles(command: Command<T>, message: Message, dm: boolean): boolean;
 
-		public dispatch(command: Command<Bot>,
-						message: Message,
-						args: Array<number | string>,
-						mentions: User[],
-						original: string): Promise<any>;
+		// private commandNotFoundError(message: Message): Promise<Message>;
+		private guildOnlyError(message: Message): Promise<Message>;
+		private missingPermissionsError(missing: PermissionResolvable[], message: Message): Promise<Message>;
+		private missingRolesError(message: Message, command: Command<T>): Promise<Message>;
+
+		private dispatch(command: Command<T>, message: Message, args: any[]): Promise<any>;
 	}
 
 	export class CommandLoader
