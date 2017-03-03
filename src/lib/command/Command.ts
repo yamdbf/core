@@ -1,5 +1,8 @@
-'use babel';
-'use strict';
+import { Bot } from '../bot/Bot';
+import { PermissionResolvable, Message } from 'discord.js';
+
+import { CommandInfo } from '../types/CommandInfo';
+import { ArgOpts } from '../types/ArgOpts';
 
 /**
  * Command class to extend to create commands users can execute
@@ -7,12 +10,30 @@
  * @param {Bot} bot - Bot instance
  * @param {CommandInfo} info - Object containing required command properties
  */
-export default class Command
+export class Command<T extends Bot>
 {
-	constructor(bot, info = null) // eslint-disable-line complexity
+	public bot: T;
+	public name: string;
+	public description: string;
+	public usage: string;
+	public extraHelp: string;
+	public group: string;
+	public aliases: string[];
+	public guildOnly: boolean;
+	public hidden: boolean;
+	public argOpts: ArgOpts;
+	public permissions: PermissionResolvable[];
+	public roles: string[];
+	public ownerOnly: boolean;
+	public overloads: string;
+
+	public _classloc: string;
+	public _middleware: Array<(message: Message, args: string[]) => Promise<[Message, any[]]> | [Message, any[]]>;
+
+	public constructor(bot: T, info: CommandInfo = null)
 	{
 		// Assert necessary command information
-		const name = this.constructor.name;
+		const name: string = this.constructor.name;
 		if (!info) throw new Error(`You must provide an info object for command: ${name}`);
 		if (!info.name) throw new Error(`You must provide a name for command: ${name}`);
 		if (!info.description) throw new Error(`You must provide a description for command: ${name}`);
@@ -21,11 +42,11 @@ export default class Command
 		if (info.aliases && !Array.isArray(info.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
 		if (info.permissions && !Array.isArray(info.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
 		if (info.permissions && info.permissions.length > 0)
-			info.permissions.forEach((perm, index) =>
+			info.permissions.forEach((perm: PermissionResolvable, index: number) =>
 			{
 				try
 				{
-					bot.resolver.resolvePermission(perm);
+					(<any> bot).resolver.resolvePermission(perm);
 				}
 				catch (err)
 				{
@@ -184,24 +205,17 @@ export default class Command
 	}
 
 	/**
-	 * @typedef {Array<string|number>} args - Array of values parsed from {@link external:Message} content
-	 * that will be passed to a command. Can contain a mix of string and number values.
-	 */
-
-	/**
 	 * Action to be executed when the command is called. The following parameters
 	 * are what command actions will be passed by the {@link CommandDispatcher} whenever
 	 * a command is called. Be sure to receive these in proper order when writing
 	 * new commands
 	 * @memberof Command
 	 * @instance
-	 * @param {external:Message} message - Discord.js message object
-	 * @param {args[]} args - An array containing the args parsed from the command calling message
-	 * @param {external:User[]} mentions - An array containing the Discord.js User
-	 * objects parsed from the mentions contained in a message
-	 * @param {string} original - The original raw content of the message that called the command
+	 * @param {external:Message} message Discord.js message object
+	 * @param {any[]} args An array containing the args parsed from the command calling message.<br>
+	 * 					   Will contain strings unless middleware is used to transform the args
 	 */
-	async action()
+	public action(message: Message, args: any[]): void
 	{
 		throw new Error(`${this.constructor.name} has not overloaded the command action method`);
 	}
@@ -212,9 +226,9 @@ export default class Command
 	 * @memberof Command
 	 * @instance
 	 */
-	register()
+	public register(): void
 	{
-		let name = this.constructor.name;
+		let name: string = this.constructor.name;
 		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 		if (!(this.action instanceof Function)) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 	}
@@ -248,19 +262,22 @@ export default class Command
 	 * functions can be added to a command via multiple calls to this method
 	 * @memberof Command
 	 * @instance
-	 * @param {Function} fn - Middleware function. `(message, args) => [message, args]`
+	 * @param {Function} fn Middleware function. `(message, args) => [message, args]`
 	 * @returns {Command} This command instance
 	 */
-	use(fn)
+	public use(fn: (message: Message, args: any[]) => Promise<[Message, any[]]> | [Message, any[]]): this
 	{
 		this._middleware.push(fn);
 		return this;
 	}
 
-	// Send provided response text to the command's calling channel
-	// via edit, editCode, sendMessage, or sendCode depending on Whether
-	// or not the bot is a selfbot and/or a codeblock language is given
-	_respond(message, response, code)
+	/**
+	 * Send provided response text to the command's calling channel
+	 * via edit, editCode, send, or sendCode depending on whether
+	 * or not the bot is a selfbot and/or a codeblock language is given
+	 * @protected
+	 */
+	protected _respond(message: Message, response: string, code?: string): Promise<Message | Message[]>
 	{
 		if (this.bot.selfbot && !code) return message.edit(response);
 		if (this.bot.selfbot && code) return message.editCode(code, response);
@@ -268,27 +285,3 @@ export default class Command
 		return message.channel.sendMessage(response);
 	}
 }
-
-/**
- * @typedef {Object} CommandInfo - Object containing required {@link Command} properties
- * to be passed to a Command on construction
- * @property {string} name - See: {@link Command#name}
- * @property {string} description - See: {@link Command#description}
- * @property {string} usage - See: {@link Command#usage}
- * @property {string} extraHelp - See: {@link Command#extraHelp}
- * @property {string} group - See: {@link Command#group}
- * @property {string[]} [aliases=[]] - See: {@link Command#aliases}
- * @property {boolean} [guildOnly=false] - See: {@link Command#guildOnly}
- * @property {boolean} [hidden=false] - See: {@link Command#hidden}
- * @property {ArgOpts} [argOpts] - See: {@link Command#argOpts}, {@link ArgOpts}
- * @property {PermissionResolvable[]} [permissions=[]] - See: {@link Command#permissions}
- * @property {string[]} [roles=[]] - See: {@link Command#roles}
- * @property {boolean} [ownerOnly=false] - See: {@link Command#ownerOnly}
- * @property {string} [overloads=null] - See: {@link Command#overloads}
- */
-
-/**
- * @typedef {Object} ArgOpts - Object containing options for
- * controlling how command arguments will be parsed
- * @property {string} [separator=' '] - The charactor to separate args by
- */

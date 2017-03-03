@@ -1,5 +1,7 @@
-'use babel';
-'use strict';
+import { DefaultGuildSettings } from '../types/DefaultGuildSettings';
+import { LocalStorage } from './LocalStorage';
+import { Bot } from '../bot/Bot';
+import { Guild } from 'discord.js';
 
 /**
  * Handle loading, saving, and storing Guild data and settings
@@ -11,12 +13,17 @@
  * @param {LocalStorage} dataStorage - LocalStorage instance containing all guild-specific data
  * @param {LocalStorage} settingsStorage - LocalStorage instance containing all guild-specific settings
  */
-export default class GuildStorage
+export class GuildStorage
 {
-	constructor(bot, guild, dataStorage, settingsStorage)
+	private _id: string;
+	private _dataStorage: LocalStorage;
+	private _settingsStorage: LocalStorage;
+	private _temp: { [key: string]: any };
+
+	public constructor(bot: Bot, guild: Guild | string, dataStorage: LocalStorage, settingsStorage: LocalStorage)
 	{
 		/** @type {string} */
-		this._id = guild.id || guild;
+		this._id = (<Guild> guild).id || <string> guild;
 
 		/** @type {LocalStorage} */
 		this._dataStorage = dataStorage;
@@ -34,7 +41,7 @@ export default class GuildStorage
 		if (!this._settingsStorage.getItem(this.id))
 		{
 			this._settingsStorage.setItem(this.id, {});
-			let defaults = bot.storage.getItem('defaultGuildSettings');
+			let defaults: DefaultGuildSettings = bot.storage.getItem('defaultGuildSettings');
 			Object.keys(defaults).forEach(key =>
 			{
 				this._settingsStorage.setItem(`${this.id}/${key}`, defaults[key]);
@@ -49,21 +56,21 @@ export default class GuildStorage
 	 * @type {string}
 	 * @name id
 	 */
-	get id() { return this._id; }
+	public get id(): string { return this._id; }
 
 	// Handle increment/deincrement of stored integer values
-	_modifyStoredInt(key, type, storage)
+	private _modifyStoredInt(key: string, type: '++' | '--', storage: 'storage' | 'settings'): void
 	{
 		if (typeof key !== 'string') return;
 		if (type !== '++' && type !== '--') return;
 		if (storage !== 'storage' && storage !== 'settings') return;
-		let ls = storage === 'storage' ? this._dataStorage : this._settingsStorage;
-		let value = ls.getItem(`${this._id}/${key}`);
+		let ls: LocalStorage = storage === 'storage' ? this._dataStorage : this._settingsStorage;
+		let value: number = ls.getItem(`${this._id}/${key}`);
 		if (!Number.isInteger(value)) return;
 		ls.setItem(`${this._id}/${key}`, type === '++' ? ++value : --value);
 	}
 
-	// Settings storage ////////////////////////////////////////////////////////
+//#region Settings storage
 
 	/**
 	 * The number of keys in this Guild's settings
@@ -71,7 +78,7 @@ export default class GuildStorage
 	 * @instance
 	 * @type {number}
 	 */
-	get settingsLength() { return Object.keys(this._settingsStorage.getItem(this.id)).length || 0; }
+	public get settingsLength(): number { return Object.keys(this._settingsStorage.getItem(this.id)).length || 0; }
 
 	/**
 	 * The names of all keys in this guild's settings
@@ -79,20 +86,20 @@ export default class GuildStorage
 	 * @instance
 	 * @type {string[]}
 	 */
-	get settingsKeys() { return Object.keys(this._settingsStorage.getItem(this.id)); }
+	public get settingsKeys(): string[] { return Object.keys(this._settingsStorage.getItem(this.id)); }
 
 	/**
 	 * Get the name of the key at the given index in this guild's settings
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {number} index - The index of the key to find
+	 * @param {number} index The index of the key to find
 	 * @returns {string}
 	 */
-	settingKey(index)
+	public settingKey(index: number): string
 	{
 		if (!index || index < 0) return null;
-		let settings = this._settingsStorage.getItem(this.id);
-		if (index >= settings.length) return null;
+		let settings: object = this._settingsStorage.getItem(this.id);
+		if (index >= Object.keys(settings).length) return null;
 		return Object.keys(settings)[index];
 	}
 
@@ -100,10 +107,10 @@ export default class GuildStorage
 	 * Get the value of the given key in this guild's settings
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the setting to get
+	 * @param {string} key The key of the setting to get
 	 * @returns {*}
 	 */
-	getSetting(key)
+	public getSetting(key: string): any
 	{
 		if (typeof key !== 'string') return null;
 		return this._settingsStorage.getItem(`${this.id}/${key}`);
@@ -113,10 +120,10 @@ export default class GuildStorage
 	 * Set the value of a setting in this guild's settings
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the setting to set
-	 * @param {*} value - The value to set
+	 * @param {string} key The key of the setting to set
+	 * @param {*} value The value to set
 	 */
-	setSetting(key, value)
+	public setSetting(key: string, value: any): void
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
@@ -127,25 +134,25 @@ export default class GuildStorage
 	 * Increment a stored integer settings value
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the item to increment
+	 * @param {string} key The key of the item to increment
 	 */
-	incrSetting(key) { this._modifyStoredInt(key, '++', 'settings'); }
+	public incrSetting(key: string): void { this._modifyStoredInt(key, '++', 'settings'); }
 
 	/**
 	 * Deincrement a stored integer settings value
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the item to increment
+	 * @param {string} key The key of the item to increment
 	 */
-	deincrSetting(key) { this._modifyStoredInt(key, '--', 'settings'); }
+	public deincrSetting(key: string): void { this._modifyStoredInt(key, '--', 'settings'); }
 
 	/**
 	 * Delete a setting in this guild's settings
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the setting to delete
+	 * @param {string} key The key of the setting to delete
 	 */
-	removeSetting(key)
+	public removeSetting(key: string): void
 	{
 		if (typeof key !== 'string') return;
 		this._settingsStorage.removeItem(`${this.id}/${key}`);
@@ -155,10 +162,10 @@ export default class GuildStorage
 	 * Check if a setting exists
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the setting to check for
+	 * @param {string} key The key of the setting to check for
 	 * @returns {boolean}
 	 */
-	settingExists(key)
+	public settingExists(key: string): boolean
 	{
 		if (typeof key !== 'string') return false;
 		return this.getSetting(key) !== null;
@@ -171,14 +178,16 @@ export default class GuildStorage
 	 * <GuildStorage>.resetSettings(<Bot>.storage.getItem('defaultGuildSettings'));
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {Object} defaults - Should always use {@link defaultGuildSettings}
+	 * @param {Object} defaults Should always use {@link defaultGuildSettings}
 	 */
-	resetSettings(defaults)
+	public resetSettings(defaults: DefaultGuildSettings): void
 	{
 		this._settingsStorage.setItem(this.id, defaults);
 	}
 
-	// Non-settings storage ////////////////////////////////////////////////////
+//#endregion
+
+//#region Regular storage
 
 	/**
 	 * The number of keys in this guild's storage
@@ -186,7 +195,7 @@ export default class GuildStorage
 	 * @instance
 	 * @type {number}
 	 */
-	get length()
+	public get length(): number
 	{
 		return Object.keys(this._dataStorage.getItem(this.id)).length || 0;
 	}
@@ -197,7 +206,7 @@ export default class GuildStorage
 	 * @instance
 	 * @type {string[]}
 	 */
-	get keys()
+	public get keys(): string[]
 	{
 		return Object.keys(this._dataStorage.getItem(this.id));
 	}
@@ -206,14 +215,14 @@ export default class GuildStorage
 	 * Get the name of the key at the given index in this guild's storage
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {number} index - The index of the key to find
+	 * @param {number} index The index of the key to find
 	 * @returns {string}
 	 */
-	key(index)
+	public key(index: number): string
 	{
 		if (!index || index < 0) return null;
-		let data = this._dataStorage.getItem(this.id);
-		if (index >= data.length) return null;
+		let data: object = this._dataStorage.getItem(this.id);
+		if (index >= Object.keys(data).length) return null;
 		return Object.keys(data)[index];
 	}
 
@@ -221,10 +230,10 @@ export default class GuildStorage
 	 * Get the value of the given key in this guild's storage
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the item to get
+	 * @param {string} key The key of the item to get
 	 * @returns {*}
 	 */
-	getItem(key)
+	public getItem(key: string): any
 	{
 		if (typeof key !== 'string') return null;
 		return this._dataStorage.getItem(`${this.id}/${key}`);
@@ -234,10 +243,10 @@ export default class GuildStorage
 	 * Set the value of a given key in this guild's storage
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the item to set
-	 * @param {*} value - The value to set
+	 * @param {string} key The key of the item to set
+	 * @param {*} value The value to set
 	 */
-	setItem(key, value)
+	public setItem(key: string, value: any): void
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
@@ -248,9 +257,9 @@ export default class GuildStorage
 	 * Increment a stored integer value
 	 * @memberof GuildStorage
 	 * @instance
-	 * @param {string} key - The key of the item to increment
+	 * @param {string} key The key of the item to increment
 	 */
-	incr(key) { this._modifyStoredInt(key, '++', 'storage'); }
+	public incr(key: string): void { this._modifyStoredInt(key, '++', 'storage'); }
 
 	/**
 	 * Deincrement a stored integer value
@@ -258,7 +267,7 @@ export default class GuildStorage
 	 * @instance
 	 * @param {string} key - The key of the item to increment
 	 */
-	deincr(key) { this._modifyStoredInt(key, '--', 'storage'); }
+	public deincr(key: string): void { this._modifyStoredInt(key, '--', 'storage'); }
 
 	/**
 	 * Delete an item in this guild's storage
@@ -266,7 +275,7 @@ export default class GuildStorage
 	 * @instance
 	 * @param {string} key - The key of the item to delete
 	 */
-	removeItem(key)
+	public removeItem(key: string): void
 	{
 		if (typeof key !== 'string') return;
 		this._dataStorage.removeItem(`${this.id}/${key}`);
@@ -279,7 +288,7 @@ export default class GuildStorage
 	 * @param {string} key - The key of the item to check for
 	 * @returns {boolean}
 	 */
-	exists(key)
+	public exists(key: string): boolean
 	{
 		if (typeof key !== 'string') return false;
 		return !!this.getItem(key);
@@ -290,7 +299,7 @@ export default class GuildStorage
 	 * @memberof GuildStorage
 	 * @instance
 	 */
-	clear()
+	public clear(): void
 	{
 		this._dataStorage.setItem(this.id, {});
 	}
@@ -305,15 +314,15 @@ export default class GuildStorage
 	 * @param {function} callback - callback to execute that will be accessing the key
 	 * @returns {Promise}
 	 */
-	queue(key, callback)
+	public queue<T extends string>(key: T, callback: (key: T) => void): Promise<void>
 	{
-		return new Promise((resolve, reject) =>
+		return new Promise<void>((resolve, reject) =>
 		{
 			try
 			{
-				while(this._temp[`checking${key}`]) {} // eslint-disable-line
+				while (this._temp[`checking${key}`]) {}
 				this._temp[`checking${key}`] = true;
-				const finished = callback(key); // eslint-disable-line
+				const finished: any = callback(key);
 				if (finished instanceof Promise)
 				{
 					finished.then(() =>
@@ -341,9 +350,5 @@ export default class GuildStorage
 		});
 	}
 
-	nonConcurrentAccess(key, callback)
-	{
-		console.warn('GuildStorage#nonConcurrentAccess has been deprecated and will be removed in a future update. Use GuildStorage#queue instead.');
-		return this.queue(key, callback);
-	}
+//#endregion
 }

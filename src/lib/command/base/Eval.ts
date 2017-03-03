@@ -1,14 +1,13 @@
-'use babel';
-'use strict';
-
-import Command from '../Command';
+import { Bot } from '../../bot/Bot';
+import { Message } from '../../types/Message';
+import { Command } from '../Command';
 import { inspect } from 'util';
-import * as Discord from 'discord.js'; // eslint-disable-line
-import * as Yamdbf from '../../../index'; // eslint-disable-line
+import * as Discord from 'discord.js'; // tslint:disable-line
+import * as Yamdbf from '../../../index'; // tslint:disable-line
 
-export default class Eval extends Command
+export default class Eval extends Command<Bot>
 {
-	constructor(bot)
+	public constructor(bot: Bot)
 	{
 		super(bot, {
 			name: 'eval',
@@ -19,16 +18,16 @@ export default class Eval extends Command
 		});
 	}
 
-	action(message)
+	public action(message: Message): void
 	{
-		const code = message.content.split(this.name).slice(1).join(this.name).trim(); // eslint-disable-line
+		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
 		if (!code)
 		{
 			this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
 			return;
 		}
 
-		let evaled = eval(code);
+		let evaled: string | Promise<string | object> = eval(code);
 		if (evaled instanceof Promise)
 		{
 			evaled.then(res =>
@@ -51,7 +50,7 @@ export default class Eval extends Command
 		}
 	}
 
-	_clean(text)
+	private _clean(text: string): string
 	{
 		return typeof text === 'string' ? text
 			.replace(/`/g, `\`${String.fromCharCode(8203)}`)

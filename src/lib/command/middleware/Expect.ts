@@ -1,46 +1,23 @@
-'use babel';
-'use strict';
+import { Bot } from '../../bot/Bot';
+import { ExpectArgType } from '../../types/ExpectArgType';
+import { Message } from '../../types/Message';
+import { Command } from '../Command';
+import { GuildMember, Role, TextChannel, User } from 'discord.js';
 
-import { User, GuildMember, TextChannel, Role } from 'discord.js';
-
-/** @module Middleware */
-
-/**
- * Takes an object mapping argument names to argument types that
- * checks the types of passed arguments and ensures required
- * arguments are present and valid. Should be added to the
- * command AFTER any and all middleware functions that modify
- * args in any way are added.
- *
- * Valid types are:
- * `String`, `Number`, `User`, `Member`, `Role`, `Channel`, `Any`
- *
- * Example:
- * ```
- * { '<mem>': 'Member', '<age>': 'Number', '<desc>': 'String' }
- * ```
- *
- * If verifying a `BannedUser` returned from the ResolveArgs middleware,
- * use the `User` type.
- *
- * This middleware does not modify args in any way.
- * @param {object} argTypes An object of argument names mapped to argument types
- * @returns {Function}
- */
-export default function expect(argTypes)
+export function expect<T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }): (message: Message, args: any[]) => [Message, any[]]
 {
-	return function(message, args)
+	return function(message, args): [Message, any[]]
 	{
-		const names = Object.keys(argTypes);
-		const types = names.map(a => argTypes[a]);
+		const names: string[] = Object.keys(argTypes);
+		const types: ExpectArgType[] = names.map(a => argTypes[a]);
 
-		const prefix = message.guild.storage.getSetting('prefix');
-		const usage = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
+		const prefix: string = message.guild.storage.getSetting('prefix');
+		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 
 		for (const [index, name] of names.entries())
 		{
-			const arg = args[index];
-			const type = types[index];
+			const arg: any = args[index];
+			const type: ExpectArgType = types[index];
 
 			if (typeof args[index] === 'undefined' || args[index] === null)
 				throw new Error(`Missing or null value for arg: \`${name}\`, expected \`${type}\`\n${usage}`);

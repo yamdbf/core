@@ -1,12 +1,14 @@
-'use babel';
-'use strict';
-import { normalize } from '../../../Util';
+import { Bot } from '../../../bot/Bot';
+import { GuildStorage } from '../../../storage/GuildStorage';
+import { Message } from '../../../types/Message';
+import { Util } from '../../../Util';
+import { Command } from '../../Command';
+import { Middleware } from '../../middleware/Middleware';
+import { Role } from 'discord.js';
 
-import Command from '../../Command';
-
-export default class Limit extends Command
+export default class Limit extends Command<Bot>
 {
-	constructor(bot)
+	public constructor(bot: Bot)
 	{
 		super(bot, {
 			name: 'limit',
@@ -17,25 +19,25 @@ export default class Limit extends Command
 			argOpts: { separator: ',' },
 			permissions: ['ADMINISTRATOR']
 		});
+
+		this.use(Middleware.expect({ '<command>': 'String' }));
 	}
 
-	async action(message, args)
+	public action(message: Message, [commandName, ...roleNames]: [string, string]): Promise<Message | Message[]>
 	{
-		let commandName = args.shift();
-		if (!commandName) return this._respond(message, `You must provide a command to limit.`);
-		const command = this.bot.commands.find(c => normalize(commandName) === normalize(c.name));
+		const command: Command<Bot> = this.bot.commands.find(c => Util.normalize(commandName) === Util.normalize(c.name));
 		if (!command) return this._respond(message, `Failed to find a command with the name \`${commandName}\``);
 		if (command.group === 'base') this._respond(message, `Cannot limit base commands.`);
 
-		const storage = message.guild.storage;
-		let limitedCommands = storage.getSetting('limitedCommands') || {};
-		let newLimit = limitedCommands[command.name] || [];
+		const storage: GuildStorage = message.guild.storage;
+		let limitedCommands: { [name: string]: string[] } = storage.getSetting('limitedCommands') || {};
+		let newLimit: string[] = limitedCommands[command.name] || [];
 
-		let roles = [];
-		let invalidRoles = [];
-		for (const name of args)
+		let roles: Role[] = [];
+		let invalidRoles: string[] = [];
+		for (const name of roleNames)
 		{
-			let foundRole = message.guild.roles.find(role => normalize(role.name) === normalize(name));
+			let foundRole: Role = message.guild.roles.find(role => Util.normalize(role.name) === Util.normalize(name));
 			if (!foundRole) invalidRoles.push(name);
 			else if (foundRole && newLimit.includes(foundRole.id)) message.channel.send(
 				`Role \`${foundRole.name}\` is already a limiter for command: \`${command.name}\``);

@@ -1,13 +1,13 @@
-'use babel';
-'use strict';
-
-import { Client } from 'discord.js';
-import LocalStorage from '../storage/LocalStorage';
-import GuildStorageLoader from '../storage/GuildStorageLoader';
-import GuildStorageRegistry from '../storage/GuildStorageRegistry';
-import CommandLoader from '../command/CommandLoader';
-import CommandRegistry from '../command/CommandRegistry';
-import CommandDispatcher from '../command/CommandDispatcher';
+import { Client, ClientOptions, Guild, Message, Channel, Emoji, User, GuildMember, Collection, MessageReaction, Role, UserResolvable } from 'discord.js';
+import { BotOptions } from '../types/BotOptions';
+import { LocalStorage } from '../storage/LocalStorage';
+import { GuildStorage } from '../storage/GuildStorage';
+import { GuildStorageLoader } from '../storage/GuildStorageLoader';
+import { GuildStorageRegistry } from '../storage/GuildStorageRegistry';
+import { Command } from '../command/Command';
+import { CommandLoader } from '../command/CommandLoader';
+import { CommandRegistry } from '../command/CommandRegistry';
+import { CommandDispatcher } from '../command/CommandDispatcher';
 
 /**
  * The Discord.js Client instance. Contains bot-specific [storage]{@link Bot#storage},
@@ -18,13 +18,34 @@ import CommandDispatcher from '../command/CommandDispatcher';
  * @param {BotOptions} botOptions - Object containing required bot properties
  * @param {external:ClientOptions} [clientOptions] - Discord.js ClientOptions
  */
-export default class Bot extends Client
+export class Bot extends Client
 {
-	constructor(botOptions = null, clientOptions)
+	public name: string;
+	public commandsDir: string;
+	public statusText: string;
+	public readyText: string;
+	public noCommandErr: boolean;
+	public selfbot: boolean;
+	public passive: boolean;
+	public version: string;
+	public disableBase: string[];
+	public config: any;
+
+	public storage: LocalStorage;
+	public guildStorages: GuildStorageRegistry<string, GuildStorage>;
+	public commands: CommandRegistry<this, string, Command<this>>;
+
+	private _token: string;
+	private _guildDataStorage: LocalStorage;
+	private _guildSettingStorage: LocalStorage;
+	private _guildStorageLoader: GuildStorageLoader<this>;
+	private _commandLoader: CommandLoader<this>;
+	private _dispatcher: CommandDispatcher<this>;
+
+	public constructor(botOptions: BotOptions, clientOptions?: ClientOptions)
 	{
 		super(clientOptions);
 
-		/** @type {string} */
 		this._token = botOptions.token;
 
 		/**
@@ -49,7 +70,7 @@ export default class Bot extends Client
 		/**
 		 * Status text for the bot
 		 * @memberof Bot
-		 * @type {?string}
+		 * @type {string}
 		 * @name statusText
 		 * @instance
 		 */
@@ -127,16 +148,9 @@ export default class Bot extends Client
 		 */
 		this.disableBase = botOptions.disableBase || [];
 
-		/** @type {LocalStorage} */
 		this._guildDataStorage = new LocalStorage('storage/guild-storage');
-
-		/** @type {LocalStorage} */
 		this._guildSettingStorage = new LocalStorage('storage/guild-settings');
-
-		/** @type {GuildStorageLoader} */
 		this._guildStorageLoader = new GuildStorageLoader(this);
-
-		/** @type {CommandLoader} */
 		this._commandLoader = new CommandLoader(this);
 
 		/**
@@ -164,22 +178,14 @@ export default class Bot extends Client
 		 * @name commands
 		 * @instance
 		 */
-		this.commands = new CommandRegistry();
-
-		/**
-		 * @typedef {Object} DefaultGuildSettings - The default settings to apply to new guilds.
-		 * Stored under the key <code>'defaultGuildSettings'</code> in {@link Bot#storage}
-		 * @property {string} prefix='/' - Prefix to prepend commands
-		 * @property {Array} [disabledGroups=[]] - Command groups to ignore
-		 */
+		this.commands = new CommandRegistry<this, string, Command<this>>();
 
 		// Load defaultGuildSettings into storage the first time the bot is run
-		if (!this.storage.exists('defaultGuildSettings')) // eslint-disable-line curly
+		if (!this.storage.exists('defaultGuildSettings'))
 			this.storage.setItem('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
 
-		/** @type {CommandDispatcher} */
-		this._dispatcher = new CommandDispatcher(this);
+		this._dispatcher = new CommandDispatcher<this>(this);
 
 		// Make some asserts
 		if (!this._token) throw new Error('You must provide a token for the bot.');
@@ -198,7 +204,7 @@ export default class Bot extends Client
 	 * @instance
 	 * @param {string} command - The name of a command to reload, or 'all' to load all commands
 	 */
-	loadCommand(command)
+	public loadCommand(command: string): void
 	{
 		if (!command) throw new Error(`You must provide a command name to load, or 'all' to load all commands`);
 		if (command === 'all') this._commandLoader.loadCommands();
@@ -211,13 +217,13 @@ export default class Bot extends Client
 	 * @instance
 	 * @returns {Bot}
 	 */
-	start()
+	public start(): this
 	{
 		this.login(this._token);
 
 		this.once('ready', () =>
 		{
-			console.log(this.readyText); // eslint-disable-line no-console
+			console.log(this.readyText);
 			this.user.setGame(this.statusText);
 
 			// Load all guild storages
@@ -246,10 +252,10 @@ export default class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key to use in settings storage
-	 * @param {string} value - The value to use in settings storage
+	 * @param {any} value - The value to use in settings storage
 	 * @returns {Bot}
 	 */
-	setDefaultSetting(key, value)
+	public setDefaultSetting(key: string, value: any): this
 	{
 		this.storage.setItem(`defaultGuildSettings/${key}`, value);
 		this.guildStorages.forEach(guild =>
@@ -268,7 +274,7 @@ export default class Bot extends Client
 	 * @param {string} key - The key to use in settings storage
 	 * @returns {Bot}
 	 */
-	removeDefaultSetting(key)
+	public removeDefaultSetting(key: string): this
 	{
 		this.storage.removeItem(`defaultGuildSettings/${key}`);
 		return this;
@@ -281,7 +287,7 @@ export default class Bot extends Client
 	 * @param {string} key - The key in storage to check
 	 * @returns {boolean}
 	 */
-	defaultSettingExists(key)
+	public defaultSettingExists(key: string): boolean
 	{
 		return !!this.storage.getItem('defaultGuildSettings')[key];
 	}
@@ -290,13 +296,13 @@ export default class Bot extends Client
 	 * Shortcut to return the command prefix for the provided guild
 	 * @memberof Bot
 	 * @instance
-	 * @param {(external:Guild|string)} guild - The guild or guild id to get the prefix of
+	 * @param {(external:Guild|string)} guild The guild or guild id to get the prefix of
 	 * @returns {string|null}
 	 */
-	getPrefix(guild)
+	public getPrefix(guild: Guild | string): string
 	{
 		if (!guild) return null;
-		return this.guildStorages.get(guild).getSetting('prefix') || null;
+		return this.guildStorages.get(<Guild> guild).getSetting('prefix') || null;
 	}
 
 	/**
@@ -305,24 +311,70 @@ export default class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 */
-	sweepStorages()
+	public sweepStorages(): void
 	{
 		this._guildStorageLoader.cleanGuilds(this._guildDataStorage, this._guildSettingStorage);
 	}
-}
 
-/**
- * @typedef {Object} BotOptions Object containing required {@link Bot} properties to be
- * passed to a Bot on construction
- * @property {string} [name='botname'] - See: {@link Bot#name}
- * @property {string} token - See: {@link Bot#token}
- * @property {string} [commandsDir] - See: {@link Bot#commandsDir}
- * @property {string} [statusText=null] - See: {@link Bot#statusText}
- * @property {string} [readyText='Ready!'] - See: {@link Bot#readyText}
- * @property {boolean} [noCommandErr=true] - See: {@link Bot#noCommandErr}
- * @property {boolean} [selfbot=false] - See: {@link Bot#selfbot}
- * @property {boolean} [passive=false] - see {@link Bot#passive}
- * @property {string} [version='0.0.0'] - See: {@link Bot#version}
- * @property {Object} config - See: {@link Bot#config}
- * @property {string[]} [disableBase=[]] - See: {@link Bot#disableBase}
- */
+	/**
+	 * Emitted whenever a command is successfully called
+	 * @memberof Bot
+	 * @instance
+	 * @event event:command
+	 * @param {string} name Name of the called command
+	 * @param {any[]} args Args passed to the called command
+	 * @param {number} execTime Time command took to execute
+	 * @param {external:Message} message Message that triggered the command
+	 */
+	public on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
+
+//#region Discord.js events
+
+	public on(event: 'channelCreate', listener: (channel: Channel) => void): this;
+	public on(event: 'channelDelete', listener: (channel: Channel) => void): this;
+	public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
+	public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+	public on(event: 'debug', listener: (info: string) => void): this;
+	public on(event: 'disconnect', listener: (event: any) => void): this;
+	public on(event: 'emojiCreate', listener: (emoji: Emoji) => void): this;
+	public on(event: 'emojiCreate', listener: (emoji: Emoji) => void): this;
+	public on(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
+	public on(event: 'error', listener: (error: Error) => void): this;
+	public on(event: 'guildBanAdd', listener: (guild: Guild, user: User) => void): this;
+	public on(event: 'guildBanRemove', listener: (guild: Guild, user: User) => void): this;
+	public on(event: 'guildCreate', listener: (guild: Guild) => void): this;
+	public on(event: 'guildDelete', listener: (guild: Guild) => void): this;
+	public on(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
+	public on(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
+	public on(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
+	public on(event: 'guildMembersChunk', listener: (members: Collection<string, GuildMember>, guild: Guild) => void): this;
+	public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
+	public on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+	public on(event: 'guildUnavailable', listener: (guild: Guild) => void): this;
+	public on(event: 'guildUpdate', listener: (oldGuild: Guild, newGuild: Guild) => void): this;
+	public on(event: 'message', listener: (message: Message) => void): this;
+	public on(event: 'messageDelete', listener: (message: Message) => void): this;
+	public on(event: 'messageDeleteBulk', listener: (messages: Collection<string, Message>) => void): this;
+	public on(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: User) => void): this;
+	public on(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
+	public on(event: 'messageReactionRemoveAll', listener: (message: Message) => void): this;
+	public on(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
+	public on(event: 'presenceUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+	public on(event: 'ready', listener: () => void): this;
+	public on(event: 'reconnecting', listener: () => void): this;
+	public on(event: 'roleCreate', listener: (role: Role) => void): this;
+	public on(event: 'roleDelete', listener: (role: Role) => void): this;
+	public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
+	public on(event: 'typingStart', listener: (channel: Channel, user: User) => void): this;
+	public on(event: 'typingStop', listener: (channel: Channel, user: User) => void): this;
+	public on(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
+	public on(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+	public on(event: 'voiceStateUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+	public on(event: 'warn', listener: (info: string) => void): this;
+	public on(event: string, listener: Function): this
+	{
+		return super.on(event, listener);
+	}
+
+//#endregion
+}

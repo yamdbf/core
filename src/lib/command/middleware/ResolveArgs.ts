@@ -1,46 +1,29 @@
-'use babel';
-'use strict';
+import { Bot } from '../../bot/Bot';
+import { Message } from '../../types/Message';
+import { ResolveArgType } from '../../types/ResolveArgType';
+import { Util } from '../../Util';
+import { Command } from '../Command';
+import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 
-import { normalize } from '../../Util';
-
-/** @module Middleware */
-
-/**
- * Takes an object mapping argument names to argument types that
- * resolves args to their specified type or throws errors for
- * any invalid input.
- *
- * Valid types are:
- * `String`, `Number`, `User`, `Member`, `BannedUser`, `Role`, `Channel`
- *
- * Example:
- * ```
- * { '<mem>': 'Member', '<age>': 'Number', '<...desc>': 'String' }
- * ```
- *
- * Supports `...` in the argument name as the final argument to
- * gather the remaining args into one string
- * @param {object} argTypes An object of argument names mapped to argument types
- * @returns {Function}
- */
-export default function resolveArgs(argTypes)
+export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): (message: Message, args: any[]) => Promise<[Message, any[]]>
 {
-	return async function(message, args)
+	return async function(message, args): Promise<[Message, any[]]>
 	{
-		const names = Object.keys(argTypes);
-		const types = names.map(a => argTypes[a]);
+		const names: string[] = Object.keys(argTypes);
+		const types: ResolveArgType[] = names.map(a => argTypes[a]);
 
-		const normalizeUser = text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
+		const normalizeUser: (text: string) => string =
+			text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
 
-		const prefix = message.guild.storage.getSetting('prefix');
-		const usage = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
-		const idRegex = /^(?:<@!?)?(\d+)>?$/;
+		const prefix: string = message.guild.storage.getSetting('prefix');
+		const usage: string = `Usage: \`${(<U> this).usage.replace('<prefix>', prefix)}\``;
+		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 		for (const [index, arg] of args.entries())
 		{
 			if (index > names.length - 1) break;
 
-			const name = names[index];
-			const type = types[index];
+			const name: string = names[index];
+			const type: ResolveArgType = types[index];
 			if (name.includes('...'))
 			{
 				if (index !== names.length - 1) throw new Error(
@@ -68,7 +51,7 @@ export default function resolveArgs(argTypes)
 
 			else if (type === 'User')
 			{
-				let user;
+				let user: User;
 				if (idRegex.test(arg))
 				{
 					try
@@ -83,8 +66,8 @@ export default function resolveArgs(argTypes)
 				}
 				else
 				{
-					const normalized = normalizeUser(arg);
-					let users = this.bot.users.filter(a => normalizeUser(a.username).includes(normalized)
+					const normalized: string = normalizeUser(arg);
+					let users: Collection<string, User> = (<U> this).bot.users.filter(a => normalizeUser(a.username).includes(normalized)
 						|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
 
 					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
@@ -100,7 +83,7 @@ export default function resolveArgs(argTypes)
 
 			else if (type === 'Member')
 			{
-				let member;
+				let member: GuildMember;
 				if (idRegex.test(arg))
 				{
 					try
@@ -115,10 +98,11 @@ export default function resolveArgs(argTypes)
 				}
 				else
 				{
-					const normalized = normalizeUser(arg);
-					let members = message.guild.members.filter(a => normalizeUser(a.displayName).includes(normalized)
-						|| normalizeUser(a.user.username).includes(normalized)
-						|| normalizeUser(`${a.user.username}#${a.user.discriminator}`).includes(normalized));
+					const normalized: string = normalizeUser(arg);
+					let members: Collection<string, GuildMember> = message.guild.members
+						.filter(a => normalizeUser(a.displayName).includes(normalized)
+							|| normalizeUser(a.user.username).includes(normalized)
+							|| normalizeUser(`${a.user.username}#${a.user.discriminator}`).includes(normalized));
 
 					if (members.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
 						members.map(a => `\`${a.user.username}#${a.user.discriminator}\``)
@@ -133,8 +117,8 @@ export default function resolveArgs(argTypes)
 
 			else if (type === 'BannedUser')
 			{
-				const bannedUsers = await message.guild.fetchBans();
-				let user;
+				const bannedUsers: Collection<string, User> = await message.guild.fetchBans();
+				let user: User;
 				if (idRegex.test(arg))
 				{
 					user = bannedUsers.get(arg.match(idRegex)[1]);
@@ -142,9 +126,10 @@ export default function resolveArgs(argTypes)
 				}
 				else
 				{
-					const normalized = normalizeUser(arg);
-					let users = bannedUsers.filter(a => normalizeUser(a.username).includes(normalized)
-						|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
+					const normalized: string = normalizeUser(arg);
+					let users: Collection<string, User> = bannedUsers.filter(a =>
+						normalizeUser(a.username).includes(normalized)
+							|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
 
 					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
 						users.map(a => `\`${a.username}#${a.discriminator}\``).join(', ')
@@ -159,19 +144,20 @@ export default function resolveArgs(argTypes)
 
 			else if (type === 'Channel')
 			{
-				let channel;
-				const channelRegex = /^(?:<#)?(\d+)>?$/;
+				let channel: TextChannel;
+				const channelRegex: RegExp = /^(?:<#)?(\d+)>?$/;
 				if (channelRegex.test(arg))
 				{
-					const id = arg.match(channelRegex)[1];
-					channel = message.guild.channels.get(id);
+					const id: string = arg.match(channelRegex)[1];
+					channel = <TextChannel> message.guild.channels.get(id);
 					if (!channel) throw new Error(`in arg \`${name}\`: Failed to find a channel with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
-					const normalized = normalize(arg);
-					let channels = message.guild.channels.filter(a => a.type === 'text')
-						.filter(a => normalize(a.name).includes(normalized));
+					const normalized: string = Util.normalize(arg);
+					let channels: Collection<string, TextChannel> = <Collection<string, TextChannel>> message.guild.channels
+						.filter(a => a.type === 'text')
+						.filter(a => Util.normalize(a.name).includes(normalized));
 
 					if (channels.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
 						channels.map(a => `\`#${a.name}\``).join(', ')
@@ -186,18 +172,18 @@ export default function resolveArgs(argTypes)
 
 			else if (type === 'Role')
 			{
-				let role;
-				const roleRegex = /^(?:<@&)?(\d+)>?$/;
+				let role: Role;
+				const roleRegex: RegExp = /^(?:<@&)?(\d+)>?$/;
 				if (roleRegex.test(arg))
 				{
-					const id = arg.match(roleRegex)[1];
+					const id: string = arg.match(roleRegex)[1];
 					role = message.guild.roles.get(id);
 					if (!role) throw new Error(`in arg \`${name}\`: Failed to find a role with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
-					const normalized = normalize(arg);
-					let roles = message.guild.roles.filter(a => normalize(a.name).includes(normalized));
+					const normalized: string = Util.normalize(arg);
+					let roles: Collection<string, Role> = message.guild.roles.filter(a => Util.normalize(a.name).includes(normalized));
 
 					if (roles.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
 						roles.map(a => `\`${a.name}\``).join(', ')

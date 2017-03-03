@@ -1,11 +1,11 @@
 {
 	"rules": {
-		"no-inferrable-types": false,
+		"no-inferrable-types": [false],
 		"no-unused-expression": true,
 		"no-duplicate-variable": true,
 		"no-duplicate-key": true,
 		"no-unused-variable": [true, {"ignore-pattern": "^_"}],
-		"no-invalid-this": true,
+		// "no-invalid-this": true,
 		"no-shadowed-variable": true,
 		"comment-format": [
 			true, "check-space"
@@ -38,7 +38,7 @@
         //     ]}
 		// ],
 		"member-access": [true, "check-accessor", "check-constructor"],
-		"no-consecutive-blank-lines": true,
+		"no-consecutive-blank-lines": [true],
 		"no-constructor-vars": true,
 		"one-line": [
 			false
@@ -62,7 +62,7 @@
 		],
 		"typedef": [
 			"parameter",
-			"arrow-parameter",
+			// "arrow-parameter",
 			"call-signature",
 			"member-variable-declaration",
 			"property-declaration",

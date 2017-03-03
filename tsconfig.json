@@ -2,8 +2,11 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
+        "lib": [
+            "es7"
+        ],
         "declaration": true,
-        "noImplicitAny": false
+        "noImplicitAny": true
     },
 	"exclude": [
 		"node_modules",

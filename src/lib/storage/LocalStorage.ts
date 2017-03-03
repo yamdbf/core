@@ -1,7 +1,4 @@
-'use babel';
-'use strict';
-
-import Database from 'node-json-db';
+import * as Database from 'node-json-db';
 
 /**
  * Creates a persistent storage file and handles interacting with the persistent
@@ -9,9 +6,12 @@ import Database from 'node-json-db';
  * @class LocalStorage
  * @param {string} fileName - The name of the persistent storage file. Will be json format
  */
-export default class LocalStorage
+export class LocalStorage
 {
-	constructor(fileName)
+	private _db: Database;
+	private _temp: { [key: string]: any };
+
+	public constructor(fileName: string)
 	{
 		if (!fileName) throw new Error('You must provide a file name for the LocalStorage');
 
@@ -28,11 +28,11 @@ export default class LocalStorage
 	 * @instance
 	 * @type {number}
 	 */
-	get length()
+	public get length(): number
 	{
 		try
 		{
-			let data = this._db.getData('/');
+			let data: object = this._db.getData('/');
 			return Object.keys(data).length || 0;
 		}
 		catch (err)
@@ -47,11 +47,11 @@ export default class LocalStorage
 	 * @instance
 	 * @type {string[]}
 	 */
-	get keys()
+	public get keys(): string[]
 	{
 		try
 		{
-			let data = this._db.getData('/');
+			let data: object = this._db.getData('/');
 			return Object.keys(data);
 		}
 		catch (err)
@@ -64,16 +64,16 @@ export default class LocalStorage
 	 * Get the name of the key at the given index in this storage
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {number} index - The index of the key to find
+	 * @param {number} index The index of the key to find
 	 * @returns {string}
 	 */
-	key(index)
+	public key(index: number): string
 	{
 		if (!index || index < 0) return null;
 		try
 		{
-			let data = this._db.getData('/');
-			if (index >= data.length) return null;
+			let data: object = this._db.getData('/');
+			if (index >= Object.keys(data).length) return null;
 			return Object.keys(data)[index];
 		}
 		catch (err)
@@ -86,15 +86,15 @@ export default class LocalStorage
 	 * Get the value of the given key in this storage
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {string} key - The key of the item to get
+	 * @param {string} key The key of the item to get
 	 * @returns {*}
 	 */
-	getItem(key)
+	public getItem(key: string): any
 	{
 		if (typeof key !== 'string') return null;
 		try
 		{
-			let data = this._db.getData(`/${key}`);
+			let data: object = this._db.getData(`/${key}`);
 			return JSON.parse(JSON.stringify(data));
 		}
 		catch (err)
@@ -107,10 +107,10 @@ export default class LocalStorage
 	 * Set the value of a given key in this storage
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {string} key - The key of the item to set
-	 * @param {*} value - The value to set
+	 * @param {string} key The key of the item to set
+	 * @param {*} value The value to set
 	 */
-	setItem(key, value)
+	public setItem(key: string, value: any): void
 	{
 		if (typeof key !== 'string') return;
 		if (typeof value === 'undefined') value = '';
@@ -118,11 +118,11 @@ export default class LocalStorage
 	}
 
 	// Handle increment/deincrement of stored integer values
-	_modifyStoredInt(key, type)
+	private _modifyStoredInt(key: string, type: '++' | '--'): void
 	{
 		if (typeof key !== 'string') return;
 		if (type !== '++' && type !== '--') return;
-		let value = this.getItem(key);
+		let value: any = this.getItem(key);
 		if (!Number.isInteger(value)) return;
 		this.setItem(key, type === '++' ? ++value : --value);
 	}
@@ -131,25 +131,25 @@ export default class LocalStorage
 	 * Increment a stored integer value
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {string} key - The key of the item to increment
+	 * @param {string} key The key of the item to increment
 	 */
-	incr(key) { this._modifyStoredInt(key, '++'); }
+	public incr(key: string): void { this._modifyStoredInt(key, '++'); }
 
 	/**
 	 * Deincrement a stored integer value
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {string} key - The key of the item to increment
+	 * @param {string} key The key of the item to increment
 	 */
-	deincr(key) { this._modifyStoredInt(key, '--'); }
+	public deincr(key: string): void { this._modifyStoredInt(key, '--'); }
 
 	/**
 	 * Delete an item in this storage
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {string} key - The key of the item to delete
+	 * @param {string} key The key of the item to delete
 	 */
-	removeItem(key)
+	public removeItem(key: string): void
 	{
 		if (typeof key !== 'string') return;
 		this._db.delete(`/${key}`);
@@ -159,10 +159,10 @@ export default class LocalStorage
 	 * Check if key/value pair exists in this storage
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {string} key - The key of the item to check for
+	 * @param {string} key The key of the item to check for
 	 * @returns {boolean}
 	 */
-	exists(key)
+	public exists(key: string): boolean
 	{
 		if (typeof key !== 'string') return false;
 		return this.getItem(key) !== null;
@@ -173,7 +173,7 @@ export default class LocalStorage
 	 * @memberof LocalStorage
 	 * @instance
 	 */
-	clear()
+	public clear(): void
 	{
 		this._db.push('/', {}, true);
 	}
@@ -184,19 +184,19 @@ export default class LocalStorage
 	 * proceeding with the provided callback
 	 * @memberof LocalStorage
 	 * @instance
-	 * @param {string} key - the storage key you will be accessing
-	 * @param {function} callback - callback to execute that will be accessing the key
+	 * @param {string} key the storage key you will be accessing
+	 * @param {function} callback callback to execute that will be accessing the key
 	 * @returns {Promise}
 	 */
-	queue(key, callback)
+	public queue<T extends string>(key: T, callback: (key: T) => void): Promise<void>
 	{
-		return new Promise((resolve, reject) =>
+		return new Promise<void>((resolve, reject) =>
 		{
 			try
 			{
-				while(this._temp[`checking${key}`]) {} // eslint-disable-line
+				while (this._temp[`checking${key}`]) {}
 				this._temp[`checking${key}`] = true;
-				const finished = callback(key); // eslint-disable-line
+				const finished: any = callback(key);
 				if (finished instanceof Promise)
 				{
 					finished.then(() =>
@@ -222,11 +222,5 @@ export default class LocalStorage
 				reject(err);
 			}
 		});
-	}
-
-	nonConcurrentAccess(key, callback)
-	{
-		console.warn('LocalStorage#nonConcurrentAccess has been deprecated and will be removed in a future update. Use LocalStorage#queue instead.');
-		return this.queue(key, callback);
 	}
 }

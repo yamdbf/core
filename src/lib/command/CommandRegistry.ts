@@ -1,19 +1,15 @@
-'use babel';
-'use strict';
-
-import { Collection } from 'discord.js';
+import { Collection, Message, TextChannel } from 'discord.js';
+import { Command } from '../command/Command';
+import { Bot } from '../bot/Bot';
 
 /**
  * Stores loaded Commands as &lt;[name]{@link Command#name}, [Command]{@link Command}&gt; pairs
  * @class CommandRegistry
  * @extends {external:Collection}
  */
-export default class CommandRegistry extends Collection
+export class CommandRegistry<T extends Bot, K extends string, V extends Command<T>> extends Collection<K, V>
 {
-	constructor()
-	{
-		super();
-	}
+	public constructor() { super(); }
 
 	/**
 	 * Complete registration of a command and add to the parent [Collection]{@link external:Collection},
@@ -25,23 +21,23 @@ export default class CommandRegistry extends Collection
 	 * @param {boolean} reload - Whether or not the command is being reloaded and
 	 * replaced in the collection
 	 */
-	register(command, key, reload)
+	public register(command: V, key: K, reload?: boolean): void
 	{
-		if (super.has(command.name) && !reload && !(command.overloads && command.overloads !== super.get(command.overload).name))
+		if (super.has(<K> command.name) && !reload && !(command.overloads && command.overloads !== super.get(<K> command.overloads).name))
 			throw new Error(`A command with the name "${command.name}" already exists.`);
 
 		this.forEach(a =>
 		{
 			a.aliases.forEach(b =>
 			{
-				let duplicates = this.filter(c => c.aliases.includes(b) && c !== a);
+				let duplicates: Collection<K, V> = this.filter(c => c.aliases.includes(b) && c !== a);
 				if (duplicates.size > 0)
 					throw new Error(`Commands may not share aliases: ${duplicates.first().name}, ${a.name} (shared alias: ${b})`);
 			});
 		});
 
 		command.register();
-		super.set(key, command);
+		super.set(key, <V> command);
 	}
 
 	/**
@@ -50,9 +46,9 @@ export default class CommandRegistry extends Collection
 	 * @instance
 	 * @type {string[]}
 	 */
-	get groups()
+	public get groups(): string[]
 	{
-		return this.map(a => a.group).filter((a, i, self) => self.indexOf(a) === i);
+		return this.map((a: V) => a.group).filter((a, i, self) => self.indexOf(a) === i);
 	}
 
 	/**
@@ -62,7 +58,7 @@ export default class CommandRegistry extends Collection
 	 * @param {string} text - The name or alias of the Command
 	 * @returns {Command}
 	 */
-	findByNameOrAlias(text)
+	public findByNameOrAlias(text: string): V
 	{
 		return this.filter(c => c.name === text || c.aliases.includes(text)).first();
 	}
@@ -76,17 +72,16 @@ export default class CommandRegistry extends Collection
 	 * @param {external:Message} message - Discord.js Message object
 	 * @returns {external:Collection<string, Command>}
 	 */
-	filterGuildUsable(bot, message)
+	public filterGuildUsable(bot: T, message: Message): Collection<K, V>
 	{
+		// TODO: Rewrite this. Seriously. This is a disgusting mess.
 		return this.filter(c => c.permissions.length > 0 ? c.permissions
-			.filter(a => message.channel.permissionsFor(message.author)
+			.filter(a => (<TextChannel> message.channel).permissionsFor(message.author)
 				.hasPermission(a)).length > 0 : true)
-			.filter(c => !(c.roles.length > 0 && !message.member.roles.filter(role =>
-				c.roles.includes(role.name)).size > 0))
+			.filter(c => !(c.roles.length > 0 && message.member.roles.filter(role => c.roles.includes(role.name)).size === 0))
 			.filter(c => !bot.guildStorages.get(message.guild).settingExists('disabledGroups')
 				|| !bot.guildStorages.get(message.guild).getSetting('disabledGroups').includes(c.group))
-			.filter(c => (bot.config.owner
-				.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly);
+			.filter(c => ((<any> bot.config).owner.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly);
 	}
 
 	/**
@@ -98,14 +93,12 @@ export default class CommandRegistry extends Collection
 	 * @param {external:Message} message - Discord.js Message object
 	 * @returns {external:Collection<string, Command>}
 	 */
-	filterDMUsable(bot, message)
+	public filterDMUsable(bot: T, message: Message): Collection<K, V>
 	{
-		return this.filter(c => !c.guildOnly && ((bot.config.owner
+		return this.filter(c => !c.guildOnly && (((<any> bot.config).owner
 			.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly));
 	}
 
-	// Returns all commands that can have their help looked up in
-	// a DM by the user
 	/**
 	 * Returns all commands that can have their help looked up by the user
 	 * in the DM channel the message is in
@@ -115,9 +108,9 @@ export default class CommandRegistry extends Collection
 	 * @param {external:Message} message - Discord.js Message object
 	 * @returns {external:Collection<string, Command>}
 	 */
-	filterDMHelp(bot, message)
+	public filterDMHelp(bot: T, message: Message): Collection<K, V>
 	{
-		return this.filter(c => (bot.config.owner
+		return this.filter(c => ((<any> bot.config).owner
 			.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly);
 	}
 }
