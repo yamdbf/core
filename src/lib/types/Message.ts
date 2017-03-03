@@ -1,7 +1,7 @@
-import { Message as DMessage } from 'discord.js';
 import { Guild } from './Guild';
+import * as Discord from 'discord.js';
 
-export class Message extends DMessage
+export class Message extends Discord.Message
 {
 	public guild: Guild;
 }
