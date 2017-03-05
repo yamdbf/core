@@ -3,7 +3,7 @@ import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Command } from '../command/Command';
 import { Bot } from '../bot/Bot';
-import * as now from 'performance-now';
+import now = require('performance-now');
 
 /**
  * Handles dispatching commands

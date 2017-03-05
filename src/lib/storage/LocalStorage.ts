@@ -1,4 +1,4 @@
-import * as Database from 'node-json-db';
+import Database = require('node-json-db');
 
 /**
  * Creates a persistent storage file and handles interacting with the persistent

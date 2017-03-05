@@ -1,7 +1,7 @@
 import { Bot } from '../../bot/Bot';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import * as now from 'performance-now';
+import now = require('performance-now');
 
 export default class Reload extends Command<Bot>
 {

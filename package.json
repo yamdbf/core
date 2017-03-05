@@ -5,7 +5,7 @@
   "main": "bin/index",
   "typings": "bin/index.d.ts",
   "scripts": {
-    "postinstall": "postinstall-build \"npm run build\"",
+    "postinstall": "postinstall-build \"npm run build -s\"",
     "build": "gulp",
     "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r bin && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
     "lint": "tslint './src/**/*.ts'"
