@@ -199,6 +199,18 @@ export class Bot extends Client
 	}
 
 	/**
+	 * Returns whether or not the given user is an owner
+	 * of the bot
+	 * @memberof Bot
+	 * @instance
+	 * @param {User} user User to check
+	 */
+	public isOwner(user: User): boolean
+	{
+		return this.config.owner.includes(user.id);
+	}
+
+	/**
 	 * Loads/reloads all/specific commands
 	 * @memberof Bot
 	 * @instance
