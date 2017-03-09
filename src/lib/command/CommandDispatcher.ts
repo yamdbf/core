@@ -1,4 +1,4 @@
-import { PermissionResolvable, TextChannel } from 'discord.js';
+import { PermissionResolvable, TextChannel, User } from 'discord.js';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Command } from '../command/Command';
@@ -31,6 +31,8 @@ export class CommandDispatcher<T extends Bot>
 
 		const dm: boolean = ['dm', 'group'].includes(message.channel.type);
 		if (!dm) message.guild.storage = this._bot.guildStorages.get(message.guild);
+
+		if (this.isBlacklisted(message.author, message, dm)) return;
 
 		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = this.isCommandCalled(message);
 		if (!commandCalled) return;
@@ -166,6 +168,16 @@ export class CommandDispatcher<T extends Bot>
 		return this._bot.selfbot || command.roles.length === 0 || dm
 			|| message.member.roles.filter(role =>
 				command.roles.includes(role.name)).size > 0;
+	}
+
+	/**
+	 * Check if the calling user is blacklisted
+	 */
+	private isBlacklisted(user: User, message: Message, dm: boolean): boolean
+	{
+		if (this._bot.storage.exists(`blacklist/${user.id}`)) return true;
+		if (!dm && message.guild.storage.settingExists(`blacklist/${user.id}`)) return true;
+		return false;
 	}
 
 	/**
