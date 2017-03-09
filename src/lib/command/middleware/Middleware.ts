@@ -18,7 +18,7 @@ export class Middleware
 	 * any invalid input.<br><br>
 	 *
 	 * Valid types are:<br>
-	 * <pre class="prettyprint"><code>'String' | 'Number' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre><br>
+	 * <pre class="prettyprint"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre><br>
 	 *
 	 * Example:<br>
 	 * <pre class="prettyprint"><code>{ 'mem': 'Member', 'age>': 'Number', '...desc': 'String' }
@@ -52,7 +52,7 @@ export class Middleware
 	 * </code></pre><br>
 	 *
 	 * If verifying a `BannedUser` returned from the ResolveArgs middleware,
-	 * use the `User` type.
+	 * use the `User` type. If verifying `Duration` type, `Number` should be used.
 	 *
 	 * This middleware does not modify args in any way.
 	 * @name expect

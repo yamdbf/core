@@ -48,6 +48,25 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 					`in arg \`${name}\`: \`${arg}\` could not be resolved to a number.\n${usage}`);
 			}
 
+			else if (type === 'Duration')
+			{
+				let duration: number, match: RegExpMatchArray;
+				if (/^(?:\d+(?:\.\d+)?)[s|m|h|d]$/.test(arg))
+				{
+					match = arg.match(/(\d+(?:\.\d+)?)(s|m|h|d)$/);
+					duration = parseFloat(match[1]);
+					duration = match[2] === 's'
+						? duration * 1000 : match[2] === 'm'
+						? duration * 1000 * 60 : match[2] === 'h'
+						? duration * 1000 * 60 * 60 : match[2] === 'd'
+						? duration * 1000 * 60 * 60 * 24 : null;
+				}
+				if (!duration) throw new Error(
+					`in arg \`${name}\`: \`${arg}\` could not be resolved to a duration.\n${usage}`);
+
+				args[index] = duration;
+			}
+
 			else if (type === 'User')
 			{
 				let user: User;
