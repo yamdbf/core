@@ -18,7 +18,8 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 		const prefix: string = message.guild.storage.getSetting('prefix');
 		const usage: string = `Usage: \`${(<U> this).usage.replace('<prefix>', prefix)}\``;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
-		for (const [index, arg] of args.entries())
+		let foundRestArg: boolean = false;
+		for (let [index, arg] of args.entries())
 		{
 			if (index > names.length - 1) break;
 
@@ -29,12 +30,10 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 				if (index !== names.length - 1) throw new Error(
 					`Rest arg \`${name}\` must be the final argument descriptor.`);
 
-				if (type !== 'String') throw new Error(
-					`in rest arg \`${name}\`: Rest args can only resolve to Strings.`);
-
-				args[index] = args.slice(index).join(' ');
+				arg = args.slice(index).join(' ');
+				args[index] = arg;
 				args = args.slice(0, index + 1);
-				break;
+				foundRestArg = true;
 			}
 
 			if (type === 'String')
@@ -200,6 +199,8 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 			{
 				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not a valid argument type.`);
 			}
+
+			if (foundRestArg) break;
 		}
 
 		return [message, args];
