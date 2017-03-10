@@ -33,6 +33,7 @@ export default class Whitelist extends Command<Bot>
 				return message.channel.send('That user is not currently globally blacklisted.');
 
 			this.bot.storage.removeItem(`blacklist/${user.id}`);
+			this.bot.emit('blacklistRemove', user, true);
 			return message.channel.send(`Removed ${user.username}#${user.discriminator} from the global blacklist.`);
 		}
 
@@ -40,6 +41,7 @@ export default class Whitelist extends Command<Bot>
 			return message.channel.send('That user is not currently blacklisted in this server.');
 
 		message.guild.storage.removeSetting(`blacklist/${user.id}`);
+		this.bot.emit('blacklistRemove', user, false);
 		return message.channel.send(`Removed ${user.username}#${user.discriminator} from this server's blacklist.`);
 	}
 }

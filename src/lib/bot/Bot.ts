@@ -328,18 +328,6 @@ export class Bot extends Client
 		this._guildStorageLoader.cleanGuilds(this._guildDataStorage, this._guildSettingStorage);
 	}
 
-	/**
-	 * Emitted whenever a command is successfully called
-	 * @memberof Bot
-	 * @instance
-	 * @event event:command
-	 * @param {string} name Name of the called command
-	 * @param {any[]} args Args passed to the called command
-	 * @param {number} execTime Time command took to execute
-	 * @param {external:Message} message Message that triggered the command
-	 */
-	public on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
-
 //#region Discord.js events
 
 	public on(event: 'channelCreate', listener: (channel: Channel) => void): this;
@@ -383,10 +371,43 @@ export class Bot extends Client
 	public on(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
 	public on(event: 'voiceStateUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 	public on(event: 'warn', listener: (info: string) => void): this;
+
+//#endregion
+
+	public on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
+	public on(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
+	public on(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
+
+	/**
+	 * Emitted whenever a command is successfully called
+	 * @memberof Bot
+	 * @instance
+	 * @event event:command
+	 * @param {string} name Name of the called command
+	 * @param {any[]} args Args passed to the called command
+	 * @param {number} execTime Time command took to execute
+	 * @param {external:Message} message Message that triggered the command
+	 */
+
+	/**
+	 * Emitted whenever a user is blacklisted
+	 * @memberof Bot
+	 * @instance
+	 * @event event:blacklistAdd
+	 * @param {User} user User who was blacklisted
+	 * @param {boolean} global Whether or not blacklisting is global
+	 */
+
+	/**
+	 * Emitted whenever a user is removed from the blacklist
+	 * @memberof Bot
+	 * @instance
+	 * @event event:blacklistRemove
+	 * @param {User} user User who was removed
+	 * @param {boolean} global Whether or not removal is global
+	 */
 	public on(event: string, listener: Function): this
 	{
 		return super.on(event, listener);
 	}
-
-//#endregion
 }

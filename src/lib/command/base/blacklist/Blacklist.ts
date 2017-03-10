@@ -39,6 +39,7 @@ export default class Blacklist extends Command<Bot>
 				return message.channel.send('That user is already globally blacklisted.');
 
 			this.bot.storage.setItem(`blacklist/${user.id}`, true);
+			this.bot.emit('blacklistAdd', user, true);
 			return message.channel.send(`Added ${user.username}#${user.discriminator} to the global blacklist.`);
 		}
 
@@ -49,6 +50,7 @@ export default class Blacklist extends Command<Bot>
 			return message.channel.send('That user is already blacklisted in this server.');
 
 		message.guild.storage.setSetting(`blacklist/${user.id}`, true);
+		this.bot.emit('blacklistAdd', user, false);
 		return message.channel.send(`Added ${user.username}#${user.discriminator} to this server's blacklist.`);
 	}
 }
