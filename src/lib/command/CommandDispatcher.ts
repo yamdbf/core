@@ -137,7 +137,7 @@ export class CommandDispatcher<T extends Bot>
 		return true;
 	}
 
-	/** 
+	/**
 	 * Compare user permissions to the command's requisites
 	 */
 	private checkPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]

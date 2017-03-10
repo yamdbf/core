@@ -15,7 +15,7 @@ export type CommandInfo = {
 	roles?: string[];
 	ownerOnly?: boolean;
 	overloads?: string;
-}
+};
 
 /**
  * @typedef {Object} CommandInfo - Object containing required {@link Command} properties

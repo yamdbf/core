@@ -10,7 +10,7 @@ export type BotOptions = {
 	version?: string;
 	disableBase?: string[];
 	config: any;
-}
+};
 
 /**
  * @typedef {Object} BotOptions Object containing required {@link Bot} properties to be

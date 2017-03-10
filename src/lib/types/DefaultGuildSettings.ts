@@ -2,7 +2,7 @@ export type DefaultGuildSettings = {
 	[key: string]: any;
 	prefix: string;
 	disabledGroups: string[];
-}
+};
 
 /**
  * @typedef {Object} DefaultGuildSettings - The default settings to apply to new guilds.

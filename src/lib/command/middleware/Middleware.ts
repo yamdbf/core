@@ -43,10 +43,10 @@ export class Middleware
 	 * arguments are present and valid. Should be added to the
 	 * command AFTER any and all middleware functions that modify
 	 * args in any way are added.<br><br>
-	 * 
+	 *
 	 * Valid types are:<br>
 	 * <pre class="prettyprint"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><br>
-	 * 
+	 *
 	 * Example:<br>
 	 * <pre class="prettyprint"><code>{ 'mem': 'Member', 'age': 'Number', 'desc': 'String' }
 	 * </code></pre><br>

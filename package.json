@@ -5,11 +5,11 @@
   "main": "bin/index",
   "typings": "bin/index.d.ts",
   "scripts": {
+    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r bin && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
     "postinstall": "postinstall-build \"npm run build -s\"",
     "build": "gulp",
-    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r bin && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
-    "lint": "tslint './src/**/*.ts'",
-    "test": "npm run lint -s"
+    "lint": "gulp lint",
+    "test": "npm run build -s"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
@@ -37,16 +37,17 @@
   },
   "devDependencies": {
     "@types/glob": "^5.0.30",
-    "@types/node": "^6.0.46",
+    "@types/node": "^7.0.8",
     "@types/node-json-db": "0.0.1",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
-    "gulp-sourcemaps": "^1.6.0",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-tslint": "^7.1.0",
     "gulp-typescript": "^3.1.5",
     "jsdoc": "github:zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "github:zajrik/minami",
-    "tslint": "^3.15.1",
+    "tslint": "^4.5.1",
     "typescript": "^2.2.1"
   }
 }

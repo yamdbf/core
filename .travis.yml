@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "7"
+dist: trusty
+cache:
+  directories:
+    - node_modules
+before_install:
+  - npm explore npm -g -- npm install node-gyp@latest
+install: npm install

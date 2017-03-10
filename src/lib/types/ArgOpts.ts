@@ -1,7 +1,7 @@
 
 export type ArgOpts = {
 	separator?: string;
-}
+};
 
 /**
  * @typedef {Object} ArgOpts - Object containing options for
