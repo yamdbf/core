@@ -11,13 +11,17 @@ export function expect<T extends Bot, U extends Command<T>>(argTypes: { [name: s
 		const names: string[] = Object.keys(argTypes);
 		const types: ExpectArgType[] = names.map(a => argTypes[a]);
 
-		const prefix: string = message.guild.storage.getSetting('prefix');
+		const dm: boolean = message.channel.type !== 'text';
+		const prefix: string = !dm ? message.guild.storage.getSetting('prefix') : '';
 		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 
 		for (const [index, name] of names.entries())
 		{
 			const arg: any = args[index];
 			const type: ExpectArgType = types[index];
+
+			if (dm && !['String', 'Number', 'User', 'Any'].includes(type))
+				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
 
 			if (typeof args[index] === 'undefined' || args[index] === null)
 				throw new Error(`Missing or null value for arg: \`${name}\`, expected \`${type}\`\n${usage}`);
