@@ -15,7 +15,8 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 		const normalizeUser: (text: string) => string =
 			text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
 
-		const prefix: string = message.guild.storage.getSetting('prefix');
+		const dm: boolean = message.channel.type !== 'text';
+		const prefix: string = dm ? message.guild.storage.getSetting('prefix') : '';
 		const usage: string = `Usage: \`${(<U> this).usage.replace('<prefix>', prefix)}\``;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 		let foundRestArg: boolean = false;
@@ -35,6 +36,9 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 				args = args.slice(0, index + 1);
 				foundRestArg = true;
 			}
+
+			if (dm && !['String', 'Number', 'Duration', 'User'].includes(type))
+				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
 
 			if (type === 'String')
 			{
