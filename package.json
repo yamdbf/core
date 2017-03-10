@@ -3,17 +3,12 @@
   "version": "2.6.2",
   "description": "Yet Another Modular Discord Bot Framework: A somewhat simple framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
-  "types": "typings/index.d.ts",
+  "typings": "bin/index.d.ts",
   "scripts": {
-    "postinstall": "postinstall-build \"npm run rebuild\"",
-    "build": "gulp build",
-    "clean": "gulp clean",
-    "rebuild": "gulp clean && gulp build",
-    "package": "gulp clean-package && gulp package",
-    "tag-release": "gulp tag-release",
-    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r src && jsdoc -c .jsdoc.json -t templates/haruki -r src -d console > ../yamdbf-docs/docs.json",
-    "lint": "eslint ./src/",
-    "lint-typings": "tslint typings/index.d.ts"
+    "postinstall": "postinstall-build \"npm run build -s\"",
+    "build": "gulp",
+    "docs": "jsdoc -R README.md -c .jsdoc.json -u examples -r bin && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
+    "lint": "tslint './src/**/*.ts'"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
@@ -40,31 +35,17 @@
     "postinstall-build": "^2.1.3"
   },
   "devDependencies": {
+    "@types/glob": "^5.0.30",
     "@types/node": "^6.0.46",
-    "babel-cli": "^6.14.0",
-    "babel-eslint": "^7.0.0",
-    "babel-preset-es2015-node6": "^0.3.0",
+    "@types/node-json-db": "0.0.1",
     "del": "^2.2.2",
-    "eslint": "^3.9.1",
-    "fast-async": "^6.0.34",
-    "gulp": "gulpjs/gulp#4.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-exec": "^2.1.2",
+    "gulp": "^3.9.1",
     "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^3.1.5",
     "jsdoc": "github:zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "github:zajrik/minami",
-    "source-map-support": "^0.4.2",
     "tslint": "^3.15.1",
-    "tslint-config-typings": "^0.2.4",
-    "typescript": "^2.0.7"
-  },
-  "babel": {
-    "presets": [
-      "es2015-node6"
-    ],
-    "plugins": [
-      "fast-async"
-    ]
+    "typescript": "^2.2.1"
   }
 }

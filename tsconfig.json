@@ -1,9 +1,14 @@
 {
     "compilerOptions": {
+        "noImplicitAny": true,
         "module": "commonjs",
         "target": "es6",
+        "lib": [
+            "es7"
+        ],
         "declaration": true,
-        "noImplicitAny": false
+        "sourceMap": true,
+        "removeComments": false
     },
 	"exclude": [
 		"node_modules",
