@@ -2,8 +2,8 @@ import { Bot } from '../../bot/Bot';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { inspect } from 'util';
-import * as Discord from 'discord.js'; // tslint:disable-line
-import * as Yamdbf from '../../../index'; // tslint:disable-line
+const Discord = require('discord.js'); // tslint:disable-line
+const Yamdbf = require('../../../index'); // tslint:disable-line
 
 export default class Eval extends Command<Bot>
 {
@@ -27,7 +27,16 @@ export default class Eval extends Command<Bot>
 			return;
 		}
 
-		let evaled: string | Promise<string | object> = eval(code);
+		let evaled: string | Promise<string | object>;
+		try
+		{
+			evaled = eval(code);
+		}
+		catch (err)
+		{
+			this._respond(message,
+				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
+		}
 		if (evaled instanceof Promise)
 		{
 			evaled.then(res =>
