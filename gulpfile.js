@@ -27,6 +27,8 @@ gulp.task('build', () => {
 		.pipe(gulp_sourcemaps.init())
 		.pipe(project());
 
+	tsCompile.pipe(gulp.dest('bin/'));
+
 	gulp.src('./src/**/*.js')
 		.pipe(gulp.dest('bin/'));
 
