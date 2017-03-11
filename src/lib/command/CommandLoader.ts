@@ -34,10 +34,13 @@ export class CommandLoader<T extends Bot>
 		{
 			const commandLocation: string = fileName.replace('.js', '');
 			delete require.cache[require.resolve(commandLocation)];
-			const loadedCommandClass: any = require(commandLocation).default;
+
+			let loadedCommandClass: any = this.getCommandClass(commandLocation);
 			const _command: Command<T> = new loadedCommandClass(this._bot);
+
 			if (this._bot.disableBase.includes(_command.name)) return;
 			_command._classloc = commandLocation;
+
 			if (_command.overloads)
 			{
 				if (!this._bot.commands.has(_command.overloads))
@@ -63,13 +66,37 @@ export class CommandLoader<T extends Bot>
 	{
 		const name: string = this._bot.commands.findByNameOrAlias(nameOrAlias).name;
 		if (!name) return false;
+
 		const commandLocation: string = this._bot.commands.get(name)._classloc;
 		delete require.cache[require.resolve(commandLocation)];
-		const loadedCommandClass: any = require(commandLocation).default;
+
+		const loadedCommandClass: any = this.getCommandClass(commandLocation);
 		const _command: Command<T> = new loadedCommandClass(this._bot);
 		_command._classloc = commandLocation;
 		this._bot.commands.register(_command, _command.name, true);
 		console.log(`Command '${_command.name}' reloaded.`);
 		return true;
+	}
+
+	/**
+	 * Get the Command class from an attempted Command class import
+	 */
+	private getCommandClass(loc: string): typeof Command
+	{
+		const importedObj: any = require(loc);
+		let commandClass: typeof Command;
+		if (importedObj && Object.getPrototypeOf(importedObj).name !== 'Command')
+		{
+			for (const key of Object.keys(importedObj))
+				if (Object.getPrototypeOf(importedObj[key]).name === 'Command')
+				{
+					commandClass = importedObj[key];
+					break;
+				}
+		}
+		else commandClass = importedObj;
+		if (!commandClass || Object.getPrototypeOf(commandClass).name !== 'Command')
+			throw new Error(`Failed to find an exported Command class in file '${loc}'`);
+		return commandClass;
 	}
 }
