@@ -18,7 +18,7 @@ export default class Eval extends Command<Bot>
 		});
 	}
 
-	public action(message: Message): void
+	public action(message: Message): any
 	{
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
 		if (!code)
@@ -34,7 +34,7 @@ export default class Eval extends Command<Bot>
 		}
 		catch (err)
 		{
-			this._respond(message,
+			return this._respond(message,
 				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
 		}
 		if (evaled instanceof Promise)
@@ -54,7 +54,7 @@ export default class Eval extends Command<Bot>
 		else
 		{
 			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
-			this._respond(message,
+			return this._respond(message,
 				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
 		}
 	}
