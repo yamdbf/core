@@ -1,11 +1,12 @@
 import { Bot } from '../../bot/Bot';
 import { Message } from '../../types/Message';
+import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
 import { Util } from '../../Util';
 import { Command } from '../Command';
 import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 
-export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): (message: Message, args: any[]) => Promise<[Message, any[]]>
+export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): MiddlewareFunction
 {
 	return async function(message, args): Promise<[Message, any[]]>
 	{

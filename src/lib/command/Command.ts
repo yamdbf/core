@@ -1,6 +1,6 @@
-import { Bot } from '../bot/Bot';
 import { PermissionResolvable, Message } from 'discord.js';
-
+import { Bot } from '../bot/Bot';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
 import { ArgOpts } from '../types/ArgOpts';
 
@@ -28,7 +28,7 @@ export class Command<T extends Bot>
 	public overloads: string;
 
 	public _classloc: string;
-	public _middleware: Array<(message: Message, args: string[]) => Promise<[Message, any[]]> | [Message, any[]]>;
+	public _middleware: MiddlewareFunction[];
 
 	public constructor(bot: T, info: CommandInfo = null)
 	{
@@ -253,19 +253,17 @@ export class Command<T extends Bot>
 	 * ```
 	 * This will add a middleware function to the command that will attempt
 	 * to transform all args to uppercase. This will of course fail if any
-	 * of the args are not a string. This could be ensured with the `stringArgs`
-	 * `argOpts` flag, or via another middleware function added before this one
-	 * that converts all args to strings.
+	 * of the args are not a string.
 	 *
 	 * Note: Middleware functions should only be added to a command one time each,
 	 * and thus should be added in the Command's constructor. Multiple middleware
 	 * functions can be added to a command via multiple calls to this method
 	 * @memberof Command
 	 * @instance
-	 * @param {Function} fn Middleware function. `(message, args) => [message, args]`
+	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
 	 * @returns {Command} This command instance
 	 */
-	public use(fn: (message: Message, args: any[]) => Promise<[Message, any[]]> | [Message, any[]]): this
+	public use(fn: MiddlewareFunction): this
 	{
 		this._middleware.push(fn);
 		return this;

@@ -1,4 +1,5 @@
 import { PermissionResolvable, TextChannel, User } from 'discord.js';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Command } from '../command/Command';
@@ -54,11 +55,12 @@ export class CommandDispatcher<T extends Bot>
 			.filter(a => a !== '');
 
 		let middlewarePassed: boolean = true;
-		for (let middleware of command._middleware)
+		let middleware: MiddlewareFunction[] = this._bot._middleware.concat(command._middleware);
+		for (let func of middleware)
 			try
 			{
 				let result: Promise<[Message, any[]]> | [Message, any[]] =
-					middleware.call(command, message, args);
+					func.call(command, message, args);
 				if (result instanceof Promise) result = await result;
 				if (!(result instanceof Array))
 				{

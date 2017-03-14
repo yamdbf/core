@@ -8,6 +8,7 @@ import { Command } from '../command/Command';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
 import { CommandDispatcher } from '../command/CommandDispatcher';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
 
 /**
  * The Discord.js Client instance. Contains bot-specific [storage]{@link Bot#storage},
@@ -30,6 +31,7 @@ export class Bot extends Client
 	public version: string;
 	public disableBase: string[];
 	public config: any;
+	public _middleware: MiddlewareFunction[];
 
 	public storage: LocalStorage;
 	public guildStorages: GuildStorageRegistry<string, GuildStorage>;
@@ -147,6 +149,9 @@ export class Bot extends Client
 		 * @instance
 		 */
 		this.disableBase = botOptions.disableBase || [];
+
+		// Middleware function storage for the bot instance
+		this._middleware = [];
 
 		this._guildDataStorage = new LocalStorage('storage/guild-storage');
 		this._guildSettingStorage = new LocalStorage('storage/guild-settings');
@@ -326,6 +331,43 @@ export class Bot extends Client
 	public sweepStorages(): void
 	{
 		this._guildStorageLoader.cleanGuilds(this._guildDataStorage, this._guildSettingStorage);
+	}
+
+	/**
+	 * Adds a middleware function to be used when any command is run
+	 * to make modifications to args or determine if the command can
+	 * be run. Takes a function that will receive the message object
+	 * and the array of args.
+	 *
+	 * A middleware function must return an array where the first item
+	 * is the message object and the second item is the args array.
+	 * If a middleware function returns a string, or throws a string/error,
+	 * it will be sent to the calling channel as a message and the command
+	 * execution will be aborted. If a middleware function does not return
+	 * anything or returns something other than an array or string, it will
+	 * fail silently.
+	 *
+	 * Example:
+	 * ```js
+	 * this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
+	 * ```
+	 * This will add a middleware function to all commands that will attempt
+	 * to transform all args to uppercase. This will of course fail if any
+	 * of the args are not a string.
+	 *
+	 * Note: Middleware functions should only be added to the bot one time each,
+	 * and thus should not be added within any sort of event or loop.
+	 * Multiple middleware functions can be added to the via multiple calls
+	 * to this method
+	 * @memberof Bot
+	 * @instance
+	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
+	 * @returns {Bot} This Bot instance
+	 */
+	public use(fn: MiddlewareFunction): this
+	{
+		this._middleware.push(fn);
+		return this;
 	}
 
 //#region Discord.js events

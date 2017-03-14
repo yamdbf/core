@@ -1,8 +1,8 @@
-import { Message } from '../../types/Message';
-import { resolveArgs } from './ResolveArgs';
-import { expect } from './Expect';
 import { Bot } from '../../bot/Bot';
 import { Command } from '../Command';
+import { expect } from './Expect';
+import { resolveArgs } from './ResolveArgs';
+import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
 import { ExpectArgType } from '../../types/ExpectArgType';
 
@@ -34,8 +34,7 @@ export class Middleware
 	 * @returns {Function} <pre class="prettyprint"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
 	 */
 	public static resolveArgs: <T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }) =>
-		(message: Message, args: any[]) =>
-			Promise<[Message, any[]]> = resolveArgs;
+		MiddlewareFunction = resolveArgs;
 
 	/**
 	 * Takes an object mapping argument names to argument types that
@@ -63,6 +62,5 @@ export class Middleware
 	 * @returns {Function} <pre class="prettyprint"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
 	 */
 	public static expect: <T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }) =>
-		(message: Message, args: any[]) =>
-			[Message, any[]] = expect;
+		MiddlewareFunction = expect;
 }
