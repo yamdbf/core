@@ -337,7 +337,7 @@ export class Bot extends Client
 	 * Adds a middleware function to be used when any command is run
 	 * to make modifications to args or determine if the command can
 	 * be run. Takes a function that will receive the message object
-	 * and the array of args.
+	 * and the array of args.<br><br>
 	 *
 	 * A middleware function must return an array where the first item
 	 * is the message object and the second item is the args array.
@@ -345,15 +345,14 @@ export class Bot extends Client
 	 * it will be sent to the calling channel as a message and the command
 	 * execution will be aborted. If a middleware function does not return
 	 * anything or returns something other than an array or string, it will
-	 * fail silently.
+	 * fail silently.<br><br>
 	 *
-	 * Example:
-	 * ```js
-	 * this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
-	 * ```
+	 * Example:<br>
+	 * <pre class="prettyprint"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
+	 * </code></pre><br>
 	 * This will add a middleware function to all commands that will attempt
 	 * to transform all args to uppercase. This will of course fail if any
-	 * of the args are not a string.
+	 * of the args are not a string.<br><br>
 	 *
 	 * Note: Middleware functions should only be added to the bot one time each,
 	 * and thus should not be added within any sort of event or loop.
@@ -361,7 +360,7 @@ export class Bot extends Client
 	 * to this method
 	 * @memberof Bot
 	 * @instance
-	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
+	 * @param {MiddlewareFunction} fn Middleware function. <code>(message, args) => [message, args]</code>
 	 * @returns {Bot} This Bot instance
 	 */
 	public use(fn: MiddlewareFunction): this
