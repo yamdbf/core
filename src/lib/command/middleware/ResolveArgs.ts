@@ -92,6 +92,12 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 					let users: Collection<string, User> = (<U> this).bot.users.filter(a => normalizeUser(a.username).includes(normalized)
 						|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
 
+					if (message.channel.type === 'text')
+						users = users.concat(new Collection(
+							message.guild.members
+								.filter(a => normalizeUser(a.displayName).includes(normalized))
+								.map(a => <[string, User]> [a.id, a.user])));
+
 					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
 						users.map(a => `\`${a.username}#${a.discriminator}\``).join(', ')
 						}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
