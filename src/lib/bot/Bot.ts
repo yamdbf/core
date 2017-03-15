@@ -8,6 +8,7 @@ import { Command } from '../command/Command';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
 import { CommandDispatcher } from '../command/CommandDispatcher';
+import { RateLimiter } from '../command/RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 
 /**
@@ -32,6 +33,7 @@ export class Bot extends Client
 	public disableBase: string[];
 	public config: any;
 	public _middleware: MiddlewareFunction[];
+	public _rateLimiter: RateLimiter;
 
 	public storage: LocalStorage;
 	public guildStorages: GuildStorageRegistry<string, GuildStorage>;
@@ -149,6 +151,10 @@ export class Bot extends Client
 		 * @instance
 		 */
 		this.disableBase = botOptions.disableBase || [];
+
+		// Create the global RateLimiter instance if a ratelimit is specified
+		if (botOptions.ratelimit)
+			this._rateLimiter = new RateLimiter(botOptions.ratelimit, true);
 
 		// Middleware function storage for the bot instance
 		this._middleware = [];

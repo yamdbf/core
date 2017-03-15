@@ -2,6 +2,7 @@ import { PermissionResolvable, Message } from 'discord.js';
 import { Bot } from '../bot/Bot';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
+import { RateLimiter } from './RateLimiter';
 import { ArgOpts } from '../types/ArgOpts';
 
 /**
@@ -28,6 +29,7 @@ export class Command<T extends Bot>
 	public overloads: string;
 
 	public _classloc: string;
+	public _rateLimiter: RateLimiter;
 	public _middleware: MiddlewareFunction[];
 
 	public constructor(bot: T, info: CommandInfo = null)
@@ -194,6 +196,10 @@ export class Command<T extends Bot>
 		 * @instance
 		 */
 		this.overloads = info.overloads || null;
+
+		// Create the RateLimiter instance if a ratelimit is specified
+		if (info.ratelimit)
+			this._rateLimiter = new RateLimiter(info.ratelimit, false);
 
 		// Middleware function storage for the Command instance
 		this._middleware = [];

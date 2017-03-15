@@ -10,6 +10,10 @@ export { GuildStorageLoader } from './lib/storage/GuildStorageLoader';
 export { GuildStorageRegistry } from './lib/storage/GuildStorageRegistry';
 export { LocalStorage } from './lib/storage/LocalStorage';
 export { Middleware } from './lib/command/middleware/Middleware';
+export { RateLimiter } from './lib/command/RateLimiter';
+export { RateLimit } from './lib/command/RateLimit';
+
+export { Time } from './lib/Time';
 export { Util } from './lib/Util';
 
 export { ArgOpts } from './lib/types/ArgOpts';

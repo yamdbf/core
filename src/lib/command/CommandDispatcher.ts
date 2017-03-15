@@ -1,9 +1,12 @@
+import { RateLimiter } from './RateLimiter';
 import { PermissionResolvable, TextChannel, User } from 'discord.js';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Command } from '../command/Command';
 import { Bot } from '../bot/Bot';
+import { RateLimit } from './RateLimit';
+import { Time } from '../Time';
 import now = require('performance-now');
 
 /**
@@ -30,14 +33,19 @@ export class CommandDispatcher<T extends Bot>
 		if (this._bot.selfbot && message.author !== this._bot.user) return;
 		if (message.author.bot) return;
 
-		const dm: boolean = ['dm', 'group'].includes(message.channel.type);
+		const dm: boolean = message.channel.type !== 'text';
 		if (!dm) message.guild.storage = this._bot.guildStorages.get(message.guild);
 
+		// Check blacklist
 		if (this.isBlacklisted(message.author, message, dm)) return;
 
 		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = this.isCommandCalled(message);
 		if (!commandCalled) return;
 
+		// Check ratelimits
+		if (!this.checkRateLimits(message, command)) return;
+
+		// Remove bot from message.mentions if only mentioned one time as a prefix
 		if (!(!dm && prefix === message.guild.storage.getSetting('prefix')) && prefix !== ''
 			&& (message.content.match(new RegExp(`<@!?${this._bot.user.id}>`, 'g')) || []).length === 1)
 			message.mentions.users.delete(this._bot.user.id);
@@ -92,7 +100,7 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private isCommandCalled(message: Message): [boolean, Command<T>, string, string]
 	{
-		const dm: boolean = ['dm', 'group'].includes(message.channel.type);
+		const dm: boolean = message.channel.type !== 'text';
 		const prefixes: string[] = [
 			`<@${this._bot.user.id}>`,
 			`<@!${this._bot.user.id}>`
@@ -123,7 +131,7 @@ export class CommandDispatcher<T extends Bot>
 	private testCommand(command: Command<T>, message: Message): boolean
 	{
 		const config: any = this._bot.config;
-		const dm: boolean = ['dm', 'group'].includes(message.channel.type);
+		const dm: boolean = message.channel.type !== 'text';
 		const storage: GuildStorage = !dm ? this._bot.guildStorages.get(message.guild) : null;
 
 		if (!dm && storage.settingExists('disabledGroups')
@@ -137,6 +145,53 @@ export class CommandDispatcher<T extends Bot>
 		if (!this.hasRoles(command, message, dm)) throw this.missingRolesError(command);
 
 		return true;
+	}
+
+	/**
+	 * Check either global or command-specific rate limits for the given
+	 * message author and also notify them if they exceed ratelimits
+	 */
+	private checkRateLimiter(message: Message, command?: Command<T>): boolean
+	{
+		const rateLimiter: RateLimiter = command ? command._rateLimiter : this._bot._rateLimiter;
+		if (!rateLimiter) return true;
+
+		const rateLimit: RateLimit = rateLimiter.get(message);
+		if (!rateLimit.isLimited) return true;
+
+		if (!rateLimit.wasNotified)
+		{
+			const globalLimiter: RateLimiter = this._bot._rateLimiter;
+			const globalLimit: RateLimit = globalLimiter ? globalLimiter.get(message) : null;
+			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return;
+
+			rateLimit.setNotified();
+			if (!command) message.channel.send(
+				`You have tried to use too many commands and may not use any more for **${
+					Time.difference(rateLimit.expires, Date.now()).toString()}**.`);
+			else message.channel.send(
+				`You have tried to use this command too many times and may not use it again for **${
+					Time.difference(rateLimit.expires, Date.now()).toString()}**.`);
+		}
+		return false;
+	}
+
+	/**
+	 * Check global and command-specific ratelimits for the user
+	 * for the given command
+	 */
+	private checkRateLimits(message: Message, command: Command<T>): boolean
+	{
+		let passedGlobal: boolean = true;
+		let passedCommand: boolean = true;
+		let passedRateLimiters: boolean = true;
+		if (!this.checkRateLimiter(message)) passedGlobal = false;
+		if (!this.checkRateLimiter(message, command)) passedCommand = false;
+		if (!passedGlobal || !passedCommand) passedRateLimiters = false;
+		if (passedRateLimiters)
+			if (!(command && command._rateLimiter && !command._rateLimiter.get(message).call()) && this._bot._rateLimiter)
+				this._bot._rateLimiter.get(message).call();
+		return passedRateLimiters;
 	}
 
 	/**
