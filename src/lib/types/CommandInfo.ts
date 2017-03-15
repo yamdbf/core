@@ -25,7 +25,7 @@ export type CommandInfo = {
  * @property {string} name See: {@link Command#name}
  * @property {string} description See: {@link Command#description}
  * @property {string} usage See: {@link Command#usage}
- * @property {string} extraHelp See: {@link Command#extraHelp}
+ * @property {string} [extraHelp] See: {@link Command#extraHelp}
  * @property {string} group See: {@link Command#group}
  * @property {string[]} [aliases=[]] See: {@link Command#aliases}
  * @property {boolean} [guildOnly=false] See: {@link Command#guildOnly}
