@@ -1,0 +1,13 @@
+export type BaseCommandName = 'blacklist'
+	| 'whitelist'
+	| 'clearlimit'
+	| 'disablegroup'
+	| 'enablegroup'
+	| 'limit'
+	| 'listgroups'
+	| 'eval'
+	| 'help'
+	| 'ping'
+	| 'reload'
+	| 'setprefix'
+	| 'version';

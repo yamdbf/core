@@ -20,6 +20,7 @@ export { ExpectArgType } from './lib/types/ExpectArgType';
 export { Guild } from './lib/types/Guild';
 export { Message } from './lib/types/Message';
 export { ResolveArgType } from './lib/types/ResolveArgType';
+export { BaseCommandName } from './lib/types/BaseCommandName';
 
 export const version: string = require(path.join(__dirname, '..', 'package')).version;
 

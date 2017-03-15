@@ -1,3 +1,5 @@
+import { BaseCommandName } from './BaseCommandName';
+
 export type BotOptions = {
 	name: string;
 	token: string;
@@ -8,7 +10,7 @@ export type BotOptions = {
 	selfbot?: boolean;
 	passive?: boolean;
 	version?: string;
-	disableBase?: string[];
+	disableBase?: BaseCommandName[];
 	config: any;
 };
 

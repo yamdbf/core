@@ -1,4 +1,5 @@
 import { PermissionResolvable } from 'discord.js';
+import { BaseCommandName } from './BaseCommandName';
 import { ArgOpts } from './ArgOpts';
 
 export type CommandInfo = {
@@ -14,7 +15,7 @@ export type CommandInfo = {
 	permissions?: PermissionResolvable[];
 	roles?: string[];
 	ownerOnly?: boolean;
-	overloads?: string;
+	overloads?: BaseCommandName;
 };
 
 /**
