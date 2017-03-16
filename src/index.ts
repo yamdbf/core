@@ -5,6 +5,7 @@ export { Command } from './lib/command/Command';
 export { CommandLoader } from './lib/command/CommandLoader';
 export { CommandRegistry } from './lib/command/CommandRegistry';
 export { CommandDispatcher } from './lib/command/CommandDispatcher';
+export { CommandDecorators } from './lib/command/CommandDecorators';
 export { GuildStorage } from './lib/storage/GuildStorage';
 export { GuildStorageLoader } from './lib/storage/GuildStorageLoader';
 export { GuildStorageRegistry } from './lib/storage/GuildStorageRegistry';
