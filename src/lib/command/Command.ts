@@ -34,29 +34,6 @@ export class Command<T extends Bot>
 
 	public constructor(bot: T, info: CommandInfo = null)
 	{
-		// Assert necessary command information
-		const name: string = this.constructor.name;
-		if (!info) throw new Error(`You must provide an info object for command: ${name}`);
-		if (!info.name) throw new Error(`You must provide a name for command: ${name}`);
-		if (!info.description) throw new Error(`You must provide a description for command: ${name}`);
-		if (!info.usage) throw new Error(`You must provide usage information for command: ${name}`);
-		if (!info.group) throw new Error(`You must provide a group for command: ${name}`);
-		if (info.aliases && !Array.isArray(info.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
-		if (info.permissions && !Array.isArray(info.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
-		if (info.permissions && info.permissions.length > 0)
-			info.permissions.forEach((perm: PermissionResolvable, index: number) =>
-			{
-				try
-				{
-					(<any> bot).resolver.resolvePermission(perm);
-				}
-				catch (err)
-				{
-					throw new Error(`Command#${name} permission "${info.permissions[index]}" at ${name}.permissions[${index}] is not a valid permission.\n\n${err}`);
-				}
-			});
-		if (info.roles && !Array.isArray(info.roles)) throw new Error(`Roles for command ${name} must be an array`);
-
 		/**
 		 * Bot instance
 		 * @memberof Command
@@ -74,7 +51,6 @@ export class Command<T extends Bot>
 		 * @name name
 		 * @instance
 		 */
-		this.name = info.name;
 
 		/**
 		 * A brief description of the command, displayed
@@ -84,7 +60,6 @@ export class Command<T extends Bot>
 		 * @name description
 		 * @instance
 		 */
-		this.description = info.description;
 
 		/**
 		 * An example of command usage. The token '&lt;prefix&gt;' will
@@ -95,7 +70,6 @@ export class Command<T extends Bot>
 		 * @name usage
 		 * @instance
 		 */
-		this.usage = info.usage;
 
 		/**
 		 * Extra information about the command to be displayed
@@ -105,7 +79,6 @@ export class Command<T extends Bot>
 		 * @name extraHelp
 		 * @instance
 		 */
-		this.extraHelp = info.extraHelp;
 
 		/**
 		 * The command group that the command belongs to. Allows commands to be
@@ -115,7 +88,6 @@ export class Command<T extends Bot>
 		 * @name group
 		 * @instance
 		 */
-		this.group = info.group;
 
 		/**
 		 * Aliases the command can be called by other than its name
@@ -124,7 +96,6 @@ export class Command<T extends Bot>
 		 * @name aliases
 		 * @instance
 		 */
-		this.aliases = info.aliases || [];
 
 		/**
 		 * Whether or not a command can only be used within a
@@ -134,13 +105,15 @@ export class Command<T extends Bot>
 		 * @name guildOnly
 		 * @instance
 		 */
-		this.guildOnly = info.guildOnly || false;
 
 		/**
 		 * Whether or not the command is to be hidden from the
 		 * commands list via the default help command
+		 * @memberof Command
+		 * @type {boolean}
+		 * @name hidden
+		 * @instance
 		 */
-		this.hidden = info.hidden || false;
 
 		/**
 		 * Options for how arguments should be parsed. See: {@link ArgOpts}
@@ -149,8 +122,6 @@ export class Command<T extends Bot>
 		 * @name argOpts
 		 * @instance
 		 */
-		this.argOpts = info.argOpts || {};
-		this.argOpts.separator = this.argOpts.separator || ' ';
 
 		/**
 		 * Array of permissions required by the command
@@ -162,7 +133,6 @@ export class Command<T extends Bot>
 		 * @name permissions
 		 * @instance
 		 */
-		this.permissions = info.permissions || [];
 
 		/**
 		 * Array of roles required to use the command. If the command caller
@@ -174,7 +144,6 @@ export class Command<T extends Bot>
 		 * @name roles
 		 * @instance
 		 */
-		this.roles = info.roles || [];
 
 		/**
 		 * Whether or not the command can be used by the bot owner(s).
@@ -184,7 +153,6 @@ export class Command<T extends Bot>
 		 * @instance
 		 * @see [Bot#config.owner]{@link Bot#config}
 		 */
-		this.ownerOnly = info.ownerOnly || false;
 
 		/**
 		 * The name of a base command to overload. Commands may only overload
@@ -195,19 +163,15 @@ export class Command<T extends Bot>
 		 * @name overloads
 		 * @instance
 		 */
-		this.overloads = info.overloads || null;
-
-		// Create the RateLimiter instance if a ratelimit is specified
-		if (info.ratelimit)
-			this._rateLimiter = new RateLimiter(info.ratelimit, false);
 
 		// Middleware function storage for the Command instance
 		this._middleware = [];
 
-		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
+		if (info) Object.assign(this, info);
 
-		// Default guildOnly to true if permissions/roles are given
-		if (this.permissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
+		// Create the RateLimiter instance if a ratelimit is specified
+		if (info && info.ratelimit)
+			this._rateLimiter = new RateLimiter(info.ratelimit, false);
 	}
 
 	/**
@@ -234,7 +198,44 @@ export class Command<T extends Bot>
 	 */
 	public register(): void
 	{
-		let name: string = this.constructor.name;
+		const name: string = this.constructor.name;
+
+		// Set defaults if not present
+		if (!this.aliases) this.aliases = [];
+		if (!this.group) this.group = 'base';
+		if (!this.guildOnly) this.guildOnly = false;
+		if (!this.hidden) this.hidden = false;
+		if (!this.argOpts) this.argOpts = {};
+		if (!this.argOpts.separator) this.argOpts.separator = ' ';
+		if (!this.permissions) this.permissions = [];
+		if (!this.roles) this.roles = [];
+		if (!this.ownerOnly) this.ownerOnly = false;
+
+		// Make necessary asserts
+		if (!this.name) throw new Error(`You must provide a name for command: ${name}`);
+		if (!this.description) throw new Error(`You must provide a description for command: ${name}`);
+		if (!this.usage) throw new Error(`You must provide usage information for command: ${name}`);
+		if (!this.group) throw new Error(`You must provide a group for command: ${name}`);
+		if (this.aliases && !Array.isArray(this.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
+		if (this.permissions && !Array.isArray(this.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
+		if (this.permissions && this.permissions.length > 0)
+			this.permissions.forEach((perm: PermissionResolvable, index: number) =>
+			{
+				try
+				{
+					(<any> this.bot).resolver.resolvePermission(perm);
+				}
+				catch (err)
+				{
+					throw new Error(`Command#${name} permission "${this.permissions[index]}" at ${name}.permissions[${index}] is not a valid permission.\n\n${err}`);
+				}
+			});
+		if (this.roles && !Array.isArray(this.roles)) throw new Error(`Roles for command ${name} must be an array`);
+		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
+
+		// Default guildOnly to true if permissions/roles are given
+		if (this.permissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
+
 		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 		if (!(this.action instanceof Function)) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
 	}

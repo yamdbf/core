@@ -41,6 +41,7 @@ export class CommandDispatcher<T extends Bot>
 
 		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = this.isCommandCalled(message);
 		if (!commandCalled) return;
+		if (command.ownerOnly && !this._bot.isOwner(message.author)) return;
 
 		// Check ratelimits
 		if (!this.checkRateLimits(message, command)) return;
@@ -130,13 +131,11 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private testCommand(command: Command<T>, message: Message): boolean
 	{
-		const config: any = this._bot.config;
 		const dm: boolean = message.channel.type !== 'text';
 		const storage: GuildStorage = !dm ? this._bot.guildStorages.get(message.guild) : null;
 
 		if (!dm && storage.settingExists('disabledGroups')
 			&& storage.getSetting('disabledGroups').includes(command.group)) return false;
-		if (command.ownerOnly && !config.owner.includes(message.author.id)) return false;
 
 		if (dm && command.guildOnly) throw this.guildOnlyError();
 		let missingPermissions: PermissionResolvable[] = this.checkPermissions(command, message, dm);
