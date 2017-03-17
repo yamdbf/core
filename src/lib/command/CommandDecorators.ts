@@ -94,39 +94,39 @@ function overloads(value: string): any
 }
 
 /**
- * Set `owneronly` metadata
+ * Set `owneronly` flag metadata
  */
 function ownerOnly(target: any): any
 {
-	Object.defineProperty(target.prototype, 'ownerOnly', {
-			value: true,
-			enumerable: true,
-		});
-		return target;
+	return _setFlagMetaData(target, 'ownerOnly');
 }
 
 /**
- * Set `guildOnly` metadata
+ * Set `guildOnly` flag metadata
  */
 function guildOnly(target: any): any
 {
-	Object.defineProperty(target.prototype, 'guildOnly', {
-			value: true,
-			enumerable: true,
-		});
-		return target;
+	return _setFlagMetaData(target, 'guildOnly');
 }
 
 /**
- * Set `hidden` metadata
+ * Set `hidden` flag metadata
  */
 function hidden(target: any): any
 {
-	Object.defineProperty(target.prototype, 'hidden', {
-			value: true,
-			enumerable: true,
-		});
-		return target;
+	return _setFlagMetaData(target, 'hidden');
+}
+
+/**
+ * Set a boolean flag metadata on a class
+ */
+function _setFlagMetaData(target: any, flag: string): any
+{
+	Object.defineProperty(target.prototype, flag, {
+		value: true,
+		enumerable: true,
+	});
+	return target;
 }
 
 /**
@@ -201,8 +201,6 @@ export const CommandDecorators: { // tslint:disable-line
 	ownerOnly: any;
 	guildOnly: any;
 	hidden: any;
-
-	_setMetaData: (key: string, value: any) => any;
 } = {
 	using: using,
 
@@ -220,6 +218,4 @@ export const CommandDecorators: { // tslint:disable-line
 	ownerOnly: ownerOnly,
 	guildOnly: guildOnly,
 	hidden: hidden,
-
-	_setMetaData: _setMetaData
 };
