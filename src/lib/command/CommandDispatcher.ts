@@ -166,10 +166,10 @@ export class CommandDispatcher<T extends Bot>
 
 			rateLimit.setNotified();
 			if (!command) message.channel.send(
-				`You have tried to use too many commands and may not use any more for **${
+				`You have used too many commands and may not use any more for **${
 					Time.difference(rateLimit.expires, Date.now()).toString()}**.`);
 			else message.channel.send(
-				`You have tried to use this command too many times and may not use it again for **${
+				`You have used this command too many times and may not use it again for **${
 					Time.difference(rateLimit.expires, Date.now()).toString()}**.`);
 		}
 		return false;
