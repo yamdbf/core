@@ -6,151 +6,10 @@ import { ArgOpts } from '../types/ArgOpts';
 import { Message } from '../types/Message';
 
 /**
- * Set `name` metadata
- */
-function name(value: string): any
-{
-	return _setMetaData('name', value);
-}
-
-/**
- * Set `aliases` metadata
- */
-function aliases(...value: string[]): any
-{
-	return _setMetaData('aliases', value);
-}
-
-/**
- * Set `description` metadata
- */
-function description(value: string): any
-{
-	return _setMetaData('description', value);
-}
-
-/**
- * Set `usage` metadata
- */
-function usage(value: string): any
-{
-	return _setMetaData('usage', value);
-}
-
-/**
- * Set `extraHelp` metadata
- */
-function extraHelp(value: string): any
-{
-	return _setMetaData('extraHelp', value);
-}
-
-/**
- * Set `group` metadata
- */
-function group(value: string): any
-{
-	return _setMetaData('group', value);
-}
-
-/**
- * Set `argOpts` metadata
- */
-function argOpts(value: ArgOpts): any
-{
-	return _setMetaData('usage', value);
-}
-
-/**
- * Set `permissions` metadata
- */
-function permissions(...value: PermissionResolvable[]): any
-{
-	return _setMetaData('permissions', value);
-}
-
-/**
- * Set `roles` metadata
- */
-function roles(...value: string[]): any
-{
-	return _setMetaData('roles', value);
-}
-
-/**
- * Set `ratelimit` metadata
- */
-function ratelimit(value: string): any
-{
-	return _setMetaData('_rateLimiter', new RateLimiter(value, false));
-}
-
-/**
- * Set `overloads` metadata
- */
-function overloads(value: string): any
-{
-	return _setMetaData('overloads', value);
-}
-
-/**
- * Set `owneronly` flag metadata
- */
-function ownerOnly(target: any): any
-{
-	return _setFlagMetaData(target, 'ownerOnly');
-}
-
-/**
- * Set `guildOnly` flag metadata
- */
-function guildOnly(target: any): any
-{
-	return _setFlagMetaData(target, 'guildOnly');
-}
-
-/**
- * Set `hidden` flag metadata
- */
-function hidden(target: any): any
-{
-	return _setFlagMetaData(target, 'hidden');
-}
-
-/**
- * Set a boolean flag metadata on a class
- */
-function _setFlagMetaData(target: any, flag: string): any
-{
-	Object.defineProperty(target.prototype, flag, {
-		value: true,
-		enumerable: true,
-	});
-	return target;
-}
-
-/**
- * Set an arbitrary value to an arbitrary key on a class
- */
-function _setMetaData(key: string, value: any): any
-{
-	return function(target: any): any
-	{
-		Object.defineProperty(target.prototype, key, {
-			value: value,
-			configurable: true,
-			enumerable: true,
-			writable: true
-		});
-		return target;
-	};
-}
-
-/**
  * Apply a middleware function to the action method of a command.
  * Identical to `Command#use()` but used as a method decorator
  */
-function using(func: MiddlewareFunction): MethodDecorator
+export function using(func: MiddlewareFunction): MethodDecorator
 {
 	return function(target: Command<any>, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
 	{
@@ -184,38 +43,143 @@ function using(func: MiddlewareFunction): MethodDecorator
 	};
 }
 
-export const CommandDecorators: { // tslint:disable-line
-	using: (func: MiddlewareFunction) => MethodDecorator;
+/**
+ * Set `name` metadata
+ */
+export function name(value: string): any
+{
+	return _setMetaData('name', value);
+}
 
-	name: (value: string) => any;
-	aliases: (...value: string[]) => any;
-	description: (value: string) => any;
-	usage: (value: string) => any;
-	extraHelp: (value: string) => any;
-	group: (value: string) => any;
-	argOpts: (value: ArgOpts) => any;
-	permissions: (...value: PermissionResolvable[]) => any;
-	roles: (...value: string[]) => any;
-	ratelimit: (value: string) => any;
-	overloads: (value: string) => any;
-	ownerOnly: any;
-	guildOnly: any;
-	hidden: any;
-} = {
-	using: using,
+/**
+ * Set `aliases` metadata
+ */
+export function aliases(...value: string[]): any
+{
+	return _setMetaData('aliases', value);
+}
 
-	name: name,
-	aliases: aliases,
-	description: description,
-	usage: usage,
-	extraHelp: extraHelp,
-	group: group,
-	argOpts: argOpts,
-	permissions: permissions,
-	roles: roles,
-	ratelimit: ratelimit,
-	overloads: overloads,
-	ownerOnly: ownerOnly,
-	guildOnly: guildOnly,
-	hidden: hidden,
-};
+/**
+ * Set `description` metadata
+ */
+export function description(value: string): any
+{
+	return _setMetaData('description', value);
+}
+
+/**
+ * Set `usage` metadata
+ */
+export function usage(value: string): any
+{
+	return _setMetaData('usage', value);
+}
+
+/**
+ * Set `extraHelp` metadata
+ */
+export function extraHelp(value: string): any
+{
+	return _setMetaData('extraHelp', value);
+}
+
+/**
+ * Set `group` metadata
+ */
+export function group(value: string): any
+{
+	return _setMetaData('group', value);
+}
+
+/**
+ * Set `argOpts` metadata
+ */
+export function argOpts(value: ArgOpts): any
+{
+	return _setMetaData('usage', value);
+}
+
+/**
+ * Set `permissions` metadata
+ */
+export function permissions(...value: PermissionResolvable[]): any
+{
+	return _setMetaData('permissions', value);
+}
+
+/**
+ * Set `roles` metadata
+ */
+export function roles(...value: string[]): any
+{
+	return _setMetaData('roles', value);
+}
+
+/**
+ * Set `ratelimit` metadata
+ */
+export function ratelimit(value: string): any
+{
+	return _setMetaData('_rateLimiter', new RateLimiter(value, false));
+}
+
+/**
+ * Set `overloads` metadata
+ */
+export function overloads(value: string): any
+{
+	return _setMetaData('overloads', value);
+}
+
+/**
+ * Set `owneronly` flag metadata
+ */
+export function ownerOnly(target: any): any
+{
+	return _setFlagMetaData(target, 'ownerOnly');
+}
+
+/**
+ * Set `guildOnly` flag metadata
+ */
+export function guildOnly(target: any): any
+{
+	return _setFlagMetaData(target, 'guildOnly');
+}
+
+/**
+ * Set `hidden` flag metadata
+ */
+export function hidden(target: any): any
+{
+	return _setFlagMetaData(target, 'hidden');
+}
+
+/**
+ * Set a boolean flag metadata on a class
+ */
+function _setFlagMetaData(target: any, flag: string): any
+{
+	Object.defineProperty(target.prototype, flag, {
+		value: true,
+		enumerable: true,
+	});
+	return target;
+}
+
+/**
+ * Set an arbitrary value to an arbitrary key on a class
+ */
+function _setMetaData(key: string, value: any): any
+{
+	return function(target: any): any
+	{
+		Object.defineProperty(target.prototype, key, {
+			value: value,
+			configurable: true,
+			enumerable: true,
+			writable: true
+		});
+		return target;
+	};
+}
