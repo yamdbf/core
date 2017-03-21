@@ -281,10 +281,9 @@ export class Bot extends Client
 	public setDefaultSetting(key: string, value: any): this
 	{
 		this.storage.setItem(`defaultGuildSettings/${key}`, value);
-		this.guildStorages.forEach(guild =>
-		{
+		for (const guild of this.guildStorages.values())
 			if (!guild.settingExists(key)) guild.setSetting(key, value);
-		});
+
 		return this;
 	}
 

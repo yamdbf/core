@@ -30,7 +30,7 @@ export class CommandLoader<T extends Bot>
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
 		commandFiles.push(...glob.sync(`${this._bot.commandsDir}/**/*.js`));
 		let loadedCommands: number = 0;
-		commandFiles.forEach(fileName =>
+		for (const fileName of commandFiles)
 		{
 			const commandLocation: string = fileName.replace('.js', '');
 			delete require.cache[require.resolve(commandLocation)];
@@ -55,7 +55,7 @@ export class CommandLoader<T extends Bot>
 				loadedCommands++;
 				console.log(`Command '${_command.name}' loaded.`);
 			}
-		});
+		}
 		console.log(`Loaded ${loadedCommands} total commands in ${this._bot.commands.groups.length} groups.`);
 	}
 

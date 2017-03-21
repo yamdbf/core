@@ -35,17 +35,15 @@ export class GuildStorage
 		this._temp = {};
 
 		// Create blank storage for the guild if no storage is present
-		if (!this._dataStorage.getItem(this.id)) this._dataStorage.setItem(this.id, {});
+		if (!this._dataStorage.exists(this.id)) this._dataStorage.setItem(this.id, {});
 
 		// Set default settings if no settings are present
-		if (!this._settingsStorage.getItem(this.id))
+		if (!this._settingsStorage.exists(this.id))
 		{
 			this._settingsStorage.setItem(this.id, {});
 			let defaults: DefaultGuildSettings = bot.storage.getItem('defaultGuildSettings');
-			Object.keys(defaults).forEach(key =>
-			{
+			for (const key of Object.keys(defaults))
 				this._settingsStorage.setItem(`${this.id}/${key}`, defaults[key]);
-			});
 		}
 	}
 

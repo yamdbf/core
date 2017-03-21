@@ -22,10 +22,8 @@ export class GuildStorageLoader<T extends Bot>
 	 */
 	public loadStorages(dataStorage: LocalStorage, settingsStorage: LocalStorage): void
 	{
-		dataStorage.keys.forEach((key) =>
-		{
+		for (const key of dataStorage.keys)
 			this._bot.guildStorages.set(key, new GuildStorage(this._bot, key, dataStorage, settingsStorage));
-		});
 
 		this.initNewGuilds(dataStorage, settingsStorage);
 	}
@@ -38,10 +36,8 @@ export class GuildStorageLoader<T extends Bot>
 	public initNewGuilds(dataStorage: LocalStorage, settingsStorage: LocalStorage): void
 	{
 		let storagelessGuilds: Collection<string, Guild> = this._bot.guilds.filter(guild => !dataStorage.keys.includes(guild.id));
-		storagelessGuilds.forEach(guild =>
-		{
+		for (const guild of storagelessGuilds.values())
 			this._bot.guildStorages.set(guild.id, new GuildStorage(this._bot, guild.id, dataStorage, settingsStorage));
-		});
 	}
 
 	/**
@@ -52,11 +48,11 @@ export class GuildStorageLoader<T extends Bot>
 	{
 		let guildlessStorages: string[] = dataStorage.keys.filter(guild => !this._bot.guilds.has(guild));
 		let guildlessSettings: string[] = settingsStorage.keys.filter(guild => !this._bot.guilds.has(guild));
-		guildlessSettings.forEach(settings => settingsStorage.removeItem(settings));
-		guildlessStorages.forEach(storage =>
+		for (const settings of guildlessSettings) settingsStorage.removeItem(settings);
+		for (const storage of guildlessStorages)
 		{
 			this._bot.guildStorages.delete(storage);
 			dataStorage.removeItem(storage);
-		});
+		}
 	}
 }

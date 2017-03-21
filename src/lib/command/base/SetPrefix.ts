@@ -35,7 +35,10 @@ export default class SetPrefix extends Command<Bot>
 
 		if (prefix === 'noprefix') prefix = '';
 
-		if (this.bot.selfbot) this.bot.guildStorages.forEach(guild => guild.setSetting('prefix', prefix));
+		if (this.bot.selfbot)
+			for (const guild of this.bot.guildStorages.values())
+				guild.setSetting('prefix', prefix);
+
 		else this.bot.guildStorages.get(message.guild).setSetting('prefix', prefix);
 		this._respond(message, prefix === '' ? 'Command prefix removed.'
 			: `Command prefix set to \`${prefix}\``);

@@ -65,6 +65,6 @@ export class GuildStorageRegistry<K extends string, V extends GuildStorage> exte
 	 */
 	public resetAllGuildSettings(defaults: DefaultGuildSettings): void
 	{
-		super.forEach(guild => guild.resetSettings(defaults));
+		for (const guild of this.values()) guild.resetSettings(defaults);
 	}
 }

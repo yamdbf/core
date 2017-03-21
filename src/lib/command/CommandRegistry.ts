@@ -26,15 +26,15 @@ export class CommandRegistry<T extends Bot, K extends string, V extends Command<
 		if (super.has(<K> command.name) && !reload && !(command.overloads && command.overloads !== super.get(<K> command.overloads).name))
 			throw new Error(`A command with the name "${command.name}" already exists.`);
 
-		this.forEach(a =>
+		for (const cmd of this.values())
 		{
-			a.aliases.forEach(b =>
+			for (const alias of cmd.aliases)
 			{
-				let duplicates: Collection<K, V> = this.filter(c => c.aliases.includes(b) && c !== a);
+				let duplicates: Collection<K, V> = this.filter(c => c.aliases.includes(alias) && c !== cmd);
 				if (duplicates.size > 0)
-					throw new Error(`Commands may not share aliases: ${duplicates.first().name}, ${a.name} (shared alias: ${b})`);
-			});
-		});
+					throw new Error(`Commands may not share aliases: ${duplicates.first().name}, ${cmd.name} (shared alias: ${alias})`);
+			}
+		}
 
 		command.register();
 		super.set(key, <V> command);
@@ -48,7 +48,7 @@ export class CommandRegistry<T extends Bot, K extends string, V extends Command<
 	 */
 	public get groups(): string[]
 	{
-		return this.map((a: V) => a.group).filter((a, i, self) => self.indexOf(a) === i);
+		return this.map(a => a.group).filter((a, i, self) => self.indexOf(a) === i);
 	}
 
 	/**
