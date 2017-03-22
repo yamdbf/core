@@ -38,7 +38,7 @@ export class CommandLoader<T extends Bot>
 			let loadedCommandClass: any = this.getCommandClass(commandLocation);
 			const _command: Command<T> = new loadedCommandClass(this._bot);
 
-			if (this._bot.disableBase.includes(_command.name)) return;
+			if (this._bot.disableBase.includes(_command.name)) continue;
 			_command._classloc = commandLocation;
 
 			if (_command.overloads)
