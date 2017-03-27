@@ -54,4 +54,24 @@ export class Util
 		if (path.length === 0) obj[first] = value;
 		else Util.assignNested(obj[first], path, value);
 	}
+
+	/**
+	 * Fetches a nested value from within an object via the
+	 * provided path
+	 * @static
+	 * @param {any} obj Object to search
+	 * @param {string[]} path Nested path to follow within the object
+	 * @returns {any}
+	 */
+	public static nestedValue(obj: any, path: string[]): any
+	{
+		if (path.length === 0) return obj;
+
+		let first: string = path.shift();
+		if (typeof obj[first] === 'undefined') return;
+		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
+			return;
+
+		return Util.nestedValue(obj[first], path);
+	}
 }
