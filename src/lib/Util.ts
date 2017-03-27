@@ -56,6 +56,27 @@ export class Util
 	}
 
 	/**
+	 * Remove a value from within an object along a nested path
+	 * @static
+	 * @param {any} obj Object to remove from
+	 * @param {string[]} path Nested path to follow within the object
+	 */
+	public static removeNested(obj: any, path: string[]): void
+	{
+		if (typeof obj !== 'object' || obj instanceof Array) return;
+		if (path.length === 0)
+			throw new Error('Missing nested assignment path');
+
+		let first: string = path.shift();
+		if (typeof obj[first] === 'undefined') return;
+		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
+			return;
+
+		if (path.length === 0) delete obj[first];
+		else Util.removeNested(obj[first], path);
+	}
+
+	/**
 	 * Fetches a nested value from within an object via the
 	 * provided path
 	 * @static
@@ -65,6 +86,7 @@ export class Util
 	 */
 	public static nestedValue(obj: any, path: string[]): any
 	{
+		if (typeof obj === 'undefined') return;
 		if (path.length === 0) return obj;
 
 		let first: string = path.shift();
