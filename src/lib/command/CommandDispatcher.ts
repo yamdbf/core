@@ -2,7 +2,7 @@ import { RateLimiter } from './RateLimiter';
 import { PermissionResolvable, TextChannel, User } from 'discord.js';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { Message } from '../types/Message';
-import { GuildStorage } from '../storage/GuildStorage';
+import { GuildStorage } from '../types/GuildStorage';
 import { Command } from '../command/Command';
 import { Bot } from '../bot/Bot';
 import { RateLimit } from './RateLimit';
@@ -34,12 +34,12 @@ export class CommandDispatcher<T extends Bot>
 		if (message.author.bot) return;
 
 		const dm: boolean = message.channel.type !== 'text';
-		if (!dm) message.guild.storage = this._bot.guildStorages.get(message.guild);
+		if (!dm) message.guild.storage = this._bot.storage.guilds.get(message.guild.id);
 
 		// Check blacklist
-		if (this.isBlacklisted(message.author, message, dm)) return;
+		if (await this.isBlacklisted(message.author, message, dm)) return;
 
-		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = this.isCommandCalled(message);
+		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = await this.isCommandCalled(message);
 		if (!commandCalled) return;
 		if (command.ownerOnly && !this._bot.isOwner(message.author)) return;
 
@@ -47,12 +47,12 @@ export class CommandDispatcher<T extends Bot>
 		if (!this.checkRateLimits(message, command)) return;
 
 		// Remove bot from message.mentions if only mentioned one time as a prefix
-		if (!(!dm && prefix === message.guild.storage.getSetting('prefix')) && prefix !== ''
+		if (!(!dm && prefix === await message.guild.storage.settings.get('prefix')) && prefix !== ''
 			&& (message.content.match(new RegExp(`<@!?${this._bot.user.id}>`, 'g')) || []).length === 1)
 			message.mentions.users.delete(this._bot.user.id);
 
 		let validCaller: boolean = false;
-		try { validCaller = this.testCommand(command, message); }
+		try { validCaller = await this.testCommand(command, message); }
 		catch (err) { message[this._bot.selfbot ? 'channel' : 'author'].send(err); }
 		if (!validCaller) return;
 
@@ -99,7 +99,7 @@ export class CommandDispatcher<T extends Bot>
 	 * the prefix used to call the command, and the name or alias
 	 * of the command used to call it
 	 */
-	private isCommandCalled(message: Message): [boolean, Command<T>, string, string]
+	private async isCommandCalled(message: Message): Promise<[boolean, Command<T>, string, string]>
 	{
 		const dm: boolean = message.channel.type !== 'text';
 		const prefixes: string[] = [
@@ -107,7 +107,7 @@ export class CommandDispatcher<T extends Bot>
 			`<@!${this._bot.user.id}>`
 		];
 
-		if (!dm) prefixes.push(message.guild.storage.getSetting('prefix'));
+		if (!dm) prefixes.push(await message.guild.storage.settings.get('prefix'));
 
 		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
 
@@ -129,13 +129,13 @@ export class CommandDispatcher<T extends Bot>
 	 * Test if the command caller is allowed to use the command
 	 * under whatever circumstances are present at call-time
 	 */
-	private testCommand(command: Command<T>, message: Message): boolean
+	private async testCommand(command: Command<T>, message: Message): Promise<boolean>
 	{
 		const dm: boolean = message.channel.type !== 'text';
-		const storage: GuildStorage = !dm ? this._bot.guildStorages.get(message.guild) : null;
+		const storage: GuildStorage = !dm ? this._bot.storage.guilds.get(message.guild.id) : null;
 
-		if (!dm && storage.settingExists('disabledGroups')
-			&& storage.getSetting('disabledGroups').includes(command.group)) return false;
+		if (!dm && typeof await storage.settings.get('disabledGroups') !== 'undefined'
+			&& (await storage.settings.get('disabledGroups')).includes(command.group)) return false;
 
 		if (dm && command.guildOnly) throw this.guildOnlyError();
 		let missingPermissions: PermissionResolvable[] = this.checkPermissions(command, message, dm);
@@ -205,11 +205,11 @@ export class CommandDispatcher<T extends Bot>
 	/**
 	 * Compare user roles to the command's limiter
 	 */
-	private checkLimiter(command: Command<T>, message: Message, dm: boolean): boolean
+	private async checkLimiter(command: Command<T>, message: Message, dm: boolean): Promise<boolean>
 	{
 		if (dm || this._bot.selfbot) return true;
-		let storage: GuildStorage = this._bot.guildStorages.get(message.guild);
-		let limitedCommands: { [name: string]: string[] } = storage.getSetting('limitedCommands') || {};
+		let storage: GuildStorage = this._bot.storage.guilds.get(message.guild.id);
+		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
 		if (!limitedCommands[command.name]) return true;
 		if (limitedCommands[command.name].length === 0) return true;
 		return message.member.roles.filter(role =>
@@ -229,10 +229,10 @@ export class CommandDispatcher<T extends Bot>
 	/**
 	 * Check if the calling user is blacklisted
 	 */
-	private isBlacklisted(user: User, message: Message, dm: boolean): boolean
+	private async isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
 	{
-		if (this._bot.storage.exists(`blacklist/${user.id}`)) return true;
-		if (!dm && message.guild.storage.settingExists(`blacklist/${user.id}`)) return true;
+		if (await this._bot.storage.get(`blacklist.${user.id}`)) return true;
+		if (!dm && message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
 		return false;
 	}
 
@@ -279,10 +279,10 @@ export class CommandDispatcher<T extends Bot>
 	/**
 	 * Return an error for failing a command limiter
 	 */
-	private failedLimiterError(command: Command<T>, message: Message): string
+	private async failedLimiterError(command: Command<T>, message: Message): Promise<string>
 	{
-		const storage: GuildStorage = this._bot.guildStorages.get(message.guild);
-		let limitedCommands: { [name: string]: string[] } = storage.getSetting('limitedCommands');
+		const storage: GuildStorage = this._bot.storage.guilds.get(message.guild.id);
+		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands');
 		let roles: string[] = limitedCommands[command.name];
 		return `**You must have ${roles.length > 1
 			? 'one of the following roles' : 'the following role'}`

@@ -1,15 +1,16 @@
 import { Client, ClientOptions, Guild, Message, Channel, Emoji, User, GuildMember, Collection, MessageReaction, Role, UserResolvable } from 'discord.js';
 import { BotOptions } from '../types/BotOptions';
-import { LocalStorage } from '../storage/LocalStorage';
-import { GuildStorage } from '../storage/GuildStorage';
 import { GuildStorageLoader } from '../storage/GuildStorageLoader';
-import { GuildStorageRegistry } from '../storage/GuildStorageRegistry';
 import { Command } from '../command/Command';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
 import { CommandDispatcher } from '../command/CommandDispatcher';
 import { RateLimiter } from '../command/RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { StorageProvider } from '../storage/StorageProvider';
+import { JSONProvider } from '../storage/JSONProvider';
+import { ClientStorage } from '../types/ClientStorage';
+import { applyClientStorageMixin } from '../storage/mixin/ClientStorageMixin';
 
 /**
  * The Discord.js Client instance. Contains bot-specific [storage]{@link Bot#storage},
@@ -32,16 +33,16 @@ export class Bot extends Client
 	public version: string;
 	public disableBase: string[];
 	public config: any;
+	public provider: typeof StorageProvider;
 	public _middleware: MiddlewareFunction[];
 	public _rateLimiter: RateLimiter;
 
-	public storage: LocalStorage;
-	public guildStorages: GuildStorageRegistry<string, GuildStorage>;
+	public storage: ClientStorage;
 	public commands: CommandRegistry<this, string, Command<this>>;
 
 	private _token: string;
-	private _guildDataStorage: LocalStorage;
-	private _guildSettingStorage: LocalStorage;
+	private _guildDataStorage: StorageProvider;
+	private _guildSettingStorage: StorageProvider;
 	private _guildStorageLoader: GuildStorageLoader<this>;
 	private _commandLoader: CommandLoader<this>;
 	private _dispatcher: CommandDispatcher<this>;
@@ -159,27 +160,21 @@ export class Bot extends Client
 		// Middleware function storage for the bot instance
 		this._middleware = [];
 
-		this._guildDataStorage = new LocalStorage('storage/guild-storage');
-		this._guildSettingStorage = new LocalStorage('storage/guild-settings');
+		this.provider = <typeof StorageProvider> (botOptions.provider || JSONProvider);
+
+		this._guildDataStorage = new (<any> this.provider)('guild_storage');
+		this._guildSettingStorage = new (<any> this.provider)('guild_settings');
 		this._guildStorageLoader = new GuildStorageLoader(this);
 
 		/**
 		 * Bot-specific storage
 		 * @memberof Bot
-		 * @type {LocalStorage}
+		 * @type {StorageProvider}
 		 * @name storage
 		 * @instance
 		 */
-		this.storage = new LocalStorage('storage/bot-storage');
-
-		/**
-		 * [Collection]{@link external:Collection} containing all GuildStorage instances
-		 * @memberof Bot
-		 * @type {GuildStorageRegistry<string, GuildStorage>}
-		 * @name guildStorages
-		 * @instance
-		 */
-		this.guildStorages = new GuildStorageRegistry();
+		this.storage = new (<any> this.provider)('client_storage');
+		applyClientStorageMixin(this.storage);
 
 		/**
 		 * [Collection]{@link external:Collection} containing all loaded commands
@@ -189,11 +184,6 @@ export class Bot extends Client
 		 * @instance
 		 */
 		this.commands = new CommandRegistry<this, string, Command<this>>();
-
-		// Load defaultGuildSettings into storage the first time the bot is run
-		if (!this.storage.exists('defaultGuildSettings'))
-			this.storage.setItem('defaultGuildSettings',
-				require('../storage/defaultGuildSettings.json'));
 
 		this._commandLoader = !this.passive ? new CommandLoader(this) : null;
 		this._dispatcher = !this.passive ? new CommandDispatcher<this>(this) : null;
@@ -207,6 +197,18 @@ export class Bot extends Client
 
 		// Load commands
 		if (!this.passive) this.loadCommand('all');
+	}
+
+	private async init(): Promise<void>
+	{
+		await this.storage.init();
+		await this._guildDataStorage.init();
+		await this._guildSettingStorage.init();
+
+		// Load defaultGuildSettings into storage the first time the bot is run
+		if (typeof await this.storage.get('defaultGuildSettings') === 'undefined')
+			await this.storage.set('defaultGuildSettings',
+				require('../storage/defaultGuildSettings.json'));
 	}
 
 	/**
@@ -244,14 +246,17 @@ export class Bot extends Client
 	{
 		this.login(this._token);
 
-		this.once('ready', () =>
+		this.once('ready', async () =>
 		{
-			console.log(this.readyText);
+			await this.init();
 			this.user.setGame(this.statusText);
 
 			// Load all guild storages
-			this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
+			await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
+			this.emit('waiting');
 		});
+
+		this.once('finished', () => this.emit('clientReady'));
 
 		this.on('guildCreate', () =>
 		{
@@ -260,9 +265,9 @@ export class Bot extends Client
 
 		this.on('guildDelete', (guild) =>
 		{
-			this.guildStorages.delete(guild.id);
-			this._guildDataStorage.removeItem(guild.id);
-			this._guildSettingStorage.removeItem(guild.id);
+			this.storage.guilds.delete(guild.id);
+			this._guildDataStorage.remove(guild.id);
+			this._guildSettingStorage.remove(guild.id);
 		});
 
 		return this;
@@ -278,11 +283,12 @@ export class Bot extends Client
 	 * @param {any} value - The value to use in settings storage
 	 * @returns {Bot}
 	 */
-	public setDefaultSetting(key: string, value: any): this
+	public async setDefaultSetting(key: string, value: any): Promise<this>
 	{
-		this.storage.setItem(`defaultGuildSettings/${key}`, value);
-		for (const guild of this.guildStorages.values())
-			if (!guild.settingExists(key)) guild.setSetting(key, value);
+		await this.storage.set(`defaultGuildSettings/${key}`, value);
+		for (const guildStorage of this.storage.guilds.values())
+			if (typeof await guildStorage.settings.get(key) === 'undefined')
+				await guildStorage.settings.set(key, value);
 
 		return this;
 	}
@@ -296,22 +302,22 @@ export class Bot extends Client
 	 * @param {string} key - The key to use in settings storage
 	 * @returns {Bot}
 	 */
-	public removeDefaultSetting(key: string): this
+	public async removeDefaultSetting(key: string): Promise<this>
 	{
-		this.storage.removeItem(`defaultGuildSettings/${key}`);
+		await this.storage.remove(`defaultGuildSettings.${key}`);
 		return this;
 	}
 
 	/**
-	 * See if a guild default setting exists
+	 * See if a default guild setting exists
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key in storage to check
 	 * @returns {boolean}
 	 */
-	public defaultSettingExists(key: string): boolean
+	public async defaultSettingExists(key: string): Promise<boolean>
 	{
-		return !!this.storage.getItem('defaultGuildSettings')[key];
+		return typeof await this.storage.get(`defaultGuildSettings.${key}`) !== 'undefined';
 	}
 
 	/**
@@ -321,10 +327,10 @@ export class Bot extends Client
 	 * @param {(external:Guild|string)} guild The guild or guild id to get the prefix of
 	 * @returns {string|null}
 	 */
-	public getPrefix(guild: Guild | string): string
+	public async getPrefix(guild: Guild): Promise<string>
 	{
 		if (!guild) return null;
-		return this.guildStorages.get(<Guild> guild).getSetting('prefix') || null;
+		return (await this.storage.guilds.get(guild.id).settings.get('prefix')) || null;
 	}
 
 	/**
@@ -423,6 +429,9 @@ export class Bot extends Client
 	public on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
 	public on(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
 	public on(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
+	public on(event: 'waiting', listener: () => void): this;
+	public on(event: 'finished', listener: () => void): this;
+	public on(event: 'clientReady', listener: () => void): this;
 
 	/**
 	 * Emitted whenever a command is successfully called
