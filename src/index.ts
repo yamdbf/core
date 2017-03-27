@@ -13,6 +13,9 @@ export { Middleware } from './lib/command/middleware/Middleware';
 export { RateLimiter } from './lib/command/RateLimiter';
 export { RateLimit } from './lib/command/RateLimit';
 
+export { JSONProvider } from './lib/storage/JSONProvider';
+export { GuildSettings } from './lib/storage/GuildSettings';
+
 import * as CommandDecorators from './lib/command/CommandDecorators';
 export { CommandDecorators }
 
