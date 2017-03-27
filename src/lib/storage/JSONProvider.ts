@@ -18,26 +18,50 @@ export class JSONProvider extends StorageProvider
 
 	public async keys(): Promise<string[]>
 	{
-		return Object.keys(this._db.getData('/'));
+		try
+		{
+			let data: object = this._db.getData('/');
+			return Object.keys(data);
+		}
+		catch (err)
+		{
+			return [];
+		}
 	}
 
 	public async get(key: string): Promise<string>
 	{
-		return this._db.getData(`/${key}`);
+		if (typeof key !== 'string')
+			throw new Error('Key must be string');
+
+		try
+		{
+			let data: string = this._db.getData(`/${key}`);
+			return data;
+		}
+		catch (err)
+		{
+			return undefined;
+		}
 	}
 
 	public async set(key: string, value: string): Promise<void>
 	{
-		this._db.push(`/${key}`, value);
+		if (typeof key !== 'string') throw new Error('Key must be string');
+		if (typeof value === 'undefined') throw new Error('Value must be provided');
+		if (typeof value !== 'string') throw new Error('Value must be string');
+		this._db.push(`/${key}`, value, true);
 	}
 
 	public async remove(key: string): Promise<void>
 	{
-		this._db.delete(`/${key}`);
+		try { this._db.delete(`/${key}`); }
+		catch (err) { return; }
 	}
 
 	public async clear(): Promise<void>
 	{
-		for (const key of await this.keys()) this._db.delete(`/${key}`);
+		try { for (const key of await this.keys()) this._db.delete(`/${key}`); }
+		catch (err) { return; }
 	}
 }
