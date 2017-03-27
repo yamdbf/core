@@ -13,6 +13,7 @@ export { Middleware } from './lib/command/middleware/Middleware';
 export { RateLimiter } from './lib/command/RateLimiter';
 export { RateLimit } from './lib/command/RateLimit';
 
+export { StorageProvider } from './lib/storage/StorageProvider';
 export { JSONProvider } from './lib/storage/JSONProvider';
 export { GuildSettings } from './lib/storage/GuildSettings';
 export { guildStorageMixin } from './lib/storage/GuildStorageMixin';
