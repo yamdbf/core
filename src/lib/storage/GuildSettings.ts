@@ -5,14 +5,14 @@ import { Bot } from '../bot/Bot';
 
 export class GuildSettings
 {
-	private _storage: StorageProvider;
+	private _provider: StorageProvider;
 	private _guild: Guild;
 	private _id: string;
 	private _client: any;
 	private _cache: { [key: string]: any };
 	public constructor(storage: StorageProvider, guild: Guild, client: Bot)
 	{
-		this._storage = storage;
+		this._provider = storage;
 		this._guild = guild;
 		this._id = guild.id;
 		this._client = client;
@@ -23,7 +23,7 @@ export class GuildSettings
 	{
 		try
 		{
-			let data: any = await this._storage.get(this._id);
+			let data: any = await this._provider.get(this._id);
 			if (typeof data === 'undefined') data = {};
 			else data = JSON.parse(data);
 
@@ -34,7 +34,7 @@ export class GuildSettings
 					if (typeof data[key] === 'undefined')
 						data[key] = defaults[key];
 
-				await this._storage.set(this._id, JSON.stringify(data));
+				await this._provider.set(this._id, JSON.stringify(data));
 			}
 
 			this._cache = data;
@@ -80,7 +80,7 @@ export class GuildSettings
 		{
 			this._cache[key] = value;
 		}
-		await this._storage.set(this._id, JSON.stringify(this._cache));
+		await this._provider.set(this._id, JSON.stringify(this._cache));
 	}
 
 	public async remove(key: string): Promise<void>
@@ -99,12 +99,12 @@ export class GuildSettings
 		{
 			delete this._cache[key];
 		}
-		await this._storage.set(this._id, JSON.stringify(this._cache));
+		await this._provider.set(this._id, JSON.stringify(this._cache));
 	}
 
 	public async clear(): Promise<void>
 	{
 		this._cache = {};
-		await this._storage.set(this._id, JSON.stringify(this._cache));
+		await this._provider.set(this._id, JSON.stringify(this._cache));
 	}
 }

@@ -15,6 +15,7 @@ export { RateLimit } from './lib/command/RateLimit';
 
 export { JSONProvider } from './lib/storage/JSONProvider';
 export { GuildSettings } from './lib/storage/GuildSettings';
+export { guildStorageMixin } from './lib/storage/GuildStorageMixin';
 
 import * as CommandDecorators from './lib/command/CommandDecorators';
 export { CommandDecorators }
