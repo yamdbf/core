@@ -37,7 +37,7 @@ export default class extends Command<Bot>
 			return message.channel.send(`Removed ${user.username}#${user.discriminator} from the global blacklist.`);
 		}
 
-		const guildBlacklist: any = message.guild.storage.settings.get('blacklist') || {};
+		const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
 		if (!guildBlacklist[user.id])
 			return message.channel.send('That user is not currently blacklisted in this server.');
 

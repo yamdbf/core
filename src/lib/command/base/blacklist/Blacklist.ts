@@ -47,7 +47,8 @@ export default class extends Command<Bot>
 		if ((await message.guild.fetchMember(user)).hasPermission('ADMINISTRATOR'))
 			return message.channel.send('You may not use this command on that person.');
 
-		const guildBlacklist: any = message.guild.storage.settings.get('blacklist') || {};
+		const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
+		console.log(guildBlacklist);
 		if (guildBlacklist[user.id])
 			return message.channel.send('That user is already blacklisted in this server.');
 
