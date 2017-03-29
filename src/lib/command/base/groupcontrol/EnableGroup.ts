@@ -29,7 +29,7 @@ export default class extends Command<Bot>
 
 		if (!this.bot.commands.groups.includes(group)) return this._respond(message, err.NO_EXIST);
 		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
-		if (group === 'base' || disabledGroups.includes(group))
+		if (group === 'base' || !disabledGroups.includes(group))
 			return this._respond(message, err.ENABLED);
 
 		disabledGroups.splice(disabledGroups.indexOf(group), 1);
