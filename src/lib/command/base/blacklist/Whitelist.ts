@@ -22,25 +22,27 @@ export default class Whitelist extends Command<Bot>
 		this.use(Middleware.expect({ '<user>': 'User' }));
 	}
 
-	public action(message: Message, [user, global]: [User, string]): Promise<Message | Message[]>
+	public async action(message: Message, [user, global]: [User, string]): Promise<Message | Message[]>
 	{
 		if (global === 'global')
 		{
 			if (!this.bot.isOwner(message.author))
 				return message.channel.send('Only bot owners may remove a global blacklisting.');
 
-			if (!this.bot.storage.exists(`blacklist/${user.id}`))
+			const globalBlacklist: any = await this.bot.storage.get('blacklist') || {};
+			if (!globalBlacklist[user.id])
 				return message.channel.send('That user is not currently globally blacklisted.');
 
-			this.bot.storage.removeItem(`blacklist/${user.id}`);
+			await this.bot.storage.remove(`blacklist.${user.id}`);
 			this.bot.emit('blacklistRemove', user, true);
 			return message.channel.send(`Removed ${user.username}#${user.discriminator} from the global blacklist.`);
 		}
 
-		if (!message.guild.storage.settingExists(`blacklist/${user.id}`))
+		const guildBlacklist: any = message.guild.storage.settings.get('blacklist') || {};
+		if (!guildBlacklist[user.id])
 			return message.channel.send('That user is not currently blacklisted in this server.');
 
-		message.guild.storage.removeSetting(`blacklist/${user.id}`);
+		message.guild.storage.settings.remove(`blacklist.${user.id}`);
 		this.bot.emit('blacklistRemove', user, false);
 		return message.channel.send(`Removed ${user.username}#${user.discriminator} from this server's blacklist.`);
 	}

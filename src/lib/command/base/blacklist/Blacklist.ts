@@ -35,10 +35,11 @@ export default class Blacklist extends Command<Bot>
 			if (!this.bot.isOwner(message.author))
 				return message.channel.send('Only bot owners may blacklist globally.');
 
-			if (this.bot.storage.exists(`blacklist/${user.id}`))
+			const globalBlacklist: any = await this.bot.storage.get('blacklist') || {};
+			if (globalBlacklist[user.id])
 				return message.channel.send('That user is already globally blacklisted.');
 
-			this.bot.storage.setItem(`blacklist/${user.id}`, true);
+			await this.bot.storage.set(`blacklist.${user.id}`, true);
 			this.bot.emit('blacklistAdd', user, true);
 			return message.channel.send(`Added ${user.username}#${user.discriminator} to the global blacklist.`);
 		}
@@ -46,10 +47,11 @@ export default class Blacklist extends Command<Bot>
 		if ((await message.guild.fetchMember(user)).hasPermission('ADMINISTRATOR'))
 			return message.channel.send('You may not use this command on that person.');
 
-		if (message.guild.storage.settingExists(`blacklist/${user.id}`))
+		const guildBlacklist: any = message.guild.storage.settings.get('blacklist') || {};
+		if (guildBlacklist[user.id])
 			return message.channel.send('That user is already blacklisted in this server.');
 
-		message.guild.storage.setSetting(`blacklist/${user.id}`, true);
+		await message.guild.storage.settings.set(`blacklist.${user.id}`, true);
 		this.bot.emit('blacklistAdd', user, false);
 		return message.channel.send(`Added ${user.username}#${user.discriminator} to this server's blacklist.`);
 	}
