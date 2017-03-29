@@ -9,7 +9,8 @@
     "postinstall": "postinstall-build \"npm run build -s\"",
     "build": "gulp",
     "lint": "gulp lint",
-    "test": "npm run build -s"
+    "test": "npm run build -s",
+    "test:client": "node test/client_test.js"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {

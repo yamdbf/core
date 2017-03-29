@@ -4,3 +4,4 @@
 /pkg/*
 config.json
 npm-debug*
+/test/storage
