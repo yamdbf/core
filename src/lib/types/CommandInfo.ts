@@ -6,7 +6,7 @@ export type CommandInfo = {
 	name: string;
 	description: string;
 	usage: string;
-	group: string;
+	group?: string;
 	extraHelp?: string;
 	aliases?: string[];
 	guildOnly?: boolean;
@@ -26,7 +26,7 @@ export type CommandInfo = {
  * @property {string} description See: {@link Command#description}
  * @property {string} usage See: {@link Command#usage}
  * @property {string} [extraHelp] See: {@link Command#extraHelp}
- * @property {string} group See: {@link Command#group}
+ * @property {string} [group='base'] See: {@link Command#group}
  * @property {string[]} [aliases=[]] See: {@link Command#aliases}
  * @property {boolean} [guildOnly=false] See: {@link Command#guildOnly}
  * @property {boolean} [hidden=false] See: {@link Command#hidden}

@@ -3,6 +3,8 @@ import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { User } from 'discord.js';
+import * as CommandDecorators from '../../CommandDecorators';
+const { using } = CommandDecorators;
 
 export default class Blacklist extends Command<Bot>
 {
@@ -14,14 +16,12 @@ export default class Blacklist extends Command<Bot>
 			aliases: ['bl'],
 			usage: '<prefix>blacklist <user>, [\'global\']',
 			extraHelp: 'If global, this will block the user from calling commands in ANY server and DMs',
-			group: 'base',
 			permissions: ['ADMINISTRATOR']
 		});
-
-		this.use(Middleware.resolveArgs({ '<user>': 'User' }));
-		this.use(Middleware.expect({ '<user>': 'User' }));
 	}
 
+	@using(Middleware.resolveArgs({ '<user>': 'User' }))
+	@using(Middleware.expect({ '<user>': 'User' }))
 	public async action(message: Message, [user, global]: [User, string]): Promise<Message | Message[]>
 	{
 		if (user.id === message.author.id)

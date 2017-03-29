@@ -3,6 +3,8 @@ import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { User } from 'discord.js';
+import * as CommandDecorators from '../../CommandDecorators';
+const { using } = CommandDecorators;
 
 export default class Whitelist extends Command<Bot>
 {
@@ -13,15 +15,12 @@ export default class Whitelist extends Command<Bot>
 			description: 'Remove a user from the command blacklist',
 			aliases: ['wl'],
 			usage: '<prefix>whitelist <user>, [\'global\']',
-			extraHelp: '',
-			group: 'base',
 			permissions: ['ADMINISTRATOR']
 		});
-
-		this.use(Middleware.resolveArgs({ '<user>': 'User' }));
-		this.use(Middleware.expect({ '<user>': 'User' }));
 	}
 
+	@using(Middleware.resolveArgs({ '<user>': 'User' }))
+	@using(Middleware.expect({ '<user>': 'User' }))
 	public async action(message: Message, [user, global]: [User, string]): Promise<Message | Message[]>
 	{
 		if (global === 'global')
