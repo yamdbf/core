@@ -13,7 +13,7 @@ export class JSONProvider extends StorageProvider
 
 	public async init(): Promise<void>
 	{
-		this._db = new DB(`storage/${this._name}`);
+		this._db = new DB(`storage/${this._name}`, true, true);
 	}
 
 	public async keys(): Promise<string[]>

@@ -16,8 +16,6 @@ export { RateLimit } from './lib/command/RateLimit';
 export { StorageProvider } from './lib/storage/StorageProvider';
 export { JSONProvider } from './lib/storage/JSONProvider';
 export { GuildSettings } from './lib/storage/GuildSettings';
-export { createGuildStorageMixin } from './lib/storage/mixin/GuildStorageMixin';
-export { applyClientStorageMixin } from './lib/storage/mixin/ClientStorageMixin';
 export { ClientStorage } from './lib/types/ClientStorage';
 
 import * as CommandDecorators from './lib/command/CommandDecorators';

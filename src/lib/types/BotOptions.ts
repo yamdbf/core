@@ -1,10 +1,10 @@
+import { StorageProviderConstructor } from './StorageProviderConstructor';
 import { BaseCommandName } from './BaseCommandName';
-import { StorageProvider } from '../storage/StorageProvider';
 
 export type BotOptions = {
 	name: string;
 	token: string;
-	provider: new(name: string) => StorageProvider;
+	provider?: StorageProviderConstructor;
 	commandsDir?: string;
 	statusText?: string;
 	readyText?: string;
@@ -22,7 +22,7 @@ export type BotOptions = {
  * passed to a Bot on construction
  * @property {string} [name='botname'] See: {@link Bot#name}
  * @property {string} token See: {@link Bot#token}
- * @property {string} provider See: {@link Bot#provider}
+ * @property {string} [provider] See: {@link Bot#provider}
  * @property {string} [commandsDir] See: {@link Bot#commandsDir}
  * @property {string} [statusText=null] See: {@link Bot#statusText}
  * @property {string} [readyText='Ready!'] See: {@link Bot#readyText}

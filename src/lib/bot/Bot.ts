@@ -1,16 +1,17 @@
-import { Client, ClientOptions, Guild, Message, Channel, Emoji, User, GuildMember, Collection, MessageReaction, Role, UserResolvable } from 'discord.js';
-import { BotOptions } from '../types/BotOptions';
-import { GuildStorageLoader } from '../storage/GuildStorageLoader';
+import { Channel, Client, ClientOptions, Collection, Emoji, Guild, GuildMember, Message, MessageReaction, Role, User, UserResolvable } from 'discord.js';
 import { Command } from '../command/Command';
+import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
-import { CommandDispatcher } from '../command/CommandDispatcher';
 import { RateLimiter } from '../command/RateLimiter';
-import { MiddlewareFunction } from '../types/MiddlewareFunction';
-import { StorageProvider } from '../storage/StorageProvider';
+import { GuildStorageLoader } from '../storage/GuildStorageLoader';
 import { JSONProvider } from '../storage/JSONProvider';
+import { StorageProvider } from '../storage/StorageProvider';
+import { StorageFactory } from '../storage/StorageFactory';
+import { BotOptions } from '../types/BotOptions';
 import { ClientStorage } from '../types/ClientStorage';
-import { applyClientStorageMixin } from '../storage/mixin/ClientStorageMixin';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 
 /**
  * The Discord.js Client instance. Contains bot-specific [storage]{@link Bot#storage},
@@ -33,7 +34,8 @@ export class Bot extends Client
 	public version: string;
 	public disableBase: string[];
 	public config: any;
-	public provider: typeof StorageProvider;
+	public provider: StorageProviderConstructor;
+	public storageFactory: StorageFactory;
 	public _middleware: MiddlewareFunction[];
 	public _rateLimiter: RateLimiter;
 
@@ -160,21 +162,22 @@ export class Bot extends Client
 		// Middleware function storage for the bot instance
 		this._middleware = [];
 
-		this.provider = <typeof StorageProvider> (botOptions.provider || JSONProvider);
+		this.provider = botOptions.provider || JSONProvider;
 
-		this._guildDataStorage = new (<any> this.provider)('guild_storage');
-		this._guildSettingStorage = new (<any> this.provider)('guild_settings');
+		this._guildDataStorage = new this.provider('guild_storage');
+		this._guildSettingStorage = new this.provider('guild_settings');
 		this._guildStorageLoader = new GuildStorageLoader(this);
+
+		this.storageFactory = new StorageFactory(this, this._guildDataStorage, this._guildSettingStorage);
 
 		/**
 		 * Bot-specific storage
 		 * @memberof Bot
-		 * @type {StorageProvider}
+		 * @type {ClientStorage}
 		 * @name storage
 		 * @instance
 		 */
-		this.storage = new (<any> this.provider)('client_storage');
-		applyClientStorageMixin(this.storage);
+		this.storage = this.storageFactory.createClientStorage();
 
 		/**
 		 * [Collection]{@link external:Collection} containing all loaded commands
@@ -209,6 +212,8 @@ export class Bot extends Client
 		if (typeof await this.storage.get('defaultGuildSettings') === 'undefined')
 			await this.storage.set('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
+
+		await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
 	}
 
 	/**
@@ -251,8 +256,6 @@ export class Bot extends Client
 			await this.init();
 			this.user.setGame(this.statusText);
 
-			// Load all guild storages
-			await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
 			this.emit('waiting');
 		});
 
@@ -285,7 +288,7 @@ export class Bot extends Client
 	 */
 	public async setDefaultSetting(key: string, value: any): Promise<this>
 	{
-		await this.storage.set(`defaultGuildSettings/${key}`, value);
+		await this.storage.set(`defaultGuildSettings.${key}`, value);
 		for (const guildStorage of this.storage.guilds.values())
 			if (typeof await guildStorage.settings.get(key) === 'undefined')
 				await guildStorage.settings.set(key, value);

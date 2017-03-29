@@ -24,7 +24,11 @@ export class GuildSettings
 		try
 		{
 			let data: any = await this._provider.get(this._id);
-			if (typeof data === 'undefined') data = {};
+			if (typeof data === 'undefined')
+			{
+				data = {};
+				await this._provider.set(this._id, JSON.stringify(data));
+			}
 			else data = JSON.parse(data);
 
 			if (useDefaults)
@@ -91,7 +95,6 @@ export class GuildSettings
 		{
 			let path: string[] = key.split('.');
 			let first: string = path.shift();
-			console.log('removing ', key, this._cache[first]);
 			if (typeof this._cache[first] !== 'undefined')
 				Util.removeNested(this._cache[first], path);
 		}

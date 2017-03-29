@@ -232,7 +232,7 @@ export class CommandDispatcher<T extends Bot>
 	private async isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
 	{
 		if (await this._bot.storage.get(`blacklist.${user.id}`)) return true;
-		if (!dm && message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
+		if (!dm && await message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
 		return false;
 	}
 

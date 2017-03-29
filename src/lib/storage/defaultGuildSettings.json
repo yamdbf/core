@@ -1,5 +1,6 @@
 {
 	"prefix": "/",
 	"disabledGroups": [],
-	"limitedCommands": {}
+	"limitedCommands": {},
+	"blacklist": {}
 }
