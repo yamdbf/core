@@ -2,8 +2,10 @@ import { Bot } from '../../bot/Bot';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { Middleware } from '../middleware/Middleware';
+import * as CommandDecorators from '../CommandDecorators';
+const { using } = CommandDecorators;
 
-export default class SetPrefix extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -13,13 +15,11 @@ export default class SetPrefix extends Command<Bot>
 			aliases: ['prefix'],
 			usage: '<prefix>setprefix <prefix>',
 			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Set the prefix to "noprefix" to allow commands to be called without a prefix.',
-			group: 'base',
 			permissions: ['ADMINISTRATOR']
 		});
-
-		this.use(Middleware.resolveArgs({ '<prefix>': 'String' }));
 	}
 
+	@using(Middleware.expect({ '<prefix>': 'String' }))
 	public async action(message: Message, [prefix]: [string]): Promise<any>
 	{
 		if (!prefix)
@@ -36,10 +36,10 @@ export default class SetPrefix extends Command<Bot>
 		if (prefix === 'noprefix') prefix = '';
 
 		if (this.bot.selfbot)
-			for (const guild of this.bot.guildStorages.values())
-				guild.setSetting('prefix', prefix);
+			for (const guild of this.bot.storage.guilds.values())
+				await guild.settings.set('prefix', prefix);
 
-		else this.bot.guildStorages.get(message.guild).setSetting('prefix', prefix);
+		else await this.bot.storage.guilds.get(message.guild.id).settings.set('prefix', prefix);
 		this._respond(message, prefix === '' ? 'Command prefix removed.'
 			: `Command prefix set to \`${prefix}\``);
 	}

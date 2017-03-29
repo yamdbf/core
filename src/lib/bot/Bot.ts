@@ -171,7 +171,8 @@ export class Bot extends Client
 		this.storageFactory = new StorageFactory(this, this._guildDataStorage, this._guildSettingStorage);
 
 		/**
-		 * Bot-specific storage
+		 * Client-specific storage. Also contains a `guilds` Collection property containing
+		 * all GuildStorage instances
 		 * @memberof Bot
 		 * @type {ClientStorage}
 		 * @name storage

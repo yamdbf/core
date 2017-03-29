@@ -1,12 +1,14 @@
 import { Bot } from '../../../bot/Bot';
-import { GuildStorage } from '../../../storage/GuildStorage';
+import { GuildStorage } from '../../../types/GuildStorage';
 import { Message } from '../../../types/Message';
 import { Util } from '../../../Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { Role } from 'discord.js';
+import * as CommandDecorators from '../CommandDecorators';
+const { using } = CommandDecorators;
 
-export default class Limit extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -15,22 +17,20 @@ export default class Limit extends Command<Bot>
 			description: 'Limit a command to the provided roles',
 			usage: '<prefix>limit <command>, <role names, ...>',
 			extraHelp: 'The comma after the command name -- before the role names list -- is necessary.',
-			group: 'base',
 			argOpts: { separator: ',' },
 			permissions: ['ADMINISTRATOR']
 		});
-
-		this.use(Middleware.expect({ '<command>': 'String' }));
 	}
 
-	public action(message: Message, [commandName, ...roleNames]: [string, string]): Promise<Message | Message[]>
+	@using(Middleware.expect({ '<command>': 'String' }))
+	public async action(message: Message, [commandName, ...roleNames]: [string, string]): Promise<Message | Message[]>
 	{
 		const command: Command<Bot> = this.bot.commands.find(c => Util.normalize(commandName) === Util.normalize(c.name));
 		if (!command) return this._respond(message, `Failed to find a command with the name \`${commandName}\``);
 		if (command.group === 'base') this._respond(message, `Cannot limit base commands.`);
 
 		const storage: GuildStorage = message.guild.storage;
-		let limitedCommands: { [name: string]: string[] } = storage.getSetting('limitedCommands') || {};
+		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
 		let newLimit: string[] = limitedCommands[command.name] || [];
 
 		let roles: Role[] = [];
@@ -50,7 +50,7 @@ export default class Limit extends Command<Bot>
 
 		newLimit = newLimit.concat(roles.map(role => role.id));
 		limitedCommands[command.name] = newLimit;
-		storage.setSetting('limitedCommands', limitedCommands);
+		await storage.settings.set('limitedCommands', limitedCommands);
 
 		return this._respond(message, `Successfully added role${roles.length > 1 ? 's' : ''}: \`${
 			roles.map(role => role.name).join('`, `')}\` to the limiter for command: \`${command.name}\``);

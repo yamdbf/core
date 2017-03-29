@@ -5,7 +5,7 @@ import { inspect } from 'util';
 const Discord = require('discord.js'); // tslint:disable-line
 const Yamdbf = require('../../../index'); // tslint:disable-line
 
-export default class Eval extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -13,7 +13,6 @@ export default class Eval extends Command<Bot>
 			name: 'eval',
 			description: 'Evaluate provided Javascript code',
 			usage: '<prefix>eval <code>',
-			group: 'base',
 			ownerOnly: true
 		});
 	}

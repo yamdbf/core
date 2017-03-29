@@ -2,15 +2,14 @@ import { Bot } from '../../bot/Bot';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 
-export default class Ping extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
 		super(bot, {
 			name: 'ping',
 			description: 'Pong!',
-			usage: '<prefix>ping',
-			group: 'base'
+			usage: '<prefix>ping'
 		});
 	}
 

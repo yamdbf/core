@@ -3,7 +3,7 @@ import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import now = require('performance-now');
 
-export default class Reload extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -12,7 +12,6 @@ export default class Reload extends Command<Bot>
 			description: 'Reload a command or all commands',
 			usage: '<prefix>reload [command]',
 			extraHelp: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
-			group: 'base',
 			ownerOnly: true
 		});
 	}
