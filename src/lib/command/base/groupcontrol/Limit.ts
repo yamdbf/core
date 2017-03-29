@@ -5,7 +5,7 @@ import { Util } from '../../../Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { Role } from 'discord.js';
-import * as CommandDecorators from '../CommandDecorators';
+import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
 export default class extends Command<Bot>
