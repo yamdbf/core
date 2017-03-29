@@ -46,7 +46,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 /**
  * Set `name` metadata
  */
-export function name(value: string): any
+export function name(value: string): ClassDecorator
 {
 	return _setMetaData('name', value);
 }
@@ -54,7 +54,7 @@ export function name(value: string): any
 /**
  * Set `aliases` metadata
  */
-export function aliases(...value: string[]): any
+export function aliases(...value: string[]): ClassDecorator
 {
 	return _setMetaData('aliases', value);
 }
@@ -62,7 +62,7 @@ export function aliases(...value: string[]): any
 /**
  * Set `description` metadata
  */
-export function description(value: string): any
+export function description(value: string): ClassDecorator
 {
 	return _setMetaData('description', value);
 }
@@ -70,7 +70,7 @@ export function description(value: string): any
 /**
  * Set `usage` metadata
  */
-export function usage(value: string): any
+export function usage(value: string): ClassDecorator
 {
 	return _setMetaData('usage', value);
 }
@@ -78,7 +78,7 @@ export function usage(value: string): any
 /**
  * Set `extraHelp` metadata
  */
-export function extraHelp(value: string): any
+export function extraHelp(value: string): ClassDecorator
 {
 	return _setMetaData('extraHelp', value);
 }
@@ -86,7 +86,7 @@ export function extraHelp(value: string): any
 /**
  * Set `group` metadata
  */
-export function group(value: string): any
+export function group(value: string): ClassDecorator
 {
 	return _setMetaData('group', value);
 }
@@ -94,7 +94,7 @@ export function group(value: string): any
 /**
  * Set `argOpts` metadata
  */
-export function argOpts(value: ArgOpts): any
+export function argOpts(value: ArgOpts): ClassDecorator
 {
 	return _setMetaData('usage', value);
 }
@@ -102,7 +102,7 @@ export function argOpts(value: ArgOpts): any
 /**
  * Set `permissions` metadata
  */
-export function permissions(...value: PermissionResolvable[]): any
+export function permissions(...value: PermissionResolvable[]): ClassDecorator
 {
 	return _setMetaData('permissions', value);
 }
@@ -110,7 +110,7 @@ export function permissions(...value: PermissionResolvable[]): any
 /**
  * Set `roles` metadata
  */
-export function roles(...value: string[]): any
+export function roles(...value: string[]): ClassDecorator
 {
 	return _setMetaData('roles', value);
 }
@@ -118,7 +118,7 @@ export function roles(...value: string[]): any
 /**
  * Set `ratelimit` metadata
  */
-export function ratelimit(value: string): any
+export function ratelimit(value: string): ClassDecorator
 {
 	return _setMetaData('_rateLimiter', new RateLimiter(value, false));
 }
@@ -126,7 +126,7 @@ export function ratelimit(value: string): any
 /**
  * Set `overloads` metadata
  */
-export function overloads(value: string): any
+export function overloads(value: string): ClassDecorator
 {
 	return _setMetaData('overloads', value);
 }
@@ -134,45 +134,48 @@ export function overloads(value: string): any
 /**
  * Set `owneronly` flag metadata
  */
-export function ownerOnly(target: any): any
+export function ownerOnly(target: typeof Command): ClassDecorator
 {
-	return _setFlagMetaData(target, 'ownerOnly');
+	return _setFlagMetaData('ownerOnly');
 }
 
 /**
  * Set `guildOnly` flag metadata
  */
-export function guildOnly(target: any): any
+export function guildOnly(target: typeof Command): ClassDecorator
 {
-	return _setFlagMetaData(target, 'guildOnly');
+	return _setFlagMetaData('guildOnly');
 }
 
 /**
  * Set `hidden` flag metadata
  */
-export function hidden(target: any): any
+export function hidden(target: typeof Command): ClassDecorator
 {
-	return _setFlagMetaData(target, 'hidden');
+	return _setFlagMetaData('hidden');
 }
 
 /**
  * Set a boolean flag metadata on a class
  */
-function _setFlagMetaData(target: any, flag: string): any
+function _setFlagMetaData(flag: string): ClassDecorator
 {
-	Object.defineProperty(target.prototype, flag, {
-		value: true,
-		enumerable: true,
-	});
-	return target;
+	return function(target: typeof Command): typeof Command
+	{
+		Object.defineProperty(target.prototype, flag, {
+			value: true,
+			enumerable: true,
+		});
+		return target;
+	}
 }
 
 /**
  * Set an arbitrary value to an arbitrary key on a class
  */
-function _setMetaData(key: string, value: any): any
+function _setMetaData(key: string, value: any): ClassDecorator
 {
-	return function(target: any): any
+	return function(target: typeof Command): typeof Command
 	{
 		Object.defineProperty(target.prototype, key, {
 			value: value,

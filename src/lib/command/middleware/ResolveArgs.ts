@@ -17,7 +17,7 @@ export function resolveArgs<T extends Bot, U extends Command<T>>(argTypes: { [na
 			text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? message.guild.storage.getSetting('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = `Usage: \`${(<U> this).usage.replace('<prefix>', prefix)}\``;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 		let foundRestArg: boolean = false;
