@@ -167,7 +167,7 @@ function _setFlagMetaData(flag: string): ClassDecorator
 			enumerable: true,
 		});
 		return target;
-	}
+	};
 }
 
 /**
