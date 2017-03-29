@@ -90,10 +90,9 @@ export class CommandRegistry<T extends Bot, K extends string, V extends Command<
 		const byOwnerOnly: (c: V) => boolean = c =>
 			((<any> bot.config).owner.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly;
 
-		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups');
+		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 		for (const [name, command] of this.filter(byPermissions).filter(byRoles).filter(byOwnerOnly).entries())
-			if (typeof disabledGroups === 'undefined' || !disabledGroups.includes(command.group))
-				filtered.set(name, command);
+			if (!disabledGroups.includes(command.group)) filtered.set(name, command);
 
 		return filtered;
 	}

@@ -6,7 +6,7 @@ import { User } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class Whitelist extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
