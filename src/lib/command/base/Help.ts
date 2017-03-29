@@ -4,7 +4,7 @@ import { Util } from '../../Util';
 import { Command } from '../Command';
 import { Collection, RichEmbed } from 'discord.js';
 
-export default class Help extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -12,15 +12,14 @@ export default class Help extends Command<Bot>
 			name: 'help',
 			description: 'Provides information on bot commands',
 			usage: `<prefix>help [command]`,
-			extraHelp: 'Will DM bot command help information to the user to keep clutter down in guild channels. If you use the help command from within a DM you will only receive information for the commands you can use within the DM. If you want help with commands usable in a guild, call the help command in a guild channel. You will receive a list of the commands that you have permissions/roles for in that channel.',
-			group: 'base'
+			extraHelp: 'Will DM bot command help information to the user to keep clutter down in guild channels. If you use the help command from within a DM you will only receive information for the commands you can use within the DM. If you want help with commands usable in a guild, call the help command in a guild channel. You will receive a list of the commands that you have permissions/roles for in that channel.'
 		});
 	}
 
 	public async action(message: Message, [commandName]: [string]): Promise<void>
 	{
 		if (this.bot.selfbot) message.delete();
-		const dm: boolean = ['dm', 'group'].includes(message.channel.type);
+		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.bot.user.username}#${this.bot.user.discriminator}`;
 
 		let command: Command<Bot>;
@@ -33,8 +32,8 @@ export default class Help extends Command<Bot>
 			const postText: string = `\`\`\`Use \`<prefix>help <command>\` ${this.bot.selfbot ? '' : `or \`${
 				mentionName} help <command>\` `}for more information.\n\n`;
 
-			const usableCommands: Collection<string, Command<Bot>> = this.bot.commands[dm
-				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message)
+			const usableCommands: Collection<string, Command<Bot>> = (await this.bot.commands[dm
+				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message))
 				.filter(c => !c.hidden);
 
 			const widest: number = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
@@ -56,8 +55,8 @@ export default class Help extends Command<Bot>
 		}
 		else
 		{
-			command = this.bot.commands[dm
-				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message)
+			command = (await this.bot.commands[dm
+				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message))
 				.filter(c => c.name === commandName || c.aliases.includes(commandName))
 				.first();
 
@@ -73,7 +72,7 @@ export default class Help extends Command<Bot>
 		}
 
 		output = dm ? output.replace(/<prefix>/g, '')
-			: output.replace(/<prefix>/g, this.bot.getPrefix(message.guild) || '');
+			: output.replace(/<prefix>/g, await this.bot.getPrefix(message.guild) || '');
 
 		embed.setColor(11854048).setDescription(output);
 
