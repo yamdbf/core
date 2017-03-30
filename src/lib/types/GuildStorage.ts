@@ -1,9 +1,10 @@
 /**
  * Class containing asynchronous methods for storing, retrieving, and
- * interacting with data for a specific guild. Can not be created directly,
+ * interacting with data for a specific guild. Can not be created directly
  * via a constructor due to mixin mechanics. Must be created via
  * {@link StorageFactory#createGuildStorage}
  * @class GuildStorage
+ * @mixes GuildSettings
  * @borrows GuildSettings#init as GuildStorage#init
  * @borrows GuildSettings#keys as GuildStorage#keys
  * @borrows GuildSettings#get as GuildStorage#get
