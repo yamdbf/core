@@ -40,7 +40,12 @@ export class CommandDispatcher<T extends Bot>
 		if (await this.isBlacklisted(message.author, message, dm)) return;
 
 		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = await this.isCommandCalled(message);
-		if (!commandCalled) return;
+		if (!commandCalled)
+		{
+			if (dm && this._bot.unknownCommandError)
+				message.channel.send(this.unknownCommandError());
+			return;
+		}
 		if (command.ownerOnly && !this._bot.isOwner(message.author)) return;
 
 		// Check ratelimits
@@ -254,6 +259,17 @@ export class CommandDispatcher<T extends Bot>
 				reject(err);
 			}
 		});
+	}
+
+	/**
+	 * Return an error for unknown commands in DMs
+	 */
+	private unknownCommandError(): string
+	{
+		return `Sorry, I didn't recognize any command in your message.\n`
+			+ `Try saying "help" to view a list of commands you can use in `
+			+ `this DM, or try calling the\nhelp command in a server channel `
+			+ `to see what commands you can use there!`;
 	}
 
 	/**

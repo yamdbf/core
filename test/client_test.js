@@ -6,7 +6,8 @@ const client = new Bot({
 	name: 'test',
 	token: config.token,
 	config: config,
-	commandsDir: path.join(__dirname, 'commands')
+	commandsDir: path.join(__dirname, 'commands'),
+	unknownCommandError: false
 }).start();
 
 client.on('waiting', () => client.emit('finished'));

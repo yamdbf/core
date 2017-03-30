@@ -8,7 +8,7 @@ export type BotOptions = {
 	commandsDir?: string;
 	statusText?: string;
 	readyText?: string;
-	noCommandErr?: boolean;
+	unknownCommandError?: boolean;
 	selfbot?: boolean;
 	passive?: boolean;
 	version?: string;
@@ -26,7 +26,7 @@ export type BotOptions = {
  * @property {string} [commandsDir] See: {@link Bot#commandsDir}
  * @property {string} [statusText=null] See: {@link Bot#statusText}
  * @property {string} [readyText='Ready!'] See: {@link Bot#readyText}
- * @property {boolean} [noCommandErr=true] See: {@link Bot#noCommandErr}
+ * @property {boolean} [unknownCommandError=true] See: {@link Bot#unknownCommandError}
  * @property {boolean} [selfbot=false] See: {@link Bot#selfbot}
  * @property {boolean} [passive=false] see {@link Bot#passive}
  * @property {string} [version='0.0.0'] See: {@link Bot#version}

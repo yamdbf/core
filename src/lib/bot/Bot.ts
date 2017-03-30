@@ -28,7 +28,7 @@ export class Bot extends Client
 	public commandsDir: string;
 	public statusText: string;
 	public readyText: string;
-	public noCommandErr: boolean;
+	public unknownCommandError: boolean;
 	public selfbot: boolean;
 	public passive: boolean;
 	public version: string;
@@ -95,13 +95,13 @@ export class Bot extends Client
 		/**
 		 * Whether or not a generic 'command not found' message
 		 * should be given in DMs to instruct the user to
-		 * use the `help` command. Set to false to disable
-		 * this message
+		 * use the `help` command. <code>true</code> by default
 		 * @name Bot#noCommandErr
 		 * @type {string}
 		 * @instance
 		 */
-		this.noCommandErr = botOptions.noCommandErr === undefined ? true : botOptions.noCommandErr;
+		this.unknownCommandError = botOptions.unknownCommandError === undefined ?
+			true : botOptions.unknownCommandError;
 
 		/**
 		 * Whether or not the bot is a selfbot
