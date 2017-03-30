@@ -2,6 +2,7 @@
  * Maintains its own call count and expiry for making sure
  * things only happen a certain number of times within
  * a given timeframe
+ * @param {Tuple<number, number>} limit Tuple containing quantity and duration
  */
 export class RateLimit
 {
@@ -18,6 +19,7 @@ export class RateLimit
 
 	/**
 	 * Sets this RateLimit to default values
+	 * @private
 	 */
 	private _reset(): void
 	{
@@ -30,6 +32,7 @@ export class RateLimit
 	 * Returns whether or not this rate limit has been capped out
 	 * for its current expiry window while incrementing calls
 	 * towards the rate limit cap if not currently capped
+	 * @returns {boolean}
 	 */
 	public call(): boolean
 	{
@@ -42,6 +45,7 @@ export class RateLimit
 
 	/**
 	 * Return whether or not this ratelimit is currently capped out
+	 * @returns {boolean}
 	 */
 	public get isLimited(): boolean
 	{
@@ -51,6 +55,7 @@ export class RateLimit
 	/**
 	 * Flag this RateLimit as having had the user the RateLimit
 	 * is for notified of being rate limited
+	 * @returns {void}
 	 */
 	public setNotified(): void
 	{
@@ -60,6 +65,7 @@ export class RateLimit
 	/**
 	 * Return whether or not this RateLimit was flagged after
 	 * notifying the user of being rate limited
+	 * @returns {boolean}
 	 */
 	public get wasNotified(): boolean
 	{

@@ -5,6 +5,7 @@ import { Message } from '../types/Message';
 
 /**
  * Stores loaded Commands as &lt;[name]{@link Command#name}, [Command]{@link Command}&gt; pairs
+ * @private
  * @class CommandRegistry
  * @extends {external:Collection}
  */

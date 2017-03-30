@@ -47,3 +47,12 @@ export const version: string = require(path.join(__dirname, '..', 'package')).ve
 /** @external {Message} See: {@link https://discord.js.org/#/docs/main/stable/class/Message} */
 /** @external {User} See: {@link https://discord.js.org/#/docs/main/stable/class/User} */
 /** @external {PermissionResolvable} See: {@link https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable} */
+
+/**
+ * @typedef {Array<any>} Tuple Represents an array of fixed length where the the item in
+ * the specified position is of the specified type.<br><br>
+ *
+ * Example:<br>
+ * <pre class="prettyprint"><code>Tuple&lt;string, number&gt; === [string, number] === ['foo', 10]
+ * </code></pre>
+ */

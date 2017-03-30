@@ -10,6 +10,7 @@ import { ClientStorage } from '../types/ClientStorage';
  * Used for creating the different storage class mixins used throughout
  * and needed by YAMDBF Clients. Used internally, shouldn't ever
  * need to be used in your bots
+ * @private
  * @class StorageFactory
  * @param {Client} client The YAMDBF Client instance
  * @param {StorageProvider} guildDataStorage StorageProvider instance that provides all guild data

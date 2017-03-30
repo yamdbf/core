@@ -5,6 +5,9 @@ import { Message } from '../types/Message';
 
 /**
  * Handles assigning ratelimits to guildmembers and users
+ * @param {string} limit Ratelimit string matching the regex <code>\d+\/\d+[s|m|h|d]</code><br>
+ * 						 <b>Example:</b> <code>1/10m</code> to limit a command to one use per 10 minutes
+ * @param {boolean} global Whether or not this RateLimiter handles global ratelimits
  */
 export class RateLimiter
 {
@@ -24,6 +27,8 @@ export class RateLimiter
 	/**
 	 * Returns the RateLimit object for the message author if global
 	 * or message member if message is in a guild
+	 * @param {external:Message} message Discord.js Message object
+	 * @returns {RateLimit}
 	 */
 	public get(message: Message): RateLimit
 	{
@@ -47,6 +52,7 @@ export class RateLimiter
 
 	/**
 	 * Parse the ratelimit from the given input string
+	 * @private
 	 */
 	private _parseLimit(limitString: string): [number, number]
 	{
@@ -63,6 +69,7 @@ export class RateLimiter
 
 	/**
 	 * Determine whether or not to use the global rate limit collection
+	 * @private
 	 */
 	private _isGlobal(message?: Message): boolean
 	{
