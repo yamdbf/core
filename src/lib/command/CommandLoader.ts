@@ -14,7 +14,6 @@ export class CommandLoader<T extends Bot>
 	private _bot: T;
 	public constructor(bot: T)
 	{
-		/** @type {Bot} */
 		this._bot = bot;
 	}
 

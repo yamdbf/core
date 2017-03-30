@@ -6,8 +6,15 @@ import { ArgOpts } from '../types/ArgOpts';
 import { Message } from '../types/Message';
 
 /**
- * Apply a middleware function to the action method of a command.
- * Identical to `Command#use()` but used as a method decorator
+ * Grouping of static decorator methods for the {@link Command}
+ * class and {@link Command#action} method
+ * @module CommandDecorators
+ */
+
+/**
+ * Apply a middleware function to the action method of a Command.
+ * Identical to {@link Command#use} but used as a method decorator
+ * @param {MiddlewareFunction} func Middleware function to use for this Command action
  */
 export function using(func: MiddlewareFunction): MethodDecorator
 {
@@ -45,6 +52,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 
 /**
  * Set `name` metadata
+ * @param {string} value Value to set
  */
 export function name(value: string): ClassDecorator
 {
@@ -53,14 +61,16 @@ export function name(value: string): ClassDecorator
 
 /**
  * Set `aliases` metadata
+ * @param {...string} values Values to set
  */
-export function aliases(...value: string[]): ClassDecorator
+export function aliases(...values: string[]): ClassDecorator
 {
-	return _setMetaData('aliases', value);
+	return _setMetaData('aliases', values);
 }
 
 /**
  * Set `description` metadata
+ * @param {string} value Value to set
  */
 export function description(value: string): ClassDecorator
 {
@@ -69,6 +79,7 @@ export function description(value: string): ClassDecorator
 
 /**
  * Set `usage` metadata
+ * @param {string} value Value to set
  */
 export function usage(value: string): ClassDecorator
 {
@@ -77,6 +88,7 @@ export function usage(value: string): ClassDecorator
 
 /**
  * Set `extraHelp` metadata
+ * @param {string} value Value to set
  */
 export function extraHelp(value: string): ClassDecorator
 {
@@ -85,6 +97,7 @@ export function extraHelp(value: string): ClassDecorator
 
 /**
  * Set `group` metadata
+ * @param {string} value Value to set
  */
 export function group(value: string): ClassDecorator
 {
@@ -93,6 +106,7 @@ export function group(value: string): ClassDecorator
 
 /**
  * Set `argOpts` metadata
+ * @param {string} value Value to set
  */
 export function argOpts(value: ArgOpts): ClassDecorator
 {
@@ -101,22 +115,25 @@ export function argOpts(value: ArgOpts): ClassDecorator
 
 /**
  * Set `permissions` metadata
+ * @param {...external:PermissionResolvable} values Values to set
  */
-export function permissions(...value: PermissionResolvable[]): ClassDecorator
+export function permissions(...values: PermissionResolvable[]): ClassDecorator
 {
-	return _setMetaData('permissions', value);
+	return _setMetaData('permissions', values);
 }
 
 /**
  * Set `roles` metadata
+ * @param {...string} values Values to set
  */
-export function roles(...value: string[]): ClassDecorator
+export function roles(...values: string[]): ClassDecorator
 {
-	return _setMetaData('roles', value);
+	return _setMetaData('roles', values);
 }
 
 /**
  * Set `ratelimit` metadata
+ * @param {string} value Value to set
  */
 export function ratelimit(value: string): ClassDecorator
 {
@@ -125,6 +142,7 @@ export function ratelimit(value: string): ClassDecorator
 
 /**
  * Set `overloads` metadata
+ * @param {string} value Value to set
  */
 export function overloads(value: string): ClassDecorator
 {
@@ -157,6 +175,7 @@ export function hidden(target: typeof Command): ClassDecorator
 
 /**
  * Set a boolean flag metadata on a class
+ * @private
  */
 function _setFlagMetaData(flag: string): ClassDecorator
 {
@@ -172,6 +191,7 @@ function _setFlagMetaData(flag: string): ClassDecorator
 
 /**
  * Set an arbitrary value to an arbitrary key on a class
+ * @private
  */
 function _setMetaData(key: string, value: any): ClassDecorator
 {
