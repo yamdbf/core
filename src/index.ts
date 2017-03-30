@@ -12,6 +12,7 @@ export { Middleware } from './lib/command/middleware/Middleware';
 export { RateLimit } from './lib/command/RateLimit';
 export { RateLimiter } from './lib/command/RateLimiter';
 
+export { IStorageProvider } from './lib/storage/interface/IStorageProvider';
 export { StorageProvider } from './lib/storage/StorageProvider';
 export { StorageFactory } from './lib/storage/StorageFactory';
 export { JSONProvider } from './lib/storage/JSONProvider';

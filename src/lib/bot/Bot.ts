@@ -304,7 +304,7 @@ export class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key to use in settings storage
-	 * @returns {Bot}
+	 * @returns {Promise<Bot>}
 	 */
 	public async removeDefaultSetting(key: string): Promise<this>
 	{
@@ -317,7 +317,7 @@ export class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @param {string} key - The key in storage to check
-	 * @returns {boolean}
+	 * @returns {Promise<boolean>}
 	 */
 	public async defaultSettingExists(key: string): Promise<boolean>
 	{
@@ -329,7 +329,7 @@ export class Bot extends Client
 	 * @memberof Bot
 	 * @instance
 	 * @param {(external:Guild|string)} guild The guild or guild id to get the prefix of
-	 * @returns {string|null}
+	 * @returns {Promise<?string>}
 	 */
 	public async getPrefix(guild: Guild): Promise<string>
 	{

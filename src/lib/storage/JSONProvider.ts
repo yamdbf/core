@@ -1,7 +1,15 @@
+import { IStorageProvider } from './interface/IStorageProvider';
 import { StorageProvider } from './StorageProvider';
 import DB = require('node-json-db');
 
-export class JSONProvider extends StorageProvider
+/**
+ * Default storage provider for the framework. If no storage provider is passed
+ * in the client constructor, this provider will be used
+ * @class JSONProvider
+ * @extends StorageProvider
+ * @implements IStorageProvider
+ */
+export class JSONProvider extends StorageProvider implements IStorageProvider
 {
 	private _name: string;
 	private _db: DB;

@@ -25,11 +25,12 @@ export class Middleware
 	 * </code></pre><br>
 	 *
 	 * Supports <code>'...'</code> in the argument name as the final argument to
-	 * gather the remaining args into one string
+	 * gather all remaining words into one string and attempt to resolve them to
+	 * the provided argument type
 	 * @name resolveArgs
 	 * @method
 	 * @memberof Middleware
-	 * @param {object} argTypes An object of argument names mapped to argument types
+	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ResolveArgType}
 	 * @returns {Function} <pre class="prettyprint"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
 	 */
@@ -57,7 +58,7 @@ export class Middleware
 	 * @name expect
 	 * @method
 	 * @memberof Middleware
-	 * @param {object} argTypes An object of argument names mapped to argument types
+	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ExpectArgType}
 	 * @returns {Function} <pre class="prettyprint"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
 	 */
