@@ -11,42 +11,36 @@
  * Async method to be run that will set up the storage provider
  * for use. Calls to other provider methods should not be made
  * until this method has been called and resolved
- * @name IStorageProvider#init
- * @method
+ * @method IStorageProvider#init
  * @returns {Promise<void>}
  */
 /**
  * Async method returning an array of stored key names
- * @name IStorageProvider#keys
- * @method
+ * @method IStorageProvider#keys
  * @returns {Promise<string[]>}
  */
 /**
  * Async method that gets the value of a key in storage
- * @name IStorageProvider#get
- * @method
+ * @method IStorageProvider#get
  * @param {string} key The name of the key in storage
  * @returns {Promise<string>}
  */
 /**
  * Async method that sets the value of a key in storage
- * @name IStorageProvider#set
- * @method
+ * @method IStorageProvider#set
  * @param {string} key The name of the key in storage
  * @param {string} value The value to set in storage
  * @returns {Promise<void>}
  */
 /**
  * Async method that removes a key and its value from storage
- * @name IStorageProvider#remove
- * @method
+ * @method IStorageProvider#remove
  * @param {string} key The name of the key in storage
  * @returns {Promise<void>}
  */
 /**
  * Async method that removes all keys and their values from storage
- * @name IStorageProvider#clear
- * @method
+ * @method IStorageProvider#clear
  * @returns {Promise<void>}
  */
 

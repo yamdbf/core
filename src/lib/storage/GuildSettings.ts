@@ -3,6 +3,12 @@ import { StorageProvider } from './StorageProvider';
 import { Util } from '../Util';
 import { Bot } from '../bot/Bot';
 
+/**
+ * Class containing asynchronous methods for storing, retrieving, and
+ * interacting with settings for a specific guild. Will be contained
+ * under {@link GuildStorage#settings}
+ * @class GuildSettings
+ */
 export class GuildSettings
 {
 	private _provider: StorageProvider;
@@ -19,6 +25,11 @@ export class GuildSettings
 		this._cache = {};
 	}
 
+	/**
+	 * Initialize this storage instance
+	 * @method GuildSettings#init
+	 * @returns {Promise<void>}
+	 */
 	public async init(useDefaults: boolean = false): Promise<void>
 	{
 		try
@@ -49,11 +60,22 @@ export class GuildSettings
 		}
 	}
 
+	/**
+	 * Get the names of all keys in this storage for this Guild
+	 * @method GuildSettings#keys
+	 * @returns {Promise<string[]>}
+	 */
 	public async keys(): Promise<string[]>
 	{
 		return Object.keys(this._cache);
 	}
 
+	/**
+	 * Get a value from storage for this Guild
+	 * @method GuildSettings#get
+	 * @param {string} key The key in storage to get
+	 * @returns {Promise<any>}
+	 */
 	public async get(key: string): Promise<any>
 	{
 		if (key.includes('.'))
@@ -67,6 +89,13 @@ export class GuildSettings
 		}
 	}
 
+	/**
+	 * Set a value in storage for this Guild
+	 * @method GuildSettings#set
+	 * @param {string} key The key in storage to set
+	 * @param {any} value The value to set
+	 * @returns {Promise<void>}
+	 */
 	public async set(key: string, value: any): Promise<void>
 	{
 		try { JSON.stringify(value); }
@@ -87,6 +116,12 @@ export class GuildSettings
 		await this._provider.set(this._id, JSON.stringify(this._cache));
 	}
 
+	/**
+	 * Remove a value from storage for this Guild
+	 * @method GuildSettings#remove
+	 * @param {string} key The key in storage to remove
+	 * @returns {Promise<void>}
+	 */
 	public async remove(key: string): Promise<void>
 	{
 		if (typeof key === 'undefined') throw new Error('Key must be provided');
@@ -105,6 +140,11 @@ export class GuildSettings
 		await this._provider.set(this._id, JSON.stringify(this._cache));
 	}
 
+	/**
+	 * Remove all key/value pairs from storage for this Guild
+	 * @method GuildSettings#clear
+	 * @returns {Promise<void>}
+	 */
 	public async clear(): Promise<void>
 	{
 		this._cache = {};
