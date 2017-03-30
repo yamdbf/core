@@ -23,15 +23,15 @@ export default class extends Command<Bot>
 	public async action(message: Message, [prefix]: [string]): Promise<any>
 	{
 		if (!prefix)
-			return this._respond(message, `${this.bot.getPrefix(message.guild)
+			return this.respond(message, `${this.bot.getPrefix(message.guild)
 				? `Current prefix is \`${this.bot.getPrefix(message.guild)}\``
 				: 'There is currently no prefix.'}`);
 
 		if (prefix.length > 10)
-			return this._respond(message, `Prefixes may only be up to 10 chars in length.`);
+			return this.respond(message, `Prefixes may only be up to 10 chars in length.`);
 
 		if (/[\\`]/.test(prefix))
-			return this._respond(message, `Prefixes may not contain backticks or backslashes.`);
+			return this.respond(message, `Prefixes may not contain backticks or backslashes.`);
 
 		if (prefix === 'noprefix') prefix = '';
 
@@ -40,7 +40,7 @@ export default class extends Command<Bot>
 				await guild.settings.set('prefix', prefix);
 
 		else await this.bot.storage.guilds.get(message.guild.id).settings.set('prefix', prefix);
-		this._respond(message, prefix === '' ? 'Command prefix removed.'
+		this.respond(message, prefix === '' ? 'Command prefix removed.'
 			: `Command prefix set to \`${prefix}\``);
 	}
 }

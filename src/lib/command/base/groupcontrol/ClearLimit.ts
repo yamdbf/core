@@ -23,13 +23,13 @@ export default class extends Command<Bot>
 	public async action(message: Message, [commandName]: [string]): Promise<Message | Message[]>
 	{
 		let command: Command<Bot> = this.bot.commands.find(c => Util.normalize(c.name) === Util.normalize(commandName));
-		if (!command) return this._respond(message, `Failed to find a command with the name \`${commandName}\``);
+		if (!command) return this.respond(message, `Failed to find a command with the name \`${commandName}\``);
 
 		const storage: GuildStorage = message.guild.storage;
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
 		delete limitedCommands[command.name];
 		storage.settings.set('limitedCommands', limitedCommands);
 
-		return this._respond(message, `Successfully cleared role limits for command: \`${command.name}\``);
+		return this.respond(message, `Successfully cleared role limits for command: \`${command.name}\``);
 	}
 }

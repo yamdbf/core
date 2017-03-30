@@ -22,7 +22,7 @@ export default class extends Command<Bot>
 		const command: Command<Bot> = this.bot.commands.findByNameOrAlias(commandName);
 
 		if (commandName && !command)
-			return this._respond(message, `Command "${commandName}" could not be found.`);
+			return this.respond(message, `Command "${commandName}" could not be found.`);
 
 		if (command) this.bot.loadCommand(command.name);
 		else this.bot.loadCommand('all');
@@ -30,6 +30,6 @@ export default class extends Command<Bot>
 		const end: number = now();
 		const name: string = command ? command.name : null;
 		const text: string = name ? ` "${name}"` : 's';
-		return this._respond(message, `Command${text} reloaded. (${(end - start).toFixed(3)} ms)`);
+		return this.respond(message, `Command${text} reloaded. (${(end - start).toFixed(3)} ms)`);
 	}
 }

@@ -15,6 +15,6 @@ export default class extends Command<Bot>
 
 	public action(message: Message): void
 	{
-		this._respond(message, `Current version is: **${this.bot.version}**`);
+		this.respond(message, `Current version is: **${this.bot.version}**`);
 	}
 }

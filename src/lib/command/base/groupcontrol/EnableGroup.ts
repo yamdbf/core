@@ -27,14 +27,14 @@ export default class extends Command<Bot>
 			ENABLED: `Command group ${group} is already enabled.`
 		};
 
-		if (!this.bot.commands.groups.includes(group)) return this._respond(message, err.NO_EXIST);
+		if (!this.bot.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
 		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 		if (group === 'base' || !disabledGroups.includes(group))
-			return this._respond(message, err.ENABLED);
+			return this.respond(message, err.ENABLED);
 
 		disabledGroups.splice(disabledGroups.indexOf(group), 1);
 		await message.guild.storage.settings.set('disabledGroups', disabledGroups);
 
-		this._respond(message, `**Enabled command group "${group}"**`);
+		this.respond(message, `**Enabled command group "${group}"**`);
 	}
 }

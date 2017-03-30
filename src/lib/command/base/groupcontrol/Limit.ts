@@ -26,8 +26,8 @@ export default class extends Command<Bot>
 	public async action(message: Message, [commandName, ...roleNames]: [string, string]): Promise<Message | Message[]>
 	{
 		const command: Command<Bot> = this.bot.commands.find(c => Util.normalize(commandName) === Util.normalize(c.name));
-		if (!command) return this._respond(message, `Failed to find a command with the name \`${commandName}\``);
-		if (command.group === 'base') this._respond(message, `Cannot limit base commands.`);
+		if (!command) return this.respond(message, `Failed to find a command with the name \`${commandName}\``);
+		if (command.group === 'base') this.respond(message, `Cannot limit base commands.`);
 
 		const storage: GuildStorage = message.guild.storage;
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
@@ -46,13 +46,13 @@ export default class extends Command<Bot>
 
 		if (invalidRoles.length > 0) message.channel.send(`Couldn't find role${
 			invalidRoles.length > 1 ? 's' : ''}: \`${invalidRoles.join('`, `')}\``);
-		if (roles.length === 0) return this._respond(message, `Failed to add any roles to the command.`);
+		if (roles.length === 0) return this.respond(message, `Failed to add any roles to the command.`);
 
 		newLimit = newLimit.concat(roles.map(role => role.id));
 		limitedCommands[command.name] = newLimit;
 		await storage.settings.set('limitedCommands', limitedCommands);
 
-		return this._respond(message, `Successfully added role${roles.length > 1 ? 's' : ''}: \`${
+		return this.respond(message, `Successfully added role${roles.length > 1 ? 's' : ''}: \`${
 			roles.map(role => role.name).join('`, `')}\` to the limiter for command: \`${command.name}\``);
 	}
 }

@@ -25,6 +25,6 @@ export default class extends Command<Bot>
 		let output: string = 'Command groups:\n';
 		for (const group of groups) output += `${disabledGroups.includes(group) ? '*' : ' '}${group}\n`;
 
-		this._respond(message, output, 'ldif');
+		this.respond(message, output, 'ldif');
 	}
 }
