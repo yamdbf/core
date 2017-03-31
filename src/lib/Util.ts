@@ -1,13 +1,13 @@
 /**
  * Utility class containing handy static methods that can
  * be used anywhere
- * @class Util
+ * @module Util
  */
 export class Util
 {
 	/**
 	 * Pads the right side of a string with spaces to the given length
-	 * @static
+	 * @method padRight
 	 * @param {string} text Text to pad
 	 * @param {number} length Length to pad to
 	 * @returns {string}
@@ -21,7 +21,7 @@ export class Util
 	/**
 	 * Returns the given string lowercased with any non
 	 * alphanumeric chars removed
-	 * @static
+	 * @method normalize
 	 * @param {string} text Text to normalize
 	 * @returns {string}
 	 */
@@ -33,7 +33,7 @@ export class Util
 	/**
 	 * Assigns the given value along the given nested path within
 	 * the provided initial object
-	 * @static
+	 * @method assignNested
 	 * @param {any} obj Object to assign to
 	 * @param {string[]} path Nested path to follow within the object
 	 * @param {any} value Value to assign within the object
@@ -57,7 +57,7 @@ export class Util
 
 	/**
 	 * Remove a value from within an object along a nested path
-	 * @static
+	 * @method removeNested
 	 * @param {any} obj Object to remove from
 	 * @param {string[]} path Nested path to follow within the object
 	 */
@@ -79,7 +79,7 @@ export class Util
 	/**
 	 * Fetches a nested value from within an object via the
 	 * provided path
-	 * @static
+	 * @method nestedValue
 	 * @param {any} obj Object to search
 	 * @param {string[]} path Nested path to follow within the object
 	 * @returns {any}

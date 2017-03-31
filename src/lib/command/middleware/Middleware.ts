@@ -8,7 +8,7 @@ import { ExpectArgType } from '../../types/ExpectArgType';
 
 /**
  * Contains static command middleware methods
- * @class Middleware
+ * @module Middleware
  */
 export class Middleware
 {
@@ -27,9 +27,7 @@ export class Middleware
 	 * Supports <code>'...'</code> in the argument name as the final argument to
 	 * gather all remaining words into one string and attempt to resolve them to
 	 * the provided argument type
-	 * @name resolveArgs
-	 * @method
-	 * @memberof Middleware
+	 * @method resolveArgs
 	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ResolveArgType}
 	 * @returns {Function} <pre class="prettyprint"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
@@ -55,9 +53,7 @@ export class Middleware
 	 * use the `User` type. If verifying `Duration` type, `Number` should be used.
 	 *
 	 * This middleware does not modify args in any way.
-	 * @name expect
-	 * @method
-	 * @memberof Middleware
+	 * @method expect
 	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ExpectArgType}
 	 * @returns {Function} <pre class="prettyprint"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
