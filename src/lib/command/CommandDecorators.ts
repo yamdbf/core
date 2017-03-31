@@ -152,45 +152,42 @@ export function overloads(value: string): ClassDecorator
 /**
  * Set `owneronly` flag metadata
  */
-export function ownerOnly(target: typeof Command): ClassDecorator
+export function ownerOnly(target: typeof Command): typeof Command
 {
-	return _setFlagMetaData('ownerOnly');
+	return _setFlagMetaData(target, 'ownerOnly');
 }
 
 /**
  * Set `guildOnly` flag metadata
  */
-export function guildOnly(target: typeof Command): ClassDecorator
+export function guildOnly(target: typeof Command): typeof Command
 {
-	return _setFlagMetaData('guildOnly');
+	return _setFlagMetaData(target, 'guildOnly');
 }
 
 /**
  * Set `hidden` flag metadata
  */
-export function hidden(target: typeof Command): ClassDecorator
+export function hidden(target: typeof Command): typeof Command
 {
-	return _setFlagMetaData('hidden');
+	return _setFlagMetaData(target, 'hidden');
 }
 
 /**
- * Set a boolean flag metadata on a class
+ * Set a boolean flag metadata on a command class
  * @private
  */
-function _setFlagMetaData(flag: string): ClassDecorator
+function _setFlagMetaData(target: typeof Command, flag: string): typeof Command
 {
-	return function(target: typeof Command): typeof Command
-	{
-		Object.defineProperty(target.prototype, flag, {
-			value: true,
-			enumerable: true,
-		});
-		return target;
-	};
+	Object.defineProperty(target.prototype, flag, {
+		value: true,
+		enumerable: true,
+	});
+	return target;
 }
 
 /**
- * Set an arbitrary value to an arbitrary key on a class
+ * Set an arbitrary value to an arbitrary key on a command class
  * @private
  */
 function _setMetaData(key: string, value: any): ClassDecorator
