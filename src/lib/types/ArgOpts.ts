@@ -4,7 +4,7 @@ export type ArgOpts = {
 };
 
 /**
- * @typedef {Object} ArgOpts - Object containing options for
+ * @typedef {Object} ArgOpts Object containing options for
  * controlling how command arguments will be parsed
- * @property {string} [separator=' '] - The charactor to separate args by
+ * @property {string} [separator=' '] The charactor to separate args by
  */
