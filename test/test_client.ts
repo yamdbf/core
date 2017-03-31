@@ -1,8 +1,8 @@
-const { Bot } = require('../bin/');
-const config = require('./config.json');
-const path = require('path');
+import { Bot } from '../bin';
+import * as path from 'path';
+const config: any = require('./config.json');
 
-const client = new Bot({
+const client: Bot = new Bot({
 	name: 'test',
 	token: config.token,
 	config: config,

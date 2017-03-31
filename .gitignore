@@ -1,7 +1,7 @@
-.vscode
 /node_modules/*
 /bin/*
 /pkg/*
 config.json
 npm-debug*
 /test/storage
+test_*.js
