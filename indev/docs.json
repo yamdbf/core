@@ -1,0 +1,2489 @@
+{
+    "typedefs": [
+        {
+            "name": "Tuple",
+            "description": "<p>Represents an array of fixed length where the the item in\nthe specified position is of the specified type.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>Tuple&lt;string, number> === [string, number] === ['foo', 10]</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "ArgOpts",
+            "description": "<p>Object containing options for\ncontrolling how command arguments will be parsed</p>",
+            "properties": [
+                {
+                    "name": "separator",
+                    "type": "string",
+                    "description": "<p>The charactor to separate args by</p>",
+                    "default": "' '",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "BaseCommandName",
+            "description": "<p>String representing a name of a base command. Valid names are:</p>\n<pre class=\"prettyprint source\"><code>'blacklist',\n'whitelist',\n'clearlimit',\n'disablegroup',\n'enablegroup',\n'limit',\n'listgroups',\n'eval',\n'help',\n'ping'\n'reload',\n'setprefix',\n'version'</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "BotOptions",
+            "description": "<p>Object containing required {@link Bot} properties to be\npassed to a Bot on construction</p>",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "<p>See: {@link Bot#name}</p>",
+                    "default": "'botname'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "token",
+                    "type": "string",
+                    "description": "<p>See: {@link Bot#token}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "provider",
+                    "type": "string",
+                    "description": "<p>See: {@link Bot#provider}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "commandsDir",
+                    "type": "string",
+                    "description": "<p>See: {@link Bot#commandsDir}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "statusText",
+                    "type": "string",
+                    "description": "<p>See: {@link Bot#statusText}</p>",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "readyText",
+                    "type": "string",
+                    "description": "<p>See: {@link Bot#readyText}</p>",
+                    "default": "'Ready!'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "unknownCommandError",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Bot#unknownCommandError}</p>",
+                    "default": true,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "selfbot",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Bot#selfbot}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "passive",
+                    "type": "boolean",
+                    "description": "<p>see {@link Bot#passive}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "version",
+                    "type": "string",
+                    "description": "<p>See: {@link Bot#version}</p>",
+                    "default": "'0.0.0'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "config",
+                    "type": "Object",
+                    "description": "<p>See: {@link Bot#config}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disableBase",
+                    "type": "Array.<string>",
+                    "description": "<p>See: {@link Bot#disableBase}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ratelimit",
+                    "type": "string",
+                    "description": "<p>Sets a global rate limit on command calls for every user</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "CommandInfo",
+            "description": "<p>Object containing required {@link Command} properties\nto be passed to a Command on construction</p>",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#name}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#description}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "usage",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#usage}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "extraHelp",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#extraHelp}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "group",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#group}</p>",
+                    "default": "'base'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "aliases",
+                    "type": "Array.<string>",
+                    "description": "<p>See: {@link Command#aliases}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "guildOnly",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Command#guildOnly}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "hidden",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Command#hidden}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "argOpts",
+                    "type": "ArgOpts",
+                    "description": "<p>See: {@link Command#argOpts}, {@link ArgOpts}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "permissions",
+                    "type": "Array.<PermissionResolvable>",
+                    "description": "<p>See: {@link Command#permissions}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "roles",
+                    "type": "Array.<string>",
+                    "description": "<p>See: {@link Command#roles}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ownerOnly",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Command#ownerOnly}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "overloads",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#overloads}</p>",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ratelimit",
+                    "type": "string",
+                    "description": "<p>Sets a rate limit on calls to this command for every user</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "DefaultGuildSettings",
+            "description": "<p>The default settings to apply to new guilds.\nStored under the key <code>'defaultGuildSettings'</code> in {@link Bot#storage}</p>",
+            "properties": [
+                {
+                    "name": "prefix",
+                    "type": "string",
+                    "description": "<p>Prefix to prepend commands</p>",
+                    "default": "'/'",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disabledGroups",
+                    "type": "Array",
+                    "description": "<p>Command groups to ignore</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "Difference",
+            "description": "<p>Represents a difference between two given valid Unix time signatures</p>",
+            "properties": [
+                {
+                    "name": "ms",
+                    "type": "number",
+                    "description": "<p>Total number of MS difference</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "days",
+                    "type": "number",
+                    "description": "<p>Number of days spanned</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "hours",
+                    "type": "number",
+                    "description": "<p>Number of hours spanned after higher units are subtracted</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "minutes",
+                    "type": "number",
+                    "description": "<p>Number of minutes spanned after higher units are subtracted</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "secs",
+                    "type": "number",
+                    "description": "<p>Number of seconds spanned after higher units are subtracted</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "toString()",
+                    "type": "function",
+                    "description": "<p>Returns duration formatted as <code># days, # hours, # mins, # secs</code></p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "toSimplifiedString()",
+                    "type": "function",
+                    "description": "<p>Returns duration formatted as <code>#d #h #m #s</code></p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "ExpectArgType",
+            "description": "<p>Valid arg type values for the Expect middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "MiddlewareFunction",
+            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args.</p>\n<p>It should be noted that the command dispatcher will attempt\nto bind the called Command instance to the middleware function, so if it is not an arrow function\n<code>this</code> within a middleware function will be the Command instance at runtime</p>",
+            "properties": []
+        },
+        {
+            "name": "ResolveArgType",
+            "description": "<p>Valid arg type values for the ResolveArgs middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "StorageProviderConstructor",
+            "description": "<p>Any class that extends and implements {@link StorageProvider}\nand provides an interface with a storage medium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
+            "properties": []
+        }
+    ],
+    "classes": [
+        {
+            "name": "Bot",
+            "description": "<p>The YAMDBF Client through which you can access [storage]{@link Bot#storage}\nand any of the properties available on a typical Discord.js Client instance</p>",
+            "extends": [
+                "external:Client"
+            ],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Bot",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "botOptions",
+                        "type": "BotOptions",
+                        "description": "<p>Object containing required bot properties</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "clientOptions",
+                        "type": "external:ClientOptions",
+                        "description": "<p>Discord.js ClientOptions</p>",
+                        "default": "",
+                        "optional": true,
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "name",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The name of the Bot</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "commandsDir",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Directory to find command class files. Optional\nif bot is passive. See: {@link Bot#passive}</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "statusText",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Status text for the bot</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "readyText",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Text to output when the bot is ready</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "unknownCommandError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not a generic 'command not found' message\nshould be given in DMs to instruct the user to\nuse the <code>help</code> command. <code>true</code> by default</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "selfbot",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not the bot is a selfbot</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "passive",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not this bot is passive. Passive bots\nwill not register a command dispatcher or a message\nlistener. This allows passive bots to be created that\ndo not respond to any commands but are able to perform\nactions based on whatever the framework user wants</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "version",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Bot version, best taken from package.json</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "config",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Object containing token and owner ids</p>",
+                    "type": {
+                        "names": [
+                            "Object"
+                        ]
+                    }
+                },
+                {
+                    "name": "disableBase",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Array of base command names to skip when loading commands. Base commands\nmay only be disabled by name, not by alias</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
+                    "name": "storage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Client-specific storage. Also contains a <code>guilds</code> Collection property containing\nall GuildStorage instances</p>",
+                    "type": {
+                        "names": [
+                            "ClientStorage"
+                        ]
+                    }
+                },
+                {
+                    "name": "commands",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>[Collection]{@link external:Collection} containing all loaded commands</p>",
+                    "type": {
+                        "names": [
+                            "CommandRegistry.<string, Command>"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Initialize storages, load default settings into storage if they're not there already\nand load guild storages for guilds</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "isOwner",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns whether or not the given user is an owner\nof the bot</p>",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "type": "User",
+                            "description": "<p>User to check</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "loadCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Loads/reloads all/specific commands</p>",
+                    "parameters": [
+                        {
+                            "name": "command",
+                            "type": "string",
+                            "description": "<p>The name of a command to reload, or 'all' to load all commands</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "start",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Logs the Bot in and registers some event handlers</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Bot",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "setDefaultSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set the value of a default setting key and push it to all guild\nsetting storages. Will not overwrite a setting in guild settings\nstorage if there is already an existing key with the given value</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key to use in settings storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to use in settings storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Bot>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "removeDefaultSetting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a defaultGuildSettings item. Will not remove from ALL guild\nsettings, but will prevent the item from being added to new guild\nsettings storage upon creation</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key to use in settings storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Bot>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "defaultSettingsExists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>See if a default guild setting exists</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to check</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<boolean>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "getPrefix",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Shortcut to return the command prefix for the provided guild</p>",
+                    "parameters": [
+                        {
+                            "name": "guild",
+                            "type": "external:Guild",
+                            "description": "<p>The guild to get the prefix of</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<?string>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "sweepStorages",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Clean out any guild storage/settings that no longer have\nan associated guild</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "use",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Adds a middleware function to be used when any command is run\nto make modifications to args or determine if the command can\nbe run. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to the bot one time each,\nand thus should not be added within any sort of event or loop.\nMultiple middleware functions can be added to the via multiple calls\nto this method</p>",
+                    "parameters": [
+                        {
+                            "name": "fn",
+                            "type": "MiddlewareFunction",
+                            "description": "<p>Middleware function. <code>(message, args) =&gt; [message, args]</code></p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Bot",
+                        "description": ""
+                    }
+                }
+            ],
+            "events": [
+                {
+                    "name": "event:clientReady",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Emitted when the client is ready. Should be used instead of Discord.js'\n<code>ready</code> event, as this is the point that everything is set up within the\nYAMDBF Client and it's all ready to go</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "event:command",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Emitted whenever a command is successfully called</p>",
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "description": "<p>Name of the called command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>Args passed to the called command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "execTime",
+                            "type": "number",
+                            "description": "<p>Time command took to execute</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Message that triggered the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "event:blacklistAdd",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Emitted whenever a user is blacklisted</p>",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "type": "User",
+                            "description": "<p>User who was blacklisted</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "global",
+                            "type": "boolean",
+                            "description": "<p>Whether or not blacklisting is global</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "event:blacklistRemove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Emitted whenever a user is removed from the blacklist</p>",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "type": "User",
+                            "description": "<p>User who was removed</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "global",
+                            "type": "boolean",
+                            "description": "<p>Whether or not removal is global</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "event:waiting",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Emitted when the client is waiting for you to send a <code>finished</code> event,\nafter which <code>clientReady</code> will be emitted</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "event:finished",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>To be emitted whenever you have finished setting things up that should\nbe set up before the client is ready for use</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "Command",
+            "description": "<p>Command class to extend to create commands users can execute</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Command",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "bot",
+                        "type": "Bot",
+                        "description": "<p>Bot instance</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "info",
+                        "type": "CommandInfo",
+                        "description": "<p>Object containing required command properties</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "client",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>YAMDBF Client instance</p>",
+                    "type": {
+                        "names": [
+                            "Client"
+                        ]
+                    }
+                },
+                {
+                    "name": "name",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The name of the command, used by the dispatcher\nto determine the command being executed</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "description",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>A brief description of the command, displayed\nin the commands list via the Help command</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "usage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>An example of command usage. The token '&lt;prefix&gt;' will\nbe replaced by the guild-specific command prefix in the Help command when\n'help &lt;command&gt;' is called</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "extraHelp",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Extra information about the command to be displayed\nby the Help command when 'help &lt;command&gt;' is called</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "group",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The command group that the command belongs to. Allows commands to be\ngrouped for disabling. The group 'base' cannot be disabled.</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "aliases",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Aliases the command can be called by other than its name</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
+                    "name": "guildOnly",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not a command can only be used within a\nguild text channel</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "hidden",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not the command is to be hidden from the\ncommands list via the default help command</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "argOpts",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Options for how arguments should be parsed. See: {@link ArgOpts}</p>",
+                    "type": {
+                        "names": [
+                            "ArgOpts"
+                        ]
+                    }
+                },
+                {
+                    "name": "permissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Array of permissions required by the command\ncaller to be able to execute the command in the guild the command is called in.</p>\n<p>If any permissions are provided the command's <code>guildOnly</code> property will be automatically set to true</p>",
+                    "type": {
+                        "names": [
+                            "Array.<external:PermissionResolvable>"
+                        ]
+                    }
+                },
+                {
+                    "name": "roles",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Array of roles required to use the command. If the command caller\nhas any of the roles in the array, they will be able to use the command</p>\n<p>If any roles are provided the command's <code>guildOnly</code> property will be automatically set to true</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
+                    "name": "ownerOnly",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not the command can be used by the bot owner(s).</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "overloads",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The name of a base command to overload. Commands may only overload\nbase commands so the {@link Command#group} must be set to 'base' in\norder to overload. Commands may only be overloaded by name, not by alias</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "action",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Action to be executed when the command is called. The following parameters\nare what command actions will be passed by the {@link CommandDispatcher} whenever\na command is called. Be sure to receive these in proper order when writing\nnew commands</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>An array containing the args parsed from the command calling message.<br>\n                       Will contain strings unless middleware is used to transform the args</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "register",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Assert {@link Command#action} is typeof Function, finishing the\ncommand creation process.<br>Called by {@link CommandRegistry#register}</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "use",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Adds a middleware function to be used when the command is run\nto make modifications to args or determine if the command can\nbe run. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to the command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to a command one time each,\nand thus should be added in the Command's constructor. Multiple middleware\nfunctions can be added to a command via multiple calls to this method</p>",
+                    "parameters": [
+                        {
+                            "name": "fn",
+                            "type": "MiddlewareFunction",
+                            "description": "<p>Middleware function. <code>(message, args) =&gt; [message, args]</code></p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Command",
+                        "description": "<p>This command instance</p>"
+                    }
+                },
+                {
+                    "name": "respond",
+                    "access": "protected",
+                    "virtual": false,
+                    "description": "<p>Send provided response text to the command's calling channel\nvia edit, editCode, send, or sendCode depending on whether\nor not the bot is a selfbot and/or a codeblock language is given</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "CommandDispatcher",
+            "description": "<p>Handles dispatching commands</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CommandDispatcher",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "handleMessage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Handle received messages</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "isCommandCalled",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return if a command has been called, the called command\nthe prefix used to call the command, and the name or alias\nof the command used to call it</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "testCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Test if the command caller is allowed to use the command\nunder whatever circumstances are present at call-time</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "checkRateLimiter",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check either global or command-specific rate limits for the given\nmessage author and also notify them if they exceed ratelimits</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "checkRateLimits",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check global and command-specific ratelimits for the user\nfor the given command</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "checkPermissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Compare user permissions to the command's requisites</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "checkLimiter",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Compare user roles to the command's limiter</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "hasRoles",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Compare user roles to the command's requisites</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "isBlacklisted",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check if the calling user is blacklisted</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "dispatch",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Execute the provided command with the provided args</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "unknownCommandError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return an error for unknown commands in DMs</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "guildOnlyError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return an error for guild only commands</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "missingPermissionsError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return an error for missing permissions</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "failedLimiterError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return an error for failing a command limiter</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "missingRolesError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return an error for missing roles</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "CommandLoader",
+            "description": "<p>Handles loading all commands from the given Bot's commandsDir</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CommandLoader",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "loadCommands",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Load or reload all commands from the base commands directory and the\nuser-specified {@link Bot#commandsDir} directory and stores them in\nthe Bot's {@link CommandRegistry} instance ({@link Bot#commands})</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "reloadCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Reload the given command in the Bot's {@link CommandRegistry} ({@link Bot#commands})</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "getCommandClass",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the Command class from an attempted Command class import</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "CommandRegistry",
+            "description": "",
+            "extends": [
+                "external:Collection"
+            ],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CommandRegistry",
+                "description": "<p>Stores loaded Commands as &lt;[name]{@link Command#name}, [Command]{@link Command}&gt; pairs</p>",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "register",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Complete registration of a command and add to the parent [Collection]{@link external:Collection},\nerroring on duplicate names and aliases</p>",
+                    "parameters": [
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "<p>The Command to be registered</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key to store the Command at. Will be {@link Command#name}</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "reload",
+                            "type": "boolean",
+                            "description": "<p>Whether or not the command is being reloaded and\nreplaced in the collection</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "findByNameOrAlias",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Finds a command by [name]{@link Command#name} or [alias]{@link Command#aliases}</p>",
+                    "parameters": [
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "description": "<p>The name or alias of the Command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Command",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "filterGuildUsable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns a Promise resolving with a collection of all commands usable\nby the user in the guild text channel the provided message is in.\nNeeds to be async due to having to access guild settings to check\nfor disabled groups</p>",
+                    "parameters": [
+                        {
+                            "name": "bot",
+                            "type": "Bot",
+                            "description": "<p>Bot instance</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<external:Collection.<string, Command>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "filterDMUsable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns all commands usable by the user within the DM channel the provided\nmessage is in</p>",
+                    "parameters": [
+                        {
+                            "name": "bot",
+                            "type": "Bot",
+                            "description": "<p>Bot instance</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "external:Collection.<string, Command>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "filterDMHelp",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns all commands that can have their help looked up by the user\nin the DM channel the message is in</p>",
+                    "parameters": [
+                        {
+                            "name": "bot",
+                            "type": "Bot",
+                            "description": "<p>Bot instance</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "external:Collection.<string, Command>",
+                        "description": ""
+                    }
+                }
+            ],
+            "properties": [
+                {
+                    "name": "groups",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Contains all [Command groups]{@link Command#group}</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "RateLimit",
+            "description": "<p>Maintains its own call count and expiry for making sure\nthings only happen a certain number of times within\na given timeframe</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "RateLimit",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "type": "Tuple.<number, number>",
+                        "description": "<p>Tuple containing quantity and duration</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "_reset",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Sets this RateLimit to default values</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "call",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns whether or not this rate limit has been capped out\nfor its current expiry window while incrementing calls\ntowards the rate limit cap if not currently capped</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "setNotified",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Flag this RateLimit as having had the user the RateLimit\nis for notified of being rate limited</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                }
+            ],
+            "properties": [
+                {
+                    "name": "isLimited",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not this ratelimit is currently capped out</p>",
+                    "type": ""
+                },
+                {
+                    "name": "wasNotified",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not this RateLimit was flagged after\nnotifying the user of being rate limited</p>",
+                    "type": ""
+                }
+            ]
+        },
+        {
+            "name": "RateLimiter",
+            "description": "<p>Handles assigning ratelimits to guildmembers and users</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "RateLimiter",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "type": "string",
+                        "description": "<p>Ratelimit string matching the regex <code>\\d+\\/\\d+[s|m|h|d]</code><br>\n                         <strong>Example:</strong> <code>1/10m</code> to limit a command to one use per 10 minutes</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "global",
+                        "type": "boolean",
+                        "description": "<p>Whether or not this RateLimiter handles global ratelimits</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns the RateLimit object for the message author if global\nor message member if message is in a guild</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "RateLimit",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "_parseLimit",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Parse the ratelimit from the given input string</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "_isGlobal",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Determine whether or not to use the global rate limit collection</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "GuildSettings",
+            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with settings for a specific guild. Will be contained\nunder {@link GuildStorage#settings}</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "GuildSettings",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage for this Guild</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from storage for this Guild</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in storage for this Guild</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a value from storage for this Guild</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from storage for this Guild</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "GuildStorageLoader",
+            "description": "<p>Handles loading all guild-specific data from persistent storage into\n{@link GuildStorage} objects</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "GuildStorageLoader",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "loadStorages",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Load data for each guild from persistent storage and store it in a\n{@link GuildStorage} object</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "initNewGuilds",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Assign a GuildStorage to guilds that lack one due to the bot being\nin the guild before adopting this storage spec or the bot being\nadded to a new guild</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "cleanGuilds",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Clean out any storages/settings storages for guilds the\nbot is no longer a part of</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "JSONProvider",
+            "description": "<p>Default storage provider for the framework. If no storage provider is passed\nin the client constructor, this provider will be used</p>",
+            "extends": [
+                "StorageProvider"
+            ],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "JSONProvider",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method to be run that will set up the storage provider\nfor use. Calls to other provider methods should not be made\nuntil this method has been called and resolved</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method returning an array of stored key names</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that gets the value of a key in storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The name of the key in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<string>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that sets the value of a key in storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The name of the key in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "description": "<p>The value to set in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that removes a key and its value from storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The name of the key in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that removes all keys and their values from storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "KeyedStorage",
+            "description": "<p>Simple key/value storage abstraction operating on top of the\ngiven StorageProvider. Supports nested object paths in\nget/set/remove using <code>.</code> like normal object accessors</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "KeyedStorage",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "description": "<p>Unique identifier for this storage, used by the given StorageProvider</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "provider",
+                        "type": "StorageProviderConstructor",
+                        "description": "<p>The storage provider class that will be instantiated\n                                                and used as the backend for this storage abstraction</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage. Any other method calls should not be made\nuntil this method has been called and resolved</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from this storage for the specified key</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in this storage for the specified key</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a key/value pair from this storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from this storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "StorageFactory",
+            "description": "",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "StorageFactory",
+                "description": "<p>Used for creating the different storage class mixins used throughout\nand needed by YAMDBF Clients. Used internally, shouldn't ever\nneed to be used in your bots</p>",
+                "parameters": [
+                    {
+                        "name": "client",
+                        "type": "Client",
+                        "description": "<p>The YAMDBF Client instance</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "guildDataStorage",
+                        "type": "StorageProvider",
+                        "description": "<p>StorageProvider instance that provides all guild data</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "guildSettingStorage",
+                        "type": "StorageProvider",
+                        "description": "<p>StorageProvider instance that provides all guild settings</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "createGuildStorage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Creates a GuildStorage mixin, creating the GuildSettings instance under <code>.settings</code></p>",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "type": "string",
+                            "description": "<p>ID of the Guild to create storage for</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<GuildStorage>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "createClientStorage",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Creates a ClientStorage mixin using KeyedStorage as a base. Adds a <code>guilds</code> Collection\nthat will map Guild IDs to GuildStorages</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "ClientStorage",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "StorageProvider",
+            "description": "<p>Abstract class for storage providers to extend. Provides runtime errors\nfor missing method implementations, and is necessary at compile-time\nfor the compiler to recognize a StorageProvider as valid.</p>\n<p>StorageProviders must present an interface with a storage solution that\nprovides access to string values via string keys. Data will be stored\nin the storage solution by the framework as stringified JSON-valid data</p>\n<blockquote>\n<p><strong>Note:</strong> All methods shown on this class must be implemented within\nany storage providers you create and, in the case of <code>keys()</code>\nand <code>get()</code>, <strong>must</strong> return the proper data types or your\nclient <strong>will not work</strong>.</p>\n</blockquote>",
+            "extends": [],
+            "access": "",
+            "virtual": true,
+            "fires": "",
+            "constructor": {
+                "name": "StorageProvider",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "description": "<p>Name of the storage to access. Can be a DB table, file name, etc.\nWhatever the storage solution expects with regards to providing a unique identifier\nfor a specific storage.</p>\n<blockquote>\n<p><strong>Note:</strong> This does not need to be passed to <code>super()</code> in classes extending <code>StorageProvider</code>\nas <code>StorageProvider</code> is abstract and provides no implementation, but should be received\nby and used within your storage provider constructors as necessary to create a unique\nstorage based on the given string</p>\n</blockquote>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method to be run that will set up the storage provider\nfor use. Calls to other provider methods should not be made\nuntil this method has been called and resolved</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method returning an array of stored key names</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that gets the value of a key in storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The name of the key in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<string>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that sets the value of a key in storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The name of the key in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "description": "<p>The value to set in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that removes a key and its value from storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The name of the key in storage</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that removes all keys and their values from storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ClientStorage",
+            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with data specific to the Client instance. Can not be\ncreated directly via a constructor due to mixin mechanics.\nCreated internally via <code>StorageFactory#createClientStorage</code></p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "ClientStorage",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "guilds",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Collection mapping Guild IDs to GuildStorages</p>",
+                    "type": {
+                        "names": [
+                            "external:Collection.<string, GuildStorage>"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage. Any other method calls should not be made\nuntil this method has been called and resolved</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from this storage for the specified key</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in this storage for the specified key</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a key/value pair from this storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from this storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "GuildStorage",
+            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with data for a specific guild. Can not be created directly\nvia a constructor due to mixin mechanics. Created internally via\n<code>StorageFactory#createGuildStorage</code></p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "GuildStorage",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "settings",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>GuildSettings object containing settings for this guild</p>",
+                    "type": {
+                        "names": [
+                            "GuildSettings"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage for this Guild</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from storage for this Guild</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in storage for this Guild</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a value from storage for this Guild</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from storage for this Guild</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        }
+    ],
+    "mixins": [
+        {
+            "name": "Guild",
+            "description": "<p>Represents a Discord.js Guild object that has had a {@link GuildStorage} object\nfor the guild the message was sent from, if any, mixed in by the CommandDispatcher before being passed\nto the command action upon Command execution</p>",
+            "access": "",
+            "virtual": false
+        },
+        {
+            "name": "Message",
+            "description": "<p>Represents a Discord.js Message object that contains a modifed {@link Guild} object\ncontaining a {@link GuildStorage} for the associated guild, if the message was sent\nfrom within a guild, mixed in by the CommandDispatcher.</p>\n<blockquote>\n<p><strong>Note:</strong> For bots written in Typescript, you will want to import\n<code>Message</code> from YAMDBF rather than Discord.js to be able to\naccess <code>message.guild.storage</code> within your commands without\ncompiler errors</p>\n</blockquote>",
+            "access": "",
+            "virtual": false
+        }
+    ]
+}
