@@ -14,13 +14,12 @@ import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 
 /**
- * The Discord.js Client instance. Contains bot-specific [storage]{@link Bot#storage},
- * guild specific [storages]{@link Bot#guildStorages}, and contains important
- * fields for access within commands
+ * The YAMDBF Client through which you can access [storage]{@link Bot#storage}
+ * and any of the properties available on a typical Discord.js Client instance
  * @class Bot
  * @extends {external:Client}
- * @param {BotOptions} botOptions - Object containing required bot properties
- * @param {external:ClientOptions} [clientOptions] - Discord.js ClientOptions
+ * @param {BotOptions} botOptions Object containing required bot properties
+ * @param {external:ClientOptions} [clientOptions] Discord.js ClientOptions
  */
 export class Bot extends Client
 {
@@ -57,46 +56,38 @@ export class Bot extends Client
 
 		/**
 		 * The name of the Bot
-		 * @memberof Bot
+		 * @name Bot#name
 		 * @type {string}
-		 * @name name
-		 * @instance
 		 */
 		this.name = botOptions.name || 'botname';
 
 		/**
 		 * Directory to find command class files. Optional
 		 * if bot is passive. See: {@link Bot#passive}
-		 * @memberof Bot
+		 * @name Bot#commandsDir
 		 * @type {string}
-		 * @name commandsDir
-		 * @instance
 		 */
 		this.commandsDir = botOptions.commandsDir || null;
 
 		/**
 		 * Status text for the bot
-		 * @memberof Bot
+		 * @name Bot#statusText
 		 * @type {string}
-		 * @name statusText
-		 * @instance
 		 */
 		this.statusText = botOptions.statusText || null;
 
 		/**
 		 * Text to output when the bot is ready
-		 * @memberof Bot
+		 * @name Bot#readyText
 		 * @type {string}
-		 * @name readyText
-		 * @instance
 		 */
 		this.readyText = botOptions.readyText || 'Ready!';
 
 		/**
 		 * Whether or not a generic 'command not found' message
 		 * should be given in DMs to instruct the user to
-		 * use the `help` command. <code>true</code> by default
-		 * @name Bot#noCommandErr
+		 * use the `help` command. `true` by default
+		 * @name Bot#unknownCommandError
 		 * @type {string}
 		 * @instance
 		 */
@@ -105,10 +96,8 @@ export class Bot extends Client
 
 		/**
 		 * Whether or not the bot is a selfbot
-		 * @memberof Bot
+		 * @name Bot#selfbot
 		 * @type {boolean}
-		 * @name selfbot
-		 * @instance
 		 */
 		this.selfbot = botOptions.selfbot || false;
 
@@ -118,10 +107,8 @@ export class Bot extends Client
 		 * listener. This allows passive bots to be created that
 		 * do not respond to any commands but are able to perform
 		 * actions based on whatever the framework user wants
-		 * @memberof Bot
+		 * @name Bot#passive
 		 * @type {boolean}
-		 * @name passive
-		 * @instance
 		 */
 		this.passive = botOptions.passive || false;
 
@@ -136,10 +123,8 @@ export class Bot extends Client
 
 		/**
 		 * Object containing token and owner ids
-		 * @memberof Bot
+		 * @name Bot#config
 		 * @type {Object}
-		 * @name config
-		 * @instance
 		 * @property {string} token - Discord login token for the bot
 		 * @property {string[]} owner - Array of owner id strings
 		 */
@@ -148,10 +133,8 @@ export class Bot extends Client
 		/**
 		 * Array of base command names to skip when loading commands. Base commands
 		 * may only be disabled by name, not by alias
-		 * @memberof Bot
+		 * @name Bot#disableBase
 		 * @type {string[]}
-		 * @name disableBase
-		 * @instance
 		 */
 		this.disableBase = botOptions.disableBase || [];
 
@@ -173,19 +156,15 @@ export class Bot extends Client
 		/**
 		 * Client-specific storage. Also contains a `guilds` Collection property containing
 		 * all GuildStorage instances
-		 * @memberof Bot
+		 * @name Bot#storage
 		 * @type {ClientStorage}
-		 * @name storage
-		 * @instance
 		 */
 		this.storage = this.storageFactory.createClientStorage();
 
 		/**
 		 * [Collection]{@link external:Collection} containing all loaded commands
-		 * @memberof Bot
+		 * @name Bot#commands
 		 * @type {CommandRegistry<string, Command>}
-		 * @name commands
-		 * @instance
 		 */
 		this.commands = new CommandRegistry<this, string, Command<this>>();
 
@@ -203,6 +182,11 @@ export class Bot extends Client
 		if (!this.passive) this.loadCommand('all');
 	}
 
+	/**
+	 * Initialize storages, load default settings into storage if they're not there already
+	 * and load guild storages for guilds
+	 * @private
+	 */
 	private async init(): Promise<void>
 	{
 		await this.storage.init();
@@ -220,9 +204,9 @@ export class Bot extends Client
 	/**
 	 * Returns whether or not the given user is an owner
 	 * of the bot
-	 * @memberof Bot
-	 * @instance
+	 * @method Bot#isOwner
 	 * @param {User} user User to check
+	 * @returns {boolean}
 	 */
 	public isOwner(user: User): boolean
 	{
@@ -231,9 +215,8 @@ export class Bot extends Client
 
 	/**
 	 * Loads/reloads all/specific commands
-	 * @memberof Bot
-	 * @instance
-	 * @param {string} command - The name of a command to reload, or 'all' to load all commands
+	 * @method Bot#loadCommand
+	 * @param {string} command The name of a command to reload, or 'all' to load all commands
 	 */
 	public loadCommand(command: string): void
 	{
@@ -244,8 +227,7 @@ export class Bot extends Client
 
 	/**
 	 * Logs the Bot in and registers some event handlers
-	 * @memberof Bot
-	 * @instance
+	 * @method Bot#start
 	 * @returns {Bot}
 	 */
 	public start(): this
@@ -281,11 +263,10 @@ export class Bot extends Client
 	 * Set the value of a default setting key and push it to all guild
 	 * setting storages. Will not overwrite a setting in guild settings
 	 * storage if there is already an existing key with the given value
-	 * @memberof Bot
-	 * @instance
-	 * @param {string} key - The key to use in settings storage
-	 * @param {any} value - The value to use in settings storage
-	 * @returns {Bot}
+	 * @method Bot#setDefaultSetting
+	 * @param {string} key The key to use in settings storage
+	 * @param {any} value The value to use in settings storage
+	 * @returns {Promise<Bot>}
 	 */
 	public async setDefaultSetting(key: string, value: any): Promise<this>
 	{
@@ -301,9 +282,8 @@ export class Bot extends Client
 	 * Remove a defaultGuildSettings item. Will not remove from ALL guild
 	 * settings, but will prevent the item from being added to new guild
 	 * settings storage upon creation
-	 * @memberof Bot
-	 * @instance
-	 * @param {string} key - The key to use in settings storage
+	 * @method Bot#removeDefaultSetting
+	 * @param {string} key The key to use in settings storage
 	 * @returns {Promise<Bot>}
 	 */
 	public async removeDefaultSetting(key: string): Promise<this>
@@ -314,9 +294,8 @@ export class Bot extends Client
 
 	/**
 	 * See if a default guild setting exists
-	 * @memberof Bot
-	 * @instance
-	 * @param {string} key - The key in storage to check
+	 * @method Bot#defaultSettingsExists
+	 * @param {string} key The key in storage to check
 	 * @returns {Promise<boolean>}
 	 */
 	public async defaultSettingExists(key: string): Promise<boolean>
@@ -326,9 +305,8 @@ export class Bot extends Client
 
 	/**
 	 * Shortcut to return the command prefix for the provided guild
-	 * @memberof Bot
-	 * @instance
-	 * @param {(external:Guild|string)} guild The guild or guild id to get the prefix of
+	 * @method Bot#getPrefix
+	 * @param {external:Guild} guild The guild to get the prefix of
 	 * @returns {Promise<?string>}
 	 */
 	public async getPrefix(guild: Guild): Promise<string>
@@ -340,8 +318,7 @@ export class Bot extends Client
 	/**
 	 * Clean out any guild storage/settings that no longer have
 	 * an associated guild
-	 * @memberof Bot
-	 * @instance
+	 * @method Bot#sweepStorages
 	 */
 	public sweepStorages(): void
 	{
@@ -352,7 +329,7 @@ export class Bot extends Client
 	 * Adds a middleware function to be used when any command is run
 	 * to make modifications to args or determine if the command can
 	 * be run. Takes a function that will receive the message object
-	 * and the array of args.<br><br>
+	 * and the array of args.
 	 *
 	 * A middleware function must return an array where the first item
 	 * is the message object and the second item is the args array.
@@ -360,23 +337,23 @@ export class Bot extends Client
 	 * it will be sent to the calling channel as a message and the command
 	 * execution will be aborted. If a middleware function does not return
 	 * anything or returns something other than an array or string, it will
-	 * fail silently.<br><br>
+	 * fail silently.
 	 *
-	 * Example:<br>
-	 * <pre class="prettyprint"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
-	 * </code></pre><br>
+	 * Example:
+	 * ```
+	 * this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
+	 * ```
 	 * This will add a middleware function to all commands that will attempt
 	 * to transform all args to uppercase. This will of course fail if any
-	 * of the args are not a string.<br><br>
+	 * of the args are not a string.
 	 *
 	 * Note: Middleware functions should only be added to the bot one time each,
 	 * and thus should not be added within any sort of event or loop.
 	 * Multiple middleware functions can be added to the via multiple calls
 	 * to this method
-	 * @memberof Bot
-	 * @instance
-	 * @param {MiddlewareFunction} fn Middleware function. <code>(message, args) => [message, args]</code>
-	 * @returns {Bot} This Bot instance
+	 * @method Bot#use
+	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
+	 * @returns {Bot}
 	 */
 	public use(fn: MiddlewareFunction): this
 	{
@@ -440,7 +417,6 @@ export class Bot extends Client
 	/**
 	 * Emitted whenever a command is successfully called
 	 * @memberof Bot
-	 * @instance
 	 * @event event:command
 	 * @param {string} name Name of the called command
 	 * @param {any[]} args Args passed to the called command
@@ -451,7 +427,6 @@ export class Bot extends Client
 	/**
 	 * Emitted whenever a user is blacklisted
 	 * @memberof Bot
-	 * @instance
 	 * @event event:blacklistAdd
 	 * @param {User} user User who was blacklisted
 	 * @param {boolean} global Whether or not blacklisting is global
@@ -460,10 +435,31 @@ export class Bot extends Client
 	/**
 	 * Emitted whenever a user is removed from the blacklist
 	 * @memberof Bot
-	 * @instance
 	 * @event event:blacklistRemove
 	 * @param {User} user User who was removed
 	 * @param {boolean} global Whether or not removal is global
+	 */
+
+	/**
+	 * Emitted when the client is waiting for you to send a `finished` event,
+	 * after which `clientReady` will be emitted
+	 * @memberof Bot
+	 * @event event:waiting
+	 */
+
+	/**
+	 * To be emitted whenever you have finished setting things up that should
+	 * be set up before the client is ready for use
+	 * @memberof Bot
+	 * @event event:finished
+	 */
+
+	/**
+	 * Emitted when the client is ready. Should be used instead of Discord.js'
+	 * `ready` event, as this is the point that everything is set up within the
+	 * YAMDBF Client and it's all ready to go
+	 * @memberof Bot
+	 * @event event:clientReady
 	 */
 	public on(event: string, listener: Function): this
 	{
