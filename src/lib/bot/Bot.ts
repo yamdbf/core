@@ -16,7 +16,6 @@ import { StorageProviderConstructor } from '../types/StorageProviderConstructor'
 /**
  * The YAMDBF Client through which you can access [storage]{@link Bot#storage}
  * and any of the properties available on a typical Discord.js Client instance
- * @class Bot
  * @extends {external:Client}
  * @param {BotOptions} botOptions Object containing required bot properties
  * @param {external:ClientOptions} [clientOptions] Discord.js ClientOptions

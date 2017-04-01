@@ -5,8 +5,8 @@ import { Message } from '../types/Message';
 
 /**
  * Handles assigning ratelimits to guildmembers and users
- * @param {string} limit Ratelimit string matching the regex <code>\d+\/\d+[s|m|h|d]</code><br>
- * 						 <b>Example:</b> <code>1/10m</code> to limit a command to one use per 10 minutes
+ * @param {string} limit Ratelimit string matching the regex `\d+\/\d+[s|m|h|d]`<br>
+ * 						 **Example:** `1/10m` to limit a command to one use per 10 minutes
  * @param {boolean} global Whether or not this RateLimiter handles global ratelimits
  */
 export class RateLimiter

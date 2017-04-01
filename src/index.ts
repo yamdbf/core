@@ -50,9 +50,10 @@ export const version: string = require(path.join(__dirname, '..', 'package')).ve
 
 /**
  * @typedef {Array<any>} Tuple Represents an array of fixed length where the the item in
- * the specified position is of the specified type.<br><br>
+ * the specified position is of the specified type.
  *
- * Example:<br>
- * <pre class="prettyprint"><code>Tuple&lt;string, number&gt; === [string, number] === ['foo', 10]
- * </code></pre>
+ * Example:
+ * ```
+ * Tuple<string, number> === [string, number] === ['foo', 10]
+ * ```
  */

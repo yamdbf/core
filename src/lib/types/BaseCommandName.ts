@@ -1,6 +1,7 @@
 /**
- * @typedef {string} BaseCommandName String representing a name of a base command. Valid names are:<br>
- * <pre class="prettyprint"><code>'blacklist',
+ * @typedef {string} BaseCommandName String representing a name of a base command. Valid names are:
+ * ```
+ * 'blacklist',
  * 'whitelist',
  * 'clearlimit',
  * 'disablegroup',
@@ -12,7 +13,8 @@
  * 'ping'
  * 'reload',
  * 'setprefix',
- * 'version'</code></pre>
+ * 'version'
+ * ```
  */
 
 export type BaseCommandName = 'blacklist'

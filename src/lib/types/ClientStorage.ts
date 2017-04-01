@@ -1,8 +1,8 @@
 /**
- * Class containing asynchronous methods for storing, retrieving, and
+ * @classdesc Class containing asynchronous methods for storing, retrieving, and
  * interacting with data specific to the Client instance. Can not be
  * created directly via a constructor due to mixin mechanics.
- * Must be created via {@link StorageFactory#createClientStorage}
+ * Created internally via `StorageFactory#createClientStorage`
  * @class ClientStorage
  * @mixes KeyedStorage
  * @borrows KeyedStorage#init as ClientStorage#init

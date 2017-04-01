@@ -5,8 +5,7 @@ import { Util } from '../Util';
 /**
  * Simple key/value storage abstraction operating on top of the
  * given StorageProvider. Supports nested object paths in
- * get/set/remove using <code>.</code> like normal object accessors
- * @class KeyedStorage
+ * get/set/remove using `.` like normal object accessors
  * @param {string} name Unique identifier for this storage, used by the given StorageProvider
  * @param {StorageProviderConstructor} provider The storage provider class that will be instantiated
  * 												and used as the backend for this storage abstraction

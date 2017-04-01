@@ -7,7 +7,6 @@ import { Bot } from '../bot/Bot';
  * Class containing asynchronous methods for storing, retrieving, and
  * interacting with settings for a specific guild. Will be contained
  * under {@link GuildStorage#settings}
- * @class GuildSettings
  */
 export class GuildSettings
 {

@@ -5,7 +5,6 @@ import DB = require('node-json-db');
 /**
  * Default storage provider for the framework. If no storage provider is passed
  * in the client constructor, this provider will be used
- * @class JSONProvider
  * @extends StorageProvider
  * @implements IStorageProvider
  */

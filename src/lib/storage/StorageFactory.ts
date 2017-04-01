@@ -29,7 +29,7 @@ export class StorageFactory
 	}
 
 	/**
-	 * Creates a GuildStorage mixin, creating the GuildSettings instance under <code>.settings</code>
+	 * Creates a GuildStorage mixin, creating the GuildSettings instance under `.settings`
 	 * @param {string} id ID of the Guild to create storage for
 	 * @returns {Promise<GuildStorage>}
 	 */
@@ -44,7 +44,7 @@ export class StorageFactory
 	}
 
 	/**
-	 * Creates a ClientStorage mixin using KeyedStorage as a base. Adds a <code>guilds</code> Collection
+	 * Creates a ClientStorage mixin using KeyedStorage as a base. Adds a `guilds` Collection
 	 * that will map Guild IDs to GuildStorages
 	 * @returns {ClientStorage}
 	 */

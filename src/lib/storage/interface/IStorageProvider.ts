@@ -2,8 +2,8 @@
  * Interface for storage providers to implement, providing compile-time
  * errors for incorrect implementations alongside the abstract StorageProvider
  * class to extend which provides runtime errors for missing method implementations
- * <br><br>
- * <b>Note:</b> This is a TypeScript feature and you do not need to worry about this bit so much
+ *
+ * >**Note:** This is a TypeScript feature and you do not need to worry about this bit so much
  * if you are using JavaScript.
  * @interface IStorageProvider
  */

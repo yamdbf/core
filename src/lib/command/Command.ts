@@ -7,7 +7,6 @@ import { ArgOpts } from '../types/ArgOpts';
 
 /**
  * Command class to extend to create commands users can execute
- * @class Command
  * @param {Bot} bot - Bot instance
  * @param {CommandInfo} info - Object containing required command properties
  */
@@ -106,7 +105,7 @@ export class Command<T extends Bot>
 		/**
 		 * Array of permissions required by the command
 		 * caller to be able to execute the command in the guild the command is called in.
-		 * <br><br>
+		 *
 		 * If any permissions are provided the command's `guildOnly` property will be automatically set to true
 		 * @name Command#permissions
 		 * @type {external:PermissionResolvable[]}
@@ -115,7 +114,7 @@ export class Command<T extends Bot>
 		/**
 		 * Array of roles required to use the command. If the command caller
 		 * has any of the roles in the array, they will be able to use the command
-		 * <br><br>
+		 *
 		 * If any roles are provided the command's `guildOnly` property will be automatically set to true
 		 * @name Command#roles
 		 * @type {string[]}
@@ -214,7 +213,7 @@ export class Command<T extends Bot>
 	 * Adds a middleware function to be used when the command is run
 	 * to make modifications to args or determine if the command can
 	 * be run. Takes a function that will receive the message object
-	 * and the array of args.<br><br>
+	 * and the array of args.
 	 *
 	 * A middleware function must return an array where the first item
 	 * is the message object and the second item is the args array.
@@ -222,20 +221,21 @@ export class Command<T extends Bot>
 	 * it will be sent to the calling channel as a message and the command
 	 * execution will be aborted. If a middleware function does not return
 	 * anything or returns something other than an array or string, it will
-	 * fail silently.<br><br>
+	 * fail silently.
 	 *
-	 * Example:<br>
-	 * <pre class="prettyprint"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
-	 * </code></pre><br>
+	 * Example:
+	 * ```
+	 * this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
+	 * ```
 	 * This will add a middleware function to the command that will attempt
 	 * to transform all args to uppercase. This will of course fail if any
-	 * of the args are not a string.<br><br>
+	 * of the args are not a string.
 	 *
 	 * Note: Middleware functions should only be added to a command one time each,
 	 * and thus should be added in the Command's constructor. Multiple middleware
 	 * functions can be added to a command via multiple calls to this method
 	 * @method Command#use
-	 * @param {MiddlewareFunction} fn Middleware function. <code>(message, args) => [message, args]</code>
+	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
 	 * @returns {Command} This command instance
 	 */
 	public use(fn: MiddlewareFunction): this
