@@ -1,9 +1,11 @@
-import { Collection, Message, TextChannel } from 'discord.js';
+import { Collection, TextChannel, PermissionResolvable } from 'discord.js';
 import { Command } from '../command/Command';
 import { Bot } from '../bot/Bot';
+import { Message } from '../types/Message';
 
 /**
  * Stores loaded Commands as &lt;[name]{@link Command#name}, [Command]{@link Command}&gt; pairs
+ * @private
  * @class CommandRegistry
  * @extends {external:Collection}
  */
@@ -64,24 +66,36 @@ export class CommandRegistry<T extends Bot, K extends string, V extends Command<
 	}
 
 	/**
-	 * Returns all commands usable by the user in the guild text channel
-	 * the provided message is in
+	 * Returns a Promise resolving with a collection of all commands usable
+	 * by the user in the guild text channel the provided message is in.
+	 * Needs to be async due to having to access guild settings to check
+	 * for disabled groups
 	 * @memberof CommandRegistry
 	 * @instance
 	 * @param {Bot} bot - Bot instance
 	 * @param {external:Message} message - Discord.js Message object
-	 * @returns {external:Collection<string, Command>}
+	 * @returns {Promise<external:Collection<string, Command>>}
 	 */
-	public filterGuildUsable(bot: T, message: Message): Collection<K, V>
+	public async filterGuildUsable(bot: T, message: Message): Promise<Collection<K, V>>
 	{
-		// TODO: Rewrite this. Seriously. This is a disgusting mess.
-		return this.filter(c => c.permissions.length > 0 ? c.permissions
-			.filter(a => (<TextChannel> message.channel).permissionsFor(message.author)
-				.hasPermission(a)).length > 0 : true)
-			.filter(c => !(c.roles.length > 0 && message.member.roles.filter(role => c.roles.includes(role.name)).size === 0))
-			.filter(c => !bot.guildStorages.get(message.guild).settingExists('disabledGroups')
-				|| !bot.guildStorages.get(message.guild).getSetting('disabledGroups').includes(c.group))
-			.filter(c => ((<any> bot.config).owner.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly);
+		let filtered: Collection<K, V> = new Collection<K, V>();
+		const currentPermissions: (a: PermissionResolvable) => boolean = a =>
+			(<TextChannel> message.channel).permissionsFor(message.author).hasPermission(a);
+
+		const byPermissions: (c: V) => boolean = c =>
+			c.permissions.length > 0 ? c.permissions.filter(currentPermissions).length > 0 : true;
+
+		const byRoles: (c: V) => boolean = c =>
+			!(c.roles.length > 0 && message.member.roles.filter(role => c.roles.includes(role.name)).size === 0);
+
+		const byOwnerOnly: (c: V) => boolean = c =>
+			((<any> bot.config).owner.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly;
+
+		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
+		for (const [name, command] of this.filter(byPermissions).filter(byRoles).filter(byOwnerOnly).entries())
+			if (!disabledGroups.includes(command.group)) filtered.set(name, command);
+
+		return filtered;
 	}
 
 	/**

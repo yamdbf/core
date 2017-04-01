@@ -1,7 +1,6 @@
-import { GuildStorage } from './GuildStorage';
-import { LocalStorage } from './LocalStorage';
 import { Collection, Guild } from 'discord.js';
 import { Bot } from '../bot/Bot';
+import { StorageProvider } from './StorageProvider';
 
 /**
  * Handles loading all guild-specific data from persistent storage into
@@ -10,22 +9,23 @@ import { Bot } from '../bot/Bot';
  */
 export class GuildStorageLoader<T extends Bot>
 {
-	private _bot: T;
+	private _client: T;
 	public constructor(bot: T)
 	{
-		this._bot = bot;
+		this._client = bot;
 	}
 
 	/**
 	 * Load data for each guild from persistent storage and store it in a
 	 * {@link GuildStorage} object
 	 */
-	public loadStorages(dataStorage: LocalStorage, settingsStorage: LocalStorage): void
+	public async loadStorages(dataStorage: StorageProvider, settingsStorage: StorageProvider): Promise<void>
 	{
-		for (const key of dataStorage.keys)
-			this._bot.guildStorages.set(key, new GuildStorage(this._bot, key, dataStorage, settingsStorage));
+		for (const key of await dataStorage.keys())
+			this._client.storage.guilds.set(key,
+				await this._client.storageFactory.createGuildStorage(key));
 
-		this.initNewGuilds(dataStorage, settingsStorage);
+		await this.initNewGuilds(dataStorage, settingsStorage);
 	}
 
 	/**
@@ -33,26 +33,30 @@ export class GuildStorageLoader<T extends Bot>
 	 * in the guild before adopting this storage spec or the bot being
 	 * added to a new guild
 	 */
-	public initNewGuilds(dataStorage: LocalStorage, settingsStorage: LocalStorage): void
+	public async initNewGuilds(dataStorage: StorageProvider, settingsStorage: StorageProvider): Promise<void>
 	{
-		let storagelessGuilds: Collection<string, Guild> = this._bot.guilds.filter(guild => !dataStorage.keys.includes(guild.id));
+		const dataStorageKeys: string[] = await dataStorage.keys();
+		let storagelessGuilds: Collection<string, Guild> = this._client.guilds.filter(g => !dataStorageKeys.includes(g.id));
 		for (const guild of storagelessGuilds.values())
-			this._bot.guildStorages.set(guild.id, new GuildStorage(this._bot, guild.id, dataStorage, settingsStorage));
+			this._client.storage.guilds.set(guild.id,
+				await this._client.storageFactory.createGuildStorage(guild.id));
 	}
 
 	/**
 	 * Clean out any storages/settings storages for guilds the
 	 * bot is no longer a part of
 	 */
-	public cleanGuilds(dataStorage: LocalStorage, settingsStorage: LocalStorage): void
+	public async cleanGuilds(dataStorage: StorageProvider, settingsStorage: StorageProvider): Promise<void>
 	{
-		let guildlessStorages: string[] = dataStorage.keys.filter(guild => !this._bot.guilds.has(guild));
-		let guildlessSettings: string[] = settingsStorage.keys.filter(guild => !this._bot.guilds.has(guild));
-		for (const settings of guildlessSettings) settingsStorage.removeItem(settings);
+		const dataStorageKeys: string[] = await dataStorage.keys();
+		const settingsStorageKeys: string[] = await settingsStorage.keys();
+		let guildlessStorages: string[] = dataStorageKeys.filter(guild => !this._client.guilds.has(guild));
+		let guildlessSettings: string[] = settingsStorageKeys.filter(guild => !this._client.guilds.has(guild));
+		for (const settings of guildlessSettings) await settingsStorage.remove(settings);
 		for (const storage of guildlessStorages)
 		{
-			this._bot.guildStorages.delete(storage);
-			dataStorage.removeItem(storage);
+			this._client.storage.guilds.delete(storage);
+			await dataStorage.remove(storage);
 		}
 	}
 }

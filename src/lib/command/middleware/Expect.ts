@@ -7,13 +7,13 @@ import { GuildMember, Role, TextChannel, User } from 'discord.js';
 
 export function expect<T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }): MiddlewareFunction
 {
-	return function(message, args): [Message, any[]]
+	return async function(message, args): Promise<[Message, any[]]>
 	{
 		const names: string[] = Object.keys(argTypes);
 		const types: ExpectArgType[] = names.map(a => argTypes[a]);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? message.guild.storage.getSetting('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 
 		for (const [index, name] of names.entries())

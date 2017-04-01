@@ -3,7 +3,7 @@ import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import now = require('performance-now');
 
-export default class Reload extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -12,7 +12,6 @@ export default class Reload extends Command<Bot>
 			description: 'Reload a command or all commands',
 			usage: '<prefix>reload [command]',
 			extraHelp: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
-			group: 'base',
 			ownerOnly: true
 		});
 	}
@@ -23,7 +22,7 @@ export default class Reload extends Command<Bot>
 		const command: Command<Bot> = this.bot.commands.findByNameOrAlias(commandName);
 
 		if (commandName && !command)
-			return this._respond(message, `Command "${commandName}" could not be found.`);
+			return this.respond(message, `Command "${commandName}" could not be found.`);
 
 		if (command) this.bot.loadCommand(command.name);
 		else this.bot.loadCommand('all');
@@ -31,6 +30,6 @@ export default class Reload extends Command<Bot>
 		const end: number = now();
 		const name: string = command ? command.name : null;
 		const text: string = name ? ` "${name}"` : 's';
-		return this._respond(message, `Command${text} reloaded. (${(end - start).toFixed(3)} ms)`);
+		return this.respond(message, `Command${text} reloaded. (${(end - start).toFixed(3)} ms)`);
 	}
 }

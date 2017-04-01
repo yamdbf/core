@@ -9,7 +9,8 @@
     "postinstall": "postinstall-build \"npm run build -s\"",
     "build": "gulp",
     "lint": "gulp lint",
-    "test": "npm run build -s"
+    "test": "npm run build -s",
+    "test:client": "node test/client_test.js"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
@@ -45,7 +46,6 @@
     "gulp-tslint": "^7.1.0",
     "gulp-typescript": "^3.1.5",
     "jsdoc": "github:zajrik/jsdoc",
-    "jsdoc-strip-async-await": "^0.1.0",
     "minami": "github:zajrik/minami",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1"

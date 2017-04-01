@@ -1,14 +1,17 @@
 import { Difference } from './types/Difference';
 
 /**
- * Extend the Date class to provide helper methods
+ * Contains static methods for time related calculations and parsing
+ * @module Time
  */
-export class Time extends Date
+export class Time
 {
-	public constructor() { super(); }
-
 	/**
 	 * Return a Difference object representing the time difference between a and b
+	 * @method difference
+	 * @param {number} a First time in MS
+	 * @param {number} b Second time in MS
+	 * @returns {Difference}
 	 */
 	public static difference(a: number, b: number): Difference
 	{
@@ -43,6 +46,9 @@ export class Time extends Date
 	/**
 	 * Return a Difference object (for convenience) measuring the
 	 * duration of the given MS
+	 * @method duration
+	 * @param {number} time The time in MS
+	 * @returns {difference}
 	 */
 	public static duration(time: number): Difference
 	{
@@ -53,6 +59,9 @@ export class Time extends Date
 	 * Parse a duration shorthand string and return the duration in ms
 	 *
 	 * Shorthand examples: 10m, 5h, 1d
+	 * @method parseShorthand
+	 * @param {string} shorthand The shorthand to parse
+	 * @returns {number} The parsed duration in MS
 	 */
 	public static parseShorthand(shorthand: string): number
 	{

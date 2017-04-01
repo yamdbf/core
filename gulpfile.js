@@ -41,3 +41,15 @@ gulp.task('build', () => {
 		}))
 		.pipe(gulp.dest('bin/'));
 });
+
+gulp.task('build:tests', () => {
+	del.sync(['./test/**/*.js']);
+	gulp.src('./test/**/*.ts')
+		.pipe(gulp_ts({
+			experimentalDecorators: true,
+			module: 'commonjs',
+			target: 'es6',
+			lib: ['es7']
+		}))		
+		.pipe(gulp.dest('./test/'));
+});

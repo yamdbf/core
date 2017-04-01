@@ -5,7 +5,7 @@ import { inspect } from 'util';
 const Discord = require('discord.js'); // tslint:disable-line
 const Yamdbf = require('../../../index'); // tslint:disable-line
 
-export default class Eval extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -13,7 +13,6 @@ export default class Eval extends Command<Bot>
 			name: 'eval',
 			description: 'Evaluate provided Javascript code',
 			usage: '<prefix>eval <code>',
-			group: 'base',
 			ownerOnly: true
 		});
 	}
@@ -23,7 +22,7 @@ export default class Eval extends Command<Bot>
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
 		if (!code)
 		{
-			this._respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
+			this.respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
 			return;
 		}
 
@@ -34,7 +33,7 @@ export default class Eval extends Command<Bot>
 		}
 		catch (err)
 		{
-			return this._respond(message,
+			return this.respond(message,
 				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
 		}
 		if (evaled instanceof Promise)
@@ -42,19 +41,19 @@ export default class Eval extends Command<Bot>
 			evaled.then(res =>
 			{
 				if (typeof res !== 'string') res = inspect(res, { depth: 0 });
-				this._respond(message,
+				this.respond(message,
 					`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(res)}\n\`\`\``);
 			})
 			.catch(err =>
 			{
-				this._respond(message,
+				this.respond(message,
 					`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
 			});
 		}
 		else
 		{
 			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
-			return this._respond(message,
+			return this.respond(message,
 				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
 		}
 	}

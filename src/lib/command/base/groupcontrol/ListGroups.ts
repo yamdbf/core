@@ -2,7 +2,7 @@ import { Bot } from '../../../bot/Bot';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 
-export default class ListGroups extends Command<Bot>
+export default class extends Command<Bot>
 {
 	public constructor(bot: Bot)
 	{
@@ -17,14 +17,14 @@ export default class ListGroups extends Command<Bot>
 		});
 	}
 
-	public action(message: Message): void
+	public async action(message: Message): Promise<void>
 	{
 		let groups: string[] = this.bot.commands.groups;
-		let disabledGroups: string[] = message.guild.storage.getSetting('disabledGroups');
+		let disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 
 		let output: string = 'Command groups:\n';
 		for (const group of groups) output += `${disabledGroups.includes(group) ? '*' : ' '}${group}\n`;
 
-		this._respond(message, output, 'ldif');
+		this.respond(message, output, 'ldif');
 	}
 }

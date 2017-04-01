@@ -6,8 +6,15 @@ import { ArgOpts } from '../types/ArgOpts';
 import { Message } from '../types/Message';
 
 /**
- * Apply a middleware function to the action method of a command.
- * Identical to `Command#use()` but used as a method decorator
+ * Grouping of static decorator methods for the {@link Command}
+ * class and {@link Command#action} method
+ * @module CommandDecorators
+ */
+
+/**
+ * Apply a middleware function to the action method of a Command.
+ * Identical to {@link Command#use} but used as a method decorator
+ * @param {MiddlewareFunction} func Middleware function to use for this Command action
  */
 export function using(func: MiddlewareFunction): MethodDecorator
 {
@@ -45,88 +52,99 @@ export function using(func: MiddlewareFunction): MethodDecorator
 
 /**
  * Set `name` metadata
+ * @param {string} value Value to set
  */
-export function name(value: string): any
+export function name(value: string): ClassDecorator
 {
 	return _setMetaData('name', value);
 }
 
 /**
  * Set `aliases` metadata
+ * @param {...string} values Values to set
  */
-export function aliases(...value: string[]): any
+export function aliases(...values: string[]): ClassDecorator
 {
-	return _setMetaData('aliases', value);
+	return _setMetaData('aliases', values);
 }
 
 /**
  * Set `description` metadata
+ * @param {string} value Value to set
  */
-export function description(value: string): any
+export function description(value: string): ClassDecorator
 {
 	return _setMetaData('description', value);
 }
 
 /**
  * Set `usage` metadata
+ * @param {string} value Value to set
  */
-export function usage(value: string): any
+export function usage(value: string): ClassDecorator
 {
 	return _setMetaData('usage', value);
 }
 
 /**
  * Set `extraHelp` metadata
+ * @param {string} value Value to set
  */
-export function extraHelp(value: string): any
+export function extraHelp(value: string): ClassDecorator
 {
 	return _setMetaData('extraHelp', value);
 }
 
 /**
  * Set `group` metadata
+ * @param {string} value Value to set
  */
-export function group(value: string): any
+export function group(value: string): ClassDecorator
 {
 	return _setMetaData('group', value);
 }
 
 /**
  * Set `argOpts` metadata
+ * @param {string} value Value to set
  */
-export function argOpts(value: ArgOpts): any
+export function argOpts(value: ArgOpts): ClassDecorator
 {
 	return _setMetaData('usage', value);
 }
 
 /**
  * Set `permissions` metadata
+ * @param {...external:PermissionResolvable} values Values to set
  */
-export function permissions(...value: PermissionResolvable[]): any
+export function permissions(...values: PermissionResolvable[]): ClassDecorator
 {
-	return _setMetaData('permissions', value);
+	return _setMetaData('permissions', values);
 }
 
 /**
  * Set `roles` metadata
+ * @param {...string} values Values to set
  */
-export function roles(...value: string[]): any
+export function roles(...values: string[]): ClassDecorator
 {
-	return _setMetaData('roles', value);
+	return _setMetaData('roles', values);
 }
 
 /**
  * Set `ratelimit` metadata
+ * @param {string} value Value to set
  */
-export function ratelimit(value: string): any
+export function ratelimit(value: string): ClassDecorator
 {
 	return _setMetaData('_rateLimiter', new RateLimiter(value, false));
 }
 
 /**
  * Set `overloads` metadata
+ * @param {string} value Value to set
  */
-export function overloads(value: string): any
+export function overloads(value: string): ClassDecorator
 {
 	return _setMetaData('overloads', value);
 }
@@ -134,7 +152,7 @@ export function overloads(value: string): any
 /**
  * Set `owneronly` flag metadata
  */
-export function ownerOnly(target: any): any
+export function ownerOnly(target: typeof Command): typeof Command
 {
 	return _setFlagMetaData(target, 'ownerOnly');
 }
@@ -142,7 +160,7 @@ export function ownerOnly(target: any): any
 /**
  * Set `guildOnly` flag metadata
  */
-export function guildOnly(target: any): any
+export function guildOnly(target: typeof Command): typeof Command
 {
 	return _setFlagMetaData(target, 'guildOnly');
 }
@@ -150,15 +168,16 @@ export function guildOnly(target: any): any
 /**
  * Set `hidden` flag metadata
  */
-export function hidden(target: any): any
+export function hidden(target: typeof Command): typeof Command
 {
 	return _setFlagMetaData(target, 'hidden');
 }
 
 /**
- * Set a boolean flag metadata on a class
+ * Set a boolean flag metadata on a command class
+ * @private
  */
-function _setFlagMetaData(target: any, flag: string): any
+function _setFlagMetaData(target: typeof Command, flag: string): typeof Command
 {
 	Object.defineProperty(target.prototype, flag, {
 		value: true,
@@ -168,11 +187,12 @@ function _setFlagMetaData(target: any, flag: string): any
 }
 
 /**
- * Set an arbitrary value to an arbitrary key on a class
+ * Set an arbitrary value to an arbitrary key on a command class
+ * @private
  */
-function _setMetaData(key: string, value: any): any
+function _setMetaData(key: string, value: any): ClassDecorator
 {
-	return function(target: any): any
+	return function(target: typeof Command): typeof Command
 	{
 		Object.defineProperty(target.prototype, key, {
 			value: value,
