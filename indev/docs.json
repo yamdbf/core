@@ -25,116 +25,6 @@
             "properties": []
         },
         {
-            "name": "BotOptions",
-            "description": "<p>Object containing required {@link Bot} properties to be\npassed to a Bot on construction</p>",
-            "properties": [
-                {
-                    "name": "name",
-                    "type": "string",
-                    "description": "<p>See: {@link Bot#name}</p>",
-                    "default": "'botname'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "token",
-                    "type": "string",
-                    "description": "<p>See: {@link Bot#token}</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "provider",
-                    "type": "string",
-                    "description": "<p>See: {@link Bot#provider}</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "commandsDir",
-                    "type": "string",
-                    "description": "<p>See: {@link Bot#commandsDir}</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "statusText",
-                    "type": "string",
-                    "description": "<p>See: {@link Bot#statusText}</p>",
-                    "default": null,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "readyText",
-                    "type": "string",
-                    "description": "<p>See: {@link Bot#readyText}</p>",
-                    "default": "'Ready!'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "unknownCommandError",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Bot#unknownCommandError}</p>",
-                    "default": true,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "selfbot",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Bot#selfbot}</p>",
-                    "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "passive",
-                    "type": "boolean",
-                    "description": "<p>see {@link Bot#passive}</p>",
-                    "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "version",
-                    "type": "string",
-                    "description": "<p>See: {@link Bot#version}</p>",
-                    "default": "'0.0.0'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "config",
-                    "type": "Object",
-                    "description": "<p>See: {@link Bot#config}</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "disableBase",
-                    "type": "Array.<string>",
-                    "description": "<p>See: {@link Bot#disableBase}</p>",
-                    "default": "[]",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "ratelimit",
-                    "type": "string",
-                    "description": "<p>Sets a global rate limit on command calls for every user</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                }
-            ]
-        },
-        {
             "name": "CommandInfo",
             "description": "<p>Object containing required {@link Command} properties\nto be passed to a Command on construction</p>",
             "properties": [
@@ -254,7 +144,7 @@
         },
         {
             "name": "DefaultGuildSettings",
-            "description": "<p>The default settings to apply to new guilds.\nStored under the key <code>'defaultGuildSettings'</code> in {@link Bot#storage}</p>",
+            "description": "<p>The default settings to apply to new guilds.\nStored under the key <code>'defaultGuildSettings'</code> in {@link Client#storage}</p>",
             "properties": [
                 {
                     "name": "prefix",
@@ -355,12 +245,122 @@
             "name": "StorageProviderConstructor",
             "description": "<p>Any class that extends and implements {@link StorageProvider}\nand provides an interface with a storage medium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
             "properties": []
+        },
+        {
+            "name": "YAMDBFOptions",
+            "description": "<p>Object containing required {@link Client} properties to be\npassed to a Client on construction</p>",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#name}</p>",
+                    "default": "'botname'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "token",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#token}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "provider",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#provider}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "commandsDir",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#commandsDir}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "statusText",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#statusText}</p>",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "readyText",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#readyText}</p>",
+                    "default": "'Ready!'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "unknownCommandError",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Client#unknownCommandError}</p>",
+                    "default": true,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "selfbot",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Client#selfbot}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "passive",
+                    "type": "boolean",
+                    "description": "<p>see {@link Client#passive}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "version",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#version}</p>",
+                    "default": "'0.0.0'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "config",
+                    "type": "Object",
+                    "description": "<p>See: {@link Client#config}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disableBase",
+                    "type": "Array.<string>",
+                    "description": "<p>See: {@link Client#disableBase}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ratelimit",
+                    "type": "string",
+                    "description": "<p>Sets a global rate limit on command calls for every user</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
         }
     ],
     "classes": [
         {
-            "name": "Bot",
-            "description": "<p>The YAMDBF Client through which you can access [storage]{@link Bot#storage}\nand any of the properties available on a typical Discord.js Client instance</p>",
+            "name": "Client",
+            "description": "<p>The YAMDBF Client through which you can access [storage]{@link Client#storage}\nand any of the properties available on a typical Discord.js Client instance</p>",
             "extends": [
                 "external:Client"
             ],
@@ -368,13 +368,13 @@
             "virtual": false,
             "fires": "",
             "constructor": {
-                "name": "Bot",
+                "name": "Client",
                 "description": "",
                 "parameters": [
                     {
-                        "name": "botOptions",
-                        "type": "BotOptions",
-                        "description": "<p>Object containing required bot properties</p>",
+                        "name": "options",
+                        "type": "YAMDBFOptions",
+                        "description": "<p>Object containing required client properties</p>",
                         "default": "",
                         "optional": "",
                         "nullable": ""
@@ -395,7 +395,7 @@
                     "name": "name",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>The name of the Bot</p>",
+                    "description": "<p>The name of the bot this Client is for</p>",
                     "type": {
                         "names": [
                             "string"
@@ -406,7 +406,7 @@
                     "name": "commandsDir",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Directory to find command class files. Optional\nif bot is passive. See: {@link Bot#passive}</p>",
+                    "description": "<p>Directory to find command class files. Optional\nif client is passive. See: {@link Client#passive}</p>",
                     "type": {
                         "names": [
                             "string"
@@ -417,7 +417,7 @@
                     "name": "statusText",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Status text for the bot</p>",
+                    "description": "<p>Status text for the client</p>",
                     "type": {
                         "names": [
                             "string"
@@ -428,7 +428,7 @@
                     "name": "readyText",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Text to output when the bot is ready</p>",
+                    "description": "<p>Text to output when the client is ready</p>",
                     "type": {
                         "names": [
                             "string"
@@ -450,7 +450,7 @@
                     "name": "selfbot",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Whether or not the bot is a selfbot</p>",
+                    "description": "<p>Whether or not the client is a selfbot</p>",
                     "type": {
                         "names": [
                             "boolean"
@@ -461,7 +461,7 @@
                     "name": "passive",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Whether or not this bot is passive. Passive bots\nwill not register a command dispatcher or a message\nlistener. This allows passive bots to be created that\ndo not respond to any commands but are able to perform\nactions based on whatever the framework user wants</p>",
+                    "description": "<p>Whether or not this client is passive. Passive clients\nwill not register a command dispatcher or a message\nlistener. This allows passive clients to be created that\ndo not respond to any commands but are able to perform\nactions based on whatever the framework user wants</p>",
                     "type": {
                         "names": [
                             "boolean"
@@ -472,7 +472,7 @@
                     "name": "version",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Bot version, best taken from package.json</p>",
+                    "description": "<p>Client version, best taken from package.json</p>",
                     "type": {
                         "names": [
                             "string"
@@ -497,7 +497,7 @@
                     "description": "<p>Array of base command names to skip when loading commands. Base commands\nmay only be disabled by name, not by alias</p>",
                     "type": {
                         "names": [
-                            "Array.<string>"
+                            "Array.<BaseCommandName>"
                         ]
                     }
                 },
@@ -537,7 +537,7 @@
                     "name": "isOwner",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns whether or not the given user is an owner\nof the bot</p>",
+                    "description": "<p>Returns whether or not the given user is an owner\nof the client/bot</p>",
                     "parameters": [
                         {
                             "name": "user",
@@ -575,11 +575,11 @@
                     "name": "start",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Logs the Bot in and registers some event handlers</p>",
+                    "description": "<p>Logs the Client in and registers some event handlers</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
-                        "type": "Bot",
+                        "type": "Client",
                         "description": ""
                     }
                 },
@@ -608,7 +608,7 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "Promise.<Bot>",
+                        "type": "Promise.<Client>",
                         "description": ""
                     }
                 },
@@ -629,7 +629,7 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "Promise.<Bot>",
+                        "type": "Promise.<Client>",
                         "description": ""
                     }
                 },
@@ -687,7 +687,7 @@
                     "name": "use",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Adds a middleware function to be used when any command is run\nto make modifications to args or determine if the command can\nbe run. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to the bot one time each,\nand thus should not be added within any sort of event or loop.\nMultiple middleware functions can be added to the via multiple calls\nto this method</p>",
+                    "description": "<p>Adds a middleware function to be used when any command is run\nto make modifications to args or determine if the command can\nbe run. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to the client one time each,\nand thus should not be added within any sort of event or loop.\nMultiple middleware functions can be added to the via multiple calls\nto this method</p>",
                     "parameters": [
                         {
                             "name": "fn",
@@ -700,7 +700,7 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "Bot",
+                        "type": "Client",
                         "description": ""
                     }
                 }
@@ -835,9 +835,9 @@
                 "description": "",
                 "parameters": [
                     {
-                        "name": "bot",
-                        "type": "Bot",
-                        "description": "<p>Bot instance</p>",
+                        "name": "client",
+                        "type": "Client",
+                        "description": "<p>YAMDBF Client instance</p>",
                         "default": "",
                         "optional": "",
                         "nullable": ""
@@ -891,7 +891,7 @@
                     "name": "usage",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>An example of command usage. The token '&lt;prefix&gt;' will\nbe replaced by the guild-specific command prefix in the Help command when\n'help &lt;command&gt;' is called</p>",
+                    "description": "<p>An example of command usage. The token <code>&lt;prefix&gt;</code> will\nbe replaced by the guild-specific command prefix in the Help command when\n<code>help &lt;command&gt;</code> is called</p>",
                     "type": {
                         "names": [
                             "string"
@@ -902,7 +902,7 @@
                     "name": "extraHelp",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Extra information about the command to be displayed\nby the Help command when 'help &lt;command&gt;' is called</p>",
+                    "description": "<p>Extra information about the command to be displayed\nby the Help command when <code>help &lt;command&gt;</code> is called</p>",
                     "type": {
                         "names": [
                             "string"
@@ -957,7 +957,7 @@
                     "name": "argOpts",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Options for how arguments should be parsed. See: {@link ArgOpts}</p>",
+                    "description": "<p>Options for how arguments should be parsed.<br>\n<strong>See:</strong> {@link ArgOpts}</p>",
                     "type": {
                         "names": [
                             "ArgOpts"
@@ -990,7 +990,7 @@
                     "name": "ownerOnly",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Whether or not the command can be used by the bot owner(s).</p>",
+                    "description": "<p>Whether or not the command can be used by the client/bot owner(s).<br>\n<strong>See:</strong> [Client#config.owner]{@link Client#config}</p>",
                     "type": {
                         "names": [
                             "boolean"
@@ -1068,7 +1068,7 @@
                     "name": "respond",
                     "access": "protected",
                     "virtual": false,
-                    "description": "<p>Send provided response text to the command's calling channel\nvia edit, editCode, send, or sendCode depending on whether\nor not the bot is a selfbot and/or a codeblock language is given</p>",
+                    "description": "<p>Send provided response text to the command's calling channel\nvia edit, editCode, send, or sendCode depending on whether\nor not the client is a selfbot and/or a codeblock language is given</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -1212,7 +1212,7 @@
         },
         {
             "name": "CommandLoader",
-            "description": "<p>Handles loading all commands from the given Bot's commandsDir</p>",
+            "description": "<p>Handles loading all commands from the given Client's commandsDir</p>",
             "extends": [],
             "access": "private",
             "virtual": false,
@@ -1228,7 +1228,7 @@
                     "name": "loadCommands",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Load or reload all commands from the base commands directory and the\nuser-specified {@link Bot#commandsDir} directory and stores them in\nthe Bot's {@link CommandRegistry} instance ({@link Bot#commands})</p>",
+                    "description": "<p>Load or reload all commands from the base commands directory and the\nuser-specified {@link Client#commandsDir} directory and stores them in\nthe Client's {@link CommandRegistry} instance ({@link Client#commands})</p>",
                     "parameters": [],
                     "examples": []
                 },
@@ -1236,7 +1236,7 @@
                     "name": "reloadCommand",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Reload the given command in the Bot's {@link CommandRegistry} ({@link Bot#commands})</p>",
+                    "description": "<p>Reload the given command in the Client's {@link CommandRegistry} ({@link Client#commands})</p>",
                     "parameters": [],
                     "examples": []
                 },
@@ -1256,7 +1256,7 @@
             "extends": [
                 "external:Collection"
             ],
-            "access": "private",
+            "access": "",
             "virtual": false,
             "fires": "",
             "constructor": {
@@ -1327,9 +1327,9 @@
                     "description": "<p>Returns a Promise resolving with a collection of all commands usable\nby the user in the guild text channel the provided message is in.\nNeeds to be async due to having to access guild settings to check\nfor disabled groups</p>",
                     "parameters": [
                         {
-                            "name": "bot",
-                            "type": "Bot",
-                            "description": "<p>Bot instance</p>",
+                            "name": "client",
+                            "type": "Client",
+                            "description": "<p>YAMDBF Client instance</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -1356,9 +1356,9 @@
                     "description": "<p>Returns all commands usable by the user within the DM channel the provided\nmessage is in</p>",
                     "parameters": [
                         {
-                            "name": "bot",
-                            "type": "Bot",
-                            "description": "<p>Bot instance</p>",
+                            "name": "client",
+                            "type": "Client",
+                            "description": "<p>YAMDBF Client instance</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -1385,9 +1385,9 @@
                     "description": "<p>Returns all commands that can have their help looked up by the user\nin the DM channel the message is in</p>",
                     "parameters": [
                         {
-                            "name": "bot",
-                            "type": "Bot",
-                            "description": "<p>Bot instance</p>",
+                            "name": "client",
+                            "type": "Client",
+                            "description": "<p>YAMDBF Client instance</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -2002,7 +2002,7 @@
             "fires": "",
             "constructor": {
                 "name": "StorageFactory",
-                "description": "<p>Used for creating the different storage class mixins used throughout\nand needed by YAMDBF Clients. Used internally, shouldn't ever\nneed to be used in your bots</p>",
+                "description": "<p>Used for creating the different storage class mixins used throughout\nand needed by YAMDBF Clients. Used internally, shouldn't ever\nneed to be used directly in a custom client</p>",
                 "parameters": [
                     {
                         "name": "client",
@@ -2481,7 +2481,7 @@
         },
         {
             "name": "Message",
-            "description": "<p>Represents a Discord.js Message object that contains a modifed {@link Guild} object\ncontaining a {@link GuildStorage} for the associated guild, if the message was sent\nfrom within a guild, mixed in by the CommandDispatcher.</p>\n<blockquote>\n<p><strong>Note:</strong> For bots written in Typescript, you will want to import\n<code>Message</code> from YAMDBF rather than Discord.js to be able to\naccess <code>message.guild.storage</code> within your commands without\ncompiler errors</p>\n</blockquote>",
+            "description": "<p>Represents a Discord.js Message object that contains a modifed {@link Guild} object\ncontaining a {@link GuildStorage} for the associated guild, if the message was sent\nfrom within a guild, mixed in by the CommandDispatcher.</p>\n<blockquote>\n<p><strong>Note:</strong> For clients written in Typescript, you will want to import\n<code>Message</code> from YAMDBF rather than Discord.js to be able to\naccess <code>message.guild.storage</code> within your commands without\ncompiler errors</p>\n</blockquote>",
             "access": "",
             "virtual": false
         }
