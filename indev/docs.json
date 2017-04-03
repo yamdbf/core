@@ -406,7 +406,7 @@
                     "name": "commandsDir",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Directory to find command class files. Optional\nif client is passive. See: {@link Client#passive}</p>",
+                    "description": "<p>Directory to find command class files. Optional\nif client is passive.<br>\n<strong>See:</strong> {@link Client#passive}</p>",
                     "type": {
                         "names": [
                             "string"
@@ -616,7 +616,7 @@
                     "name": "removeDefaultSetting",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Remove a defaultGuildSettings item. Will not remove from ALL guild\nsettings, but will prevent the item from being added to new guild\nsettings storage upon creation</p>",
+                    "description": "<p>Remove a <code>defaultGuildSettings</code> item. Will not remove from any current\nguild settings, but will remove the item from the defaults added to\nnew guild settings storages upon creation</p>",
                     "parameters": [
                         {
                             "name": "key",
@@ -642,7 +642,7 @@
                         {
                             "name": "key",
                             "type": "string",
-                            "description": "<p>The key in storage to check</p>",
+                            "description": "<p>The default settings key to check for</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -663,7 +663,7 @@
                         {
                             "name": "guild",
                             "type": "external:Guild",
-                            "description": "<p>The guild to get the prefix of</p>",
+                            "description": "<p>The Guild to get the prefix of</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -687,7 +687,7 @@
                     "name": "use",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Adds a middleware function to be used when any command is run\nto make modifications to args or determine if the command can\nbe run. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to the client one time each,\nand thus should not be added within any sort of event or loop.\nMultiple middleware functions can be added to the via multiple calls\nto this method</p>",
+                    "description": "<p>Adds a middleware function to be used when any command is run\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do every time any command\nis fun. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to the client one time each,\nand thus should not be added within any sort of event or loop.\nMultiple middleware functions can be added to the via multiple calls\nto this method</p>",
                     "parameters": [
                         {
                             "name": "fn",
@@ -1047,7 +1047,7 @@
                     "name": "use",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Adds a middleware function to be used when the command is run\nto make modifications to args or determine if the command can\nbe run. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to the command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to a command one time each,\nand thus should be added in the Command's constructor. Multiple middleware\nfunctions can be added to a command via multiple calls to this method</p>",
+                    "description": "<p>Adds a middleware function to be used when the command is run\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do whenever this command\nis called. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to the command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to a command one time each,\nand thus should be added in the Command's constructor. Multiple middleware\nfunctions can be added to a command via multiple calls to this method</p>",
                     "parameters": [
                         {
                             "name": "fn",
