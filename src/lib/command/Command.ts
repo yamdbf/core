@@ -212,8 +212,9 @@ export class Command<T extends Client>
 
 	/**
 	 * Adds a middleware function to be used when the command is run
-	 * to make modifications to args or determine if the command can
-	 * be run. Takes a function that will receive the message object
+	 * to make modifications to args, determine if the command can
+	 * be run, or anything else you want to do whenever this command
+	 * is called. Takes a function that will receive the message object
 	 * and the array of args.
 	 *
 	 * A middleware function must return an array where the first item
