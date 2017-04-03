@@ -1,33 +1,34 @@
 import * as glob from 'glob';
 import * as path from 'path';
 
-import { CommandRegistry } from './CommandRegistry';
-import { Bot } from '../bot/Bot';
+import { Client } from '../client/Client';
 import { Command } from './Command';
+import { CommandRegistry } from './CommandRegistry';
+import { BaseCommandName } from '../types/BaseCommandName';
 
 /**
- * Handles loading all commands from the given Bot's commandsDir
+ * Handles loading all commands from the given Client's commandsDir
  * @private
  */
-export class CommandLoader<T extends Bot>
+export class CommandLoader<T extends Client>
 {
-	private _bot: T;
-	public constructor(bot: T)
+	private _client: T;
+	public constructor(client: T)
 	{
-		this._bot = bot;
+		this._client = client;
 	}
 
 	/**
 	 * Load or reload all commands from the base commands directory and the
-	 * user-specified {@link Bot#commandsDir} directory and stores them in
-	 * the Bot's {@link CommandRegistry} instance ({@link Bot#commands})
+	 * user-specified {@link Client#commandsDir} directory and stores them in
+	 * the Client's {@link CommandRegistry} instance ({@link Client#commands})
 	 */
 	public loadCommands(): void
 	{
-		if (this._bot.commands.size > 0) this._bot.commands = new CommandRegistry<T, string, Command<T>>();
+		if (this._client.commands.size > 0) this._client.commands = new CommandRegistry<T, string, Command<T>>();
 		let commandFiles: string[] = [];
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
-		commandFiles.push(...glob.sync(`${this._bot.commandsDir}/**/*.js`));
+		commandFiles.push(...glob.sync(`${this._client.commandsDir}/**/*.js`));
 		let loadedCommands: number = 0;
 		for (const fileName of commandFiles)
 		{
@@ -35,44 +36,44 @@ export class CommandLoader<T extends Bot>
 			delete require.cache[require.resolve(commandLocation)];
 
 			let loadedCommandClass: any = this.getCommandClass(commandLocation);
-			const _command: Command<T> = new loadedCommandClass(this._bot);
+			const _command: Command<T> = new loadedCommandClass(this._client);
 
-			if (this._bot.disableBase.includes(_command.name)) continue;
+			if (this._client.disableBase.includes(<BaseCommandName> _command.name)) continue;
 			_command._classloc = commandLocation;
 
 			if (_command.overloads)
 			{
-				if (!this._bot.commands.has(_command.overloads))
+				if (!this._client.commands.has(_command.overloads))
 					throw new Error(`Command "${_command.overloads}" does not exist to be overloaded.`);
-				this._bot.commands.delete(_command.overloads);
-				this._bot.commands.register(_command, _command.name);
+				this._client.commands.delete(_command.overloads);
+				this._client.commands.register(_command, _command.name);
 				console.log(`Command '${_command.name}' loaded, overloading command '${_command.overloads}'.`);
 			}
 			else
 			{
-				this._bot.commands.register(_command, _command.name);
+				this._client.commands.register(_command, _command.name);
 				loadedCommands++;
 				console.log(`Command '${_command.name}' loaded.`);
 			}
 		}
-		console.log(`Loaded ${loadedCommands} total commands in ${this._bot.commands.groups.length} groups.`);
+		console.log(`Loaded ${loadedCommands} total commands in ${this._client.commands.groups.length} groups.`);
 	}
 
 	/**
-	 * Reload the given command in the Bot's {@link CommandRegistry} ({@link Bot#commands})
+	 * Reload the given command in the Client's {@link CommandRegistry} ({@link Client#commands})
 	 */
 	public reloadCommand(nameOrAlias: string): boolean
 	{
-		const name: string = this._bot.commands.findByNameOrAlias(nameOrAlias).name;
+		const name: string = this._client.commands.findByNameOrAlias(nameOrAlias).name;
 		if (!name) return false;
 
-		const commandLocation: string = this._bot.commands.get(name)._classloc;
+		const commandLocation: string = this._client.commands.get(name)._classloc;
 		delete require.cache[require.resolve(commandLocation)];
 
 		const loadedCommandClass: any = this.getCommandClass(commandLocation);
-		const _command: Command<T> = new loadedCommandClass(this._bot);
+		const _command: Command<T> = new loadedCommandClass(this._client);
 		_command._classloc = commandLocation;
-		this._bot.commands.register(_command, _command.name, true);
+		this._client.commands.register(_command, _command.name, true);
 		console.log(`Command '${_command.name}' reloaded.`);
 		return true;
 	}

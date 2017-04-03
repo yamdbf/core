@@ -1,5 +1,5 @@
 import { Collection, Guild } from 'discord.js';
-import { Bot } from '../bot/Bot';
+import { Client } from '../client/Client';
 import { StorageProvider } from './StorageProvider';
 
 /**
@@ -7,12 +7,12 @@ import { StorageProvider } from './StorageProvider';
  * {@link GuildStorage} objects
  * @private
  */
-export class GuildStorageLoader<T extends Bot>
+export class GuildStorageLoader<T extends Client>
 {
 	private _client: T;
-	public constructor(bot: T)
+	public constructor(client: T)
 	{
-		this._client = bot;
+		this._client = client;
 	}
 
 	/**

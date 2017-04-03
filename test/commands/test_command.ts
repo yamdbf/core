@@ -1,10 +1,10 @@
-import { Bot, Command, Message, CommandDecorators } from '../../bin';
+import { Client, Command, Message, CommandDecorators } from '../../bin';
 const { using, guildOnly } = CommandDecorators;
 
 @guildOnly
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(client: Bot)
+	public constructor(client: Client)
 	{
 		super(client, {
 			name: 'test',

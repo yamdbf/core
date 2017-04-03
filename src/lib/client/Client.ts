@@ -1,4 +1,5 @@
-import { Channel, Client, ClientOptions, Collection, Emoji, Guild, GuildMember, Message, MessageReaction, Role, User, UserResolvable } from 'discord.js';
+import * as Discord from 'discord.js';
+import { Channel, ClientOptions, Collection, Emoji, Guild, GuildMember, Message, MessageReaction, Role, User, UserResolvable } from 'discord.js';
 import { Command } from '../command/Command';
 import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
@@ -8,19 +9,20 @@ import { GuildStorageLoader } from '../storage/GuildStorageLoader';
 import { JSONProvider } from '../storage/JSONProvider';
 import { StorageProvider } from '../storage/StorageProvider';
 import { StorageFactory } from '../storage/StorageFactory';
-import { BotOptions } from '../types/BotOptions';
+import { YAMDBFOptions } from '../types/YAMDBFOptions';
 import { ClientStorage } from '../types/ClientStorage';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
+import { BaseCommandName } from '../types/BaseCommandName';
 
 /**
- * The YAMDBF Client through which you can access [storage]{@link Bot#storage}
+ * The YAMDBF Client through which you can access [storage]{@link Client#storage}
  * and any of the properties available on a typical Discord.js Client instance
  * @extends {external:Client}
- * @param {BotOptions} botOptions Object containing required bot properties
+ * @param {YAMDBFOptions} options Object containing required client properties
  * @param {external:ClientOptions} [clientOptions] Discord.js ClientOptions
  */
-export class Bot extends Client
+export class Client extends Discord.Client
 {
 	public name: string;
 	public commandsDir: string;
@@ -30,7 +32,7 @@ export class Bot extends Client
 	public selfbot: boolean;
 	public passive: boolean;
 	public version: string;
-	public disableBase: string[];
+	public disableBase: BaseCommandName[];
 	public config: any;
 	public provider: StorageProviderConstructor;
 	public storageFactory: StorageFactory;
@@ -47,104 +49,104 @@ export class Bot extends Client
 	private _commandLoader: CommandLoader<this>;
 	private _dispatcher: CommandDispatcher<this>;
 
-	public constructor(botOptions: BotOptions, clientOptions?: ClientOptions)
+	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
 	{
 		super(clientOptions);
 
-		this._token = botOptions.token;
+		this._token = options.token;
 
 		/**
-		 * The name of the Bot
-		 * @name Bot#name
+		 * The name of the bot this Client is for
+		 * @name Client#name
 		 * @type {string}
 		 */
-		this.name = botOptions.name || 'botname';
+		this.name = options.name || 'botname';
 
 		/**
 		 * Directory to find command class files. Optional
-		 * if bot is passive. See: {@link Bot#passive}
-		 * @name Bot#commandsDir
+		 * if client is passive. See: {@link Client#passive}
+		 * @name Client#commandsDir
 		 * @type {string}
 		 */
-		this.commandsDir = botOptions.commandsDir || null;
+		this.commandsDir = options.commandsDir || null;
 
 		/**
-		 * Status text for the bot
-		 * @name Bot#statusText
+		 * Status text for the client
+		 * @name Client#statusText
 		 * @type {string}
 		 */
-		this.statusText = botOptions.statusText || null;
+		this.statusText = options.statusText || null;
 
 		/**
-		 * Text to output when the bot is ready
-		 * @name Bot#readyText
+		 * Text to output when the client is ready
+		 * @name Client#readyText
 		 * @type {string}
 		 */
-		this.readyText = botOptions.readyText || 'Ready!';
+		this.readyText = options.readyText || 'Ready!';
 
 		/**
 		 * Whether or not a generic 'command not found' message
 		 * should be given in DMs to instruct the user to
 		 * use the `help` command. `true` by default
-		 * @name Bot#unknownCommandError
+		 * @name Client#unknownCommandError
 		 * @type {string}
 		 * @instance
 		 */
-		this.unknownCommandError = botOptions.unknownCommandError === undefined ?
-			true : botOptions.unknownCommandError;
+		this.unknownCommandError = options.unknownCommandError === undefined ?
+			true : options.unknownCommandError;
 
 		/**
-		 * Whether or not the bot is a selfbot
-		 * @name Bot#selfbot
+		 * Whether or not the client is a selfbot
+		 * @name Client#selfbot
 		 * @type {boolean}
 		 */
-		this.selfbot = botOptions.selfbot || false;
+		this.selfbot = options.selfbot || false;
 
 		/**
-		 * Whether or not this bot is passive. Passive bots
+		 * Whether or not this client is passive. Passive clients
 		 * will not register a command dispatcher or a message
-		 * listener. This allows passive bots to be created that
+		 * listener. This allows passive clients to be created that
 		 * do not respond to any commands but are able to perform
 		 * actions based on whatever the framework user wants
-		 * @name Bot#passive
+		 * @name Client#passive
 		 * @type {boolean}
 		 */
-		this.passive = botOptions.passive || false;
+		this.passive = options.passive || false;
 
 		/**
-		 * Bot version, best taken from package.json
-		 * @memberof Bot
+		 * Client version, best taken from package.json
+		 * @memberof Client
 		 * @type {string}
 		 * @name version
 		 * @instance
 		 */
-		this.version = botOptions.version || '0.0.0';
+		this.version = options.version || '0.0.0';
 
 		/**
 		 * Object containing token and owner ids
-		 * @name Bot#config
+		 * @name Client#config
 		 * @type {Object}
-		 * @property {string} token - Discord login token for the bot
+		 * @property {string} token - Discord login token for the client
 		 * @property {string[]} owner - Array of owner id strings
 		 */
-		this.config = botOptions.config || null;
+		this.config = options.config || null;
 
 		/**
 		 * Array of base command names to skip when loading commands. Base commands
 		 * may only be disabled by name, not by alias
-		 * @name Bot#disableBase
-		 * @type {string[]}
+		 * @name Client#disableBase
+		 * @type {BaseCommandName[]}
 		 */
-		this.disableBase = botOptions.disableBase || [];
+		this.disableBase = options.disableBase || [];
 
 		// Create the global RateLimiter instance if a ratelimit is specified
-		if (botOptions.ratelimit)
-			this._rateLimiter = new RateLimiter(botOptions.ratelimit, true);
+		if (options.ratelimit)
+			this._rateLimiter = new RateLimiter(options.ratelimit, true);
 
-		// Middleware function storage for the bot instance
+		// Middleware function storage for the client instance
 		this._middleware = [];
 
-		this.provider = botOptions.provider || JSONProvider;
+		this.provider = options.provider || JSONProvider;
 
 		this._guildDataStorage = new this.provider('guild_storage');
 		this._guildSettingStorage = new this.provider('guild_settings');
@@ -155,14 +157,14 @@ export class Bot extends Client
 		/**
 		 * Client-specific storage. Also contains a `guilds` Collection property containing
 		 * all GuildStorage instances
-		 * @name Bot#storage
+		 * @name Client#storage
 		 * @type {ClientStorage}
 		 */
 		this.storage = this.storageFactory.createClientStorage();
 
 		/**
 		 * [Collection]{@link external:Collection} containing all loaded commands
-		 * @name Bot#commands
+		 * @name Client#commands
 		 * @type {CommandRegistry<string, Command>}
 		 */
 		this.commands = new CommandRegistry<this, string, Command<this>>();
@@ -171,7 +173,7 @@ export class Bot extends Client
 		this._dispatcher = !this.passive ? new CommandDispatcher<this>(this) : null;
 
 		// Make some asserts
-		if (!this._token) throw new Error('You must provide a token for the bot.');
+		if (!this._token) throw new Error('You must provide a token for the client.');
 		if (!this.commandsDir && !this.passive) throw new Error('You must provide a directory to load commands from via commandDir');
 		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
 		if (!this.config.owner) throw new Error('You must provide config array of owner ids.');
@@ -192,7 +194,7 @@ export class Bot extends Client
 		await this._guildDataStorage.init();
 		await this._guildSettingStorage.init();
 
-		// Load defaultGuildSettings into storage the first time the bot is run
+		// Load defaultGuildSettings into storage the first time the client is run
 		if (typeof await this.storage.get('defaultGuildSettings') === 'undefined')
 			await this.storage.set('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
@@ -202,8 +204,8 @@ export class Bot extends Client
 
 	/**
 	 * Returns whether or not the given user is an owner
-	 * of the bot
-	 * @method Bot#isOwner
+	 * of the client/bot
+	 * @method Client#isOwner
 	 * @param {User} user User to check
 	 * @returns {boolean}
 	 */
@@ -214,7 +216,7 @@ export class Bot extends Client
 
 	/**
 	 * Loads/reloads all/specific commands
-	 * @method Bot#loadCommand
+	 * @method Client#loadCommand
 	 * @param {string} command The name of a command to reload, or 'all' to load all commands
 	 */
 	public loadCommand(command: string): void
@@ -225,9 +227,9 @@ export class Bot extends Client
 	}
 
 	/**
-	 * Logs the Bot in and registers some event handlers
-	 * @method Bot#start
-	 * @returns {Bot}
+	 * Logs the Client in and registers some event handlers
+	 * @method Client#start
+	 * @returns {Client}
 	 */
 	public start(): this
 	{
@@ -262,10 +264,10 @@ export class Bot extends Client
 	 * Set the value of a default setting key and push it to all guild
 	 * setting storages. Will not overwrite a setting in guild settings
 	 * storage if there is already an existing key with the given value
-	 * @method Bot#setDefaultSetting
+	 * @method Client#setDefaultSetting
 	 * @param {string} key The key to use in settings storage
 	 * @param {any} value The value to use in settings storage
-	 * @returns {Promise<Bot>}
+	 * @returns {Promise<Client>}
 	 */
 	public async setDefaultSetting(key: string, value: any): Promise<this>
 	{
@@ -281,9 +283,9 @@ export class Bot extends Client
 	 * Remove a defaultGuildSettings item. Will not remove from ALL guild
 	 * settings, but will prevent the item from being added to new guild
 	 * settings storage upon creation
-	 * @method Bot#removeDefaultSetting
+	 * @method Client#removeDefaultSetting
 	 * @param {string} key The key to use in settings storage
-	 * @returns {Promise<Bot>}
+	 * @returns {Promise<Client>}
 	 */
 	public async removeDefaultSetting(key: string): Promise<this>
 	{
@@ -293,7 +295,7 @@ export class Bot extends Client
 
 	/**
 	 * See if a default guild setting exists
-	 * @method Bot#defaultSettingsExists
+	 * @method Client#defaultSettingsExists
 	 * @param {string} key The key in storage to check
 	 * @returns {Promise<boolean>}
 	 */
@@ -304,7 +306,7 @@ export class Bot extends Client
 
 	/**
 	 * Shortcut to return the command prefix for the provided guild
-	 * @method Bot#getPrefix
+	 * @method Client#getPrefix
 	 * @param {external:Guild} guild The guild to get the prefix of
 	 * @returns {Promise<?string>}
 	 */
@@ -317,7 +319,7 @@ export class Bot extends Client
 	/**
 	 * Clean out any guild storage/settings that no longer have
 	 * an associated guild
-	 * @method Bot#sweepStorages
+	 * @method Client#sweepStorages
 	 */
 	public sweepStorages(): void
 	{
@@ -346,13 +348,13 @@ export class Bot extends Client
 	 * to transform all args to uppercase. This will of course fail if any
 	 * of the args are not a string.
 	 *
-	 * Note: Middleware functions should only be added to the bot one time each,
+	 * Note: Middleware functions should only be added to the client one time each,
 	 * and thus should not be added within any sort of event or loop.
 	 * Multiple middleware functions can be added to the via multiple calls
 	 * to this method
-	 * @method Bot#use
+	 * @method Client#use
 	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
-	 * @returns {Bot}
+	 * @returns {Client}
 	 */
 	public use(fn: MiddlewareFunction): this
 	{
@@ -415,7 +417,7 @@ export class Bot extends Client
 
 	/**
 	 * Emitted whenever a command is successfully called
-	 * @memberof Bot
+	 * @memberof Client
 	 * @event event:command
 	 * @param {string} name Name of the called command
 	 * @param {any[]} args Args passed to the called command
@@ -425,7 +427,7 @@ export class Bot extends Client
 
 	/**
 	 * Emitted whenever a user is blacklisted
-	 * @memberof Bot
+	 * @memberof Client
 	 * @event event:blacklistAdd
 	 * @param {User} user User who was blacklisted
 	 * @param {boolean} global Whether or not blacklisting is global
@@ -433,7 +435,7 @@ export class Bot extends Client
 
 	/**
 	 * Emitted whenever a user is removed from the blacklist
-	 * @memberof Bot
+	 * @memberof Client
 	 * @event event:blacklistRemove
 	 * @param {User} user User who was removed
 	 * @param {boolean} global Whether or not removal is global
@@ -442,14 +444,14 @@ export class Bot extends Client
 	/**
 	 * Emitted when the client is waiting for you to send a `finished` event,
 	 * after which `clientReady` will be emitted
-	 * @memberof Bot
+	 * @memberof Client
 	 * @event event:waiting
 	 */
 
 	/**
 	 * To be emitted whenever you have finished setting things up that should
 	 * be set up before the client is ready for use
-	 * @memberof Bot
+	 * @memberof Client
 	 * @event event:finished
 	 */
 
@@ -457,7 +459,7 @@ export class Bot extends Client
 	 * Emitted when the client is ready. Should be used instead of Discord.js'
 	 * `ready` event, as this is the point that everything is set up within the
 	 * YAMDBF Client and it's all ready to go
-	 * @memberof Bot
+	 * @memberof Client
 	 * @event event:clientReady
 	 */
 	public on(event: string, listener: Function): this

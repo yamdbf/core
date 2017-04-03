@@ -1,4 +1,4 @@
-import { Bot } from '../../../bot/Bot';
+import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Util } from '../../../Util';
 import { Command } from '../../Command';
@@ -7,11 +7,11 @@ import { GuildStorage } from '../../../types/GuildStorage';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'clearlimit',
 			description: 'Clear role restrictions from a command',
 			usage: '<prefix>clearlimit <command>',
@@ -22,7 +22,7 @@ export default class extends Command<Bot>
 	@using(Middleware.expect({ '<command>': 'String' }))
 	public async action(message: Message, [commandName]: [string]): Promise<Message | Message[]>
 	{
-		let command: Command<Bot> = this.bot.commands.find(c => Util.normalize(c.name) === Util.normalize(commandName));
+		let command: Command<Client> = this.client.commands.find(c => Util.normalize(c.name) === Util.normalize(commandName));
 		if (!command) return this.respond(message, `Failed to find a command with the name \`${commandName}\``);
 
 		const storage: GuildStorage = message.guild.storage;

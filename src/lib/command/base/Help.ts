@@ -1,14 +1,14 @@
-import { Bot } from '../../bot/Bot';
+import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Util } from '../../Util';
 import { Command } from '../Command';
 import { Collection, RichEmbed } from 'discord.js';
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'help',
 			description: 'Provides information on bot commands',
 			usage: `<prefix>help [command]`,
@@ -18,22 +18,22 @@ export default class extends Command<Bot>
 
 	public async action(message: Message, [commandName]: [string]): Promise<void>
 	{
-		if (this.bot.selfbot) message.delete();
+		if (this.client.selfbot) message.delete();
 		const dm: boolean = message.channel.type !== 'text';
-		const mentionName: string = `@${this.bot.user.username}#${this.bot.user.discriminator}`;
+		const mentionName: string = `@${this.client.user.username}#${this.client.user.discriminator}`;
 
-		let command: Command<Bot>;
+		let command: Command<Client>;
 		let output: string = '';
 		let embed: RichEmbed = new RichEmbed();
 
 		if (!commandName)
 		{
 			const preText: string = `Available commands in ${dm ? 'this DM' : message.channel}\n\`\`\`ldif\n`;
-			const postText: string = `\`\`\`Use \`<prefix>help <command>\` ${this.bot.selfbot ? '' : `or \`${
+			const postText: string = `\`\`\`Use \`<prefix>help <command>\` ${this.client.selfbot ? '' : `or \`${
 				mentionName} help <command>\` `}for more information.\n\n`;
 
-			const usableCommands: Collection<string, Command<Bot>> = (await this.bot.commands[dm
-				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message))
+			const usableCommands: Collection<string, Command<Client>> = (await this.client.commands[dm
+				? 'filterDMUsable' : 'filterGuildUsable'](this.client, message))
 				.filter(c => !c.hidden);
 
 			const widest: number = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
@@ -55,8 +55,8 @@ export default class extends Command<Bot>
 		}
 		else
 		{
-			command = (await this.bot.commands[dm
-				? 'filterDMUsable' : 'filterGuildUsable'](this.bot, message))
+			command = (await this.client.commands[dm
+				? 'filterDMUsable' : 'filterGuildUsable'](this.client, message))
 				.filter(c => c.name === commandName || c.aliases.includes(commandName))
 				.first();
 
@@ -72,14 +72,14 @@ export default class extends Command<Bot>
 		}
 
 		output = dm ? output.replace(/<prefix>/g, '')
-			: output.replace(/<prefix>/g, await this.bot.getPrefix(message.guild) || '');
+			: output.replace(/<prefix>/g, await this.client.getPrefix(message.guild) || '');
 
 		embed.setColor(11854048).setDescription(output);
 
 		let outMessage: Message;
-		if (!dm && !this.bot.selfbot && command) message.reply(`Sent you a DM with command help information.`);
-		if (!dm && !this.bot.selfbot && !command) message.reply(`Sent you a DM with a list of commands.`);
-		if (this.bot.selfbot) outMessage = <Message> await message.channel.sendEmbed(embed);
+		if (!dm && !this.client.selfbot && command) message.reply(`Sent you a DM with command help information.`);
+		if (!dm && !this.client.selfbot && !command) message.reply(`Sent you a DM with a list of commands.`);
+		if (this.client.selfbot) outMessage = <Message> await message.channel.sendEmbed(embed);
 		else message.author.sendEmbed(embed);
 
 		if (outMessage) outMessage.delete(30e3);

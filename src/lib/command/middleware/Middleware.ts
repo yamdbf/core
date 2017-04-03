@@ -1,4 +1,4 @@
-import { Bot } from '../../bot/Bot';
+import { Client } from '../../client/Client';
 import { Command } from '../Command';
 import { expect } from './Expect';
 import { resolveArgs } from './ResolveArgs';
@@ -36,7 +36,7 @@ export class Middleware
 	 * (message: Message, args: any[]) => [Message, any[]]
 	 * ```
 	 */
-	public static resolveArgs: <T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }) =>
+	public static resolveArgs: <T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }) =>
 		MiddlewareFunction = resolveArgs;
 
 	/**
@@ -66,6 +66,6 @@ export class Middleware
 	 * (message: Message, args: any[]) => [Message, any[]]
 	 * ```
 	 */
-	public static expect: <T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }) =>
+	public static expect: <T extends Client, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }) =>
 		MiddlewareFunction = expect;
 }

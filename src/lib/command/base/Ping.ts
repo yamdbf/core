@@ -1,12 +1,12 @@
-import { Bot } from '../../bot/Bot';
+import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'ping',
 			description: 'Pong!',
 			usage: '<prefix>ping'
@@ -16,7 +16,7 @@ export default class extends Command<Bot>
 	public async action(message: Message): Promise<void>
 	{
 		let msg: Message;
-		if (this.bot.selfbot) msg = <Message> await message.edit('Pong!');
+		if (this.client.selfbot) msg = <Message> await message.edit('Pong!');
 		else msg = <Message> await message.channel.send('Pong!');
 		msg.edit(`Pong! (${msg.createdTimestamp - message.createdTimestamp}ms)`);
 	}

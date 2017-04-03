@@ -3,7 +3,7 @@
  * containing a {@link GuildStorage} for the associated guild, if the message was sent
  * from within a guild, mixed in by the CommandDispatcher.
  *
- * >**Note:** For bots written in Typescript, you will want to import
+ * >**Note:** For clients written in Typescript, you will want to import
  * `Message` from YAMDBF rather than Discord.js to be able to
  * access `message.guild.storage` within your commands without
  * compiler errors

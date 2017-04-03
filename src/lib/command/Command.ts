@@ -1,5 +1,5 @@
 import { PermissionResolvable, Message } from 'discord.js';
-import { Bot } from '../bot/Bot';
+import { Client } from '../client/Client';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
 import { RateLimiter } from './RateLimiter';
@@ -7,12 +7,12 @@ import { ArgOpts } from '../types/ArgOpts';
 
 /**
  * Command class to extend to create commands users can execute
- * @param {Bot} bot - Bot instance
+ * @param {Client} client - YAMDBF Client instance
  * @param {CommandInfo} info - Object containing required command properties
  */
-export class Command<T extends Bot>
+export class Command<T extends Client>
 {
-	public bot: T;
+	public client: T;
 	public name: string;
 	public description: string;
 	public usage: string;
@@ -31,14 +31,14 @@ export class Command<T extends Bot>
 	public _rateLimiter: RateLimiter;
 	public _middleware: MiddlewareFunction[];
 
-	public constructor(bot: T, info: CommandInfo = null)
+	public constructor(client: T, info: CommandInfo = null)
 	{
 		/**
 		 * YAMDBF Client instance
 		 * @name Command#client
 		 * @type {Client}
 		 */
-		this.bot = bot;
+		this.client = client;
 
 		/**
 		 * The name of the command, used by the dispatcher
@@ -55,16 +55,16 @@ export class Command<T extends Bot>
 		 */
 
 		/**
-		 * An example of command usage. The token '&lt;prefix&gt;' will
+		 * An example of command usage. The token `'<prefix>'` will
 		 * be replaced by the guild-specific command prefix in the Help command when
-		 * 'help &lt;command&gt;' is called
+		 * `'help <command>'` is called
 		 * @name Command#usage
 		 * @type {string}
 		 */
 
 		/**
 		 * Extra information about the command to be displayed
-		 * by the Help command when 'help &lt;command&gt;' is called
+		 * by the Help command when `'help <command>'` is called
 		 * @name Command#extraHelp
 		 * @type {string}
 		 */
@@ -121,10 +121,10 @@ export class Command<T extends Bot>
 		 */
 
 		/**
-		 * Whether or not the command can be used by the bot owner(s).
+		 * Whether or not the command can be used by the client/bot owner(s).<br>
+		 * **See:** [Client#config.owner]{@link Client#config}
 		 * @name Command#ownerOnly
 		 * @type {boolean}
-		 * @see [Bot#config.owner]{@link Bot#config}
 		 */
 
 		/**
@@ -192,7 +192,7 @@ export class Command<T extends Bot>
 			{
 				try
 				{
-					(<any> this.bot).resolver.resolvePermission(perm);
+					(<any> this.client).resolver.resolvePermission(perm);
 				}
 				catch (err)
 				{
@@ -247,13 +247,13 @@ export class Command<T extends Bot>
 	/**
 	 * Send provided response text to the command's calling channel
 	 * via edit, editCode, send, or sendCode depending on whether
-	 * or not the bot is a selfbot and/or a codeblock language is given
+	 * or not the client is a selfbot and/or a codeblock language is given
 	 * @protected
 	 */
 	protected respond(message: Message, response: string, code?: string): Promise<Message | Message[]>
 	{
-		if (this.bot.selfbot && !code) return message.edit(response);
-		if (this.bot.selfbot && code) return message.editCode(code, response);
+		if (this.client.selfbot && !code) return message.edit(response);
+		if (this.client.selfbot && code) return message.editCode(code, response);
 		if (code) return message.channel.sendCode(code, response);
 		return message.channel.sendMessage(response);
 	}

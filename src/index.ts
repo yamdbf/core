@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-export { Bot } from './lib/bot/Bot';
+export { Client } from './lib/client/Client';
 export { Command } from './lib/command/Command';
 export { CommandDispatcher } from './lib/command/CommandDispatcher';
 export { CommandLoader } from './lib/command/CommandLoader';
@@ -25,7 +25,7 @@ export { Util } from './lib/Util';
 
 export { ArgOpts } from './lib/types/ArgOpts';
 export { BaseCommandName } from './lib/types/BaseCommandName';
-export { BotOptions } from './lib/types/BotOptions';
+export { YAMDBFOptions } from './lib/types/YAMDBFOptions';
 export { ClientStorage } from './lib/types/ClientStorage';
 export { CommandInfo } from './lib/types/CommandInfo';
 export { DefaultGuildSettings } from './lib/types/DefaultGuildSettings';

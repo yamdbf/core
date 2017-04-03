@@ -1,4 +1,4 @@
-import { Bot } from '../../../bot/Bot';
+import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
@@ -6,11 +6,11 @@ import { User } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'whitelist',
 			description: 'Remove a user from the command blacklist',
 			aliases: ['wl'],
@@ -25,15 +25,15 @@ export default class extends Command<Bot>
 	{
 		if (global === 'global')
 		{
-			if (!this.bot.isOwner(message.author))
+			if (!this.client.isOwner(message.author))
 				return message.channel.send('Only bot owners may remove a global blacklisting.');
 
-			const globalBlacklist: any = await this.bot.storage.get('blacklist') || {};
+			const globalBlacklist: any = await this.client.storage.get('blacklist') || {};
 			if (!globalBlacklist[user.id])
 				return message.channel.send('That user is not currently globally blacklisted.');
 
-			await this.bot.storage.remove(`blacklist.${user.id}`);
-			this.bot.emit('blacklistRemove', user, true);
+			await this.client.storage.remove(`blacklist.${user.id}`);
+			this.client.emit('blacklistRemove', user, true);
 			return message.channel.send(`Removed ${user.username}#${user.discriminator} from the global blacklist.`);
 		}
 
@@ -42,7 +42,7 @@ export default class extends Command<Bot>
 			return message.channel.send('That user is not currently blacklisted in this server.');
 
 		message.guild.storage.settings.remove(`blacklist.${user.id}`);
-		this.bot.emit('blacklistRemove', user, false);
+		this.client.emit('blacklistRemove', user, false);
 		return message.channel.send(`Removed ${user.username}#${user.discriminator} from this server's blacklist.`);
 	}
 }

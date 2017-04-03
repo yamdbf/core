@@ -1,11 +1,11 @@
-import { Bot } from '../../bot/Bot';
+import { Client } from '../../client/Client';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ExpectArgType } from '../../types/ExpectArgType';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { GuildMember, Role, TextChannel, User } from 'discord.js';
 
-export function expect<T extends Bot, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }): MiddlewareFunction
+export function expect<T extends Client, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }): MiddlewareFunction
 {
 	return async function(message, args): Promise<[Message, any[]]>
 	{

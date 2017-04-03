@@ -1,12 +1,12 @@
-import { Bot } from '../../bot/Bot';
+import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'version',
 			description: 'Get the version of the bot',
 			usage: `<prefix>version`
@@ -15,6 +15,6 @@ export default class extends Command<Bot>
 
 	public action(message: Message): void
 	{
-		this.respond(message, `Current version is: **${this.bot.version}**`);
+		this.respond(message, `Current version is: **${this.client.version}**`);
 	}
 }

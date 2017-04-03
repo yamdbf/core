@@ -1,25 +1,24 @@
-import { Bot } from '../../../bot/Bot';
+import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'listgroups',
 			description: 'List all command groups and their status',
 			aliases: ['lg'],
 			usage: '<prefix>listgroups',
 			extraHelp: `A '*' denotes a disabled group when listing all command groups.`,
-			group: 'base',
 			permissions: ['ADMINISTRATOR']
 		});
 	}
 
 	public async action(message: Message): Promise<void>
 	{
-		let groups: string[] = this.bot.commands.groups;
+		let groups: string[] = this.client.commands.groups;
 		let disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 
 		let output: string = 'Command groups:\n';

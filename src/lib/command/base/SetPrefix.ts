@@ -1,15 +1,15 @@
-import { Bot } from '../../bot/Bot';
+import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { Middleware } from '../middleware/Middleware';
 import * as CommandDecorators from '../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'setprefix',
 			description: 'Set or check the bot command prefix for this guild',
 			aliases: ['prefix'],
@@ -23,8 +23,8 @@ export default class extends Command<Bot>
 	public async action(message: Message, [prefix]: [string]): Promise<any>
 	{
 		if (!prefix)
-			return this.respond(message, `${this.bot.getPrefix(message.guild)
-				? `Current prefix is \`${this.bot.getPrefix(message.guild)}\``
+			return this.respond(message, `${this.client.getPrefix(message.guild)
+				? `Current prefix is \`${this.client.getPrefix(message.guild)}\``
 				: 'There is currently no prefix.'}`);
 
 		if (prefix.length > 10)
@@ -35,11 +35,11 @@ export default class extends Command<Bot>
 
 		if (prefix === 'noprefix') prefix = '';
 
-		if (this.bot.selfbot)
-			for (const guild of this.bot.storage.guilds.values())
+		if (this.client.selfbot)
+			for (const guild of this.client.storage.guilds.values())
 				await guild.settings.set('prefix', prefix);
 
-		else await this.bot.storage.guilds.get(message.guild.id).settings.set('prefix', prefix);
+		else await this.client.storage.guilds.get(message.guild.id).settings.set('prefix', prefix);
 		this.respond(message, prefix === '' ? 'Command prefix removed.'
 			: `Command prefix set to \`${prefix}\``);
 	}

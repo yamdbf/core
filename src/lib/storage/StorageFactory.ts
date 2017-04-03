@@ -1,7 +1,7 @@
 import { KeyedStorage } from './KeyedStorage';
 import { GuildStorage } from '../types/GuildStorage';
 import { StorageProvider } from './StorageProvider';
-import { Bot } from '../bot/Bot';
+import { Client } from '../client/Client';
 import { GuildSettings } from './GuildSettings';
 import { Guild, Collection } from 'discord.js';
 import { ClientStorage } from '../types/ClientStorage';
@@ -9,7 +9,7 @@ import { ClientStorage } from '../types/ClientStorage';
 /**
  * Used for creating the different storage class mixins used throughout
  * and needed by YAMDBF Clients. Used internally, shouldn't ever
- * need to be used in your bots
+ * need to be used directly in a custom client
  * @private
  * @class StorageFactory
  * @param {Client} client The YAMDBF Client instance
@@ -18,10 +18,10 @@ import { ClientStorage } from '../types/ClientStorage';
  */
 export class StorageFactory
 {
-	private _client: Bot;
+	private _client: Client;
 	private _guildDataStorage: StorageProvider;
 	private _guildSettingStorage: StorageProvider;
-	public constructor(client: Bot, guildDataStorage: StorageProvider, guildSettingStorage: StorageProvider)
+	public constructor(client: Client, guildDataStorage: StorageProvider, guildSettingStorage: StorageProvider)
 	{
 		this._client = client;
 		this._guildDataStorage = guildDataStorage;

@@ -4,7 +4,7 @@ import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../types/GuildStorage';
 import { Command } from '../command/Command';
-import { Bot } from '../bot/Bot';
+import { Client } from '../client/Client';
 import { RateLimit } from './RateLimit';
 import { Time } from '../Time';
 import now = require('performance-now');
@@ -13,15 +13,15 @@ import now = require('performance-now');
  * Handles dispatching commands
  * @private
  */
-export class CommandDispatcher<T extends Bot>
+export class CommandDispatcher<T extends Client>
 {
-	private _bot: T;
-	public constructor(bot: T)
+	private _client: T;
+	public constructor(client: T)
 	{
-		this._bot = bot;
+		this._client = client;
 
 		// Register message listener
-		if (!this._bot.passive) this._bot.on('message', message => this.handleMessage(message));
+		if (!this._client.passive) this._client.on('message', message => this.handleMessage(message));
 	}
 
 	/**
@@ -30,11 +30,11 @@ export class CommandDispatcher<T extends Bot>
 	private async handleMessage(message: Message): Promise<void>
 	{
 		const dispatchStart: number = now();
-		if (this._bot.selfbot && message.author !== this._bot.user) return;
+		if (this._client.selfbot && message.author !== this._client.user) return;
 		if (message.author.bot) return;
 
 		const dm: boolean = message.channel.type !== 'text';
-		if (!dm) message.guild.storage = this._bot.storage.guilds.get(message.guild.id);
+		if (!dm) message.guild.storage = this._client.storage.guilds.get(message.guild.id);
 
 		// Check blacklist
 		if (await this.isBlacklisted(message.author, message, dm)) return;
@@ -42,23 +42,23 @@ export class CommandDispatcher<T extends Bot>
 		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = await this.isCommandCalled(message);
 		if (!commandCalled)
 		{
-			if (dm && this._bot.unknownCommandError)
+			if (dm && this._client.unknownCommandError)
 				message.channel.send(this.unknownCommandError());
 			return;
 		}
-		if (command.ownerOnly && !this._bot.isOwner(message.author)) return;
+		if (command.ownerOnly && !this._client.isOwner(message.author)) return;
 
 		// Check ratelimits
 		if (!this.checkRateLimits(message, command)) return;
 
-		// Remove bot from message.mentions if only mentioned one time as a prefix
+		// Remove clientuser from message.mentions if only mentioned one time as a prefix
 		if (!(!dm && prefix === await message.guild.storage.settings.get('prefix')) && prefix !== ''
-			&& (message.content.match(new RegExp(`<@!?${this._bot.user.id}>`, 'g')) || []).length === 1)
-			message.mentions.users.delete(this._bot.user.id);
+			&& (message.content.match(new RegExp(`<@!?${this._client.user.id}>`, 'g')) || []).length === 1)
+			message.mentions.users.delete(this._client.user.id);
 
 		let validCaller: boolean = false;
 		try { validCaller = await this.testCommand(command, message); }
-		catch (err) { message[this._bot.selfbot ? 'channel' : 'author'].send(err); }
+		catch (err) { message[this._client.selfbot ? 'channel' : 'author'].send(err); }
 		if (!validCaller) return;
 
 		let args: string[] = message.content
@@ -69,7 +69,7 @@ export class CommandDispatcher<T extends Bot>
 			.filter(a => a !== '');
 
 		let middlewarePassed: boolean = true;
-		let middleware: MiddlewareFunction[] = this._bot._middleware.concat(command._middleware);
+		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command._middleware);
 		for (let func of middleware)
 			try
 			{
@@ -96,7 +96,7 @@ export class CommandDispatcher<T extends Bot>
 
 		const dispatchEnd: number = now() - dispatchStart;
 
-		this._bot.emit('command', command.name, args, dispatchEnd, message);
+		this._client.emit('command', command.name, args, dispatchEnd, message);
 	}
 
 	/**
@@ -108,8 +108,8 @@ export class CommandDispatcher<T extends Bot>
 	{
 		const dm: boolean = message.channel.type !== 'text';
 		const prefixes: string[] = [
-			`<@${this._bot.user.id}>`,
-			`<@!${this._bot.user.id}>`
+			`<@${this._client.user.id}>`,
+			`<@!${this._client.user.id}>`
 		];
 
 		if (!dm) prefixes.push(await message.guild.storage.settings.get('prefix'));
@@ -123,7 +123,7 @@ export class CommandDispatcher<T extends Bot>
 			.slice(prefix.length).trim()
 			.split(' ')[0];
 
-		const command: Command<T> = this._bot.commands.find(c =>
+		const command: Command<T> = this._client.commands.find(c =>
 			c.name === commandName || c.aliases.includes(commandName));
 
 		if (!command) return [false, null, null, null];
@@ -137,7 +137,7 @@ export class CommandDispatcher<T extends Bot>
 	private async testCommand(command: Command<T>, message: Message): Promise<boolean>
 	{
 		const dm: boolean = message.channel.type !== 'text';
-		const storage: GuildStorage = !dm ? this._bot.storage.guilds.get(message.guild.id) : null;
+		const storage: GuildStorage = !dm ? this._client.storage.guilds.get(message.guild.id) : null;
 
 		if (!dm && typeof await storage.settings.get('disabledGroups') !== 'undefined'
 			&& (await storage.settings.get('disabledGroups')).includes(command.group)) return false;
@@ -157,7 +157,7 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private checkRateLimiter(message: Message, command?: Command<T>): boolean
 	{
-		const rateLimiter: RateLimiter = command ? command._rateLimiter : this._bot._rateLimiter;
+		const rateLimiter: RateLimiter = command ? command._rateLimiter : this._client._rateLimiter;
 		if (!rateLimiter) return true;
 
 		const rateLimit: RateLimit = rateLimiter.get(message);
@@ -165,7 +165,7 @@ export class CommandDispatcher<T extends Bot>
 
 		if (!rateLimit.wasNotified)
 		{
-			const globalLimiter: RateLimiter = this._bot._rateLimiter;
+			const globalLimiter: RateLimiter = this._client._rateLimiter;
 			const globalLimit: RateLimit = globalLimiter ? globalLimiter.get(message) : null;
 			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return;
 
@@ -193,8 +193,8 @@ export class CommandDispatcher<T extends Bot>
 		if (!this.checkRateLimiter(message, command)) passedCommand = false;
 		if (!passedGlobal || !passedCommand) passedRateLimiters = false;
 		if (passedRateLimiters)
-			if (!(command && command._rateLimiter && !command._rateLimiter.get(message).call()) && this._bot._rateLimiter)
-				this._bot._rateLimiter.get(message).call();
+			if (!(command && command._rateLimiter && !command._rateLimiter.get(message).call()) && this._client._rateLimiter)
+				this._client._rateLimiter.get(message).call();
 		return passedRateLimiters;
 	}
 
@@ -203,7 +203,7 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private checkPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
 	{
-		return this._bot.selfbot || dm ? [] : command.permissions.filter(a =>
+		return this._client.selfbot || dm ? [] : command.permissions.filter(a =>
 			!(<TextChannel> message.channel).permissionsFor(message.author).hasPermission(a));
 	}
 
@@ -212,8 +212,8 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private async checkLimiter(command: Command<T>, message: Message, dm: boolean): Promise<boolean>
 	{
-		if (dm || this._bot.selfbot) return true;
-		let storage: GuildStorage = this._bot.storage.guilds.get(message.guild.id);
+		if (dm || this._client.selfbot) return true;
+		let storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
 		if (!limitedCommands[command.name]) return true;
 		if (limitedCommands[command.name].length === 0) return true;
@@ -226,7 +226,7 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private hasRoles(command: Command<T>, message: Message, dm: boolean): boolean
 	{
-		return this._bot.selfbot || command.roles.length === 0 || dm
+		return this._client.selfbot || command.roles.length === 0 || dm
 			|| message.member.roles.filter(role =>
 				command.roles.includes(role.name)).size > 0;
 	}
@@ -236,7 +236,7 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private async isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
 	{
-		if (await this._bot.storage.get(`blacklist.${user.id}`)) return true;
+		if (await this._client.storage.get(`blacklist.${user.id}`)) return true;
 		if (!dm && await message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
 		return false;
 	}
@@ -297,7 +297,7 @@ export class CommandDispatcher<T extends Bot>
 	 */
 	private async failedLimiterError(command: Command<T>, message: Message): Promise<string>
 	{
-		const storage: GuildStorage = this._bot.storage.guilds.get(message.guild.id);
+		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands');
 		let roles: string[] = limitedCommands[command.name];
 		return `**You must have ${roles.length > 1

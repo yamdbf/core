@@ -1,7 +1,7 @@
 import { Guild } from 'discord.js';
 import { StorageProvider } from './StorageProvider';
 import { Util } from '../Util';
-import { Bot } from '../bot/Bot';
+import { Client } from '../client/Client';
 
 /**
  * Class containing asynchronous methods for storing, retrieving, and
@@ -15,7 +15,7 @@ export class GuildSettings
 	private _id: string;
 	private _client: any;
 	private _cache: { [key: string]: any };
-	public constructor(storage: StorageProvider, guild: Guild, client: Bot)
+	public constructor(storage: StorageProvider, guild: Guild, client: Client)
 	{
 		this._provider = storage;
 		this._guild = guild;

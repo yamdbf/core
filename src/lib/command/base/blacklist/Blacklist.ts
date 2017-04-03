@@ -1,4 +1,4 @@
-import { Bot } from '../../../bot/Bot';
+import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
@@ -6,11 +6,11 @@ import { User } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'blacklist',
 			description: 'Blacklist a user from calling commands',
 			aliases: ['bl'],
@@ -32,15 +32,15 @@ export default class extends Command<Bot>
 
 		if (global === 'global')
 		{
-			if (!this.bot.isOwner(message.author))
+			if (!this.client.isOwner(message.author))
 				return message.channel.send('Only bot owners may blacklist globally.');
 
-			const globalBlacklist: any = await this.bot.storage.get('blacklist') || {};
+			const globalBlacklist: any = await this.client.storage.get('blacklist') || {};
 			if (globalBlacklist[user.id])
 				return message.channel.send('That user is already globally blacklisted.');
 
-			await this.bot.storage.set(`blacklist.${user.id}`, true);
-			this.bot.emit('blacklistAdd', user, true);
+			await this.client.storage.set(`blacklist.${user.id}`, true);
+			this.client.emit('blacklistAdd', user, true);
 			return message.channel.send(`Added ${user.username}#${user.discriminator} to the global blacklist.`);
 		}
 
@@ -53,7 +53,7 @@ export default class extends Command<Bot>
 			return message.channel.send('That user is already blacklisted in this server.');
 
 		await message.guild.storage.settings.set(`blacklist.${user.id}`, true);
-		this.bot.emit('blacklistAdd', user, false);
+		this.client.emit('blacklistAdd', user, false);
 		return message.channel.send(`Added ${user.username}#${user.discriminator} to this server's blacklist.`);
 	}
 }

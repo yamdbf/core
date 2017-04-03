@@ -1,15 +1,15 @@
-import { Bot } from '../../../bot/Bot';
+import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Bot>
+export default class extends Command<Client>
 {
-	public constructor(bot: Bot)
+	public constructor(client: Client)
 	{
-		super(bot, {
+		super(client, {
 			name: 'disablegroup',
 			description: 'Disable a command group',
 			aliases: ['disable', 'dg'],
@@ -27,7 +27,7 @@ export default class extends Command<Bot>
 			DISABLED: `Command group "${group}" is already disabled or is not allowed to be disabled.`
 		};
 
-		if (!this.bot.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
+		if (!this.client.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
 		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 		if (group === 'base' || disabledGroups.includes(group))
 			return this.respond(message, err.DISABLED);
