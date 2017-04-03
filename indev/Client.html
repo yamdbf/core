@@ -2974,10 +2974,10 @@ an associated guild</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Adds a middleware function to be used when any command is run
+    <p>Adds a middleware function to be used when any command is called
 to make modifications to args, determine if the command can
 be run, or anything else you want to do every time any command
-is run. Takes a function that will receive the message object
+is called. Takes a function that will receive the message object
 and the array of args.</p>
 <p>A middleware function must return an array where the first item
 is the message object and the second item is the args array.
