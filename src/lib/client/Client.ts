@@ -329,7 +329,7 @@ export class Client extends Discord.Client
 	 * Adds a middleware function to be used when any command is run
 	 * to make modifications to args, determine if the command can
 	 * be run, or anything else you want to do every time any command
-	 * is fun. Takes a function that will receive the message object
+	 * is run. Takes a function that will receive the message object
 	 * and the array of args.
 	 *
 	 * A middleware function must return an array where the first item
