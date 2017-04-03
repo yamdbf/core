@@ -233,7 +233,7 @@
         },
         {
             "name": "MiddlewareFunction",
-            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args.</p>\n<p>It should be noted that the command dispatcher will attempt\nto bind the called Command instance to the middleware function, so if it is not an arrow function\n<code>this</code> within a middleware function will be the Command instance at runtime</p>",
+            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
             "properties": []
         },
         {
@@ -243,7 +243,7 @@
         },
         {
             "name": "StorageProviderConstructor",
-            "description": "<p>Any class that extends and implements {@link StorageProvider}\nand provides an interface with a storage medium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
+            "description": "<p>Any class that extends and\nimplements {@link StorageProvider} and provides an interface with a storage\nmedium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
             "properties": []
         },
         {
