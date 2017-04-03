@@ -149,7 +149,7 @@
                 {
                     "name": "prefix",
                     "type": "string",
-                    "description": "<p>Prefix to prepend commands</p>",
+                    "description": "<p>Prefix denoting a command call</p>",
                     "default": "'/'",
                     "optional": "",
                     "nullable": ""
