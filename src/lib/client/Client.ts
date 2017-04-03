@@ -64,7 +64,8 @@ export class Client extends Discord.Client
 
 		/**
 		 * Directory to find command class files. Optional
-		 * if client is passive. See: {@link Client#passive}
+		 * if client is passive.<br>
+		 * **See:** {@link Client#passive}
 		 * @name Client#commandsDir
 		 * @type {string}
 		 */
@@ -115,10 +116,8 @@ export class Client extends Discord.Client
 
 		/**
 		 * Client version, best taken from package.json
-		 * @memberof Client
+		 * @name Client#version
 		 * @type {string}
-		 * @name version
-		 * @instance
 		 */
 		this.version = options.version || '0.0.0';
 
@@ -280,9 +279,9 @@ export class Client extends Discord.Client
 	}
 
 	/**
-	 * Remove a defaultGuildSettings item. Will not remove from ALL guild
-	 * settings, but will prevent the item from being added to new guild
-	 * settings storage upon creation
+	 * Remove a `defaultGuildSettings` item. Will not remove from any current
+	 * guild settings, but will remove the item from the defaults added to
+	 * new guild settings storages upon creation
 	 * @method Client#removeDefaultSetting
 	 * @param {string} key The key to use in settings storage
 	 * @returns {Promise<Client>}
@@ -296,7 +295,7 @@ export class Client extends Discord.Client
 	/**
 	 * See if a default guild setting exists
 	 * @method Client#defaultSettingsExists
-	 * @param {string} key The key in storage to check
+	 * @param {string} key The default settings key to check for
 	 * @returns {Promise<boolean>}
 	 */
 	public async defaultSettingExists(key: string): Promise<boolean>
@@ -307,7 +306,7 @@ export class Client extends Discord.Client
 	/**
 	 * Shortcut to return the command prefix for the provided guild
 	 * @method Client#getPrefix
-	 * @param {external:Guild} guild The guild to get the prefix of
+	 * @param {external:Guild} guild The Guild to get the prefix of
 	 * @returns {Promise<?string>}
 	 */
 	public async getPrefix(guild: Guild): Promise<string>
@@ -328,8 +327,9 @@ export class Client extends Discord.Client
 
 	/**
 	 * Adds a middleware function to be used when any command is run
-	 * to make modifications to args or determine if the command can
-	 * be run. Takes a function that will receive the message object
+	 * to make modifications to args, determine if the command can
+	 * be run, or anything else you want to do every time any command
+	 * is fun. Takes a function that will receive the message object
 	 * and the array of args.
 	 *
 	 * A middleware function must return an array where the first item
