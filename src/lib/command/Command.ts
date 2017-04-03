@@ -55,16 +55,16 @@ export class Command<T extends Client>
 		 */
 
 		/**
-		 * An example of command usage. The token `'<prefix>'` will
+		 * An example of command usage. The token `<prefix>` will
 		 * be replaced by the guild-specific command prefix in the Help command when
-		 * `'help <command>'` is called
+		 * `help <command>` is called
 		 * @name Command#usage
 		 * @type {string}
 		 */
 
 		/**
 		 * Extra information about the command to be displayed
-		 * by the Help command when `'help <command>'` is called
+		 * by the Help command when `help <command>` is called
 		 * @name Command#extraHelp
 		 * @type {string}
 		 */
@@ -97,7 +97,8 @@ export class Command<T extends Client>
 		 */
 
 		/**
-		 * Options for how arguments should be parsed. See: {@link ArgOpts}
+		 * Options for how arguments should be parsed.<br>
+		 * **See:** {@link ArgOpts}
 		 * @name Command#argOpts
 		 * @type {ArgOpts}
 		 */
