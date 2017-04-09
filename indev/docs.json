@@ -2257,10 +2257,10 @@
                     "examples": []
                 },
                 {
-                    "name": "error",
+                    "name": "debug",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log error text to the console.\nWill not be logged unless the logging level is <code>LogLevel.ERROR</code> or higher</p>",
+                    "description": "<p>Log debug text to the console.\nWill not be logged unless the logging level is <code>LogLevel.DEBUG</code></p>",
                     "parameters": [
                         {
                             "name": "tag",
