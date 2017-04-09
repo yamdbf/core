@@ -8,6 +8,10 @@ import { Message } from '../types/Message';
 /**
  * Grouping of static decorator methods for the {@link Command}
  * class and {@link Command#action} method
+ *
+ * **Note:** This is a Typescript feature. Javascript users are limited to
+ * using CommandInfo to define their commands and {@link Command#use} for
+ * assigning middleware functions to commands
  * @module CommandDecorators
  */
 

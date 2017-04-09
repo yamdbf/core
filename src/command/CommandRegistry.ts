@@ -4,7 +4,7 @@ import { Client } from '../client/Client';
 import { Message } from '../types/Message';
 
 /**
- * Stores loaded Commands as <[name]{@link Command#name}, [Command]{@link Command}> pairs
+ * @classdesc Stores loaded Commands in a Collection keyed by each Command's `name` property
  * @class CommandRegistry
  * @extends {external:Collection}
  */
