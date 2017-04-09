@@ -894,7 +894,7 @@
         },
         {
             "name": "CommandRegistry",
-            "description": "",
+            "description": "<p>Stores loaded Commands in a Collection keyed by each Command's <code>name</code> property</p>",
             "extends": [
                 "external:Collection"
             ],
@@ -903,7 +903,7 @@
             "fires": "",
             "constructor": {
                 "name": "CommandRegistry",
-                "description": "<p>Stores loaded Commands as &lt;[name]{@link Command#name}, [Command]{@link Command}&gt; pairs</p>",
+                "description": "",
                 "parameters": [],
                 "examples": []
             },
