@@ -1,362 +1,4 @@
 {
-    "typedefs": [
-        {
-            "name": "Tuple",
-            "description": "<p>Represents an array of fixed length where the the item in\nthe specified position is of the specified type.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>Tuple&lt;string, number> === [string, number] === ['foo', 10]</code></pre>",
-            "properties": []
-        },
-        {
-            "name": "ArgOpts",
-            "description": "<p>Object containing options for\ncontrolling how command arguments will be parsed</p>",
-            "properties": [
-                {
-                    "name": "separator",
-                    "type": "string",
-                    "description": "<p>The charactor to separate args by</p>",
-                    "default": "' '",
-                    "optional": true,
-                    "nullable": ""
-                }
-            ]
-        },
-        {
-            "name": "BaseCommandName",
-            "description": "<p>String representing a name of a base command. Valid names are:</p>\n<pre class=\"prettyprint source\"><code>'blacklist',\n'whitelist',\n'clearlimit',\n'disablegroup',\n'enablegroup',\n'limit',\n'listgroups',\n'eval',\n'help',\n'ping'\n'reload',\n'setprefix',\n'version'</code></pre>",
-            "properties": []
-        },
-        {
-            "name": "CommandInfo",
-            "description": "<p>Object containing required {@link Command} properties\nto be passed to a Command on construction</p>",
-            "properties": [
-                {
-                    "name": "name",
-                    "type": "string",
-                    "description": "<p>See: {@link Command#name}</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "description",
-                    "type": "string",
-                    "description": "<p>See: {@link Command#description}</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "usage",
-                    "type": "string",
-                    "description": "<p>See: {@link Command#usage}</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "extraHelp",
-                    "type": "string",
-                    "description": "<p>See: {@link Command#extraHelp}</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "group",
-                    "type": "string",
-                    "description": "<p>See: {@link Command#group}</p>",
-                    "default": "'base'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "aliases",
-                    "type": "Array.<string>",
-                    "description": "<p>See: {@link Command#aliases}</p>",
-                    "default": "[]",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "guildOnly",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Command#guildOnly}</p>",
-                    "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "hidden",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Command#hidden}</p>",
-                    "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "argOpts",
-                    "type": "ArgOpts",
-                    "description": "<p>See: {@link Command#argOpts}, {@link ArgOpts}</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "permissions",
-                    "type": "Array.<PermissionResolvable>",
-                    "description": "<p>See: {@link Command#permissions}</p>",
-                    "default": "[]",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "roles",
-                    "type": "Array.<string>",
-                    "description": "<p>See: {@link Command#roles}</p>",
-                    "default": "[]",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "ownerOnly",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Command#ownerOnly}</p>",
-                    "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "overloads",
-                    "type": "string",
-                    "description": "<p>See: {@link Command#overloads}</p>",
-                    "default": null,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "ratelimit",
-                    "type": "string",
-                    "description": "<p>Sets a rate limit on calls to this command for every user</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                }
-            ]
-        },
-        {
-            "name": "DefaultGuildSettings",
-            "description": "<p>The default settings to apply to new guilds.\nStored under the key <code>'defaultGuildSettings'</code> in {@link Client#storage}</p>",
-            "properties": [
-                {
-                    "name": "prefix",
-                    "type": "string",
-                    "description": "<p>Prefix denoting a command call</p>",
-                    "default": "'/'",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "disabledGroups",
-                    "type": "Array",
-                    "description": "<p>Command groups to ignore</p>",
-                    "default": "[]",
-                    "optional": true,
-                    "nullable": ""
-                }
-            ]
-        },
-        {
-            "name": "Difference",
-            "description": "<p>Represents a difference between two given valid Unix time signatures</p>",
-            "properties": [
-                {
-                    "name": "ms",
-                    "type": "number",
-                    "description": "<p>Total number of MS difference</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": true
-                },
-                {
-                    "name": "days",
-                    "type": "number",
-                    "description": "<p>Number of days spanned</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": true
-                },
-                {
-                    "name": "hours",
-                    "type": "number",
-                    "description": "<p>Number of hours spanned after higher units are subtracted</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": true
-                },
-                {
-                    "name": "minutes",
-                    "type": "number",
-                    "description": "<p>Number of minutes spanned after higher units are subtracted</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": true
-                },
-                {
-                    "name": "secs",
-                    "type": "number",
-                    "description": "<p>Number of seconds spanned after higher units are subtracted</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": true
-                },
-                {
-                    "name": "toString()",
-                    "type": "function",
-                    "description": "<p>Returns duration formatted as <code># days, # hours, # mins, # secs</code></p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "toSimplifiedString()",
-                    "type": "function",
-                    "description": "<p>Returns duration formatted as <code>#d #h #m #s</code></p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                }
-            ]
-        },
-        {
-            "name": "ExpectArgType",
-            "description": "<p>Valid arg type values for the Expect middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre>",
-            "properties": []
-        },
-        {
-            "name": "MiddlewareFunction",
-            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
-            "properties": []
-        },
-        {
-            "name": "ResolveArgType",
-            "description": "<p>Valid arg type values for the ResolveArgs middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre>",
-            "properties": []
-        },
-        {
-            "name": "StorageProviderConstructor",
-            "description": "<p>Any class that extends and\nimplements {@link StorageProvider} and provides an interface with a storage\nmedium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
-            "properties": []
-        },
-        {
-            "name": "YAMDBFOptions",
-            "description": "<p>Object containing required {@link Client} properties to be\npassed to a Client on construction</p>",
-            "properties": [
-                {
-                    "name": "name",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#name}</p>",
-                    "default": "'botname'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "token",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#token}</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "provider",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#provider}</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "commandsDir",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#commandsDir}</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "statusText",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#statusText}</p>",
-                    "default": null,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "readyText",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#readyText}</p>",
-                    "default": "'Ready!'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "unknownCommandError",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Client#unknownCommandError}</p>",
-                    "default": true,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "selfbot",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Client#selfbot}</p>",
-                    "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "passive",
-                    "type": "boolean",
-                    "description": "<p>see {@link Client#passive}</p>",
-                    "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "version",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#version}</p>",
-                    "default": "'0.0.0'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "config",
-                    "type": "Object",
-                    "description": "<p>See: {@link Client#config}</p>",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                },
-                {
-                    "name": "disableBase",
-                    "type": "Array.<string>",
-                    "description": "<p>See: {@link Client#disableBase}</p>",
-                    "default": "[]",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "ratelimit",
-                    "type": "string",
-                    "description": "<p>Sets a global rate limit on command calls for every user</p>",
-                    "default": "",
-                    "optional": true,
-                    "nullable": ""
-                }
-            ]
-        }
-    ],
     "classes": [
         {
             "name": "Client",
@@ -2468,6 +2110,364 @@
                         "type": "Promise.<void>",
                         "description": ""
                     }
+                }
+            ]
+        }
+    ],
+    "typedefs": [
+        {
+            "name": "Tuple",
+            "description": "<p>Represents an array of fixed length where the the item in\nthe specified position is of the specified type.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>Tuple&lt;string, number> === [string, number] === ['foo', 10]</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "ArgOpts",
+            "description": "<p>Object containing options for\ncontrolling how command arguments will be parsed</p>",
+            "properties": [
+                {
+                    "name": "separator",
+                    "type": "string",
+                    "description": "<p>The charactor to separate args by</p>",
+                    "default": "' '",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "BaseCommandName",
+            "description": "<p>String representing a name of a base command. Valid names are:</p>\n<pre class=\"prettyprint source\"><code>'blacklist',\n'whitelist',\n'clearlimit',\n'disablegroup',\n'enablegroup',\n'limit',\n'listgroups',\n'eval',\n'help',\n'ping'\n'reload',\n'setprefix',\n'version'</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "CommandInfo",
+            "description": "<p>Object containing required {@link Command} properties\nto be passed to a Command on construction</p>",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#name}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#description}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "usage",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#usage}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "extraHelp",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#extraHelp}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "group",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#group}</p>",
+                    "default": "'base'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "aliases",
+                    "type": "Array.<string>",
+                    "description": "<p>See: {@link Command#aliases}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "guildOnly",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Command#guildOnly}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "hidden",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Command#hidden}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "argOpts",
+                    "type": "ArgOpts",
+                    "description": "<p>See: {@link Command#argOpts}, {@link ArgOpts}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "permissions",
+                    "type": "Array.<PermissionResolvable>",
+                    "description": "<p>See: {@link Command#permissions}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "roles",
+                    "type": "Array.<string>",
+                    "description": "<p>See: {@link Command#roles}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ownerOnly",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Command#ownerOnly}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "overloads",
+                    "type": "string",
+                    "description": "<p>See: {@link Command#overloads}</p>",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ratelimit",
+                    "type": "string",
+                    "description": "<p>Sets a rate limit on calls to this command for every user</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "DefaultGuildSettings",
+            "description": "<p>The default settings to apply to new guilds.\nStored under the key <code>'defaultGuildSettings'</code> in {@link Client#storage}</p>",
+            "properties": [
+                {
+                    "name": "prefix",
+                    "type": "string",
+                    "description": "<p>Prefix denoting a command call</p>",
+                    "default": "'/'",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disabledGroups",
+                    "type": "Array",
+                    "description": "<p>Command groups to ignore</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "Difference",
+            "description": "<p>Represents a difference between two given valid Unix time signatures</p>",
+            "properties": [
+                {
+                    "name": "ms",
+                    "type": "number",
+                    "description": "<p>Total number of MS difference</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "days",
+                    "type": "number",
+                    "description": "<p>Number of days spanned</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "hours",
+                    "type": "number",
+                    "description": "<p>Number of hours spanned after higher units are subtracted</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "minutes",
+                    "type": "number",
+                    "description": "<p>Number of minutes spanned after higher units are subtracted</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "secs",
+                    "type": "number",
+                    "description": "<p>Number of seconds spanned after higher units are subtracted</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": true
+                },
+                {
+                    "name": "toString()",
+                    "type": "function",
+                    "description": "<p>Returns duration formatted as <code># days, # hours, # mins, # secs</code></p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "toSimplifiedString()",
+                    "type": "function",
+                    "description": "<p>Returns duration formatted as <code>#d #h #m #s</code></p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                }
+            ]
+        },
+        {
+            "name": "ExpectArgType",
+            "description": "<p>Valid arg type values for the Expect middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "MiddlewareFunction",
+            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
+            "properties": []
+        },
+        {
+            "name": "ResolveArgType",
+            "description": "<p>Valid arg type values for the ResolveArgs middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "StorageProviderConstructor",
+            "description": "<p>Any class that extends and\nimplements {@link StorageProvider} and provides an interface with a storage\nmedium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
+            "properties": []
+        },
+        {
+            "name": "YAMDBFOptions",
+            "description": "<p>Object containing required {@link Client} properties to be\npassed to a Client on construction</p>",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#name}</p>",
+                    "default": "'botname'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "token",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#token}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "provider",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#provider}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "commandsDir",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#commandsDir}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "statusText",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#statusText}</p>",
+                    "default": null,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "readyText",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#readyText}</p>",
+                    "default": "'Ready!'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "unknownCommandError",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Client#unknownCommandError}</p>",
+                    "default": true,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "selfbot",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Client#selfbot}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "passive",
+                    "type": "boolean",
+                    "description": "<p>see {@link Client#passive}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "version",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#version}</p>",
+                    "default": "'0.0.0'",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "config",
+                    "type": "Object",
+                    "description": "<p>See: {@link Client#config}</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "disableBase",
+                    "type": "Array.<string>",
+                    "description": "<p>See: {@link Client#disableBase}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "ratelimit",
+                    "type": "string",
+                    "description": "<p>Sets a global rate limit on command calls for every user</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
                 }
             ]
         }
