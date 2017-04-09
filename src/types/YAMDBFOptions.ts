@@ -18,6 +18,7 @@
 
 import { StorageProviderConstructor } from './StorageProviderConstructor';
 import { BaseCommandName } from './BaseCommandName';
+import { LogLevel } from './LogLevel';
 
 export type YAMDBFOptions = {
 	name: string;
@@ -33,4 +34,5 @@ export type YAMDBFOptions = {
 	disableBase?: BaseCommandName[];
 	ratelimit?: string;
 	config: any;
+	logLevel?: LogLevel;
 };

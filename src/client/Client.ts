@@ -14,6 +14,7 @@ import { ClientStorage } from '../types/ClientStorage';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 import { BaseCommandName } from '../types/BaseCommandName';
+import { Logger, logger } from '../util/logger/Logger';
 
 /**
  * The YAMDBF Client through which you can access [storage]{@link Client#storage}
@@ -24,6 +25,7 @@ import { BaseCommandName } from '../types/BaseCommandName';
  */
 export class Client extends Discord.Client
 {
+	@logger private logger: Logger;
 	public name: string;
 	public commandsDir: string;
 	public statusText: string;
@@ -83,7 +85,7 @@ export class Client extends Discord.Client
 		 * @name Client#readyText
 		 * @type {string}
 		 */
-		this.readyText = options.readyText || 'Ready!';
+		this.readyText = options.readyText || 'Client ready!';
 
 		/**
 		 * Whether or not a generic 'command not found' message
@@ -141,6 +143,10 @@ export class Client extends Discord.Client
 		// Create the global RateLimiter instance if a ratelimit is specified
 		if (options.ratelimit)
 			this._rateLimiter = new RateLimiter(options.ratelimit, true);
+
+		// Set the logger level if provided
+		if (typeof options.logLevel !== 'undefined')
+			this.logger.setLogLevel(options.logLevel);
 
 		// Middleware function storage for the client instance
 		this._middleware = [];
@@ -242,7 +248,11 @@ export class Client extends Discord.Client
 			this.emit('waiting');
 		});
 
-		this.once('finished', () => this.emit('clientReady'));
+		this.once('finished', () =>
+		{
+			this.logger.log('Client', this.readyText);
+			this.emit('clientReady');
+		});
 
 		this.on('guildCreate', () =>
 		{

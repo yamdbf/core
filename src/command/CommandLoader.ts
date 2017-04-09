@@ -1,10 +1,10 @@
 import * as glob from 'glob';
 import * as path from 'path';
-
 import { Client } from '../client/Client';
 import { Command } from './Command';
 import { CommandRegistry } from './CommandRegistry';
 import { BaseCommandName } from '../types/BaseCommandName';
+import { Logger, logger } from '../util/logger/Logger';
 
 /**
  * Handles loading all commands from the given Client's commandsDir
@@ -12,6 +12,7 @@ import { BaseCommandName } from '../types/BaseCommandName';
  */
 export class CommandLoader<T extends Client>
 {
+	@logger private logger: Logger;
 	private _client: T;
 	public constructor(client: T)
 	{
@@ -47,16 +48,18 @@ export class CommandLoader<T extends Client>
 					throw new Error(`Command "${_command.overloads}" does not exist to be overloaded.`);
 				this._client.commands.delete(_command.overloads);
 				this._client.commands.register(_command, _command.name);
-				console.log(`Command '${_command.name}' loaded, overloading command '${_command.overloads}'.`);
+				this.logger.info('CommandLoader',
+					`Command '${_command.name}' loaded, overloading command '${_command.overloads}'.`);
 			}
 			else
 			{
 				this._client.commands.register(_command, _command.name);
 				loadedCommands++;
-				console.log(`Command '${_command.name}' loaded.`);
+				this.logger.info('CommandLoader', `Command '${_command.name}' loaded.`);
 			}
 		}
-		console.log(`Loaded ${loadedCommands} total commands in ${this._client.commands.groups.length} groups.`);
+		this.logger.info('CommandLoader',
+			`Loaded ${loadedCommands} total commands in ${this._client.commands.groups.length} groups.`);
 	}
 
 	/**
@@ -74,7 +77,7 @@ export class CommandLoader<T extends Client>
 		const _command: Command<T> = new loadedCommandClass(this._client);
 		_command._classloc = commandLocation;
 		this._client.commands.register(_command, _command.name, true);
-		console.log(`Command '${_command.name}' reloaded.`);
+		this.logger.info('CommandLoader', `Command '${_command.name}' reloaded.`);
 		return true;
 	}
 

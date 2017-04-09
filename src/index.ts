@@ -22,10 +22,12 @@ export { CommandDecorators }
 
 export { Time } from './util/Time';
 export { Util } from './util/Util';
+export { Logger } from './util/logger/Logger';
+export { logger } from './util/logger/LoggerDecorator';
+export { LogLevel } from './types/LogLevel';
 
 export { ArgOpts } from './types/ArgOpts';
 export { BaseCommandName } from './types/BaseCommandName';
-export { YAMDBFOptions } from './types/YAMDBFOptions';
 export { ClientStorage } from './types/ClientStorage';
 export { CommandInfo } from './types/CommandInfo';
 export { DefaultGuildSettings } from './types/DefaultGuildSettings';
@@ -37,6 +39,7 @@ export { Message } from './types/Message';
 export { MiddlewareFunction } from './types/MiddlewareFunction';
 export { ResolveArgType } from './types/ResolveArgType';
 export { StorageProviderConstructor } from './types/StorageProviderConstructor';
+export { YAMDBFOptions } from './types/YAMDBFOptions';
 
 export const version: string = require(path.join(__dirname, '..', 'package')).version;
 
