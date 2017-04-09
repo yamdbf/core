@@ -3,7 +3,7 @@ import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { inspect } from 'util';
 const Discord = require('discord.js'); // tslint:disable-line
-const Yamdbf = require('../../../index'); // tslint:disable-line
+const Yamdbf = require('../../index'); // tslint:disable-line
 
 export default class extends Command<Client>
 {
