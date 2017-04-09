@@ -140,9 +140,9 @@ export class Logger
 	}
 
 	/**
-	 * Log error text to the console.
-	 * Will not be logged unless the logging level is `LogLevel.ERROR` or higher
-	 * @method Logger#error
+	 * Log debug text to the console.
+	 * Will not be logged unless the logging level is `LogLevel.DEBUG`
+	 * @method Logger#debug
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
 	 */
