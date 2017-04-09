@@ -2112,6 +2112,252 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Logger",
+            "description": "<p>Singleton containing methods for asynchronous logging with clean,\nconfigurable output</p>\n<p>Easiest manner of use is via the <code>@logger</code> parameter decorator\nto attach the logger to a class property for use within that class.\nOtherwise the singleton instance can be accessed via <code>Logger.instance()</code></p>\n<p>Logging can be turned off by setting the logging level to <code>LogLevel.NONE</code></p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Logger",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "instance",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns the Logger singleton instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Logger",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "setLogLevel",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set the level of output that will be logged</p>",
+                    "parameters": [
+                        {
+                            "name": "level",
+                            "type": "LogLevel",
+                            "description": "<p>The level of logging to output</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "log",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Log to the console. This is the base level of logging and is the default\nlog level, represented by <code>LogLevel.LOG</code>, when the logger singleton is created</p>",
+                    "parameters": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "description": "<p>Tag to prefix the log with</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "description": "<p>String(s) to log</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "info",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Log information that doesn't need to be visible by default to the console.\nWill not be logged unless the logging level is <code>LogLevel.INFO</code> or higher</p>",
+                    "parameters": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "description": "<p>Tag to prefix the log with</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "description": "<p>String(s) to log</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "warn",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Log warning text to the console.\nWill not be logged unless the logging level is <code>LogLevel.WARN</code> or higher</p>",
+                    "parameters": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "description": "<p>Tag to prefix the log with</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "description": "<p>String(s) to log</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "error",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Log error text to the console.\nWill not be logged unless the logging level is <code>LogLevel.ERROR</code> or higher</p>",
+                    "parameters": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "description": "<p>Tag to prefix the log with</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "description": "<p>String(s) to log</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "error",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Log error text to the console.\nWill not be logged unless the logging level is <code>LogLevel.ERROR</code> or higher</p>",
+                    "parameters": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "description": "<p>Tag to prefix the log with</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "description": "<p>String(s) to log</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "_write",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Write to the console</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ],
+            "properties": [
+                {
+                    "name": "NONE",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p><code>LogLevel.NONE</code> enum shortcut</p>",
+                    "type": {
+                        "names": [
+                            "LogLevel"
+                        ]
+                    }
+                },
+                {
+                    "name": "LOG",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p><code>LogLevel.LOG</code> enum shortcut</p>",
+                    "type": {
+                        "names": [
+                            "LogLevel"
+                        ]
+                    }
+                },
+                {
+                    "name": "INFO",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p><code>LogLevel.INFO</code> enum shortcut</p>",
+                    "type": {
+                        "names": [
+                            "LogLevel"
+                        ]
+                    }
+                },
+                {
+                    "name": "WARN",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p><code>LogLevel.WARN</code> enum shortcut</p>",
+                    "type": {
+                        "names": [
+                            "LogLevel"
+                        ]
+                    }
+                },
+                {
+                    "name": "ERROR",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p><code>LogLevel.ERROR</code> enum shortcut</p>",
+                    "type": {
+                        "names": [
+                            "LogLevel"
+                        ]
+                    }
+                },
+                {
+                    "name": "DEBUG",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p><code>LogLevel.DEBUG</code> enum shortcut</p>",
+                    "type": {
+                        "names": [
+                            "LogLevel"
+                        ]
+                    }
+                }
+            ]
         }
     ],
     "typedefs": [
@@ -2347,6 +2593,11 @@
             "properties": []
         },
         {
+            "name": "LogLevel",
+            "description": "<p>Enum containing the different levels of\npotential logger output. Each level represents itself and everything\nabove it in the enum. The default logger log level is <code>LogLevel.LOG</code></p>\n<pre class=\"prettyprint source\"><code>enum LogLevel\n{\n    NONE,\n    LOG,\n    INFO,\n    WARN,\n    ERROR.\n    DEBUG\n}</code></pre>",
+            "properties": []
+        },
+        {
             "name": "MiddlewareFunction",
             "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
             "properties": []
@@ -2484,6 +2735,16 @@
             "description": "<p>Represents a Discord.js Message object that contains a modifed {@link Guild} object\ncontaining a {@link GuildStorage} for the associated guild, if the message was sent\nfrom within a guild, mixed in by the CommandDispatcher.</p>\n<blockquote>\n<p><strong>Note:</strong> For clients written in Typescript, you will want to import\n<code>Message</code> from YAMDBF rather than Discord.js to be able to\naccess <code>message.guild.storage</code> within your commands without\ncompiler errors</p>\n</blockquote>",
             "access": "",
             "virtual": false
+        }
+    ],
+    "functions": [
+        {
+            "name": "logger",
+            "access": "",
+            "virtual": false,
+            "description": "<p>Property decorator that will automatically assign\nthe Logger singleton instance to the decorated\nclass property</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>class Foo {\n    &#64logger private logger: Logger;\n    ...</code></pre><p><strong>Note:</strong> This is a Typescript feature. If using the logger is desired\nin Javascript you should simply retrieve the singleton instance via\n<code>Logger.instance()</code></p>",
+            "parameters": [],
+            "examples": []
         }
     ]
 }
