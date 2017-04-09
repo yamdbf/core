@@ -1,6 +1,6 @@
 import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
-import { Util } from '../../Util';
+import { Util } from '../../util/Util';
 import { Command } from '../Command';
 import { Collection, RichEmbed } from 'discord.js';
 

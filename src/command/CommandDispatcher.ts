@@ -1,12 +1,12 @@
-import { RateLimiter } from './RateLimiter';
 import { PermissionResolvable, TextChannel, User } from 'discord.js';
+import { RateLimiter } from './RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../types/GuildStorage';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
 import { RateLimit } from './RateLimit';
-import { Time } from '../Time';
+import { Time } from '../util/Time';
 import now = require('performance-now');
 
 /**

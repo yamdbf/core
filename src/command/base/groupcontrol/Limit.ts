@@ -1,7 +1,7 @@
 import { Client } from '../../../client/Client';
 import { GuildStorage } from '../../../types/GuildStorage';
 import { Message } from '../../../types/Message';
-import { Util } from '../../../Util';
+import { Util } from '../../../util/Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { Role } from 'discord.js';

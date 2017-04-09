@@ -1,42 +1,42 @@
 import * as path from 'path';
 
-export { Client } from './lib/client/Client';
-export { Command } from './lib/command/Command';
-export { CommandDispatcher } from './lib/command/CommandDispatcher';
-export { CommandLoader } from './lib/command/CommandLoader';
-export { CommandRegistry } from './lib/command/CommandRegistry';
-export { GuildSettings } from './lib/storage/GuildSettings';
-export { GuildStorageLoader } from './lib/storage/GuildStorageLoader';
-export { KeyedStorage } from './lib/storage/KeyedStorage';
-export { Middleware } from './lib/command/middleware/Middleware';
-export { RateLimit } from './lib/command/RateLimit';
-export { RateLimiter } from './lib/command/RateLimiter';
+export { Client } from './client/Client';
+export { Command } from './command/Command';
+export { CommandDispatcher } from './command/CommandDispatcher';
+export { CommandLoader } from './command/CommandLoader';
+export { CommandRegistry } from './command/CommandRegistry';
+export { GuildSettings } from './storage/GuildSettings';
+export { GuildStorageLoader } from './storage/GuildStorageLoader';
+export { KeyedStorage } from './storage/KeyedStorage';
+export { Middleware } from './command/middleware/Middleware';
+export { RateLimit } from './command/RateLimit';
+export { RateLimiter } from './command/RateLimiter';
 
-export { IStorageProvider } from './lib/storage/interface/IStorageProvider';
-export { StorageProvider } from './lib/storage/StorageProvider';
-export { StorageFactory } from './lib/storage/StorageFactory';
-export { JSONProvider } from './lib/storage/JSONProvider';
+export { IStorageProvider } from './storage/interface/IStorageProvider';
+export { StorageProvider } from './storage/StorageProvider';
+export { StorageFactory } from './storage/StorageFactory';
+export { JSONProvider } from './storage/JSONProvider';
 
-import * as CommandDecorators from './lib/command/CommandDecorators';
+import * as CommandDecorators from './command/CommandDecorators';
 export { CommandDecorators }
 
-export { Time } from './lib/Time';
-export { Util } from './lib/Util';
+export { Time } from './util/Time';
+export { Util } from './util/Util';
 
-export { ArgOpts } from './lib/types/ArgOpts';
-export { BaseCommandName } from './lib/types/BaseCommandName';
-export { YAMDBFOptions } from './lib/types/YAMDBFOptions';
-export { ClientStorage } from './lib/types/ClientStorage';
-export { CommandInfo } from './lib/types/CommandInfo';
-export { DefaultGuildSettings } from './lib/types/DefaultGuildSettings';
-export { Difference } from './lib/types/Difference';
-export { ExpectArgType } from './lib/types/ExpectArgType';
-export { Guild } from './lib/types/Guild';
-export { GuildStorage } from './lib/types/GuildStorage';
-export { Message } from './lib/types/Message';
-export { MiddlewareFunction } from './lib/types/MiddlewareFunction';
-export { ResolveArgType } from './lib/types/ResolveArgType';
-export { StorageProviderConstructor } from './lib/types/StorageProviderConstructor';
+export { ArgOpts } from './types/ArgOpts';
+export { BaseCommandName } from './types/BaseCommandName';
+export { YAMDBFOptions } from './types/YAMDBFOptions';
+export { ClientStorage } from './types/ClientStorage';
+export { CommandInfo } from './types/CommandInfo';
+export { DefaultGuildSettings } from './types/DefaultGuildSettings';
+export { Difference } from './types/Difference';
+export { ExpectArgType } from './types/ExpectArgType';
+export { Guild } from './types/Guild';
+export { GuildStorage } from './types/GuildStorage';
+export { Message } from './types/Message';
+export { MiddlewareFunction } from './types/MiddlewareFunction';
+export { ResolveArgType } from './types/ResolveArgType';
+export { StorageProviderConstructor } from './types/StorageProviderConstructor';
 
 export const version: string = require(path.join(__dirname, '..', 'package')).version;
 

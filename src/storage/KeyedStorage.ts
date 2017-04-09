@@ -1,6 +1,6 @@
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 import { StorageProvider } from './StorageProvider';
-import { Util } from '../Util';
+import { Util } from '../util/Util';
 
 /**
  * Simple key/value storage abstraction operating on top of the

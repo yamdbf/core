@@ -1,6 +1,6 @@
 import { Collection } from 'discord.js';
 import { RateLimit } from './RateLimit';
-import { Time } from '../Time';
+import { Time } from '../util/Time';
 import { Message } from '../types/Message';
 
 /**

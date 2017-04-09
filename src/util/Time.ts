@@ -1,4 +1,4 @@
-import { Difference } from './types/Difference';
+import { Difference } from '../types/Difference';
 
 /**
  * Contains static methods for time related calculations and parsing

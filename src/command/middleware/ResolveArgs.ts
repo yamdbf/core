@@ -2,7 +2,7 @@ import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
-import { Util } from '../../Util';
+import { Util } from '../../util/Util';
 import { Command } from '../Command';
 import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 
