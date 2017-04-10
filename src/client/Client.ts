@@ -179,7 +179,7 @@ export class Client extends Discord.Client
 
 		// Make some asserts
 		if (!this._token) throw new Error('You must provide a token for the client.');
-		if (!this.commandsDir && !this.passive) throw new Error('You must provide a directory to load commands from via commandDir');
+		if (!this.commandsDir && !this.passive) throw new Error('You must provide a directory to load commands from via commansdDir');
 		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
 		if (!this.config.owner) throw new Error('You must provide config array of owner ids.');
 		if (!(this.config.owner instanceof Array)) throw new TypeError('Config owner option must be an arrray of user ids.');
@@ -303,8 +303,8 @@ export class Client extends Discord.Client
 	}
 
 	/**
-	 * See if a default guild setting exists
-	 * @method Client#defaultSettingsExists
+	 * Check if a default guild setting exists
+	 * @method Client#defaultSettingExists
 	 * @param {string} key The default settings key to check for
 	 * @returns {Promise<boolean>}
 	 */
