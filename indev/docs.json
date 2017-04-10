@@ -276,10 +276,10 @@
                     }
                 },
                 {
-                    "name": "defaultSettingsExists",
+                    "name": "defaultSettingExists",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>See if a default guild setting exists</p>",
+                    "description": "<p>Check if a default guild setting exists</p>",
                     "parameters": [
                         {
                             "name": "key",
