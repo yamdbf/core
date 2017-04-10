@@ -2719,6 +2719,14 @@
                     "default": "",
                     "optional": true,
                     "nullable": ""
+                },
+                {
+                    "name": "logLevel",
+                    "type": "LogLevel",
+                    "description": "<p>Sets the logging level for the logger. Defaults to <code>LogLevel.LOG</code></p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
                 }
             ]
         }
