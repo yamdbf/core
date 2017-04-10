@@ -14,6 +14,7 @@
  * @property {Object} config See: {@link Client#config}
  * @property {string[]} [disableBase=[]] See: {@link Client#disableBase}
  * @property {string} [ratelimit] Sets a global rate limit on command calls for every user
+ * @property {LogLevel} [logLevel] Sets the logging level for the logger. Defaults to `LogLevel.LOG`
  */
 
 import { StorageProviderConstructor } from './StorageProviderConstructor';
