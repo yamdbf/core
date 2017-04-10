@@ -1,4 +1,7 @@
 {
+	"FrontPage": {
+		"title": "Home"
+	},
 	"UsingBotStorage": {
 		"title": "Using bot-specific storage"
 	},
