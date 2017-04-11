@@ -34,7 +34,7 @@ import { Logger } from './Logger';
  * Example:
  * ```
  * class Foo {
- * 	&#64logger private logger: Logger;
+ * 	&#64logger private readonly logger: Logger;
  * 	...
  * ```
  * >**Note:** This is a Typescript feature. If using the logger is desired

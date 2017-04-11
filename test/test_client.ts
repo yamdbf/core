@@ -11,7 +11,11 @@ const client: Client = new Client({
 	logLevel: LogLevel.DEBUG
 }).start();
 
-client.on('waiting', () => client.emit('finished'));
+client.on('waiting', async () =>
+{
+	await client.setDefaultSetting('prefix', '.');
+	client.emit('finished');
+});
 logger.warn('Test', 'Testing Logger#warn()');
 logger.error('Test', 'Testing Logger#error()');
 logger.debug('Test', 'Testing Logger#debug()');
