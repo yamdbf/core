@@ -132,7 +132,7 @@ the Logger singleton instance to the decorated
 class property</p>
 <p>Example:</p>
 <pre class="prettyprint source"><code>class Foo {
-    &#64logger private logger: Logger;
+    &#64logger private readonly logger: Logger;
     ...</code></pre><blockquote>
 <p><strong>Note:</strong> This is a Typescript feature. If using the logger is desired
 in Javascript you should simply retrieve the singleton instance via
