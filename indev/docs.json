@@ -2750,7 +2750,7 @@
             "name": "logger",
             "access": "",
             "virtual": false,
-            "description": "<p>Property decorator that will automatically assign\nthe Logger singleton instance to the decorated\nclass property</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>class Foo {\n    &#64logger private logger: Logger;\n    ...</code></pre><p><strong>Note:</strong> This is a Typescript feature. If using the logger is desired\nin Javascript you should simply retrieve the singleton instance via\n<code>Logger.instance()</code></p>",
+            "description": "<p>Property decorator that will automatically assign\nthe Logger singleton instance to the decorated\nclass property</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>class Foo {\n    &#64logger private logger: Logger;\n    ...</code></pre><blockquote>\n<p><strong>Note:</strong> This is a Typescript feature. If using the logger is desired\nin Javascript you should simply retrieve the singleton instance via\n<code>Logger.instance()</code></p>\n</blockquote>",
             "parameters": [],
             "examples": []
         }
