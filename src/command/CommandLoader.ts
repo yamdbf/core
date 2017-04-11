@@ -2,7 +2,6 @@ import * as glob from 'glob';
 import * as path from 'path';
 import { Client } from '../client/Client';
 import { Command } from './Command';
-import { CommandRegistry } from './CommandRegistry';
 import { BaseCommandName } from '../types/BaseCommandName';
 import { Logger, logger } from '../util/logger/Logger';
 
@@ -12,8 +11,8 @@ import { Logger, logger } from '../util/logger/Logger';
  */
 export class CommandLoader<T extends Client>
 {
-	@logger private logger: Logger;
-	private _client: T;
+	@logger private readonly logger: Logger;
+	private readonly _client: T;
 	public constructor(client: T)
 	{
 		this._client = client;
@@ -26,7 +25,7 @@ export class CommandLoader<T extends Client>
 	 */
 	public loadCommands(): void
 	{
-		if (this._client.commands.size > 0) this._client.commands = new CommandRegistry<T, string, Command<T>>();
+		if (this._client.commands.size > 0) this._client.commands.clear();
 		let commandFiles: string[] = [];
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
 		commandFiles.push(...glob.sync(`${this._client.commandsDir}/**/*.js`));

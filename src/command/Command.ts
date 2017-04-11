@@ -12,7 +12,7 @@ import { ArgOpts } from '../types/ArgOpts';
  */
 export class Command<T extends Client>
 {
-	public client: T;
+	public readonly client: T;
 	public name: string;
 	public description: string;
 	public usage: string;
@@ -28,8 +28,8 @@ export class Command<T extends Client>
 	public overloads: string;
 
 	public _classloc: string;
-	public _rateLimiter: RateLimiter;
-	public _middleware: MiddlewareFunction[];
+	public readonly _rateLimiter: RateLimiter;
+	public readonly _middleware: MiddlewareFunction[];
 
 	public constructor(client: T, info: CommandInfo = null)
 	{

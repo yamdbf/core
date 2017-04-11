@@ -10,10 +10,10 @@ import { Client } from '../client/Client';
  */
 export class GuildSettings
 {
-	private _provider: StorageProvider;
-	private _guild: Guild;
-	private _id: string;
-	private _client: any;
+	private readonly _provider: StorageProvider;
+	private readonly _guild: Guild;
+	private readonly _id: string;
+	private readonly _client: any;
 	private _cache: { [key: string]: any };
 	public constructor(storage: StorageProvider, guild: Guild, client: Client)
 	{

@@ -9,7 +9,7 @@ import { StorageProvider } from './StorageProvider';
  */
 export class GuildStorageLoader<T extends Client>
 {
-	private _client: T;
+	private readonly _client: T;
 	public constructor(client: T)
 	{
 		this._client = client;

@@ -18,9 +18,9 @@ import { ClientStorage } from '../types/ClientStorage';
  */
 export class StorageFactory
 {
-	private _client: Client;
-	private _guildDataStorage: StorageProvider;
-	private _guildSettingStorage: StorageProvider;
+	private readonly _client: Client;
+	private readonly _guildDataStorage: StorageProvider;
+	private readonly _guildSettingStorage: StorageProvider;
 	public constructor(client: Client, guildDataStorage: StorageProvider, guildSettingStorage: StorageProvider)
 	{
 		this._client = client;

@@ -12,7 +12,7 @@ import { Util } from '../util/Util';
  */
 export class KeyedStorage
 {
-	private _storage: StorageProvider;
+	private readonly _storage: StorageProvider;
 	public constructor(name: string, provider: StorageProviderConstructor)
 	{
 		this._storage = new provider(name);

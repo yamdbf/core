@@ -10,7 +10,7 @@ import DB = require('node-json-db');
  */
 export class JSONProvider extends StorageProvider implements IStorageProvider
 {
-	private _name: string;
+	private readonly _name: string;
 	private _db: DB;
 	public constructor(name: string)
 	{

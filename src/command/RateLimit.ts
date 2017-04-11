@@ -6,8 +6,8 @@
  */
 export class RateLimit
 {
-	private _limit: number;
-	private _duration: number;
+	private readonly _limit: number;
+	private readonly _duration: number;
 	private _count: number;
 	private _notified: boolean;
 	public expires: number;

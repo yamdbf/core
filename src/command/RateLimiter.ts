@@ -11,10 +11,10 @@ import { Message } from '../types/Message';
  */
 export class RateLimiter
 {
-	private _limit: [number, number];
-	private _global: boolean;
-	private _rateLimits: Collection<string, Collection<string, RateLimit>>;
-	private _globalLimits: Collection<string, RateLimit>;
+	private readonly _limit: [number, number];
+	private readonly _global: boolean;
+	private readonly _rateLimits: Collection<string, Collection<string, RateLimit>>;
+	private readonly _globalLimits: Collection<string, RateLimit>;
 	public constructor(limit: string, global: boolean)
 	{
 		this._limit = this._parseLimit(limit);

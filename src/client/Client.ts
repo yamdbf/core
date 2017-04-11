@@ -25,31 +25,31 @@ import { Logger, logger } from '../util/logger/Logger';
  */
 export class Client extends Discord.Client
 {
-	@logger private logger: Logger;
-	public name: string;
-	public commandsDir: string;
-	public statusText: string;
-	public readyText: string;
-	public unknownCommandError: boolean;
-	public selfbot: boolean;
-	public passive: boolean;
-	public version: string;
-	public disableBase: BaseCommandName[];
-	public config: any;
-	public provider: StorageProviderConstructor;
-	public storageFactory: StorageFactory;
-	public _middleware: MiddlewareFunction[];
-	public _rateLimiter: RateLimiter;
+	@logger private readonly logger: Logger;
+	public readonly name: string;
+	public readonly commandsDir: string;
+	public readonly statusText: string;
+	public readonly readyText: string;
+	public readonly unknownCommandError: boolean;
+	public readonly selfbot: boolean;
+	public readonly passive: boolean;
+	public readonly version: string;
+	public readonly disableBase: BaseCommandName[];
+	public readonly config: any;
+	public readonly provider: StorageProviderConstructor;
+	public readonly storageFactory: StorageFactory;
+	public readonly _middleware: MiddlewareFunction[];
+	public readonly _rateLimiter: RateLimiter;
 
-	public storage: ClientStorage;
-	public commands: CommandRegistry<this, string, Command<this>>;
+	public readonly storage: ClientStorage;
+	public readonly commands: CommandRegistry<this, string, Command<this>>;
 
-	private _token: string;
-	private _guildDataStorage: StorageProvider;
-	private _guildSettingStorage: StorageProvider;
-	private _guildStorageLoader: GuildStorageLoader<this>;
-	private _commandLoader: CommandLoader<this>;
-	private _dispatcher: CommandDispatcher<this>;
+	private readonly _token: string;
+	private readonly _guildDataStorage: StorageProvider;
+	private readonly _guildSettingStorage: StorageProvider;
+	private readonly _guildStorageLoader: GuildStorageLoader<this>;
+	private readonly _commandLoader: CommandLoader<this>;
+	private readonly _dispatcher: CommandDispatcher<this>;
 
 	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
 	{
