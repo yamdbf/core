@@ -1,6 +1,7 @@
 import { Collection, Guild } from 'discord.js';
 import { Client } from '../client/Client';
 import { StorageProvider } from './StorageProvider';
+import { StorageFactory } from './StorageFactory';
 
 /**
  * Handles loading all guild-specific data from persistent storage into
@@ -10,9 +11,11 @@ import { StorageProvider } from './StorageProvider';
 export class GuildStorageLoader<T extends Client>
 {
 	private readonly _client: T;
-	public constructor(client: T)
+	private readonly _storageFactory: StorageFactory;
+	public constructor(client: T, storageFactory: StorageFactory)
 	{
 		this._client = client;
+		this._storageFactory = storageFactory;
 	}
 
 	/**
@@ -23,7 +26,7 @@ export class GuildStorageLoader<T extends Client>
 	{
 		for (const key of await dataStorage.keys())
 			this._client.storage.guilds.set(key,
-				await this._client.storageFactory.createGuildStorage(key));
+				await this._storageFactory.createGuildStorage(key));
 
 		await this.initNewGuilds(dataStorage, settingsStorage);
 	}
@@ -39,7 +42,7 @@ export class GuildStorageLoader<T extends Client>
 		let storagelessGuilds: Collection<string, Guild> = this._client.guilds.filter(g => !dataStorageKeys.includes(g.id));
 		for (const guild of storagelessGuilds.values())
 			this._client.storage.guilds.set(guild.id,
-				await this._client.storageFactory.createGuildStorage(guild.id));
+				await this._storageFactory.createGuildStorage(guild.id));
 	}
 
 	/**

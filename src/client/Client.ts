@@ -37,7 +37,6 @@ export class Client extends Discord.Client
 	public readonly disableBase: BaseCommandName[];
 	public readonly config: any;
 	public readonly provider: StorageProviderConstructor;
-	public readonly storageFactory: StorageFactory;
 	public readonly _middleware: MiddlewareFunction[];
 	public readonly _rateLimiter: RateLimiter;
 
@@ -45,6 +44,7 @@ export class Client extends Discord.Client
 	public readonly commands: CommandRegistry<this, string, Command<this>>;
 
 	private readonly _token: string;
+	private readonly _storageFactory: StorageFactory;
 	private readonly _guildDataStorage: StorageProvider;
 	private readonly _guildSettingStorage: StorageProvider;
 	private readonly _guildStorageLoader: GuildStorageLoader<this>;
@@ -155,9 +155,8 @@ export class Client extends Discord.Client
 
 		this._guildDataStorage = new this.provider('guild_storage');
 		this._guildSettingStorage = new this.provider('guild_settings');
-		this._guildStorageLoader = new GuildStorageLoader(this);
-
-		this.storageFactory = new StorageFactory(this, this._guildDataStorage, this._guildSettingStorage);
+		this._storageFactory = new StorageFactory(this, this._guildDataStorage, this._guildSettingStorage);
+		this._guildStorageLoader = new GuildStorageLoader(this, this._storageFactory);
 
 		/**
 		 * Client-specific storage. Also contains a `guilds` Collection property containing
@@ -165,7 +164,7 @@ export class Client extends Discord.Client
 		 * @name Client#storage
 		 * @type {ClientStorage}
 		 */
-		this.storage = this.storageFactory.createClientStorage();
+		this.storage = this._storageFactory.createClientStorage();
 
 		/**
 		 * [Collection]{@link external:Collection} containing all loaded commands
