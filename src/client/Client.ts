@@ -25,7 +25,7 @@ import { Logger, logger } from '../util/logger/Logger';
  */
 export class Client extends Discord.Client
 {
-	@logger private readonly logger: Logger;
+	@logger private readonly _logger: Logger;
 	public readonly name: string;
 	public readonly commandsDir: string;
 	public readonly statusText: string;
@@ -146,7 +146,7 @@ export class Client extends Discord.Client
 
 		// Set the logger level if provided
 		if (typeof options.logLevel !== 'undefined')
-			this.logger.setLogLevel(options.logLevel);
+			this._logger.setLogLevel(options.logLevel);
 
 		// Middleware function storage for the client instance
 		this._middleware = [];
@@ -250,7 +250,7 @@ export class Client extends Discord.Client
 
 		this.once('finished', () =>
 		{
-			this.logger.log('Client', this.readyText);
+			this._logger.log('Client', this.readyText);
 			this.emit('clientReady');
 		});
 

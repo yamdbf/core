@@ -43,6 +43,6 @@ import { Logger } from './Logger';
  */
 export function logger<T>(target: T, key: string): void
 {
-	Object.defineProperty(target, 'logger',
+	Object.defineProperty(target, key,
 		{ value: Logger.instance() });
 }
