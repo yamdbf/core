@@ -2747,6 +2747,23 @@
     ],
     "functions": [
         {
+            "name": "deprecated",
+            "access": "private",
+            "virtual": false,
+            "description": "<p>Logs a deprecation warning for the decorated class method</p>",
+            "parameters": [
+                {
+                    "name": "message",
+                    "type": "string",
+                    "description": "<p>Method deprecation message</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ],
+            "examples": []
+        },
+        {
             "name": "logger",
             "access": "",
             "virtual": false,
