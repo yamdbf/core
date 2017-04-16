@@ -36,49 +36,48 @@
 <header>
     
 
-    <h2>Using bot-specific storage</h2>
+    <h2>Starting a bot in 3.0.0</h2>
 </header>
 
 <article>
-    <p>Using the bot's default persistent storage is very easy, but it should be noted that this storage is universal, unlike guild-specific storage. If you want to use storage for values specific to an individual guild, you should head on over to <a href="tutorial-UsingGuildStorage.html">Using guild-specific storage</a>.</p>
-<p>The bot's default storage can be accessed via <code>storage</code> property of the Bot instance. We'll assume here that you're going to be accessing the storage from within a command action, and thus have access to the Bot instance via <code>this.bot</code>:</p>
-<pre class="prettyprint source lang-js"><code>let storage = this.bot.storage;</code></pre><p>We'll be using this <code>storage</code> variable for the rest of the examples.</p>
-<h2>Storing values</h2><p>Storing values is done with the <code>setItem()</code> method. Let's say we know the storage contains the key <code>'foo'</code>. We want to assign the vale <code>'bar'</code> to the key <code>'foo'</code> in storage:</p>
-<pre class="prettyprint source lang-js"><code>storage.setItem('foo', 'bar');</code></pre><p>If you only need to interact when storage once, there's no need to load the storage into a variable first. You can interact with storage directly, in-line, like so:</p>
-<pre class="prettyprint source lang-js"><code>this.bot.storage.setItem('foo', 'bar');</code></pre><p>It should be noted that if a key does not exist in storage it will be created when using <code>setItem()</code>.</p>
-<h2>Retrieving and modifying values</h2><p>Earlier we set the value of the key <code>'foo'</code>, so now we'll pull it back out of storage.</p>
-<pre class="prettyprint source lang-js"><code>let foo = storage.getItem('foo');
-// foo === 'bar'
+    <h2>Starting a bot in YAMDBF 3.0.0</h2><p>YAMDBF 3.0.0 comes with a handful of breaking changes, the first of which is fairly important and affects how you start up your bot.
+When a YAMDBF Client instance is first created, commands will be synchronously loaded. After that is finished the <code>start()</code> method
+may be executed. The first thing you should note is that <code>ready</code> is no longer the event you will want to subscribe to for
+determining when the YAMDBF Client is ready for use. The new event is <code>clientReady</code></p>
+<p>After <code>start()</code> is called the Client will go through the Discord.js client login process and register some event
+listeners for some internal things. During this time the Client <code>init()</code> method will be called. This is where storages --
+<code>ClientStorage</code> and all <code>GuildStorage</code> instances -- will be created and linked with the current storage provider. After
+this process completes the <code>waiting</code> event will be emitted.</p>
+<blockquote>
+<p>Because of how storages are loaded asynchronously after <code>start()</code> is called it is no longer possible to interact with
+default settings until after storages have been loaded, meaning guilds will have their default settings applied before
+you will have the chance to set them when guild setting storage is generated for the first time. This means it becomes
+necessary to either completely remove guild settings and allow them to regenerate after changing default settings the
+first time the Client is started, or to iterate over guild storages and apply any changes one time to bring them up to date
+with the defaults. This of course only needs to be done if you are trying to set a default setting the first time your client
+is run and fresh storages are generated. After that the default settings will be properly applied to new guilds and their
+settings.</p>
+</blockquote>
+<p>After the <code>waiting</code> event is fired is when you have the opportunity to set up anything that needs it before the Client
+is ready to operate. When you have finished with whatever you need to do after <code>waiting</code> you must use <code>&lt;Client&gt;.emit('finished');</code>
+to tell the Client you have finished setting up. After this <code>clientReady</code> will be emitted and the Client will be ready for use.</p>
+<p>I'll end this with a barebones example of starting a bot with the new startup flow and a simple example of what
+setting a default setting will look like:</p>
+<pre class="prettyprint source"><code>const { Client } = require('yamdbf');
+const config = require('./config.json');
 
-// Now we'll modify it:
+const client = new Client({
+    name: 'YAMDBFBot',
+    commandsDir: './commands',
+    token: config.token,
+    config: config
+}).start();
 
-storage.setItem('foo', 'boo');
-foo = storage.getItem('foo');
-// foo === 'boo'</code></pre><h2>Storing and modifying stored objects</h2><p>Objects can be placed in storage just as easily as any other value, but modifying them requires a little extra effort. You'll need to pull the object out of storage, modify it, and then put it back in:</p>
-<pre class="prettyprint source lang-js"><code>let oldObject = {
-    foo: 'bar',
-    bar: 'baz'
-}
-
-storage.setItem('object', oldObject);
-
-// Now, let's modify it!
-
-let newObject = storage.getItem('object');
-newObject.foo = 'boo';
-storage.setItem('object', newObject);
-console.log(storage.getItem('object'));
-// logs: { foo: 'boo', bar: 'baz' }</code></pre><p>Of course, you can store Arrays as well:</p>
-<pre class="prettyprint source lang-js"><code>let array = ['foo', 'bar'];
-
-storage.setItem('array', array);
-
-let newArray = storage.getItem('array')
-newArray.push('baz');
-storage.setItem('array', newArray);
-console.log(storage.getItem('array'));
-// logs: ['foo', 'bar', 'baz']</code></pre><p>As far as the basics of storage go, that's about it. Make sure to check out <code>LocalStorage</code> to read up on the methods available for interacting with storages using the <code>LocalStorage</code> class. You can even declare your own storages separate from the bot's default storage. The docs should point you in the right direction for this, but as always you can ask questions on the YAMDB Discord server if you have any.</p>
-<p>If you haven't already, take a look at <a href="tutorial-UsingGuildStorage.html">Using guild-specific storage</a> to read up on using guild-specific storages in your bot.</p>
+client.on('waiting', async () =>
+{
+    await client.setDefaultSetting('prefix', '.');
+    client.emit('finished');
+});</code></pre>
 </article>
 
 </section>
