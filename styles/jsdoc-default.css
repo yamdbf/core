@@ -424,8 +424,12 @@ dl.param-type {
   margin-left: 0px;
 }
 
-.param-type dd {
+.param-type dd, span.param-types {
   font-family: Consolas, Monaco, 'Andale Mono', monospace
+}
+
+span.param-types {
+	font-size: 80%;
 }
 
 .disabled {
