@@ -40,6 +40,7 @@ import { Logger } from './Logger';
  * >**Note:** This is a Typescript feature. If using the logger is desired
  * in Javascript you should simply retrieve the singleton instance via
  * `Logger.instance()`
+ * @returns {PropertyDecorator}
  */
 export function logger<T>(target: T, key: string): void
 {
