@@ -183,7 +183,7 @@
                     "parameters": [
                         {
                             "name": "user",
-                            "type": "User",
+                            "type": "external:User",
                             "description": "<p>User to check</p>",
                             "default": "",
                             "optional": "",
@@ -211,7 +211,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "start",
@@ -313,7 +317,7 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "Promise.<?string>",
+                        "type": "Promise.<(string|null)>",
                         "description": ""
                     }
                 },
@@ -323,7 +327,11 @@
                     "virtual": false,
                     "description": "<p>Clean out any guild storage/settings that no longer have\nan associated guild</p>",
                     "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "use",
@@ -332,7 +340,7 @@
                     "description": "<p>Adds a middleware function to be used when any command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do every time any command\nis called. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to the client one time each,\nand thus should not be added within any sort of event or loop.\nMultiple middleware functions can be added to the via multiple calls\nto this method</p>",
                     "parameters": [
                         {
-                            "name": "fn",
+                            "name": "func",
                             "type": "MiddlewareFunction",
                             "description": "<p>Middleware function. <code>(message, args) =&gt; [message, args]</code></p>",
                             "default": "",
@@ -632,7 +640,7 @@
                     "name": "ownerOnly",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Whether or not the command can be used by the client/bot owner(s).<br>\n<strong>See:</strong> [Client#config.owner]{@link Client#config}</p>",
+                    "description": "<p>Whether or not the command can be used only by the client/bot owner(s).<br>\n<strong>See:</strong> [Client#config.owner]{@link Client#config}</p>",
                     "type": {
                         "names": [
                             "boolean"
@@ -675,7 +683,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "any",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "register",
@@ -683,7 +695,11 @@
                     "virtual": false,
                     "description": "<p>Assert {@link Command#action} is typeof Function, finishing the\ncommand creation process.<br>Called by {@link CommandRegistry#register}</p>",
                     "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "use",
@@ -692,7 +708,7 @@
                     "description": "<p>Adds a middleware function to be used when the command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do whenever this command\nis called. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to the command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to a command one time each,\nand thus should be added in the Command's constructor. Multiple middleware\nfunctions can be added to a command via multiple calls to this method</p>",
                     "parameters": [
                         {
-                            "name": "fn",
+                            "name": "func",
                             "type": "MiddlewareFunction",
                             "description": "<p>Middleware function. <code>(message, args) =&gt; [message, args]</code></p>",
                             "default": "",
@@ -711,8 +727,37 @@
                     "access": "protected",
                     "virtual": false,
                     "description": "<p>Send provided response text to the command's calling channel\nvia edit, editCode, send, or sendCode depending on whether\nor not the client is a selfbot and/or a codeblock language is given</p>",
-                    "parameters": [],
-                    "examples": []
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "response",
+                            "type": "string",
+                            "description": "<p>String to send</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "code",
+                            "type": "string",
+                            "description": "<p>Language to use if sendCode/editCode effect is desired</p>",
+                            "default": "",
+                            "optional": true,
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<(external:Message|Array.<external:Message>)>",
+                        "description": ""
+                    }
                 }
             ]
         },
@@ -939,7 +984,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "findByNameOrAlias",
@@ -2154,7 +2203,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "log",
@@ -2179,7 +2232,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "info",
@@ -2204,7 +2261,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "warn",
@@ -2229,7 +2290,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "error",
@@ -2254,7 +2319,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "debug",
@@ -2279,7 +2348,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "_write",
@@ -2517,7 +2590,7 @@
                 },
                 {
                     "name": "disabledGroups",
-                    "type": "Array",
+                    "type": "Array.<string>",
                     "description": "<p>Command groups to ignore</p>",
                     "default": "[]",
                     "optional": true,
@@ -2599,7 +2672,7 @@
         },
         {
             "name": "MiddlewareFunction",
-            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
+            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args. Can be async as long as the returned promise resolves with\nthe array containing the message object and the args array as expected.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
             "properties": []
         },
         {
@@ -2660,7 +2733,7 @@
                     "name": "readyText",
                     "type": "string",
                     "description": "<p>See: {@link Client#readyText}</p>",
-                    "default": "'Ready!'",
+                    "default": "'Client ready!'",
                     "optional": true,
                     "nullable": ""
                 },
@@ -2748,7 +2821,7 @@
     "functions": [
         {
             "name": "deprecated",
-            "access": "private",
+            "access": "",
             "virtual": false,
             "description": "<p>Logs a deprecation warning for the decorated class method\nwhenever it is called</p>",
             "parameters": [
@@ -2761,7 +2834,11 @@
                     "nullable": ""
                 }
             ],
-            "examples": []
+            "examples": [],
+            "returns": {
+                "type": "MethodDecorator",
+                "description": ""
+            }
         },
         {
             "name": "logger",
