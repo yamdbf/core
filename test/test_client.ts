@@ -1,5 +1,4 @@
 import { Client, LogLevel, Logger } from '../bin/';
-import * as path from 'path';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 
@@ -7,7 +6,7 @@ const client: Client = new Client({
 	name: 'test',
 	token: config.token,
 	config: config,
-	commandsDir: path.join(__dirname, 'commands'),
+	commandsDir: './commands',
 	logLevel: LogLevel.DEBUG
 }).start();
 

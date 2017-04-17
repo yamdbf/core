@@ -1,4 +1,5 @@
 import * as Discord from 'discord.js';
+import * as path from 'path';
 import { Channel, ClientOptions, Collection, Emoji, Guild, GuildMember, Message, MessageReaction, Role, User, UserResolvable } from 'discord.js';
 import { Command } from '../command/Command';
 import { CommandDispatcher } from '../command/CommandDispatcher';
@@ -71,7 +72,7 @@ export class Client extends Discord.Client
 		 * @name Client#commandsDir
 		 * @type {string}
 		 */
-		this.commandsDir = options.commandsDir || null;
+		this.commandsDir = path.resolve(options.commandsDir) || null;
 
 		/**
 		 * Status text for the client
