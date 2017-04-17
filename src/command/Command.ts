@@ -35,7 +35,6 @@ export class Command<T extends Client>
 	{
 		/**
 		 * YAMDBF Client instance
-		 * @name Command#client
 		 * @type {Client}
 		 */
 		this.client = client;
@@ -122,7 +121,7 @@ export class Command<T extends Client>
 		 */
 
 		/**
-		 * Whether or not the command can be used by the client/bot owner(s).<br>
+		 * Whether or not the command can be used only by the client/bot owner(s).<br>
 		 * **See:** [Client#config.owner]{@link Client#config}
 		 * @name Command#ownerOnly
 		 * @type {boolean}
@@ -151,10 +150,10 @@ export class Command<T extends Client>
 	 * are what command actions will be passed by the {@link CommandDispatcher} whenever
 	 * a command is called. Be sure to receive these in proper order when writing
 	 * new commands
-	 * @method Command#action
 	 * @param {external:Message} message Discord.js message object
 	 * @param {any[]} args An array containing the args parsed from the command calling message.<br>
 	 * 					   Will contain strings unless middleware is used to transform the args
+	 * @returns {any}
 	 */
 	public action(message: Message, args: any[]): void
 	{
@@ -164,7 +163,7 @@ export class Command<T extends Client>
 	/**
 	 * Assert {@link Command#action} is typeof Function, finishing the
 	 * command creation process.<br>Called by {@link CommandRegistry#register}
-	 * @method Command#register
+	 * @returns {void}
 	 */
 	public register(): void
 	{
@@ -236,13 +235,12 @@ export class Command<T extends Client>
 	 * Note: Middleware functions should only be added to a command one time each,
 	 * and thus should be added in the Command's constructor. Multiple middleware
 	 * functions can be added to a command via multiple calls to this method
-	 * @method Command#use
-	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
+	 * @param {MiddlewareFunction} func Middleware function. `(message, args) => [message, args]`
 	 * @returns {Command} This command instance
 	 */
-	public use(fn: MiddlewareFunction): this
+	public use(func: MiddlewareFunction): this
 	{
-		this._middleware.push(fn);
+		this._middleware.push(func);
 		return this;
 	}
 
@@ -251,6 +249,10 @@ export class Command<T extends Client>
 	 * via edit, editCode, send, or sendCode depending on whether
 	 * or not the client is a selfbot and/or a codeblock language is given
 	 * @protected
+	 * @param {external:Message} message Discord.js Message object
+	 * @param {string} response String to send
+	 * @param {string} [code] Language to use if sendCode/editCode effect is desired
+	 * @returns {Promise<external:Message | external:Message[]>}
 	 */
 	protected respond(message: Message, response: string, code?: string): Promise<Message | Message[]>
 	{

@@ -21,7 +21,6 @@ export class KeyedStorage
 	/**
 	 * Initialize this storage. Any other method calls should not be made
 	 * until this method has been called and resolved
-	 * @method KeyedStorage#init
 	 * @returns {Promise<void>}
 	 */
 	public async init(): Promise<void>
@@ -31,7 +30,6 @@ export class KeyedStorage
 
 	/**
 	 * Get the names of all keys in this storage
-	 * @method KeyedStorage#keys
 	 * @returns {Promise<string[]>}
 	 */
 	public async keys(): Promise<string[]>
@@ -41,7 +39,6 @@ export class KeyedStorage
 
 	/**
 	 * Get a value from this storage for the specified key
-	 * @method KeyedStorage#get
 	 * @param {string} key The key in storage to get
 	 * @returns {Promise<any>}
 	 */
@@ -65,7 +62,6 @@ export class KeyedStorage
 
 	/**
 	 * Set a value in this storage for the specified key
-	 * @method KeyedStorage#set
 	 * @param {string} key The key in storage to set
 	 * @param {any} value The value to set
 	 * @returns {Promise<void>}
@@ -95,7 +91,6 @@ export class KeyedStorage
 
 	/**
 	 * Remove a key/value pair from this storage
-	 * @method KeyedStorage#remove
 	 * @param {string} key The key in storage to remove
 	 * @returns {Promise<void>}
 	 */
@@ -124,7 +119,6 @@ export class KeyedStorage
 
 	/**
 	 * Remove all key/value pairs from this storage
-	 * @method KeyedStorage#clear
 	 * @returns {Promise<void>}
 	 */
 	public async clear(): Promise<void>

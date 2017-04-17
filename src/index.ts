@@ -26,6 +26,8 @@ export { Logger } from './util/logger/Logger';
 export { logger } from './util/logger/LoggerDecorator';
 export { LogLevel } from './types/LogLevel';
 
+export { deprecated } from './util/DeprecatedDecorator';
+
 export { ArgOpts } from './types/ArgOpts';
 export { BaseCommandName } from './types/BaseCommandName';
 export { ClientStorage } from './types/ClientStorage';

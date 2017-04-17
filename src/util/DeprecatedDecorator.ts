@@ -4,8 +4,8 @@ const logger: Logger = Logger.instance();
 /**
  * Logs a deprecation warning for the decorated class method
  * whenever it is called
- * @private
  * @param {string} [message] Method deprecation message
+ * @returns {MethodDecorator}
  */
 export function deprecated<T extends Function>(message?: string): MethodDecorator
 {

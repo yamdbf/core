@@ -26,49 +26,42 @@ export class Logger
 
 	/**
 	 * `LogLevel.NONE` enum shortcut
-	 * @name Logger.NONE
 	 * @type {LogLevel}
 	 */
 	public static readonly NONE: LogLevel = LogLevel.NONE;
 
 	/**
 	 * `LogLevel.LOG` enum shortcut
-	 * @name Logger.LOG
 	 * @type {LogLevel}
 	 */
 	public static readonly LOG: LogLevel = LogLevel.LOG;
 
 	/**
 	 * `LogLevel.INFO` enum shortcut
-	 * @name Logger.INFO
 	 * @type LogLevel
 	 */
 	public static readonly INFO: LogLevel = LogLevel.INFO;
 
 	/**
 	 * `LogLevel.WARN` enum shortcut
-	 * @name Logger.WARN
 	 * @type {LogLevel}
 	 */
 	public static readonly WARN: LogLevel = LogLevel.WARN;
 
 	/**
 	 * `LogLevel.ERROR` enum shortcut
-	 * @name Logger.ERROR
 	 * @type {LogLevel}
 	 */
 	public static readonly ERROR: LogLevel = LogLevel.ERROR;
 
 	/**
 	 * `LogLevel.DEBUG` enum shortcut
-	 * @name Logger.DEBUG
 	 * @type LogLevel
 	 */
 	public static readonly DEBUG: LogLevel = LogLevel.DEBUG;
 
 	/**
 	 * Returns the Logger singleton instance
-	 * @method Logger.instance
 	 * @returns {Logger}
 	 */
 	public static instance(): Logger
@@ -79,8 +72,8 @@ export class Logger
 
 	/**
 	 * Set the level of output that will be logged
-	 * @method Logger#setLogLevel
 	 * @param {LogLevel} level The level of logging to output
+	 * @returns {void}
 	 */
 	public setLogLevel(level: LogLevel): void
 	{
@@ -90,9 +83,9 @@ export class Logger
 	/**
 	 * Log to the console. This is the base level of logging and is the default
 	 * log level, represented by `LogLevel.LOG`, when the logger singleton is created
-	 * @method Logger#log
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
+	 * @returns {Promise<void>}
 	 */
 	public async log(tag: string, ...text: string[]): Promise<void>
 	{
@@ -103,9 +96,9 @@ export class Logger
 	/**
 	 * Log information that doesn't need to be visible by default to the console.
 	 * Will not be logged unless the logging level is `LogLevel.INFO` or higher
-	 * @method Logger#info
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
+	 * @returns {Promise<void>}
 	 */
 	public async info(tag: string, ...text: string[]): Promise<void>
 	{
@@ -116,9 +109,9 @@ export class Logger
 	/**
 	 * Log warning text to the console.
 	 * Will not be logged unless the logging level is `LogLevel.WARN` or higher
-	 * @method Logger#warn
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
+	 * @returns {Promise<void>}
 	 */
 	public async warn(tag: string, ...text: string[]): Promise<void>
 	{
@@ -129,9 +122,9 @@ export class Logger
 	/**
 	 * Log error text to the console.
 	 * Will not be logged unless the logging level is `LogLevel.ERROR` or higher
-	 * @method Logger#error
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
+	 * @returns {Promise<void>}
 	 */
 	public async error(tag: string, ...text: string[]): Promise<void>
 	{
@@ -142,9 +135,9 @@ export class Logger
 	/**
 	 * Log debug text to the console.
 	 * Will not be logged unless the logging level is `LogLevel.DEBUG`
-	 * @method Logger#debug
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
+	 * @returns {Promise<void>}
 	 */
 	public async debug(tag: string, ...text: string[]): Promise<void>
 	{

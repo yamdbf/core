@@ -60,7 +60,6 @@ export class Client extends Discord.Client
 
 		/**
 		 * The name of the bot this Client is for
-		 * @name Client#name
 		 * @type {string}
 		 */
 		this.name = options.name || 'botname';
@@ -69,21 +68,18 @@ export class Client extends Discord.Client
 		 * Directory to find command class files. Optional
 		 * if client is passive.<br>
 		 * **See:** {@link Client#passive}
-		 * @name Client#commandsDir
 		 * @type {string}
 		 */
 		this.commandsDir = path.resolve(options.commandsDir) || null;
 
 		/**
 		 * Status text for the client
-		 * @name Client#statusText
 		 * @type {string}
 		 */
 		this.statusText = options.statusText || null;
 
 		/**
 		 * Text to output when the client is ready
-		 * @name Client#readyText
 		 * @type {string}
 		 */
 		this.readyText = options.readyText || 'Client ready!';
@@ -92,16 +88,13 @@ export class Client extends Discord.Client
 		 * Whether or not a generic 'command not found' message
 		 * should be given in DMs to instruct the user to
 		 * use the `help` command. `true` by default
-		 * @name Client#unknownCommandError
 		 * @type {string}
-		 * @instance
 		 */
 		this.unknownCommandError = options.unknownCommandError === undefined ?
 			true : options.unknownCommandError;
 
 		/**
 		 * Whether or not the client is a selfbot
-		 * @name Client#selfbot
 		 * @type {boolean}
 		 */
 		this.selfbot = options.selfbot || false;
@@ -112,21 +105,18 @@ export class Client extends Discord.Client
 		 * listener. This allows passive clients to be created that
 		 * do not respond to any commands but are able to perform
 		 * actions based on whatever the framework user wants
-		 * @name Client#passive
 		 * @type {boolean}
 		 */
 		this.passive = options.passive || false;
 
 		/**
 		 * Client version, best taken from package.json
-		 * @name Client#version
 		 * @type {string}
 		 */
 		this.version = options.version || '0.0.0';
 
 		/**
 		 * Object containing token and owner ids
-		 * @name Client#config
 		 * @type {Object}
 		 * @property {string} token - Discord login token for the client
 		 * @property {string[]} owner - Array of owner id strings
@@ -136,7 +126,6 @@ export class Client extends Discord.Client
 		/**
 		 * Array of base command names to skip when loading commands. Base commands
 		 * may only be disabled by name, not by alias
-		 * @name Client#disableBase
 		 * @type {BaseCommandName[]}
 		 */
 		this.disableBase = options.disableBase || [];
@@ -162,14 +151,12 @@ export class Client extends Discord.Client
 		/**
 		 * Client-specific storage. Also contains a `guilds` Collection property containing
 		 * all GuildStorage instances
-		 * @name Client#storage
 		 * @type {ClientStorage}
 		 */
 		this.storage = this._storageFactory.createClientStorage();
 
 		/**
 		 * [Collection]{@link external:Collection} containing all loaded commands
-		 * @name Client#commands
 		 * @type {CommandRegistry<string, Command>}
 		 */
 		this.commands = new CommandRegistry<this, string, Command<this>>();
@@ -210,8 +197,7 @@ export class Client extends Discord.Client
 	/**
 	 * Returns whether or not the given user is an owner
 	 * of the client/bot
-	 * @method Client#isOwner
-	 * @param {User} user User to check
+	 * @param {external:User} user User to check
 	 * @returns {boolean}
 	 */
 	public isOwner(user: User): boolean
@@ -221,8 +207,8 @@ export class Client extends Discord.Client
 
 	/**
 	 * Loads/reloads all/specific commands
-	 * @method Client#loadCommand
 	 * @param {string} command The name of a command to reload, or 'all' to load all commands
+	 * @returns {void}
 	 */
 	public loadCommand(command: string): void
 	{
@@ -233,7 +219,6 @@ export class Client extends Discord.Client
 
 	/**
 	 * Logs the Client in and registers some event handlers
-	 * @method Client#start
 	 * @returns {Client}
 	 */
 	public start(): this
@@ -273,7 +258,6 @@ export class Client extends Discord.Client
 	 * Set the value of a default setting key and push it to all guild
 	 * setting storages. Will not overwrite a setting in guild settings
 	 * storage if there is already an existing key with the given value
-	 * @method Client#setDefaultSetting
 	 * @param {string} key The key to use in settings storage
 	 * @param {any} value The value to use in settings storage
 	 * @returns {Promise<Client>}
@@ -292,7 +276,6 @@ export class Client extends Discord.Client
 	 * Remove a `defaultGuildSettings` item. Will not remove from any current
 	 * guild settings, but will remove the item from the defaults added to
 	 * new guild settings storages upon creation
-	 * @method Client#removeDefaultSetting
 	 * @param {string} key The key to use in settings storage
 	 * @returns {Promise<Client>}
 	 */
@@ -304,7 +287,6 @@ export class Client extends Discord.Client
 
 	/**
 	 * Check if a default guild setting exists
-	 * @method Client#defaultSettingExists
 	 * @param {string} key The default settings key to check for
 	 * @returns {Promise<boolean>}
 	 */
@@ -315,9 +297,8 @@ export class Client extends Discord.Client
 
 	/**
 	 * Shortcut to return the command prefix for the provided guild
-	 * @method Client#getPrefix
 	 * @param {external:Guild} guild The Guild to get the prefix of
-	 * @returns {Promise<?string>}
+	 * @returns {Promise<string | null>}
 	 */
 	public async getPrefix(guild: Guild): Promise<string>
 	{
@@ -328,7 +309,7 @@ export class Client extends Discord.Client
 	/**
 	 * Clean out any guild storage/settings that no longer have
 	 * an associated guild
-	 * @method Client#sweepStorages
+	 * @returns {void}
 	 */
 	public sweepStorages(): void
 	{
@@ -362,13 +343,12 @@ export class Client extends Discord.Client
 	 * and thus should not be added within any sort of event or loop.
 	 * Multiple middleware functions can be added to the via multiple calls
 	 * to this method
-	 * @method Client#use
-	 * @param {MiddlewareFunction} fn Middleware function. `(message, args) => [message, args]`
+	 * @param {MiddlewareFunction} func Middleware function. `(message, args) => [message, args]`
 	 * @returns {Client}
 	 */
-	public use(fn: MiddlewareFunction): this
+	public use(func: MiddlewareFunction): this
 	{
-		this._middleware.push(fn);
+		this._middleware.push(func);
 		return this;
 	}
 

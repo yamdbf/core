@@ -48,7 +48,7 @@ export class Time
 	 * duration of the given MS
 	 * @method duration
 	 * @param {number} time The time in MS
-	 * @returns {difference}
+	 * @returns {Difference}
 	 */
 	public static duration(time: number): Difference
 	{

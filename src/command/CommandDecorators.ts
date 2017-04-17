@@ -19,6 +19,7 @@ import { Message } from '../types/Message';
  * Apply a middleware function to the action method of a Command.
  * Identical to {@link Command#use} but used as a method decorator
  * @param {MiddlewareFunction} func Middleware function to use for this Command action
+ * @returns {MethodDecorator}
  */
 export function using(func: MiddlewareFunction): MethodDecorator
 {
@@ -57,6 +58,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 /**
  * Set `name` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function name(value: string): ClassDecorator
 {
@@ -66,6 +68,7 @@ export function name(value: string): ClassDecorator
 /**
  * Set `aliases` metadata
  * @param {...string} values Values to set
+ * @returns {ClassDecorator}
  */
 export function aliases(...values: string[]): ClassDecorator
 {
@@ -75,6 +78,7 @@ export function aliases(...values: string[]): ClassDecorator
 /**
  * Set `description` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function description(value: string): ClassDecorator
 {
@@ -84,6 +88,7 @@ export function description(value: string): ClassDecorator
 /**
  * Set `usage` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function usage(value: string): ClassDecorator
 {
@@ -93,6 +98,7 @@ export function usage(value: string): ClassDecorator
 /**
  * Set `extraHelp` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function extraHelp(value: string): ClassDecorator
 {
@@ -102,6 +108,7 @@ export function extraHelp(value: string): ClassDecorator
 /**
  * Set `group` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function group(value: string): ClassDecorator
 {
@@ -111,6 +118,7 @@ export function group(value: string): ClassDecorator
 /**
  * Set `argOpts` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function argOpts(value: ArgOpts): ClassDecorator
 {
@@ -120,6 +128,7 @@ export function argOpts(value: ArgOpts): ClassDecorator
 /**
  * Set `permissions` metadata
  * @param {...external:PermissionResolvable} values Values to set
+ * @returns {ClassDecorator}
  */
 export function permissions(...values: PermissionResolvable[]): ClassDecorator
 {
@@ -129,6 +138,7 @@ export function permissions(...values: PermissionResolvable[]): ClassDecorator
 /**
  * Set `roles` metadata
  * @param {...string} values Values to set
+ * @returns {ClassDecorator}
  */
 export function roles(...values: string[]): ClassDecorator
 {
@@ -138,6 +148,7 @@ export function roles(...values: string[]): ClassDecorator
 /**
  * Set `ratelimit` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function ratelimit(value: string): ClassDecorator
 {
@@ -147,6 +158,7 @@ export function ratelimit(value: string): ClassDecorator
 /**
  * Set `overloads` metadata
  * @param {string} value Value to set
+ * @returns {ClassDecorator}
  */
 export function overloads(value: string): ClassDecorator
 {
@@ -155,6 +167,7 @@ export function overloads(value: string): ClassDecorator
 
 /**
  * Set `owneronly` flag metadata
+ * @returns {ClassDecorator}
  */
 export function ownerOnly(target: typeof Command): typeof Command
 {
@@ -163,6 +176,7 @@ export function ownerOnly(target: typeof Command): typeof Command
 
 /**
  * Set `guildOnly` flag metadata
+ * @returns {ClassDecorator}
  */
 export function guildOnly(target: typeof Command): typeof Command
 {
@@ -171,6 +185,7 @@ export function guildOnly(target: typeof Command): typeof Command
 
 /**
  * Set `hidden` flag metadata
+ * @returns {ClassDecorator}
  */
 export function hidden(target: typeof Command): typeof Command
 {

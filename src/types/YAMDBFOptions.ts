@@ -6,7 +6,7 @@
  * @property {string} [provider] See: {@link Client#provider}
  * @property {string} [commandsDir] See: {@link Client#commandsDir}
  * @property {string} [statusText=null] See: {@link Client#statusText}
- * @property {string} [readyText='Ready!'] See: {@link Client#readyText}
+ * @property {string} [readyText='Client ready!'] See: {@link Client#readyText}
  * @property {boolean} [unknownCommandError=true] See: {@link Client#unknownCommandError}
  * @property {boolean} [selfbot=false] See: {@link Client#selfbot}
  * @property {boolean} [passive=false] see {@link Client#passive}

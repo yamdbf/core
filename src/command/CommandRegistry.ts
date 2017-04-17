@@ -15,11 +15,11 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	/**
 	 * Complete registration of a command and add to the parent [Collection]{@link external:Collection},
 	 * erroring on duplicate names and aliases
-	 * @method CommandRegistry#register
 	 * @param {Command} command The Command to be registered
 	 * @param {string} key The key to store the Command at. Will be {@link Command#name}
 	 * @param {boolean} reload Whether or not the command is being reloaded and
 	 * replaced in the collection
+	 * @returns {void}
 	 */
 	public register(command: V, key: K, reload?: boolean): void
 	{
@@ -42,7 +42,6 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 
 	/**
 	 * Contains all [Command groups]{@link Command#group}
-	 * @name CommandRegistry#groups
 	 * @type {string[]}
 	 */
 	public get groups(): string[]
@@ -52,7 +51,6 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 
 	/**
 	 * Finds a command by [name]{@link Command#name} or [alias]{@link Command#aliases}
-	 * @method CommandRegistry#findByNameOrAlias
 	 * @param {string} text The name or alias of the Command
 	 * @returns {Command}
 	 */
@@ -66,7 +64,6 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 * by the user in the guild text channel the provided message is in.
 	 * Needs to be async due to having to access guild settings to check
 	 * for disabled groups
-	 * @method CommandRegistry#filterGuildUsable
 	 * @param {Client} client YAMDBF Client instance
 	 * @param {external:Message} message Discord.js Message object
 	 * @returns {Promise<external:Collection<string, Command>>}
@@ -96,7 +93,6 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	/**
 	 * Returns all commands usable by the user within the DM channel the provided
 	 * message is in
-	 * @method CommandRegistry#filterDMUsable
 	 * @param {Client} client YAMDBF Client instance
 	 * @param {external:Message} message - Discord.js Message object
 	 * @returns {external:Collection<string, Command>}
@@ -110,7 +106,6 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	/**
 	 * Returns all commands that can have their help looked up by the user
 	 * in the DM channel the message is in
-	 * @method CommandRegistry#filterDMHelp
 	 * @param {Client} client YAMDBF Client instance
 	 * @param {external:Message} message Discord.js Message object
 	 * @returns {external:Collection<string, Command>}

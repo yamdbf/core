@@ -32,7 +32,7 @@ export class Middleware
 	 * @method resolveArgs
 	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ResolveArgType}
-	 * @returns {Function} ```
+	 * @returns {MiddlewareFunction} ```
 	 * (message: Message, args: any[]) => [Message, any[]]
 	 * ```
 	 */
@@ -62,7 +62,7 @@ export class Middleware
 	 * @method expect
 	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ExpectArgType}
-	 * @returns {Function} ```
+	 * @returns {MiddlewareFunction} ```
 	 * (message: Message, args: any[]) => [Message, any[]]
 	 * ```
 	 */
