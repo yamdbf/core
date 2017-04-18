@@ -72,7 +72,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	{
 		let filtered: Collection<K, V> = new Collection<K, V>();
 		const currentPermissions: (a: PermissionResolvable) => boolean = a =>
-			(<TextChannel> message.channel).permissionsFor(message.author).hasPermission(a);
+			(<TextChannel> message.channel).permissionsFor(message.author).has(a);
 
 		const byPermissions: (c: V) => boolean = c =>
 			c.permissions.length > 0 ? c.permissions.filter(currentPermissions).length > 0 : true;

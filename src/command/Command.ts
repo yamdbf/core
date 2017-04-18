@@ -198,7 +198,7 @@ export class Command<T extends Client>
 				{
 					throw new Error(`Command#${name} permission "${this.permissions[index]}" at ${name}.permissions[${index}] is not a valid permission.\n\n${err}`);
 				}
-			};
+			}
 		if (this.roles && !Array.isArray(this.roles)) throw new Error(`Roles for command ${name} must be an array`);
 		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
 
