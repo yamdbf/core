@@ -192,7 +192,7 @@ export class Command<T extends Client>
 			{
 				try
 				{
-					(<any> this.client).resolver.resolvePermission(perm);
+					Permissions.resolve(perm);
 				}
 				catch (err)
 				{
