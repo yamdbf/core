@@ -145,7 +145,7 @@ export class CommandDispatcher<T extends Client>
 		if (dm && command.guildOnly) throw this.guildOnlyError();
 		let missingPermissions: PermissionResolvable[] = this.checkPermissions(command, message, dm);
 		if (missingPermissions.length > 0) throw this.missingPermissionsError(missingPermissions);
-		if (!this.checkLimiter(command, message, dm)) throw this.failedLimiterError(command, message);
+		if (!(await this.checkLimiter(command, message, dm))) throw await this.failedLimiterError(command, message);
 		if (!this.hasRoles(command, message, dm)) throw this.missingRolesError(command);
 
 		return true;
