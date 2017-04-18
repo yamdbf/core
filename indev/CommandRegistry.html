@@ -245,7 +245,7 @@
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Returns all commands that can have their help looked up by the user
+    <p>Returns all commands that can have their help looked up by the caller
 in the DM channel the message is in</p>
 </div>
 
@@ -418,7 +418,7 @@ in the DM channel the message is in</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Returns all commands usable by the user within the DM channel the provided
+    <p>Returns all commands usable by the caller within the DM channel the provided
 message is in</p>
 </div>
 
@@ -592,7 +592,7 @@ message is in</p>
 
 <div class="description">
     <p>Returns a Promise resolving with a collection of all commands usable
-by the user in the guild text channel the provided message is in.
+by the caller in the guild text channel the provided message is in.
 Needs to be async due to having to access guild settings to check
 for disabled groups</p>
 </div>

@@ -615,10 +615,10 @@
                     }
                 },
                 {
-                    "name": "permissions",
+                    "name": "callerPermissions",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Array of permissions required by the command\ncaller to be able to execute the command in the guild the command is called in.</p>\n<p>If any permissions are provided the command's <code>guildOnly</code> property will be automatically set to true</p>",
+                    "description": "<p>Array of permissions required by the command\ncaller to be able to execute the command in\nthe guild the command is called in.</p>\n<p>If any permissions are provided the command's <code>guildOnly</code>\nproperty will be automatically overridden to true</p>",
                     "type": {
                         "names": [
                             "Array.<external:PermissionResolvable>"
@@ -1015,7 +1015,7 @@
                     "name": "filterGuildUsable",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns a Promise resolving with a collection of all commands usable\nby the user in the guild text channel the provided message is in.\nNeeds to be async due to having to access guild settings to check\nfor disabled groups</p>",
+                    "description": "<p>Returns a Promise resolving with a collection of all commands usable\nby the caller in the guild text channel the provided message is in.\nNeeds to be async due to having to access guild settings to check\nfor disabled groups</p>",
                     "parameters": [
                         {
                             "name": "client",
@@ -1044,7 +1044,7 @@
                     "name": "filterDMUsable",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns all commands usable by the user within the DM channel the provided\nmessage is in</p>",
+                    "description": "<p>Returns all commands usable by the caller within the DM channel the provided\nmessage is in</p>",
                     "parameters": [
                         {
                             "name": "client",
@@ -1073,7 +1073,7 @@
                     "name": "filterDMHelp",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns all commands that can have their help looked up by the user\nin the DM channel the message is in</p>",
+                    "description": "<p>Returns all commands that can have their help looked up by the caller\nin the DM channel the message is in</p>",
                     "parameters": [
                         {
                             "name": "client",
@@ -2535,9 +2535,9 @@
                     "nullable": ""
                 },
                 {
-                    "name": "permissions",
+                    "name": "callerPermissions",
                     "type": "Array.<PermissionResolvable>",
-                    "description": "<p>See: {@link Command#permissions}</p>",
+                    "description": "<p>See: {@link Command#callerPermissions}</p>",
                     "default": "[]",
                     "optional": true,
                     "nullable": ""
