@@ -12,7 +12,7 @@ export default class extends Command<Client>
 			aliases: ['prefix'],
 			usage: '<prefix>setprefix [prefix]',
 			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Set the prefix to "noprefix" to allow commands to be called without a prefix.',
-			permissions: ['ADMINISTRATOR']
+			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 

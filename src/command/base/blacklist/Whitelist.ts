@@ -15,7 +15,7 @@ export default class extends Command<Client>
 			description: 'Remove a user from the command blacklist',
 			aliases: ['wl'],
 			usage: '<prefix>whitelist <user>, [\'global\']',
-			permissions: ['ADMINISTRATOR']
+			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 

@@ -10,7 +10,7 @@
  * @property {boolean} [guildOnly=false] See: {@link Command#guildOnly}
  * @property {boolean} [hidden=false] See: {@link Command#hidden}
  * @property {ArgOpts} [argOpts] See: {@link Command#argOpts}, {@link ArgOpts}
- * @property {PermissionResolvable[]} [permissions=[]] See: {@link Command#permissions}
+ * @property {PermissionResolvable[]} [callerPermissions=[]] See: {@link Command#callerPermissions}
  * @property {string[]} [roles=[]] See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] See: {@link Command#ownerOnly}
  * @property {string} [overloads=null] See: {@link Command#overloads}
@@ -31,7 +31,7 @@ export type CommandInfo = {
 	guildOnly?: boolean;
 	hidden?: boolean;
 	argOpts?: ArgOpts;
-	permissions?: PermissionResolvable[];
+	callerPermissions?: PermissionResolvable[];
 	roles?: string[];
 	ownerOnly?: boolean;
 	overloads?: BaseCommandName;

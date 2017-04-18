@@ -126,13 +126,13 @@ export function argOpts(value: ArgOpts): ClassDecorator
 }
 
 /**
- * Set `permissions` metadata
+ * Set `callerPermissions` metadata
  * @param {...external:PermissionResolvable} values Values to set
  * @returns {ClassDecorator}
  */
-export function permissions(...values: PermissionResolvable[]): ClassDecorator
+export function callerPermissions(...values: PermissionResolvable[]): ClassDecorator
 {
-	return _setMetaData('permissions', values);
+	return _setMetaData('callerPermissions', values);
 }
 
 /**

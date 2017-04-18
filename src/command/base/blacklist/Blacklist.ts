@@ -16,7 +16,7 @@ export default class extends Command<Client>
 			aliases: ['bl'],
 			usage: '<prefix>blacklist <user>, [\'global\']',
 			extraHelp: 'If global, this will block the user from calling commands in ANY server and DMs',
-			permissions: ['ADMINISTRATOR']
+			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 

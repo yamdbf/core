@@ -18,7 +18,7 @@ export default class extends Command<Client>
 			usage: '<prefix>limit <command>, <role names, ...>',
 			extraHelp: 'The comma after the command name -- before the role names list -- is necessary.',
 			argOpts: { separator: ',' },
-			permissions: ['ADMINISTRATOR']
+			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 

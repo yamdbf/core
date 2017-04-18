@@ -35,26 +35,26 @@ export class CommandLoader<T extends Client>
 			const commandLocation: string = fileName.replace('.js', '');
 			delete require.cache[require.resolve(commandLocation)];
 
-			let loadedCommandClass: any = this.getCommandClass(commandLocation);
-			const _command: Command<T> = new loadedCommandClass(this._client);
+			const loadedCommandClass: any = this.getCommandClass(commandLocation);
+			const command: Command<T> = new loadedCommandClass(this._client);
 
-			if (this._client.disableBase.includes(<BaseCommandName> _command.name)) continue;
-			_command._classloc = commandLocation;
+			if (this._client.disableBase.includes(<BaseCommandName> command.name)) continue;
+			command._classloc = commandLocation;
 
-			if (_command.overloads)
+			if (command.overloads)
 			{
-				if (!this._client.commands.has(_command.overloads))
-					throw new Error(`Command "${_command.overloads}" does not exist to be overloaded.`);
-				this._client.commands.delete(_command.overloads);
-				this._client.commands.register(_command, _command.name);
+				if (!this._client.commands.has(command.overloads))
+					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
+				this._client.commands.delete(command.overloads);
+				this._client.commands.register(command, command.name);
 				this.logger.info('CommandLoader',
-					`Command '${_command.name}' loaded, overloading command '${_command.overloads}'.`);
+					`Command '${command.name}' loaded, overloading command '${command.overloads}'.`);
 			}
 			else
 			{
-				this._client.commands.register(_command, _command.name);
+				this._client.commands.register(command, command.name);
 				loadedCommands++;
-				this.logger.info('CommandLoader', `Command '${_command.name}' loaded.`);
+				this.logger.info('CommandLoader', `Command '${command.name}' loaded.`);
 			}
 		}
 		this.logger.info('CommandLoader',
@@ -73,10 +73,10 @@ export class CommandLoader<T extends Client>
 		delete require.cache[require.resolve(commandLocation)];
 
 		const loadedCommandClass: any = this.getCommandClass(commandLocation);
-		const _command: Command<T> = new loadedCommandClass(this._client);
-		_command._classloc = commandLocation;
-		this._client.commands.register(_command, _command.name, true);
-		this.logger.info('CommandLoader', `Command '${_command.name}' reloaded.`);
+		const command: Command<T> = new loadedCommandClass(this._client);
+		command._classloc = commandLocation;
+		this._client.commands.register(command, command.name, true);
+		this.logger.info('CommandLoader', `Command '${command.name}' reloaded.`);
 		return true;
 	}
 

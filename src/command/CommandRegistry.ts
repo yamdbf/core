@@ -61,7 +61,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 
 	/**
 	 * Returns a Promise resolving with a collection of all commands usable
-	 * by the user in the guild text channel the provided message is in.
+	 * by the caller in the guild text channel the provided message is in.
 	 * Needs to be async due to having to access guild settings to check
 	 * for disabled groups
 	 * @param {Client} client YAMDBF Client instance
@@ -75,13 +75,13 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 			(<TextChannel> message.channel).permissionsFor(message.author).has(a);
 
 		const byPermissions: (c: V) => boolean = c =>
-			c.permissions.length > 0 ? c.permissions.filter(currentPermissions).length > 0 : true;
+			c.callerPermissions.length > 0 ? c.callerPermissions.filter(currentPermissions).length > 0 : true;
 
 		const byRoles: (c: V) => boolean = c =>
 			!(c.roles.length > 0 && message.member.roles.filter(role => c.roles.includes(role.name)).size === 0);
 
 		const byOwnerOnly: (c: V) => boolean = c =>
-			((<any> client.config).owner.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly;
+			(client.config.owner.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly;
 
 		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 		for (const [name, command] of this.filter(byPermissions).filter(byRoles).filter(byOwnerOnly).entries())
@@ -91,7 +91,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	}
 
 	/**
-	 * Returns all commands usable by the user within the DM channel the provided
+	 * Returns all commands usable by the caller within the DM channel the provided
 	 * message is in
 	 * @param {Client} client YAMDBF Client instance
 	 * @param {external:Message} message - Discord.js Message object
@@ -99,12 +99,12 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 */
 	public filterDMUsable(client: T, message: Message): Collection<K, V>
 	{
-		return this.filter(c => !c.guildOnly && (((<any> client.config).owner
+		return this.filter(c => !c.guildOnly && ((client.config.owner
 			.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly));
 	}
 
 	/**
-	 * Returns all commands that can have their help looked up by the user
+	 * Returns all commands that can have their help looked up by the caller
 	 * in the DM channel the message is in
 	 * @param {Client} client YAMDBF Client instance
 	 * @param {external:Message} message Discord.js Message object
@@ -112,7 +112,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 */
 	public filterDMHelp(client: T, message: Message): Collection<K, V>
 	{
-		return this.filter(c => ((<any> client.config).owner
+		return this.filter(c => (client.config.owner
 			.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly);
 	}
 }

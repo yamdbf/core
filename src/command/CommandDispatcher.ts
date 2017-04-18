@@ -203,7 +203,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private checkPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
 	{
-		return this._client.selfbot || dm ? [] : command.permissions.filter(a =>
+		return this._client.selfbot || dm ? [] : command.callerPermissions.filter(a =>
 			!(<TextChannel> message.channel).permissionsFor(message.author).has(a));
 	}
 

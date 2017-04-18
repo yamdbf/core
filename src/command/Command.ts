@@ -1,4 +1,4 @@
-import { PermissionResolvable, Message } from 'discord.js';
+import { PermissionResolvable, Permissions, Message } from 'discord.js';
 import { Client } from '../client/Client';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
@@ -22,7 +22,7 @@ export class Command<T extends Client>
 	public guildOnly: boolean;
 	public hidden: boolean;
 	public argOpts: ArgOpts;
-	public permissions: PermissionResolvable[];
+	public callerPermissions: PermissionResolvable[];
 	public roles: string[];
 	public ownerOnly: boolean;
 	public overloads: string;
@@ -104,10 +104,12 @@ export class Command<T extends Client>
 
 		/**
 		 * Array of permissions required by the command
-		 * caller to be able to execute the command in the guild the command is called in.
+		 * caller to be able to execute the command in
+		 * the guild the command is called in.
 		 *
-		 * If any permissions are provided the command's `guildOnly` property will be automatically set to true
-		 * @name Command#permissions
+		 * If any permissions are provided the command's `guildOnly`
+		 * property will be automatically overridden to true
+		 * @name Command#callerPermissions
 		 * @type {external:PermissionResolvable[]}
 		 */
 
@@ -167,8 +169,6 @@ export class Command<T extends Client>
 	 */
 	public register(): void
 	{
-		const name: string = this.constructor.name;
-
 		// Set defaults if not present
 		if (!this.aliases) this.aliases = [];
 		if (!this.group) this.group = 'base';
@@ -176,19 +176,19 @@ export class Command<T extends Client>
 		if (!this.hidden) this.hidden = false;
 		if (!this.argOpts) this.argOpts = {};
 		if (!this.argOpts.separator) this.argOpts.separator = ' ';
-		if (!this.permissions) this.permissions = [];
+		if (!this.callerPermissions) this.callerPermissions = [];
 		if (!this.roles) this.roles = [];
 		if (!this.ownerOnly) this.ownerOnly = false;
 
 		// Make necessary asserts
-		if (!this.name) throw new Error(`You must provide a name for command: ${name}`);
-		if (!this.description) throw new Error(`You must provide a description for command: ${name}`);
-		if (!this.usage) throw new Error(`You must provide usage information for command: ${name}`);
-		if (!this.group) throw new Error(`You must provide a group for command: ${name}`);
-		if (this.aliases && !Array.isArray(this.aliases)) throw new Error(`Aliases for command ${name} must be an array`);
-		if (this.permissions && !Array.isArray(this.permissions)) throw new Error(`Permissions for command ${name} must be an array`);
-		if (this.permissions && this.permissions.length > 0)
-			for (const [index, perm] of this.permissions.entries())
+		if (!this.name) throw new Error(`A command is missing a name`);
+		if (!this.description) throw new Error(`You must provide a description for command: ${this.name}`);
+		if (!this.usage) throw new Error(`You must provide usage information for command: ${this.name}`);
+		if (!this.group) throw new Error(`You must provide a group for command: ${this.name}`);
+		if (this.aliases && !Array.isArray(this.aliases)) throw new Error(`Aliases for command "${this.name}" must be an array`);
+		if (this.callerPermissions && !Array.isArray(this.callerPermissions)) throw new Error(`callerPermissions for Command "${this.name}" must be an array`);
+		if (this.callerPermissions && this.callerPermissions.length > 0)
+			for (const [index, perm] of this.callerPermissions.entries())
 			{
 				try
 				{
@@ -196,17 +196,17 @@ export class Command<T extends Client>
 				}
 				catch (err)
 				{
-					throw new Error(`Command#${name} permission "${this.permissions[index]}" at ${name}.permissions[${index}] is not a valid permission.\n\n${err}`);
+					throw new Error(`Command "${this.name}" caller permission "${this.callerPermissions[index]}" at "${this.name}".callerPermissions[${index}] is not a valid permission.\n\n${err}`);
 				}
 			}
-		if (this.roles && !Array.isArray(this.roles)) throw new Error(`Roles for command ${name} must be an array`);
+		if (this.roles && !Array.isArray(this.roles)) throw new Error(`Roles for command ${this.name} must be an array`);
 		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
 
 		// Default guildOnly to true if permissions/roles are given
-		if (this.permissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
+		if (this.callerPermissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
 
-		if (!this.action) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
-		if (!(this.action instanceof Function)) throw new Error(`Command#${name}.action: expected Function, got: ${typeof this.action}`);
+		if (!this.action) throw new Error(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
+		if (!(this.action instanceof Function)) throw new Error(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 	}
 
 	/**

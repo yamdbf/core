@@ -12,7 +12,7 @@ export default class extends Command<Client>
 			aliases: ['lg'],
 			usage: '<prefix>listgroups',
 			extraHelp: `A '*' denotes a disabled group when listing all command groups.`,
-			permissions: ['ADMINISTRATOR']
+			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 

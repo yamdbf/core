@@ -15,7 +15,7 @@ export default class extends Command<Client>
 			aliases: ['enable', 'eg'],
 			usage: '<prefix>enablegroup <group>',
 			extraHelp: 'Enables a command group so that all of the commands in the group can be used on this server.',
-			permissions: ['ADMINISTRATOR']
+			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 

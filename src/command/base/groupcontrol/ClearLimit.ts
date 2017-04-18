@@ -15,7 +15,7 @@ export default class extends Command<Client>
 			name: 'clearlimit',
 			description: 'Clear role restrictions from a command',
 			usage: '<prefix>clearlimit <command>',
-			permissions: ['ADMINISTRATOR']
+			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 
