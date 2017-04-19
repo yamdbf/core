@@ -11,7 +11,7 @@ export default class extends Command<Client>
 			description: 'Set or check the bot command prefix for this guild',
 			aliases: ['prefix'],
 			usage: '<prefix>setprefix [prefix]',
-			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Set the prefix to "noprefix" to allow commands to be called without a prefix.',
+			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Use "clear" to clear the prefix and allow commands to be called without a prefix.',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
@@ -29,13 +29,13 @@ export default class extends Command<Client>
 		if (/[\\`]/.test(prefix))
 			return this.respond(message, `Prefixes may not contain backticks or backslashes.`);
 
-		if (prefix === 'noprefix') prefix = '';
+		if (prefix === 'clear') prefix = '';
 
 		if (this.client.selfbot)
 			for (const guild of this.client.storage.guilds.values())
 				await guild.settings.set('prefix', prefix);
-
 		else await message.guild.storage.settings.set('prefix', prefix);
+
 		this.respond(message, prefix === '' ? 'Command prefix removed.'
 			: `Command prefix set to \`${prefix}\``);
 	}

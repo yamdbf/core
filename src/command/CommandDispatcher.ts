@@ -124,8 +124,8 @@ export class CommandDispatcher<T extends Client>
 
 		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
 
-		if (dm && !prefix) prefix = '';
-		if (!prefix && !dm) return [false, null, null, null];
+		if (dm && typeof prefix === 'undefined') prefix = '';
+		if (typeof prefix === 'undefined' && !dm) return [false, null, null, null];
 
 		const commandName: string = message.content.trim()
 			.slice(prefix.length).trim()
