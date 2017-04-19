@@ -169,7 +169,7 @@ export function overloads(value: string): ClassDecorator
  * Set `owneronly` flag metadata
  * @returns {ClassDecorator}
  */
-export function ownerOnly(target: typeof Command): typeof Command
+export function ownerOnly<T extends Function>(target: T): T
 {
 	return _setFlagMetaData(target, 'ownerOnly');
 }
@@ -178,7 +178,7 @@ export function ownerOnly(target: typeof Command): typeof Command
  * Set `guildOnly` flag metadata
  * @returns {ClassDecorator}
  */
-export function guildOnly(target: typeof Command): typeof Command
+export function guildOnly<T extends Function>(target: T): T
 {
 	return _setFlagMetaData(target, 'guildOnly');
 }
@@ -187,7 +187,7 @@ export function guildOnly(target: typeof Command): typeof Command
  * Set `hidden` flag metadata
  * @returns {ClassDecorator}
  */
-export function hidden(target: typeof Command): typeof Command
+export function hidden<T extends Function>(target: T): T
 {
 	return _setFlagMetaData(target, 'hidden');
 }
@@ -196,7 +196,7 @@ export function hidden(target: typeof Command): typeof Command
  * Set a boolean flag metadata on a command class
  * @private
  */
-function _setFlagMetaData(target: typeof Command, flag: string): typeof Command
+function _setFlagMetaData<T extends Function>(target: T, flag: string): T
 {
 	Object.defineProperty(target.prototype, flag, {
 		value: true,
@@ -211,7 +211,7 @@ function _setFlagMetaData(target: typeof Command, flag: string): typeof Command
  */
 function _setMetaData(key: string, value: any): ClassDecorator
 {
-	return function(target: typeof Command): typeof Command
+	return function<T extends Function>(target: T): T
 	{
 		Object.defineProperty(target.prototype, key, {
 			value: value,
