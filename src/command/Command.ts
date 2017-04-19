@@ -23,6 +23,7 @@ export class Command<T extends Client>
 	public hidden: boolean;
 	public argOpts: ArgOpts;
 	public callerPermissions: PermissionResolvable[];
+	public clientPermissions: PermissionResolvable[];
 	public roles: string[];
 	public ownerOnly: boolean;
 	public overloads: string;
@@ -114,6 +115,17 @@ export class Command<T extends Client>
 		 */
 
 		/**
+		 * Array of permissions required by the client
+		 * to be able to execute the command in the guild
+		 * the command is called in.
+		 *
+		 * If any permissions are provided the command's `guildOnly`
+		 * property will be automatically overridden to true
+		 * @name Command#clientPermissions
+		 * @type {external:PermissionResolvable[]}
+		 */
+
+		/**
 		 * Array of roles required to use the command. If the command caller
 		 * has any of the roles in the array, they will be able to use the command
 		 *
@@ -163,47 +175,40 @@ export class Command<T extends Client>
 	}
 
 	/**
-	 * Assert {@link Command#action} is typeof Function, finishing the
-	 * command creation process.<br>Called by {@link CommandRegistry#register}
+	 * Make necessary asserts for Command validity. Called by the CommandLoader when
+	 * adding Commands to the CommandRegistry via {@link CommandRegistry#register}
 	 * @returns {void}
 	 */
 	public register(): void
 	{
 		// Set defaults if not present
-		if (!this.aliases) this.aliases = [];
-		if (!this.group) this.group = 'base';
-		if (!this.guildOnly) this.guildOnly = false;
-		if (!this.hidden) this.hidden = false;
-		if (!this.argOpts) this.argOpts = {};
-		if (!this.argOpts.separator) this.argOpts.separator = ' ';
-		if (!this.callerPermissions) this.callerPermissions = [];
-		if (!this.roles) this.roles = [];
-		if (!this.ownerOnly) this.ownerOnly = false;
+		if (typeof this.aliases === 'undefined') this.aliases = [];
+		if (typeof this.group === 'undefined') this.group = 'base';
+		if (typeof this.guildOnly === 'undefined') this.guildOnly = false;
+		if (typeof this.hidden === 'undefined') this.hidden = false;
+		if (typeof this.argOpts === 'undefined') this.argOpts = {};
+		if (typeof this.argOpts.separator === 'undefined') this.argOpts.separator = ' ';
+		if (typeof this.callerPermissions === 'undefined') this.callerPermissions = [];
+		if (typeof this.clientPermissions === 'undefined') this.clientPermissions = [];
+		if (typeof this.roles === 'undefined') this.roles = [];
+		if (typeof this.ownerOnly === 'undefined') this.ownerOnly = false;
 
 		// Make necessary asserts
 		if (!this.name) throw new Error(`A command is missing a name`);
 		if (!this.description) throw new Error(`You must provide a description for command: ${this.name}`);
 		if (!this.usage) throw new Error(`You must provide usage information for command: ${this.name}`);
-		if (!this.group) throw new Error(`You must provide a group for command: ${this.name}`);
 		if (this.aliases && !Array.isArray(this.aliases)) throw new Error(`Aliases for command "${this.name}" must be an array`);
 		if (this.callerPermissions && !Array.isArray(this.callerPermissions)) throw new Error(`callerPermissions for Command "${this.name}" must be an array`);
-		if (this.callerPermissions && this.callerPermissions.length > 0)
-			for (const [index, perm] of this.callerPermissions.entries())
-			{
-				try
-				{
-					Permissions.resolve(perm);
-				}
-				catch (err)
-				{
-					throw new Error(`Command "${this.name}" caller permission "${this.callerPermissions[index]}" at "${this.name}".callerPermissions[${index}] is not a valid permission.\n\n${err}`);
-				}
-			}
+		if (this.clientPermissions && !Array.isArray(this.clientPermissions)) throw new Error(`clientPermissions for Command "${this.name}" must be an array`);
+		if (this.callerPermissions && this.callerPermissions.length) this._validatePermissions('callerPermissions', this.callerPermissions);
+		if (this.clientPermissions && this.clientPermissions.length) this._validatePermissions('clientPermissions', this.clientPermissions);
 		if (this.roles && !Array.isArray(this.roles)) throw new Error(`Roles for command ${this.name} must be an array`);
 		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
 
 		// Default guildOnly to true if permissions/roles are given
-		if (this.callerPermissions.length > 0 || this.roles.length > 0) this.guildOnly = true;
+		if (!this.guildOnly && (this.callerPermissions.length
+			|| this.clientPermissions.length
+			|| this.roles.length)) this.guildOnly = true;
 
 		if (!this.action) throw new Error(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 		if (!(this.action instanceof Function)) throw new Error(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
@@ -260,5 +265,20 @@ export class Command<T extends Client>
 		if (this.client.selfbot && code) return message.editCode(code, response);
 		if (code) return message.channel.sendCode(code, response);
 		return message.channel.sendMessage(response);
+	}
+
+	/**
+	 * Validate permissions resolvables in the given array, throwing an error
+	 * for any that are invalid
+	 * @private
+	 */
+	private _validatePermissions(method: string, permissions: PermissionResolvable[]): void
+	{
+		let errString: (i: number, err: any) => string = (i: number, err: any) =>
+			`Command "${this.name}" permission "${permissions[i]}" at "${this.name}".${method}[${i}] is not a valid permission.\n\n${err}`;
+
+		for (const [index, perm] of permissions.entries())
+			try { Permissions.resolve(perm); }
+			catch (err) { throw new Error(errString(index, err)); }
 	}
 }

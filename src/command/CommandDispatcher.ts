@@ -51,6 +51,14 @@ export class CommandDispatcher<T extends Client>
 		// Check ratelimits
 		if (!this.checkRateLimits(message, command)) return;
 
+		// Alert for missing client permissions
+		const missingClientPermissions: PermissionResolvable[] = this.checkClientPermissions(command, message, dm);
+		if (missingClientPermissions.length > 0)
+		{
+			message.channel.send(this.missingClientPermissionsError(missingClientPermissions));
+			return;
+		}
+
 		// Remove clientuser from message.mentions if only mentioned one time as a prefix
 		if (!(!dm && prefix === await message.guild.storage.settings.get('prefix')) && prefix !== ''
 			&& (message.content.match(new RegExp(`<@!?${this._client.user.id}>`, 'g')) || []).length === 1)
@@ -143,8 +151,8 @@ export class CommandDispatcher<T extends Client>
 			&& (await storage.settings.get('disabledGroups')).includes(command.group)) return false;
 
 		if (dm && command.guildOnly) throw this.guildOnlyError();
-		let missingPermissions: PermissionResolvable[] = this.checkPermissions(command, message, dm);
-		if (missingPermissions.length > 0) throw this.missingPermissionsError(missingPermissions);
+		const missingCallerPermissions: PermissionResolvable[] = this.checkCallerPermissions(command, message, dm);
+		if (missingCallerPermissions.length > 0) throw this.missingCallerPermissionsError(missingCallerPermissions);
 		if (!(await this.checkLimiter(command, message, dm))) throw await this.failedLimiterError(command, message);
 		if (!this.hasRoles(command, message, dm)) throw this.missingRolesError(command);
 
@@ -199,9 +207,19 @@ export class CommandDispatcher<T extends Client>
 	}
 
 	/**
+	 * Check that the client has the permissions requested by the
+	 * command in the channel the command is being called in
+	 */
+	private checkClientPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
+	{
+		return dm ? [] : command.clientPermissions.filter(a =>
+			!(<TextChannel> message.channel).permissionsFor(this._client.user).has(a));
+	}
+
+	/**
 	 * Compare user permissions to the command's requisites
 	 */
-	private checkPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
+	private checkCallerPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return this._client.selfbot || dm ? [] : command.callerPermissions.filter(a =>
 			!(<TextChannel> message.channel).permissionsFor(message.author).has(a));
@@ -282,9 +300,20 @@ export class CommandDispatcher<T extends Client>
 	}
 
 	/**
-	 * Return an error for missing permissions
+	 * Return an error for missing caller permissions
 	 */
-	private missingPermissionsError(missing: PermissionResolvable[]): string
+	private missingClientPermissionsError(missing: PermissionResolvable[]): string
+	{
+		return `**I must be given the following permission`
+			+ `${missing.length > 1 ? 's' : ''} `
+			+ `for that command to be usable in this channel:**\n\`\`\`css\n`
+			+ `${missing.join(', ')}\n\`\`\``;
+	}
+
+	/**
+	 * Return an error for missing caller permissions
+	 */
+	private missingCallerPermissionsError(missing: PermissionResolvable[]): string
 	{
 		return `**You're missing the following permission`
 			+ `${missing.length > 1 ? 's' : ''} `

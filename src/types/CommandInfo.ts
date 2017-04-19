@@ -11,6 +11,7 @@
  * @property {boolean} [hidden=false] See: {@link Command#hidden}
  * @property {ArgOpts} [argOpts] See: {@link Command#argOpts}, {@link ArgOpts}
  * @property {PermissionResolvable[]} [callerPermissions=[]] See: {@link Command#callerPermissions}
+ * @property {PermissionResolvable[]} [clientPermissions=[]] See: {@link Command#clientPermissions}
  * @property {string[]} [roles=[]] See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] See: {@link Command#ownerOnly}
  * @property {string} [overloads=null] See: {@link Command#overloads}
@@ -32,6 +33,7 @@ export type CommandInfo = {
 	hidden?: boolean;
 	argOpts?: ArgOpts;
 	callerPermissions?: PermissionResolvable[];
+	clientPermissions?: PermissionResolvable[];
 	roles?: string[];
 	ownerOnly?: boolean;
 	overloads?: BaseCommandName;
