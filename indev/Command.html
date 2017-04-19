@@ -488,6 +488,75 @@ property will be automatically overridden to true</p>
 
         
             
+<h4 class="name" id="clientPermissions">.<a href='#clientPermissions' style='color: black'>clientPermissions</a><span class="type-signature">: <a href="external-PermissionResolvable.html">PermissionResolvable</a>[]</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    <p>Array of permissions required by the client
+to be able to execute the command in the guild
+the command is called in.</p>
+<p>If any permissions are provided the command's <code>guildOnly</code>
+property will be automatically overridden to true</p>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd><a href="external-PermissionResolvable.html">PermissionResolvable</a>[]</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
 <h4 class="name" id="description">.<a href='#description' style='color: black'>description</a><span class="type-signature">: string</span></h4>
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
@@ -1347,8 +1416,8 @@ new commands</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Assert <a href="Command.html#action"><code>Command#action</code></a> is typeof Function, finishing the
-command creation process.<br>Called by <a href="CommandRegistry.html#register"><code>CommandRegistry#register</code></a></p>
+    <p>Make necessary asserts for Command validity. Called by the CommandLoader when
+adding Commands to the CommandRegistry via <a href="CommandRegistry.html#register"><code>CommandRegistry#register</code></a></p>
 </div>
 
 

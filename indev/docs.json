@@ -626,6 +626,17 @@
                     }
                 },
                 {
+                    "name": "clientPermissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Array of permissions required by the client\nto be able to execute the command in the guild\nthe command is called in.</p>\n<p>If any permissions are provided the command's <code>guildOnly</code>\nproperty will be automatically overridden to true</p>",
+                    "type": {
+                        "names": [
+                            "Array.<external:PermissionResolvable>"
+                        ]
+                    }
+                },
+                {
                     "name": "roles",
                     "access": "",
                     "virtual": false,
@@ -693,7 +704,7 @@
                     "name": "register",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Assert {@link Command#action} is typeof Function, finishing the\ncommand creation process.<br>Called by {@link CommandRegistry#register}</p>",
+                    "description": "<p>Make necessary asserts for Command validity. Called by the CommandLoader when\nadding Commands to the CommandRegistry via {@link CommandRegistry#register}</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
@@ -758,6 +769,14 @@
                         "type": "Promise.<(external:Message|Array.<external:Message>)>",
                         "description": ""
                     }
+                },
+                {
+                    "name": "_validatePermissions",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Validate permissions resolvables in the given array, throwing an error\nfor any that are invalid</p>",
+                    "parameters": [],
+                    "examples": []
                 }
             ]
         },
@@ -816,7 +835,15 @@
                     "examples": []
                 },
                 {
-                    "name": "checkPermissions",
+                    "name": "checkClientPermissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check that the client has the permissions requested by the\ncommand in the channel the command is being called in</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "checkCallerPermissions",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Compare user permissions to the command's requisites</p>",
@@ -872,10 +899,18 @@
                     "examples": []
                 },
                 {
-                    "name": "missingPermissionsError",
+                    "name": "missingClientPermissionsError",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Return an error for missing permissions</p>",
+                    "description": "<p>Return an error for missing caller permissions</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "missingCallerPermissionsError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return an error for missing caller permissions</p>",
                     "parameters": [],
                     "examples": []
                 },
@@ -2538,6 +2573,14 @@
                     "name": "callerPermissions",
                     "type": "Array.<PermissionResolvable>",
                     "description": "<p>See: {@link Command#callerPermissions}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "clientPermissions",
+                    "type": "Array.<PermissionResolvable>",
+                    "description": "<p>See: {@link Command#clientPermissions}</p>",
                     "default": "[]",
                     "optional": true,
                     "nullable": ""
