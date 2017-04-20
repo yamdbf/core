@@ -228,7 +228,7 @@ export class Client extends Discord.Client
 		this.once('ready', async () =>
 		{
 			await this.init();
-			this.user.setGame(this.statusText);
+			if (this.statusText) this.user.setGame(this.statusText);
 
 			this.emit('waiting');
 		});
