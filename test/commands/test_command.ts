@@ -12,9 +12,7 @@ export default class extends Command<Client>
 		super(client, {
 			name: 'test',
 			description: 'test command',
-			usage: '<prefix>test',
-			clientPermissions: ['MANAGE_GUILD'],
-			ratelimit: '2/10s'
+			usage: '<prefix>test'
 		});
 	}
 
