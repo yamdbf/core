@@ -165,11 +165,11 @@ export class Client extends Discord.Client
 		this._dispatcher = !this.passive ? new CommandDispatcher<this>(this) : null;
 
 		// Make some asserts
-		if (!this._token) throw new Error('You must provide a token for the client.');
-		if (!this.commandsDir && !this.passive) throw new Error('You must provide a directory to load commands from via commansdDir');
-		if (!this.config) throw new Error('You must provide a config containing token and owner ids.');
-		if (!this.config.owner) throw new Error('You must provide config array of owner ids.');
-		if (!(this.config.owner instanceof Array)) throw new TypeError('Config owner option must be an arrray of user ids.');
+		if (!this._token) throw new Error('A token must be provided for the client');
+		if (!this.commandsDir && !this.passive) throw new Error('A directory from which to load commands must be provided via commandsDir');
+		if (!this.config) throw new Error('A config containing containing `token` string and `owner` ID string array must be provided');
+		if (!this.config.owner) throw new Error('Provided Client config is missing owner ID string array');
+		if (!(this.config.owner instanceof Array)) throw new TypeError('Client config `owner` field must be an array of user ID strings.');
 
 		// Load commands
 		if (!this.passive) this.loadCommand('all');

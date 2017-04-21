@@ -171,7 +171,7 @@ export class Command<T extends Client>
 	 */
 	public action(message: Message, args: any[]): void
 	{
-		throw new Error(`${this.constructor.name} has not overloaded the command action method`);
+		throw new Error(`\`${this.constructor.name}\` has not overloaded the command action method`);
 	}
 
 	/**
@@ -195,23 +195,23 @@ export class Command<T extends Client>
 
 		// Make necessary asserts
 		if (!this.name) throw new Error(`A command is missing a name`);
-		if (!this.description) throw new Error(`You must provide a description for command: ${this.name}`);
-		if (!this.usage) throw new Error(`You must provide usage information for command: ${this.name}`);
-		if (this.aliases && !Array.isArray(this.aliases)) throw new Error(`Aliases for command "${this.name}" must be an array`);
-		if (this.callerPermissions && !Array.isArray(this.callerPermissions)) throw new Error(`callerPermissions for Command "${this.name}" must be an array`);
-		if (this.clientPermissions && !Array.isArray(this.clientPermissions)) throw new Error(`clientPermissions for Command "${this.name}" must be an array`);
+		if (!this.description) throw new Error(`A description must be provided for Command: ${this.name}`);
+		if (!this.usage) throw new Error(`Usage information must be provided for Command: ${this.name}`);
+		if (this.aliases && !Array.isArray(this.aliases)) throw new TypeError(`Aliases for Command "${this.name}" must be an array of alias strings`);
+		if (this.callerPermissions && !Array.isArray(this.callerPermissions)) throw new TypeError(`\`callerPermissions\` for Command "${this.name}" must be an array`);
+		if (this.clientPermissions && !Array.isArray(this.clientPermissions)) throw new TypeError(`\`clientPermissions\` for Command "${this.name}" must be an array`);
 		if (this.callerPermissions && this.callerPermissions.length) this._validatePermissions('callerPermissions', this.callerPermissions);
 		if (this.clientPermissions && this.clientPermissions.length) this._validatePermissions('clientPermissions', this.clientPermissions);
-		if (this.roles && !Array.isArray(this.roles)) throw new Error(`Roles for command ${this.name} must be an array`);
-		if (this.overloads && this.group !== 'base') throw new Error('Commands may only overload commands in group "base"');
+		if (this.roles && !Array.isArray(this.roles)) throw new TypeError(`\`roles\` for Command "${this.name}" must be an array`);
+		if (this.overloads && this.group !== 'base') throw new TypeError(`Expected Command#overloads to equal "base", got: "${this.group}"`);
 
 		// Default guildOnly to true if permissions/roles are given
 		if (!this.guildOnly && (this.callerPermissions.length
 			|| this.clientPermissions.length
 			|| this.roles.length)) this.guildOnly = true;
 
-		if (!this.action) throw new Error(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
-		if (!(this.action instanceof Function)) throw new Error(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
+		if (!this.action) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
+		if (!(this.action instanceof Function)) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 	}
 
 	/**
@@ -279,6 +279,6 @@ export class Command<T extends Client>
 
 		for (const [index, perm] of permissions.entries())
 			try { Permissions.resolve(perm); }
-			catch (err) { throw new Error(errString(index, err)); }
+			catch (err) { throw new TypeError(errString(index, err)); }
 	}
 }
