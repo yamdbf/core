@@ -23,7 +23,7 @@ export class Middleware
 	 * ```
 	 * Example:
 	 * ```
-	 * { 'mem': 'Member', 'age>': 'Number', '...desc': 'String' }
+	 * { '<mem>': 'Member', '<age>': 'Number', '<...desc>': 'String' }
 	 * ```
 	 *
 	 * Supports `'...'` in the argument name as the final argument to gather
@@ -52,7 +52,7 @@ export class Middleware
 	 * ```
 	 * Example:
 	 * ```
-	 * { 'mem': 'Member', 'age': 'Number', 'desc': 'String' }
+	 * { '<mem>': 'Member', '<age>': 'Number', '<desc>': 'String' }
 	 * ```
 	 *
 	 * If verifying a `BannedUser` returned from the ResolveArgs middleware,
