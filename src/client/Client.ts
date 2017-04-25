@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js';
 import * as path from 'path';
-import { Channel, ClientOptions, Collection, Emoji, Guild, GuildMember, Message, MessageReaction, Role, User, UserResolvable } from 'discord.js';
+import { Channel, ClientOptions, Collection, Emoji, Guild, GuildMember, Message, MessageReaction, Role, User, UserResolvable, ClientUserSettings, Snowflake } from 'discord.js';
 import { Command } from '../command/Command';
 import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
@@ -358,10 +358,11 @@ export class Client extends Discord.Client
 	public on(event: 'channelDelete', listener: (channel: Channel) => void): this;
 	public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 	public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+	public on(event: 'clientUserSettingsUpdate', listener: (clientUserSettings: ClientUserSettings) => void): this;
 	public on(event: 'debug', listener: (info: string) => void): this;
 	public on(event: 'disconnect', listener: (event: any) => void): this;
 	public on(event: 'emojiCreate', listener: (emoji: Emoji) => void): this;
-	public on(event: 'emojiCreate', listener: (emoji: Emoji) => void): this;
+	public on(event: 'emojiDelete', listener: (emoji: Emoji) => void): this;
 	public on(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
 	public on(event: 'error', listener: (error: Error) => void): this;
 	public on(event: 'guildBanAdd', listener: (guild: Guild, user: User) => void): this;
@@ -371,14 +372,14 @@ export class Client extends Discord.Client
 	public on(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
 	public on(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
 	public on(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-	public on(event: 'guildMembersChunk', listener: (members: Collection<string, GuildMember>, guild: Guild) => void): this;
+	public on(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: Guild) => void): this;
 	public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
 	public on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 	public on(event: 'guildUnavailable', listener: (guild: Guild) => void): this;
 	public on(event: 'guildUpdate', listener: (oldGuild: Guild, newGuild: Guild) => void): this;
 	public on(event: 'message', listener: (message: Message) => void): this;
 	public on(event: 'messageDelete', listener: (message: Message) => void): this;
-	public on(event: 'messageDeleteBulk', listener: (messages: Collection<string, Message>) => void): this;
+	public on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
 	public on(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: User) => void): this;
 	public on(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 	public on(event: 'messageReactionRemoveAll', listener: (message: Message) => void): this;
