@@ -212,7 +212,7 @@ export class Client extends Discord.Client
 	 */
 	public loadCommand(command: string): void
 	{
-		if (!command) throw new Error(`You must provide a command name to load, or 'all' to load all commands`);
+		if (!command) throw new Error(`A command name must be provided to load, or 'all' to load all commands`);
 		if (command === 'all') this._commandLoader.loadCommands();
 		else this._commandLoader.reloadCommand(command);
 	}
