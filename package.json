@@ -7,11 +7,10 @@
   "scripts": {
     "docs:stable": "jsdoc -R examples/FrontPage.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
     "docs:indev": "jsdoc -R examples/FrontPage.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/indev/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/indev/docs.json",
-    "postinstall": "postinstall-build --only-as-dependency \"npm run build:nolint -s\"",
+    "postinstall": "postinstall-build --only-as-dependency \"npm run build -s\"",
     "build": "gulp",
-    "build:nolint": "gulp build",
     "lint": "gulp lint",
-    "test": "npm run build -s",
+    "test": "npm run lint -s && npm run build -s",
     "test:client": "node test/client_test.js"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",

@@ -9,7 +9,7 @@ const path = require('path');
 const project = gulp_ts.createProject('tsconfig.json');
 const linter = tslint.Linter.createProgram('tsconfig.json');
 
-gulp.task('default', ['lint', 'build']);
+gulp.task('default', ['build']);
 
 gulp.task('lint', () => {
 	gulp.src('./src/**/*.ts')
