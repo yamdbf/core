@@ -136,6 +136,16 @@ export function callerPermissions(...values: PermissionResolvable[]): ClassDecor
 }
 
 /**
+ * Set `clientPermissions` metadata
+ * @param {...external:PermissionResolvable} values Values to set
+ * @returns {ClassDecorator}
+ */
+export function clientPermissions(...values: PermissionResolvable[]): ClassDecorator
+{
+	return _setMetaData('clientPermissions', values);
+}
+
+/**
  * Set `roles` metadata
  * @param {...string} values Values to set
  * @returns {ClassDecorator}
