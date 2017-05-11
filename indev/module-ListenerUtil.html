@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Middleware - Documentation</title>
+    <title>ListenerUtil - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -38,7 +38,7 @@
 
 <header>
 	
-		<h2>Middleware</h2>
+		<h2>ListenerUtil</h2>
 	
     
         
@@ -51,7 +51,8 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Contains static command middleware methods</p></div>
+            <div class="description"><p>Contains static methods for declaring class methods (within a class extending <code>EventEmitter</code>)
+as listeners for events that will be emitted by the class or parent classes</p></div>
         
 
         
@@ -150,8 +151,8 @@
 
     
 
-    <h4 class="name" id="~expect">
-		<span class="type-signature">(inner) </span>.<a href='#expect' style='color: black'>expect</a><span class="signature">(<span class="param-types">argTypes: object</span>)</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
+    <h4 class="name" id=".on">
+		<span class="type-signature">(static) </span>.<a href='#on' style='color: black'>on</a><span class="signature">(<span class="param-types">event: string</span>)</span><span class="type-signature"> &rarr; MethodDecorator</span>
 	</h4>
 
     
@@ -160,16 +161,13 @@
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Takes an object mapping argument names to argument types that
-checks the types of passed arguments and ensures required
-arguments are present and valid. Should be added to the
-command AFTER any and all middleware functions that modify
-args in any way are added.</p>
-<p>Valid types are:</p>
-<pre class="prettyprint source"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><p>Example:</p>
-<pre class="prettyprint source"><code>{ '&lt;mem>': 'Member', '&lt;age>': 'Number', '&lt;desc>': 'String' }</code></pre><p>If verifying a <code>BannedUser</code> returned from the ResolveArgs middleware,
-use the <code>User</code> type. If verifying <code>Duration</code> type, <code>Number</code> should be used.</p>
-<p>This middleware does not modify args in any way.</p>
+    <p>Declares the decorated method as an event handler for the specified event
+Must be registered by calling <code>ListenerUtil.registerListeners()</code></p>
+<blockquote>
+<p><strong>Note:</strong> <code>registerListeners()</code> is already called in the YAMDBF
+<a href="Client.html"><code>Client</code></a> constructor and does not need to be called in classes
+extending it</p>
+</blockquote>
 </div>
 
 
@@ -205,13 +203,13 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 
         <tr>
             
-                <td class="name"><code>argTypes</code></td>
+                <td class="name"><code>event</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><dd>object</dd></span>
+<span class="param-type"><dd>string</dd></span>
 
 
 
@@ -222,8 +220,7 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 
             
 
-            <td class="description last"><p>An object of argument names mapped to argument types<br>
-                            See: <a href="global.html#ExpectArgType"><code>ExpectArgType</code></a></p></td>
+            <td class="description last"><p>The name of the event to handle</p></td>
         </tr>
 
     
@@ -287,15 +284,11 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 	
 
         
-<div class="param-desc">
-    <pre class="prettyprint source"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
-</div>
-
 
 
 <span class="param-type">
 	<dd>
-<span class="param-type"><dd><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></dd></span>
+<span class="param-type"><dd>MethodDecorator</dd></span>
 
 
 </dd>
@@ -312,8 +305,8 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 
     
 
-    <h4 class="name" id="~resolveArgs">
-		<span class="type-signature">(inner) </span>.<a href='#resolveArgs' style='color: black'>resolveArgs</a><span class="signature">(<span class="param-types">argTypes: object</span>)</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
+    <h4 class="name" id=".once">
+		<span class="type-signature">(static) </span>.<a href='#once' style='color: black'>once</a><span class="signature">(<span class="param-types">event: string</span>)</span><span class="type-signature"> &rarr; MethodDecorator</span>
 	</h4>
 
     
@@ -322,14 +315,14 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Takes an object mapping argument names to argument types that
-resolves args to their specified type or throws errors for
-any invalid input.</p>
-<p>Valid types are:</p>
-<pre class="prettyprint source"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre><p>Example:</p>
-<pre class="prettyprint source"><code>{ '&lt;mem>': 'Member', '&lt;age>': 'Number', '&lt;...desc>': 'String' }</code></pre><p>Supports <code>'...'</code> in the argument name as the final argument to gather
-all remaining words into one string and attempt to resolve them to
-the provided argument type</p>
+    <p>Declares the decorated method as a single-use event handler for the
+specified event. Must be registered by calling
+<code>ListenerUtil.registerListeners()</code></p>
+<blockquote>
+<p><strong>Note:</strong> <code>registerListeners()</code> is already called in the YAMDBF
+<a href="Client.html"><code>Client</code></a> constructor and does not need to be called in classes
+extending it</p>
+</blockquote>
 </div>
 
 
@@ -365,13 +358,13 @@ the provided argument type</p>
 
         <tr>
             
-                <td class="name"><code>argTypes</code></td>
+                <td class="name"><code>event</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><dd>object</dd></span>
+<span class="param-type"><dd>string</dd></span>
 
 
 
@@ -382,8 +375,7 @@ the provided argument type</p>
 
             
 
-            <td class="description last"><p>An object of argument names mapped to argument types<br>
-                            See: <a href="global.html#ResolveArgType"><code>ResolveArgType</code></a></p></td>
+            <td class="description last"><p>The name of the event to handle</p></td>
         </tr>
 
     
@@ -447,15 +439,161 @@ the provided argument type</p>
 	
 
         
-<div class="param-desc">
-    <pre class="prettyprint source"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
-</div>
-
 
 
 <span class="param-type">
 	<dd>
-<span class="param-type"><dd><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></dd></span>
+<span class="param-type"><dd>MethodDecorator</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".registerListeners">
+		<span class="type-signature">(static) </span>.<a href='#registerListeners' style='color: black'>registerListeners</a><span class="signature">(<span class="param-types">emitter: EventEmitter</span>)</span><span class="type-signature"> &rarr; void</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Attaches any listeners registered via the <code>on</code> or <code>once</code> decorators.
+Must be called <strong><em>after</em></strong> <code>super()</code>, and only in classes extending <code>EventEmitter</code>
+(which includes the Discord.js Client class and thus the YAMDBF Client class);</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>emitter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>EventEmitter</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>EventEmitter to register listeners for</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>void</dd></span>
 
 
 </dd>
