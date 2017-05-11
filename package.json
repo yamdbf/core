@@ -36,7 +36,8 @@
     "glob": "7.1.1",
     "node-json-db": "0.7.3",
     "performance-now": "^2.0.0",
-    "postinstall-build": "^3.0.0"
+    "postinstall-build": "^3.0.0",
+    "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",

@@ -1,6 +1,22 @@
 import * as Discord from 'discord.js';
 import * as path from 'path';
-import { Channel, ClientOptions, Collection, Emoji, Guild, GuildMember, Message, MessageReaction, Role, User, UserResolvable, ClientUserSettings, Snowflake } from 'discord.js';
+
+import {
+	Channel,
+	ClientOptions,
+	Collection,
+	Emoji,
+	Guild,
+	GuildMember,
+	Message,
+	MessageReaction,
+	Role,
+	User,
+	UserResolvable,
+	ClientUserSettings,
+	Snowflake
+} from 'discord.js';
+
 import { Command } from '../command/Command';
 import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
@@ -16,6 +32,9 @@ import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 import { BaseCommandName } from '../types/BaseCommandName';
 import { Logger, logger } from '../util/logger/Logger';
+import { ListenerUtil } from '../util/ListenerUtil';
+
+const { registerListeners } = ListenerUtil;
 
 /**
  * The YAMDBF Client through which you can access [storage]{@link Client#storage}
@@ -173,6 +192,8 @@ export class Client extends Discord.Client
 
 		// Load commands
 		if (!this.passive) this.loadCommand('all');
+
+		registerListeners(this);
 	}
 
 	/**

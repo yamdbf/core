@@ -28,6 +28,8 @@ export { LogLevel } from './types/LogLevel';
 
 export { deprecated } from './util/DeprecatedDecorator';
 
+export { ListenerUtil } from './util/ListenerUtil';
+
 export { ArgOpts } from './types/ArgOpts';
 export { BaseCommandName } from './types/BaseCommandName';
 export { ClientStorage } from './types/ClientStorage';
