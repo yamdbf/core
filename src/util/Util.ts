@@ -7,6 +7,7 @@ export class Util
 {
 	/**
 	 * Pads the right side of a string with spaces to the given length
+	 * @static
 	 * @method padRight
 	 * @param {string} text Text to pad
 	 * @param {number} length Length to pad to
@@ -21,6 +22,7 @@ export class Util
 	/**
 	 * Returns the given string lowercased with any non
 	 * alphanumeric chars removed
+	 * @static
 	 * @method normalize
 	 * @param {string} text Text to normalize
 	 * @returns {string}
@@ -33,12 +35,14 @@ export class Util
 	/**
 	 * Assigns the given value along the given nested path within
 	 * the provided initial object
-	 * @method assignNested
+	 * @static
+	 * @method assignNestedValue
 	 * @param {any} obj Object to assign to
 	 * @param {string[]} path Nested path to follow within the object
 	 * @param {any} value Value to assign within the object
+	 * @returns {void}
 	 */
-	public static assignNested(obj: any, path: string[], value: any): void
+	public static assignNestedValue(obj: any, path: string[], value: any): void
 	{
 		if (typeof obj !== 'object' || obj instanceof Array)
 			throw new Error(`Initial input of type '${typeof obj}' is not valid for nested assignment`);
@@ -52,16 +56,18 @@ export class Util
 			throw new Error(`Target '${first}' is not valid for nested assignment.`);
 
 		if (path.length === 0) obj[first] = value;
-		else Util.assignNested(obj[first], path, value);
+		else Util.assignNestedValue(obj[first], path, value);
 	}
 
 	/**
 	 * Remove a value from within an object along a nested path
-	 * @method removeNested
+	 * @static
+	 * @method removeNestedValue
 	 * @param {any} obj Object to remove from
 	 * @param {string[]} path Nested path to follow within the object
+	 * @returns {void}
 	 */
-	public static removeNested(obj: any, path: string[]): void
+	public static removeNestedValue(obj: any, path: string[]): void
 	{
 		if (typeof obj !== 'object' || obj instanceof Array) return;
 		if (path.length === 0)
@@ -73,18 +79,19 @@ export class Util
 			return;
 
 		if (path.length === 0) delete obj[first];
-		else Util.removeNested(obj[first], path);
+		else Util.removeNestedValue(obj[first], path);
 	}
 
 	/**
 	 * Fetches a nested value from within an object via the
 	 * provided path
-	 * @method nestedValue
+	 * @static
+	 * @method getNestedValue
 	 * @param {any} obj Object to search
 	 * @param {string[]} path Nested path to follow within the object
 	 * @returns {any}
 	 */
-	public static nestedValue(obj: any, path: string[]): any
+	public static getNestedValue(obj: any, path: string[]): any
 	{
 		if (typeof obj === 'undefined') return;
 		if (path.length === 0) return obj;
@@ -94,6 +101,6 @@ export class Util
 		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
 			return;
 
-		return Util.nestedValue(obj[first], path);
+		return Util.getNestedValue(obj[first], path);
 	}
 }

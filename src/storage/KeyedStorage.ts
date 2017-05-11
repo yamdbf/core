@@ -50,7 +50,7 @@ export class KeyedStorage
 			let stringData: string = await this._storage.get(path.shift());
 			if (typeof stringData === 'undefined') return;
 			let data: object = JSON.parse(stringData);
-			return Util.nestedValue(data, path);
+			return Util.getNestedValue(data, path);
 		}
 		else
 		{
@@ -79,7 +79,7 @@ export class KeyedStorage
 			data = await this.get(first);
 			if (typeof data === 'undefined')
 				data = {};
-			Util.assignNested(data, path, value);
+			Util.assignNestedValue(data, path, value);
 			key = first;
 		}
 		else
@@ -106,7 +106,7 @@ export class KeyedStorage
 			let first: string = path.shift();
 			data = await this.get(first);
 			if (typeof data !== 'undefined')
-				Util.removeNested(data, path);
+				Util.removeNestedValue(data, path);
 
 			key = first;
 			await this._storage.set(key, JSON.stringify(data));

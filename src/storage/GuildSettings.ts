@@ -77,7 +77,7 @@ export class GuildSettings
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			return Util.nestedValue(this._cache[path.shift()], path);
+			return Util.getNestedValue(this._cache[path.shift()], path);
 		}
 		else
 		{
@@ -102,7 +102,7 @@ export class GuildSettings
 			let first: string = path.shift();
 			if (typeof this._cache[first] === 'undefined')
 				this._cache[first] = {};
-			Util.assignNested(this._cache[first], path, value);
+			Util.assignNestedValue(this._cache[first], path, value);
 		}
 		else
 		{
@@ -125,7 +125,7 @@ export class GuildSettings
 			let path: string[] = key.split('.');
 			let first: string = path.shift();
 			if (typeof this._cache[first] !== 'undefined')
-				Util.removeNested(this._cache[first], path);
+				Util.removeNestedValue(this._cache[first], path);
 		}
 		else
 		{
