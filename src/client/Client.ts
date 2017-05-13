@@ -34,7 +34,7 @@ import { BaseCommandName } from '../types/BaseCommandName';
 import { Logger, logger } from '../util/logger/Logger';
 import { ListenerUtil } from '../util/ListenerUtil';
 
-const { registerListeners } = ListenerUtil;
+const { on, once, registerListeners } = ListenerUtil;
 
 /**
  * The YAMDBF Client through which you can access [storage]{@link Client#storage}
@@ -53,6 +53,7 @@ export class Client extends Discord.Client
 	public readonly unknownCommandError: boolean;
 	public readonly selfbot: boolean;
 	public readonly passive: boolean;
+	public readonly pause: boolean;
 	public readonly version: string;
 	public readonly disableBase: BaseCommandName[];
 	public readonly config: any;
@@ -129,6 +130,22 @@ export class Client extends Discord.Client
 		this.passive = options.passive || false;
 
 		/**
+		 * Whether or not the client will pause after loading Client
+		 * Storage, giving the opportunity to add/change default
+		 * settings before guild settings are created for the first
+		 * time. If this is used, you must create a listener for `'pause'`,
+		 * and emit `'continue'` when you have finished doing what you
+		 * need to do.
+		 *
+		 * If adding new default settings is desired *after* guild settings
+		 * have already been generated for the first time, they should be
+		 * added after `'clientReady'` so they can be properly pushed to
+		 * the settings for all guilds
+		 * @type {boolean}
+		 */
+		this.pause = options.pause || false;
+
+		/**
 		 * Client version, best taken from package.json
 		 * @type {string}
 		 */
@@ -196,12 +213,10 @@ export class Client extends Discord.Client
 		registerListeners(this);
 	}
 
-	/**
-	 * Initialize storages, load default settings into storage if they're not there already
-	 * and load guild storages for guilds
-	 * @private
-	 */
-	private async init(): Promise<void>
+//#region Event handlers
+
+	@once('ready')
+	private async __onReadyEvent(): Promise<void>
 	{
 		await this.storage.init();
 
@@ -210,18 +225,48 @@ export class Client extends Discord.Client
 			await this.storage.set('defaultGuildSettings',
 				require('../storage/defaultGuildSettings.json'));
 
-		this.emit('waiting');
+		if (this.pause) this.emit('pause');
+		else this.__onContinueEvent();
+
+		this.user.setGame(this.statusText);
 	}
 
-	/**
-	 * Returns whether or not the given user is an owner
-	 * of the client/bot
-	 * @param {external:User} user User to check
-	 * @returns {boolean}
-	 */
-	public isOwner(user: User): boolean
+	@once('continue')
+	private async __onContinueEvent(): Promise<void>
 	{
-		return this.config.owner.includes(user.id);
+		await this._guildDataStorage.init();
+		await this._guildSettingStorage.init();
+
+		await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
+
+		this._logger.log('Client', this.readyText);
+		this.emit('clientReady');
+	}
+
+	@on('guildCreate')
+	private __onGuildCreateEvent(): void
+	{
+		this._guildStorageLoader.initNewGuilds(this._guildDataStorage, this._guildSettingStorage);
+	}
+
+	@on('guildDelete')
+	private __onGuildDeleteEvent(guild: Guild): void
+	{
+		this.storage.guilds.delete(guild.id);
+		this._guildDataStorage.remove(guild.id);
+		this._guildSettingStorage.remove(guild.id);
+	}
+
+//#endregion
+
+	/**
+	 * Logs the Client in and registers some event handlers
+	 * @returns {Client}
+	 */
+	public start(): this
+	{
+		this.login(this._token);
+		return this;
 	}
 
 	/**
@@ -237,43 +282,14 @@ export class Client extends Discord.Client
 	}
 
 	/**
-	 * Logs the Client in and registers some event handlers
-	 * @returns {Client}
+	 * Returns whether or not the given user is an owner
+	 * of the client/bot
+	 * @param {external:User} user User to check
+	 * @returns {boolean}
 	 */
-	public start(): this
+	public isOwner(user: User): boolean
 	{
-		this.login(this._token);
-
-		this.once('ready', async () =>
-		{
-			await this.init();
-			this.user.setGame(this.statusText);
-		});
-
-		this.once('finished', async () =>
-		{
-			await this._guildDataStorage.init();
-			await this._guildSettingStorage.init();
-
-			await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
-
-			this._logger.log('Client', this.readyText);
-			this.emit('clientReady');
-		});
-
-		this.on('guildCreate', () =>
-		{
-			this._guildStorageLoader.initNewGuilds(this._guildDataStorage, this._guildSettingStorage);
-		});
-
-		this.on('guildDelete', (guild) =>
-		{
-			this.storage.guilds.delete(guild.id);
-			this._guildDataStorage.remove(guild.id);
-			this._guildSettingStorage.remove(guild.id);
-		});
-
-		return this;
+		return this.config.owner.includes(user.id);
 	}
 
 	/**
@@ -424,8 +440,8 @@ export class Client extends Discord.Client
 	public on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
 	public on(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
 	public on(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
-	public on(event: 'waiting', listener: () => void): this;
-	public on(event: 'finished', listener: () => void): this;
+	public on(event: 'pause', listener: () => void): this;
+	public on(event: 'continue', listener: () => void): this;
 	public on(event: 'clientReady', listener: () => void): this;
 
 	/**
@@ -455,17 +471,17 @@ export class Client extends Discord.Client
 	 */
 
 	/**
-	 * Emitted when the client is waiting for you to send a `finished` event,
+	 * Emitted when the client is waiting for you to send a `continue` event,
 	 * after which `clientReady` will be emitted
 	 * @memberof Client
-	 * @event event:waiting
+	 * @event event:pause
 	 */
 
 	/**
-	 * To be emitted whenever you have finished setting things up that should
-	 * be set up before the client is ready for use
+	 * To be emitted after the `pause` event when you have finished setting
+	 * things up that should be set up before the client is ready for use
 	 * @memberof Client
-	 * @event event:finished
+	 * @event event:continue
 	 */
 
 	/**

@@ -9,7 +9,8 @@
  * @property {string} [readyText='Client ready!'] See: {@link Client#readyText}
  * @property {boolean} [unknownCommandError=true] See: {@link Client#unknownCommandError}
  * @property {boolean} [selfbot=false] See: {@link Client#selfbot}
- * @property {boolean} [passive=false] see {@link Client#passive}
+ * @property {boolean} [passive=false] See: {@link Client#passive}
+ * @property {boolean} [pause=false] See: {@link Client#pause}
  * @property {string} [version='0.0.0'] See: {@link Client#version}
  * @property {Object} config See: {@link Client#config}
  * @property {string[]} [disableBase=[]] See: {@link Client#disableBase}
@@ -31,6 +32,7 @@ export type YAMDBFOptions = {
 	unknownCommandError?: boolean;
 	selfbot?: boolean;
 	passive?: boolean;
+	pause?: boolean;
 	version?: string;
 	disableBase?: BaseCommandName[];
 	ratelimit?: string;

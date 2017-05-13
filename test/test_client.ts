@@ -29,26 +29,33 @@ class Test extends Client
 			token: config.token,
 			config: config,
 			commandsDir: './commands',
+			pause: true,
 			logLevel: LogLevel.DEBUG
 		});
 	}
 
-	@once('waiting')
-	private async _onWaiting(): Promise<void>
+	@once('pause')
+	private async _onPause(): Promise<void>
 	{
-		logger.debug('Test', 'Waiting...');
+		logger.debug('Test', 'Paused...');
 		await this.setDefaultSetting('prefix', '?');
-		this.emit('finished');
+		this.emit('continue');
 	}
 
-	@once('finished')
-	private _onFinished(): void
+	@once('continue')
+	private _onContinue(): void
 	{
-		logger.debug('Test', 'Finished');
+		logger.debug('Test', 'Continuing');
 
 		logger.warn('Test', 'Testing Logger#warn()');
 		logger.debug('Test', 'Testing Logger#debug()');
 		logger.error('Test', 'Testing Logger#error()');
+	}
+
+	@once('clientReady')
+	private async _onClientReady(): Promise<void>
+	{
+		await this.setDefaultSetting('foo', 'bar');
 	}
 }
 const test: Test = new Test();
