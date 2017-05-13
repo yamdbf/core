@@ -111,6 +111,17 @@
                     }
                 },
                 {
+                    "name": "pause",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not the client will pause after loading Client\nStorage, giving the opportunity to add/change default\nsettings before guild settings are created for the first\ntime. If this is used, you must create a listener for <code>'pause'</code>,\nand emit <code>'continue'</code> when you have finished doing what you\nneed to do.</p>\n<p>If adding new default settings is desired <em>after</em> guild settings\nhave already been generated for the first time, they should be\nadded after <code>'clientReady'</code> so they can be properly pushed to\nthe settings for all guilds</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
                     "name": "version",
                     "access": "",
                     "virtual": false,
@@ -168,31 +179,14 @@
             ],
             "functions": [
                 {
-                    "name": "init",
-                    "access": "private",
-                    "virtual": false,
-                    "description": "<p>Initialize storages, load default settings into storage if they're not there already\nand load guild storages for guilds</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "isOwner",
+                    "name": "start",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns whether or not the given user is an owner\nof the client/bot</p>",
-                    "parameters": [
-                        {
-                            "name": "user",
-                            "type": "external:User",
-                            "description": "<p>User to check</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
+                    "description": "<p>Logs the Client in and registers some event handlers</p>",
+                    "parameters": [],
                     "examples": [],
                     "returns": {
-                        "type": "boolean",
+                        "type": "Client",
                         "description": ""
                     }
                 },
@@ -218,14 +212,23 @@
                     }
                 },
                 {
-                    "name": "start",
+                    "name": "isOwner",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Logs the Client in and registers some event handlers</p>",
-                    "parameters": [],
+                    "description": "<p>Returns whether or not the given user is an owner\nof the client/bot</p>",
+                    "parameters": [
+                        {
+                            "name": "user",
+                            "type": "external:User",
+                            "description": "<p>User to check</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
                     "examples": [],
                     "returns": {
-                        "type": "Client",
+                        "type": "boolean",
                         "description": ""
                     }
                 },
@@ -456,18 +459,18 @@
                     "examples": []
                 },
                 {
-                    "name": "event:waiting",
+                    "name": "event:pause",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Emitted when the client is waiting for you to send a <code>finished</code> event,\nafter which <code>clientReady</code> will be emitted</p>",
+                    "description": "<p>Emitted when the client is waiting for you to send a <code>continue</code> event,\nafter which <code>clientReady</code> will be emitted</p>",
                     "parameters": [],
                     "examples": []
                 },
                 {
-                    "name": "event:finished",
+                    "name": "event:continue",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>To be emitted whenever you have finished setting things up that should\nbe set up before the client is ready for use</p>",
+                    "description": "<p>To be emitted after the <code>pause</code> event when you have finished setting\nthings up that should be set up before the client is ready for use</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -2799,7 +2802,15 @@
                 {
                     "name": "passive",
                     "type": "boolean",
-                    "description": "<p>see {@link Client#passive}</p>",
+                    "description": "<p>See: {@link Client#passive}</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "pause",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Client#pause}</p>",
                     "default": false,
                     "optional": true,
                     "nullable": ""

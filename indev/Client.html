@@ -844,8 +844,8 @@ YAMDBF Client and it's all ready to go</p>
 
     
 
-    <h4 class="name" id=".event:event:finished">
-		<a href='#event:finished' style='color: black'>finished</a>
+    <h4 class="name" id=".event:event:continue">
+		<a href='#event:continue' style='color: black'>continue</a>
 	</h4>
 
     
@@ -854,8 +854,8 @@ YAMDBF Client and it's all ready to go</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>To be emitted whenever you have finished setting things up that should
-be set up before the client is ready for use</p>
+    <p>To be emitted after the <code>pause</code> event when you have finished setting
+things up that should be set up before the client is ready for use</p>
 </div>
 
 
@@ -926,8 +926,8 @@ be set up before the client is ready for use</p>
 
     
 
-    <h4 class="name" id=".event:event:waiting">
-		<a href='#event:waiting' style='color: black'>waiting</a>
+    <h4 class="name" id=".event:event:pause">
+		<a href='#event:pause' style='color: black'>pause</a>
 	</h4>
 
     
@@ -936,7 +936,7 @@ be set up before the client is ready for use</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Emitted when the client is waiting for you to send a <code>finished</code> event,
+    <p>Emitted when the client is waiting for you to send a <code>continue</code> event,
 after which <code>clientReady</code> will be emitted</p>
 </div>
 
@@ -1436,6 +1436,80 @@ will not register a command dispatcher or a message
 listener. This allows passive clients to be created that
 do not respond to any commands but are able to perform
 actions based on whatever the framework user wants</p>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>boolean</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="pause">.<a href='#pause' style='color: black'>pause</a><span class="type-signature">: boolean</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    <p>Whether or not the client will pause after loading Client
+Storage, giving the opportunity to add/change default
+settings before guild settings are created for the first
+time. If this is used, you must create a listener for <code>'pause'</code>,
+and emit <code>'continue'</code> when you have finished doing what you
+need to do.</p>
+<p>If adding new default settings is desired <em>after</em> guild settings
+have already been generated for the first time, they should be
+added after <code>'clientReady'</code> so they can be properly pushed to
+the settings for all guilds</p>
 </div>
 
 
