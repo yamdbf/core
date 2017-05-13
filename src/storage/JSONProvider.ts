@@ -38,8 +38,8 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 
 	public async get(key: string): Promise<string>
 	{
-		if (typeof key !== 'string')
-			throw new Error('Key must be string');
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
 
 		try
 		{
@@ -54,14 +54,19 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 
 	public async set(key: string, value: string): Promise<void>
 	{
-		if (typeof key !== 'string') throw new Error('Key must be string');
-		if (typeof value === 'undefined') throw new Error('Value must be provided');
-		if (typeof value !== 'string') throw new Error('Value must be string');
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
+		if (typeof value !== 'string') throw new TypeError('Value must be string');
+
 		this._db.push(`/${key}`, value, true);
 	}
 
 	public async remove(key: string): Promise<void>
 	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
 		try { this._db.delete(`/${key}`); }
 		catch (err) { return; }
 	}

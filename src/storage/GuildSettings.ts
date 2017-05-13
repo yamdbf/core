@@ -74,6 +74,9 @@ export class GuildSettings
 	 */
 	public async get(key: string): Promise<any>
 	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
@@ -93,6 +96,9 @@ export class GuildSettings
 	 */
 	public async set(key: string, value: any): Promise<void>
 	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
 		try { JSON.stringify(value); }
 		catch (err) { value = {}; }
 
@@ -118,8 +124,9 @@ export class GuildSettings
 	 */
 	public async remove(key: string): Promise<void>
 	{
-		if (typeof key === 'undefined') throw new Error('Key must be provided');
-		if (typeof key !== 'string') throw new Error('Key must be a string');
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
