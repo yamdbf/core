@@ -155,6 +155,17 @@
                     }
                 },
                 {
+                    "name": "provider",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The chosen storage provider to use for the Client.\nDefaults to {@link JSONProvider}</p>",
+                    "type": {
+                        "names": [
+                            "StorageProvider"
+                        ]
+                    }
+                },
+                {
                     "name": "storage",
                     "access": "",
                     "virtual": false,
