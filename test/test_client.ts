@@ -27,7 +27,7 @@ class Test extends Client
 		super({
 			name: 'test',
 			token: config.token,
-			config: config,
+			owner: config.owner,
 			commandsDir: './commands',
 			pause: true,
 			logLevel: LogLevel.DEBUG

@@ -3,6 +3,7 @@
  * passed to a Client on construction
  * @property {string} [name='botname'] See: {@link Client#name}
  * @property {string} token See: {@link Client#token}
+ * @property {string | string[]} [owner] See: {@link Client#owner}
  * @property {string} [provider] See: {@link Client#provider}
  * @property {string} [commandsDir] See: {@link Client#commandsDir}
  * @property {string} [statusText=null] See: {@link Client#statusText}
@@ -12,7 +13,6 @@
  * @property {boolean} [passive=false] See: {@link Client#passive}
  * @property {boolean} [pause=false] See: {@link Client#pause}
  * @property {string} [version='0.0.0'] See: {@link Client#version}
- * @property {Object} config See: {@link Client#config}
  * @property {string[]} [disableBase=[]] See: {@link Client#disableBase}
  * @property {string} [ratelimit] Sets a global rate limit on command calls for every user
  * @property {LogLevel} [logLevel] Sets the logging level for the logger. Defaults to `LogLevel.LOG`
@@ -25,6 +25,7 @@ import { LogLevel } from './LogLevel';
 export type YAMDBFOptions = {
 	name: string;
 	token: string;
+	owner?: string | string[];
 	provider?: StorageProviderConstructor;
 	commandsDir?: string;
 	statusText?: string;
@@ -36,6 +37,5 @@ export type YAMDBFOptions = {
 	version?: string;
 	disableBase?: BaseCommandName[];
 	ratelimit?: string;
-	config: any;
 	logLevel?: LogLevel;
 };

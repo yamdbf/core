@@ -48,6 +48,7 @@ export class Client extends Discord.Client
 	@logger private readonly _logger: Logger;
 	public readonly name: string;
 	public readonly commandsDir: string;
+	public readonly owner: string | string[];
 	public readonly statusText: string;
 	public readonly readyText: string;
 	public readonly unknownCommandError: boolean;
@@ -56,7 +57,6 @@ export class Client extends Discord.Client
 	public readonly pause: boolean;
 	public readonly version: string;
 	public readonly disableBase: BaseCommandName[];
-	public readonly config: any;
 	public readonly provider: StorageProviderConstructor;
 	public readonly _middleware: MiddlewareFunction[];
 	public readonly _rateLimiter: RateLimiter;
@@ -83,6 +83,16 @@ export class Client extends Discord.Client
 		 * @type {string}
 		 */
 		this.name = options.name || 'botname';
+
+		/**
+		 * The owner/owners of the bot, represented as an array of IDs.
+		 * These IDs determine who is allowed to use commands flagged as
+		 * `ownerOnly`
+		 * @type {string[]}
+		 */
+		this.owner = options.owner instanceof Array ?
+			options.owner : typeof options.owner !== 'undefined' ?
+				[options.owner] : [];
 
 		/**
 		 * Directory to find command class files. Optional
@@ -152,14 +162,6 @@ export class Client extends Discord.Client
 		this.version = options.version || '0.0.0';
 
 		/**
-		 * Object containing token and owner ids
-		 * @type {Object}
-		 * @property {string} token - Discord login token for the client
-		 * @property {string[]} owner - Array of owner id strings
-		 */
-		this.config = options.config || null;
-
-		/**
 		 * Array of base command names to skip when loading commands. Base commands
 		 * may only be disabled by name, not by alias
 		 * @type {BaseCommandName[]}
@@ -203,9 +205,7 @@ export class Client extends Discord.Client
 		// Make some asserts
 		if (!this._token) throw new Error('A token must be provided for the client');
 		if (!this.commandsDir && !this.passive) throw new Error('A directory from which to load commands must be provided via commandsDir');
-		if (!this.config) throw new Error('A config containing containing `token` string and `owner` ID string array must be provided');
-		if (!this.config.owner) throw new Error('Provided Client config is missing owner ID string array');
-		if (!(this.config.owner instanceof Array)) throw new TypeError('Client config `owner` field must be an array of user ID strings.');
+		if (!(this.owner instanceof Array)) throw new TypeError('Client config `owner` field must be an array of user ID strings.');
 
 		// Load commands
 		if (!this.passive) this.loadCommand('all');
@@ -260,7 +260,7 @@ export class Client extends Discord.Client
 //#endregion
 
 	/**
-	 * Logs the Client in and registers some event handlers
+	 * Starts the login process, culminating in the `clientReady` event
 	 * @returns {Client}
 	 */
 	public start(): this
@@ -289,7 +289,7 @@ export class Client extends Discord.Client
 	 */
 	public isOwner(user: User): boolean
 	{
-		return this.config.owner.includes(user.id);
+		return this.owner.includes(user.id);
 	}
 
 	/**

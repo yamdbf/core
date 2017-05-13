@@ -81,7 +81,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 			!(c.roles.length > 0 && message.member.roles.filter(role => c.roles.includes(role.name)).size === 0);
 
 		const byOwnerOnly: (c: V) => boolean = c =>
-			(client.config.owner.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly;
+			(client.isOwner(message.author) && c.ownerOnly) || !c.ownerOnly;
 
 		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 		for (const [name, command] of this.filter(byPermissions).filter(byRoles).filter(byOwnerOnly).entries())
@@ -99,8 +99,8 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 */
 	public filterDMUsable(client: T, message: Message): Collection<K, V>
 	{
-		return this.filter(c => !c.guildOnly && ((client.config.owner
-			.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly));
+		return this.filter(c => !c.guildOnly &&
+			((client.isOwner(message.author) && c.ownerOnly) || !c.ownerOnly));
 	}
 
 	/**
@@ -112,7 +112,6 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 */
 	public filterDMHelp(client: T, message: Message): Collection<K, V>
 	{
-		return this.filter(c => (client.config.owner
-			.includes(message.author.id) && c.ownerOnly) || !c.ownerOnly);
+		return this.filter(c => (client.isOwner(message.author) && c.ownerOnly) || !c.ownerOnly);
 	}
 }
