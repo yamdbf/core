@@ -45,6 +45,17 @@
                     }
                 },
                 {
+                    "name": "owner",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The owner/owners of the bot, represented as an array of IDs.\nThese IDs determine who is allowed to use commands flagged as\n<code>ownerOnly</code></p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                },
+                {
                     "name": "commandsDir",
                     "access": "",
                     "virtual": false,
@@ -133,17 +144,6 @@
                     }
                 },
                 {
-                    "name": "config",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Object containing token and owner ids</p>",
-                    "type": {
-                        "names": [
-                            "Object"
-                        ]
-                    }
-                },
-                {
                     "name": "disableBase",
                     "access": "",
                     "virtual": false,
@@ -182,7 +182,7 @@
                     "name": "start",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Logs the Client in and registers some event handlers</p>",
+                    "description": "<p>Starts the login process, culminating in the <code>clientReady</code> event</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
@@ -2752,6 +2752,14 @@
                     "nullable": ""
                 },
                 {
+                    "name": "owner",
+                    "type": "Array.<string>",
+                    "description": "<p>Can also be a single string<br>See: {@link Client#owner}</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
                     "name": "provider",
                     "type": "string",
                     "description": "<p>See: {@link Client#provider}</p>",
@@ -2821,14 +2829,6 @@
                     "description": "<p>See: {@link Client#version}</p>",
                     "default": "'0.0.0'",
                     "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "config",
-                    "type": "Object",
-                    "description": "<p>See: {@link Client#config}</p>",
-                    "default": "",
-                    "optional": "",
                     "nullable": ""
                 },
                 {

@@ -1151,148 +1151,6 @@ if client is passive.<br>
 
         
             
-<h4 class="name" id="config">.<a href='#config' style='color: black'>config</a><span class="type-signature">: Object</span></h4>
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-
-
-<div class="description">
-    <p>Object containing token and owner ids</p>
-</div>
-
-
-
-    <b>Type:</b> 
-<span class="param-type"><dd>Object</dd></span>
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string</dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Discord login token for the client</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>owner</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string[]</dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Array of owner id strings</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-</div>
-
-        
-            
 <h4 class="name" id="disableBase">.<a href='#disableBase' style='color: black'>disableBase</a><span class="type-signature">: <a href="global.html#BaseCommandName">BaseCommandName</a>[]</span></h4>
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
@@ -1373,6 +1231,73 @@ may only be disabled by name, not by alias</p>
 
     <b>Type:</b> 
 <span class="param-type"><dd>string</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="owner">.<a href='#owner' style='color: black'>owner</a><span class="type-signature">: string[]</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    <p>The owner/owners of the bot, represented as an array of IDs.
+These IDs determine who is allowed to use commands flagged as
+<code>ownerOnly</code></p>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>string[]</dd></span>
 
 
 
@@ -2897,7 +2822,7 @@ storage if there is already an existing key with the given value</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Logs the Client in and registers some event handlers</p>
+    <p>Starts the login process, culminating in the <code>clientReady</code> event</p>
 </div>
 
 
