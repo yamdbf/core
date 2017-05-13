@@ -3,7 +3,7 @@
  * passed to a Client on construction
  * @property {string} [name='botname'] See: {@link Client#name}
  * @property {string} token See: {@link Client#token}
- * @property {string | string[]} [owner] See: {@link Client#owner}
+ * @property {string[]} [owner=[]] Can also be a single string<br>See: {@link Client#owner}
  * @property {string} [provider] See: {@link Client#provider}
  * @property {string} [commandsDir] See: {@link Client#commandsDir}
  * @property {string} [statusText=null] See: {@link Client#statusText}
