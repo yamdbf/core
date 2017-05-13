@@ -179,6 +179,11 @@ export class Client extends Discord.Client
 		// Middleware function storage for the client instance
 		this._middleware = [];
 
+		/**
+		 * The chosen storage provider to use for the Client.
+		 * Defaults to {@link JSONProvider}
+		 * @type {StorageProvider}
+		 */
 		this.provider = options.provider || JSONProvider;
 
 		this._guildDataStorage = new this.provider('guild_storage');
