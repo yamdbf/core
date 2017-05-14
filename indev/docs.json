@@ -1365,6 +1365,27 @@
                     }
                 },
                 {
+                    "name": "exists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check if a value exists in storage for this Guild</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to check</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<boolean>",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "set",
                     "access": "",
                     "virtual": false,
@@ -1666,6 +1687,27 @@
                     "examples": [],
                     "returns": {
                         "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "exists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check if a value exists in storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to check</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<boolean>",
                         "description": ""
                     }
                 },
