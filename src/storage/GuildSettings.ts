@@ -95,18 +95,7 @@ export class GuildSettings
 	 */
 	public async exists(key: string): Promise<boolean>
 	{
-		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
-		if (typeof key !== 'string') throw new TypeError('Key must be a string');
-
-		if (key.includes('.'))
-		{
-			let path: string[] = key.split('.');
-			return typeof Util.getNestedValue(this._cache[path.shift()], path) !== 'undefined';
-		}
-		else
-		{
-			return typeof this._cache[key] !== 'undefined';
-		}
+		return typeof await this.get(key) !== 'undefined';
 	}
 
 	/**

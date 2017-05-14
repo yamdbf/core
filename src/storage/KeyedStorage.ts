@@ -70,22 +70,7 @@ export class KeyedStorage
 	 */
 	public async exists(key: string): Promise<boolean>
 	{
-		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
-		if (typeof key !== 'string') throw new TypeError('Key must be a string');
-
-		if (key.includes('.'))
-		{
-			let path: string[] = key.split('.');
-			let stringData: string = await this._storage.get(path.shift());
-			if (typeof stringData === 'undefined') return false;
-			let data: object = JSON.parse(stringData);
-			return typeof Util.getNestedValue(data, path) !== 'undefined';
-		}
-		else
-		{
-			let stringData: string = await this._storage.get(key);
-			if (typeof stringData === 'undefined') return false;
-		}
+		return typeof await this.get(key) !== 'undefined';
 	}
 
 	/**
