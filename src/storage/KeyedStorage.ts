@@ -44,6 +44,9 @@ export class KeyedStorage
 	 */
 	public async get(key: string): Promise<any>
 	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
@@ -61,6 +64,31 @@ export class KeyedStorage
 	}
 
 	/**
+	 * Check if a value exists in storage
+	 * @param {string} key The key in storage to check
+	 * @returns {Promise<boolean>}
+	 */
+	public async exists(key: string): Promise<boolean>
+	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
+		if (key.includes('.'))
+		{
+			let path: string[] = key.split('.');
+			let stringData: string = await this._storage.get(path.shift());
+			if (typeof stringData === 'undefined') return false;
+			let data: object = JSON.parse(stringData);
+			return typeof Util.getNestedValue(data, path) !== 'undefined';
+		}
+		else
+		{
+			let stringData: string = await this._storage.get(key);
+			if (typeof stringData === 'undefined') return false;
+		}
+	}
+
+	/**
 	 * Set a value in this storage for the specified key
 	 * @param {string} key The key in storage to set
 	 * @param {any} value The value to set
@@ -68,6 +96,10 @@ export class KeyedStorage
 	 */
 	public async set(key: string, value: any): Promise<void>
 	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
+
 		try { JSON.stringify(value); }
 		catch (err) { value = {}; }
 

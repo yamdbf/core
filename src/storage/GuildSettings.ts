@@ -89,6 +89,27 @@ export class GuildSettings
 	}
 
 	/**
+	 * Check if a value exists in storage for this Guild
+	 * @param {string} key The key in storage to check
+	 * @returns {Promise<boolean>}
+	 */
+	public async exists(key: string): Promise<boolean>
+	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
+		if (key.includes('.'))
+		{
+			let path: string[] = key.split('.');
+			return typeof Util.getNestedValue(this._cache[path.shift()], path) !== 'undefined';
+		}
+		else
+		{
+			return typeof this._cache[key] !== 'undefined';
+		}
+	}
+
+	/**
 	 * Set a value in storage for this Guild
 	 * @param {string} key The key in storage to set
 	 * @param {any} value The value to set
@@ -98,6 +119,7 @@ export class GuildSettings
 	{
 		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
 
 		try { JSON.stringify(value); }
 		catch (err) { value = {}; }
