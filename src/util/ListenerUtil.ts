@@ -2,8 +2,11 @@ import 'reflect-metadata';
 import { EventEmitter } from 'events';
 
 /**
- * Contains static methods for declaring class methods (within a class extending `EventEmitter`)
+ * Contains static decorator methods for declaring class methods (within a class extending `EventEmitter`)
  * as listeners for events that will be emitted by the class or parent classes
+ *
+ * >**Note:** This is a TypeScript feature. Javascript users are limited to creating listeners
+ * the old fashioned `<EventEmitter>on/once(...)` way
  * @module ListenerUtil
  */
 export class ListenerUtil
