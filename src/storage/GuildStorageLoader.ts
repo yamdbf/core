@@ -2,6 +2,7 @@ import { Collection, Guild } from 'discord.js';
 import { Client } from '../client/Client';
 import { StorageProvider } from './StorageProvider';
 import { StorageFactory } from './StorageFactory';
+import { GuildStorage } from '../types/GuildStorage';
 
 /**
  * Handles loading all guild-specific data from persistent storage into
@@ -25,8 +26,11 @@ export class GuildStorageLoader<T extends Client>
 	public async loadStorages(dataStorage: StorageProvider, settingsStorage: StorageProvider): Promise<void>
 	{
 		for (const key of await dataStorage.keys())
-			this._client.storage.guilds.set(key,
-				await this._storageFactory.createGuildStorage(key));
+		{
+			const guildStorage: GuildStorage = await this._storageFactory.createGuildStorage(key);
+			if (!guildStorage) continue;
+			this._client.storage.guilds.set(key, guildStorage);
+		}
 
 		await this.initNewGuilds(dataStorage, settingsStorage);
 	}

@@ -60,3 +60,5 @@ class Test extends Client
 }
 const test: Test = new Test();
 test.start();
+
+process.on('unhandledRejection', (err: any) => console.error(err));

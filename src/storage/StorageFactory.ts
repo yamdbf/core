@@ -36,6 +36,7 @@ export class StorageFactory
 	public async createGuildStorage(id: string): Promise<GuildStorage>
 	{
 		const guild: Guild = this._client.guilds.get(id);
+		if (!guild) return null;
 		const newStorage: GuildSettings = new GuildSettings(this._guildDataStorage, guild, this._client);
 		(<GuildStorage> newStorage).settings = new GuildSettings(this._guildSettingStorage, guild, this._client);
 		await newStorage.init();
