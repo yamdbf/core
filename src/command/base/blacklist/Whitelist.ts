@@ -14,7 +14,7 @@ export default class extends Command<Client>
 			name: 'whitelist',
 			description: 'Remove a user from the command blacklist',
 			aliases: ['wl'],
-			usage: '<prefix>whitelist <user>, [\'global\']',
+			usage: '<prefix>whitelist <user> [\'global\']',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
@@ -41,7 +41,7 @@ export default class extends Command<Client>
 		if (!guildBlacklist[user.id])
 			return message.channel.send('That user is not currently blacklisted in this server.');
 
-		message.guild.storage.settings.remove(`blacklist.${user.id}`);
+		await message.guild.storage.settings.remove(`blacklist.${user.id}`);
 		this.client.emit('blacklistRemove', user, false);
 		return message.channel.send(`Removed ${user.username}#${user.discriminator} from this server's blacklist.`);
 	}

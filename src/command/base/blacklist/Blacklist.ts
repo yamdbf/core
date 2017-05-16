@@ -2,7 +2,7 @@ import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
-import { User } from 'discord.js';
+import { User, GuildMember } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
@@ -14,7 +14,7 @@ export default class extends Command<Client>
 			name: 'blacklist',
 			description: 'Blacklist a user from calling commands',
 			aliases: ['bl'],
-			usage: '<prefix>blacklist <user>, [\'global\']',
+			usage: '<prefix>blacklist <user> [\'global\']',
 			extraHelp: 'If global, this will block the user from calling commands in ANY server and DMs',
 			callerPermissions: ['ADMINISTRATOR']
 		});
@@ -44,7 +44,11 @@ export default class extends Command<Client>
 			return message.channel.send(`Added ${user.username}#${user.discriminator} to the global blacklist.`);
 		}
 
-		if ((await message.guild.fetchMember(user)).hasPermission('ADMINISTRATOR'))
+		let member: GuildMember;
+		try { member = await message.guild.fetchMember(user); }
+		catch (err) {}
+
+		if (member && member.permissions.has('ADMINISTRATOR'))
 			return message.channel.send('You may not use this command on that person.');
 
 		const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
