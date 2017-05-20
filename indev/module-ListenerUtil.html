@@ -465,7 +465,7 @@ extending it</p>
     
 
     <h4 class="name" id=".registerListeners">
-		<span class="type-signature">(static) </span>.<a href='#registerListeners' style='color: black'>registerListeners</a><span class="signature">(<span class="param-types">emitter: EventEmitter</span>)</span><span class="type-signature"> &rarr; void</span>
+		<span class="type-signature">(static) </span>.<a href='#registerListeners' style='color: black'>registerListeners</a><span class="signature">(<span class="param-types">emitter: EventEmitter</span>, <span class="param-types">listenerSource?: object</span>)</span><span class="type-signature"> &rarr; void</span>
 	</h4>
 
     
@@ -476,7 +476,9 @@ extending it</p>
 <div class="description">
     <p>Attaches any listeners registered via the <code>on</code> or <code>once</code> decorators.
 Must be called <strong><em>after</em></strong> <code>super()</code>, and only in classes extending <code>EventEmitter</code>
-(which includes the Discord.js Client class and thus the YAMDBF Client class);</p>
+(which includes the Discord.js Client class and thus the YAMDBF Client class)</p>
+<p>If the <code>listenerSource</code> parameter is provided, the object passed will be used
+as the source of methods to link with events from the given <code>EventEmitter</code></p>
 </div>
 
 
@@ -499,6 +501,8 @@ Must be called <strong><em>after</em></strong> <code>super()</code>, and only in
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -526,10 +530,52 @@ Must be called <strong><em>after</em></strong> <code>super()</code>, and only in
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>EventEmitter to register listeners for</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listenerSource</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>object</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Object with registered methods to link events to</p></td>
         </tr>
 
     
