@@ -21,9 +21,10 @@ making it simple to get a bot up and running with minimal effort and configurati
   control over the data passed to your commands
   - Ships with methods for resolving different data types and ensuring  
     certain args/types are passed to commands
-- Easy to use settings/storage with support for custom providers
+- Easy to use settings/storage with support for custom storage providers
 - Full TypeScript support (It's written in it!)
   - Support for decorators for simpler handling of:
+	- Event listeners
     - Command metadata
 	- Command middleware assignment
 	- Attaching Logger for logging/debugging

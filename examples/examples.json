@@ -4,11 +4,5 @@
 	},
 	"StartingInV3": {
 		"title": "Starting a bot in 3.0.0"
-	},
-	"UsingBotStorage": {
-		"title": "Using bot-specific storage"
-	},
-	"UsingGuildStorage": {
-		"title": "Using guild-specific storage"
 	}
 }
