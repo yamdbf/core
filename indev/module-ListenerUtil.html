@@ -156,7 +156,7 @@ the old fashioned <code>&lt;EventEmitter&gt;on/once(...)</code> way</p>
     
 
     <h4 class="name" id=".on">
-		<span class="type-signature">(static) </span>.<a href='#on' style='color: black'>on</a><span class="signature">(<span class="param-types">event: string</span>)</span><span class="type-signature"> &rarr; MethodDecorator</span>
+		<span class="type-signature">(static) </span>.<a href='#on' style='color: black'>on</a><span class="signature">(<span class="param-types">event: string</span>, <span class="param-types">args: any[]</span>)</span><span class="type-signature"> &rarr; MethodDecorator</span>
 	</h4>
 
     
@@ -195,6 +195,8 @@ extending it</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -221,10 +223,53 @@ extending it</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>The name of the event to handle</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>any[]</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Additional static values to pass to the method.
+                          Will be passed after any args passed by the event</p></td>
         </tr>
 
     
@@ -310,7 +355,7 @@ extending it</p>
     
 
     <h4 class="name" id=".once">
-		<span class="type-signature">(static) </span>.<a href='#once' style='color: black'>once</a><span class="signature">(<span class="param-types">event: string</span>)</span><span class="type-signature"> &rarr; MethodDecorator</span>
+		<span class="type-signature">(static) </span>.<a href='#once' style='color: black'>once</a><span class="signature">(<span class="param-types">event: string</span>, <span class="param-types">args: any[]</span>)</span><span class="type-signature"> &rarr; MethodDecorator</span>
 	</h4>
 
     
@@ -350,6 +395,8 @@ extending it</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -376,10 +423,53 @@ extending it</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>The name of the event to handle</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>any[]</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Additional static values to pass to the method.
+                          Will be passed after any args passed by the event</p></td>
         </tr>
 
     
