@@ -52,9 +52,10 @@ class Test extends Client
 		logger.error('Test', 'Testing Logger#error()');
 	}
 
-	@once('clientReady')
-	private async _onClientReady(): Promise<void>
+	@once('clientReady', 'foo', 1)
+	private async _onClientReady(foo: string, bar: number): Promise<void>
 	{
+		logger.debug('Test', foo, bar.toString());
 		await this.setDefaultSetting('foo', 'bar');
 	}
 }

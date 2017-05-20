@@ -37,7 +37,7 @@ export class ListenerUtil
 			if (listener.attached) continue;
 			listener.attached = true;
 			emitter[listener.once ? 'once' : 'on'](listener.event,
-				(...eventArgs: any[]) => (<any> listenerTarget)[listener.method](...eventArgs));
+				(...eventArgs: any[]) => (<any> listenerTarget)[listener.method](...eventArgs, ...listener.args));
 		}
 	}
 
@@ -51,11 +51,13 @@ export class ListenerUtil
 	 * @static
 	 * @method on
 	 * @param {string} event The name of the event to handle
+	 * @param {...any[]} args Additional static values to pass to the method.
+	 * 						  Will be passed after any args passed by the event
 	 * @returns {MethodDecorator}
 	 */
-	public static on(event: string): MethodDecorator
+	public static on(event: string, ...args: any[]): MethodDecorator
 	{
-		return ListenerUtil._setListenerMetadata(event);
+		return ListenerUtil._setListenerMetadata(event, false, ...args);
 	}
 
 	/**
@@ -69,11 +71,13 @@ export class ListenerUtil
 	 * @static
 	 * @method once
 	 * @param {string} event The name of the event to handle
+	 * @param {...any[]} args Additional static values to pass to the method.
+	 * 						  Will be passed after any args passed by the event
 	 * @returns {MethodDecorator}
 	 */
-	public static once(event: string): MethodDecorator
+	public static once(event: string, ...args: any[]): MethodDecorator
 	{
-		return ListenerUtil._setListenerMetadata(event, true);
+		return ListenerUtil._setListenerMetadata(event, true, ...args);
 	}
 
 	/**
@@ -81,12 +85,12 @@ export class ListenerUtil
 	 * metadata for a class method
 	 * @private
 	 */
-	private static _setListenerMetadata(event: string, once: boolean = false): MethodDecorator
+	private static _setListenerMetadata(event: string, once: boolean, ...args: any[]): MethodDecorator
 	{
 		return function<T extends EventEmitter>(target: T, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
 		{
 			const listeners: ListenerMetadata[] = Reflect.getMetadata('listeners', target) || [];
-			listeners.push({ event: event, method: key, once: once });
+			listeners.push({ event: event, method: key, once: once, args: args });
 			Reflect.defineMetadata('listeners', listeners, target);
 			return descriptor;
 		};
@@ -102,5 +106,6 @@ type ListenerMetadata =
 	event: string;
 	method: string;
 	once: boolean;
+	args: any[];
 	attached?: boolean;
 };
