@@ -33,7 +33,7 @@ export class ListenerUtil
 
 		for (const listener of <ListenerMetadata[]> Reflect.getMetadata('listeners', listenerTarget.constructor.prototype))
 		{
-			if (!(<any> emitter)[listener.method]) continue;
+			if (!(<any> listenerTarget)[listener.method]) continue;
 			if (listener.attached) continue;
 			listener.attached = true;
 			emitter[listener.once ? 'once' : 'on'](listener.event,
