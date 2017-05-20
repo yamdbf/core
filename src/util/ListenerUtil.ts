@@ -14,25 +14,30 @@ export class ListenerUtil
 	/**
 	 * Attaches any listeners registered via the `on` or `once` decorators.
 	 * Must be called ***after*** `super()`, and only in classes extending `EventEmitter`
-	 * (which includes the Discord.js Client class and thus the YAMDBF Client class);
+	 * (which includes the Discord.js Client class and thus the YAMDBF Client class)
+	 *
+	 * If the `listenerSource` parameter is provided, the object passed will be used
+	 * as the source of methods to link with events from the given `EventEmitter`
 	 * @static
 	 * @method registerListeners
 	 * @param {EventEmitter} emitter EventEmitter to register listeners for
+	 * @param {object} [listenerSource] Object with registered methods to link events to
 	 * @returns {void}
 	 */
-	public static registerListeners(emitter: EventEmitter): void
+	public static registerListeners(emitter: EventEmitter, listenerSource?: object): void
 	{
 		if (!(emitter instanceof EventEmitter))
 			throw new TypeError('Listeners can only be registered on classes extending EventEmitter');
-		if (typeof Reflect.getMetadata('listeners', emitter.constructor.prototype) === 'undefined') return;
+		const listenerTarget: object = listenerSource ? listenerSource : emitter;
+		if (typeof Reflect.getMetadata('listeners', listenerTarget.constructor.prototype) === 'undefined') return;
 
-		for (const listener of <ListenerMetadata[]> Reflect.getMetadata('listeners', emitter.constructor.prototype))
+		for (const listener of <ListenerMetadata[]> Reflect.getMetadata('listeners', listenerTarget.constructor.prototype))
 		{
 			if (!(<any> emitter)[listener.method]) continue;
 			if (listener.attached) continue;
 			listener.attached = true;
 			emitter[listener.once ? 'once' : 'on'](listener.event,
-				(...eventArgs: any[]) => (<any> emitter)[listener.method](...eventArgs));
+				(...eventArgs: any[]) => (<any> listenerTarget)[listener.method](...eventArgs));
 		}
 	}
 
