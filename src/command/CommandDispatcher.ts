@@ -121,6 +121,7 @@ export class CommandDispatcher<T extends Client>
 		];
 
 		if (!dm) prefixes.push(await message.guild.storage.settings.get('prefix'));
+		else prefixes.push(await this._client.storage.get('defaultGuildSettings.prefix'));
 
 		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
 
