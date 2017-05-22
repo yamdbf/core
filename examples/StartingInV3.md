@@ -5,25 +5,23 @@ may be executed. The first thing you should note is that `ready` is no longer th
 determining when the YAMDBF Client is ready for use. The new event is `clientReady`
 
 After `start()` is called the Client will go through the Discord.js client login process and register some event
-listeners for some internal things. During this time the Client `init()` method will be called. This is where storages --
-`ClientStorage` and all `GuildStorage` instances -- will be created and linked with the current storage provider. After
-this process completes the `waiting` event will be emitted.
+listeners for some internal things. During this time the Client `init()` method will be called. This is when `ClientStorage`
+will be loaded and initialized. Now things can get a little tricky. If you don't pass `pause: true` in your YAMDBF
+Client options then everything will be as it was previously in YAMDBF 2.6.2 and prior and startup will continue as normal,
+emitting `clientReady` when everything is finished.
 
->Because of how storages are loaded asynchronously after `start()` is called it is no longer possible to interact with
-default settings until after storages have been loaded, meaning guilds will have their default settings applied before
-you will have the chance to set them when guild setting storage is generated for the first time. This means it becomes
-necessary to either completely remove guild settings and allow them to regenerate after changing default settings the
-first time the Client is started, or to iterate over guild storages and apply any changes one time to bring them up to date
-with the defaults. This of course only needs to be done if you are trying to set a default setting the first time your client
-is run and fresh storages are generated. After that the default settings will be properly applied to new guilds and their
-settings.
+The thing to note here is that this does not allow you to add or change any default guild settings before guild storage
+and settings are generated for the first time. That's where the `pause` option comes in. Passing `pause: true` in your YAMDBF
+Client options will cause your Client to emit the `pause` event after it finishes initializing Client storage. This is when
+you will have the opportunity to add or change default settings before guild settings and storage are generated/loaded.
+After you've finished doing everything you need to do, use `<Client>.emit('continue')` to continue the Client startup process.
 
-After the `waiting` event is fired is when you have the opportunity to set up anything that needs it before the Client
-is ready to operate. When you have finished with whatever you need to do after `waiting` you must use `<Client>.emit('finished');`
-to tell the Client you have finished setting up. After this `clientReady` will be emitted and the Client will be ready for use.
+The next important change is that YAMDBF Client options no longer has a `config` field. This was only used to access the owner
+field and really wasn't needed. `owner` is now a direct optional field in the Client options that accepts a user ID or array
+of user IDs. Despite the config field no longer existing, it's still recommended to store sensitive information like your
+token and owner ID/s in a config file that is not checked in to version control.
 
-I'll end this with a barebones example of starting a bot with the new startup flow and a simple example of what
-setting a default setting will look like:
+To sum things up, basic startup remains relatively unchanged. You'll notice the owner field in the example:
 ```
 const { Client } = require('yamdbf');
 const config = require('./config.json');
@@ -32,12 +30,42 @@ const client = new Client({
 	name: 'YAMDBFBot',
 	commandsDir: './commands',
 	token: config.token,
-	config: config
+	owner: config.owner
+}).start();
+```
+
+And advanced startup where addition or manipulation of default guild settings is desired will look like this:
+```
+const { Client } = require('yamdbf');
+const config = require('./config.json');
+
+const client = new Client({
+	name: 'YAMDBFBot',
+	commandsDir: './commands',
+	token: config.token,
+	owner: config.owner,
+	pause: true
 }).start();
 
-client.on('waiting', async () =>
-{
-	await client.setDefaultSetting('prefix', '.');
-	client.emit('finished');
+client.on('pause', () => {
+	client.setDefaultSetting('prefix', '?')
+		.then(() => client.emit('continue'));
 });
 ```
+>I've used a traditional promise in this example, but everything works with async/await and it makes
+everything far easier to use. If you're unfamiliar with async/await, I ***highly*** recommend you
+take the time to learn and familiarize yourself with it. You'll be so much happier when working with
+the promises/asynchronous methods throughout the framework.
+```
+client.on('pause', async () => {
+	await client.setDefaultSetting('prefix', '?');
+	client.emit('continue');
+});
+```
+
+All storage methods and methods that use storage internally are now asynchronous, so a strong understanding
+of promises will benefit you heavily throughout your use of YAMDBF, and understanding of async/await will
+benefit you even further than that.
+
+As always, refer to the docs when you need information on anything, and feel free to ask questions on the
+official server if you need further help.
