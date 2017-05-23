@@ -41,7 +41,7 @@ export default class extends Command<Client>
 
 			await this.client.storage.set(`blacklist.${user.id}`, true);
 			this.client.emit('blacklistAdd', user, true);
-			return message.channel.send(`Added ${user.username}#${user.discriminator} to the global blacklist.`);
+			return message.channel.send(`Added ${user.tag} to the global blacklist.`);
 		}
 
 		let member: GuildMember;
@@ -57,6 +57,6 @@ export default class extends Command<Client>
 
 		await message.guild.storage.settings.set(`blacklist.${user.id}`, true);
 		this.client.emit('blacklistAdd', user, false);
-		return message.channel.send(`Added ${user.username}#${user.discriminator} to this server's blacklist.`);
+		return message.channel.send(`Added ${user.tag} to this server's blacklist.`);
 	}
 }

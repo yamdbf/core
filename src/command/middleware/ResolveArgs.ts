@@ -85,13 +85,14 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 					{
 						throw new Error(`in arg \`${name}\`: Failed to find a user with ID \`${arg}\`.\n${usage}`);
 					}
-					if (!user) throw new Error(`in arg \`${name}\`:  Failed to find a user with ID \`${arg}\`.\n${usage}`);
+					if (!user) throw new Error(
+						`in arg \`${name}\`:  Failed to find a user with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
 					const normalized: string = normalizeUser(arg);
-					let users: Collection<string, User> = (<U> this).client.users.filter(a => normalizeUser(a.username).includes(normalized)
-						|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
+					let users: Collection<string, User> = (<U> this).client.users.filter(a =>
+						normalizeUser(a.username).includes(normalized) || normalizeUser(a.tag).includes(normalized));
 
 					if (message.channel.type === 'text')
 						users = users.concat(new Collection(
@@ -99,9 +100,10 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 								.filter(a => normalizeUser(a.displayName).includes(normalized))
 								.map(a => <[string, User]> [a.id, a.user])));
 
-					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
-						users.map(a => `\`${a.username}#${a.discriminator}\``).join(', ')
-						}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
+					if (users.size > 1) throw String(
+						`Found multiple potential matches for arg \`${name}\`:\n${
+							users.map(a => `\`${a.tag}\``).join(', ')
+							}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
 
 					user = users.first();
 					if (!user) throw new Error(
@@ -121,9 +123,11 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 					}
 					catch (err)
 					{
-						throw new Error(`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
+						throw new Error(
+							`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
 					}
-					if (!member) throw new Error(`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
+					if (!member) throw new Error(
+						`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
@@ -131,11 +135,12 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 					let members: Collection<string, GuildMember> = message.guild.members
 						.filter(a => normalizeUser(a.displayName).includes(normalized)
 							|| normalizeUser(a.user.username).includes(normalized)
-							|| normalizeUser(`${a.user.username}#${a.user.discriminator}`).includes(normalized));
+							|| normalizeUser(a.user.tag).includes(normalized));
 
-					if (members.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
-						members.map(a => `\`${a.user.username}#${a.user.discriminator}\``)
-							.join(', ')}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
+					if (members.size > 1) throw String(
+						`Found multiple potential matches for arg \`${name}\`:\n${
+							members.map(a => `\`${a.user.tag}\``).join(', ')
+							}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
 
 					member = members.first();
 					if (!member) throw new Error(
@@ -151,17 +156,18 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 				if (idRegex.test(arg))
 				{
 					user = bannedUsers.get(arg.match(idRegex)[1]);
-					if (!user) throw new Error(`in arg \`${name}\`:  Failed to find a banned user with ID \`${arg}\`.\n${usage}`);
+					if (!user) throw new Error(
+						`in arg \`${name}\`:  Failed to find a banned user with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
 					const normalized: string = normalizeUser(arg);
 					let users: Collection<string, User> = bannedUsers.filter(a =>
 						normalizeUser(a.username).includes(normalized)
-							|| normalizeUser(`${a.username}#${a.discriminator}`).includes(normalized));
+							|| normalizeUser(a.tag).includes(normalized));
 
 					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
-						users.map(a => `\`${a.username}#${a.discriminator}\``).join(', ')
+						users.map(a => `\`${a.tag}\``).join(', ')
 						}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
 
 					user = users.first();
@@ -179,18 +185,21 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 				{
 					const id: string = arg.match(channelRegex)[1];
 					channel = <TextChannel> message.guild.channels.get(id);
-					if (!channel) throw new Error(`in arg \`${name}\`: Failed to find a channel with ID \`${arg}\`.\n${usage}`);
+					if (!channel) throw new Error(
+						`in arg \`${name}\`: Failed to find a channel with ID \`${arg}\`.\n${usage}`);
 				}
 				else
 				{
 					const normalized: string = Util.normalize(arg);
-					let channels: Collection<string, TextChannel> = <Collection<string, TextChannel>> message.guild.channels
-						.filter(a => a.type === 'text')
-						.filter(a => Util.normalize(a.name).includes(normalized));
+					let channels: Collection<string, TextChannel> =
+						(<Collection<string, TextChannel>> message.guild.channels)
+							.filter(a => a.type === 'text')
+							.filter(a => Util.normalize(a.name).includes(normalized));
 
-					if (channels.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
-						channels.map(a => `\`#${a.name}\``).join(', ')
-						}\nPlease refine your search, or consider using an ID/channel link\n${usage}`);
+					if (channels.size > 1) throw String(
+						`Found multiple potential matches for arg \`${name}\`:\n${
+							channels.map(a => `\`#${a.name}\``).join(', ')
+							}\nPlease refine your search, or consider using an ID/channel link\n${usage}`);
 
 					channel = channels.first();
 					if (!channel) throw new Error(
@@ -212,11 +221,13 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 				else
 				{
 					const normalized: string = Util.normalize(arg);
-					let roles: Collection<string, Role> = message.guild.roles.filter(a => Util.normalize(a.name).includes(normalized));
+					let roles: Collection<string, Role> = message.guild.roles.filter(a =>
+						Util.normalize(a.name).includes(normalized));
 
-					if (roles.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
-						roles.map(a => `\`${a.name}\``).join(', ')
-						}\nPlease refine your search, or consider using an ID/role mention\n${usage}`);
+					if (roles.size > 1) throw String(
+						`Found multiple potential matches for arg \`${name}\`:\n${
+							roles.map(a => `\`${a.name}\``).join(', ')
+							}\nPlease refine your search, or consider using an ID/role mention\n${usage}`);
 
 					role = roles.first();
 					if (!role) throw new Error(

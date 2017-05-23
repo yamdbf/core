@@ -20,7 +20,7 @@ export default class extends Command<Client>
 	{
 		if (this.client.selfbot) message.delete();
 		const dm: boolean = message.channel.type !== 'text';
-		const mentionName: string = `@${this.client.user.username}#${this.client.user.discriminator}`;
+		const mentionName: string = `@${this.client.user.tag}`;
 
 		let command: Command<Client>;
 		let output: string = '';

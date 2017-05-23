@@ -34,7 +34,7 @@ export default class extends Command<Client>
 
 			await this.client.storage.remove(`blacklist.${user.id}`);
 			this.client.emit('blacklistRemove', user, true);
-			return message.channel.send(`Removed ${user.username}#${user.discriminator} from the global blacklist.`);
+			return message.channel.send(`Removed ${user.tag} from the global blacklist.`);
 		}
 
 		const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
@@ -43,6 +43,6 @@ export default class extends Command<Client>
 
 		await message.guild.storage.settings.remove(`blacklist.${user.id}`);
 		this.client.emit('blacklistRemove', user, false);
-		return message.channel.send(`Removed ${user.username}#${user.discriminator} from this server's blacklist.`);
+		return message.channel.send(`Removed ${user.tag} from this server's blacklist.`);
 	}
 }
