@@ -19,9 +19,9 @@ export default class extends Command<Client>
 	public async action(message: Message, [prefix]: [string]): Promise<any>
 	{
 		if (!prefix)
-			return this.respond(message, `${await this.client.getPrefix(message.guild)
+			return this.respond(message, await this.client.getPrefix(message.guild)
 				? `Current prefix is \`${await this.client.getPrefix(message.guild)}\``
-				: 'There is currently no prefix.'}`);
+				: 'There is currently no prefix.');
 
 		if (prefix.length > 10)
 			return this.respond(message, `Prefixes may only be up to 10 chars in length.`);

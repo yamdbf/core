@@ -261,10 +261,8 @@ export class Command<T extends Client>
 	 */
 	protected respond(message: Message, response: string, code?: string): Promise<Message | Message[]>
 	{
-		if (this.client.selfbot && !code) return message.edit(response);
-		if (this.client.selfbot && code) return message.editCode(code, response);
-		if (code) return message.channel.sendCode(code, response);
-		return message.channel.sendMessage(response);
+		if (this.client.selfbot) return message.edit(response, { code });
+		return message.channel.send(response, { code });
 	}
 
 	/**
@@ -272,10 +270,10 @@ export class Command<T extends Client>
 	 * for any that are invalid
 	 * @private
 	 */
-	private _validatePermissions(method: string, permissions: PermissionResolvable[]): void
+	private _validatePermissions(field: string, permissions: PermissionResolvable[]): void
 	{
 		let errString: (i: number, err: any) => string = (i: number, err: any) =>
-			`Command "${this.name}" permission "${permissions[i]}" at "${this.name}".${method}[${i}] is not a valid permission.\n\n${err}`;
+			`Command "${this.name}" permission "${permissions[i]}" at "${this.name}".${field}[${i}] is not a valid permission.\n\n${err}`;
 
 		for (const [index, perm] of permissions.entries())
 			try { Permissions.resolve(perm); }

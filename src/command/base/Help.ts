@@ -77,10 +77,13 @@ export default class extends Command<Client>
 		embed.setColor(11854048).setDescription(output);
 
 		let outMessage: Message;
-		if (!dm && !this.client.selfbot && command) message.reply(`Sent you a DM with command help information.`);
-		if (!dm && !this.client.selfbot && !command) message.reply(`Sent you a DM with a list of commands.`);
-		if (this.client.selfbot) outMessage = <Message> await message.channel.sendEmbed(embed);
-		else message.author.sendEmbed(embed);
+		if (!dm && !this.client.selfbot)
+		{
+			if (command) message.reply(`Sent you a DM with command help information.`);
+			else message.reply(`Sent you a DM with a list of commands.`);
+		}
+		if (this.client.selfbot) outMessage = <Message> await message.channel.send({ embed });
+		else message.author.send({ embed });
 
 		if (outMessage) outMessage.delete(30e3);
 	}
