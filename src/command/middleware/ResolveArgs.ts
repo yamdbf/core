@@ -8,7 +8,7 @@ import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 
 export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): MiddlewareFunction
 {
-	return async function(message, args): Promise<[Message, any[]]>
+	return async function(this: U, message: Message, args: any[]): Promise<[Message, any[]]>
 	{
 		const names: string[] = Object.keys(argTypes);
 		const types: ResolveArgType[] = names.map(a => argTypes[a]);
@@ -18,7 +18,7 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 
 		const dm: boolean = message.channel.type !== 'text';
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
-		const usage: string = `Usage: \`${(<U> this).usage.replace('<prefix>', prefix)}\``;
+		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 		let foundRestArg: boolean = false;
 		for (let [index, arg] of args.entries())
@@ -91,7 +91,7 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 				else
 				{
 					const normalized: string = normalizeUser(arg);
-					let users: Collection<string, User> = (<U> this).client.users.filter(a =>
+					let users: Collection<string, User> = this.client.users.filter(a =>
 						normalizeUser(a.username).includes(normalized) || normalizeUser(a.tag).includes(normalized));
 
 					if (message.channel.type === 'text')

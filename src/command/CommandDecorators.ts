@@ -29,7 +29,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 		if (key !== 'action') throw new Error(`"${target.constructor.name}#${key}" is not a valid method target for @using.`);
 		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 		const original: any = descriptor.value;
-		descriptor.value = async function(message: Message, args: any[]): Promise<any>
+		descriptor.value = async function(this: Command<any>, message: Message, args: any[]): Promise<any>
 		{
 			let middlewarePassed: boolean = true;
 			try

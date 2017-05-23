@@ -7,7 +7,7 @@ import { GuildMember, Role, TextChannel, User } from 'discord.js';
 
 export function expect<T extends Client, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }): MiddlewareFunction
 {
-	return async function(message, args): Promise<[Message, any[]]>
+	return async function(this: U, message: Message, args: any[]): Promise<[Message, any[]]>
 	{
 		const names: string[] = Object.keys(argTypes);
 		const types: ExpectArgType[] = names.map(a => argTypes[a]);
