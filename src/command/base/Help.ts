@@ -28,24 +28,27 @@ export default class extends Command<Client>
 
 		if (!commandName)
 		{
-			const preText: string = `Available commands in ${dm ? 'this DM' : message.channel}\n\`\`\`ldif\n`;
+			const preText: string = `Available commands: (Commands marked with \`*\` are server-only)\n\`\`\`ldif\n`;
 			const postText: string = `\`\`\`Use \`<prefix>help <command>\` ${this.client.selfbot ? '' : `or \`${
-				mentionName} help <command>\` `}for more information.\n\n`;
+				mentionName} help <command>\` `}for more info\n\n`;
 
-			const usableCommands: Collection<string, Command<Client>> = (await this.client.commands[dm
-				? 'filterDMUsable' : 'filterGuildUsable'](this.client, message))
+			const usableCommands: Collection<string, Command<Client>> = this.client.commands
+				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.filter(c => !c.hidden);
 
 			const widest: number = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			let commandList: string = usableCommands.map(c =>
-				`${Util.padRight(c.name, widest + 1)}: ${c.description}`).sort().join('\n');
+				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${c.description}`).sort().join('\n');
 
 			output = preText + commandList + postText;
 			if (output.length >= 1024)
 			{
 				commandList = '';
-				let mappedCommands: string[] = usableCommands.map(c => Util.padRight(c.name, widest + 2)).sort();
-				for (let i: number = 0; i <= mappedCommands.length; i++)
+				let mappedCommands: string[] = usableCommands
+					.sort((a, b) => a.name < b.name ? -1 : 1)
+					.map(c => (c.guildOnly ? '*' : ' ') + Util.padRight(c.name, widest + 2));
+
+				for (let i: number = 0; i < mappedCommands.length; i++)
 				{
 					commandList += mappedCommands[i];
 					if ((i + 1) % 3 === 0) commandList += '\n';
@@ -55,10 +58,10 @@ export default class extends Command<Client>
 		}
 		else
 		{
-			command = (await this.client.commands[dm
-				? 'filterDMUsable' : 'filterGuildUsable'](this.client, message))
-				.filter(c => c.name === commandName || c.aliases.includes(commandName))
-				.first();
+			command = (await this.client.commands
+				[dm ? 'filterDMUsable' : 'filterGuildUsable'](this.client, message))
+					.filter(c => c.name === commandName || c.aliases.includes(commandName))
+					.first();
 
 			if (!command) output = `A command by that name could not be found or you do\n`
 				+ `not have permissions to view it in this guild or channel`;
