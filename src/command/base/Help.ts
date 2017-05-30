@@ -58,14 +58,15 @@ export default class extends Command<Client>
 		}
 		else
 		{
-			command = (await this.client.commands
-				[dm ? 'filterDMUsable' : 'filterGuildUsable'](this.client, message))
-					.filter(c => c.name === commandName || c.aliases.includes(commandName))
-					.first();
+			command = this.client.commands
+				.filter(c => c.name === commandName || c.aliases.includes(commandName))
+				.first();
 
 			if (!command) output = `A command by that name could not be found or you do\n`
 				+ `not have permissions to view it in this guild or channel`;
 			else output = '```ldif\n'
+				+ (command.guildOnly ? '[Server Only]\n' : '')
+				+ (command.ownerOnly ? '[Owner Only]\n' : '')
 				+ `Command: ${command.name}\n`
 				+ `Description: ${command.description}\n`
 				+ (command.aliases.length > 0 ? `Aliases: ${command.aliases.join(', ')}\n` : '')
@@ -80,13 +81,21 @@ export default class extends Command<Client>
 		embed.setColor(11854048).setDescription(output);
 
 		let outMessage: Message;
-		if (!dm && !this.client.selfbot)
+		try
 		{
-			if (command) message.reply(`Sent you a DM with command help information.`);
-			else message.reply(`Sent you a DM with a list of commands.`);
+			if (this.client.selfbot) outMessage = <Message> await message.channel.send({ embed });
+			else await message.author.send({ embed });
+			if (!dm && !this.client.selfbot)
+			{
+				if (command) message.reply(`Sent you a DM with command help information.`);
+				else message.reply(`Sent you a DM with a list of commands.`);
+			}
 		}
-		if (this.client.selfbot) outMessage = <Message> await message.channel.send({ embed });
-		else message.author.send({ embed });
+		catch (err)
+		{
+			if (!dm && !this.client.selfbot)
+				message.reply('Failed to DM help information. Do you have DMs blocked?');
+		}
 
 		if (outMessage) outMessage.delete(30e3);
 	}
