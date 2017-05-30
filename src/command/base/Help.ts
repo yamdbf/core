@@ -59,11 +59,11 @@ export default class extends Command<Client>
 		else
 		{
 			command = this.client.commands
-				.filter(c => c.name === commandName || c.aliases.includes(commandName))
-				.first();
+				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
+				.find(c => c.name === commandName || c.aliases.includes(commandName));
 
 			if (!command) output = `A command by that name could not be found or you do\n`
-				+ `not have permissions to view it in this guild or channel`;
+				+ `not have permission to view it.`;
 			else output = '```ldif\n'
 				+ (command.guildOnly ? '[Server Only]\n' : '')
 				+ (command.ownerOnly ? '[Owner Only]\n' : '')
