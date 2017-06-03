@@ -1,5 +1,6 @@
 import { Client, Command, Message, CommandDecorators, Logger, logger } from '../../bin';
 const { using, guildOnly, group } = CommandDecorators;
+import { Middleware } from '../../bin';
 import * as util from 'util';
 
 @guildOnly
@@ -12,11 +13,12 @@ export default class extends Command<Client>
 		super(client, {
 			name: 'test',
 			description: 'test command',
-			usage: '<prefix>test'
+			usage: '<prefix>test <foo|bar|baz>'
 		});
 	}
 
 	@using((message, args) => [message, args.map(a => a.toUpperCase())])
+	@using(Middleware.expect({ '<foo|bar|baz>': ['foo', 'bar', 'baz'] }))
 	public action(message: Message, args: string[]): void
 	{
 		message.channel.send(args.join(' ') || 'MISSING ARGS');

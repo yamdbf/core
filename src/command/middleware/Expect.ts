@@ -21,15 +21,28 @@ export function expect<T extends Client, U extends Command<T>>(argTypes: { [name
 			const arg: any = args[index];
 			const type: ExpectArgType = types[index];
 
-			if (dm && !['String', 'Number', 'User', 'Any'].includes(type))
+			if (dm && !(type instanceof Array) && !['String', 'Number', 'User', 'Any'].includes(<string> type))
 				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
 
-			if (typeof args[index] === 'undefined' || args[index] === null)
-				throw new Error(`Missing or null value for arg: \`${name}\`, expected \`${type}\`\n${usage}`);
+			if (typeof arg === 'undefined' || arg === null)
+			{
+				let error: string = `Missing or null value for arg: \`${name}\``;
+				if (type instanceof Array) error += `\nExpected one of: \`${type.join('`, `')}\``;
+				else error += `, expected \`${type}\``;
+				throw new Error(error += `\n${usage}`);
+			}
 
 			if (type === 'Any') continue;
 
-			if (type === 'String')
+			if (type instanceof Array)
+			{
+				if (!type.map(a => a.toLowerCase()).includes(arg.toLowerCase()))
+					throw new Error([
+						`in arg \`${name}\`: \`${arg}\` is not a valid option`,
+						`${usage}\nValid options for arg \`${name}\`: \`${type.join('`, `')}\``
+					].join('\n'));
+			}
+			else if (type === 'String')
 			{
 				if (typeof arg !== 'string')
 					throw new Error(`in arg \`${name}\`: \`String\` expected, got \`${arg.constructor.name}\``);

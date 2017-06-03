@@ -1,5 +1,4 @@
 import { Logger } from './logger/Logger';
-const logger: Logger = Logger.instance();
 
 /**
  * Logs a deprecation warning for the decorated class method
@@ -13,6 +12,7 @@ export function deprecated<T extends Function>(message?: string): MethodDecorato
 	{
 		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 		const original: any = descriptor.value;
+		const logger: Logger = Logger.instance();
 		descriptor.value = function(...args: any[]): any
 		{
 			logger.warn('Deprecation', message || `${target.constructor.name}#${key}() is deprecated and will be removed in a future release.`);
