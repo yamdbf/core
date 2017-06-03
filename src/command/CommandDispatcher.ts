@@ -287,9 +287,7 @@ export class CommandDispatcher<T extends Client>
 	private unknownCommandError(): string
 	{
 		return `Sorry, I didn't recognize any command in your message.\n`
-			+ `Try saying "help" to view a list of commands you can use in `
-			+ `this DM, or try calling the\nhelp command in a server channel `
-			+ `to see what commands you can use there!`;
+			+ `Try saying "help" to view a list of commands.`;
 	}
 
 	/**
@@ -297,8 +295,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private guildOnlyError(): string
 	{
-		return `That command is for servers only. Try saying "help" to see a `
-			+ `list of commands you can use in this DM`;
+		return `That command is for servers only. Try saying "help" to see a list of commands.`;
 	}
 
 	/**
