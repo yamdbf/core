@@ -2761,7 +2761,7 @@
         },
         {
             "name": "ExpectArgType",
-            "description": "<p>Valid arg type values for the Expect middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre>",
+            "description": "<p>Valid arg type values for the Expect middleware\nCan be one of the following types as strings:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><p>or an Array of possible string literal values if specific string options are desired</p>",
             "properties": []
         },
         {
