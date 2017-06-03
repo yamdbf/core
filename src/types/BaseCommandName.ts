@@ -9,6 +9,7 @@
  * 'limit',
  * 'listgroups',
  * 'eval',
+ * 'eval:ts',
  * 'help',
  * 'ping'
  * 'reload',
@@ -25,6 +26,7 @@ export type BaseCommandName = 'blacklist'
 	| 'limit'
 	| 'listgroups'
 	| 'eval'
+	| 'eval:ts'
 	| 'help'
 	| 'ping'
 	| 'reload'

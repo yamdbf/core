@@ -12,7 +12,7 @@ export default class extends Command<Client>
 		super(client, {
 			name: 'eval',
 			description: 'Evaluate provided Javascript code',
-			usage: '<prefix>eval <code>',
+			usage: '<prefix>eval <...code>',
 			ownerOnly: true
 		});
 	}
