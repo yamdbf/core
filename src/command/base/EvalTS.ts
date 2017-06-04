@@ -37,7 +37,6 @@ export default class extends Command<Client>
 		try
 		{
 			const compiled: string = this._compile(code);
-			message.channel.send(compiled);
 			evaled = eval(compiled);
 		}
 		catch (err)
@@ -75,17 +74,21 @@ export default class extends Command<Client>
 			const fileName: string = `${__dirname}/eval${Date.now()}.ts`;
 			fs.writeFileSync(fileName, code);
 			const program: any = ts.createProgram([fileName], { module: ts.ModuleKind.CommonJS });
-			const diagnostic: any = ts.getPreEmitDiagnostics(program)[0];
-			if (diagnostic)
+			let diagnostics: any[] = ts.getPreEmitDiagnostics(program);
+			if (diagnostics.length > 0)
 			{
-				const messageText: string = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-				const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-				if (!messageText.includes('Cannot find name'))
-					message = `(${line + 1},${character + 1}): ${messageText} (${diagnostic.code})`;
+				diagnostics = diagnostics.map(d =>
+				{
+					const messageText: string = ts.flattenDiagnosticMessageText(d.messageText, '\n');
+					const { line, character } = d.file.getLineAndCharacterOfPosition(d.start);
+					return `\n(${line + 1},${character + 1}): ${messageText} (${d.code})`;
+				})
+				.filter(d => !d.includes('Cannot find name'));
+				if (diagnostics.length > 0) message = diagnostics.join('');
 			}
 			fs.unlinkSync(fileName);
 		}
-		if (message) throw Error(message);
+		if (message) throw new CompilerError(message);
 		return ts ? ts.transpileModule(code,
 			{ compilerOptions: { module: ts.ModuleKind.CommonJS } })
 				.outputText
@@ -101,5 +104,14 @@ export default class extends Command<Client>
 			.replace(/[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g, '[REDACTED]')
 			.replace(/email: '[^']+'/g, `email: '[REDACTED]'`)
 			: text;
+	}
+}
+
+class CompilerError extends Error
+{
+	public name: string = 'CompilerError';
+	public constructor(message: string)
+	{
+		super(message);
 	}
 }
