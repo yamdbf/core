@@ -1,7 +1,7 @@
 import { Client } from '../../client/Client';
 import { Command } from '../Command';
 import { expect } from './Expect';
-import { resolveArgs } from './ResolveArgs';
+import { resolve } from './ResolveArgs';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
 import { ExpectArgType } from '../../types/ExpectArgType';
@@ -29,15 +29,15 @@ export class Middleware
 	 * Supports `'...'` in the argument name as the final argument to gather
 	 * all remaining words into one string and attempt to resolve them to
 	 * the provided argument type
-	 * @method resolveArgs
+	 * @method resolve
 	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ResolveArgType}
 	 * @returns {MiddlewareFunction} ```
 	 * (message: Message, args: any[]) => [Message, any[]]
 	 * ```
 	 */
-	public static resolveArgs: <T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }) =>
-		MiddlewareFunction = resolveArgs;
+	public static resolve: <T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }) =>
+		MiddlewareFunction = resolve;
 
 	/**
 	 * Takes an object mapping argument names to argument types that

@@ -7,7 +7,7 @@ import { Util } from '../../util/Util';
 import { Time } from '../../util/Time';
 import { Command } from '../Command';
 
-export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): MiddlewareFunction
+export function resolve<T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): MiddlewareFunction
 {
 	return async function(this: U, message: Message, args: any[]): Promise<[Message, any[]]>
 	{
