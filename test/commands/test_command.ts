@@ -18,11 +18,11 @@ export default class extends Command<Client>
 	}
 
 	@using((message, args) => [message, args.map(a => a.toUpperCase())])
-	@using(Middleware.expect({ '<foo|bar|baz>': ['foo', 'bar', 'baz'] }))
+	@using(Middleware.resolveArgs({ '<test>': 'Duration' }))
+	// @using(Middleware.expect({ '<foo|bar|baz>': ['foo', 'bar', 'baz'] }))
 	public action(message: Message, args: string[]): void
 	{
 		message.channel.send(args.join(' ') || 'MISSING ARGS');
-		this.logger.debug('Command:test', util.inspect(this.clientPermissions));
 		this.logger.debug('Command:test', util.inspect(this.group));
 	}
 }

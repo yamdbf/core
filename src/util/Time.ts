@@ -66,7 +66,7 @@ export class Time
 	public static parseShorthand(shorthand: string): number
 	{
 		let duration: number, match: RegExpMatchArray;
-		if (/^(?:\d+(?:\.\d+)?)[s|m|h|d]$/.test(<string> shorthand))
+		if (/^(?:\d+(?:\.\d+)?)[s|m|h|d]$/.test(shorthand))
 		{
 			match = shorthand.match(/(\d+(?:\.\d+)?)(s|m|h|d)$/);
 			duration = parseFloat(match[1]);
