@@ -11,7 +11,7 @@
  * 'eval',
  * 'eval:ts',
  * 'help',
- * 'ping'
+ * 'ping',
  * 'reload',
  * 'setprefix',
  * 'version'

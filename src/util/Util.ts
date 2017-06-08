@@ -1,3 +1,5 @@
+import { BaseCommandName } from '../types/BaseCommandName';
+
 /**
  * Utility class containing handy static methods that can
  * be used anywhere
@@ -5,6 +7,31 @@
  */
 export class Util
 {
+
+	/**
+	 * Tangible representation of all base command names
+	 * @static
+	 * @name baseCommandNames
+	 * @type {BaseCommandName[]}
+	 */
+	public static baseCommandNames: BaseCommandName[] =
+	[
+		'blacklist',
+		'whitelist',
+		'clearlimit',
+		'disablegroup',
+		'enablegroup',
+		'limit',
+		'listgroups',
+		'eval',
+		'eval:ts',
+		'help',
+		'ping',
+		'reload',
+		'setprefix',
+		'version'
+	];
+
 	/**
 	 * Pads the right side of a string with spaces to the given length
 	 * @static
