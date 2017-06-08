@@ -1,12 +1,13 @@
-import { Client } from '../../client/Client';
-import { Message } from '../../types/Message';
+import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
+import { Client } from '../../client/Client';
+import { Message } from '../../types/Message';
 import { Util } from '../../util/Util';
+import { Time } from '../../util/Time';
 import { Command } from '../Command';
-import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 
-export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): MiddlewareFunction
+export function resolve<T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }): MiddlewareFunction
 {
 	return async function(this: U, message: Message, args: any[]): Promise<[Message, any[]]>
 	{
@@ -55,19 +56,11 @@ export function resolveArgs<T extends Client, U extends Command<T>>(argTypes: { 
 
 			else if (type === 'Duration')
 			{
-				let duration: number, match: RegExpMatchArray;
-				if (/^(?:\d+(?:\.\d+)?)[s|m|h|d]$/.test(arg))
-				{
-					match = arg.match(/(\d+(?:\.\d+)?)(s|m|h|d)$/);
-					duration = parseFloat(match[1]);
-					duration = match[2] === 's'
-						? duration * 1000 : match[2] === 'm'
-						? duration * 1000 * 60 : match[2] === 'h'
-						? duration * 1000 * 60 * 60 : match[2] === 'd'
-						? duration * 1000 * 60 * 60 * 24 : null;
-				}
-				if (!duration) throw new Error(
-					`in arg \`${name}\`: \`${arg}\` could not be resolved to a duration.\n${usage}`);
+				let duration: number = Time.parseShorthand(arg);
+				if (!duration) throw new Error([
+					`in arg \`${name}\`: \`${arg}\` could not be resolved to a duration.\n${usage}`,
+					`Duration examples: \`10m\`, \`2h\`, \`1.5d\``
+				].join('\n'));
 
 				args[index] = duration;
 			}

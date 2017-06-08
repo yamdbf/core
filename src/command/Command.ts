@@ -10,7 +10,7 @@ import { ArgOpts } from '../types/ArgOpts';
  * @param {Client} client - YAMDBF Client instance
  * @param {CommandInfo} info - Object containing required command properties
  */
-export class Command<T extends Client>
+export class Command<T extends Client = Client>
 {
 	public readonly client: T;
 	public name: string;

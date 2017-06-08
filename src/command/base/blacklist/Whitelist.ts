@@ -19,7 +19,7 @@ export default class extends Command<Client>
 		});
 	}
 
-	@using(Middleware.resolveArgs({ '<user>': 'User' }))
+	@using(Middleware.resolve({ '<user>': 'User' }))
 	@using(Middleware.expect({ '<user>': 'User' }))
 	public async action(message: Message, [user, global]: [User, string]): Promise<Message | Message[]>
 	{
