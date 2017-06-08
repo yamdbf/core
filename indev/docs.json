@@ -2546,7 +2546,7 @@
         },
         {
             "name": "BaseCommandName",
-            "description": "<p>String representing a name of a base command. Valid names are:</p>\n<pre class=\"prettyprint source\"><code>'blacklist',\n'whitelist',\n'clearlimit',\n'disablegroup',\n'enablegroup',\n'limit',\n'listgroups',\n'eval',\n'eval:ts',\n'help',\n'ping'\n'reload',\n'setprefix',\n'version'</code></pre>",
+            "description": "<p>String representing a name of a base command. Valid names are:</p>\n<pre class=\"prettyprint source\"><code>'blacklist',\n'whitelist',\n'clearlimit',\n'disablegroup',\n'enablegroup',\n'limit',\n'listgroups',\n'eval',\n'eval:ts',\n'help',\n'ping',\n'reload',\n'setprefix',\n'version'</code></pre>",
             "properties": []
         },
         {
