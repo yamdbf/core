@@ -12,7 +12,7 @@ import { ArgOpts } from '../types/ArgOpts';
  */
 export class Command<T extends Client = Client>
 {
-	public readonly client: T;
+	public client: T;
 	public name: string;
 	public description: string;
 	public usage: string;
@@ -32,13 +32,13 @@ export class Command<T extends Client = Client>
 	public readonly _rateLimiter: RateLimiter;
 	public readonly _middleware: MiddlewareFunction[];
 
-	public constructor(client: T, info: CommandInfo = null)
+	public constructor(info: CommandInfo = null)
 	{
 		/**
 		 * YAMDBF Client instance
 		 * @type {Client}
 		 */
-		this.client = client;
+		this.client = null;
 
 		/**
 		 * The name of the command, used by the dispatcher
@@ -179,8 +179,10 @@ export class Command<T extends Client = Client>
 	 * adding Commands to the CommandRegistry via {@link CommandRegistry#register}
 	 * @returns {void}
 	 */
-	public register(): void
+	public register(client: T): void
 	{
+		this.client = client;
+
 		// Set defaults if not present
 		if (typeof this.aliases === 'undefined') this.aliases = [];
 		if (typeof this.group === 'undefined') this.group = 'base';

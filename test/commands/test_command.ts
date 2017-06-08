@@ -8,16 +8,16 @@ import * as util from 'util';
 export default class extends Command
 {
 	@logger private readonly logger: Logger;
-	public constructor(client: Client)
+	public constructor()
 	{
-		super(client, {
+		super({
 			name: 'test',
 			description: 'test command',
 			usage: '<prefix>test <test>'
 		});
 	}
 
-	@using((message, args) => [message, args.map(a => a.toUpperCase())])
+	// @using((message, args) => [message, args.map(a => a.toUpperCase())])
 	@using(Middleware.resolve({ '<test>': 'Duration' }))
 	// @using(Middleware.expect({ '<foo|bar|baz>': ['foo', 'bar', 'baz'] }))
 	public action(message: Message, args: string[]): void

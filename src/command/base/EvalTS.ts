@@ -1,4 +1,3 @@
-import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { inspect } from 'util';
@@ -10,11 +9,11 @@ let ts: any;
 try { ts = require('typescript'); }
 catch (err) {}
 
-export default class extends Command<Client>
+export default class extends Command
 {
-	public constructor(client: Client)
+	public constructor()
 	{
-		super(client, {
+		super({
 			name: 'eval:ts',
 			description: 'Evaluate provided Typescript code',
 			usage: '<prefix>eval:ts <...code>',

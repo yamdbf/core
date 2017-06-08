@@ -11,7 +11,8 @@
 			"program": "${workspaceRoot}/test/test_client.js",
 			"cwd": "${workspaceRoot}/test",
 			"outFiles": [],
-			"preLaunchTask": "tests"
+			"preLaunchTask": "tests",
+			"console": "integratedTerminal"
 		},
 		{
 			"type": "node",

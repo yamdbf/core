@@ -21,7 +21,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 * replaced in the collection
 	 * @returns {void}
 	 */
-	public register(command: V, key: K, reload?: boolean): void
+	public register(client: T, command: V, key: K, reload?: boolean): void
 	{
 		if (super.has(<K> command.name) && !reload && !(command.overloads && command.overloads !== super.get(<K> command.overloads).name))
 			throw new Error(`A command with the name "${command.name}" already exists.`);
@@ -36,7 +36,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 			}
 		}
 
-		command.register();
+		command.register(client);
 		super.set(key, <V> command);
 	}
 

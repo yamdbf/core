@@ -1,15 +1,14 @@
-import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Client>
+export default class extends Command
 {
-	public constructor(client: Client)
+	public constructor()
 	{
-		super(client, {
+		super({
 			name: 'enablegroup',
 			description: 'Enable a command group',
 			aliases: ['enable', 'eg'],

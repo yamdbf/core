@@ -1,4 +1,3 @@
-import { Client } from '../../../client/Client';
 import { GuildStorage } from '../../../types/GuildStorage';
 import { Message } from '../../../types/Message';
 import { Util } from '../../../util/Util';
@@ -8,11 +7,11 @@ import { Role } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Client>
+export default class extends Command
 {
-	public constructor(client: Client)
+	public constructor()
 	{
-		super(client, {
+		super({
 			name: 'limit',
 			description: 'Limit a command to the provided roles',
 			usage: '<prefix>limit <command>, <role names, ...>',
@@ -25,7 +24,7 @@ export default class extends Command<Client>
 	@using(Middleware.expect({ '<command>': 'String' }))
 	public async action(message: Message, [commandName, ...roleNames]: [string, string]): Promise<Message | Message[]>
 	{
-		const command: Command<Client> = this.client.commands.find(c => Util.normalize(commandName) === Util.normalize(c.name));
+		const command: Command = this.client.commands.find(c => Util.normalize(commandName) === Util.normalize(c.name));
 		if (!command) return this.respond(message, `Failed to find a command with the name \`${commandName}\``);
 		if (command.group === 'base') this.respond(message, `Cannot limit base commands.`);
 

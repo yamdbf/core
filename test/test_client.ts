@@ -25,7 +25,7 @@ class Test extends Client
 	public constructor()
 	{
 		super({
-			name: 'test',
+			name: 'tests',
 			token: config.token,
 			owner: config.owner,
 			commandsDir: './commands',

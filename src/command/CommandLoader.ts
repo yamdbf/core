@@ -36,7 +36,7 @@ export class CommandLoader<T extends Client>
 			delete require.cache[require.resolve(commandLocation)];
 
 			const loadedCommandClass: any = this.getCommandClass(commandLocation);
-			const command: Command<T> = new loadedCommandClass(this._client);
+			const command: Command<T> = new loadedCommandClass();
 
 			if (this._client.disableBase.includes(<BaseCommandName> command.name)) continue;
 			command._classloc = commandLocation;
@@ -46,13 +46,13 @@ export class CommandLoader<T extends Client>
 				if (!this._client.commands.has(command.overloads))
 					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
 				this._client.commands.delete(command.overloads);
-				this._client.commands.register(command, command.name);
+				this._client.commands.register(this._client, command, command.name);
 				this.logger.info('CommandLoader',
 					`Command '${command.name}' loaded, overloading command '${command.overloads}'.`);
 			}
 			else
 			{
-				this._client.commands.register(command, command.name);
+				this._client.commands.register(this._client, command, command.name);
 				loadedCommands++;
 				this.logger.info('CommandLoader', `Command '${command.name}' loaded.`);
 			}
@@ -75,7 +75,7 @@ export class CommandLoader<T extends Client>
 		const loadedCommandClass: any = this.getCommandClass(commandLocation);
 		const command: Command<T> = new loadedCommandClass(this._client);
 		command._classloc = commandLocation;
-		this._client.commands.register(command, command.name, true);
+		this._client.commands.register(this._client, command, command.name, true);
 		this.logger.info('CommandLoader', `Command '${command.name}' reloaded.`);
 		return true;
 	}

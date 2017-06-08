@@ -1,15 +1,14 @@
-import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { inspect } from 'util';
 const Discord = require('discord.js'); // tslint:disable-line
 const Yamdbf = require('../../index'); // tslint:disable-line
 
-export default class extends Command<Client>
+export default class extends Command
 {
-	public constructor(client: Client)
+	public constructor()
 	{
-		super(client, {
+		super({
 			name: 'eval',
 			description: 'Evaluate provided Javascript code',
 			usage: '<prefix>eval <...code>',

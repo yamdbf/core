@@ -1,14 +1,13 @@
-import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Util } from '../../util/Util';
 import { Command } from '../Command';
 import { Collection, RichEmbed } from 'discord.js';
 
-export default class extends Command<Client>
+export default class extends Command
 {
-	public constructor(client: Client)
+	public constructor()
 	{
-		super(client, {
+		super({
 			name: 'help',
 			description: 'Provides information on bot commands',
 			usage: `<prefix>help [command]`,
@@ -22,7 +21,7 @@ export default class extends Command<Client>
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user.tag}`;
 
-		let command: Command<Client>;
+		let command: Command;
 		let output: string = '';
 		let embed: RichEmbed = new RichEmbed();
 
@@ -32,7 +31,7 @@ export default class extends Command<Client>
 			const postText: string = `\`\`\`Use \`<prefix>help <command>\` ${this.client.selfbot ? '' : `or \`${
 				mentionName} help <command>\` `}for more info\n\n`;
 
-			const usableCommands: Collection<string, Command<Client>> = this.client.commands
+			const usableCommands: Collection<string, Command> = this.client.commands
 				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.filter(c => !c.hidden);
 

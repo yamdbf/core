@@ -1,4 +1,3 @@
-import { Client } from '../../../client/Client';
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
@@ -6,11 +5,11 @@ import { User } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using } = CommandDecorators;
 
-export default class extends Command<Client>
+export default class extends Command
 {
-	public constructor(client: Client)
+	public constructor()
 	{
-		super(client, {
+		super({
 			name: 'whitelist',
 			description: 'Remove a user from the command blacklist',
 			aliases: ['wl'],
