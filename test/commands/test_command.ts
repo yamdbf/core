@@ -5,7 +5,7 @@ import * as util from 'util';
 
 @guildOnly
 @group('test')
-export default class extends Command<Client>
+export default class extends Command
 {
 	@logger private readonly logger: Logger;
 	public constructor(client: Client)
@@ -13,12 +13,12 @@ export default class extends Command<Client>
 		super(client, {
 			name: 'test',
 			description: 'test command',
-			usage: '<prefix>test <foo|bar|baz>'
+			usage: '<prefix>test <test>'
 		});
 	}
 
 	@using((message, args) => [message, args.map(a => a.toUpperCase())])
-	@using(Middleware.resolveArgs({ '<test>': 'Duration' }))
+	@using(Middleware.resolve({ '<test>': 'Duration' }))
 	// @using(Middleware.expect({ '<foo|bar|baz>': ['foo', 'bar', 'baz'] }))
 	public action(message: Message, args: string[]): void
 	{

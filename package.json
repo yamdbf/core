@@ -51,7 +51,7 @@
     "gulp-typescript": "^3.1.5",
     "jsdoc": "github:zajrik/jsdoc",
     "minami": "github:zajrik/minami",
-    "tslint": "^4.5.1",
-    "typescript": "^2.2.1"
+    "tslint": "^5.4.3",
+    "typescript": "^2.3.4"
   }
 }
