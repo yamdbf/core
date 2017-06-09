@@ -1270,12 +1270,20 @@
                     "name": "get",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns the RateLimit object for the message author if global\nor message member if message is in a guild</p>",
+                    "description": "<p>Returns the RateLimit object for the message author if global\nor message member if message is in a guild. If a userOverride\nis given then the RateLimit or global RateLimit will be\nretrieved for that user based on the message location</p>",
                     "parameters": [
                         {
                             "name": "message",
                             "type": "external:Message",
                             "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "userOverride",
+                            "type": "external:User",
+                            "description": "<p>User object to use in place of Message author</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""

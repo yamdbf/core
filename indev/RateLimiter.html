@@ -231,7 +231,7 @@
     
 
     <h4 class="name" id="get">
-		<span class="type-signature"></span>.<a href='#get' style='color: black'>get</a><span class="signature">(<span class="param-types">message: <a href="external-Message.html">Message</a></span>)</span><span class="type-signature"> &rarr; <a href="RateLimit.html">RateLimit</a></span>
+		<span class="type-signature"></span>.<a href='#get' style='color: black'>get</a><span class="signature">(<span class="param-types">message: <a href="external-Message.html">Message</a></span>, <span class="param-types">userOverride: <a href="external-User.html">User</a></span>)</span><span class="type-signature"> &rarr; <a href="RateLimit.html">RateLimit</a></span>
 	</h4>
 
     
@@ -241,7 +241,9 @@
 
 <div class="description">
     <p>Returns the RateLimit object for the message author if global
-or message member if message is in a guild</p>
+or message member if message is in a guild. If a userOverride
+is given then the RateLimit or global RateLimit will be
+retrieved for that user based on the message location</p>
 </div>
 
 
@@ -295,6 +297,30 @@ or message member if message is in a guild</p>
             
 
             <td class="description last"><p>Discord.js Message object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userOverride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="external-User.html">User</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>User object to use in place of Message author</p></td>
         </tr>
 
     
