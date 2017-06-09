@@ -1,4 +1,4 @@
-import { Collection } from 'discord.js';
+import { Collection, User } from 'discord.js';
 import { RateLimit } from './RateLimit';
 import { Time } from '../util/Time';
 import { Message } from '../types/Message';
@@ -26,27 +26,31 @@ export class RateLimiter
 
 	/**
 	 * Returns the RateLimit object for the message author if global
-	 * or message member if message is in a guild
+	 * or message member if message is in a guild. If a userOverride
+	 * is given then the RateLimit or global RateLimit will be
+	 * retrieved for that user based on the message location
 	 * @param {external:Message} message Discord.js Message object
+	 * @param {external:User} userOverride User object to use in place of Message author
 	 * @returns {RateLimit}
 	 */
-	public get(message: Message): RateLimit
+	public get(message: Message, userOverride?: User): RateLimit
 	{
+		const user: User = userOverride ? userOverride : message.author;
 		if (this._isGlobal(message))
 		{
-			if (!this._globalLimits.has(message.author.id))
-				this._globalLimits.set(message.author.id, new RateLimit(this._limit));
-			return this._globalLimits.get(message.author.id);
+			if (!this._globalLimits.has(user.id))
+				this._globalLimits.set(user.id, new RateLimit(this._limit));
+			return this._globalLimits.get(user.id);
 		}
 		else
 		{
 			if (!this._rateLimits.has(message.guild.id))
 				this._rateLimits.set(message.guild.id, new Collection<string, RateLimit>());
 
-			if (!this._rateLimits.get(message.guild.id).has(message.author.id))
-				this._rateLimits.get(message.guild.id).set(message.author.id, new RateLimit(this._limit));
+			if (!this._rateLimits.get(message.guild.id).has(user.id))
+				this._rateLimits.get(message.guild.id).set(user.id, new RateLimit(this._limit));
 
-			return this._rateLimits.get(message.guild.id).get(message.author.id);
+			return this._rateLimits.get(message.guild.id).get(user.id);
 		}
 	}
 
