@@ -16,6 +16,7 @@ import now = require('performance-now');
 export class CommandDispatcher<T extends Client>
 {
 	private readonly _client: T;
+	private _ready: boolean = false;
 	public constructor(client: T)
 	{
 		this._client = client;
@@ -25,10 +26,20 @@ export class CommandDispatcher<T extends Client>
 	}
 
 	/**
+	 * Set the dispatcher as ready to receive and dispatch commands
+	 */
+	public setReady(): void
+	{
+		this._ready = true;
+	}
+
+	/**
 	 * Handle received messages
 	 */
 	private async handleMessage(message: Message): Promise<void>
 	{
+		if (!this._ready) return;
+
 		const dispatchStart: number = now();
 		if (this._client.selfbot && message.author !== this._client.user) return;
 		if (message.author.bot) return;

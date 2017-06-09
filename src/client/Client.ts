@@ -245,6 +245,7 @@ export class Client extends Discord.Client
 		await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
 
 		this._logger.log('Client', this.readyText);
+		this._dispatcher.setReady();
 		this.emit('clientReady');
 	}
 
