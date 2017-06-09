@@ -809,6 +809,14 @@
             },
             "functions": [
                 {
+                    "name": "setReady",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set the dispatcher as ready to receive and dispatch commands</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
                     "name": "handleMessage",
                     "access": "",
                     "virtual": false,
