@@ -202,6 +202,18 @@
                     }
                 },
                 {
+                    "name": "continue",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Shortcut method for <code>&lt;Client&gt;.emit('continue')</code></p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "loadCommand",
                     "access": "",
                     "virtual": false,
