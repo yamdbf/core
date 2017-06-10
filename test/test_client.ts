@@ -40,7 +40,7 @@ class Test extends Client
 	{
 		logger.debug('Test', 'Paused...');
 		await this.setDefaultSetting('prefix', '?');
-		this.emit('continue');
+		this.continue();
 	}
 
 	@once('continue')

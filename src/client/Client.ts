@@ -276,6 +276,15 @@ export class Client extends Discord.Client
 	}
 
 	/**
+	 * Shortcut method for `<Client>.emit('continue')`
+	 * @returns {void}
+	 */
+	protected continue(): void
+	{
+		this.emit('continue');
+	}
+
+	/**
 	 * Loads/reloads all/specific commands
 	 * @param {string} command The name of a command to reload, or 'all' to load all commands
 	 * @returns {void}
