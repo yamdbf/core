@@ -93,10 +93,22 @@ export function resolve<T extends Client, U extends Command<T>>(argTypes: { [nam
 								.filter(a => normalizeUser(a.displayName).includes(normalized))
 								.map(a => <[string, User]> [a.id, a.user])));
 
-					if (users.size > 1) throw String(
-						`Found multiple potential matches for arg \`${name}\`:\n${
-							users.map(a => `\`${a.tag}\``).join(', ')
-							}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
+					if (users.size > 1)
+					{
+						let error: string = `Found multiple potential matches for arg \`${name}\`:\n`;
+						if (users.size > 5)
+						{
+							const slice: User[] = users.array().slice(0, 5);
+							error += `${slice.map(a => `\`${a.tag}\``).join(', ')}, `
+								+ `plus ${users.size - slice.length} more.\n`;
+						}
+						else
+						{
+							error += `${users.map(a => `\`${a.tag}\``).join(', ')}\n`;
+						}
+						error += `Please refine your search, or consider using an ID/mention\n${usage}`;
+						throw String(error);
+					}
 
 					user = users.first();
 					if (!user) throw new Error(
@@ -130,10 +142,22 @@ export function resolve<T extends Client, U extends Command<T>>(argTypes: { [nam
 							|| normalizeUser(a.user.username).includes(normalized)
 							|| normalizeUser(a.user.tag).includes(normalized));
 
-					if (members.size > 1) throw String(
-						`Found multiple potential matches for arg \`${name}\`:\n${
-							members.map(a => `\`${a.user.tag}\``).join(', ')
-							}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
+					if (members.size > 1)
+					{
+						let error: string = `Found multiple potential matches for arg \`${name}\`:\n`;
+						if (members.size > 5)
+						{
+							const slice: GuildMember[] = members.array().slice(0, 5);
+							error += `${slice.map(a => `\`${a.user.tag}\``).join(', ')}, `
+								+ `plus ${members.size - slice.length} more.\n`;
+						}
+						else
+						{
+							error += `${members.map(a => `\`${a.user.tag}\``).join(', ')}\n`;
+						}
+						error += `Please refine your search, or consider using an ID/mention\n${usage}`;
+						throw String(error);
+					}
 
 					member = members.first();
 					if (!member) throw new Error(

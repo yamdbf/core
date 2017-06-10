@@ -1,4 +1,4 @@
-import { Client, LogLevel, Logger, ListenerUtil } from '../bin/';
+import { Client, LogLevel, Logger, ListenerUtil, Util } from '../bin/';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
@@ -30,7 +30,8 @@ class Test extends Client
 			owner: config.owner,
 			commandsDir: './commands',
 			pause: true,
-			logLevel: LogLevel.DEBUG
+			logLevel: LogLevel.DEBUG,
+			disableBase: Util.baseCommandNames
 		});
 	}
 

@@ -47,7 +47,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 			catch (err)
 			{
 				middlewarePassed = false;
-				message.channel.send(err.toString());
+				message.channel.send(err.toString(), { split: true });
 			}
 			if (middlewarePassed) return await original.apply(this, [message, args]);
 		};

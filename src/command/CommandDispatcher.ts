@@ -106,7 +106,7 @@ export class CommandDispatcher<T extends Client>
 			catch (err)
 			{
 				middlewarePassed = false;
-				message.channel.send(err.toString());
+				message.channel.send(err.toString(), { split: true });
 				break;
 			}
 
