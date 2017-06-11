@@ -76,13 +76,13 @@ export function aliases(...values: string[]): ClassDecorator
 }
 
 /**
- * Set `description` metadata
+ * Set `desc` metadata
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
-export function description(value: string): ClassDecorator
+export function desc(value: string): ClassDecorator
 {
-	return _setMetaData('description', value);
+	return _setMetaData('desc', value);
 }
 
 /**
@@ -96,13 +96,13 @@ export function usage(value: string): ClassDecorator
 }
 
 /**
- * Set `extraHelp` metadata
+ * Set `info` metadata
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
-export function extraHelp(value: string): ClassDecorator
+export function info(value: string): ClassDecorator
 {
-	return _setMetaData('extraHelp', value);
+	return _setMetaData('info', value);
 }
 
 /**
