@@ -7,10 +7,10 @@ export default class extends Command
 	{
 		super({
 			name: 'listgroups',
-			description: 'List all command groups and their status',
+			desc: 'List all command groups and their status',
 			aliases: ['lg'],
 			usage: '<prefix>listgroups',
-			extraHelp: `A '*' denotes a disabled group when listing all command groups.`,
+			info: `A '*' denotes a disabled group when listing all command groups.`,
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}

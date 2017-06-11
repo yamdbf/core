@@ -15,9 +15,9 @@ export default class extends Command
 	{
 		super({
 			name: 'eval:ts',
-			description: 'Evaluate provided Typescript code',
+			desc: 'Evaluate provided Typescript code',
 			usage: '<prefix>eval:ts <...code>',
-			extraHelp: 'Runs pretty slowly due to having to run diagnostics before compiling. If Typescript is not installed the provided code will be evaluated as Javascript and diagnostics/compilation will be skipped.',
+			info: 'Runs pretty slowly due to having to run diagnostics before compiling. If Typescript is not installed the provided code will be evaluated as Javascript and diagnostics/compilation will be skipped.',
 			ownerOnly: true
 		});
 	}

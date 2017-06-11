@@ -10,10 +10,10 @@ export default class extends Command
 	{
 		super({
 			name: 'disablegroup',
-			description: 'Disable a command group',
+			desc: 'Disable a command group',
 			aliases: ['disable', 'dg'],
 			usage: '<prefix>disablegroup <group>',
-			extraHelp: 'Disables a command group so that all of the commands in the group cannot be used on this server.',
+			info: 'Disables a command group so that all of the commands in the group cannot be used on this server.',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}

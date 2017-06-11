@@ -7,10 +7,10 @@ export default class extends Command
 	{
 		super({
 			name: 'setprefix',
-			description: 'Set or check command prefix',
+			desc: 'Set or check command prefix',
 			aliases: ['prefix'],
 			usage: '<prefix>setprefix [prefix]',
-			extraHelp: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Use "clear" to clear the prefix and allow commands to be called without a prefix.',
+			info: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Use "clear" to clear the prefix and allow commands to be called without a prefix.',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}

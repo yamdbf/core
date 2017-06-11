@@ -11,7 +11,7 @@ export default class extends Command
 	{
 		super({
 			name: 'whitelist',
-			description: 'Remove a user from the command blacklist',
+			desc: 'Remove a user from the command blacklist',
 			aliases: ['wl'],
 			usage: '<prefix>whitelist <user> [\'global\']',
 			callerPermissions: ['ADMINISTRATOR']

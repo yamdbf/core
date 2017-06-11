@@ -14,9 +14,9 @@ export class Command<T extends Client = Client>
 {
 	public client: T;
 	public name: string;
-	public description: string;
+	public desc: string;
 	public usage: string;
-	public extraHelp: string;
+	public info: string;
 	public group: string;
 	public aliases: string[];
 	public guildOnly: boolean;
@@ -197,7 +197,7 @@ export class Command<T extends Client = Client>
 
 		// Make necessary asserts
 		if (!this.name) throw new Error(`A command is missing a name`);
-		if (!this.description) throw new Error(`A description must be provided for Command: ${this.name}`);
+		if (!this.desc) throw new Error(`A description must be provided for Command: ${this.name}`);
 		if (!this.usage) throw new Error(`Usage information must be provided for Command: ${this.name}`);
 		if (this.aliases && !Array.isArray(this.aliases)) throw new TypeError(`Aliases for Command "${this.name}" must be an array of alias strings`);
 		if (this.callerPermissions && !Array.isArray(this.callerPermissions)) throw new TypeError(`\`callerPermissions\` for Command "${this.name}" must be an array`);

@@ -7,7 +7,7 @@ export default class extends Command
 	{
 		super({
 			name: 'version',
-			description: 'Get the version of the bot',
+			desc: 'Get the version of the bot',
 			usage: `<prefix>version`
 		});
 	}

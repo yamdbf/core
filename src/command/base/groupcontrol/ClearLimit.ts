@@ -12,7 +12,7 @@ export default class extends Command
 	{
 		super({
 			name: 'clearlimit',
-			description: 'Clear role restrictions from a command',
+			desc: 'Clear role restrictions from a command',
 			usage: '<prefix>clearlimit <command>',
 			callerPermissions: ['ADMINISTRATOR']
 		});

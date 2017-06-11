@@ -9,9 +9,9 @@ export default class extends Command
 	{
 		super({
 			name: 'help',
-			description: 'Provides information on bot commands',
+			desc: 'Provides information on bot commands',
 			usage: `<prefix>help [command]`,
-			extraHelp: 'Will DM bot command help information to the user to keep clutter down in guild channels. If you use the help command from within a DM you will only receive information for the commands you can use within the DM. If you want help with commands usable in a guild, call the help command in a guild channel. You will receive a list of the commands that you have permissions/roles for in that channel.'
+			info: 'Will DM bot command help information to the user to keep clutter down in guild channels. If you use the help command from within a DM you will only receive information for the commands you can use within the DM. If you want help with commands usable in a guild, call the help command in a guild channel. You will receive a list of the commands that you have permissions/roles for in that channel.'
 		});
 	}
 
@@ -37,7 +37,7 @@ export default class extends Command
 
 			const widest: number = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			let commandList: string = usableCommands.map(c =>
-				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${c.description}`).sort().join('\n');
+				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${c.desc}`).sort().join('\n');
 
 			output = preText + commandList + postText;
 			if (output.length >= 1024)
@@ -67,10 +67,10 @@ export default class extends Command
 				+ (command.guildOnly ? '[Server Only]\n' : '')
 				+ (command.ownerOnly ? '[Owner Only]\n' : '')
 				+ `Command: ${command.name}\n`
-				+ `Description: ${command.description}\n`
+				+ `Description: ${command.desc}\n`
 				+ (command.aliases.length > 0 ? `Aliases: ${command.aliases.join(', ')}\n` : '')
 				+ `Usage: ${command.usage}\n`
-				+ (command.extraHelp ? `\n${command.extraHelp}` : '')
+				+ (command.info ? `\n${command.info}` : '')
 				+ '\n```';
 		}
 

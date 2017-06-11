@@ -2,9 +2,9 @@
  * @typedef {Object} CommandInfo - Object containing required {@link Command} properties
  * to be passed to a Command on construction
  * @property {string} name See: {@link Command#name}
- * @property {string} description See: {@link Command#description}
+ * @property {string} desc See: {@link Command#desc}
  * @property {string} usage See: {@link Command#usage}
- * @property {string} [extraHelp] See: {@link Command#extraHelp}
+ * @property {string} [info] See: {@link Command#info}
  * @property {string} [group='base'] See: {@link Command#group}
  * @property {string[]} [aliases=[]] See: {@link Command#aliases}
  * @property {boolean} [guildOnly=false] See: {@link Command#guildOnly}
@@ -24,10 +24,10 @@ import { ArgOpts } from './ArgOpts';
 
 export type CommandInfo = {
 	name: string;
-	description: string;
+	desc: string;
 	usage: string;
 	group?: string;
-	extraHelp?: string;
+	info?: string;
 	aliases?: string[];
 	guildOnly?: boolean;
 	hidden?: boolean;

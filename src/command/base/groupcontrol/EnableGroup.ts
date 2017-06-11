@@ -10,10 +10,10 @@ export default class extends Command
 	{
 		super({
 			name: 'enablegroup',
-			description: 'Enable a command group',
+			desc: 'Enable a command group',
 			aliases: ['enable', 'eg'],
 			usage: '<prefix>enablegroup <group>',
-			extraHelp: 'Enables a command group so that all of the commands in the group can be used on this server.',
+			info: 'Enables a command group so that all of the commands in the group can be used on this server.',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}

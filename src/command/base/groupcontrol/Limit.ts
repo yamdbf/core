@@ -13,9 +13,9 @@ export default class extends Command
 	{
 		super({
 			name: 'limit',
-			description: 'Limit a command to the provided roles',
+			desc: 'Limit a command to the provided roles',
 			usage: '<prefix>limit <command>, <role names, ...>',
-			extraHelp: 'The comma after the command name -- before the role names list -- is necessary.',
+			info: 'The comma after the command name -- before the role names list -- is necessary.',
 			argOpts: { separator: ',' },
 			callerPermissions: ['ADMINISTRATOR']
 		});

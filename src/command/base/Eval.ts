@@ -10,7 +10,7 @@ export default class extends Command
 	{
 		super({
 			name: 'eval',
-			description: 'Evaluate provided Javascript code',
+			desc: 'Evaluate provided Javascript code',
 			usage: '<prefix>eval <...code>',
 			ownerOnly: true
 		});

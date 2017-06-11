@@ -8,9 +8,9 @@ export default class extends Command
 	{
 		super({
 			name: 'reload',
-			description: 'Reload a command or all commands',
+			desc: 'Reload a command or all commands',
 			usage: '<prefix>reload [command]',
-			extraHelp: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
+			info: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
 			ownerOnly: true
 		});
 	}

@@ -11,10 +11,10 @@ export default class extends Command
 	{
 		super({
 			name: 'blacklist',
-			description: 'Blacklist a user from calling commands',
+			desc: 'Blacklist a user from calling commands',
 			aliases: ['bl'],
 			usage: '<prefix>blacklist <user> [\'global\']',
-			extraHelp: 'If global, this will block the user from calling commands in ANY server and DMs',
+			info: 'If global, this will block the user from calling commands in ANY server and DMs',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
