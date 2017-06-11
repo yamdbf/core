@@ -2590,9 +2590,9 @@
                     "nullable": ""
                 },
                 {
-                    "name": "description",
+                    "name": "desc",
                     "type": "string",
-                    "description": "<p>See: {@link Command#description}</p>",
+                    "description": "<p>See: {@link Command#desc}</p>",
                     "default": "",
                     "optional": "",
                     "nullable": ""
@@ -2606,9 +2606,9 @@
                     "nullable": ""
                 },
                 {
-                    "name": "extraHelp",
+                    "name": "info",
                     "type": "string",
-                    "description": "<p>See: {@link Command#extraHelp}</p>",
+                    "description": "<p>See: {@link Command#info}</p>",
                     "default": "",
                     "optional": true,
                     "nullable": ""
