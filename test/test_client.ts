@@ -32,6 +32,7 @@ class Test extends Client
 			pause: true,
 			logLevel: LogLevel.DEBUG,
 			disableBase: Util.baseCommandNames
+				.filter(n => n !== 'help')
 		});
 	}
 

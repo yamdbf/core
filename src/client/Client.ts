@@ -213,7 +213,11 @@ export class Client extends Discord.Client
 		if (!(this.owner instanceof Array)) throw new TypeError('Client config `owner` field must be an array of user ID strings.');
 
 		// Load commands
-		if (!this.passive) this.loadCommand('all');
+		if (!this.passive)
+		{
+			this.loadCommand('all');
+			this._commandLoader.loadLocalizations();
+		}
 
 		registerListeners(this);
 	}

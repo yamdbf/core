@@ -3,6 +3,7 @@ import * as path from 'path';
 import { Client } from '../client/Client';
 import { Command } from './Command';
 import { BaseCommandName } from '../types/BaseCommandName';
+import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { Logger, logger } from '../util/logger/Logger';
 
 /**
@@ -78,6 +79,22 @@ export class CommandLoader<T extends Client>
 		this._client.commands.register(this._client, command, command.name, true);
 		this.logger.info('CommandLoader', `Command '${command.name}' reloaded.`);
 		return true;
+	}
+
+	/**
+	 * Load any command localizations and assign them to commands
+	 */
+	public loadLocalizations(): void
+	{
+		for (const command of this._client.commands.values())
+		{
+			let localizationFile: string = glob.sync(`${this._client.commandsDir}/**/${command.name}.lang.json`)[0];
+			if (!localizationFile) continue;
+			let localizations: { [name: string]: LocalizedCommandInfo };
+			try { localizations = require(localizationFile); }
+			catch (err) { continue; }
+			command.translation = localizations;
+		}
 	}
 
 	/**

@@ -13,7 +13,7 @@ export default class extends Command
 	{
 		super({
 			name: 'test',
-			description: 'test command',
+			desc: 'test command',
 			usage: '<prefix>test <test>'
 		});
 	}
@@ -25,5 +25,7 @@ export default class extends Command
 	{
 		message.channel.send(args.join(' ') || 'MISSING ARGS');
 		this.logger.debug('Command:test', util.inspect(this.group));
+		this.logger.debug('Command:test', this.translation.al_bhed.desc);
+		this.logger.debug('Command:test', this.translation.al_bhed.info);
 	}
 }
