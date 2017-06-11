@@ -997,6 +997,14 @@
                     "examples": []
                 },
                 {
+                    "name": "loadLocalizations",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Load any command localizations and assign them to commands</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
                     "name": "getCommandClass",
                     "access": "",
                     "virtual": false,
