@@ -67,6 +67,17 @@
                     }
                 },
                 {
+                    "name": "defaultLang",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Default language to use for localization</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
                     "name": "statusText",
                     "access": "",
                     "virtual": false,
@@ -997,14 +1008,6 @@
                     "examples": []
                 },
                 {
-                    "name": "loadLocalizations",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Load any command localizations and assign them to commands</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
                     "name": "getCommandClass",
                     "access": "",
                     "virtual": false,
@@ -1336,6 +1339,54 @@
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Determine whether or not to use the global rate limit collection</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "Lang",
+            "description": "<p>Class for loading localization files and fetching localized values</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Lang",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "createInstance",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Create the singleton instance</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "loadCommandLocalizations",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Load any command localizations and assign them to commands</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "getLangs",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get all available localization languages\nTODO: Extend this to scan language string files after\nadding support for those</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "getCommandInfo",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get localized command info, defaulting to the info\ngiven in the Command's constructor</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -2860,6 +2911,14 @@
                     "name": "commandsDir",
                     "type": "string",
                     "description": "<p>See: {@link Client#commandsDir}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "defaultLang",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#defaultLang}</p>",
                     "default": "",
                     "optional": true,
                     "nullable": ""
