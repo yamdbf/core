@@ -82,22 +82,6 @@ export class CommandLoader<T extends Client>
 	}
 
 	/**
-	 * Load any command localizations and assign them to commands
-	 */
-	public loadLocalizations(): void
-	{
-		for (const command of this._client.commands.values())
-		{
-			let localizationFile: string = glob.sync(`${this._client.commandsDir}/**/${command.name}.lang.json`)[0];
-			if (!localizationFile) continue;
-			let localizations: { [name: string]: LocalizedCommandInfo };
-			try { localizations = require(localizationFile); }
-			catch (err) { continue; }
-			command.translation = localizations;
-		}
-	}
-
-	/**
 	 * Get the Command class from an attempted Command class import
 	 */
 	private getCommandClass(loc: string): typeof Command

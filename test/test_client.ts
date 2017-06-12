@@ -29,10 +29,11 @@ class Test extends Client
 			token: config.token,
 			owner: config.owner,
 			commandsDir: './commands',
+			defaultLang: 'al_bhed',
 			pause: true,
 			logLevel: LogLevel.DEBUG,
 			disableBase: Util.baseCommandNames
-				.filter(n => n !== 'help')
+				.filter(n => n !== 'help' && n !== 'eval')
 		});
 	}
 

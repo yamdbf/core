@@ -33,6 +33,7 @@ import { StorageProviderConstructor } from '../types/StorageProviderConstructor'
 import { BaseCommandName } from '../types/BaseCommandName';
 import { Logger, logger } from '../util/logger/Logger';
 import { ListenerUtil } from '../util/ListenerUtil';
+import { Lang } from '../localization/Lang';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -49,6 +50,7 @@ export class Client extends Discord.Client
 	public readonly name: string;
 	public readonly commandsDir: string;
 	public readonly owner: string | string[];
+	public readonly defaultLang: string;
 	public readonly statusText: string;
 	public readonly readyText: string;
 	public readonly unknownCommandError: boolean;
@@ -101,6 +103,12 @@ export class Client extends Discord.Client
 		 * @type {string}
 		 */
 		this.commandsDir = path.resolve(options.commandsDir) || null;
+
+		/**
+		 * Default language to use for localization
+		 * @type {string}
+		 */
+		this.defaultLang = options.defaultLang || 'en_us';
 
 		/**
 		 * Status text for the client
@@ -212,11 +220,13 @@ export class Client extends Discord.Client
 		if (!this.commandsDir && !this.passive) throw new Error('A directory from which to load commands must be provided via commandsDir');
 		if (!(this.owner instanceof Array)) throw new TypeError('Client config `owner` field must be an array of user ID strings.');
 
+		Lang.createInstance(this);
+
 		// Load commands
 		if (!this.passive)
 		{
 			this.loadCommand('all');
-			this._commandLoader.loadLocalizations();
+			Lang.loadCommandLocalizations();
 		}
 
 		registerListeners(this);

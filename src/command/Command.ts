@@ -1,7 +1,6 @@
 import { PermissionResolvable, Permissions, Message } from 'discord.js';
 import { Client } from '../client/Client';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
-import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { CommandInfo } from '../types/CommandInfo';
 import { RateLimiter } from './RateLimiter';
 import { ArgOpts } from '../types/ArgOpts';
@@ -30,7 +29,6 @@ export class Command<T extends Client = Client>
 	public overloads: string;
 
 	public _classloc: string;
-	public translation?: { [name: string]: LocalizedCommandInfo };
 	public readonly _rateLimiter: RateLimiter;
 	public readonly _middleware: MiddlewareFunction[];
 

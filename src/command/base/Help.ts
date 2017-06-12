@@ -1,6 +1,8 @@
+import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
 import { Message } from '../../types/Message';
 import { Util } from '../../util/Util';
 import { Command } from '../Command';
+import { Lang } from '../../localization/Lang';
 import { Collection, RichEmbed } from 'discord.js';
 
 export default class extends Command
@@ -20,6 +22,11 @@ export default class extends Command
 		if (this.client.selfbot) message.delete();
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user.tag}`;
+		const lang: string = dm ? this.client.defaultLang
+			:  await message.guild.storage.settings.get('lang');
+
+		const cInfo: (command: Command) => LocalizedCommandInfo =
+			(command: Command) => Lang.getCommandInfo(command, lang);
 
 		let command: Command;
 		let output: string = '';
@@ -37,7 +44,7 @@ export default class extends Command
 
 			const widest: number = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
 			let commandList: string = usableCommands.map(c =>
-				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${c.desc}`).sort().join('\n');
+				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`).sort().join('\n');
 
 			output = preText + commandList + postText;
 			if (output.length >= 1024)
@@ -63,14 +70,16 @@ export default class extends Command
 
 			if (!command) output = `A command by that name could not be found or you do\n`
 				+ `not have permission to view it.`;
-			else output = '```ldif\n'
+
+			const info: LocalizedCommandInfo = cInfo(command);
+			if (command) output = '```ldif\n'
 				+ (command.guildOnly ? '[Server Only]\n' : '')
 				+ (command.ownerOnly ? '[Owner Only]\n' : '')
 				+ `Command: ${command.name}\n`
-				+ `Description: ${command.desc}\n`
+				+ `Description: ${info.desc}\n`
 				+ (command.aliases.length > 0 ? `Aliases: ${command.aliases.join(', ')}\n` : '')
 				+ `Usage: ${command.usage}\n`
-				+ (command.info ? `\n${command.info}` : '')
+				+ (info.info ? `\n${info.info}` : '')
 				+ '\n```';
 		}
 
