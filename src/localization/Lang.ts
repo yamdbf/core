@@ -14,7 +14,7 @@ export class Lang
 	private constructor(client: Client)
 	{
 		if (Lang._instance)
-			throw new Error('Cannot create multiple instances of Logger singleton');
+			throw new Error('Cannot create multiple instances of Lang singleton');
 
 		this.client = client;
 		this.commandInfo = {};
