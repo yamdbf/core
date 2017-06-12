@@ -1,7 +1,7 @@
 import { Client } from '../../client/Client';
 import { Command } from '../Command';
 import { expect } from './Expect';
-import { resolve } from './ResolveArgs';
+import { resolve } from './Resolve';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
 import { ExpectArgType } from '../../types/ExpectArgType';
