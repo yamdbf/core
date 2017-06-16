@@ -7,7 +7,6 @@ import { ArgOpts } from '../types/ArgOpts';
 
 /**
  * Command class to extend to create commands users can execute
- * @param {Client} client - YAMDBF Client instance
  * @param {CommandInfo} info - Object containing required command properties
  */
 export class Command<T extends Client = Client>
