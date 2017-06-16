@@ -13,6 +13,7 @@ export default class extends Command
 	{
 		super({
 			name: 'test',
+			aliases: ['testing', 'testo'],
 			desc: 'test command',
 			usage: '<prefix>test <test>'
 		});

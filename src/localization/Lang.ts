@@ -122,18 +122,20 @@ export class Lang
 	 */
 	public static getCommandInfo(command: Command, lang: string): LocalizedCommandInfo
 	{
-		let desc: string, info: string;
+		let desc: string, info: string, usage: string;
 		if (!Lang._instance.commandInfo[command.name]
 			|| (Lang._instance.commandInfo[command.name]
 				&& !Lang._instance.commandInfo[command.name][lang]))
-			return { desc, info } = command;
+			return { desc, info, usage } = command;
 
 		desc = Lang._instance.commandInfo[command.name][lang].desc;
 		info = Lang._instance.commandInfo[command.name][lang].info;
+		usage = Lang._instance.commandInfo[command.name][lang].usage;
 		if (!desc) desc = command.desc;
 		if (!info) info = command.info;
+		if (!usage) usage = command.usage;
 
-		return { desc, info };
+		return { desc, info, usage };
 	}
 
 	/**

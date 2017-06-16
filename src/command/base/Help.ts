@@ -75,14 +75,14 @@ export default class extends Command
 			const info: LocalizedCommandInfo = cInfo(command);
 			const res: LangResourceFunction = Lang.createResourceLoader(lang);
 			if (command) output = res('CMD_HELP_CODEBLOCK', {
-				serverOnly: command.guildOnly ? res('CMD_HELP_SERVERONLY') : '',
-				ownerOnly: command.ownerOnly ? res('CMD_HELP_OWNERONLY') : '',
+				serverOnly: command.guildOnly ? `${res('CMD_HELP_SERVERONLY')}\n` : '',
+				ownerOnly: command.ownerOnly ? `${res('CMD_HELP_OWNERONLY')}\n` : '',
 				commandName: command.name,
 				desc: info.desc,
 				aliasText: command.aliases.length > 0 ?
 					`${res('CMD_HELP_ALIASES', { aliases: command.aliases.join(', ')})}\n`
 					: '',
-				usage: command.usage,
+				usage: info.usage,
 				info: info.info ? `\n${info.info}` : ''
 			});
 		}

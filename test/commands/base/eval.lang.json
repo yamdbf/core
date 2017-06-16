@@ -1,5 +1,6 @@
 {
 	"al_bhed": {
-		"desc": "Ajymiyda bnujetat Javascript luta"
+		"desc": "Ajymiyda bnujetat Javascript luta",
+		"usage": "<prefix>eval <...luta>"
 	}
 }
