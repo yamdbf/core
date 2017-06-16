@@ -1,9 +1,12 @@
+import * as fs from 'fs';
+import { LangFileParser } from './LangFileParser';
 import { LangResourceFunction } from '../types/LangResourceFunction';
 import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { TokenReplaceData } from '../types/TokenReplaceData';
 import { logger, Logger } from '../util/logger/Logger';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
+import { Language } from './Language';
 import * as glob from 'glob';
 import * as path from 'path';
 
@@ -16,7 +19,7 @@ export class Lang
 	private static _instance: Lang;
 	private client: Client;
 	private commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
-	private langs: { [lang: string]: { [key: string]: string } };
+	private langs: { [lang: string]: Language };
 	private constructor(client: Client)
 	{
 		if (Lang._instance)
@@ -32,7 +35,7 @@ export class Lang
 	 * This does not include localized helptext
 	 * @type {object}
 	 */
-	public static get langs(): { [lang: string]: { [key: string]: string } }
+	public static get langs(): { [lang: string]: Language }
 	{
 		return Lang._instance.langs;
 	}
@@ -70,24 +73,35 @@ export class Lang
 	public static loadLocalizations(): void
 	{
 		if (!Lang._instance) return;
-		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\..+)?\.lang\.json/;
+		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\..+)?\.lang/;
 
-		let langFiles: string[] = [];
-		langFiles.push(...glob.sync(`${path.join(__dirname, './en_us')}/**/*.lang.json`));
+		let langs: { [key: string]: string[] } = {};
+		let allLangFiles: string[] = [];
+		allLangFiles.push(...glob.sync(`${path.join(__dirname, './en_us')}/**/*.lang`));
 		if (Lang._instance.client.localeDir)
-			langFiles.push(...glob.sync(`${Lang._instance.client.localeDir}/**/*.lang.json`));
+			allLangFiles.push(...glob.sync(`${Lang._instance.client.localeDir}/**/*.lang`));
 
-		for (const langFile of langFiles)
+		for (const langFile of allLangFiles)
 		{
-			delete require.cache[require.resolve(langFile)];
-			const loadedLangFile: { [key: string]: string } = require(langFile);
-
 			if (!langNameRegex.test(langFile)) continue;
 			const langName: string = langFile.match(langNameRegex)[1];
-			if (typeof Lang._instance.langs[langName] !== 'undefined')
-				Lang._instance.langs[langName] = { ...Lang._instance.langs[langName], ...loadedLangFile };
-			else
-				Lang._instance.langs[langName] = loadedLangFile;
+			if (!langs[langName]) langs[langName] = [];
+			langs[langName].push(langFile);
+		}
+
+		for (const langName of Object.keys(langs))
+		{
+			for (const langFile of langs[langName])
+			{
+				if (!langNameRegex.test(langFile)) continue;
+				const loadedLangFile: string = fs.readFileSync(langFile).toString();
+				const parsedLanguageFile: Language = LangFileParser.parseFile(langName, loadedLangFile);
+
+				if (typeof Lang._instance.langs[langName] !== 'undefined')
+					Lang._instance.langs[langName].concat(parsedLanguageFile);
+				else
+					Lang._instance.langs[langName] = parsedLanguageFile;
+			}
 		}
 
 		Lang.logger.info('Lang', `Loaded string localizations for ${Object.keys(Lang.langs).length} languages`);
@@ -140,7 +154,7 @@ export class Lang
 
 	/**
 	 * Get a string resource for the given language, replacing any
-	 * tokens with the given data
+	 * template tokens with the given data
 	 * @param {string} lang Language to get a string resource for
 	 * @param {string} key String key to get
 	 * @param {TokenReplaceData} [data] Values to replace in the string
@@ -149,16 +163,23 @@ export class Lang
 	public static res(lang: string, key: string, data?: TokenReplaceData): string
 	{
 		if (!Lang.langs[lang]) return key;
-		const strings: { [key: string]: string } = Lang.langs[lang];
+		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
+		const strings: { [key: string]: string } = Lang.langs[lang].strings;
 		let loadedString: string = strings[key];
 
 		if (!loadedString) return key;
 		if (typeof data === 'undefined') return loadedString;
 
 		for (const token of Object.keys(data))
-			loadedString = loadedString.replace(new RegExp(`{{ *${token} *}}`, 'g'), data[token]);
+		{
+			// Skip maybe templates so they can be removed properly later
+			if (new RegExp(`{{ *${token} *\\?}}`, 'g').test(loadedString)
+				&& (data[token] === '' || data[token] === undefined)) continue;
 
-		return loadedString;
+			loadedString = loadedString.replace(new RegExp(`{{ *${token} *\\??}}`, 'g'), data[token]);
+		}
+
+		return loadedString.replace(maybeTemplates, '');
 	}
 
 	/**

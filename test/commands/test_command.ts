@@ -26,7 +26,7 @@ export default class extends Command
 	{
 		message.channel.send(args.join(' ') || 'MISSING ARGS');
 		this.logger.debug('Command:test', util.inspect(this.group));
-		this.logger.debug('Command:test', this.translation.al_bhed.desc);
-		this.logger.debug('Command:test', this.translation.al_bhed.info);
+		// this.logger.debug('Command:test', this.translation.al_bhed.desc);
+		// this.logger.debug('Command:test', this.translation.al_bhed.info);
 	}
 }

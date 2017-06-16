@@ -1,6 +1,0 @@
-{
-	"CMD_HELP_SERVERONLY": "[Canjan Uhmo]",
-	"CMD_HELP_OWNERONLY": "[Ufhan Uhmo]",
-	"CMD_HELP_ALIASES": "Ymeycac: {{aliases}}",
-	"CMD_HELP_CODEBLOCK": "```ldif\n{{serverOnly}}{{ownerOnly}}Lussyht: {{commandName}}\nTaclnebdeuh: {{desc}}\n{{aliasText}}Icyka: {{usage}}\n{{info}}\n```"
-}

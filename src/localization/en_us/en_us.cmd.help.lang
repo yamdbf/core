@@ -1,0 +1,19 @@
+
+[CMD_HELP_SERVERONLY] [Server Only] [/CMD_HELP_SERVERONLY]
+[CMD_HELP_OWNERONLY] [Owner Only] [/CMD_HELP_OWNERONLY]
+[CMD_HELP_ALIASES] Aliases: {{ aliases }} [/CMD_HELP_ALIASES]
+
+[CMD_HELP_CODEBLOCK]
+## I feel ldif is the best codeblock language for
+## displaying all of the help commands but it could
+## be changed without any consequence if desired
+```ldif
+{{ serverOnly ?}}
+{{ ownerOnly ?}}
+Command: {{ commandName }}
+Description: {{ desc }}
+{{ aliasText ?}}
+Usage: {{ usage }}
+{{ info ?}}
+```
+[/CMD_HELP_CODEBLOCK]
