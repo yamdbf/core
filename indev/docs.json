@@ -67,6 +67,13 @@
                     }
                 },
                 {
+                    "name": "localeDir",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Directory to find custom localization files</p>",
+                    "type": ""
+                },
+                {
                     "name": "defaultLang",
                     "access": "",
                     "virtual": false,
@@ -1346,7 +1353,7 @@
         },
         {
             "name": "Lang",
-            "description": "<p>Class for loading localization files and fetching localized values</p>",
+            "description": "<p>Singleton for loading localization files and fetching localized values</p>",
             "extends": [],
             "access": "",
             "virtual": false,
@@ -1357,14 +1364,63 @@
                 "parameters": [],
                 "examples": []
             },
+            "properties": [
+                {
+                    "name": "langs",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Contains all loaded languages and their strings.\nThis does not include localized helptext</p>",
+                    "type": {
+                        "names": [
+                            "object"
+                        ]
+                    }
+                },
+                {
+                    "name": "langNames",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get all available localization languages</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                }
+            ],
             "functions": [
                 {
                     "name": "createInstance",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Create the singleton instance</p>",
+                    "parameters": [
+                        {
+                            "name": "client",
+                            "type": "Client",
+                            "description": "<p>YAMDBF Client instance</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "loadLocalizations",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Load localization files from the Client's <code>localeDir</code></p>",
                     "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "loadCommandLocalizations",
@@ -1372,15 +1428,11 @@
                     "virtual": false,
                     "description": "<p>Load any command localizations and assign them to commands</p>",
                     "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "getLangs",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Get all available localization languages\nTODO: Extend this to scan language string files after\nadding support for those</p>",
-                    "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "getCommandInfo",
@@ -1388,7 +1440,69 @@
                     "virtual": false,
                     "description": "<p>Get localized command info, defaulting to the info\ngiven in the Command's constructor</p>",
                     "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "LocalizedCommandInfo",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "res",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a string resource for the given language, replacing any\ntokens with the given data</p>",
+                    "parameters": [
+                        {
+                            "name": "lang",
+                            "type": "string",
+                            "description": "<p>Language to get a string resource for</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>String key to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "data",
+                            "type": "TokenReplaceData",
+                            "description": "<p>Values to replace in the string</p>",
+                            "default": "",
+                            "optional": true,
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "createResourceLoader",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Takes a language string and returns a function that loads string\nresources for that specific language</p>",
+                    "parameters": [
+                        {
+                            "name": "lang",
+                            "type": "string",
+                            "description": "<p>The language to create a loader for</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "LangResourceFunction",
+                        "description": ""
+                    }
                 }
             ]
         },
@@ -2852,6 +2966,11 @@
             "properties": []
         },
         {
+            "name": "LangResourceFunction",
+            "description": "<p>Represents a function assigned to\na specific language that takes a string key and a {@link TokenReplaceData}\nobject and returns a localized string for that language if it exists</p>",
+            "properties": []
+        },
+        {
             "name": "LogLevel",
             "description": "<p>Enum containing the different levels of\npotential logger output. Each level represents itself and everything\nabove it in the enum. The default logger log level is <code>LogLevel.LOG</code></p>\n<pre class=\"prettyprint source\"><code>enum LogLevel\n{\n    NONE,\n    LOG,\n    INFO,\n    WARN,\n    ERROR.\n    DEBUG\n}</code></pre>",
             "properties": []
@@ -2869,6 +2988,11 @@
         {
             "name": "StorageProviderConstructor",
             "description": "<p>Any class that extends and\nimplements {@link StorageProvider} and provides an interface with a storage\nmedium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
+            "properties": []
+        },
+        {
+            "name": "TokenReplaceData",
+            "description": "<p>Represents an object mapping key\ntokens to string values, where the token keys will be replaced with\nthe provided value in the source string when given to a Lang resource\nfunction like {@link Lang.res}</p>",
             "properties": []
         },
         {
@@ -2911,6 +3035,14 @@
                     "name": "commandsDir",
                     "type": "string",
                     "description": "<p>See: {@link Client#commandsDir}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "localeDir",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#localeDir}</p>",
                     "default": "",
                     "optional": true,
                     "nullable": ""
