@@ -2963,6 +2963,11 @@
             "properties": []
         },
         {
+            "name": "LocalizedCommandInfo",
+            "description": "<p>Represents an object\ncontaining localization overrides for a command's <code>desc</code>,\n<code>info</code>, and <code>usage</code> fields</p>",
+            "properties": []
+        },
+        {
             "name": "LogLevel",
             "description": "<p>Enum containing the different levels of\npotential logger output. Each level represents itself and everything\nabove it in the enum. The default logger log level is <code>LogLevel.LOG</code></p>\n<pre class=\"prettyprint source\"><code>enum LogLevel\n{\n    NONE,\n    LOG,\n    INFO,\n    WARN,\n    ERROR.\n    DEBUG\n}</code></pre>",
             "properties": []
