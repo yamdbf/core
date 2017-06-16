@@ -29,6 +29,7 @@ class Test extends Client
 			token: config.token,
 			owner: config.owner,
 			commandsDir: './commands',
+			localeDir: './locale',
 			defaultLang: 'al_bhed',
 			pause: true,
 			logLevel: LogLevel.DEBUG,

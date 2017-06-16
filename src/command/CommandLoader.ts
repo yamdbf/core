@@ -29,7 +29,9 @@ export class CommandLoader<T extends Client>
 		if (this._client.commands.size > 0) this._client.commands.clear();
 		let commandFiles: string[] = [];
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
-		commandFiles.push(...glob.sync(`${this._client.commandsDir}/**/*.js`));
+		if (this._client.commandsDir)
+			commandFiles.push(...glob.sync(`${this._client.commandsDir}/**/*.js`));
+
 		let loadedCommands: number = 0;
 		for (const fileName of commandFiles)
 		{

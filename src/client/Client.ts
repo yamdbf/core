@@ -49,6 +49,7 @@ export class Client extends Discord.Client
 	@logger private readonly _logger: Logger;
 	public readonly name: string;
 	public readonly commandsDir: string;
+	public readonly localeDir: string;
 	public readonly owner: string | string[];
 	public readonly defaultLang: string;
 	public readonly statusText: string;
@@ -102,7 +103,12 @@ export class Client extends Discord.Client
 		 * **See:** {@link Client#passive}
 		 * @type {string}
 		 */
-		this.commandsDir = path.resolve(options.commandsDir) || null;
+		this.commandsDir = options.commandsDir ? path.resolve(options.commandsDir) : null;
+
+		/**
+		 * Directory to find custom localization files
+		 */
+		this.localeDir = options.localeDir ? path.resolve(options.localeDir) : null;
 
 		/**
 		 * Default language to use for localization
@@ -221,6 +227,7 @@ export class Client extends Discord.Client
 		if (!(this.owner instanceof Array)) throw new TypeError('Client config `owner` field must be an array of user ID strings.');
 
 		Lang.createInstance(this);
+		Lang.loadLocalizations();
 
 		// Load commands
 		if (!this.passive)

@@ -1,9 +1,10 @@
-import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
-import { Message } from '../../types/Message';
-import { Util } from '../../util/Util';
-import { Command } from '../Command';
-import { Lang } from '../../localization/Lang';
 import { Collection, RichEmbed } from 'discord.js';
+import { LangResourceFunction } from '../../types/LangResourceFunction';
+import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
+import { Lang } from '../../localization/Lang';
+import { Message } from '../../types/Message';
+import { Command } from '../Command';
+import { Util } from '../../util/Util';
 
 export default class extends Command
 {
@@ -72,15 +73,18 @@ export default class extends Command
 				+ `not have permission to view it.`;
 
 			const info: LocalizedCommandInfo = cInfo(command);
-			if (command) output = '```ldif\n'
-				+ (command.guildOnly ? '[Server Only]\n' : '')
-				+ (command.ownerOnly ? '[Owner Only]\n' : '')
-				+ `Command: ${command.name}\n`
-				+ `Description: ${info.desc}\n`
-				+ (command.aliases.length > 0 ? `Aliases: ${command.aliases.join(', ')}\n` : '')
-				+ `Usage: ${command.usage}\n`
-				+ (info.info ? `\n${info.info}` : '')
-				+ '\n```';
+			const res: LangResourceFunction = Lang.createResourceLoader(lang);
+			if (command) output = res('CMD_HELP_CODEBLOCK', {
+				serverOnly: command.guildOnly ? res('CMD_HELP_SERVERONLY') : '',
+				ownerOnly: command.ownerOnly ? res('CMD_HELP_OWNERONLY') : '',
+				commandName: command.name,
+				desc: info.desc,
+				aliasText: command.aliases.length > 0 ?
+					`${res('CMD_HELP_ALIASES', { aliases: command.aliases.join(', ')})}\n`
+					: '',
+				usage: command.usage,
+				info: info.info ? `\n${info.info}` : ''
+			});
 		}
 
 		output = dm ? output.replace(/<prefix>/g, '')

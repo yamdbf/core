@@ -1,0 +1,6 @@
+{
+	"CMD_HELP_SERVERONLY": "[Server Only]",
+	"CMD_HELP_OWNERONLY": "[Owner Only]",
+	"CMD_HELP_ALIASES": "Aliases: {{aliases}}",
+	"CMD_HELP_CODEBLOCK": "```ldif\n{{serverOnly}}{{ownerOnly}}Command: {{commandName}}\nDescription: {{desc}}\n{{aliasText}}Usage: {{usage}}\n{{info}}\n```"
+}

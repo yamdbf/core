@@ -42,7 +42,7 @@
   "devDependencies": {
     "@types/chalk": "^0.4.31",
     "@types/glob": "^5.0.30",
-    "@types/node": "^7.0.8",
+    "@types/node": "^7.0.31",
     "@types/node-json-db": "0.0.1",
     "del": "^2.2.2",
     "gulp": "^3.9.1",

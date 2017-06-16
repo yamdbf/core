@@ -18,13 +18,14 @@ export { StorageFactory } from './storage/StorageFactory';
 export { JSONProvider } from './storage/JSONProvider';
 
 import * as CommandDecorators from './command/CommandDecorators';
-export { CommandDecorators }
+export { CommandDecorators };
 
 export { Time } from './util/Time';
 export { Util } from './util/Util';
 export { Logger } from './util/logger/Logger';
 export { logger } from './util/logger/LoggerDecorator';
 export { LogLevel } from './types/LogLevel';
+export { Lang } from './localization/Lang';
 
 export { deprecated } from './util/DeprecatedDecorator';
 
