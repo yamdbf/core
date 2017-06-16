@@ -529,14 +529,6 @@
                 "description": "",
                 "parameters": [
                     {
-                        "name": "client",
-                        "type": "Client",
-                        "description": "<p>YAMDBF Client instance</p>",
-                        "default": "",
-                        "optional": "",
-                        "nullable": ""
-                    },
-                    {
                         "name": "info",
                         "type": "CommandInfo",
                         "description": "<p>Object containing required command properties</p>",
