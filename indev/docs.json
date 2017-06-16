@@ -1442,7 +1442,7 @@
                     "name": "res",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Get a string resource for the given language, replacing any\ntokens with the given data</p>",
+                    "description": "<p>Get a string resource for the given language, replacing any\ntemplate tokens with the given data</p>",
                     "parameters": [
                         {
                             "name": "lang",
@@ -1495,6 +1495,54 @@
                         "type": "LangResourceFunction",
                         "description": ""
                     }
+                }
+            ]
+        },
+        {
+            "name": "LangFileParser",
+            "description": "<p>Class for parsing <code>.lang</code> files</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "LangFileParser",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "parseFile",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Parse a given language file string and return a Language\nobject containing all the parsed values</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "Language",
+            "description": "<p>Holds the localization strings for a given language</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Language",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "concat",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Concatenate another Language object's strings of the\nsame language with this Language object's strings,\nsaving them to this Language object's <code>strings</code> value</p>",
+                    "parameters": [],
+                    "examples": []
                 }
             ]
         },
