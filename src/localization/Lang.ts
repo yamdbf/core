@@ -32,7 +32,7 @@ export class Lang
 
 	/**
 	 * Contains all loaded languages and their strings.
-	 * This does not include localized helptext
+	 * This does not include localized command helptext
 	 * @type {object}
 	 */
 	public static get langs(): { [lang: string]: Language }
@@ -126,11 +126,16 @@ export class Lang
 			Lang._instance.commandInfo[command.name] = localizations;
 		}
 
-		Lang.logger.info('Lang', `Loaded helptext localizations for ${Lang.langNames.length} languages`);
+		const helpTextLangs: Set<string> = new Set();
+		for (const command of Object.keys(Lang._instance.commandInfo))
+			for (const lang of Object.keys(Lang._instance.commandInfo[command]))
+				helpTextLangs.add(lang);
+
+		Lang.logger.info('Lang', `Loaded helptext localizations for ${helpTextLangs.size} languages`);
 	}
 
 	/**
-	 * Get localized command info, defaulting to the info
+	 * Get localized Command info, defaulting to the info
 	 * given in the Command's constructor
 	 * @returns {LocalizedCommandInfo}
 	 */
@@ -142,12 +147,9 @@ export class Lang
 				&& !Lang._instance.commandInfo[command.name][lang]))
 			return { desc, info, usage } = command;
 
-		desc = Lang._instance.commandInfo[command.name][lang].desc;
-		info = Lang._instance.commandInfo[command.name][lang].info;
-		usage = Lang._instance.commandInfo[command.name][lang].usage;
-		if (!desc) desc = command.desc;
-		if (!info) info = command.info;
-		if (!usage) usage = command.usage;
+		desc = Lang._instance.commandInfo[command.name][lang].desc || command.desc;
+		info = Lang._instance.commandInfo[command.name][lang].info || command.info;
+		usage = Lang._instance.commandInfo[command.name][lang].usage || command.usage;
 
 		return { desc, info, usage };
 	}
