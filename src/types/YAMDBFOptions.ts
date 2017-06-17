@@ -25,8 +25,8 @@ import { BaseCommandName } from './BaseCommandName';
 import { LogLevel } from './LogLevel';
 
 export type YAMDBFOptions = {
-	name: string;
 	token: string;
+	name?: string;
 	owner?: string | string[];
 	provider?: StorageProviderConstructor;
 	commandsDir?: string;
