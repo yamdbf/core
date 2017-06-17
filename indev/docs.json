@@ -1361,7 +1361,7 @@
                     "name": "langs",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Contains all loaded languages and their strings.\nThis does not include localized helptext</p>",
+                    "description": "<p>Contains all loaded languages and their strings.\nThis does not include localized command helptext</p>",
                     "type": {
                         "names": [
                             "object"
@@ -1430,7 +1430,7 @@
                     "name": "getCommandInfo",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Get localized command info, defaulting to the info\ngiven in the Command's constructor</p>",
+                    "description": "<p>Get localized Command info, defaulting to the info\ngiven in the Command's constructor</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
