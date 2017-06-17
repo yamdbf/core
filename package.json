@@ -11,7 +11,8 @@
     "build": "gulp",
     "lint": "gulp lint",
     "test": "npm run lint -s && npm run build -s",
-    "test:client": "node test/client_test.js"
+    "test:client": "node test/client_test.js",
+    "buildLocalizationMD": "cd scripts && gulp build && gulp build:scripts && node generateDefaultLocalizationMarkdown"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {

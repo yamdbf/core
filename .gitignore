@@ -5,3 +5,5 @@ config.json
 npm-debug*
 /test/storage
 test_*.js
+/scripts/*.js
+/scripts/storage
