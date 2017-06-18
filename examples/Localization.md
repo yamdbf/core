@@ -65,8 +65,40 @@ Lang.res('en_us', 'MAYBE_TEMPLATE_EXAMPLE') // Produces: 'foobaz\nboo'
 ```
 >Note: Passing empty strings for maybe templates results in them being removed in the same manner as if no value was given
 
+## Template scripting
+I don't speak any other languages myself but I'm aware that translating between languages is hardly ever a static 1:1 thing.
+Pluralization, for example, is something that would hardly be able to be represented via simple static translation for all
+languages. This is where template scripting becomes useful. Template scripting is done within `{{! !}}` template braces.
+(Note the `!`s). This template syntax is important as the script won't be able to be interpreted if not within the proper
+template braces.
+
+
+Using the topic of pluralization from earlier, an example can be given from a template script currently in place for one of
+the strings for the default help Command:
+```
+[CMD_HELP_ALIASES]
+## 'Aliases: foo, bar' | 'Alias: foo'
+{{! return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+[/CMD_HELP_ALIASES]
+```
+>Note: A template script itself is just interpreted Javascript that must return a value. A template script that does not return a
+value will simply have the template removed from the output string in the same manner as maybe templates
+
+
+Template scripts receive a single `args` object within their context that is the {@link TokenReplaceData} object passed to the
+resource loader function that is loading the string resource. It's easiest to imagine that the script itself is surrounded
+by an anonymous function declaration taking a parameter called `args`. Using the example script from above:
+```
+function(args) {
+	return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
+ }
+```
+When working with template scripts, and really templates in general, knowing what is going to be passed to the localization
+string and thus the template script is important. Be sure to pay close attention to the original defaults and their use of
+templates to get an idea of what to expect. And, of course, being sure to test the results at runtime never hurts.
+
 ## Default localization strings
-When translating these strings for your own localizations, remember that it's not necessary to place them all into a single
+When translating these strings for your own localizations remember that it's not necessary to place them all into a single
 file. You can separate them into multiple files and they will all be loaded and merged together into a single set of strings
 for one language as long as they all have the same language name as the first part of the file name. For example, you could
 separate strings used in two separate commands into files `en_us.cmd.foo.lang` and `en_us.cmd.bar.lang`.
@@ -81,7 +113,10 @@ This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
 	
 	[CMD_HELP_OWNERONLY] [Owner Only] [/CMD_HELP_OWNERONLY]
 	
-	[CMD_HELP_ALIASES] Aliases: {{ aliases }} [/CMD_HELP_ALIASES]
+	[CMD_HELP_ALIASES]
+	## 'Aliases: foo, bar' | 'Alias: foo'
+	{{! return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+	[/CMD_HELP_ALIASES]
 	
 	[CMD_HELP_CODEBLOCK]
 	## I feel ldif is the best codeblock language for
@@ -90,7 +125,7 @@ This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
 	```ldif
 	{{ serverOnly ?}}
 	{{ ownerOnly ?}}
-	Command: {{ commandName }}
+	Comman{{! !}}d: {{ commandName }}
 	Description: {{ desc }}
 	{{ aliasText ?}}
 	Usage: {{ usage }}

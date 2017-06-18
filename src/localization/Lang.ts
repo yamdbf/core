@@ -156,16 +156,17 @@ export class Lang
 
 	/**
 	 * Get a string resource for the given language, replacing any
-	 * template tokens with the given data
+	 * templates with the given data or script result
 	 * @param {string} lang Language to get a string resource for
 	 * @param {string} key String key to get
 	 * @param {TokenReplaceData} [data] Values to replace in the string
 	 * @returns {string}
 	 */
-	public static res(lang: string, key: string, data?: TokenReplaceData): string
+	public static res(lang: string, key: string, data: TokenReplaceData = {}): string
 	{
 		if (!Lang.langs[lang]) return key;
 		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
+		const scriptTemplate: RegExp = /^{{!([\s\S]+)!}}[\t ]*\n|{{!([\s\S]+)!}}/m;
 		const strings: { [key: string]: string } = Lang.langs[lang].strings;
 		let loadedString: string = strings[key];
 
@@ -179,6 +180,25 @@ export class Lang
 				&& (data[token] === '' || data[token] === undefined)) continue;
 
 			loadedString = loadedString.replace(new RegExp(`{{ *${token} *\\??}}`, 'g'), data[token]);
+		}
+
+		const scriptTemplates: RegExp = new RegExp(scriptTemplate, 'gm');
+		if (scriptTemplates.test(loadedString))
+		{
+			for (const scriptData of loadedString.match(scriptTemplates))
+			{
+				const functionBody: string =
+					scriptData.match(scriptTemplate)[1] || scriptData.match(scriptTemplate)[2];
+
+				const script: Function = new Function('args', functionBody);
+
+				let result: string;
+				try { result = script(data); }
+				catch (err) { throw new Error(`Error in embedded localization script for: ${key}. Error: ${err}`); }
+
+				if (typeof result === 'undefined') loadedString = loadedString.replace(scriptData, '');
+				else loadedString = loadedString.replace(scriptData, result);
+			}
 		}
 
 		return loadedString.replace(maybeTemplates, '');
