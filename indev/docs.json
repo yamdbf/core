@@ -1442,7 +1442,7 @@
                     "name": "res",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Get a string resource for the given language, replacing any\ntemplate tokens with the given data</p>",
+                    "description": "<p>Get a string resource for the given language, replacing any\ntemplates with the given data or script result</p>",
                     "parameters": [
                         {
                             "name": "lang",
