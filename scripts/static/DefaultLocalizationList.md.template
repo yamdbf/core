@@ -91,7 +91,7 @@ by an anonymous function declaration taking a parameter called `args`. Using the
 ```
 function(args) {
 	return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
- }
+}
 ```
 When working with template scripts, and really templates in general, knowing what is going to be passed to the localization
 string and thus the template script is important. Be sure to pay close attention to the original defaults and their use of
