@@ -187,14 +187,24 @@ export class Lang
 		{
 			for (const scriptData of loadedString.match(scriptTemplates))
 			{
-				const functionBody: string =
+				let functionBody: string =
 					scriptData.match(scriptTemplate)[1] || scriptData.match(scriptTemplate)[2];
 
-				const script: Function = new Function('args', functionBody);
+				let script: Function = new Function('args', functionBody);
 
 				let result: string;
 				try { result = script(data); }
 				catch (err) { throw new Error(`Error in embedded localization script for: ${key}. Error: ${err}`); }
+
+				// Try to coerce an implicit return
+				if (typeof result === 'undefined')
+					try
+					{
+						functionBody = `return ${functionBody}`;
+						script = new Function('args', functionBody);
+						result = script(data);
+					}
+					catch (err) {}
 
 				if (typeof result === 'undefined') loadedString = loadedString.replace(scriptData, '');
 				else loadedString = loadedString.replace(scriptData, result);

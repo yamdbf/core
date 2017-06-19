@@ -4,7 +4,7 @@
 
 [CMD_HELP_ALIASES]
 ## 'Aliases: foo, bar' | 'Alias: foo'
-{{! return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
 [/CMD_HELP_ALIASES]
 
 [CMD_HELP_CODEBLOCK]

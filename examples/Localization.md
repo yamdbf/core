@@ -78,7 +78,7 @@ the strings for the default help Command:
 ```
 [CMD_HELP_ALIASES]
 ## 'Aliases: foo, bar' | 'Alias: foo'
-{{! return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
 [/CMD_HELP_ALIASES]
 ```
 >Note: A template script itself is just interpreted Javascript that must return a value. A template script that does not return a
@@ -87,8 +87,10 @@ value will simply have the template removed from the output string in the same m
 
 Template scripts receive a single `args` object within their context that is the {@link TokenReplaceData} object passed to the
 resource loader function that is loading the string resource. It's easiest to imagine that the script itself is surrounded
-by an anonymous function declaration taking a parameter called `args`. Using the example script from above:
+by an anonymous function declaration taking a parameter called `args` with simple arrow-function style implicit returns
+converted explicitly. Using the example script from above:
 ```
+// {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
 function(args) {
 	return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
 }
@@ -115,7 +117,7 @@ This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
 	
 	[CMD_HELP_ALIASES]
 	## 'Aliases: foo, bar' | 'Alias: foo'
-	{{! return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+	{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
 	[/CMD_HELP_ALIASES]
 	
 	[CMD_HELP_CODEBLOCK]
