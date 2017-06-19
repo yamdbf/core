@@ -98,15 +98,17 @@ template braces.</p>
 the strings for the default help Command:</p>
 <pre class="prettyprint source"><code>[CMD_HELP_ALIASES]
 ## 'Aliases: foo, bar' | 'Alias: foo'
-{{! return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
 [/CMD_HELP_ALIASES]</code></pre><blockquote>
 <p>Note: A template script itself is just interpreted Javascript that must return a value. A template script that does not return a
 value will simply have the template removed from the output string in the same manner as maybe templates</p>
 </blockquote>
 <p>Template scripts receive a single <code>args</code> object within their context that is the <a href="global.html#TokenReplaceData"><code>TokenReplaceData</code></a> object passed to the
 resource loader function that is loading the string resource. It's easiest to imagine that the script itself is surrounded
-by an anonymous function declaration taking a parameter called <code>args</code>. Using the example script from above:</p>
-<pre class="prettyprint source"><code>function(args) {
+by an anonymous function declaration taking a parameter called <code>args</code> with simple arrow-function style implicit returns
+converted explicitly. Using the example script from above:</p>
+<pre class="prettyprint source"><code>// {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
+function(args) {
     return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
 }</code></pre><p>When working with template scripts, and really templates in general, knowing what is going to be passed to the localization
 string and thus the template script is important. Be sure to pay close attention to the original defaults and their use of
@@ -126,7 +128,7 @@ be used as a distinction between different lang files for the same language.</p>
 
 [CMD_HELP_ALIASES]
 ## 'Aliases: foo, bar' | 'Alias: foo'
-{{! return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
 [/CMD_HELP_ALIASES]
 
 [CMD_HELP_CODEBLOCK]
