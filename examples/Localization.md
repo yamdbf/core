@@ -40,7 +40,7 @@ Comments are removed when parsing. Any text not enclosed within key-tags is inhe
 and is ignored when parsing.
 
 ## Templating
-Unrelated to the `.lang` file format, but a key part of the localization system as a whole is the templating system.
+Unrelated to the `.lang` file format, but a key part of the localization system as a whole, is the templating system.
 Any token surrounded with `{{ }}` or `{{ ?}}` is a template, and can be replaced at runtime via matching keys within
 a {@link TokenReplaceData} object passed to `Lang.res()` or a LangResourceFunction from `Lang.createResourceFunction()`.
 For example:
@@ -111,6 +111,21 @@ be used as a distinction between different lang files for the same language.
 
 This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
 
+	[CMD_HELP_COMMAND_LIST]
+	Available commands: (Commands marked with `*` are server-only)
+	```ldif
+	{{ commandList }}
+	## A newline after the end of this codeblock gives
+	## weird spacing between it and the last line.
+	## I don't recommend using one
+	```Use `{{ usage }}` or `{{ mentionUsage }}` for more info
+	[/CMD_HELP_COMMAND_LIST]
+	
+	[CMD_HELP_UNKNOWN_COMMAND]
+	A command by that name could not be found or you do
+	not have permission to view it.
+	[/CMD_HELP_UNKNOWN_COMMAND]
+	
 	[CMD_HELP_SERVERONLY] [Server Only] [/CMD_HELP_SERVERONLY]
 	
 	[CMD_HELP_OWNERONLY] [Owner Only] [/CMD_HELP_OWNERONLY]
@@ -134,3 +149,15 @@ This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
 	{{ info ?}}
 	```
 	[/CMD_HELP_CODEBLOCK]
+	
+	[CMD_HELP_REPLY_CMD]
+	Sent you a DM with command help information.
+	[/CMD_HELP_REPLY_CMD]
+	
+	[CMD_HELP_REPLY_ALL]
+	Sent you a DM with a list of commands.
+	[/CMD_HELP_REPLY_ALL]
+	
+	[CMD_HELP_REPLY_FAIL]
+	Failed to DM help information. Do you have DMs blocked?
+	[/CMD_HELP_REPLY_FAIL]
