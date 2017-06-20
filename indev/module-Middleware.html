@@ -312,6 +312,108 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 
     
 
+    <h4 class="name" id="~localize">
+		<span class="type-signature">(inner) </span>.<a href='#localize' style='color: black'>localize</a><span class="signature">()</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Middleware function that fetches the language to be used for command output
+and passes it as the first argument to the Command. This should be used
+<em>after</em> any other middleware like <code>expect</code> or <code>resolve</code> because those are
+based around user input whereas this should be handled after user input
+related things</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
     <h4 class="name" id="~resolve">
 		<span class="type-signature">(inner) </span>.<a href='#resolve' style='color: black'>resolve</a><span class="signature">(<span class="param-types">argTypes: object</span>)</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
 	</h4>
