@@ -30,7 +30,7 @@ class Test extends Client
 			owner: config.owner,
 			commandsDir: './commands',
 			localeDir: './locale',
-			defaultLang: 'al_bhed',
+			// defaultLang: 'al_bhed',
 			pause: true,
 			logLevel: LogLevel.DEBUG,
 			disableBase: Util.baseCommandNames

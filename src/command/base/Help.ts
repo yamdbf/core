@@ -1,11 +1,12 @@
 import { Collection, RichEmbed } from 'discord.js';
-import { LangResourceFunction } from '../../types/LangResourceFunction';
 import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
-import { Lang } from '../../localization/Lang';
+import { LangResourceFunction } from '../../types/LangResourceFunction';
+import { TokenReplaceData } from '../../types/TokenReplaceData';
 import { Message } from '../../types/Message';
-import { Command } from '../Command';
-import { Util } from '../../util/Util';
 import { localizable } from '../CommandDecorators';
+import { Lang } from '../../localization/Lang';
+import { Util } from '../../util/Util';
+import { Command } from '../Command';
 
 export default class extends Command
 {
@@ -23,6 +24,7 @@ export default class extends Command
 	public async action(message: Message, [lang, commandName]: [string, string]): Promise<void>
 	{
 		if (this.client.selfbot) message.delete();
+		const res: LangResourceFunction = Lang.createResourceLoader(lang);
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user.tag}`;
 
@@ -35,10 +37,6 @@ export default class extends Command
 
 		if (!commandName)
 		{
-			const preText: string = `Available commands: (Commands marked with \`*\` are server-only)\n\`\`\`ldif\n`;
-			const postText: string = `\`\`\`Use \`<prefix>help <command>\` ${this.client.selfbot ? '' : `or \`${
-				mentionName} help <command>\` `}for more info\n\n`;
-
 			const usableCommands: Collection<string, Command> = this.client.commands
 				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.filter(c => !c.hidden);
@@ -47,7 +45,14 @@ export default class extends Command
 			let commandList: string = usableCommands.map(c =>
 				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`).sort().join('\n');
 
-			output = preText + commandList + postText;
+			const data: TokenReplaceData = {
+				commandList: commandList,
+				usage: cInfo(this).usage,
+				mentionUsage: cInfo(this).usage
+					.replace('<prefix>', mentionName)
+			};
+
+			output = res('CMD_HELP_COMMAND_LIST', data);
 			if (output.length >= 1024)
 			{
 				commandList = '';
@@ -60,7 +65,8 @@ export default class extends Command
 					commandList += mappedCommands[i];
 					if ((i + 1) % 3 === 0) commandList += '\n';
 				}
-				output = preText + commandList + postText;
+				data.commandList = commandList;
+				output = res('CMD_HELP_COMMAND_LIST', data);
 			}
 		}
 		else
@@ -69,25 +75,25 @@ export default class extends Command
 				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.find(c => c.name === commandName || c.aliases.includes(commandName));
 
-			if (!command) output = `A command by that name could not be found or you do\n`
-				+ `not have permission to view it.`;
-
-			const info: LocalizedCommandInfo = cInfo(command);
-			const res: LangResourceFunction = Lang.createResourceLoader(lang);
-			if (command) output = res('CMD_HELP_CODEBLOCK', {
-				serverOnly: command.guildOnly ? res('CMD_HELP_SERVERONLY') : '',
-				ownerOnly: command.ownerOnly ? res('CMD_HELP_OWNERONLY') : '',
-				commandName: command.name,
-				desc: info.desc,
-				aliasText: command.aliases.length > 0 ?
-					res('CMD_HELP_ALIASES', { aliases: command.aliases.join(', ')})
-					: '',
-				usage: info.usage,
-				info: info.info ? `\n${info.info}` : ''
-			});
+			if (!command) output = res('CMD_HELP_UNKNOWN_COMMAND');
+			else
+			{
+				const info: LocalizedCommandInfo = cInfo(command);
+				output = res('CMD_HELP_CODEBLOCK', {
+					serverOnly: command.guildOnly ? res('CMD_HELP_SERVERONLY') : '',
+					ownerOnly: command.ownerOnly ? res('CMD_HELP_OWNERONLY') : '',
+					commandName: command.name,
+					desc: info.desc,
+					aliasText: command.aliases.length > 0 ?
+						res('CMD_HELP_ALIASES', { aliases: command.aliases.join(', ')})
+						: '',
+					usage: info.usage,
+					info: info.info ? `\n${info.info}` : ''
+				});
+			}
 		}
 
-		output = dm ? output.replace(/<prefix>/g, '')
+		if (!command) output = dm ? output.replace(/<prefix>/g, '')
 			: output.replace(/<prefix>/g, await this.client.getPrefix(message.guild) || '');
 
 		embed.setColor(11854048).setDescription(output);
@@ -99,14 +105,14 @@ export default class extends Command
 			else await message.author.send({ embed });
 			if (!dm && !this.client.selfbot)
 			{
-				if (command) message.reply(`Sent you a DM with command help information.`);
-				else message.reply(`Sent you a DM with a list of commands.`);
+				if (command) message.reply(res('CMD_HELP_REPLY_CMD'));
+				else message.reply(res('CMD_HELP_REPLY_ALL'));
 			}
 		}
 		catch (err)
 		{
 			if (!dm && !this.client.selfbot)
-				message.reply('Failed to DM help information. Do you have DMs blocked?');
+				message.reply(res('CMD_HELP_REPLY_FAIL'));
 		}
 
 		if (outMessage) outMessage.delete(30e3);

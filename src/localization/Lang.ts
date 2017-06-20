@@ -141,6 +141,7 @@ export class Lang
 	 */
 	public static getCommandInfo(command: Command, lang: string): LocalizedCommandInfo
 	{
+		if (!command) return null;
 		let desc: string, info: string, usage: string;
 		if (!Lang._instance.commandInfo[command.name]
 			|| (Lang._instance.commandInfo[command.name]
