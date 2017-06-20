@@ -23,7 +23,7 @@ import { Message } from '../types/Message';
  */
 export function using(func: MiddlewareFunction): MethodDecorator
 {
-	return function(target: Command<any>, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
+	return function(target: Command, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
 	{
 		if (!target) throw new Error('@using must be used as a method decorator for a Command action method.');
 		if (key !== 'action') throw new Error(`"${target.constructor.name}#${key}" is not a valid method target for @using.`);
@@ -53,6 +53,36 @@ export function using(func: MiddlewareFunction): MethodDecorator
 		};
 		return descriptor;
 	};
+}
+
+/**
+ * Get the localization language for command output and insert
+ * it as the first argument passed to the command call.
+ * Identical to {@link Middleware#localize} but used as a Command
+ * method decorator.
+ *
+ * Like the `localize` middleware, you will want to use this after
+ * any other usages of middleware via the `@using()` decorator.
+ * Middleware used with {@link Command#use} is evaluated before
+ * middlleware used via `@using()` decorator.
+ * @returns {MethodDecorator}
+ */
+export function localizable(target: Command, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
+{
+	if (!target) throw new Error('@localizable must be used as a method decorator for a Command action method.');
+	if (key !== 'action') throw new Error(
+		`"${target.constructor.name}#${key}" is not a valid method target for @localizable.`);
+	if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
+	const original: any = descriptor.value;
+	descriptor.value = async function(this: Command<any>, message: Message, args: any[]): Promise<any>
+	{
+		const dm: boolean = message.channel.type !== 'text';
+		const lang: string = dm ? this.client.defaultLang
+			:  await message.guild.storage.settings.get('lang');
+
+		return await original.apply(this, [message, [lang, ...args]]);
+	};
+	return descriptor;
 }
 
 /**

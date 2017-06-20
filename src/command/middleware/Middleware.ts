@@ -1,10 +1,11 @@
-import { Client } from '../../client/Client';
-import { Command } from '../Command';
-import { expect } from './Expect';
-import { resolve } from './Resolve';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
 import { ExpectArgType } from '../../types/ExpectArgType';
+import { Client } from '../../client/Client';
+import { localize } from './Localize';
+import { Command } from '../Command';
+import { resolve } from './Resolve';
+import { expect } from './Expect';
 
 /**
  * Contains static command middleware methods
@@ -36,7 +37,7 @@ export class Middleware
 	 * (message: Message, args: any[]) => [Message, any[]]
 	 * ```
 	 */
-	public static resolve: <T extends Client, U extends Command<T>>(argTypes: { [name: string]: ResolveArgType }) =>
+	public static resolve: (argTypes: { [name: string]: ResolveArgType }) =>
 		MiddlewareFunction = resolve;
 
 	/**
@@ -66,6 +67,17 @@ export class Middleware
 	 * (message: Message, args: any[]) => [Message, any[]]
 	 * ```
 	 */
-	public static expect: <T extends Client, U extends Command<T>>(argTypes: { [name: string]: ExpectArgType }) =>
+	public static expect: (argTypes: { [name: string]: ExpectArgType }) =>
 		MiddlewareFunction = expect;
+
+	/**
+	 * Middleware function that fetches the language to be used for command output
+	 * and passes it as the first argument to the Command. This should be used
+	 * *after* any other middleware like `expect` or `resolve` because those are
+	 * based around user input whereas this should be handled after user input
+	 * related things
+	 * @method localize
+	 * @returns {MiddlewareFunction}
+	 */
+	public static localize: MiddlewareFunction = localize;
 }

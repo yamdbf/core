@@ -1,5 +1,4 @@
-import { Lang } from '../bin';
-import { Client, LogLevel, Logger, ListenerUtil, Util } from '../bin/';
+import { Client, LogLevel, Logger, ListenerUtil, Util, Lang } from '../bin/';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
@@ -31,7 +30,7 @@ class Test extends Client
 			owner: config.owner,
 			commandsDir: './commands',
 			localeDir: './locale',
-			// defaultLang: 'al_bhed',
+			defaultLang: 'al_bhed',
 			pause: true,
 			logLevel: LogLevel.DEBUG,
 			disableBase: Util.baseCommandNames

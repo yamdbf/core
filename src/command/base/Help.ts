@@ -5,6 +5,7 @@ import { Lang } from '../../localization/Lang';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { Util } from '../../util/Util';
+import { localizable } from '../CommandDecorators';
 
 export default class extends Command
 {
@@ -18,13 +19,12 @@ export default class extends Command
 		});
 	}
 
-	public async action(message: Message, [commandName]: [string]): Promise<void>
+	@localizable
+	public async action(message: Message, [lang, commandName]: [string, string]): Promise<void>
 	{
 		if (this.client.selfbot) message.delete();
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user.tag}`;
-		const lang: string = dm ? this.client.defaultLang
-			:  await message.guild.storage.settings.get('lang');
 
 		const cInfo: (command: Command) => LocalizedCommandInfo =
 			(command: Command) => Lang.getCommandInfo(command, lang);
