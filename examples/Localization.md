@@ -111,6 +111,14 @@ be used as a distinction between different lang files for the same language.
 
 This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
 
+	[CMD_CLEARLIMIT_UNKNOWN_COMMAND]
+	Failed to find a command with the name `{{ commandName }}`
+	[/CMD_CLEARLIMIT_UNKNOWN_COMMAND]
+	
+	[CMD_CLEARLIMIT_SUCCESS]
+	Successfully cleared role limits for command: `{{ commandName }}`
+	[/CMD_CLEARLIMIT_SUCCESS]
+	
 	[CMD_HELP_COMMAND_LIST]
 	Available commands: (Commands marked with `*` are server-only)
 	```ldif
@@ -161,3 +169,71 @@ This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
 	[CMD_HELP_REPLY_FAIL]
 	Failed to DM help information. Do you have DMs blocked?
 	[/CMD_HELP_REPLY_FAIL]
+	
+	[CMD_LIMIT_UNKNOWN_COMMAND]
+	Failed to find a command with the name `{{ commandName }}`
+	[/CMD_LIMIT_UNKNOWN_COMMAND]
+	
+	[CMD_LIMIT_INVALID_GROUP]
+	Cannot limit base commands.
+	[/CMD_LIMIT_INVALID_GROUP]
+	
+	[CMD_LIMIT_ALREADY_LIMITER]
+	Role `{{ roleName }}` is already a limiter for command: `{{ commandName }}`
+	[/CMD_LIMIT_ALREADY_LIMITER]
+	
+	[CMD_LIMIT_INVALID_ROLE]
+	Couldn't find {{!
+		args.invalidRoles.split(',').length > 1 ? 'roles' : 'role'
+	!}}: {{ invalidRoles }}
+	[/CMD_LIMIT_INVALID_ROLE]
+	
+	[CMD_LIMIT_NO_ROLES]
+	Failed to add any roles to the command.
+	[/CMD_LIMIT_NO_ROLES]
+	
+	[CMD_LIMIT_SUCCESS]
+	Successfully added {{!
+		args.roles.split(',').length > 1 ? 'roles' : 'role'
+	!}}: {{ roles }} to the limiter for command: `{{ commandName }}`
+	[/CMD_LIMIT_SUCCESS]
+	
+	[CMD_RELOAD_UNKNOWN_COMMAND]
+	Command "{{ commandName }}" could not be found.
+	[/CMD_RELOAD_UNKNOWN_COMMAND]
+	
+	[CMD_RELOAD_SUCCESS]
+	{{!
+		args.commandName ? 
+			`Command "${args.commandName}"` :
+			'Commands'
+	!}} reloaded. ({{ time }} ms)
+	[/CMD_RELOAD_SUCCESS]
+	
+	[CMD_PREFIX_CURRENT]
+	{{!
+		args.prefix ?
+			`Current prefix is \`${args.prefix}\`` :
+			'There is currently no prefix.'
+	!}}
+	[/CMD_PREFIX_CURRENT]
+	
+	[CMD_PREFIX_CHAR_LIMIT]
+	Prefixes may only be up to 10 chars in length.
+	[/CMD_PREFIX_CHAR_LIMIT]
+	
+	[CMD_PREFIX_INVALID_CHARS]
+	Prefixes may not contain backticks or backslashes.
+	[/CMD_PREFIX_INVALID_CHARS]
+	
+	[CMD_PREFIX_RESULT]
+	{{!
+		args.prefix === '' ?
+			'Command prefix removed.' :
+			`Command prefix set to \`${args.prefix}\``
+	!}}
+	[/CMD_PREFIX_RESULT]
+	
+	[CMD_VERSION_OUTPUT]
+	Current version is: **{{ version }}**
+	[/CMD_VERSION_OUTPUT]
