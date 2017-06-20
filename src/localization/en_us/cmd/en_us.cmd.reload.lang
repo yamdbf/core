@@ -1,0 +1,7 @@
+[CMD_RELOAD_UNKNOWN_COMMAND]
+Command "{{ commandName }}" could not be found.
+[/CMD_RELOAD_UNKNOWN_COMMAND]
+
+[CMD_RELOAD_SUCCESS]
+{{! args.commandName ?  `Command "${args.commandName}"` : 'Commands' !}} reloaded. ({{ time }} ms)
+[/CMD_RELOAD_SUCCESS]

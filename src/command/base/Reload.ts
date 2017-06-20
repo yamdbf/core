@@ -1,5 +1,8 @@
+import { LangResourceFunction } from '../../types/LangResourceFunction';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
+import { localizable } from '../CommandDecorators';
+import { Lang } from '../../localization/Lang';
 import now = require('performance-now');
 
 export default class extends Command
@@ -15,13 +18,16 @@ export default class extends Command
 		});
 	}
 
-	public action(message: Message, [commandName]: [string]): Promise<Message | Message[]>
+	@localizable
+	public action(message: Message, [lang, commandName]: [string, string]): Promise<Message | Message[]>
 	{
+		const res: LangResourceFunction = Lang.createResourceLoader(lang);
 		const start: number = now();
 		const command: Command = this.client.commands.findByNameOrAlias(commandName);
 
 		if (commandName && !command)
-			return this.respond(message, `Command "${commandName}" could not be found.`);
+			return this.respond(message, res('CMD_RELOAD_UNKNOWN_COMMAND',
+				{ commandName: commandName }));
 
 		if (command) this.client.loadCommand(command.name);
 		else this.client.loadCommand('all');
@@ -29,6 +35,7 @@ export default class extends Command
 		const end: number = now();
 		const name: string = command ? command.name : null;
 		const text: string = name ? ` "${name}"` : 's';
-		return this.respond(message, `Command${text} reloaded. (${(end - start).toFixed(3)} ms)`);
+		return this.respond(message, res('CMD_RELOAD_SUCCESS',
+			{ commandName: name, time: (end - start).toFixed(3) }));
 	}
 }

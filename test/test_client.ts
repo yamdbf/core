@@ -33,8 +33,8 @@ class Test extends Client
 			// defaultLang: 'al_bhed',
 			pause: true,
 			logLevel: LogLevel.DEBUG,
-			disableBase: Util.baseCommandNames
-				.filter(n => n !== 'help' && n !== 'eval')
+			// disableBase: Util.baseCommandNames
+			// 	.filter(n => n !== 'help' && n !== 'eval')
 		});
 	}
 
