@@ -201,14 +201,13 @@ export class Lang
 				if (typeof result === 'undefined')
 					try
 					{
-						functionBody = `return ${functionBody}`;
+						functionBody = `return ${functionBody.replace(/^[\s]+/, '')}`;
 						script = new Function('args', functionBody);
 						result = script(data);
 					}
 					catch (err) {}
 
-				if (typeof result === 'undefined') loadedString = loadedString.replace(scriptData, '');
-				else loadedString = loadedString.replace(scriptData, result);
+				loadedString = loadedString.replace(scriptData, result);
 			}
 		}
 

@@ -1,0 +1,27 @@
+[CMD_LIMIT_UNKNOWN_COMMAND]
+Failed to find a command with the name `{{ commandName }}`
+[/CMD_LIMIT_UNKNOWN_COMMAND]
+
+[CMD_LIMIT_INVALID_GROUP]
+Cannot limit base commands.
+[/CMD_LIMIT_INVALID_GROUP]
+
+[CMD_LIMIT_ALREADY_LIMITER]
+Role `{{ roleName }}` is already a limiter for command: `{{ commandName }}`
+[/CMD_LIMIT_ALREADY_LIMITER]
+
+[CMD_LIMIT_INVALID_ROLE]
+Couldn't find {{!
+	args.invalidRoles.split(',').length > 1 ? 'roles' : 'role'
+!}}: {{ invalidRoles }}
+[/CMD_LIMIT_INVALID_ROLE]
+
+[CMD_LIMIT_NO_ROLES]
+Failed to add any roles to the command.
+[/CMD_LIMIT_NO_ROLES]
+
+[CMD_LIMIT_SUCCESS]
+Successfully added {{!
+	args.roles.split(',').length > 1 ? 'roles' : 'role'
+!}}: {{ roles }} to the limiter for command: `{{ commandName }}`
+[/CMD_LIMIT_SUCCESS]

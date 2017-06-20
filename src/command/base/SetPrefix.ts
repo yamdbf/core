@@ -1,5 +1,8 @@
+import { LangResourceFunction } from '../../types/LangResourceFunction';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
+import { localizable } from '../CommandDecorators';
+import { Lang } from '../../localization/Lang';
 
 export default class extends Command
 {
@@ -15,18 +18,20 @@ export default class extends Command
 		});
 	}
 
-	public async action(message: Message, [prefix]: [string]): Promise<any>
+	@localizable
+	public async action(message: Message, [lang, prefix]: [string, string]): Promise<any>
 	{
+		const res: LangResourceFunction = Lang.createResourceLoader(lang);
+
 		if (!prefix)
-			return this.respond(message, await this.client.getPrefix(message.guild)
-				? `Current prefix is \`${await this.client.getPrefix(message.guild)}\``
-				: 'There is currently no prefix.');
+			return this.respond(message, res('CMD_PREFIX_CURRENT',
+				{ prefix: await this.client.getPrefix(message.guild) }));
 
 		if (prefix.length > 10)
-			return this.respond(message, `Prefixes may only be up to 10 chars in length.`);
+			return this.respond(message, res('CMD_PREFIX_CHAR_LIMIT'));
 
 		if (/[\\`]/.test(prefix))
-			return this.respond(message, `Prefixes may not contain backticks or backslashes.`);
+			return this.respond(message, res('CMD_PREFIX_INVALID_CHARS'));
 
 		if (prefix === 'clear') prefix = '';
 
@@ -35,7 +40,6 @@ export default class extends Command
 				await guild.settings.set('prefix', prefix);
 		else await message.guild.storage.settings.set('prefix', prefix);
 
-		this.respond(message, prefix === '' ? 'Command prefix removed.'
-			: `Command prefix set to \`${prefix}\``);
+		return this.respond(message, res('CMD_PREFIX_RESULT', { prefix: prefix }));
 	}
 }

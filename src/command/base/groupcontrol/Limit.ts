@@ -1,11 +1,13 @@
 import { GuildStorage } from '../../../types/GuildStorage';
+import { LangResourceFunction } from '../../../types/LangResourceFunction';
 import { Message } from '../../../types/Message';
 import { Util } from '../../../util/Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
+import { Lang } from '../../../localization/Lang';
 import { Role } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
-const { using } = CommandDecorators;
+const { using, localizable } = CommandDecorators;
 
 export default class extends Command
 {
@@ -22,11 +24,16 @@ export default class extends Command
 	}
 
 	@using(Middleware.expect({ '<command>': 'String' }))
-	public async action(message: Message, [commandName, ...roleNames]: [string, string]): Promise<Message | Message[]>
+	@localizable
+	public async action(message: Message, [lang, commandName, ...roleNames]: [string, string, string]): Promise<Message | Message[]>
 	{
-		const command: Command = this.client.commands.find(c => Util.normalize(commandName) === Util.normalize(c.name));
-		if (!command) return this.respond(message, `Failed to find a command with the name \`${commandName}\``);
-		if (command.group === 'base') this.respond(message, `Cannot limit base commands.`);
+		const res: LangResourceFunction = Lang.createResourceLoader(lang);
+		const command: Command = this.client.commands.find(c =>
+			Util.normalize(commandName) === Util.normalize(c.name));
+
+		if (!command) return this.respond(message,
+			res('CMD_LIMIT_UNKNOWN_COMMAND', { commandName: commandName }));
+		if (command.group === 'base') return this.respond(message, res('CMD_LIMIT_INVALID_GROUP'));
 
 		const storage: GuildStorage = message.guild.storage;
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
@@ -38,20 +45,21 @@ export default class extends Command
 		{
 			let foundRole: Role = message.guild.roles.find(role => Util.normalize(role.name) === Util.normalize(name));
 			if (!foundRole) invalidRoles.push(name);
-			else if (foundRole && newLimit.includes(foundRole.id)) message.channel.send(
-				`Role \`${foundRole.name}\` is already a limiter for command: \`${command.name}\``);
+			else if (foundRole && newLimit.includes(foundRole.id))
+				message.channel.send(res('CMD_LIMIT_ALREADY_LIMITER',
+					{ roleName: foundRole.name, commandName: command.name }));
 			else roles.push(foundRole);
 		}
 
-		if (invalidRoles.length > 0) message.channel.send(`Couldn't find role${
-			invalidRoles.length > 1 ? 's' : ''}: \`${invalidRoles.join('`, `')}\``);
-		if (roles.length === 0) return this.respond(message, `Failed to add any roles to the command.`);
+		if (invalidRoles.length > 0) message.channel.send(res('CMD_LIMIT_INVALID_ROLE',
+			{ invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
+		if (roles.length === 0) return this.respond(message, res('CMD_LIMIT_NO_ROLES'));
 
 		newLimit = newLimit.concat(roles.map(role => role.id));
 		limitedCommands[command.name] = newLimit;
 		await storage.settings.set('limitedCommands', limitedCommands);
 
-		return this.respond(message, `Successfully added role${roles.length > 1 ? 's' : ''}: \`${
-			roles.map(role => role.name).join('`, `')}\` to the limiter for command: \`${command.name}\``);
+		return this.respond(message, res('CMD_LIMIT_SUCCESS',
+			{ roles: roles.map(r => `\`${r.name}\``).join(', '), commandName: command.name }));
 	}
 }
