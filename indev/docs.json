@@ -563,7 +563,7 @@
                     }
                 },
                 {
-                    "name": "description",
+                    "name": "desc",
                     "access": "",
                     "virtual": false,
                     "description": "<p>A brief description of the command, displayed\nin the commands list via the Help command</p>",
@@ -585,7 +585,7 @@
                     }
                 },
                 {
-                    "name": "extraHelp",
+                    "name": "info",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Extra information about the command to be displayed\nby the Help command when <code>help &lt;command&gt;</code> is called</p>",
