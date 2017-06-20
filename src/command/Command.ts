@@ -49,7 +49,7 @@ export class Command<T extends Client = Client>
 		/**
 		 * A brief description of the command, displayed
 		 * in the commands list via the Help command
-		 * @name Command#description
+		 * @name Command#desc
 		 * @type {string}
 		 */
 
@@ -64,7 +64,7 @@ export class Command<T extends Client = Client>
 		/**
 		 * Extra information about the command to be displayed
 		 * by the Help command when `help <command>` is called
-		 * @name Command#extraHelp
+		 * @name Command#info
 		 * @type {string}
 		 */
 
