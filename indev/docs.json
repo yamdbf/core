@@ -1462,7 +1462,7 @@
                         },
                         {
                             "name": "data",
-                            "type": "TokenReplaceData",
+                            "type": "TemplateData",
                             "description": "<p>Values to replace in the string</p>",
                             "default": "",
                             "optional": true,
@@ -3007,7 +3007,7 @@
         },
         {
             "name": "LangResourceFunction",
-            "description": "<p>Represents a function assigned to\na specific language that takes a string key and a {@link TokenReplaceData}\nobject and returns a localized string for that language if it exists</p>",
+            "description": "<p>Represents a function assigned to\na specific language that takes a string key and a {@link TemplateData}\nobject and returns a localized string for that language if it exists</p>",
             "properties": []
         },
         {
@@ -3036,8 +3036,8 @@
             "properties": []
         },
         {
-            "name": "TokenReplaceData",
-            "description": "<p>Represents an object mapping key\ntokens to string values, where the token keys will be replaced with\nthe provided value in the source string when given to a Lang resource\nfunction like {@link Lang.res}</p>",
+            "name": "TemplateData",
+            "description": "<p>Represents an object mapping template\nkeys to string values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction like {@link Lang.res}</p>",
             "properties": []
         },
         {
