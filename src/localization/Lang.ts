@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { LangFileParser } from './LangFileParser';
 import { LangResourceFunction } from '../types/LangResourceFunction';
 import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
-import { TokenReplaceData } from '../types/TokenReplaceData';
+import { TemplateData } from '../types/TemplateData';
 import { logger, Logger } from '../util/logger/Logger';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
@@ -160,10 +160,10 @@ export class Lang
 	 * templates with the given data or script result
 	 * @param {string} lang Language to get a string resource for
 	 * @param {string} key String key to get
-	 * @param {TokenReplaceData} [data] Values to replace in the string
+	 * @param {TemplateData} [data] Values to replace in the string
 	 * @returns {string}
 	 */
-	public static res(lang: string, key: string, data: TokenReplaceData = {}): string
+	public static res(lang: string, key: string, data: TemplateData = {}): string
 	{
 		if (!Lang.langs[lang]) return key;
 		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
@@ -174,13 +174,13 @@ export class Lang
 		if (!loadedString) return key;
 		if (typeof data === 'undefined') return loadedString;
 
-		for (const token of Object.keys(data))
+		for (const template of Object.keys(data))
 		{
 			// Skip maybe templates so they can be removed properly later
-			if (new RegExp(`{{ *${token} *\\?}}`, 'g').test(loadedString)
-				&& (data[token] === '' || data[token] === undefined)) continue;
+			if (new RegExp(`{{ *${template} *\\?}}`, 'g').test(loadedString)
+				&& (data[template] === '' || data[template] === undefined)) continue;
 
-			loadedString = loadedString.replace(new RegExp(`{{ *${token} *\\??}}`, 'g'), data[token]);
+			loadedString = loadedString.replace(new RegExp(`{{ *${template} *\\??}}`, 'g'), data[template]);
 		}
 
 		const scriptTemplates: RegExp = new RegExp(scriptTemplate, 'gm');
@@ -222,6 +222,6 @@ export class Lang
 	 */
 	public static createResourceLoader(lang: string): LangResourceFunction
 	{
-		return (key: string, data?: TokenReplaceData) => Lang.res(lang, key, data);
+		return (key: string, data?: TemplateData) => Lang.res(lang, key, data);
 	}
 }

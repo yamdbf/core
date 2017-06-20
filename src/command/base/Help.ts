@@ -1,7 +1,7 @@
 import { Collection, RichEmbed } from 'discord.js';
 import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
 import { LangResourceFunction } from '../../types/LangResourceFunction';
-import { TokenReplaceData } from '../../types/TokenReplaceData';
+import { TemplateData } from '../../types/TemplateData';
 import { Message } from '../../types/Message';
 import { localizable } from '../CommandDecorators';
 import { Lang } from '../../localization/Lang';
@@ -45,7 +45,7 @@ export default class extends Command
 			let commandList: string = usableCommands.map(c =>
 				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`).sort().join('\n');
 
-			const data: TokenReplaceData = {
+			const data: TemplateData = {
 				commandList: commandList,
 				usage: cInfo(this).usage,
 				mentionUsage: cInfo(this).usage

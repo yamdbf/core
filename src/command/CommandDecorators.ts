@@ -58,7 +58,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 /**
  * Get the localization language for command output and insert
  * it as the first argument passed to the command call.
- * Identical to {@link Middleware#localize} but used as a Command
+ * Identical to {@link Middleware.localize} but used as a Command
  * method decorator.
  *
  * Like the `localize` middleware, you will want to use this after
