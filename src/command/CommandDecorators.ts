@@ -117,7 +117,7 @@ export function group(value: string): ClassDecorator
 
 /**
  * Set `argOpts` metadata
- * @param {string} value Value to set
+ * @param {ArgOpts} value Value to set
  * @returns {ClassDecorator}
  */
 export function argOpts(value: ArgOpts): ClassDecorator
