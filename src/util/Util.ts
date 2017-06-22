@@ -14,23 +14,7 @@ export class Util
 	 * @name baseCommandNames
 	 * @type {BaseCommandName[]}
 	 */
-	public static baseCommandNames: BaseCommandName[] =
-	[
-		'blacklist',
-		'whitelist',
-		'clearlimit',
-		'disablegroup',
-		'enablegroup',
-		'limit',
-		'listgroups',
-		'eval',
-		'eval:ts',
-		'help',
-		'ping',
-		'reload',
-		'setprefix',
-		'version'
-	];
+	public static baseCommandNames: BaseCommandName[] = require('./static/baseCommandNames.json');
 
 	/**
 	 * Pads the right side of a string with spaces to the given length
