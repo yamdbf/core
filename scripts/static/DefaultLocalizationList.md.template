@@ -82,7 +82,9 @@ the strings for the default help Command:
 [/CMD_HELP_ALIASES]
 ```
 >Note: A template script itself is just interpreted Javascript that must return a value. A template script that does not return a
-value will simply have the template removed from the output string in the same manner as maybe templates
+value will simply have the template removed from the output string in the same manner as maybe templates. Implicit returns are
+possible in a manner similar to arrow functions. If the script is complex enough to necessitate an actual return statement
+then an implicit return is not possible
 
 
 Template scripts receive a single `args` object within their context that is the {@link TokenReplaceData} object passed to the
