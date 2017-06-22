@@ -221,11 +221,6 @@ export class Client extends Discord.Client
 		this._commandLoader = !this.passive ? new CommandLoader(this) : null;
 		this._dispatcher = !this.passive ? new CommandDispatcher<this>(this) : null;
 
-		// Make some asserts
-		if (!this._token) throw new Error('A token must be provided for the client');
-		if (!this.commandsDir && !this.passive) throw new Error('A directory from which to load commands must be provided via commandsDir');
-		if (!(this.owner instanceof Array)) throw new TypeError('Client config `owner` field must be an array of user ID strings.');
-
 		Lang.createInstance(this);
 		Lang.loadLocalizations();
 
@@ -292,6 +287,7 @@ export class Client extends Discord.Client
 	 */
 	public start(): this
 	{
+		if (!this._token) throw new Error('Client cannot be started without being given a token.');
 		this.login(this._token);
 		return this;
 	}
