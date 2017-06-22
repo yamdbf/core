@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { Client, LogLevel, Logger, Lang } from '../bin/';
+import { Client, LogLevel, Logger } from '../bin/';
 const logger: Logger = Logger.instance();
 
 class ScriptClient extends Client
@@ -7,6 +7,7 @@ class ScriptClient extends Client
 	public constructor()
 	{
 		super({ logLevel: LogLevel.NONE });
+
 		logger.setLogLevel(LogLevel.DEBUG);
 		logger.log('Script', 'Building base command names files');
 		let baseCommandNamesTypeFile: string = `// Generated automatically at ${new Date().toString()}

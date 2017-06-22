@@ -1,24 +1,13 @@
 import * as fs from 'fs';
-import { Client, LogLevel, Logger, ListenerUtil } from '../bin/';
-import { Lang } from '../bin';
-const config: any = require('../test/config.json');
+import { Client, LogLevel, Logger, Lang } from '../bin/';
 const logger: Logger = Logger.instance();
-const { once } = ListenerUtil;
 
 class ScriptClient extends Client
 {
 	public constructor()
 	{
-		super({
-			token: config.token,
-			logLevel: LogLevel.NONE,
-			passive: true
-		});
-	}
+		super({ logLevel: LogLevel.NONE, passive: true });
 
-	@once('clientReady')
-	private async _onClientReady(foo: string, bar: number): Promise<void>
-	{
 		logger.setLogLevel(LogLevel.DEBUG);
 		logger.log('Script', 'Building localization string list');
 		let localizationStrings: string[] = [];
@@ -45,6 +34,5 @@ class ScriptClient extends Client
 }
 logger.log('Script', 'Starting localization markdown builder');
 const script: ScriptClient = new ScriptClient();
-script.start();
 
-process.on('unhandledRejection', (err: any) => console.error(err));
+process.on('unhandledRejection', (err: any) => logger.error(err));
