@@ -11,7 +11,7 @@ Role `{{ roleName }}` is already a limiter for command: `{{ commandName }}`
 [/CMD_LIMIT_ALREADY_LIMITER]
 
 [CMD_LIMIT_INVALID_ROLE]
-Couldn't find {{!
+Failed to find {{!
 	args.invalidRoles.split(',').length > 1 ? 'roles' : 'role'
 !}}: {{ invalidRoles }}
 [/CMD_LIMIT_INVALID_ROLE]

@@ -111,6 +111,6 @@ separate strings used in two separate commands into files `en_us.cmd.foo.lang` a
 be used as a distinction between different lang files for the same language.
 
 
-This list may be incomplete during development until YAMDBF 3.0.0 is finalized.
+This list is automatically generated and may be incomplete during development until YAMDBF 3.0.0 is finalized.
 
 {{ localizationDefaults }}
