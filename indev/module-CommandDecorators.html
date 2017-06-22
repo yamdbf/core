@@ -1432,9 +1432,10 @@ assigning middleware functions to commands</p></div>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Get the localization language for command output and insert
-it as the first argument passed to the command call.
-Identical to <code>Middleware.localize</code> but used as a Command
+    <p>Creates a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function using the localization
+language for the command call and passes it as the first argument
+for that command call.</p>
+<p>Identical to <code>Middleware.localize</code> but used as a Command
 method decorator.</p>
 <p>Like the <code>localize</code> middleware, you will want to use this after
 any other usages of middleware via the <code>@using()</code> decorator.
