@@ -123,7 +123,7 @@ separate strings used in two separate commands into files <code>en_us.cmd.foo.la
 <p>Note: Anything after the language name and before <code>.lang</code> in a lang file's filename is not used for anything and can simply
 be used as a distinction between different lang files for the same language.</p>
 </blockquote>
-<p>This list may be incomplete during development until YAMDBF 3.0.0 is finalized.</p>
+<p>This list is automatically generated and may be incomplete during development until YAMDBF 3.0.0 is finalized.</p>
 <pre class="prettyprint source"><code>[CMD_CLEARLIMIT_UNKNOWN_COMMAND]
 Failed to find a command with the name `{{ commandName }}`
 [/CMD_CLEARLIMIT_UNKNOWN_COMMAND]
@@ -196,7 +196,7 @@ Role `{{ roleName }}` is already a limiter for command: `{{ commandName }}`
 [/CMD_LIMIT_ALREADY_LIMITER]
 
 [CMD_LIMIT_INVALID_ROLE]
-Couldn't find {{!
+Failed to find {{!
     args.invalidRoles.split(',').length > 1 ? 'roles' : 'role'
 !}}: {{ invalidRoles }}
 [/CMD_LIMIT_INVALID_ROLE]
