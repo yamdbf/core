@@ -1,12 +1,12 @@
-import * as fs from 'fs';
-import { LangFileParser } from './LangFileParser';
-import { ResourceLoader } from '../types/ResourceLoader';
-import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
-import { TemplateData } from '../types/TemplateData';
-import { logger, Logger } from '../util/logger/Logger';
-import { Command } from '../command/Command';
 import { Client } from '../client/Client';
+import { Command } from '../command/Command';
+import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
+import { ResourceLoader } from '../types/ResourceLoader';
+import { TemplateData } from '../types/TemplateData';
+import { Logger, logger } from '../util/logger/Logger';
+import { LangFileParser } from './LangFileParser';
 import { Language } from './Language';
+import * as fs from 'fs';
 import * as glob from 'glob';
 import * as path from 'path';
 
