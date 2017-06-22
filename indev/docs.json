@@ -3057,7 +3057,7 @@
                     "type": "string",
                     "description": "<p>See: {@link Client#token}</p>",
                     "default": "",
-                    "optional": "",
+                    "optional": true,
                     "nullable": ""
                 },
                 {
