@@ -71,11 +71,12 @@ export class Middleware
 		MiddlewareFunction = expect;
 
 	/**
-	 * Middleware function that fetches the language to be used for command output
-	 * and passes it as the first argument to the Command. This should be used
-	 * *after* any other middleware like `expect` or `resolve` because those are
-	 * based around user input whereas this should be handled after user input
-	 * related things
+	 * Middleware function that inserts a {@link ResourceLoader} function for the
+	 * language that will be used for the command call as the first arg for that
+	 * command call. This middleware should be used *after* any other middleware
+	 * like `expect` or `resolve` because those are based around user input whereas
+	 * this should be handled after user input related things as to not interfere
+	 * with the other middleware and their input
 	 * @method localize
 	 * @returns {MiddlewareFunction}
 	 */

@@ -58,8 +58,10 @@ export function using(func: MiddlewareFunction): MethodDecorator
 }
 
 /**
- * Get the localization language for command output and insert
- * it as the first argument passed to the command call.
+ * Creates a {@link ResourceLoader} function using the localization
+ * language for the command call and passes it as the first argument
+ * for that command call.
+ *
  * Identical to {@link Middleware.localize} but used as a Command
  * method decorator.
  *
