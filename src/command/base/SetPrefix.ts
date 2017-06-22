@@ -1,4 +1,4 @@
-import { LangResourceFunction } from '../../types/LangResourceFunction';
+import { ResourceLoader } from '../../types/ResourceLoader';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
@@ -19,10 +19,8 @@ export default class extends Command
 	}
 
 	@localizable
-	public async action(message: Message, [lang, prefix]: [string, string]): Promise<any>
+	public async action(message: Message, [res, prefix]: [ResourceLoader, string]): Promise<any>
 	{
-		const res: LangResourceFunction = Lang.createResourceLoader(lang);
-
 		if (!prefix)
 			return this.respond(message, res('CMD_PREFIX_CURRENT',
 				{ prefix: await this.client.getPrefix(message.guild) }));

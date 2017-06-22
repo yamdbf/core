@@ -1,5 +1,5 @@
 import { GuildStorage } from '../../../types/GuildStorage';
-import { LangResourceFunction } from '../../../types/LangResourceFunction';
+import { ResourceLoader } from '../../../types/ResourceLoader';
 import { Message } from '../../../types/Message';
 import { Util } from '../../../util/Util';
 import { Command } from '../../Command';
@@ -25,9 +25,8 @@ export default class extends Command
 
 	@using(Middleware.expect({ '<command>': 'String' }))
 	@localizable
-	public async action(message: Message, [lang, commandName, ...roleNames]: [string, string, string]): Promise<Message | Message[]>
+	public async action(message: Message, [res, commandName, ...roleNames]: [ResourceLoader, string, string[]]): Promise<Message | Message[]>
 	{
-		const res: LangResourceFunction = Lang.createResourceLoader(lang);
 		const command: Command = this.client.commands.find(c =>
 			Util.normalize(commandName) === Util.normalize(c.name));
 
@@ -41,7 +40,7 @@ export default class extends Command
 
 		let roles: Role[] = [];
 		let invalidRoles: string[] = [];
-		for (const name of roleNames)
+		for (const name of <string[]> roleNames)
 		{
 			let foundRole: Role = message.guild.roles.find(role => Util.normalize(role.name) === Util.normalize(name));
 			if (!foundRole) invalidRoles.push(name);

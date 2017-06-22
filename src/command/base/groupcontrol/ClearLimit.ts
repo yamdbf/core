@@ -3,7 +3,7 @@ import { Util } from '../../../util/Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { GuildStorage } from '../../../types/GuildStorage';
-import { LangResourceFunction } from '../../../types/LangResourceFunction';
+import { ResourceLoader } from '../../../types/ResourceLoader';
 import { Lang } from '../../../localization/Lang';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using, localizable } = CommandDecorators;
@@ -22,9 +22,8 @@ export default class extends Command
 
 	@using(Middleware.expect({ '<command>': 'String' }))
 	@localizable
-	public async action(message: Message, [lang, commandName]: [string, string]): Promise<Message | Message[]>
+	public async action(message: Message, [res, commandName]: [ResourceLoader, string]): Promise<Message | Message[]>
 	{
-		const res: LangResourceFunction = Lang.createResourceLoader(lang);
 		let command: Command = this.client.commands.find(c => Util.normalize(c.name) === Util.normalize(commandName));
 		if (!command) return this.respond(message,
 			res('CMD_CLEARLIMIT_UNKNOWN_COMMAND', { commandName: commandName }));

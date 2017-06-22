@@ -1,9 +1,11 @@
-import { PermissionResolvable } from 'discord.js';
-import { Command } from './Command';
-import { RateLimiter } from './RateLimiter';
-import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { Lang } from '../localization/Lang';
 import { ArgOpts } from '../types/ArgOpts';
 import { Message } from '../types/Message';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { ResourceLoader } from '../types/ResourceLoader';
+import { Command } from './Command';
+import { RateLimiter } from './RateLimiter';
+import { PermissionResolvable } from 'discord.js';
 
 /**
  * Grouping of static decorator methods for the {@link Command}
@@ -80,7 +82,8 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 		const lang: string = dm ? this.client.defaultLang
 			:  await message.guild.storage.settings.get('lang');
 
-		return await original.apply(this, [message, [lang, ...args]]);
+		const res: ResourceLoader = Lang.createResourceLoader(lang);
+		return await original.apply(this, [message, [res, ...args]]);
 	};
 	return descriptor;
 }

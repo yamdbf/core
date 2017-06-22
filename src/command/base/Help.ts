@@ -1,6 +1,6 @@
 import { Collection, RichEmbed } from 'discord.js';
 import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
-import { LangResourceFunction } from '../../types/LangResourceFunction';
+import { ResourceLoader } from '../../types/ResourceLoader';
 import { TemplateData } from '../../types/TemplateData';
 import { Message } from '../../types/Message';
 import { localizable } from '../CommandDecorators';
@@ -21,12 +21,13 @@ export default class extends Command
 	}
 
 	@localizable
-	public async action(message: Message, [lang, commandName]: [string, string]): Promise<void>
+	public async action(message: Message, [res, commandName]: [ResourceLoader, string]): Promise<void>
 	{
 		if (this.client.selfbot) message.delete();
-		const res: LangResourceFunction = Lang.createResourceLoader(lang);
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user.tag}`;
+		const lang: string = dm ? this.client.defaultLang
+			:  await message.guild.storage.settings.get('lang');
 
 		const cInfo: (command: Command) => LocalizedCommandInfo =
 			(command: Command) => Lang.getCommandInfo(command, lang);

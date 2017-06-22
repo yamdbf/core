@@ -1,7 +1,7 @@
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
-import { Lang } from '../../localization/Lang';
+import { ResourceLoader } from '../../types/ResourceLoader';
 
 export default class extends Command
 {
@@ -15,9 +15,8 @@ export default class extends Command
 	}
 
 	@localizable
-	public action(message: Message, [lang]: [string]): void
+	public action(message: Message, [res]: [ResourceLoader]): void
 	{
-		this.respond(message, Lang.res(lang, 'CMD_VERSION_OUTPUT',
-			{ version: this.client.version }));
+		this.respond(message, res('CMD_VERSION_OUTPUT', { version: this.client.version }));
 	}
 }

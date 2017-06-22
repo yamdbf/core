@@ -1,4 +1,4 @@
-import { LangResourceFunction } from '../../types/LangResourceFunction';
+import { ResourceLoader } from '../../types/ResourceLoader';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
@@ -19,9 +19,8 @@ export default class extends Command
 	}
 
 	@localizable
-	public action(message: Message, [lang, commandName]: [string, string]): Promise<Message | Message[]>
+	public action(message: Message, [res, commandName]: [ResourceLoader, string]): Promise<Message | Message[]>
 	{
-		const res: LangResourceFunction = Lang.createResourceLoader(lang);
 		const start: number = now();
 		const command: Command = this.client.commands.findByNameOrAlias(commandName);
 

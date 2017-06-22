@@ -22,7 +22,7 @@ as seen in the line above this, here -----------^
 [/EXAMPLE_BAR]
 ```
 The identifying string within the opening and closing tag is the key that will be used when retrieving
-the string via `Lang.res()` or a LangResourceFunction from `Lang.createResourceFunction()`.
+the string via `Lang.res()` or a ResourceLoader from `Lang.createResourceLoader()`.
 
 >Note: The closing tag key must match the opening tag key. Nested tags are not supported and, if attempted, will be 
 parsed as part of the raw string value of the outer-most surrounding tag
@@ -42,7 +42,7 @@ and is ignored when parsing.
 ## Templating
 Unrelated to the `.lang` file format, but a key part of the localization system as a whole, is the templating system.
 Any token surrounded with `{{ }}` or `{{ ?}}` is a template, and can be replaced at runtime via matching keys within
-a {@link TokenReplaceData} object passed to `Lang.res()` or a LangResourceFunction from `Lang.createResourceFunction()`.
+a {@link TokenReplaceData} object passed to `Lang.res()` or a ResourceLoader from `Lang.createResourceLoader()`.
 For example:
 ```
 [TEMPLATE_EXAMPLE]

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { LangFileParser } from './LangFileParser';
-import { LangResourceFunction } from '../types/LangResourceFunction';
+import { ResourceLoader } from '../types/ResourceLoader';
 import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { TemplateData } from '../types/TemplateData';
 import { logger, Logger } from '../util/logger/Logger';
@@ -220,7 +220,7 @@ export class Lang
 	 * @param {string} lang The language to create a loader for
 	 * @returns {LangResourceFunction}
 	 */
-	public static createResourceLoader(lang: string): LangResourceFunction
+	public static createResourceLoader(lang: string): ResourceLoader
 	{
 		return (key: string, data?: TemplateData) => Lang.res(lang, key, data);
 	}
