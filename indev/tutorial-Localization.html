@@ -56,7 +56,7 @@ This is a multi-line string.
 Newlines are preserved as well, though you can \nadd newlines mid-line
 as seen in the line above this, here -----------^
 [/EXAMPLE_BAR]</code></pre><p>The identifying string within the opening and closing tag is the key that will be used when retrieving
-the string via <code>Lang.res()</code> or a LangResourceFunction from <code>Lang.createResourceFunction()</code>.</p>
+the string via <code>Lang.res()</code> or a ResourceLoader from <code>Lang.createResourceLoader()</code>.</p>
 <blockquote>
 <p>Note: The closing tag key must match the opening tag key. Nested tags are not supported and, if attempted, will be 
 parsed as part of the raw string value of the outer-most surrounding tag</p>
@@ -71,7 +71,7 @@ foo bar baz ## And here's an inline comment
 and is ignored when parsing.</p>
 <h2>Templating</h2><p>Unrelated to the <code>.lang</code> file format, but a key part of the localization system as a whole, is the templating system.
 Any token surrounded with <code>{{ }}</code> or <code>{{ ?}}</code> is a template, and can be replaced at runtime via matching keys within
-a <code>TokenReplaceData</code> object passed to <code>Lang.res()</code> or a LangResourceFunction from <code>Lang.createResourceFunction()</code>.
+a <code>TokenReplaceData</code> object passed to <code>Lang.res()</code> or a ResourceLoader from <code>Lang.createResourceLoader()</code>.
 For example:</p>
 <pre class="prettyprint source"><code>[TEMPLATE_EXAMPLE]
 foo {{ barTemplate }} baz
@@ -101,7 +101,9 @@ the strings for the default help Command:</p>
 {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
 [/CMD_HELP_ALIASES]</code></pre><blockquote>
 <p>Note: A template script itself is just interpreted Javascript that must return a value. A template script that does not return a
-value will simply have the template removed from the output string in the same manner as maybe templates</p>
+value will simply have the template removed from the output string in the same manner as maybe templates. Implicit returns are
+possible in a manner similar to arrow functions. If the script is complex enough to necessitate an actual return statement
+then an implicit return is not possible</p>
 </blockquote>
 <p>Template scripts receive a single <code>args</code> object within their context that is the <code>TokenReplaceData</code> object passed to the
 resource loader function that is loading the string resource. It's easiest to imagine that the script itself is surrounded
