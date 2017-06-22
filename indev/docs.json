@@ -3006,11 +3006,6 @@
             "properties": []
         },
         {
-            "name": "LangResourceFunction",
-            "description": "<p>Represents a function assigned to\na specific language that takes a string key and a {@link TemplateData}\nobject and returns a localized string for that language if it exists</p>",
-            "properties": []
-        },
-        {
             "name": "LocalizedCommandInfo",
             "description": "<p>Represents an object\ncontaining localization overrides for a command's <code>desc</code>,\n<code>info</code>, and <code>usage</code> fields</p>",
             "properties": []
@@ -3028,6 +3023,11 @@
         {
             "name": "ResolveArgType",
             "description": "<p>Valid arg type values for the ResolveArgs middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre>",
+            "properties": []
+        },
+        {
+            "name": "ResourceLoader",
+            "description": "<p>Represents a function assigned to\na specific language that takes a string key and a {@link TemplateData}\nobject and returns a localized string for that language if it exists</p>",
             "properties": []
         },
         {
