@@ -1,5 +1,7 @@
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
+import { localizable } from '../../CommandDecorators';
+import { ResourceLoader } from '../../../types/ResourceLoader';
 
 export default class extends Command
 {
@@ -15,13 +17,14 @@ export default class extends Command
 		});
 	}
 
-	public async action(message: Message): Promise<void>
+	@localizable
+	public async action(message: Message, [res]: [ResourceLoader]): Promise<void>
 	{
 		let groups: string[] = this.client.commands.groups;
 		let disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 
-		let output: string = 'Command groups:\n';
-		for (const group of groups) output += `${disabledGroups.includes(group) ? '*' : ' '}${group}\n`;
+		let output: string = res('CMD_LISTGROUPS_GROUPS',
+			{ groups: groups.join(', '), disabledGroups: disabledGroups.join(', ') });
 
 		this.respond(message, output, 'ldif');
 	}
