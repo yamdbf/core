@@ -140,10 +140,6 @@ Only bot owners may blacklist globally.
 That user is already globally blacklisted.
 [/CMD_BLACKLIST_ERR_ALREADYGLOBAL]
 
-[CMD_BLACKLIST_GLOBALSUCCESS]
-Added {{ user }} to the global blacklist.
-[/CMD_BLACKLIST_GLOBALSUCCESS]
-
 [CMD_BLACKLIST_ERR_BADTARGET]
 You may not use this command on that person.
 [/CMD_BLACKLIST_ERR_BADTARGET]
@@ -151,6 +147,10 @@ You may not use this command on that person.
 [CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
 That user is already blacklisted in this server.
 [/CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
+
+[CMD_BLACKLIST_GLOBALSUCCESS]
+Added {{ user }} to the global blacklist.
+[/CMD_BLACKLIST_GLOBALSUCCESS]
 
 [CMD_BLACKLIST_SUCCESS]
 Added {{ user }} to the blacklist for this server.
@@ -177,11 +177,11 @@ Command group &quot;{{ group }}&quot; is already disabled or is not allowed to b
 [/CMD_DISABLEGROUP_SUCCESS]
 
 [CMD_ENABLEGROUP_ERR_NOEXIST]
-Command group {{ group }} does not exist.
+Command group &quot;{{ group }}&quot; does not exist.
 [/CMD_ENABLEGROUP_ERR_NOEXIST]
 
 [CMD_ENABLEGROUP_ERR_ENABLED]
-Command group {{ group }} is already enabled.
+Command group &quot;{{ group }}&quot; is already enabled.
 [/CMD_ENABLEGROUP_ERR_ENABLED]
 
 [CMD_ENABLEGROUP_SUCCESS]
@@ -281,9 +281,9 @@ Command groups:
 !}}
 [/CMD_LISTGROUPS_GROUPS]
 
-[CMD_RELOAD_UNKNOWN_COMMAND]
+[CMD_RELOAD_ERR_UNKNOWN_COMMAND]
 Command &quot;{{ commandName }}&quot; could not be found.
-[/CMD_RELOAD_UNKNOWN_COMMAND]
+[/CMD_RELOAD_ERR_UNKNOWN_COMMAND]
 
 [CMD_RELOAD_SUCCESS]
 {{!
@@ -301,21 +301,21 @@ Command &quot;{{ commandName }}&quot; could not be found.
 !}}
 [/CMD_PREFIX_CURRENT]
 
-[CMD_PREFIX_CHAR_LIMIT]
+[CMD_PREFIX_ERR_CHAR_LIMIT]
 Prefixes may only be up to 10 chars in length.
-[/CMD_PREFIX_CHAR_LIMIT]
+[/CMD_PREFIX_ERR_CHAR_LIMIT]
 
-[CMD_PREFIX_INVALID_CHARS]
+[CMD_PREFIX_ERR_INVALID_CHARS]
 Prefixes may not contain backticks or backslashes.
-[/CMD_PREFIX_INVALID_CHARS]
+[/CMD_PREFIX_ERR_INVALID_CHARS]
 
-[CMD_PREFIX_RESULT]
+[CMD_PREFIX_SUCCESS]
 {{!
     args.prefix === '' ?
         'Command prefix removed.' :
         `Command prefix set to \`${args.prefix}\``
 !}}
-[/CMD_PREFIX_RESULT]
+[/CMD_PREFIX_SUCCESS]
 
 [CMD_VERSION_OUTPUT]
 Current version is: **{{ version }}**
