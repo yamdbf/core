@@ -1,8 +1,9 @@
+import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { inspect } from 'util';
 import { localizable } from '../CommandDecorators';
 import { ResourceLoader } from '../../types/ResourceLoader';
+import { inspect } from 'util';
 import * as fs from 'fs';
 const Discord = require('discord.js'); // tslint:disable-line
 const Yamdbf = require('../../index'); // tslint:disable-line
@@ -27,6 +28,7 @@ export default class extends Command
 	@localizable
 	public async action(message: Message, [res]: [ResourceLoader]): Promise<any>
 	{
+		const client: Client = this.client;
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
 		if (!code)
 		{
