@@ -3,7 +3,7 @@ const { using, guildOnly, group, ownerOnly } = CommandDecorators;
 import { Middleware } from '../../bin';
 import * as util from 'util';
 
-@ownerOnly
+// @ownerOnly
 @guildOnly
 @group('test')
 export default class extends Command

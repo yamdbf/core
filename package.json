@@ -54,6 +54,6 @@
     "jsdoc": "github:zajrik/jsdoc",
     "minami": "github:zajrik/minami",
     "tslint": "^5.4.3",
-    "typescript": "^2.3.4"
+    "typescript": "^2.4.0"
   }
 }
