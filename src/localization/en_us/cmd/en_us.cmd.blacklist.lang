@@ -14,10 +14,6 @@ Only bot owners may blacklist globally.
 That user is already globally blacklisted.
 [/CMD_BLACKLIST_ERR_ALREADYGLOBAL]
 
-[CMD_BLACKLIST_GLOBALSUCCESS]
-Added {{ user }} to the global blacklist.
-[/CMD_BLACKLIST_GLOBALSUCCESS]
-
 [CMD_BLACKLIST_ERR_BADTARGET]
 You may not use this command on that person.
 [/CMD_BLACKLIST_ERR_BADTARGET]
@@ -25,6 +21,10 @@ You may not use this command on that person.
 [CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
 That user is already blacklisted in this server.
 [/CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
+
+[CMD_BLACKLIST_GLOBALSUCCESS]
+Added {{ user }} to the global blacklist.
+[/CMD_BLACKLIST_GLOBALSUCCESS]
 
 [CMD_BLACKLIST_SUCCESS]
 Added {{ user }} to the blacklist for this server.

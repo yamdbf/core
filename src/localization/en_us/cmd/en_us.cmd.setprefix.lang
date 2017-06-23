@@ -6,18 +6,18 @@
 !}}
 [/CMD_PREFIX_CURRENT]
 
-[CMD_PREFIX_CHAR_LIMIT]
+[CMD_PREFIX_ERR_CHAR_LIMIT]
 Prefixes may only be up to 10 chars in length.
-[/CMD_PREFIX_CHAR_LIMIT]
+[/CMD_PREFIX_ERR_CHAR_LIMIT]
 
-[CMD_PREFIX_INVALID_CHARS]
+[CMD_PREFIX_ERR_INVALID_CHARS]
 Prefixes may not contain backticks or backslashes.
-[/CMD_PREFIX_INVALID_CHARS]
+[/CMD_PREFIX_ERR_INVALID_CHARS]
 
-[CMD_PREFIX_RESULT]
+[CMD_PREFIX_SUCCESS]
 {{!
 	args.prefix === '' ?
 		'Command prefix removed.' :
 		`Command prefix set to \`${args.prefix}\``
 !}}
-[/CMD_PREFIX_RESULT]
+[/CMD_PREFIX_SUCCESS]

@@ -26,10 +26,10 @@ export default class extends Command
 				{ prefix: await this.client.getPrefix(message.guild) }));
 
 		if (prefix.length > 10)
-			return this.respond(message, res('CMD_PREFIX_CHAR_LIMIT'));
+			return this.respond(message, res('CMD_PREFIX_ERR_CHAR_LIMIT'));
 
 		if (/[\\`]/.test(prefix))
-			return this.respond(message, res('CMD_PREFIX_INVALID_CHARS'));
+			return this.respond(message, res('CMD_PREFIX_ERR_INVALID_CHARS'));
 
 		if (prefix === 'clear') prefix = '';
 
@@ -38,6 +38,6 @@ export default class extends Command
 				await guild.settings.set('prefix', prefix);
 		else await message.guild.storage.settings.set('prefix', prefix);
 
-		return this.respond(message, res('CMD_PREFIX_RESULT', { prefix: prefix }));
+		return this.respond(message, res('CMD_PREFIX_SUCCESS', { prefix }));
 	}
 }
