@@ -124,13 +124,73 @@ separate strings used in two separate commands into files <code>en_us.cmd.foo.la
 be used as a distinction between different lang files for the same language.</p>
 </blockquote>
 <p>This list is automatically generated and may be incomplete during development until YAMDBF 3.0.0 is finalized.</p>
-<pre class="prettyprint source"><code>[CMD_CLEARLIMIT_UNKNOWN_COMMAND]
+<pre class="prettyprint source"><code>[CMD_BLACKLIST_ERR_NOSELF]
+You can not blacklist your self.
+[/CMD_BLACKLIST_ERR_NOSELF]
+
+[CMD_BLACKLIST_ERR_NOBOT]
+Bots cannot call commands and thus do not need to be blacklisted.
+[/CMD_BLACKLIST_ERR_NOBOT]
+
+[CMD_BLACKLIST_ERR_OWNERONLY]
+Only bot owners may blacklist globally.
+[/CMD_BLACKLIST_ERR_OWNERONLY]
+
+[CMD_BLACKLIST_ERR_ALREADYGLOBAL]
+That user is already globally blacklisted.
+[/CMD_BLACKLIST_ERR_ALREADYGLOBAL]
+
+[CMD_BLACKLIST_GLOBALSUCCESS]
+Added {{ user }} to the global blacklist.
+[/CMD_BLACKLIST_GLOBALSUCCESS]
+
+[CMD_BLACKLIST_ERR_BADTARGET]
+You may not use this command on that person.
+[/CMD_BLACKLIST_ERR_BADTARGET]
+
+[CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
+That user is already blacklisted in this server.
+[/CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
+
+[CMD_BLACKLIST_SUCCESS]
+Added {{ user }} to the blacklist for this server.
+[/CMD_BLACKLIST_SUCCESS]
+
+[CMD_CLEARLIMIT_UNKNOWN_COMMAND]
 Failed to find a command with the name `{{ commandName }}`
 [/CMD_CLEARLIMIT_UNKNOWN_COMMAND]
 
 [CMD_CLEARLIMIT_SUCCESS]
 Successfully cleared role limits for command: `{{ commandName }}`
 [/CMD_CLEARLIMIT_SUCCESS]
+
+[CMD_DISABLEGROUP_ERR_NOEXIST]
+Command group &quot;{{ group }}&quot; does not exist.
+[/CMD_DISABLEGROUP_ERR_NOEXIST]
+
+[CMD_DISABLEGROUP_ERR_DISABLED]
+Command group &quot;{{ group }}&quot; is already disabled or is not allowed to be disabled.
+[/CMD_DISABLEGROUP_ERR_DISABLED]
+
+[CMD_DISABLEGROUP_SUCCESS]
+**Disabled command group &quot;{{ group }}&quot;**
+[/CMD_DISABLEGROUP_SUCCESS]
+
+[CMD_ENABLEGROUP_ERR_NOEXIST]
+Command group {{ group }} does not exist.
+[/CMD_ENABLEGROUP_ERR_NOEXIST]
+
+[CMD_ENABLEGROUP_ERR_ENABLED]
+Command group {{ group }} is already enabled.
+[/CMD_ENABLEGROUP_ERR_ENABLED]
+
+[CMD_ENABLEGROUP_SUCCESS]
+**Enabled command group &quot;{{ group }}&quot;**
+[/CMD_ENABLEGROUP_SUCCESS]
+
+[CMD_EVAL_ERR_NOCODE]
+No code provided to evaluate.
+[/CMD_EVAL_ERR_NOCODE]
 
 [CMD_HELP_COMMAND_LIST]
 Available commands: (Commands marked with `*` are server-only)
@@ -211,6 +271,16 @@ Successfully added {{!
 !}}: {{ roles }} to the limiter for command: `{{ commandName }}`
 [/CMD_LIMIT_SUCCESS]
 
+[CMD_LISTGROUPS_GROUPS]
+Command groups:
+{{!
+    args.groups
+        .split(', ')
+        .map(g => `${args.disabledGroups.split(', ').includes(g) ? '*' : ' '}${g}`)
+        .join('\n')
+!}}
+[/CMD_LISTGROUPS_GROUPS]
+
 [CMD_RELOAD_UNKNOWN_COMMAND]
 Command &quot;{{ commandName }}&quot; could not be found.
 [/CMD_RELOAD_UNKNOWN_COMMAND]
@@ -249,7 +319,27 @@ Prefixes may not contain backticks or backslashes.
 
 [CMD_VERSION_OUTPUT]
 Current version is: **{{ version }}**
-[/CMD_VERSION_OUTPUT]</code></pre>
+[/CMD_VERSION_OUTPUT]
+
+[CMD_WHITELIST_ERR_OWNERONLY]
+Only bot owners may remove a user from the global blacklist.
+[/CMD_WHITELIST_ERR_OWNERONLY]
+
+[CMD_WHITELIST_ERR_NOTGLOBAL]
+That user is not currently on the global blacklist.
+[/CMD_WHITELIST_ERR_NOTGLOBAL]
+
+[CMD_WHITELIST_ERR_NOTBLACKLISTED]
+That user is not currently blacklisted in this server.
+[/CMD_WHITELIST_ERR_NOTBLACKLISTED]
+
+[CMD_WHITELIST_GLOBALSUCCESS]
+Removed {{ user }} from the global blacklist.
+[/CMD_WHITELIST_GLOBALSUCCESS]
+
+[CMD_WHITELIST_SUCCESS]
+Removed {{ user }} from the blacklist for this server.
+[/CMD_WHITELIST_SUCCESS]</code></pre>
 </article>
 
 </section>
