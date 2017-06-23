@@ -202,11 +202,11 @@ export class CommandDispatcher<T extends Client>
 
 			rateLimit.setNotified();
 			if (!command) message.channel.send(
-				`You have used too many commands and may not use any more for **${
-					Time.difference(rateLimit.expires, Date.now()).toString()}**.`);
+				res('DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL',
+					{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
 			else message.channel.send(
-				`You have used this command too many times and may not use it again for **${
-					Time.difference(rateLimit.expires, Date.now()).toString()}**.`);
+				res('DISPATCHER_ERR_RATELIMIT_EXCEED',
+					{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
 		}
 		return false;
 	}
