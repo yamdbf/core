@@ -1,6 +1,8 @@
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { inspect } from 'util';
+import { localizable } from '../CommandDecorators';
+import { ResourceLoader } from '../../types/ResourceLoader';
 import * as fs from 'fs';
 const Discord = require('discord.js'); // tslint:disable-line
 const Yamdbf = require('../../index'); // tslint:disable-line
@@ -22,12 +24,13 @@ export default class extends Command
 		});
 	}
 
-	public async action(message: Message): Promise<any>
+	@localizable
+	public async action(message: Message, [res]: [ResourceLoader]): Promise<any>
 	{
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
 		if (!code)
 		{
-			this.respond(message, '**ERROR:** ```xl\nNo code provided to evaluate.\n```');
+			this.respond(message, `**ERROR:** \`\`\`xl\n${res('CMD_EVAL_ERR_NOCODE')}\n\`\`\``);
 			return;
 		}
 
@@ -45,11 +48,11 @@ export default class extends Command
 		}
 		if (evaled instanceof Promise)
 		{
-			evaled.then(res =>
+			evaled.then(result =>
 			{
-				if (typeof res !== 'string') res = inspect(res, { depth: 0 });
+				if (typeof result !== 'string') result = inspect(result, { depth: 0 });
 				start.edit(
-					`**INPUT:**\n\`\`\`ts\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(res)}\n\`\`\``);
+					`**INPUT:**\n\`\`\`ts\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(result)}\n\`\`\``);
 			})
 			.catch(err =>
 			{

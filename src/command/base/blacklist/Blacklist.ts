@@ -2,8 +2,8 @@ import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { User, GuildMember } from 'discord.js';
-import * as CommandDecorators from '../../CommandDecorators';
-const { using } = CommandDecorators;
+import { using, localizable } from '../../CommandDecorators';
+import { ResourceLoader } from '../../../types/ResourceLoader';
 
 export default class extends Command
 {
@@ -21,26 +21,26 @@ export default class extends Command
 
 	@using(Middleware.resolve({ '<user>': 'User' }))
 	@using(Middleware.expect({ '<user>': 'User' }))
-	public async action(message: Message, [user, global]: [User, string]): Promise<Message | Message[]>
+	@localizable
+	public async action(message: Message, [res, user, global]: [ResourceLoader, User, string]): Promise<Message | Message[]>
 	{
 		if (user.id === message.author.id)
-			return message.channel.send(`I don't think you want to blacklist yourself.`);
+			return message.channel.send(res('CMD_BLACKLIST_ERR_NOSELF'));
 
-		if (user.bot) return message.channel.send(
-			`Bots already cannot call commands and do not need to be blacklisted.`);
+		if (user.bot) return message.channel.send(res('CMD_BLACKLIST_ERR_NOBOT'));
 
 		if (global === 'global')
 		{
 			if (!this.client.isOwner(message.author))
-				return message.channel.send('Only bot owners may blacklist globally.');
+				return message.channel.send(res('CMD_BLACKLIST_ERR_OWNERONLY'));
 
 			const globalBlacklist: any = await this.client.storage.get('blacklist') || {};
 			if (globalBlacklist[user.id])
-				return message.channel.send('That user is already globally blacklisted.');
+				return message.channel.send(res('CMD_BLACKLIST_ERR_ALREADYGLOBAL'));
 
 			await this.client.storage.set(`blacklist.${user.id}`, true);
 			this.client.emit('blacklistAdd', user, true);
-			return message.channel.send(`Added ${user.tag} to the global blacklist.`);
+			return message.channel.send(res('CMD_BLACKLIST_GLOBALSUCCESS', { user: user.tag }));
 		}
 
 		let member: GuildMember;
@@ -48,14 +48,14 @@ export default class extends Command
 		catch (err) {}
 
 		if (member && member.permissions.has('ADMINISTRATOR'))
-			return message.channel.send('You may not use this command on that person.');
+			return message.channel.send(res('CMD_BLACKLIST_ERR_BADTARGET'));
 
 		const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
 		if (guildBlacklist[user.id])
-			return message.channel.send('That user is already blacklisted in this server.');
+			return message.channel.send(res('CMD_BLACKLIST_ERR_ALREADYBLACKLISTED'));
 
 		await message.guild.storage.settings.set(`blacklist.${user.id}`, true);
 		this.client.emit('blacklistAdd', user, false);
-		return message.channel.send(`Added ${user.tag} to this server's blacklist.`);
+		return message.channel.send(res('CMD_BLACKLIST_SUCCESS', { user: user.tag }));
 	}
 }

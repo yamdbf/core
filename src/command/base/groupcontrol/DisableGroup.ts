@@ -1,8 +1,8 @@
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
-import * as CommandDecorators from '../../CommandDecorators';
-const { using } = CommandDecorators;
+import { using, localizable } from '../../CommandDecorators';
+import { ResourceLoader } from '../../../types/ResourceLoader';
 
 export default class extends Command
 {
@@ -19,11 +19,12 @@ export default class extends Command
 	}
 
 	@using(Middleware.expect({ '<group>': 'String' }))
-	public async action(message: Message, [group]: [string]): Promise<Message | Message[]>
+	@localizable
+	public async action(message: Message, [res, group]: [ResourceLoader, string]): Promise<Message | Message[]>
 	{
 		const err: { [error: string]: string } = {
-			NO_EXIST: `Command group "${group}" does not exist.`,
-			DISABLED: `Command group "${group}" is already disabled or is not allowed to be disabled.`
+			NO_EXIST: res('CMD_DISABLEGROUP_ERR_NOEXIST', { group }),
+			DISABLED: res('CMD_DISABLEGROUP_ERR_DISABLED', { group })
 		};
 
 		if (!this.client.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
@@ -34,6 +35,6 @@ export default class extends Command
 		disabledGroups.push(group);
 		await message.guild.storage.settings.set('disabledGroups', disabledGroups);
 
-		this.respond(message, `**Disabled command group "${group}"**`);
+		this.respond(message, res('CMD_DISABLEGROUP_SUCCESS', { group }));
 	}
 }

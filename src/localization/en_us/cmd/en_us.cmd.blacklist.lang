@@ -1,0 +1,31 @@
+[CMD_BLACKLIST_ERR_NOSELF]
+You can not blacklist your self.
+[/CMD_BLACKLIST_ERR_NOSELF]
+
+[CMD_BLACKLIST_ERR_NOBOT]
+Bots cannot call commands and thus do not need to be blacklisted.
+[/CMD_BLACKLIST_ERR_NOBOT]
+
+[CMD_BLACKLIST_ERR_OWNERONLY]
+Only bot owners may blacklist globally.
+[/CMD_BLACKLIST_ERR_OWNERONLY]
+
+[CMD_BLACKLIST_ERR_ALREADYGLOBAL]
+That user is already globally blacklisted.
+[/CMD_BLACKLIST_ERR_ALREADYGLOBAL]
+
+[CMD_BLACKLIST_GLOBALSUCCESS]
+Added {{ user }} to the global blacklist.
+[/CMD_BLACKLIST_GLOBALSUCCESS]
+
+[CMD_BLACKLIST_ERR_BADTARGET]
+You may not use this command on that person.
+[/CMD_BLACKLIST_ERR_BADTARGET]
+
+[CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
+That user is already blacklisted in this server.
+[/CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
+
+[CMD_BLACKLIST_SUCCESS]
+Added {{ user }} to the blacklist for this server.
+[/CMD_BLACKLIST_SUCCESS]

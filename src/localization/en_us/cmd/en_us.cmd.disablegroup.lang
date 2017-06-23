@@ -1,0 +1,11 @@
+[CMD_DISABLEGROUP_ERR_NOEXIST]
+Command group "{{ group }}" does not exist.
+[/CMD_DISABLEGROUP_ERR_NOEXIST]
+
+[CMD_DISABLEGROUP_ERR_DISABLED]
+Command group "{{ group }}" is already disabled or is not allowed to be disabled.
+[/CMD_DISABLEGROUP_ERR_DISABLED]
+
+[CMD_DISABLEGROUP_SUCCESS]
+**Disabled command group "{{ group }}"**
+[/CMD_DISABLEGROUP_SUCCESS]

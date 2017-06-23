@@ -1,0 +1,11 @@
+[CMD_ENABLEGROUP_ERR_NOEXIST]
+Command group {{ group }} does not exist.
+[/CMD_ENABLEGROUP_ERR_NOEXIST]
+
+[CMD_ENABLEGROUP_ERR_ENABLED]
+Command group {{ group }} is already enabled.
+[/CMD_ENABLEGROUP_ERR_ENABLED]
+
+[CMD_ENABLEGROUP_SUCCESS]
+**Enabled command group "{{ group }}"**
+[/CMD_ENABLEGROUP_SUCCESS]
