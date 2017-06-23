@@ -4,7 +4,7 @@ import { Middleware } from '../../bin';
 import * as util from 'util';
 
 // @ownerOnly
-@guildOnly
+// @guildOnly
 @group('test')
 export default class extends Command
 {
@@ -20,7 +20,7 @@ export default class extends Command
 	}
 
 	// @using((message, args) => [message, args.map(a => a.toUpperCase())])
-	@using(Middleware.resolve({ '<test>': 'Member' }))
+	@using(Middleware.expect({ '<test>': ['foo', 'bar', 'baz'] }))
 	// @using(Middleware.expect({ '<foo|bar|baz>': ['foo', 'bar', 'baz'] }))
 	public action(message: Message, args: string[]): void
 	{

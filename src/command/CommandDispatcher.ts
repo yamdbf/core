@@ -1,7 +1,7 @@
 import { PermissionResolvable, TextChannel, User } from 'discord.js';
 import { RateLimiter } from './RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
-import { ResourceLoader } from '../../bin/types/ResourceLoader';
+import { ResourceLoader } from '../types/ResourceLoader';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../types/GuildStorage';
 import { Command } from '../command/Command';

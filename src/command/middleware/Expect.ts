@@ -3,6 +3,8 @@ import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ExpectArgType } from '../../types/ExpectArgType';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
+import { Lang } from '../../localization/Lang';
+import { ResourceLoader } from '../../types/ResourceLoader';
 import { GuildMember, Role, TextChannel, User } from 'discord.js';
 
 export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgType }): MiddlewareFunction
@@ -13,6 +15,9 @@ export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgT
 		const types: ExpectArgType[] = names.map(a => argTypes[a]);
 
 		const dm: boolean = message.channel.type !== 'text';
+		const lang: string = dm ? this.client.defaultLang
+			:  await message.guild.storage.settings.get('lang');
+		const res: ResourceLoader = Lang.createResourceLoader(lang);
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 
@@ -22,14 +27,15 @@ export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgT
 			const type: ExpectArgType = types[index];
 
 			if (dm && !(type instanceof Array) && !['String', 'Number', 'User', 'Any'].includes(<string> type))
-				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
+				throw new Error(res('EXPECT_ERR_DM_TYPES', { name, type }));
 
 			if (typeof arg === 'undefined' || arg === null)
 			{
-				let error: string = `Missing or null value for arg: \`${name}\``;
-				if (type instanceof Array) error += `\nExpected one of: \`${type.join('`, `')}\``;
-				else error += `, expected \`${type}\``;
-				throw new Error(error += `\n${usage}`);
+				throw new Error(res('EXPECT_ERR_MISSING_VALUE', {
+					type: type instanceof Array ? type.map(t => `\`${t}\``).join(', ') : `\`${type}\``,
+					name,
+					usage
+				}));
 			}
 
 			if (type === 'Any') continue;
@@ -37,45 +43,48 @@ export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgT
 			if (type instanceof Array)
 			{
 				if (!type.map(a => a.toLowerCase()).includes(arg.toLowerCase()))
-					throw new Error([
-						`in arg \`${name}\`: \`${arg}\` is not a valid option`,
-						`${usage}\nValid options for arg \`${name}\`: \`${type.join('`, `')}\``
-					].join('\n'));
+					throw new Error(res('EXPECT_ERR_INVALID_OPTION',
+						{ type: type.map(t => `\`${t}\``).join(', '), name, arg, usage }));
 			}
 			else if (type === 'String')
 			{
 				if (typeof arg !== 'string')
-					throw new Error(`in arg \`${name}\`: \`String\` expected, got \`${arg.constructor.name}\``);
+					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+						{ name, expected: 'String', type: arg.constructor.name }));
 			}
 			else if (type === 'Number')
 			{
 				if (!isNaN(arg) && !isFinite(arg))
-					throw new Error(`in arg \`${name}\`: \`Number\` expected, got \`${
-						arg === Infinity ? Infinity : arg.constructor.name}\``);
+					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+						{ name, expected: 'Number', type: arg === Infinity ? 'Infinity' : arg.constructor.name }));
 			}
 			else if (type === 'User')
 			{
 				if (!(arg instanceof User))
-					throw new Error(`in arg \`${name}\`: \`User\` expected, got \`${arg.constructor.name}\``);
+					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+						{ name, expected: 'User', type: arg.constructor.name }));
 			}
 			else if (type === 'Member')
 			{
 				if (!(arg instanceof GuildMember))
-					throw new Error(`in arg \`${name}\`: \`GuildMember\` expected, got \`${arg.constructor.name}\``);
+					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+						{ name, expected: 'GuildMember', type: arg.constructor.name }));
 			}
 			else if (type === 'Channel')
 			{
 				if (!(arg instanceof TextChannel))
-					throw new Error(`in arg \`${name}\`: \`TextChannel\` expected, got \`${arg.constructor.name}\``);
+					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+						{ name, expected: 'TextChannel', type: arg.constructor.name }));
 			}
 			else if (type === 'Role')
 			{
 				if (!(arg instanceof Role))
-					throw new Error(`in arg \`${name}\`: \`Role\` expected, got \`${arg.constructor.name}\``);
+					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+						{ name, expected: 'Role', type: arg.constructor.name }));
 			}
 			else
 			{
-				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not a valid argument type.`);
+				throw new Error(res('EXPECT_ERR_INVALID_TYPE', { name, type }));
 			}
 		}
 

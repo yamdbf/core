@@ -1,0 +1,26 @@
+[EXPECT_ERR_DM_TYPES]
+in arg `{{ name }}`: Type `{{ type }}` is not usable within DM-capable commands.
+[/EXPECT_ERR_DM_TYPES]
+
+[EXPECT_ERR_MISSING_VALUE]
+Missing or null value for arg: `{{ name }}`{{!
+	args.type.split(', ').length > 1
+		? `\nExpected one of: ${args.type}`
+		: `, expected ${args.type}`
+!}}
+{{ usage }}
+[/EXPECT_ERR_MISSING_VALUE]
+
+[EXPECT_ERR_INVALID_OPTION]
+in arg `{{ name }}`: `{{ arg }}` is not a valid option
+{{ usage }}
+Valid options for arg `{{ name }}`: {{ type }}
+[/EXPECT_ERR_INVALID_OPTION]
+
+[EXPECT_ERR_EXPECTED_TYPE]
+in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
+[/EXPECT_ERR_EXPECTED_TYPE]
+
+[EXPECT_ERR_INVALID_TYPE]
+in arg `{{ name }}`: Type `{{ type }}` is not a valid argument type
+[/EXPECT_ERR_INVALID_TYPE]
