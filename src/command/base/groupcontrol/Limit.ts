@@ -31,8 +31,8 @@ export default class extends Command
 			Util.normalize(commandName) === Util.normalize(c.name));
 
 		if (!command) return this.respond(message,
-			res('CMD_LIMIT_UNKNOWN_COMMAND', { commandName: commandName }));
-		if (command.group === 'base') return this.respond(message, res('CMD_LIMIT_INVALID_GROUP'));
+			res('CMD_LIMIT_ERR_UNKNOWN_COMMAND', { commandName: commandName }));
+		if (command.group === 'base') return this.respond(message, res('CMD_LIMIT_ERR_INVALID_GROUP'));
 
 		const storage: GuildStorage = message.guild.storage;
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
@@ -45,14 +45,14 @@ export default class extends Command
 			let foundRole: Role = message.guild.roles.find(role => Util.normalize(role.name) === Util.normalize(name));
 			if (!foundRole) invalidRoles.push(name);
 			else if (foundRole && newLimit.includes(foundRole.id))
-				message.channel.send(res('CMD_LIMIT_ALREADY_LIMITER',
+				message.channel.send(res('CMD_LIMIT_ERR_ALREADY_LIMITER',
 					{ roleName: foundRole.name, commandName: command.name }));
 			else roles.push(foundRole);
 		}
 
-		if (invalidRoles.length > 0) message.channel.send(res('CMD_LIMIT_INVALID_ROLE',
+		if (invalidRoles.length > 0) message.channel.send(res('CMD_LIMIT_ERR_INVALID_ROLE',
 			{ invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
-		if (roles.length === 0) return this.respond(message, res('CMD_LIMIT_NO_ROLES'));
+		if (roles.length === 0) return this.respond(message, res('CMD_LIMIT_ERR_NO_ROLES'));
 
 		newLimit = newLimit.concat(roles.map(role => role.id));
 		limitedCommands[command.name] = newLimit;
