@@ -183,9 +183,22 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 						normalizeUser(a.username).includes(normalized)
 							|| normalizeUser(a.tag).includes(normalized));
 
-					if (users.size > 1) throw String(`Found multiple potential matches for arg \`${name}\`:\n${
-						users.map(a => `\`${a.tag}\``).join(', ')
-						}\nPlease refine your search, or consider using an ID/mention\n${usage}`);
+					if (users.size > 1)
+					{
+						let error: string = `Found multiple potential matches for arg \`${name}\`:\n`;
+						if (users.size > 5)
+						{
+							const slice: User[] = users.array().slice(0, 5);
+							error += `${slice.map(a => `\`${a.tag}\``).join(', ')}, `
+								+ `plus ${users.size - slice.length} more.\n`;
+						}
+						else
+						{
+							error += `${users.map(a => `\`${a.tag}\``).join(', ')}\n`;
+						}
+						error += `Please refine your search, or consider using an ID/mention\n${usage}`;
+						throw String(error);
+					}
 
 					user = users.first();
 					if (!user) throw new Error(
