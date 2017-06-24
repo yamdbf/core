@@ -414,7 +414,22 @@ in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
 
 [EXPECT_ERR_INVALID_TYPE]
 in arg `{{ name }}`: Type `{{ type }}` is not a valid argument type
-[/EXPECT_ERR_INVALID_TYPE]</code></pre>
+[/EXPECT_ERR_INVALID_TYPE]
+
+[RESOLVE_ERR_MULTIPLE_USER_RESULTS]
+Found multiple potential matches for arg `{{ name }}`:
+{{!
+    const users = args.users.split(', ');
+    if (users.length > 5)
+    {
+        const slice = users.slice(0, 5);
+        return `${slice.join(', ')}, plus ${users.length - slice.length} more.`
+    }
+    else return users.join(', ');
+!}}
+Please refine your search, or consider using an ID/mention
+{{ usage }}
+[/RESOLVE_ERR_MULTIPLE_USER_RESULTS]</code></pre>
 </article>
 
 </section>
