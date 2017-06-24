@@ -20,13 +20,11 @@ export default class extends Command
 	}
 
 	// @using((message, args) => [message, args.map(a => a.toUpperCase())])
-	@using(Middleware.expect({ '<test>': ['foo', 'bar', 'baz'] }))
+	@using(Middleware.resolve({ '<test>': 'User' }))
 	// @using(Middleware.expect({ '<foo|bar|baz>': ['foo', 'bar', 'baz'] }))
 	public action(message: Message, args: string[]): void
 	{
 		message.channel.send(args.join(' ') || 'MISSING ARGS');
 		this.logger.debug('Command:test', util.inspect(this.group));
-		// this.logger.debug('Command:test', this.translation.al_bhed.desc);
-		// this.logger.debug('Command:test', this.translation.al_bhed.info);
 	}
 }

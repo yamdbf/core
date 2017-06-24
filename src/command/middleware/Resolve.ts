@@ -1,7 +1,9 @@
 import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
+import { ResourceLoader } from '../../types/ResourceLoader';
 import { Client } from '../../client/Client';
+import { Lang } from '../../localization/Lang';
 import { Message } from '../../types/Message';
 import { Util } from '../../util/Util';
 import { Time } from '../../util/Time';
@@ -18,6 +20,9 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 			text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
 
 		const dm: boolean = message.channel.type !== 'text';
+		const lang: string = dm ? this.client.defaultLang
+			:  await message.guild.storage.settings.get('lang');
+		const res: ResourceLoader = Lang.createResourceLoader(lang);
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
@@ -94,21 +99,8 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 								.map(a => <[string, User]> [a.id, a.user])));
 
 					if (users.size > 1)
-					{
-						let error: string = `Found multiple potential matches for arg \`${name}\`:\n`;
-						if (users.size > 5)
-						{
-							const slice: User[] = users.array().slice(0, 5);
-							error += `${slice.map(a => `\`${a.tag}\``).join(', ')}, `
-								+ `plus ${users.size - slice.length} more.\n`;
-						}
-						else
-						{
-							error += `${users.map(a => `\`${a.tag}\``).join(', ')}\n`;
-						}
-						error += `Please refine your search, or consider using an ID/mention\n${usage}`;
-						throw String(error);
-					}
+						throw String(res('RESOLVE_ERR_MULTIPLE_USER_RESULTS',
+							{ name, usage, users: users.map(u => `\`${u.tag}\``).join(', ') }));
 
 					user = users.first();
 					if (!user) throw new Error(
