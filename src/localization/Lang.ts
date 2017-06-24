@@ -195,7 +195,7 @@ export class Lang
 
 				let result: string;
 				try { result = script(data); }
-				catch (err) { throw new Error(`Error in embedded localization script for: ${key}. Error: ${err}`); }
+				catch (err) { throw new Error(`in embedded localization script for: ${lang}::${key}\n${err}`); }
 
 				// Try to coerce an implicit return
 				if (typeof result === 'undefined')
