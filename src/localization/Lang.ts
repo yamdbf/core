@@ -211,7 +211,9 @@ export class Lang
 			}
 		}
 
-		return loadedString.replace(maybeTemplates, '');
+		return loadedString
+			.replace(maybeTemplates, '')
+			.replace(/\\n/g, '\n');
 	}
 
 	/**
