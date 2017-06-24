@@ -207,7 +207,9 @@ export class Lang
 					}
 					catch (err) {}
 
-				loadedString = loadedString.replace(scriptData, result);
+				if (/^{{!([\s\S]+)!}}[\t ]*\n/.test(scriptData) && result !== '')
+					loadedString = loadedString.replace(scriptData, `${result}\n`);
+				else loadedString = loadedString.replace(scriptData, result);
 			}
 		}
 
