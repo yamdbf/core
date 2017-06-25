@@ -90,7 +90,7 @@ then an implicit return is not possible
 Template scripts receive two parameter values within their scope at runtime, the first of which is the {@link TemplateData}
 object passed to the resource loader that is loading the string resource containing the template script in question. This
 parameter is called `args`. The second parameter, called `res`, is a {@link ResourceLoader} function that can be used
-for loading other string resources for the same language in case you need to nest localizable strings
+for loading other string resources for the same language in case you need to nest localizable strings.
 
 It's easiest to imagine that the script itself is surrounded by an anonymous function declaration taking the parameters
 `args`, and `res` with simple arrow-function style implicit returns converted explicitly. Using the example script from above:
