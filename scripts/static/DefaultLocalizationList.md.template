@@ -40,10 +40,10 @@ Comments are removed when parsing. Any text not enclosed within key-tags is inhe
 and is ignored when parsing.
 
 ## Templating
-Unrelated to the `.lang` file format, but a key part of the localization system as a whole, is the templating system.
-Any token surrounded with `{{ }}` or `{{ ?}}` is a template, and can be replaced at runtime via matching keys within
-a {@link TokenReplaceData} object passed to `Lang.res()` or a ResourceLoader from `Lang.createResourceLoader()`.
-For example:
+Unrelated to the `.lang` file format, but arguably the most important part of the localization system as a whole,
+is the templating system. Any token surrounded with `{{ }}` or `{{ ?}}` is a template, and can be replaced at runtime
+via matching keys within a {@link TemplateData} object passed to `Lang.res()` or a ResourceLoader from
+`Lang.createResourceLoader()`. For example:
 ```
 [TEMPLATE_EXAMPLE]
 foo {{ barTemplate }} baz
@@ -87,13 +87,16 @@ possible in a manner similar to arrow functions. If the script is complex enough
 then an implicit return is not possible
 
 
-Template scripts receive a single `args` object within their context that is the {@link TokenReplaceData} object passed to the
-resource loader function that is loading the string resource. It's easiest to imagine that the script itself is surrounded
-by an anonymous function declaration taking a parameter called `args` with simple arrow-function style implicit returns
-converted explicitly. Using the example script from above:
+Template scripts receive two parameter values within their scope at runtime, the first of which is the {@link TemplateData}
+object passed to the resource loader that is loading the string resource containing the template script in question. This
+parameter is called `args`. The second parameter, called `res`, is a {@link ResourceLoader} function that can be used
+for loading other string resources for the same language in case you need to nest localizable strings
+
+It's easiest to imagine that the script itself is surrounded by an anonymous function declaration taking the parameters
+`args`, and `res` with simple arrow-function style implicit returns converted explicitly. Using the example script from above:
 ```
 // {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
-function(args) {
+function(args, res) {
 	return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
 }
 ```

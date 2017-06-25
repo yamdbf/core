@@ -25,12 +25,16 @@ Duration examples: `10m`, `2h`, `1.5d`
 [/RESOLVE_ERR_RESOLVE_DURATION]
 
 [RESOLVE_ERR_RESOLVE_TYPE_ID]
-in arg `{{ name }}`: Failed to find a {{ type }} with ID `{{ arg }}`
+in arg `{{ name }}`: Failed to find a {{!
+	res('RESOLVE_TYPE', args)
+!}} with ID `{{ arg }}`
 Usage: `{{ usage }}`
 [/RESOLVE_ERR_RESOLVE_TYPE_ID]
 
 [RESOLVE_ERR_RESOLVE_TYPE_TEXT]
-in arg `{{ name }}`: Failed to find a {{ type }} containing the text `{{ arg }}`
+in arg `{{ name }}`: Failed to find a {{!
+	res('RESOLVE_TYPE', args)
+!}} containing the text `{{ arg }}`
 Usage: `{{ usage }}`
 [/RESOLVE_ERR_RESOLVE_TYPE_TEXT]
 

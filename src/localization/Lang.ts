@@ -186,15 +186,16 @@ export class Lang
 		const scriptTemplates: RegExp = new RegExp(scriptTemplate, 'gm');
 		if (scriptTemplates.test(loadedString))
 		{
+			const resourceLoader: ResourceLoader = Lang.createResourceLoader(lang);
 			for (const scriptData of loadedString.match(scriptTemplates))
 			{
 				let functionBody: string =
 					scriptData.match(scriptTemplate)[1] || scriptData.match(scriptTemplate)[2];
 
-				let script: Function = new Function('args', functionBody);
+				let script: Function = new Function('args', 'res', functionBody);
 
 				let result: string;
-				try { result = script(data); }
+				try { result = script(data, resourceLoader); }
 				catch (err) { throw new Error(`in embedded localization script for: ${lang}::${key}\n${err}`); }
 
 				// Try to coerce an implicit return
@@ -202,8 +203,8 @@ export class Lang
 					try
 					{
 						functionBody = `return ${functionBody.replace(/^[\s]+/, '')}`;
-						script = new Function('args', functionBody);
-						result = script(data);
+						script = new Function('args', 'res', functionBody);
+						result = script(data, resourceLoader);
 					}
 					catch (err) {}
 
