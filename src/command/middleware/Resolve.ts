@@ -46,7 +46,8 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 			}
 
 			if (dm && !['String', 'Number', 'Duration', 'User'].includes(type))
-				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
+				throw new Error(
+					`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
 
 			if (type === 'String')
 			{
@@ -78,7 +79,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 					try { user = await message.client.fetchUser(arg.match(idRegex)[1]); }
 					catch (err) {}
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_USER_ID', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
 				}
 				else
 				{
@@ -98,7 +99,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 					user = users.first();
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_USER_TEXT', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
 				}
 				args[index] = user;
 			}
@@ -111,7 +112,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 					try { member = await message.guild.fetchMember(arg.match(idRegex)[1]); }
 					catch (err) {}
 					if (!member) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_MEMBER_ID', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
 				}
 				else
 				{
@@ -127,7 +128,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 					member = members.first();
 					if (!member) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_MEMBER_TEXT', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
 				}
 				args[index] = member;
 			}
@@ -140,7 +141,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 				{
 					user = bannedUsers.get(arg.match(idRegex)[1]);
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_BANNEDUSER_ID', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
 				}
 				else
 				{
@@ -155,7 +156,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 					user = users.first();
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_BANNEDUSER_TEXT', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
 				}
 				args[index] = user;
 			}
@@ -169,7 +170,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 					const id: string = arg.match(channelRegex)[1];
 					channel = <TextChannel> message.guild.channels.get(id);
 					if (!channel) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_CHANNEL_ID', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
 				}
 				else
 				{
@@ -185,7 +186,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 					channel = channels.first();
 					if (!channel) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_CHANNEL_TEXT', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
 				}
 				args[index] = channel;
 			}
@@ -199,7 +200,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 					const id: string = arg.match(roleRegex)[1];
 					role = message.guild.roles.get(id);
 					if (!role) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_ROLE_ID', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
 				}
 				else
 				{
@@ -213,7 +214,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 					role = roles.first();
 					if (!role) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_ROLE_TEXT', { name, arg, usage }));
+						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
 				}
 				args[index] = role;
 			}
