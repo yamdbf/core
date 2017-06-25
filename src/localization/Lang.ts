@@ -37,6 +37,7 @@ export class Lang
 	 */
 	public static get langs(): { [lang: string]: Language }
 	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 		return Lang._instance.langs;
 	}
 
@@ -46,6 +47,8 @@ export class Lang
 	 */
 	public static get langNames(): string[]
 	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
 		let langs: Set<string> = new Set();
 		for (const commandName of Object.keys(Lang._instance.commandInfo))
 			for (const lang of Object.keys(Lang._instance.commandInfo[commandName]))
@@ -72,7 +75,8 @@ export class Lang
 	 */
 	public static loadLocalizations(): void
 	{
-		if (!Lang._instance) return;
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
 		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\..+)?\.lang/;
 
 		let langs: { [key: string]: string[] } = {};
@@ -113,7 +117,7 @@ export class Lang
 	 */
 	public static loadCommandLocalizations(): void
 	{
-		if (!Lang._instance) return;
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 
 		for (const command of Lang._instance.client.commands.values())
 		{
@@ -141,7 +145,9 @@ export class Lang
 	 */
 	public static getCommandInfo(command: Command, lang: string): LocalizedCommandInfo
 	{
-		if (!command) return null;
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
+		if (!command) throw new Error('A Command must be given for which to get Command info.');
 		let desc: string, info: string, usage: string;
 		if (!Lang._instance.commandInfo[command.name]
 			|| (Lang._instance.commandInfo[command.name]
