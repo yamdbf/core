@@ -19,7 +19,7 @@ export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgT
 			:  await message.guild.storage.settings.get('lang');
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
-		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
+		const usage: string = Lang.getCommandInfo(this, lang).usage.replace('<prefix>', prefix);
 
 		for (const [index, name] of names.entries())
 		{
