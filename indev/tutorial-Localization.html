@@ -411,20 +411,20 @@ Valid options for arg `{{ name }}`: {{ type }}
 in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
 [/EXPECT_ERR_EXPECTED_TYPE]
 
-[RESOLVE_ERR_MULTIPLE_USER_RESULTS]
-Found multiple potential matches for arg `{{ name }}`:
+[RESOLVE_TYPE]
+## Only translate the return values here
 {{!
-    const users = args.users.split(', ');
-    if (users.length > 5)
+    switch (args.type)
     {
-        const slice = users.slice(0, 5);
-        return `${slice.join(', ')}, plus ${users.length - slice.length} more.`
+        case 'User': return 'user';
+        case 'Member': return 'member';
+        case 'BannedUser': return 'banned user';
+        case 'Channel': return 'channel';
+        case 'Role': return 'role';
+        default: return;
     }
-    else return users.join(', ');
 !}}
-Please refine your search, or consider using an ID/mention
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_MULTIPLE_USER_RESULTS]
+[/RESOLVE_TYPE]
 
 [RESOLVE_ERR_RESOLVE_NUMBER]
 in arg `{{ name }}`: `{{ arg }}` could not be resolved to a number.
@@ -437,45 +437,30 @@ Usage: `{{ usage }}`
 Duration examples: `10m`, `2h`, `1.5d`
 [/RESOLVE_ERR_RESOLVE_DURATION]
 
-[RESOLVE_ERR_RESOLVE_USER_ID]
-in arg `{{ name }}`: Failed to find a user with ID `{{ arg }}`
+[RESOLVE_ERR_RESOLVE_TYPE_ID]
+in arg `{{ name }}`: Failed to find a {{ type }} with ID `{{ arg }}`
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_USER_ID]
+[/RESOLVE_ERR_RESOLVE_TYPE_ID]
 
-[RESOLVE_ERR_RESOLVE_USER_TEXT]
-in arg `{{ name }}`: Failed to find a user containing the text `{{ arg }}`
+[RESOLVE_ERR_RESOLVE_TYPE_TEXT]
+in arg `{{ name }}`: Failed to find a {{ type }} containing the text `{{ arg }}`
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_USER_TEXT]
+[/RESOLVE_ERR_RESOLVE_TYPE_TEXT]
 
-[RESOLVE_ERR_RESOLVE_MEMBER_ID]
-in arg `{{ name }}`: Failed to find a member with the ID `{{ arg }}`
+[RESOLVE_ERR_MULTIPLE_USER_RESULTS]
+Found multiple potential matches for arg `{{ name }}`:
+{{!
+    const users = args.users.split(', ');
+    if (users.length > 5)
+    {
+        const slice = users.slice(0, 5);
+        return `${slice.join(', ')}, plus ${users.length - slice.length} more.`
+    }
+    else return users.join(', ');
+!}}
+Please refine your search or consider using an ID/mention
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_MEMBER_ID]
-
-[RESOLVE_ERR_RESOLVE_MEMBER_TEXT]
-in arg `{{ name }}`: Failed to find a member containing the text `{{ arg }}`
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_MEMBER_TEXT]
-
-[RESOLVE_ERR_RESOLVE_BANNEDUSER_ID]
-in arg `{{ name }}`: Failed to find a banned user with the ID `{{ arg }}`
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_BANNEDUSER_ID]
-
-[RESOLVE_ERR_RESOLVE_BANNEDUSER_TEXT]
-in arg `{{ name }}`: Failed to find a banned user containing the text `{{ arg }}`
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_BANNEDUSER_TEXT]
-
-[RESOLVE_ERR_RESOLVE_CHANNEL_ID]
-in arg `{{ name }}`: Failed to find a channel with the ID `{{ arg }}`
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_CHANNEL_ID]
-
-[RESOLVE_ERR_RESOLVE_CHANNEL_TEXT]
-in arg `{{ name }}`: Failed to find a channel containing the text `{{ arg }}`
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_CHANNEL_TEXT]
+[/RESOLVE_ERR_MULTIPLE_USER_RESULTS]
 
 [RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -488,19 +473,9 @@ Found multiple potential matches for arg `{{ name }}`:
     }
     else return channels.join(', ');
 !}}
-Please refine your search, or consider using an ID/channel link
+Please refine your search or consider using an ID/channel link
 Usage: `{{ usage }}`
 [/RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS]
-
-[RESOLVE_ERR_RESOLVE_ROLE_ID]
-in arg `{{ name }}`: Failed to find a role with the ID `{{ arg }}`
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_ROLE_ID]
-
-[RESOLVE_ERR_RESOLVE_ROLE_TEXT]
-in arg `{{ name }}`: Failed to find a role containing the text `{{ arg }}`
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_ROLE_TEXT]
 
 [RESOLVE_ERR_MULTIPLE_ROLE_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -513,7 +488,7 @@ Found multiple potential matches for arg `{{ name }}`:
     }
     else return roles.join(', ');
 !}}
-Please refine your search, or consider using an ID/role mention
+Please refine your search or consider using an ID/role mention
 Usage: `{{ usage }}`
 [/RESOLVE_ERR_MULTIPLE_ROLE_RESULTS]</code></pre>
 </article>
