@@ -390,6 +390,7 @@ That command is for servers only. Try saying &quot;help&quot; to view a list of 
 [/DISPATCHER_ERR_MISSING_ROLES]
 
 [EXPECT_ERR_DM_TYPES]
+## Developer error message
 in arg `{{ name }}`: Type `{{ type }}` is not usable within DM-capable commands.
 [/EXPECT_ERR_DM_TYPES]
 
@@ -399,20 +400,22 @@ Missing or null value for arg: `{{ name }}`{{!
         ? `\nExpected one of: ${args.type}`
         : `, expected ${args.type}`
 !}}
-{{ usage }}
+Usage: `{{ usage }}`
 [/EXPECT_ERR_MISSING_VALUE]
 
 [EXPECT_ERR_INVALID_OPTION]
 in arg `{{ name }}`: `{{ arg }}` is not a valid option
-{{ usage }}
+Usage: `{{ usage }}`
 Valid options for arg `{{ name }}`: {{ type }}
 [/EXPECT_ERR_INVALID_OPTION]
 
 [EXPECT_ERR_EXPECTED_TYPE]
+## Developer error message
 in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
 [/EXPECT_ERR_EXPECTED_TYPE]
 
 [EXPECT_ERR_INVALID_TYPE]
+## Developer error message
 in arg `{{ name }}`: Type `{{ type }}` is not a valid argument type
 [/EXPECT_ERR_INVALID_TYPE]
 
