@@ -108,7 +108,7 @@ then an implicit return is not possible</p>
 <p>Template scripts receive two parameter values within their scope at runtime, the first of which is the <a href="global.html#TemplateData"><code>TemplateData</code></a>
 object passed to the resource loader that is loading the string resource containing the template script in question. This
 parameter is called <code>args</code>. The second parameter, called <code>res</code>, is a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function that can be used
-for loading other string resources for the same language in case you need to nest localizable strings</p>
+for loading other string resources for the same language in case you need to nest localizable strings.</p>
 <p>It's easiest to imagine that the script itself is surrounded by an anonymous function declaration taking the parameters
 <code>args</code>, and <code>res</code> with simple arrow-function style implicit returns converted explicitly. Using the example script from above:</p>
 <pre class="prettyprint source"><code>// {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
