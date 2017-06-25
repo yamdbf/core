@@ -1,5 +1,5 @@
 [CMD_BLACKLIST_ERR_NOSELF]
-You can not blacklist your self.
+You can not blacklist your own account.
 [/CMD_BLACKLIST_ERR_NOSELF]
 
 [CMD_BLACKLIST_ERR_NOBOT]
