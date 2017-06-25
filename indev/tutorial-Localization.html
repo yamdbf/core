@@ -69,10 +69,10 @@ parsed as part of the raw string value of the outer-most surrounding tag</p>
 foo bar baz ## And here's an inline comment
 [/EXAMPLE_BAZ]</code></pre><p>Comments are removed when parsing. Any text not enclosed within key-tags is inherently treated as a comment
 and is ignored when parsing.</p>
-<h2>Templating</h2><p>Unrelated to the <code>.lang</code> file format, but a key part of the localization system as a whole, is the templating system.
-Any token surrounded with <code>{{ }}</code> or <code>{{ ?}}</code> is a template, and can be replaced at runtime via matching keys within
-a <code>TokenReplaceData</code> object passed to <code>Lang.res()</code> or a ResourceLoader from <code>Lang.createResourceLoader()</code>.
-For example:</p>
+<h2>Templating</h2><p>Unrelated to the <code>.lang</code> file format, but arguably the most important part of the localization system as a whole,
+is the templating system. Any token surrounded with <code>{{ }}</code> or <code>{{ ?}}</code> is a template, and can be replaced at runtime
+via matching keys within a <a href="global.html#TemplateData"><code>TemplateData</code></a> object passed to <code>Lang.res()</code> or a ResourceLoader from
+<code>Lang.createResourceLoader()</code>. For example:</p>
 <pre class="prettyprint source"><code>[TEMPLATE_EXAMPLE]
 foo {{ barTemplate }} baz
 [/TEMPLATE_EXAMPLE]
@@ -105,12 +105,14 @@ value will simply have the template removed from the output string in the same m
 possible in a manner similar to arrow functions. If the script is complex enough to necessitate an actual return statement
 then an implicit return is not possible</p>
 </blockquote>
-<p>Template scripts receive a single <code>args</code> object within their context that is the <code>TokenReplaceData</code> object passed to the
-resource loader function that is loading the string resource. It's easiest to imagine that the script itself is surrounded
-by an anonymous function declaration taking a parameter called <code>args</code> with simple arrow-function style implicit returns
-converted explicitly. Using the example script from above:</p>
+<p>Template scripts receive two parameter values within their scope at runtime, the first of which is the <a href="global.html#TemplateData"><code>TemplateData</code></a>
+object passed to the resource loader that is loading the string resource containing the template script in question. This
+parameter is called <code>args</code>. The second parameter, called <code>res</code>, is a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function that can be used
+for loading other string resources for the same language in case you need to nest localizable strings</p>
+<p>It's easiest to imagine that the script itself is surrounded by an anonymous function declaration taking the parameters
+<code>args</code>, and <code>res</code> with simple arrow-function style implicit returns converted explicitly. Using the example script from above:</p>
 <pre class="prettyprint source"><code>// {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
-function(args) {
+function(args, res) {
     return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
 }</code></pre><p>When working with template scripts, and really templates in general, knowing what is going to be passed to the localization
 string and thus the template script is important. Be sure to pay close attention to the original defaults and their use of
@@ -438,12 +440,16 @@ Duration examples: `10m`, `2h`, `1.5d`
 [/RESOLVE_ERR_RESOLVE_DURATION]
 
 [RESOLVE_ERR_RESOLVE_TYPE_ID]
-in arg `{{ name }}`: Failed to find a {{ type }} with ID `{{ arg }}`
+in arg `{{ name }}`: Failed to find a {{!
+    res('RESOLVE_TYPE', args)
+!}} with ID `{{ arg }}`
 Usage: `{{ usage }}`
 [/RESOLVE_ERR_RESOLVE_TYPE_ID]
 
 [RESOLVE_ERR_RESOLVE_TYPE_TEXT]
-in arg `{{ name }}`: Failed to find a {{ type }} containing the text `{{ arg }}`
+in arg `{{ name }}`: Failed to find a {{!
+    res('RESOLVE_TYPE', args)
+!}} containing the text `{{ arg }}`
 Usage: `{{ usage }}`
 [/RESOLVE_ERR_RESOLVE_TYPE_TEXT]
 
