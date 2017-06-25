@@ -42,9 +42,14 @@ export default class extends Command
 				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.filter(c => !c.hidden);
 
-			const widest: number = usableCommands.map(c => c.name.length).reduce((a, b) => Math.max(a, b));
+			const widest: number = usableCommands
+				.map(c => c.name.length)
+				.reduce((a, b) => Math.max(a, b));
+
 			let commandList: string = usableCommands.map(c =>
-				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`).sort().join('\n');
+				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
+					.sort()
+					.join('\n');
 
 			const data: TemplateData = {
 				commandList: commandList,
