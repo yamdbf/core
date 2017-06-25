@@ -25,7 +25,7 @@ export default class extends Command
 	{
 		if (this.client.selfbot) message.delete();
 		const dm: boolean = message.channel.type !== 'text';
-		const mentionName: string = `@${this.client.user.tag}`;
+		const mentionName: string = `@${this.client.user.tag} `;
 		const lang: string = dm ? this.client.defaultLang
 			:  await message.guild.storage.settings.get('lang');
 
