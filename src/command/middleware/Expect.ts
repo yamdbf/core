@@ -26,17 +26,17 @@ export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgT
 			const arg: any = args[index];
 			const type: ExpectArgType = types[index];
 
-			if (dm && !(type instanceof Array) && !['String', 'Number', 'User', 'Any'].includes(<string> type))
-				throw new Error(res('EXPECT_ERR_DM_TYPES', { name, type }));
+			if (dm && !(type instanceof Array)
+				&& !['String', 'Number', 'User', 'Any'].includes(<string> type))
+				throw new Error(
+					`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
 
 			if (typeof arg === 'undefined' || arg === null)
-			{
 				throw new Error(res('EXPECT_ERR_MISSING_VALUE', {
 					type: type instanceof Array ? type.map(t => `\`${t}\``).join(', ') : `\`${type}\``,
 					name,
 					usage
 				}));
-			}
 
 			if (type === 'Any') continue;
 
@@ -84,7 +84,7 @@ export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgT
 			}
 			else
 			{
-				throw new Error(res('EXPECT_ERR_INVALID_TYPE', { name, type }));
+				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not a valid argument type.`);
 			}
 		}
 

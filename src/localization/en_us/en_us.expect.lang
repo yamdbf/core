@@ -1,8 +1,3 @@
-[EXPECT_ERR_DM_TYPES]
-## Developer error message
-in arg `{{ name }}`: Type `{{ type }}` is not usable within DM-capable commands.
-[/EXPECT_ERR_DM_TYPES]
-
 [EXPECT_ERR_MISSING_VALUE]
 Missing or null value for arg: `{{ name }}`{{!
 	args.type.split(', ').length > 1
@@ -19,11 +14,8 @@ Valid options for arg `{{ name }}`: {{ type }}
 [/EXPECT_ERR_INVALID_OPTION]
 
 [EXPECT_ERR_EXPECTED_TYPE]
-## Developer error message
+## This is a developer error message and does
+## not need to be translated. I have only extracted
+## this string for ease of re-use as it is used a lot
 in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
 [/EXPECT_ERR_EXPECTED_TYPE]
-
-[EXPECT_ERR_INVALID_TYPE]
-## Developer error message
-in arg `{{ name }}`: Type `{{ type }}` is not a valid argument type
-[/EXPECT_ERR_INVALID_TYPE]
