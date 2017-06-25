@@ -24,7 +24,8 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 			:  await message.guild.storage.settings.get('lang');
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
-		const usage: string = `Usage: \`${this.usage.replace('<prefix>', prefix)}\``;
+		const usage: string = Lang.getCommandInfo(this, lang).usage.replace('<prefix>', prefix);
+
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 		let foundRestArg: boolean = false;
 		for (let [index, arg] of args.entries())
@@ -54,18 +55,17 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 			else if (type === 'Number')
 			{
+				if (isNaN(args[index]))
+					throw new Error(res('RESOLVE_ERR_RESOLVE_NUMBER', { name, arg, usage }));
+
 				args[index] = parseFloat(arg);
-				if (isNaN(args[index])) throw new Error(
-					`in arg \`${name}\`: \`${arg}\` could not be resolved to a number.\n${usage}`);
 			}
 
 			else if (type === 'Duration')
 			{
 				let duration: number = Time.parseShorthand(arg);
-				if (!duration) throw new Error([
-					`in arg \`${name}\`: \`${arg}\` could not be resolved to a duration.\n${usage}`,
-					`Duration examples: \`10m\`, \`2h\`, \`1.5d\``
-				].join('\n'));
+				if (!duration)
+					throw new Error(res('RESOLVE_ERR_RESOLVE_DURATION', { name, arg, usage }));
 
 				args[index] = duration;
 			}
@@ -75,16 +75,10 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 				let user: User;
 				if (idRegex.test(arg))
 				{
-					try
-					{
-						user = await message.client.fetchUser(arg.match(idRegex)[1]);
-					}
-					catch (err)
-					{
-						throw new Error(`in arg \`${name}\`: Failed to find a user with ID \`${arg}\`.\n${usage}`);
-					}
+					try { user = await message.client.fetchUser(arg.match(idRegex)[1]); }
+					catch (err) {}
 					if (!user) throw new Error(
-						`in arg \`${name}\`:  Failed to find a user with ID \`${arg}\`.\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_USER_ID', { name, arg, usage }));
 				}
 				else
 				{
@@ -104,7 +98,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 					user = users.first();
 					if (!user) throw new Error(
-						`in arg \`${name}\`: Failed to find a user containing the text \`${arg}\`\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_USER_TEXT', { name, arg, usage }));
 				}
 				args[index] = user;
 			}
@@ -114,17 +108,10 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 				let member: GuildMember;
 				if (idRegex.test(arg))
 				{
-					try
-					{
-						member = await message.guild.fetchMember(arg.match(idRegex)[1]);
-					}
-					catch (err)
-					{
-						throw new Error(
-							`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
-					}
+					try { member = await message.guild.fetchMember(arg.match(idRegex)[1]); }
+					catch (err) {}
 					if (!member) throw new Error(
-						`in arg \`${name}\`: Failed to find a member with ID \`${arg}\`.\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_MEMBER_ID', { name, arg, usage }));
 				}
 				else
 				{
@@ -135,25 +122,12 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 							|| normalizeUser(a.user.tag).includes(normalized));
 
 					if (members.size > 1)
-					{
-						let error: string = `Found multiple potential matches for arg \`${name}\`:\n`;
-						if (members.size > 5)
-						{
-							const slice: GuildMember[] = members.array().slice(0, 5);
-							error += `${slice.map(a => `\`${a.user.tag}\``).join(', ')}, `
-								+ `plus ${members.size - slice.length} more.\n`;
-						}
-						else
-						{
-							error += `${members.map(a => `\`${a.user.tag}\``).join(', ')}\n`;
-						}
-						error += `Please refine your search, or consider using an ID/mention\n${usage}`;
-						throw String(error);
-					}
+						throw String(res('RESOLVE_ERR_MULTIPLE_USER_RESULTS',
+							{ name, usage, users: members.map(m => `\`${m.user.tag}\``).join(', ') }));
 
 					member = members.first();
 					if (!member) throw new Error(
-						`in arg \`${name}\`: Failed to find a member containing the text \`${arg}\`\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_MEMBER_TEXT', { name, arg, usage }));
 				}
 				args[index] = member;
 			}
@@ -166,7 +140,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 				{
 					user = bannedUsers.get(arg.match(idRegex)[1]);
 					if (!user) throw new Error(
-						`in arg \`${name}\`:  Failed to find a banned user with ID \`${arg}\`.\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_BANNEDUSER_ID', { name, arg, usage }));
 				}
 				else
 				{
@@ -176,25 +150,12 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 							|| normalizeUser(a.tag).includes(normalized));
 
 					if (users.size > 1)
-					{
-						let error: string = `Found multiple potential matches for arg \`${name}\`:\n`;
-						if (users.size > 5)
-						{
-							const slice: User[] = users.array().slice(0, 5);
-							error += `${slice.map(a => `\`${a.tag}\``).join(', ')}, `
-								+ `plus ${users.size - slice.length} more.\n`;
-						}
-						else
-						{
-							error += `${users.map(a => `\`${a.tag}\``).join(', ')}\n`;
-						}
-						error += `Please refine your search, or consider using an ID/mention\n${usage}`;
-						throw String(error);
-					}
+						throw String(res('RESOLVE_ERR_MULTIPLE_USER_RESULTS',
+							{ name, usage, users: users.map(u => `\`${u.tag}\``).join(', ') }));
 
 					user = users.first();
 					if (!user) throw new Error(
-						`in arg \`${name}\`: Failed to find a banned user containing the text \`${arg}\`\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_BANNEDUSER_TEXT', { name, arg, usage }));
 				}
 				args[index] = user;
 			}
@@ -208,7 +169,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 					const id: string = arg.match(channelRegex)[1];
 					channel = <TextChannel> message.guild.channels.get(id);
 					if (!channel) throw new Error(
-						`in arg \`${name}\`: Failed to find a channel with ID \`${arg}\`.\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_CHANNEL_ID', { name, arg, usage }));
 				}
 				else
 				{
@@ -219,13 +180,12 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 							.filter(a => Util.normalize(a.name).includes(normalized));
 
 					if (channels.size > 1) throw String(
-						`Found multiple potential matches for arg \`${name}\`:\n${
-							channels.map(a => `\`#${a.name}\``).join(', ')
-							}\nPlease refine your search, or consider using an ID/channel link\n${usage}`);
+						res('RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS',
+							{ name, usage, channels: channels.map(c => `\`#${c.name}\``).join(', ') }));
 
 					channel = channels.first();
 					if (!channel) throw new Error(
-						`in arg \`${name}\`: Failed to find a channel containing the text \`${arg}\`\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_CHANNEL_TEXT', { name, arg, usage }));
 				}
 				args[index] = channel;
 			}
@@ -238,7 +198,8 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 				{
 					const id: string = arg.match(roleRegex)[1];
 					role = message.guild.roles.get(id);
-					if (!role) throw new Error(`in arg \`${name}\`: Failed to find a role with ID \`${arg}\`.\n${usage}`);
+					if (!role) throw new Error(
+						res('RESOLVE_ERR_RESOLVE_ROLE_ID', { name, arg, usage }));
 				}
 				else
 				{
@@ -247,13 +208,12 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 						Util.normalize(a.name).includes(normalized));
 
 					if (roles.size > 1) throw String(
-						`Found multiple potential matches for arg \`${name}\`:\n${
-							roles.map(a => `\`${a.name}\``).join(', ')
-							}\nPlease refine your search, or consider using an ID/role mention\n${usage}`);
+						res('RESOLVE_ERR_MULTIPLE_ROLE_RESULTS',
+							{ name, usage, roles: roles.map(r => `\`${r.name}\``).join(', ') }));
 
 					role = roles.first();
 					if (!role) throw new Error(
-						`in arg \`${name}\`: Failed to find a role containing the text \`${arg}\`\n${usage}`);
+						res('RESOLVE_ERR_RESOLVE_ROLE_TEXT', { name, arg, usage }));
 				}
 				args[index] = role;
 			}
