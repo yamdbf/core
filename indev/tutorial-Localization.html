@@ -191,8 +191,33 @@ Command group &quot;{{ group }}&quot; is already enabled.
 [/CMD_ENABLEGROUP_SUCCESS]
 
 [CMD_EVAL_ERR_NOCODE]
+**ERROR:**
+```xl
 No code provided to evaluate.
+```
 [/CMD_EVAL_ERR_NOCODE]
+
+[CMD_EVAL_RESULT]
+**INPUT:**
+```js
+{{ code }}
+```
+**OUTPUT:**
+```xl
+{{ result }}
+```
+[/CMD_EVAL_RESULT]
+
+[CMD_EVAL_ERROR]
+**INPUT:**
+```js
+{{ code }}
+```
+**ERROR:**
+```xl
+{{ error }}
+```
+[/CMD_EVAL_ERROR]
 
 [CMD_HELP_COMMAND_LIST]
 Available commands: (Commands marked with `*` are server-only)
