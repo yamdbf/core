@@ -1,5 +1,4 @@
 import { Lang } from '../../localization/Lang';
-import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { ResourceLoader } from '../../types/ResourceLoader';

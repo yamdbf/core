@@ -4,7 +4,6 @@ import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { GuildStorage } from '../../../types/GuildStorage';
 import { ResourceLoader } from '../../../types/ResourceLoader';
-import { Lang } from '../../../localization/Lang';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using, localizable } = CommandDecorators;
 

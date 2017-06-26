@@ -4,7 +4,6 @@ import { Message } from '../../../types/Message';
 import { Util } from '../../../util/Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
-import { Lang } from '../../../localization/Lang';
 import { Role } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using, localizable } = CommandDecorators;

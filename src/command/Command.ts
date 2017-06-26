@@ -170,6 +170,8 @@ export class Command<T extends Client = Client>
 	 */
 	public action(message: Message, args: any[]): void
 	{
+		message = null;
+		args = null;
 		throw new Error(`\`${this.constructor.name}\` has not overloaded the command action method`);
 	}
 

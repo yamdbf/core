@@ -3,7 +3,6 @@ import * as path from 'path';
 import { Client } from '../client/Client';
 import { Command } from './Command';
 import { BaseCommandName } from '../types/BaseCommandName';
-import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { Logger, logger } from '../util/logger/Logger';
 
 /**

@@ -36,14 +36,15 @@ export class GuildStorageLoader<T extends Client>
 	}
 
 	/**
-	 * Assign a GuildStorage to guilds that lack one due to the bot being
-	 * in the guild before adopting this storage spec or the bot being
-	 * added to a new guild
+	 * Create GuildStorage for all guilds that do not
+	 * currently have one for the Client session
 	 */
 	public async initNewGuilds(dataStorage: StorageProvider, settingsStorage: StorageProvider): Promise<void>
 	{
-		const dataStorageKeys: string[] = await dataStorage.keys();
-		let storagelessGuilds: Collection<string, Guild> = this._client.guilds.filter(g => !dataStorageKeys.includes(g.id));
+		const storageKeys: string[] = Array.from(
+			new Set([...(await dataStorage.keys()), ...(await settingsStorage.keys())]));
+		const storagelessGuilds: Collection<string, Guild> =
+			this._client.guilds.filter(g => !storageKeys.includes(g.id));
 		for (const guild of storagelessGuilds.values())
 			this._client.storage.guilds.set(guild.id,
 				await this._storageFactory.createGuildStorage(guild.id));

@@ -2,7 +2,6 @@ import { ResourceLoader } from '../../types/ResourceLoader';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
-import { Lang } from '../../localization/Lang';
 import now = require('performance-now');
 
 export default class extends Command
@@ -33,7 +32,6 @@ export default class extends Command
 
 		const end: number = now();
 		const name: string = command ? command.name : null;
-		const text: string = name ? ` "${name}"` : 's';
 		return this.respond(message, res('CMD_RELOAD_SUCCESS',
 			{ commandName: name, time: (end - start).toFixed(3) }));
 	}

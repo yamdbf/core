@@ -1,11 +1,14 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
         "module": "commonjs",
         "target": "es6",
         "lib": [
             "es7"
         ],
+        "rootDir": "src/",
         "declaration": true,
         "sourceMap": true,
         "removeComments": false,

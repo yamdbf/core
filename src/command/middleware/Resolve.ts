@@ -2,7 +2,6 @@ import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
 import { ResourceLoader } from '../../types/ResourceLoader';
-import { Client } from '../../client/Client';
 import { Lang } from '../../localization/Lang';
 import { Message } from '../../types/Message';
 import { Util } from '../../util/Util';

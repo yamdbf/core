@@ -1,4 +1,3 @@
-import { Client } from '../../client/Client';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ExpectArgType } from '../../types/ExpectArgType';
 import { Message } from '../../types/Message';

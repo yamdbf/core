@@ -2,7 +2,6 @@ import { ResourceLoader } from '../../types/ResourceLoader';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
-import { Lang } from '../../localization/Lang';
 
 export default class extends Command
 {
