@@ -30,11 +30,7 @@ export default class extends Command
 	{
 		const client: Client = this.client;
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
-		if (!code)
-		{
-			this.respond(message, `**ERROR:** \`\`\`xl\n${res('CMD_EVAL_ERR_NOCODE')}\n\`\`\``);
-			return;
-		}
+		if (!code) return this.respond(message, res('CMD_EVAL_ERR_NOCODE'));
 
 		let start: Message = ts ? <Message> await this.respond(message, '*Compiling...*') : message;
 		let evaled: string | Promise<string | object>;
@@ -45,28 +41,25 @@ export default class extends Command
 		}
 		catch (err)
 		{
-			return start.edit(
-				`**INPUT:**\n\`\`\`ts\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
+			return start.edit(res('CMD_EVAL_ERROR', { code, error: this._clean(err) }));
 		}
+
 		if (evaled instanceof Promise)
 		{
 			evaled.then(result =>
 			{
 				if (typeof result !== 'string') result = inspect(result, { depth: 0 });
-				start.edit(
-					`**INPUT:**\n\`\`\`ts\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(result)}\n\`\`\``);
+				start.edit(res('CMD_EVAL_RESULT', { code, result: this._clean(result) }));
 			})
 			.catch(err =>
 			{
-				start.edit(
-					`**INPUT:**\n\`\`\`ts\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
+				start.edit(res('CMD_EVAL_ERROR', { code, error: this._clean(err) }));
 			});
 		}
 		else
 		{
 			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
-			return start.edit(
-				`**INPUT:**\n\`\`\`ts\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
+			return start.edit(res('CMD_EVAL_RESULT', { code, result: this._clean(evaled) }));
 		}
 	}
 

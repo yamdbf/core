@@ -24,41 +24,31 @@ export default class extends Command
 	{
 		const client: Client = this.client;
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
-		if (!code)
-		{
-			this.respond(message, `**ERROR:** \`\`\`xl\n${res('CMD_EVAL_ERR_NOCODE')}\n\`\`\``);
-			return;
-		}
+		if (!code) return this.respond(message, res('CMD_EVAL_ERR_NOCODE'));
 
 		let evaled: string | Promise<string | object>;
-		try
-		{
-			evaled = eval(code);
-		}
+		try { evaled = eval(code); }
 		catch (err)
 		{
-			return this.respond(message,
-				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
+			return this.respond(message, res('CMD_EVAL_ERROR', { code, error: this._clean(err) }));
 		}
+
 		if (evaled instanceof Promise)
 		{
 			evaled.then(result =>
 			{
 				if (typeof result !== 'string') result = inspect(result, { depth: 0 });
-				this.respond(message,
-					`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(result)}\n\`\`\``);
+				this.respond(message, res('CMD_EVAL_RESULT', { code, result: this._clean(result) }));
 			})
 			.catch(err =>
 			{
-				this.respond(message,
-					`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**ERROR:**\n\`\`\`xl\n${this._clean(err)}\n\`\`\``);
+				this.respond(message, res('CMD_EVAL_ERROR', { code, error: this._clean(err) }));
 			});
 		}
 		else
 		{
 			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
-			return this.respond(message,
-				`**INPUT:**\n\`\`\`js\n${code}\n\`\`\`\n**OUTPUT:**\n\`\`\`xl\n${this._clean(evaled)}\n\`\`\``);
+			return this.respond(message, res('CMD_EVAL_RESULT', { code, result: this._clean(evaled) }));
 		}
 	}
 
