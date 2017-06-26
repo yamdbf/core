@@ -1716,7 +1716,7 @@
                     "name": "initNewGuilds",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Assign a GuildStorage to guilds that lack one due to the bot being\nin the guild before adopting this storage spec or the bot being\nadded to a new guild</p>",
+                    "description": "<p>Create GuildStorage for all guilds that do not\ncurrently have one for the Client session</p>",
                     "parameters": [],
                     "examples": []
                 },
