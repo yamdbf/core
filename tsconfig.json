@@ -8,7 +8,6 @@
         "lib": [
             "es7"
         ],
-        "rootDir": "src/",
         "declaration": true,
         "sourceMap": true,
         "removeComments": false,

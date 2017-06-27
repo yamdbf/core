@@ -4,10 +4,9 @@
 	"version": "0.1.0",
 	"command": "gulp",
 	"isShellCommand": true,
-	"args": ["lint", "build"],
 	"tasks": [
 		{
-			"taskName": "default",
+			"taskName": "build:vscode",
 			"args": [],
 			"isBuildCommand": true,
 			"isBackground": false,
@@ -19,13 +18,13 @@
 		},
 		{
 			"taskName": "tests",
-			"args": ["&&", "gulp", "build:tests"],
+			"args": ["tests"],
 			"command": "gulp",
 			"isShellCommand": true
 		},
 		{
 			"taskName": "docs",
-			"args": ["&&", "npm", "run", "docs:indev"],
+			"args": ["docs"],
 			"command": "gulp",
 			"isShellCommand": true
 		}

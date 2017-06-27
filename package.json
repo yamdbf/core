@@ -53,6 +53,7 @@
     "gulp-typescript": "^3.1.5",
     "jsdoc": "github:zajrik/jsdoc",
     "minami": "github:zajrik/minami",
+    "run-sequence": "^1.2.2",
     "tslint": "^5.4.3",
     "typescript": "^2.4.0"
   }
