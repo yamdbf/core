@@ -17,7 +17,7 @@ gulp.task('build:docs', () => execSync('npm run docs:indev'));
 gulp.task('docs', (cb) => runSequence('build', 'build:docs', cb));
 
 gulp.task('pause', (cb) => setTimeout(() => cb(), 1e3));
-gulp.task('tests', (cb) => runSequence('build', 'pause', 'build:tests', cb));
+gulp.task('tests', (cb) => runSequence('lint', 'build', 'pause', 'build:tests', cb));
 
 gulp.task('lint', () => {
 	gulp.src('./src/**/*.ts')
