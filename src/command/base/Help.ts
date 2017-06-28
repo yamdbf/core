@@ -99,7 +99,7 @@ export default class extends Command
 			}
 		}
 
-		if (!command) output = dm ? output.replace(/<prefix>/g, '')
+		output = dm ? output.replace(/<prefix>/g, '')
 			: output.replace(/<prefix>/g, await this.client.getPrefix(message.guild) || '');
 
 		embed.setColor(11854048).setDescription(output);
