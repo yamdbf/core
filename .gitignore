@@ -6,5 +6,6 @@ npm-debug*
 /test/storage
 /test/**/*.d.ts
 test_*.js
-/scripts/*.js
+/scripts/**/*.js
+/scripts/**/*.d.ts
 /scripts/storage

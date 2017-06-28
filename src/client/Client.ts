@@ -224,9 +224,12 @@ export class Client extends Discord.Client
 		Lang.createInstance(this);
 		Lang.loadLocalizations();
 
-		// Load commands
 		if (!this.passive)
 		{
+			// Disable setlang command if there is only one language
+			if (Lang.langNames.length === 1)
+				this.disableBase.push('setlang');
+
 			this.loadCommand('all');
 			Lang.loadCommandLocalizations();
 		}

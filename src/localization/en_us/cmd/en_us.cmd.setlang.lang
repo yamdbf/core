@@ -1,0 +1,15 @@
+[CMD_SETLANG_LIST]
+Available languages: (Language marked with `*` is the current language)
+```css
+{{ langList }}
+```Use `{{ prefix }} setlang #`, where `#` is the number of the language to set the
+language to use for this server
+[/CMD_SETLANG_LIST]
+
+[CMD_SETLANG_ERR_INVALID]
+That is not a valid language choice!
+[/CMD_SETLANG_ERR_INVALID]
+
+[CMD_SETLANG_SUCCESS]
+Set language for this server to: `{{ lang }}`
+[/CMD_SETLANG_SUCCESS]

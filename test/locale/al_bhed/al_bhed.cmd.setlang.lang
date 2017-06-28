@@ -1,0 +1,15 @@
+[CMD_SETLANG_LIST]
+Yjyemypma myhkiykac: (Myhkiyka syngat fedr `*` ec dra linnaht myhkiyka)
+```css
+{{ langList }}
+```Ica `{{ prefix }} setlang #`, frana `#` ec dra hispan uv dra myhkiyka du cad dra
+myhkiyka du ica vun drec canjan
+[/CMD_SETLANG_LIST]
+
+[CMD_SETLANG_ERR_INVALID]
+Dryd ec hud y jymet myhkiyka lruela!
+[/CMD_SETLANG_ERR_INVALID]
+
+[CMD_SETLANG_SUCCESS]
+Cad myhkiyka vun drec canjan du: `{{ lang }}`
+[/CMD_SETLANG_SUCCESS]

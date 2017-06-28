@@ -1,0 +1,44 @@
+import { Message } from '../../types/Message';
+import { Command } from '../Command';
+import { localizable, using } from '../CommandDecorators';
+import { ResourceLoader } from '../../types/ResourceLoader';
+import { Lang } from '../../localization/Lang';
+import { resolve } from '../middleware/Resolve';
+
+export default class extends Command
+{
+	public constructor()
+	{
+		super({
+			name: 'setlang',
+			aliases: ['lang'],
+			desc: 'List languages or set bot language',
+			usage: '<prefix>setlang [lang]',
+			callerPermissions: ['ADMINISTRATOR']
+		});
+	}
+
+	@using(resolve({ '[lang]': 'Number' }))
+	@localizable
+	public async action(message: Message, [res, lang]: [ResourceLoader, number]): Promise<any>
+	{
+		let langs: string[] = Lang.langNames;
+		if (typeof lang === 'undefined')
+		{
+			const prefix: string = await this.client.getPrefix(message.guild) || '';
+			let currentLang: string = await message.guild.storage.settings.get('lang') || 'en_us';
+			langs = langs
+				.map((l, i) => `${i + 1}:  ${l}`)
+				.map(l => l.replace(` ${currentLang}`, `*${currentLang}`));
+
+			let output: string = res('CMD_SETLANG_LIST', { langList: langs.join('\n'), prefix });
+			return message.channel.send(output);
+		}
+
+		if (!((lang - 1) in langs)) return message.channel.send(res('CMD_SETLANG_ERR_INVALID'));
+		const newLang: string = langs[lang - 1];
+		await message.guild.storage.settings.set('lang', newLang);
+		res = Lang.createResourceLoader(newLang);
+		return message.channel.send(res('CMD_SETLANG_SUCCESS', { lang: newLang }));
+	}
+}

@@ -1,1 +1,1 @@
-["blacklist","whitelist","eval","eval:ts","clearlimit","disablegroup","enablegroup","limit","listgroups","help","ping","reload","setprefix","version"]
+["blacklist","clearlimit","disablegroup","enablegroup","eval","eval:ts","help","limit","listgroups","ping","reload","setlang","setprefix","version","whitelist"]
