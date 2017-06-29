@@ -42,7 +42,7 @@ export class ListenerUtil
 	}
 
 	/**
-	 * Declares the decorated method as an event handler for the specified event
+	 * Declares the decorated method as an event handler for the specified event.
 	 * Must be registered by calling {@link ListenerUtil.registerListeners()}
 	 *
 	 * > **Note:** `registerListeners()` is already called in the YAMDBF
