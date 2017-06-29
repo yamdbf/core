@@ -62,6 +62,6 @@ export const version: string = require(path.join(__dirname, '..', 'package')).ve
  *
  * Example:
  * ```
- * Tuple<string, number> === [string, number] === ['foo', 10]
+ * ['foo', 10] === [string, number] === Tuple<string, number>
  * ```
  */

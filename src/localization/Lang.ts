@@ -33,11 +33,14 @@ export class Lang
 
 	/**
 	 * Contains all loaded languages and their strings.
-	 * This does not include localized command helptext
-	 * @private
+	 * This does not include localized command helptext.
+	 * Rather than using this directly, loading stings with
+	 * a {@link ResourceLoader} function is preferred
+	 * @static
+	 * @name langs
 	 * @type {object}
 	 */
-	private static get langs(): { [lang: string]: Language }
+	public static get langs(): { [lang: string]: Language }
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 		return Lang._instance.langs;
