@@ -2613,7 +2613,7 @@
     "typedefs": [
         {
             "name": "Tuple",
-            "description": "<p>Represents an array of fixed length where the the item in\nthe specified position is of the specified type.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>Tuple&lt;string, number> === [string, number] === ['foo', 10]</code></pre>",
+            "description": "<p>Represents an array of fixed length where the the item in\nthe specified position is of the specified type.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>['foo', 10] === [string, number] === Tuple&lt;string, number></code></pre>",
             "properties": []
         },
         {
@@ -2895,7 +2895,7 @@
                 {
                     "name": "token",
                     "type": "string",
-                    "description": "<p>See: {@link Client#token}</p>",
+                    "description": "<p>Token needed to connect the Client to Discord</p>",
                     "default": "",
                     "optional": true,
                     "nullable": ""
