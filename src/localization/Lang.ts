@@ -12,6 +12,7 @@ import * as path from 'path';
 
 /**
  * Singleton for loading localization files and fetching localized values
+ * @module Lang
  */
 export class Lang
 {
@@ -33,9 +34,10 @@ export class Lang
 	/**
 	 * Contains all loaded languages and their strings.
 	 * This does not include localized command helptext
+	 * @private
 	 * @type {object}
 	 */
-	public static get langs(): { [lang: string]: Language }
+	private static get langs(): { [lang: string]: Language }
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 		return Lang._instance.langs;
@@ -43,6 +45,8 @@ export class Lang
 
 	/**
 	 * Get all available localization languages
+	 * @static
+	 * @name langNames
 	 * @type {string[]}
 	 */
 	public static get langNames(): string[]
@@ -60,7 +64,10 @@ export class Lang
 	}
 
 	/**
-	 * Create the singleton instance
+	 * Create the singleton instance.
+	 * Called automatically by the YAMDBF Client at startup
+	 * @static
+	 * @method createInstance
 	 * @param {Client} client YAMDBF Client instance
 	 * @returns {void}
 	 */
@@ -70,7 +77,10 @@ export class Lang
 	}
 
 	/**
-	 * Load localization files from the Client's `localeDir`
+	 * Load localization files from the Client's `localeDir`.
+	 * Called automatically by the YAMDBF Client at startup
+	 * @static
+	 * @method loadLocalizations
 	 * @returns {void}
 	 */
 	public static loadLocalizations(): void
@@ -113,6 +123,9 @@ export class Lang
 
 	/**
 	 * Load any command localizations and assign them to commands
+	 * Called automatically by the YAMDBF Client at startup
+	 * @static
+	 * @method loadCommandLocalizations
 	 * @returns {void}
 	 */
 	public static loadCommandLocalizations(): void
@@ -141,6 +154,10 @@ export class Lang
 	/**
 	 * Get localized Command info, defaulting to the info
 	 * given in the Command's constructor
+	 * @static
+	 * @method getCommandInfo
+	 * @param {Command} command Command to get localized info for
+	 * @param {string} lang Language to get the localized info in
 	 * @returns {LocalizedCommandInfo}
 	 */
 	public static getCommandInfo(command: Command, lang: string): LocalizedCommandInfo
@@ -164,6 +181,8 @@ export class Lang
 	/**
 	 * Get a string resource for the given language, replacing any
 	 * templates with the given data or script result
+	 * @static
+	 * @method res
 	 * @param {string} lang Language to get a string resource for
 	 * @param {string} key String key to get
 	 * @param {TemplateData} [data] Values to replace in the string
@@ -228,8 +247,10 @@ export class Lang
 	/**
 	 * Takes a language string and returns a function that loads string
 	 * resources for that specific language
+	 * @static
+	 * @method createResourceLoader
 	 * @param {string} lang The language to create a loader for
-	 * @returns {LangResourceFunction}
+	 * @returns {ResourceLoader}
 	 */
 	public static createResourceLoader(lang: string): ResourceLoader
 	{
