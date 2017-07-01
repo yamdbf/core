@@ -28,6 +28,7 @@ export class Middleware
 	 * Supports `'...'` in the argument name as the final argument to gather
 	 * all remaining words into one string and attempt to resolve them to
 	 * the provided argument type
+	 * @static
 	 * @method resolve
 	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ResolveArgType}
@@ -58,6 +59,7 @@ export class Middleware
 	 * use the `User` type. If verifying `Duration` type, `Number` should be used.
 	 *
 	 * This middleware does not modify args in any way.
+	 * @static
 	 * @method expect
 	 * @param {object} argTypes An object of argument names mapped to argument types<br>
 	 * 							See: {@link ExpectArgType}
@@ -75,6 +77,7 @@ export class Middleware
 	 * like `expect` or `resolve` because those are based around user input whereas
 	 * this should be handled after user input related things as to not interfere
 	 * with the other middleware and their input
+	 * @static
 	 * @method localize
 	 * @returns {MiddlewareFunction}
 	 */
