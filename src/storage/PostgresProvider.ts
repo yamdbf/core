@@ -29,7 +29,10 @@ export function PostgresProvider(url: string): StorageProviderConstructor
 			super();
 			this._name = name;
 			this._url = url;
-			this._db = new Sequelize(this._url, { logging: false, define: { timestamps: false } });
+
+			this._db = new Sequelize(this._url,
+				{ logging: false, define: { timestamps: false, freezeTableName: true } });
+
 			this._model = this._db.define(name, {
 				key: { type: Sequelize.STRING, allowNull: false, primaryKey: true },
 				value: Sequelize.TEXT
