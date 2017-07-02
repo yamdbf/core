@@ -72,7 +72,7 @@ export function PostgresProvider(url: string): StorageProviderConstructor
 			if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 			if (typeof key !== 'string') throw new TypeError('Key must be a string');
 			if (typeof value === 'undefined') throw new TypeError('Value must be provided');
-			if (typeof value !== 'string') throw new TypeError('Value must be string');
+			if (typeof value !== 'string') throw new TypeError('Value must be a string');
 
 			await this._model.upsert({ key, value });
 		}

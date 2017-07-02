@@ -51,7 +51,7 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 		if (typeof key !== 'string') throw new TypeError('Key must be a string');
 		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
-		if (typeof value !== 'string') throw new TypeError('Value must be string');
+		if (typeof value !== 'string') throw new TypeError('Value must be a string');
 
 		this._db.push(`/${key}`, value, true);
 	}
