@@ -15,7 +15,6 @@ export { RateLimiter } from './command/RateLimiter';
 export { IStorageProvider } from './storage/interface/IStorageProvider';
 export { StorageProvider } from './storage/StorageProvider';
 export { StorageFactory } from './storage/StorageFactory';
-export { JSONProvider } from './storage/JSONProvider';
 export { Providers } from './storage/Providers';
 
 import * as CommandDecorators from './command/CommandDecorators';
