@@ -6,12 +6,14 @@ import { TemplateData } from '../types/TemplateData';
 import { Logger, logger } from '../util/logger/Logger';
 import { LangFileParser } from './LangFileParser';
 import { Language } from './Language';
+import { Util } from '../util/Util';
 import * as fs from 'fs';
 import * as glob from 'glob';
 import * as path from 'path';
 
 /**
- * Singleton for loading localization files and fetching localized values
+ * Module providing localization support throughout the framework.
+ * Allows client output to be translated to other languages
  * @module Lang
  */
 export class Lang
@@ -21,6 +23,7 @@ export class Lang
 	private client: Client;
 	private commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
 	private langs: { [lang: string]: Language };
+	private meta: { [lang: string]: { [key: string]: any } };
 	private constructor(client: Client)
 	{
 		if (Lang._instance)
@@ -29,6 +32,7 @@ export class Lang
 		this.client = client;
 		this.commandInfo = {};
 		this.langs = {};
+		this.meta = {};
 	}
 
 	/**
@@ -80,6 +84,48 @@ export class Lang
 	}
 
 	/**
+	 * Set a metadata key/value for a given language
+	 * @static
+	 * @method setMetaValue
+	 * @param {string} lang Language to set metadata for
+	 * @param {string} key Metadata key to set
+	 * @param {any} value Metadata value to assign
+	 * @returns {void}
+	 */
+	public static setMetaValue(lang: string, key: string, value: any): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		Util.assignNestedValue(Lang._instance.meta, [lang, key], value);
+	}
+
+	/**
+	 * Get a metadata value by key for a given language
+	 * @static
+	 * @method getMetaValue
+	 * @param {string} lang Language to get metadata for
+	 * @param {string} key Metadata key to get
+	 * @returns {any}
+	 */
+	public static getMetaValue(lang: string, key: string): any
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		return Util.getNestedValue(Lang._instance.meta, [lang, key]);
+	}
+
+	/**
+	 * Get all metadata for a given language
+	 * @static
+	 * @method getMetadata
+	 * @param {string} lang Language to get metadata for
+	 * @returns {object}
+	 */
+	public static getMetadata(lang: string): { [key: string]: any }
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		return Lang._instance.meta[lang] || {};
+	}
+
+	/**
 	 * Load localization files from the Client's `localeDir`.
 	 * Called automatically by the YAMDBF Client at startup
 	 * @static
@@ -94,6 +140,7 @@ export class Lang
 
 		let langs: { [key: string]: string[] } = {};
 		let allLangFiles: string[] = [];
+		Lang.setMetaValue('en_us', 'name', 'English');
 		allLangFiles.push(...glob.sync(`${path.join(__dirname, './en_us')}/**/*.lang`));
 		if (Lang._instance.client.localeDir)
 			allLangFiles.push(...glob.sync(`${Lang._instance.client.localeDir}/**/*.lang`));

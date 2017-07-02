@@ -1,4 +1,12 @@
-import { Client, LogLevel, Logger, ListenerUtil, Util, Lang, Providers } from '../bin/';
+import {
+	Client,
+	LogLevel,
+	Logger,
+	ListenerUtil,
+	// Util,
+	Lang,
+	// Providers
+} from '../bin/';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
@@ -11,7 +19,7 @@ class Test extends Client
 			name: 'tests',
 			token: config.token,
 			owner: config.owner,
-			provider: Providers.PostgresProvider(config.db),
+			// provider: Providers.PostgresProvider(config.db),
 			commandsDir: './commands',
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
@@ -20,13 +28,15 @@ class Test extends Client
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 		});
+
+		Lang.setMetaValue('al_bhed', 'name', 'Al Bhed');
 	}
 
 	@once('pause')
 	private async _onPause(): Promise<void>
 	{
 		logger.debug('Test', 'Paused...');
-		await this.setDefaultSetting('prefix', '?');
+		await this.setDefaultSetting('prefix', '-');
 		this.continue();
 	}
 

@@ -26,12 +26,14 @@ export default class extends Command
 		if (typeof lang === 'undefined')
 		{
 			const prefix: string = await this.client.getPrefix(message.guild) || '';
+			let names: string[] = langs.map(l => Lang.getMetaValue(l, 'name') || l);
 			let currentLang: string = await message.guild.storage.settings.get('lang') || 'en_us';
-			langs = langs
+			currentLang = Lang.getMetaValue(currentLang, 'name') || currentLang;
+			names = names
 				.map((l, i) => `${i + 1}:  ${l}`)
 				.map(l => l.replace(` ${currentLang}`, `*${currentLang}`));
 
-			let output: string = res('CMD_SETLANG_LIST', { langList: langs.join('\n'), prefix });
+			let output: string = res('CMD_SETLANG_LIST', { langList: names.join('\n'), prefix });
 			return message.channel.send(output);
 		}
 
@@ -39,6 +41,7 @@ export default class extends Command
 		const newLang: string = langs[lang - 1];
 		await message.guild.storage.settings.set('lang', newLang);
 		res = Lang.createResourceLoader(newLang);
-		return message.channel.send(res('CMD_SETLANG_SUCCESS', { lang: newLang }));
+		return message.channel.send(res('CMD_SETLANG_SUCCESS',
+			{ lang: Lang.getMetaValue(newLang, 'name') || newLang }));
 	}
 }
