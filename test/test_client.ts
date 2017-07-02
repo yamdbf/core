@@ -1,24 +1,7 @@
-import { Client, LogLevel, Logger, ListenerUtil, Util, Lang } from '../bin/';
+import { Client, LogLevel, Logger, ListenerUtil, Util, Lang, Providers } from '../bin/';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
-
-// const client: Client = new Client({
-// 	name: 'test',
-// 	token: config.token,
-// 	config: config,
-// 	commandsDir: './commands',
-// 	logLevel: LogLevel.DEBUG
-// }).start();
-
-// client.on('waiting', async () =>
-// {
-// 	await client.setDefaultSetting('prefix', '.');
-// 	client.emit('finished');
-// });
-// logger.warn('Test', 'Testing Logger#warn()');
-// logger.error('Test', 'Testing Logger#error()');
-// logger.debug('Test', 'Testing Logger#debug()');
 
 class Test extends Client
 {
@@ -28,6 +11,7 @@ class Test extends Client
 			name: 'tests',
 			token: config.token,
 			owner: config.owner,
+			provider: Providers.PostgresProvider(config.db),
 			commandsDir: './commands',
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
