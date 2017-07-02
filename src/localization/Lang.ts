@@ -27,7 +27,7 @@ export class Lang
 	private constructor(client: Client)
 	{
 		if (Lang._instance)
-			throw new Error('Cannot create multiple instances of Lang singleton');
+			throw new Error('Cannot create multiple instances of Lang singleton. Use Lang.createInstance() instead');
 
 		this.client = client;
 		this.commandInfo = {};
@@ -51,7 +51,7 @@ export class Lang
 	}
 
 	/**
-	 * Get all available localization languages
+	 * Contains all available localization languages
 	 * @static
 	 * @name langNames
 	 * @type {string[]}

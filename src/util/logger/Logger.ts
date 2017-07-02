@@ -19,7 +19,7 @@ export class Logger
 	private constructor()
 	{
 		if (Logger._instance)
-			throw new Error('Cannot create multiple instances of Logger singleton');
+			throw new Error('Cannot create multiple instances of Logger singleton. Use Logger.instance() instead');
 		Logger._instance = this;
 		this._logLevel = 1;
 	}
