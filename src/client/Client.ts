@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import * as Discord from 'discord.js';
 import * as path from 'path';
 
@@ -78,6 +79,7 @@ export class Client extends Discord.Client
 	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
 	{
 		super(clientOptions);
+		Reflect.defineMetadata('YAMDBFClient', true, this);
 
 		this._token = options.token;
 
