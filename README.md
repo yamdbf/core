@@ -28,14 +28,23 @@ is currently preferred due to the proximity to release and dependency issues in 
   control over the data passed to your commands
   - Ships with methods for resolving different data types and ensuring  
     certain args/types are passed to commands
-- Easy to use settings/storage with support for custom storage providers
-  - Ships with a default JSON provider and an optional Postgres provider
+- Easy to use storage with support for custom storage providers
+  - Ships with a default JSON provider, and other optional providers using Sequelize:
+    - Postgres
+	- SQLite
 - Full TypeScript support (It's written in it!)
   - Support for decorators for simpler handling of:
 	- Event listeners
     - Command metadata
 	- Command middleware assignment
 	- Attaching Logger for logging/debugging
+
+## Installation
+Ignore any warnings about unmet peer dependencies as they are all optional unless using a Sequelize-based storage provider.
+
+Regular install: `npm install --save yamdbf`   
+With a Postgres provider: `npm install --save yamdbf pg sequelize`   
+With an SQLite provider: `npm install --save yamdbf sqlite3 sequelize`
 
 ## Links
 - [YAMDBF Documentation](https://yamdbf.js.org)

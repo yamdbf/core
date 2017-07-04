@@ -51,7 +51,7 @@ export class Client extends Discord.Client
 	public readonly name: string;
 	public readonly commandsDir: string;
 	public readonly localeDir: string;
-	public readonly owner: string | string[];
+	public readonly owner: string[];
 	public readonly defaultLang: string;
 	public readonly statusText: string;
 	public readonly readyText: string;

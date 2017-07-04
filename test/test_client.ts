@@ -5,7 +5,7 @@ import {
 	ListenerUtil,
 	// Util,
 	Lang,
-	// Providers
+	Providers
 } from '../bin/';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
@@ -19,7 +19,7 @@ class Test extends Client
 			name: 'tests',
 			token: config.token,
 			owner: config.owner,
-			// provider: Providers.PostgresProvider(config.db),
+			provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
 			commandsDir: './commands',
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',

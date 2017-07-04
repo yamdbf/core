@@ -14,7 +14,7 @@
 		],
 		"curly": false,
 		"class-name": true,
-		"semicolon": [true],
+		"semicolon": [true, "always", "ignore-bound-class-methods"],
 		"triple-equals": true,
 		"eofline": true,
 		"no-bitwise": false,
@@ -42,7 +42,7 @@
 		"one-line": [
 			false
 		],
-		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+		"variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
 		"interface-name": [true, "always-prefix"],
 		"no-conditional-assignment": true,
 		"use-isnan": true,

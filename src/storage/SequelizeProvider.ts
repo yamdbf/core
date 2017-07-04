@@ -1,10 +1,11 @@
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 import { IStorageProvider } from './interface/IStorageProvider';
 import { StorageProvider } from './StorageProvider';
+import { Database } from './Database';
 import * as Sequelize from 'sequelize';
 
 /**
- * Represents an entry in a PostgresProvider db table
+ * Represents an entry in a `SequelizeProvider` db table
  * following the Model the provider uses
  */
 type Entry = { key: string, value: string };
@@ -16,13 +17,19 @@ type Entry = { key: string, value: string };
  */
 type ReturnedModel = { get(key: string): string };
 
-export function PostgresProvider(url: string): StorageProviderConstructor
+export enum Dialect
+{
+	Postgres,
+	SQLite
+}
+
+export function SequelizeProvider(url: string, dialect: Dialect): StorageProviderConstructor
 {
 	return class extends StorageProvider implements IStorageProvider
 	{
 		private _name: string;
 		private _url: string;
-		private _db: Sequelize.Sequelize;
+		private _backend: Database;
 		private _model: Sequelize.Model<object, object>;
 		public constructor(name: string)
 		{
@@ -30,30 +37,24 @@ export function PostgresProvider(url: string): StorageProviderConstructor
 			this._name = name;
 			this._url = url;
 
-			this._db = new Sequelize(this._url,
-				{ logging: false, define: { timestamps: false, freezeTableName: true } });
+			this._backend = Database.instance(url);
 
-			this._model = this._db.define(name, {
+			this._model = this._backend.db.define(name, {
 				key: { type: Sequelize.STRING, allowNull: false, primaryKey: true },
-				value: Sequelize.TEXT
-			});
+				value: (dialect === Dialect.Postgres || dialect === Dialect.SQLite) ?
+					Sequelize.TEXT : Sequelize.TEXT('long') },
+				{ timestamps: false, freezeTableName: true });
 		}
 
 		public async init(): Promise<void>
 		{
-			try { await this._db.authenticate(); }
-			catch (err)
-			{
-				console.error(new Error(`Failed to connect to the Postgres database:\n${err}`));
-				process.exit();
-			}
-			await this._db.sync();
+			await this._backend.init();
+			await this._backend.db.sync();
 		}
 
 		public async keys(): Promise<string[]>
 		{
-			const keys: string[] = (<Entry[]> await this._model.findAll()).map(r => r.key);
-			return keys;
+			return (<Entry[]> await this._model.findAll()).map(r => r.key);
 		}
 
 		public async get(key: string): Promise<string>

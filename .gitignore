@@ -9,3 +9,4 @@ test_*.js
 /scripts/**/*.js
 /scripts/**/*.d.ts
 /scripts/storage
+*.sqlite
