@@ -41,7 +41,7 @@
     "postinstall-build": "^3.0.0",
     "reflect-metadata": "^0.1.10"
   },
-  "peerDependencies": {  
+  "peerDependencies": {
     "pg": "6.4.0",
     "sequelize": "4.2.1",
     "sqlite3": "3.1.8"

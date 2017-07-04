@@ -37,12 +37,14 @@ export function SequelizeProvider(url: string, dialect: Dialect): StorageProvide
 			this._name = name;
 			this._url = url;
 
-			this._backend = Database.instance(url);
+			// Lazy load sequelize
+			const seq: typeof Sequelize = require('sequelize');
 
+			this._backend = Database.instance(url);
 			this._model = this._backend.db.define(name, {
-				key: { type: Sequelize.STRING, allowNull: false, primaryKey: true },
+				key: { type: seq.STRING, allowNull: false, primaryKey: true },
 				value: (dialect === Dialect.Postgres || dialect === Dialect.SQLite) ?
-					Sequelize.TEXT : Sequelize.TEXT('long') },
+					seq.TEXT : seq.TEXT('long') },
 				{ timestamps: false, freezeTableName: true });
 		}
 

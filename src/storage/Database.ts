@@ -29,12 +29,15 @@ export class Database
 		Database._instance = this;
 		this._url = url;
 
+		// Lazy load sequelize
+		const seq: typeof Sequelize = require('sequelize');
+
 		/**
 		 * The Sequelize connection to the database specified by
 		 * your chosen storage provider
 		 * @type {Sequelize}
 		 */
-		this.db = this.db ? this.db : new Sequelize(this._url, {
+		this.db = this.db ? this.db : new seq(this._url, {
 			logging: (...args: any[]) => this.logger.debug('SequelizeProvider', ...args) });
 	}
 
