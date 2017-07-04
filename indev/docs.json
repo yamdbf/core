@@ -1392,6 +1392,68 @@
             ]
         },
         {
+            "name": "Database",
+            "description": "<blockquote>\n<p><strong>Note:</strong> This won't do anything for you if you're not using\na <code>StorageProvider</code> for your client that uses Sequelize</p>\n</blockquote>\n<p>Holds the Sequelize connection to whichever database backend\nis chosen via the Client StorageProvider. As long as you wait\nuntil <code>clientReady</code> you can safely use {@link Database.instance}\nto get the Database instance and access the Sequelize connection\nvia {@link Database#db}</p>\n<p>This will allow you to define and access your own Sequelize Models\nwithout having to create another database connection. This is\nespecially important when using <code>SQLiteProvider</code> as SQLite\ndoes not like having multiple connections</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Database",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "db",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The Sequelize connection to the database specified by\nyour chosen storage provider</p>",
+                    "type": {
+                        "names": [
+                            "Sequelize"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "instance",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>As long as a Sequelize-using storage provider is being used,\nthis will return the Database instance holding the Sequelize\nconnection to the database</p>",
+                    "parameters": [
+                        {
+                            "name": "url",
+                            "type": "string",
+                            "description": "<p>The database connection url</p>",
+                            "default": "",
+                            "optional": true,
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Database",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Authenticate the connection to the database</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
             "name": "GuildSettings",
             "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with settings for a specific guild. Will be contained\nunder {@link GuildStorage#settings}</p>",
             "extends": [],

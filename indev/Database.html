@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>RateLimiter - Documentation</title>
+    <title>Database - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -40,10 +40,22 @@
 	
     
         <h2>
-        RateLimiter
+        Database
         </h2>
         
-            <div class="class-description"><p>Handles assigning ratelimits to guildmembers and users</p></div>
+            <div class="class-description"><blockquote>
+<p><strong>Note:</strong> This won't do anything for you if you're not using
+a <code>StorageProvider</code> for your client that uses Sequelize</p>
+</blockquote>
+<p>Holds the Sequelize connection to whichever database backend
+is chosen via the Client StorageProvider. As long as you wait
+until <code>clientReady</code> you can safely use <a href="Database.html#.instance"><code>Database.instance</code></a>
+to get the Database instance and access the Sequelize connection
+via <a href="Database.html#db"><code>Database#db</code></a></p>
+<p>This will allow you to define and access your own Sequelize Models
+without having to create another database connection. This is
+especially important when using <code>SQLiteProvider</code> as SQLite
+does not like having multiple connections</p></div>
         
     
 </header>
@@ -57,8 +69,8 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="RateLimiter">
-		<span class="type-signature"></span>new <a href='#RateLimiter' style='color: black'>RateLimiter</a><span class="signature">(<span class="param-types">limit: string</span>, <span class="param-types">global: boolean</span>)</span><span class="type-signature"></span>
+    <h4 class="name" id="Database">
+		<span class="type-signature"></span>new <a href='#Database' style='color: black'>Database</a><span class="signature">()</span><span class="type-signature"></span>
 	</h4>
 
     
@@ -72,81 +84,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>limit</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string</dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Ratelimit string matching the regex <code>\d+\/\d+[s|m|h|d]</code><br>
-                         <strong>Example:</strong> <code>1/10m</code> to limit a command to one use per 10 minutes</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>global</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>boolean</dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Whether or not this RateLimiter handles global ratelimits</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -220,6 +157,76 @@
     
 
     
+        <h3 class="subsection-title">Properties</h3>
+
+        
+            
+<h4 class="name" id="db">.<a href='#db' style='color: black'>db</a><span class="type-signature">: Sequelize</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    <p>The Sequelize connection to the database specified by
+your chosen storage provider</p>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>Sequelize</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+    
 
     
 	
@@ -230,8 +237,8 @@
 
     
 
-    <h4 class="name" id="get">
-		<span class="type-signature"></span>.<a href='#get' style='color: black'>get</a><span class="signature">(<span class="param-types">message: <a href="external-Message.html">Message</a></span>, <span class="param-types">userOverride: <a href="external-User.html">User</a></span>)</span><span class="type-signature"> &rarr; <a href="RateLimit.html">RateLimit</a></span>
+    <h4 class="name" id=".instance">
+		<span class="type-signature">(static) </span>.<a href='#instance' style='color: black'>instance</a><span class="signature">(<span class="param-types">url?: string</span>)</span><span class="type-signature"> &rarr; <a href="Database.html">Database</a></span>
 	</h4>
 
     
@@ -240,10 +247,9 @@
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Returns the RateLimit object for the message author if global
-or message member if message is in a guild. If a userOverride
-is given then the RateLimit or global RateLimit will be
-retrieved for that user based on the message location</p>
+    <p>As long as a Sequelize-using storage provider is being used,
+this will return the Database instance holding the Sequelize
+connection to the database</p>
 </div>
 
 
@@ -267,6 +273,8 @@ retrieved for that user based on the message location</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -279,13 +287,13 @@ retrieved for that user based on the message location</p>
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>url</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><dd><a href="external-Message.html">Message</a></dd></span>
+<span class="param-type"><dd>string</dd></span>
 
 
 
@@ -293,34 +301,20 @@ retrieved for that user based on the message location</p>
             </td>
 
             
-
-            
-
-            <td class="description last"><p>Discord.js Message object</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userOverride</code></td>
-            
-
-            <td class="type">
-            
+                <td class="attributes">
                 
-<span class="param-type"><dd><a href="external-User.html">User</a></dd></span>
+                    &lt;optional><br>
+                
 
+                
 
-
-            
-            </td>
-
-            
-
+                
+                </td>
             
 
-            <td class="description last"><p>User object to use in place of Message author</p></td>
+            
+
+            <td class="description last"><p>The database connection url</p></td>
         </tr>
 
     
@@ -388,7 +382,105 @@ retrieved for that user based on the message location</p>
 
 <span class="param-type">
 	<dd>
-<span class="param-type"><dd><a href="RateLimit.html">RateLimit</a></dd></span>
+<span class="param-type"><dd><a href="Database.html">Database</a></dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id="init">
+		<span class="type-signature"></span>.<a href='#init' style='color: black'>init</a><span class="signature">()</span><span class="type-signature"> &rarr; Promise&lt;void></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Authenticate the connection to the database</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>Promise&lt;void></dd></span>
 
 
 </dd>
