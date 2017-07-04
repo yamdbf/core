@@ -16,6 +16,7 @@ export { IStorageProvider } from './storage/interface/IStorageProvider';
 export { StorageProvider } from './storage/StorageProvider';
 export { StorageFactory } from './storage/StorageFactory';
 export { Providers } from './storage/Providers';
+export { Database } from './storage/Database';
 
 import * as CommandDecorators from './command/CommandDecorators';
 export { CommandDecorators };
