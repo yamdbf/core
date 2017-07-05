@@ -2,6 +2,7 @@
 Available languages: (Language marked with `*` is the current language)
 ```css
 {{ langList }}
+## Be sure to preserve the `{{ prefix }}setlang #` part
 ```Use `{{ prefix }}setlang #`, where `#` is the number of the language to set the
 language to use for this server
 [/CMD_SETLANG_LIST]
