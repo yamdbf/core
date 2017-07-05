@@ -2,7 +2,7 @@
 Yjyemypma myhkiykac: (Myhkiyka syngat fedr `*` ec dra linnaht myhkiyka)
 ```css
 {{ langList }}
-```Ica `{{ prefix }} setlang #`, frana `#` ec dra hispan uv dra myhkiyka du cad dra
+```Ica `{{ prefix }}setlang #`, frana `#` ec dra hispan uv dra myhkiyka du cad dra
 myhkiyka du ica vun drec canjan
 [/CMD_SETLANG_LIST]
 
