@@ -2794,7 +2794,7 @@
         },
         {
             "name": "MiddlewareFunction",
-            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns {@link Tuple} where the first item is the Message object and the\nsecond item is the array of args</p>\n<p>Method signature:</p>\n<pre class=\"prettyprint source\"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with\nthe array containing the message object and the args array as expected.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
+            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns a {@link Tuple} where the first item is the Message object and the\nsecond item is the array of args</p>\n<pre class=\"prettyprint source\"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with the tuple\ncontaining the message object and the args array as expected.</p>\n<blockquote>\n<p><strong>Note:</strong> The command dispatcher will attempt to bind the Command instance to the middleware\nfunction when called, so <code>this</code> within a middleware function (if it is not an arrow function)\nwill be the Command instance at runtime</p>\n</blockquote>",
             "properties": []
         },
         {

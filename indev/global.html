@@ -1896,14 +1896,15 @@ above it in the enum. The default logger log level is <code>LogLevel.LOG</code><
 
 <div class="description">
     <p>A function that takes a Message object and an array of args,
-does anything with them, and returns <a href="global.html#Tuple"><code>Tuple</code></a> where the first item is the Message object and the
+does anything with them, and returns a <a href="global.html#Tuple"><code>Tuple</code></a> where the first item is the Message object and the
 second item is the array of args</p>
-<p>Method signature:</p>
-<pre class="prettyprint source"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with
-the array containing the message object and the args array as expected.</p>
-<p>It should be noted that the command dispatcher will attempt to bind the called Command instance
-to the middleware function, so if it is not an arrow function <code>this</code> within a middleware
-function will be the Command instance at runtime</p>
+<pre class="prettyprint source"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with the tuple
+containing the message object and the args array as expected.</p>
+<blockquote>
+<p><strong>Note:</strong> The command dispatcher will attempt to bind the Command instance to the middleware
+function when called, so <code>this</code> within a middleware function (if it is not an arrow function)
+will be the Command instance at runtime</p>
+</blockquote>
 </div>
 
 
