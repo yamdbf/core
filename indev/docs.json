@@ -359,12 +359,12 @@
                     "name": "use",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Adds a middleware function to be used when any command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do every time any command\nis called. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to the client one time each,\nand thus should not be added within any sort of event or loop.\nMultiple middleware functions can be added to the via multiple calls\nto this method</p>",
+                    "description": "<p>Adds a middleware function to be used when any command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do every time any command\nis called.</p>\n<p>See {@link MiddlewareFunction} for information on how a middleware\nfunction should be represented</p>\n<p>Usage example:</p>\n<pre class=\"prettyprint source\"><code>&lt;Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<blockquote>\n<p><strong>Note:</strong> Middleware functions should only be added to the client one\ntime each and thus should not be added within any sort of event or loop.\nMultiple separate middleware functions can be added to the via multiple\nseparate calls to this method</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "func",
                             "type": "MiddlewareFunction",
-                            "description": "<p>Middleware function. <code>(message, args) =&gt; [message, args]</code></p>",
+                            "description": "<p>The middleware function to use</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -654,7 +654,7 @@
                     "name": "roles",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Array of roles required to use the command. If the command caller\nhas any of the roles in the array, they will be able to use the command</p>\n<p>If any roles are provided the command's <code>guildOnly</code> property will be automatically set to true</p>",
+                    "description": "<p>Array of specific {@link external:Role} names required to use the command.\nIf the command caller has any (even just one) of the roles in the array,\nthey will be able to use the command.</p>\n<p>If any roles are provided the command's <code>guildOnly</code> property will be\nautomatically set to <code>true</code></p>\n<blockquote>\n<p><strong>Note:</strong> This is far inferior to {@link Command#callerPermissions},\nusing the base <code>limit</code> command's role-limiting system, or really even\na custom-engineered solution to control who can use a command. Forcing\nservers to create Roles with specific names makes your bot that much\nless configurable on a per-guild basis, and configurability is what\nYAMDBF is all about. But, for the sake of simplicity, this is available</p>\n</blockquote>",
                     "type": {
                         "names": [
                             "Array.<string>"
@@ -730,12 +730,12 @@
                     "name": "use",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Adds a middleware function to be used when the command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do whenever this command\nis called. Takes a function that will receive the message object\nand the array of args.</p>\n<p>A middleware function must return an array where the first item\nis the message object and the second item is the args array.\nIf a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, it will\nfail silently.</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>this.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to the command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<p>Note: Middleware functions should only be added to a command one time each,\nand thus should be added in the Command's constructor. Multiple middleware\nfunctions can be added to a command via multiple calls to this method</p>",
+                    "description": "<p>Adds a middleware function to be used when the command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do whenever this command\nis called.</p>\n<p>See {@link MiddlewareFunction} for information on how a middleware\nfunction should be represented</p>\n<p>Usage example:</p>\n<pre class=\"prettyprint source\"><code>&lt;Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to this command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<blockquote>\n<p><strong>Note:</strong> Middleware functions should only be added to a command one\ntime each and thus should not be added within any sort of event or loop.\nMultiple separate middleware functions can be added to the via multiple\nseparate calls to this method</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "func",
                             "type": "MiddlewareFunction",
-                            "description": "<p>Middleware function. <code>(message, args) =&gt; [message, args]</code></p>",
+                            "description": "<p>The middleware function to use</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -744,14 +744,14 @@
                     "examples": [],
                     "returns": {
                         "type": "Command",
-                        "description": "<p>This command instance</p>"
+                        "description": ""
                     }
                 },
                 {
                     "name": "respond",
                     "access": "protected",
                     "virtual": false,
-                    "description": "<p>Send provided response text to the command's calling channel\nvia edit, editCode, send, or sendCode depending on whether\nor not the client is a selfbot and/or a codeblock language is given</p>",
+                    "description": "<p>Send provided response text to the provided message's channel\nvia edit or send, with or without a codeblock language, depending\non whether or not the client is a selfbot and whether or not a\ncodeblock language is given</p>",
                     "parameters": [
                         {
                             "name": "message",
@@ -772,7 +772,7 @@
                         {
                             "name": "code",
                             "type": "string",
-                            "description": "<p>Language to use if sendCode/editCode effect is desired</p>",
+                            "description": "<p>Language to use if a codeblock is desired</p>",
                             "default": "",
                             "optional": true,
                             "nullable": ""
@@ -788,7 +788,7 @@
                     "name": "_validatePermissions",
                     "access": "private",
                     "virtual": false,
-                    "description": "<p>Validate permissions resolvables in the given array, throwing an error\nfor any that are invalid</p>",
+                    "description": "<p>Validate PermissionResolvables in the given array, throwing an error\nfor any that are invalid</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -2772,7 +2772,7 @@
         },
         {
             "name": "MiddlewareFunction",
-            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns a {@link Tuple} where the first item is the Message object and the\nsecond item is the array of args</p>\n<pre class=\"prettyprint source\"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with the tuple\ncontaining the message object and the args array as expected.</p>\n<blockquote>\n<p><strong>Note:</strong> The command dispatcher will attempt to bind the Command instance to the middleware\nfunction when called, so <code>this</code> within a middleware function (if it is not an arrow function)\nwill be the Command instance at runtime</p>\n</blockquote>",
+            "description": "<p>A function that takes a Message\nobject and an array of args, does anything with them, and returns a\n{@link Tuple} where the first item is the Message object and the\nsecond item is the array of args</p>\n<pre class=\"prettyprint source\"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with the tuple\ncontaining the message object and the args array as expected.</p>\n<p>If a middleware function returns a string, or throws a string/error,\nit will be sent to the calling channel as a message and the Command\nexecution will be aborted. If a middleware function does not return\nanything or returns something other than an array or string, the\nCommand will fail silently.</p>\n<blockquote>\n<p><strong>Note:</strong> The command dispatcher will attempt to bind the Command\ninstance to the middleware function when called, so <code>this</code> within a\nmiddleware function (if it is not an arrow function) will be the\nCommand instance at runtime</p>\n</blockquote>",
             "properties": []
         },
         {
@@ -2792,7 +2792,7 @@
         },
         {
             "name": "TemplateData",
-            "description": "<p>Represents an object mapping template\nkeys to string values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction like {@link Lang.res}</p>",
+            "description": "<p>Represents an object mapping template\nkeys to string values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction like [Lang.res()]{@link module:Lang.res}</p>",
             "properties": []
         },
         {
