@@ -676,7 +676,7 @@
                     "name": "overloads",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>The name of a base command to overload. Commands may only overload\nbase commands so the {@link Command#group} must be set to 'base' in\norder to overload. Commands may only be overloaded by name, not by alias</p>",
+                    "description": "<p>The name of a base command to overload. Commands may only overload\nbase commands so the {@link Command#group} must be set to 'base' in\norder to overload. You must also be sure to <strong>not</strong> disable the base\ncommand that you are overloading. Commands may only be overloaded by\nname, not by alias</p>",
                     "type": {
                         "names": [
                             "string"

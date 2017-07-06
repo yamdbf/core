@@ -938,7 +938,9 @@ to determine the command being executed</p>
 <div class="description">
     <p>The name of a base command to overload. Commands may only overload
 base commands so the <a href="Command.html#group"><code>Command#group</code></a> must be set to 'base' in
-order to overload. Commands may only be overloaded by name, not by alias</p>
+order to overload. You must also be sure to <strong>not</strong> disable the base
+command that you are overloading. Commands may only be overloaded by
+name, not by alias</p>
 </div>
 
 
