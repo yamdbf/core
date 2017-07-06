@@ -256,7 +256,8 @@ export class Lang
 			if (new RegExp(`{{ *${template} *\\?}}`, 'g').test(loadedString)
 				&& (data[template] === '' || data[template] === undefined)) continue;
 
-			loadedString = loadedString.replace(new RegExp(`{{ *${template} *\\??}}`, 'g'), data[template]);
+			loadedString = loadedString.replace(
+				new RegExp(`{{ *${template} *\\??}}`, 'g'), () => data[template]);
 		}
 
 		const scriptTemplates: RegExp = new RegExp(scriptTemplate, 'gm');
@@ -285,8 +286,8 @@ export class Lang
 					catch (err) {}
 
 				if (/^{{!([\s\S]+)!}}[\t ]*\n/.test(scriptData) && result !== '')
-					loadedString = loadedString.replace(scriptData, `${result}\n`);
-				else loadedString = loadedString.replace(scriptData, result);
+					loadedString = loadedString.replace(scriptData, () => `${result}\n`);
+				else loadedString = loadedString.replace(scriptData, () => result);
 			}
 		}
 
