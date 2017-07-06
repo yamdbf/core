@@ -34,17 +34,6 @@
             },
             "properties": [
                 {
-                    "name": "name",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>The name of the bot this Client is for</p>",
-                    "type": {
-                        "names": [
-                            "string"
-                        ]
-                    }
-                },
-                {
                     "name": "owner",
                     "access": "",
                     "virtual": false,
@@ -147,17 +136,6 @@
                     "type": {
                         "names": [
                             "boolean"
-                        ]
-                    }
-                },
-                {
-                    "name": "version",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Client version, best taken from package.json</p>",
-                    "type": {
-                        "names": [
-                            "string"
                         ]
                     }
                 },
