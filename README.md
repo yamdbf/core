@@ -2,7 +2,8 @@
 
 [![Discord](https://discordapp.com/api/guilds/233751981838041090/embed.png)](https://discord.gg/cMXkbXV)
 [![npm](https://img.shields.io/npm/v/yamdbf.svg?maxAge=3600)](https://www.npmjs.com/package/yamdbf)
-[![David](https://img.shields.io/david/zajrik/yamdbf.svg?maxAge=3600)](https://david-dm.org/zajrik/yamdbf)
+[![David](https://david-dm.org/zajrik/yamdbf/status.svg)](https://david-dm.org/zajrik/yamdbf)
+[![David](https://david-dm.org/zajrik/yamdbf/peer-status.svg)](https://david-dm.org/zajrik/yamdbf?type=peer)
 [![Travis](https://api.travis-ci.org/zajrik/yamdbf.svg)](https://travis-ci.org/zajrik/yamdbf)
 
 [![NPM](https://nodei.co/npm/yamdbf.png?downloads=true&stars=true)](https://nodei.co/npm/yamdbf/)
