@@ -33,7 +33,7 @@
     "discordapp"
   ],
   "engines": {
-	  "node": ">=8.0.0"
+    "node": ">=8.0.0"
   },
   "dependencies": {
     "chalk": "^1.1.3",
@@ -61,6 +61,7 @@
     "gulp-tslint": "^7.1.0",
     "gulp-typescript": "^3.1.5",
     "jsdoc": "github:zajrik/jsdoc",
+    "jsdoc-strip-async-await": "^0.1.0",
     "minami": "github:zajrik/minami",
     "run-sequence": "^1.2.2",
     "tslint": "^5.4.3",
