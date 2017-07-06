@@ -117,10 +117,13 @@ export class Client extends Discord.Client
 		this.statusText = options.statusText || null;
 
 		/**
-		 * Text to output when the client is ready
+		 * Text to output when the client is ready. If not
+		 * provided nothing will be logged, giving the
+		 * opportunity to log something more dynamic
+		 * on `clientReady`
 		 * @type {string}
 		 */
-		this.readyText = options.readyText || 'Client ready!';
+		this.readyText = options.readyText;
 
 		/**
 		 * Whether or not a generic 'command not found' message
@@ -251,7 +254,9 @@ export class Client extends Discord.Client
 
 		await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
 
-		this._logger.log('Client', this.readyText);
+		if (typeof this.readyText !== 'undefined')
+			this._logger.log('Client', this.readyText);
+
 		if (!this.passive) this._dispatcher.setReady();
 		this.emit('clientReady');
 	}
