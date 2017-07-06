@@ -13,7 +13,8 @@ making it simple to get a bot up and running with minimal effort and configurati
 >Note: Features described here are representative of the state of the master branch. Installing directly from GitHub
 is currently preferred due to the proximity to release and dependency issues in the latest stable release.
 
->Use `npm install --save zajrik/yamdbf` to install from GitHub. This requires `git` to be installed and in your PATH.
+>Use `npm install --save zajrik/yamdbf` to install from GitHub. This requires `git` to be installed and in your PATH,
+and also requires > Node 8.0.0 to run.
 
 >Documentation for the master branch can be found [here](https://yamdbf.js.org/indev).
 

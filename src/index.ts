@@ -27,6 +27,7 @@ export { Logger } from './util/logger/Logger';
 export { logger } from './util/logger/LoggerDecorator';
 export { LogLevel } from './types/LogLevel';
 export { Lang } from './localization/Lang';
+export { ResourceLoader } from './types/ResourceLoader';
 
 export { deprecated } from './util/DeprecatedDecorator';
 

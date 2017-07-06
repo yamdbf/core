@@ -32,6 +32,9 @@
     "node",
     "discordapp"
   ],
+  "engines": {
+	  "node": ">=8.0.0"
+  },
   "dependencies": {
     "chalk": "^1.1.3",
     "discord.js": "github:hydrabolt/discord.js#11.1-dev",

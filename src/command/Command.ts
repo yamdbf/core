@@ -152,7 +152,9 @@ export class Command<T extends Client = Client>
 		/**
 		 * The name of a base command to overload. Commands may only overload
 		 * base commands so the {@link Command#group} must be set to 'base' in
-		 * order to overload. Commands may only be overloaded by name, not by alias
+		 * order to overload. You must also be sure to **not** disable the base
+		 * command that you are overloading. Commands may only be overloaded by
+		 * name, not by alias
 		 * @name Command#overloads
 		 * @type {string}
 		 */
