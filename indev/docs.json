@@ -88,7 +88,7 @@
                     "name": "readyText",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Text to output when the client is ready</p>",
+                    "description": "<p>Text to output when the client is ready. If not\nprovided nothing will be logged, giving the\nopportunity to log something more dynamic\non <code>clientReady</code></p>",
                     "type": {
                         "names": [
                             "string"
