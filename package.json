@@ -36,12 +36,12 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "chalk": "^1.1.3",
+    "chalk": "^2.0.1",
     "discord.js": "github:hydrabolt/discord.js#11.1-dev",
     "glob": "7.1.1",
     "node-json-db": "0.7.3",
     "performance-now": "^2.0.0",
-    "postinstall-build": "^3.0.0",
+    "postinstall-build": "^5.0.0",
     "reflect-metadata": "^0.1.10"
   },
   "peerDependencies": {
@@ -52,13 +52,13 @@
   "devDependencies": {
     "@types/chalk": "^0.4.31",
     "@types/glob": "^5.0.30",
-    "@types/node": "^7.0.31",
+    "@types/node": "^8.0.8",
     "@types/node-json-db": "0.0.1",
     "@types/sequelize": "^4.0.62",
-    "del": "^2.2.2",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.4.1",
-    "gulp-tslint": "^7.1.0",
+    "gulp-tslint": "^8.1.1",
     "gulp-typescript": "^3.1.5",
     "jsdoc": "github:zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
@@ -66,5 +66,19 @@
     "run-sequence": "^1.2.2",
     "tslint": "^5.4.3",
     "typescript": "^2.4.0"
-  }
+  },
+  "buildDependencies": [
+    "typescript",
+    "tslint",
+    "del",
+    "gulp",
+    "gulp-typescript",
+    "gulp-sourcemaps",
+    "run-sequence",
+    "@types/chalk",
+    "@types/glob",
+    "@types/node",
+    "@types/node-json-db",
+    "@types/sequelize"
+  ]
 }

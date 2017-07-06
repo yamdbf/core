@@ -1,6 +1,4 @@
 import { BaseCommandName } from '../types/BaseCommandName';
-import { ResolveArgType } from '../types/ResolveArgType';
-import { ExpectArgType } from '../types/ExpectArgType';
 
 /**
  * Utility class containing handy static methods that can

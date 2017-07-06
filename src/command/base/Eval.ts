@@ -22,7 +22,7 @@ export default class extends Command
 	@localizable
 	public action(message: Message, [res]: [ResourceLoader]): any
 	{
-		const client: Client = this.client;
+		const client: Client = this.client; // tslint:disable-line
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
 		if (!code) return this.respond(message, res('CMD_EVAL_ERR_NOCODE'));
 

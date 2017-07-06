@@ -12,6 +12,15 @@ let ts: any;
 try { ts = require('typescript'); }
 catch (err) {}
 
+class CompilerError extends Error
+{
+	public name: string = 'CompilerError';
+	public constructor(message: string)
+	{
+		super(message);
+	}
+}
+
 export default class extends Command
 {
 	public constructor()
@@ -28,7 +37,7 @@ export default class extends Command
 	@localizable
 	public async action(message: Message, [res]: [ResourceLoader]): Promise<any>
 	{
-		const client: Client = this.client;
+		const client: Client = this.client; // tslint:disable-line
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
 		if (!code) return this.respond(message, res('CMD_EVAL_ERR_NOCODE'));
 
@@ -101,14 +110,5 @@ export default class extends Command
 			.replace(/[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g, '[REDACTED]')
 			.replace(/email: '[^']+'/g, `email: '[REDACTED]'`)
 			: text;
-	}
-}
-
-class CompilerError extends Error
-{
-	public name: string = 'CompilerError';
-	public constructor(message: string)
-	{
-		super(message);
 	}
 }
