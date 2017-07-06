@@ -48,7 +48,6 @@ const { on, once, registerListeners } = ListenerUtil;
 export class Client extends Discord.Client
 {
 	@logger private readonly _logger: Logger;
-	public readonly name: string;
 	public readonly commandsDir: string;
 	public readonly localeDir: string;
 	public readonly owner: string[];
@@ -59,7 +58,6 @@ export class Client extends Discord.Client
 	public readonly selfbot: boolean;
 	public readonly passive: boolean;
 	public readonly pause: boolean;
-	public readonly version: string;
 	public readonly disableBase: BaseCommandName[];
 	public readonly provider: StorageProviderConstructor;
 	public readonly _middleware: MiddlewareFunction[];
@@ -82,12 +80,6 @@ export class Client extends Discord.Client
 		Reflect.defineMetadata('YAMDBFClient', true, this);
 
 		this._token = options.token;
-
-		/**
-		 * The name of the bot this Client is for
-		 * @type {string}
-		 */
-		this.name = options.name || 'botname';
 
 		/**
 		 * The owner/owners of the bot, represented as an array of IDs.
@@ -170,12 +162,6 @@ export class Client extends Discord.Client
 		 * @type {boolean}
 		 */
 		this.pause = options.pause || false;
-
-		/**
-		 * Client version, best taken from package.json
-		 * @type {string}
-		 */
-		this.version = options.version || '0.0.0';
 
 		/**
 		 * Array of base command names to skip when loading commands. Base commands

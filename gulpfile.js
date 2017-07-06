@@ -12,12 +12,12 @@ const project = gulp_ts.createProject('tsconfig.json');
 const linter = tslint.Linter.createProgram('tsconfig.json');
 
 gulp.task('default', ['build']);
-gulp.task('build:vscode', ['lint', 'build']);
+gulp.task('build:vscode', cb => runSequence('lint', 'build', cb));
 gulp.task('build:docs', () => execSync('npm run docs:indev'));
-gulp.task('docs', (cb) => runSequence('build', 'build:docs', cb));
+gulp.task('docs', cb => runSequence('build', 'build:docs', cb));
 
-gulp.task('pause', (cb) => setTimeout(() => cb(), 1e3));
-gulp.task('tests', (cb) => runSequence('lint', 'build', 'pause', 'build:tests', cb));
+gulp.task('pause', cb => setTimeout(() => cb(), 1e3));
+gulp.task('tests', cb => runSequence('lint', 'build', 'pause', 'build:tests', cb));
 
 gulp.task('lint', () => {
 	gulp.src('./src/**/*.ts')
