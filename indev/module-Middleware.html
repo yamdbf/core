@@ -162,13 +162,19 @@
 <div class="description">
     <p>Takes an object mapping argument names to argument types that
 checks the types of passed arguments and ensures required
-arguments are present and valid. Should be added to the
-command AFTER any and all middleware functions that modify
-args in any way are added.</p>
-<p>Valid types are:</p>
-<pre class="prettyprint source"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><p>Example:</p>
-<pre class="prettyprint source"><code>{ '&lt;mem>': 'Member', '&lt;age>': 'Number', '&lt;desc>': 'String' }</code></pre><p>If verifying a <code>BannedUser</code> returned from the ResolveArgs middleware,
-use the <code>User</code> type. If verifying <code>Duration</code> type, <code>Number</code> should be used.</p>
+arguments are present and valid. An argument list string
+can also be used -- See <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a>
+for an example of how the list should be formatted</p>
+<p>Should be added to the command AFTER any and all middleware functions
+that modify args in any way are added (<a href="module-Middleware.html#.resolve"><code>resolve</code></a>,
+for example), the only exception being <a href="module-Middleware.html#.localize"><code>localize</code></a>,
+which should always come last.</p>
+<p>See <a href="global.html#ExpectArgType"><code>ExpectArgType</code></a> for information on valid types.</p>
+<p>Examples:</p>
+<pre class="prettyprint source"><code>{ '&lt;mem>': 'Member', '&lt;age>': 'Number', '&lt;desc>': 'String' }</code></pre><pre class="prettyprint source"><code>{ '&lt;height>': ['short', 'medium', 'tall'] }</code></pre><blockquote>
+<p><strong>Note:</strong> If verifying a <code>BannedUser</code> returned from <a href="module-Middleware.html#.resolve"><code>resolve</code></a>,
+use the <code>User</code> type. If verifying a <code>Duration</code> type, use <code>Number</code>.</p>
+</blockquote>
 <p>This middleware does not modify args in any way.</p>
 </div>
 
@@ -212,6 +218,9 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
             
                 
 <span class="param-type"><dd>object</dd></span>
+|
+
+<span class="param-type"><dd>string</dd></span>
 
 
 
@@ -222,8 +231,10 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 
             
 
-            <td class="description last"><p>An object of argument names mapped to argument types<br>
-                            See: <a href="global.html#ExpectArgType"><code>ExpectArgType</code></a></p></td>
+            <td class="description last"><p>An object of argument names mapped to argument types
+                                   or a TypeScript-style argument list string<br>
+                                   See: <a href="global.html#ExpectArgType"><code>ExpectArgType</code></a><br>
+                                   See: <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a></p></td>
         </tr>
 
     
@@ -287,10 +298,6 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
 	
 
         
-<div class="param-desc">
-    <pre class="prettyprint source"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
-</div>
-
 
 
 <span class="param-type">
@@ -325,9 +332,10 @@ use the <code>User</code> type. If verifying <code>Duration</code> type, <code>N
     <p>Middleware function that inserts a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function for the
 language that will be used for the command call as the first arg for that
 command call. This middleware should be used <em>after</em> any other middleware
-like <code>expect</code> or <code>resolve</code> because those are based around user input whereas
-this should be handled after user input related things as to not interfere
-with the other middleware and their input</p>
+like <a href="module-Middleware.html#.expect"><code>expect</code></a> or <a href="module-Middleware.html#.resolve"><code>resolve</code></a>
+because those are based around user input whereas this should be handled
+after user input related things as to not interfere with the other middleware
+and their inputs</p>
 </div>
 
 
@@ -427,12 +435,17 @@ with the other middleware and their input</p>
 <div class="description">
     <p>Takes an object mapping argument names to argument types that
 resolves args to their specified type or throws errors for
-any invalid input.</p>
-<p>Valid types are:</p>
-<pre class="prettyprint source"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre><p>Example:</p>
+any invalid input. An argument list string can also be used --
+See <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a>
+for an example of how the list should be formatted</p>
+<p>See <a href="global.html#ResolveArgType"><code>ResolveArgType</code></a> for information on valid types.</p>
+<p>Example:</p>
 <pre class="prettyprint source"><code>{ '&lt;mem>': 'Member', '&lt;age>': 'Number', '&lt;...desc>': 'String' }</code></pre><p>Supports <code>'...'</code> in the argument name as the final argument to gather
-all remaining words into one string and attempt to resolve them to
+all remaining input into one string and attempt to resolve them to
 the provided argument type</p>
+<p>If you are using a string literal array type with <a href="module-Middleware.html#.expect"><code>expect</code></a>
+alongside this, the corresponding type you should resolve for that arg
+before using <code>expect</code> is <code>String</code></p>
 </div>
 
 
@@ -475,6 +488,9 @@ the provided argument type</p>
             
                 
 <span class="param-type"><dd>object</dd></span>
+|
+
+<span class="param-type"><dd>string</dd></span>
 
 
 
@@ -485,8 +501,10 @@ the provided argument type</p>
 
             
 
-            <td class="description last"><p>An object of argument names mapped to argument types<br>
-                            See: <a href="global.html#ResolveArgType"><code>ResolveArgType</code></a></p></td>
+            <td class="description last"><p>An object of argument names mapped to argument types
+                                   or a TypeScript-style argument list string<br>
+                                   See: <a href="global.html#ResolveArgType"><code>ResolveArgType</code></a><br>
+                                   See: <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a></p></td>
         </tr>
 
     
@@ -550,10 +568,6 @@ the provided argument type</p>
 	
 
         
-<div class="param-desc">
-    <pre class="prettyprint source"><code>(message: Message, args: any[]) => [Message, any[]]</code></pre>
-</div>
-
 
 
 <span class="param-type">

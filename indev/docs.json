@@ -2779,7 +2779,7 @@
         },
         {
             "name": "ExpectArgType",
-            "description": "<p>Valid arg type values for the Expect middleware\nCan be one of the following types as strings:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><p>or an Array of possible string literal values if specific string options are desired</p>",
+            "description": "<p>Valid arg type values\nfor [expect]{@link module:Middleware.expect}. Can be one of\nthe following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><p>or an Array of possible string literal values if specific string options are desired</p>",
             "properties": []
         },
         {
@@ -2794,12 +2794,12 @@
         },
         {
             "name": "MiddlewareFunction",
-            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns an array where the first item is the Message object and the\nsecond item is the array of args. Can be async as long as the returned promise resolves with\nthe array containing the message object and the args array as expected.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
+            "description": "<p>A function that takes a Message object and an array of args,\ndoes anything with them, and returns {@link Tuple} where the first item is the Message object and the\nsecond item is the array of args</p>\n<p>Method signature:</p>\n<pre class=\"prettyprint source\"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with\nthe array containing the message object and the args array as expected.</p>\n<p>It should be noted that the command dispatcher will attempt to bind the called Command instance\nto the middleware function, so if it is not an arrow function <code>this</code> within a middleware\nfunction will be the Command instance at runtime</p>",
             "properties": []
         },
         {
             "name": "ResolveArgType",
-            "description": "<p>Valid arg type values for the ResolveArgs middleware\nCan be one of the following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre>",
+            "description": "<p>Valid arg type values for\n[resolve]{@link module:Middleware.resolve}. Can be one of\nthe following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role'</code></pre>",
             "properties": []
         },
         {

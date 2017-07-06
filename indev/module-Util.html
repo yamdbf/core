@@ -911,6 +911,167 @@ alphanumeric chars removed</p>
 
     
 
+    <h4 class="name" id=".parseArgTypes">
+		<span class="type-signature">(static) </span>.<a href='#parseArgTypes' style='color: black'>parseArgTypes</a><span class="signature">(<span class="param-types">input: string</span>)</span><span class="type-signature"> &rarr; object</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Converts a TypeScript-style argument list into a valid args data object
+for <a href="module-Middleware.html#.resolve"><code>resolve</code></a> and <a href="module-Middleware.html#.expect"><code>expect</code></a>.
+This can help if the object syntax for resolving/expecting Command
+arguments is too awkward or cluttered, or if a simpler syntax is
+overall preferred.</p>
+<p>Args marked with <code>?</code> (for example: <code>arg?: String</code>) are declared as
+optional and will be converted to <code>'[arg]': 'String'</code> at runtime.
+Normal args will convert to <code>'&lt;arg&gt;': 'String'</code></p>
+<p>Example:</p>
+<pre class="prettyprint source"><code>`user: User, height: ['short', 'tall'], ...desc?: String`
+// becomes:
+{ '&lt;user>': 'User', '&lt;height>': ['short', 'tall'], '[...desc]': 'String' }</code></pre><p>When specifying argument types for <a href="module-Middleware.html#.resolve"><code>resolve</code></a>,
+use <code>String</code> when you know you will be later giving a string literal array to
+<a href="module-Middleware.html#.expect"><code>expect</code></a> for the corresponding arg</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Argument list string</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>object</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
     <h4 class="name" id=".removeNestedValue">
 		<span class="type-signature">(static) </span>.<a href='#removeNestedValue' style='color: black'>removeNestedValue</a><span class="signature">(<span class="param-types">obj: any</span>, <span class="param-types">path: string[]</span>)</span><span class="type-signature"> &rarr; void</span>
 	</h4>

@@ -1675,8 +1675,9 @@ Stored under the key <code>'defaultGuildSettings'</code> in <a href="Client.html
 
 
 <div class="description">
-    <p>Valid arg type values for the Expect middleware
-Can be one of the following types as strings:</p>
+    <p>Valid arg type values
+for <a href="module-Middleware.html#.expect"><code>expect</code></a>. Can be one of
+the following string literals:</p>
 <pre class="prettyprint source"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><p>or an Array of possible string literal values if specific string options are desired</p>
 </div>
 
@@ -1684,6 +1685,9 @@ Can be one of the following types as strings:</p>
 
     <b>Type:</b> 
 <span class="param-type"><dd>string</dd></span>
+|
+
+<span class="param-type"><dd>string[]</dd></span>
 
 
 
@@ -1892,8 +1896,10 @@ above it in the enum. The default logger log level is <code>LogLevel.LOG</code><
 
 <div class="description">
     <p>A function that takes a Message object and an array of args,
-does anything with them, and returns an array where the first item is the Message object and the
-second item is the array of args. Can be async as long as the returned promise resolves with
+does anything with them, and returns <a href="global.html#Tuple"><code>Tuple</code></a> where the first item is the Message object and the
+second item is the array of args</p>
+<p>Method signature:</p>
+<pre class="prettyprint source"><code>(Message, any[]) => [Message, any[]]</code></pre><p>Can be async as long as the returned promise resolves with
 the array containing the message object and the args array as expected.</p>
 <p>It should be noted that the command dispatcher will attempt to bind the called Command instance
 to the middleware function, so if it is not an arrow function <code>this</code> within a middleware
@@ -1972,9 +1978,10 @@ function will be the Command instance at runtime</p>
 
 
 <div class="description">
-    <p>Valid arg type values for the ResolveArgs middleware
-Can be one of the following string literals:</p>
-<pre class="prettyprint source"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Role' | 'Channel'</code></pre>
+    <p>Valid arg type values for
+<a href="module-Middleware.html#.resolve"><code>resolve</code></a>. Can be one of
+the following string literals:</p>
+<pre class="prettyprint source"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role'</code></pre>
 </div>
 
 
