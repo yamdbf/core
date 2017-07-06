@@ -16,9 +16,9 @@ class CustomClient extends Client
 		});
 
 		this.once('pause', async () => {
-			await client.setDefaultSetting('prefix', '-');
-			await client.setDefaultSetting('foo', 'bar');
-			client.continue();
+			await this.setDefaultSetting('prefix', '-');
+			await this.setDefaultSetting('foo', 'bar');
+			this.continue();
 		});
 
 		this.once('clientReady', () => {
