@@ -1,6 +1,7 @@
 /**
- * @typedef {string} ExpectArgType Valid arg type values for the Expect middleware
- * Can be one of the following types as strings:
+ * @typedef {string|string[]} ExpectArgType Valid arg type values
+ * for [expect]{@link module:Middleware.expect}. Can be one of
+ * the following string literals:
  * ```
  * 'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'
  * ```

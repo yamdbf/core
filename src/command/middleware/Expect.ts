@@ -3,20 +3,30 @@ import { ExpectArgType } from '../../types/ExpectArgType';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { Lang } from '../../localization/Lang';
+import { Util } from '../../util/Util';
 import { ResourceLoader } from '../../types/ResourceLoader';
 import { GuildMember, Role, TextChannel, User } from 'discord.js';
 
-export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgType }): MiddlewareFunction
-{
-	return async function(this: T, message: Message, args: any[]): Promise<[Message, any[]]>
-	{
-		const names: string[] = Object.keys(argTypes);
-		const types: ExpectArgType[] = names.map(a => argTypes[a]);
+export type MappedExpectArgType = { [name: string]: ExpectArgType };
 
+export function expect(argTypes: string | MappedExpectArgType): MiddlewareFunction
+{
+	if (typeof argTypes === 'string') argTypes =
+		<MappedExpectArgType> Util.parseArgTypes(argTypes);
+
+	const names: string[] = Object.keys(argTypes);
+	const types: ExpectArgType[] = names
+		.map(name => (<MappedExpectArgType> argTypes)[name]);
+
+	return async function(this: Command, message: Message, args: any[]): Promise<[Message, any[]]>
+	{
 		const dm: boolean = message.channel.type !== 'text';
-		const lang: string = dm ? this.client.defaultLang
-			:  await message.guild.storage.settings.get('lang');
+
+		const lang: string = dm
+			? this.client.defaultLang
+			: await message.guild.storage.settings.get('lang');
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
+
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(this, lang).usage.replace('<prefix>', prefix);
 
@@ -53,7 +63,7 @@ export function expect<T extends Command>(argTypes: { [name: string]: ExpectArgT
 			}
 			else if (type === 'Number')
 			{
-				if (!isNaN(arg) && !isFinite(arg))
+				if (typeof arg !== 'number' || (!isNaN(arg) && !isFinite(arg)))
 					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
 						{ name, expected: 'Number', type: arg === Infinity ? 'Infinity' : arg.constructor.name }));
 			}

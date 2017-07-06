@@ -1,4 +1,6 @@
 import { BaseCommandName } from '../types/BaseCommandName';
+import { ResolveArgType } from '../types/ResolveArgType';
+import { ExpectArgType } from '../types/ExpectArgType';
 
 /**
  * Utility class containing handy static methods that can
@@ -113,5 +115,62 @@ export class Util
 			return;
 
 		return Util.getNestedValue(obj[first], path);
+	}
+
+	/**
+	 * Converts a TypeScript-style argument list into a valid args data object
+	 * for [resolve]{@link module:Middleware.resolve} and [expect]{@link module:Middleware.expect}.
+	 * This can help if the object syntax for resolving/expecting Command
+	 * arguments is too awkward or cluttered, or if a simpler syntax is
+	 * overall preferred.
+	 *
+	 * Args marked with `?` (for example: `arg?: String`) are declared as
+	 * optional and will be converted to `'[arg]': 'String'` at runtime.
+	 * Normal args will convert to `'<arg>': 'String'`
+	 *
+	 * Example:
+	 * ```
+	 * `user: User, height: ['short', 'tall'], ...desc?: String`
+	 * // becomes:
+	 * { '<user>': 'User', '<height>': ['short', 'tall'], '[...desc]': 'String' }
+	 * ```
+	 *
+	 * When specifying argument types for [resolve]{@link module:Middleware.resolve},
+	 * use `String` when you know you will be later giving a string literal array to
+	 * [expect]{@link module:Middleware.expect} for the corresponding arg
+	 * @static
+	 * @method parseArgTypes
+	 * @param {string} input Argument list string
+	 * @returns {object}
+	 */
+	public static parseArgTypes(input: string): { [arg: string]: string | string[] }
+	{
+		let argStringRegex: RegExp = /(?:\.\.\.)?\w+\?? *: *(?:\[.*?\](?= *, *)|(?:\[.*?\] *$)|\w+)/g;
+		if (!argStringRegex.test(input))
+			throw new Error(`Input string is incorrectly formatted: ${input}`);
+
+		let output: { [arg: string]: string | string[] } = {};
+		let args: string[] = input.match(argStringRegex);
+		for (let arg of args)
+		{
+			let split: string[] = arg.split(':').map(a => a.trim());
+			let name: string = split.shift();
+			arg = split.join(':');
+			if (/(?:\.\.\.)?.+\?/.test(name)) name = `[${name.replace('?', '')}]`;
+			else name = `<${name}>`;
+
+			if (/\[ *(?:(?: *, *)?(['"])(\S+)\1)+ *\]|\[ *\]/.test(arg))
+			{
+				let data: string = arg.match(/\[(.*)\]/)[1];
+				if (!data) throw new Error('String literal array cannot be empty');
+				let values: string[] = data
+					.split(',')
+					.map(a => a.trim())
+					.map(a => a.slice(1, a.length - 1));
+				output[name] = values;
+			}
+			else output[name] = arg;
+		}
+		return output;
 	}
 }

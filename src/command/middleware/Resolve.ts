@@ -8,31 +8,40 @@ import { Util } from '../../util/Util';
 import { Time } from '../../util/Time';
 import { Command } from '../Command';
 
-export function resolve<T extends Command>(argTypes: { [name: string]: ResolveArgType }): MiddlewareFunction
+export type MappedResolveArgType = { [name: string]: ResolveArgType };
+
+export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunction
 {
-	return async function(this: T, message: Message, args: any[]): Promise<[Message, any[]]>
+	if (typeof argTypes === 'string') argTypes =
+		<MappedResolveArgType> Util.parseArgTypes(argTypes);
+
+	const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
+	const normalizeUser: (text: string) => string =
+		text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
+
+	const names: string[] = Object.keys(argTypes);
+	const types: ResolveArgType[] = names
+		.map(name => (<MappedResolveArgType> argTypes)[name]);
+
+	return async function(this: Command, message: Message, args: any[]): Promise<[Message, any[]]>
 	{
-		const names: string[] = Object.keys(argTypes);
-		const types: ResolveArgType[] = names.map(a => argTypes[a]);
-
-		const normalizeUser: (text: string) => string =
-			text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
-
 		const dm: boolean = message.channel.type !== 'text';
-		const lang: string = dm ? this.client.defaultLang
-			:  await message.guild.storage.settings.get('lang');
+
+		const lang: string = dm
+			? this.client.defaultLang
+			: await message.guild.storage.settings.get('lang');
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
+
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(this, lang).usage.replace('<prefix>', prefix);
 
-		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 		let foundRestArg: boolean = false;
 		for (let [index, arg] of args.entries())
 		{
 			if (index > names.length - 1) break;
-
 			const name: string = names[index];
 			const type: ResolveArgType = types[index];
+
 			if (name.includes('...'))
 			{
 				if (index !== names.length - 1) throw new Error(
@@ -55,7 +64,7 @@ export function resolve<T extends Command>(argTypes: { [name: string]: ResolveAr
 
 			else if (type === 'Number')
 			{
-				if (isNaN(args[index]))
+				if (isNaN(arg))
 					throw new Error(res('RESOLVE_ERR_RESOLVE_NUMBER', { name, arg, usage }));
 
 				args[index] = parseFloat(arg);
