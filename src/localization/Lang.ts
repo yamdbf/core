@@ -241,13 +241,13 @@ export class Lang
 	 */
 	public static res(lang: string, key: string, data: TemplateData = {}): string
 	{
-		if (!Lang.langs[lang]) return key;
+		if (!Lang.langs[lang]) return `${lang}::${key}`;
 		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
 		const scriptTemplate: RegExp = /^{{!([\s\S]+)!}}[\t ]*\n|{{!([\s\S]+)!}}/m;
 		const strings: { [key: string]: string } = Lang.langs[lang].strings;
 		let loadedString: string = strings[key];
 
-		if (!loadedString) return key;
+		if (!loadedString) return `${lang}::${key}`;
 		if (typeof data === 'undefined') return loadedString;
 
 		for (const template of Object.keys(data))
