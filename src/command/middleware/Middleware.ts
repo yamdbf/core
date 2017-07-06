@@ -29,9 +29,10 @@ export class Middleware
 	 * all remaining input into one string and attempt to resolve them to
 	 * the provided argument type
 	 *
-	 * If you are using a string literal array type with [expect]{@link module:Middleware.expect}
-	 * alongside this, the corresponding type you should resolve for that arg
-	 * before using `expect` is `String`
+	 * >**Note:** If you are using a string literal array type with
+	 * [expect]{@link module:Middleware.expect} alongside this, the
+	 * corresponding type you should resolve for that arg before using
+	 * `expect` is `String`
 	 * @static
 	 * @method resolve
 	 * @param {object|string} argTypes An object of argument names mapped to argument types
@@ -68,7 +69,7 @@ export class Middleware
 	 * >**Note:** If verifying a `BannedUser` returned from [resolve]{@link module:Middleware.resolve},
 	 * use the `User` type. If verifying a `Duration` type, use `Number`.
 	 *
-	 * This middleware does not modify args in any way.
+	 * ***This middleware does not modify args in any way.***
 	 * @static
 	 * @method expect
 	 * @param {object|string} argTypes An object of argument names mapped to argument types

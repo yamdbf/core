@@ -386,30 +386,24 @@ export class Client extends Discord.Client
 	 * Adds a middleware function to be used when any command is called
 	 * to make modifications to args, determine if the command can
 	 * be run, or anything else you want to do every time any command
-	 * is called. Takes a function that will receive the message object
-	 * and the array of args.
+	 * is called.
 	 *
-	 * A middleware function must return an array where the first item
-	 * is the message object and the second item is the args array.
-	 * If a middleware function returns a string, or throws a string/error,
-	 * it will be sent to the calling channel as a message and the command
-	 * execution will be aborted. If a middleware function does not return
-	 * anything or returns something other than an array or string, it will
-	 * fail silently.
+	 * See {@link MiddlewareFunction} for information on how a middleware
+	 * function should be represented
 	 *
-	 * Example:
+	 * Usage example:
 	 * ```
-	 * this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
+	 * <Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);
 	 * ```
 	 * This will add a middleware function to all commands that will attempt
 	 * to transform all args to uppercase. This will of course fail if any
 	 * of the args are not a string.
 	 *
-	 * Note: Middleware functions should only be added to the client one time each,
-	 * and thus should not be added within any sort of event or loop.
-	 * Multiple middleware functions can be added to the via multiple calls
-	 * to this method
-	 * @param {MiddlewareFunction} func Middleware function. `(message, args) => [message, args]`
+	 * >**Note:** Middleware functions should only be added to the client one
+	 * time each and thus should not be added within any sort of event or loop.
+	 * Multiple separate middleware functions can be added to the via multiple
+	 * separate calls to this method
+	 * @param {MiddlewareFunction} func The middleware function to use
 	 * @returns {Client}
 	 */
 	public use(func: MiddlewareFunction): this

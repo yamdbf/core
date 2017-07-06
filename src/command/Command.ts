@@ -125,10 +125,19 @@ export class Command<T extends Client = Client>
 		 */
 
 		/**
-		 * Array of roles required to use the command. If the command caller
-		 * has any of the roles in the array, they will be able to use the command
+		 * Array of specific {@link external:Role} names required to use the command.
+		 * If the command caller has any (even just one) of the roles in the array,
+		 * they will be able to use the command.
 		 *
-		 * If any roles are provided the command's `guildOnly` property will be automatically set to true
+		 * If any roles are provided the command's `guildOnly` property will be
+		 * automatically set to `true`
+		 *
+		 * >**Note:** This is far inferior to {@link Command#callerPermissions},
+		 * using the base `limit` command's role-limiting system, or really even
+		 * a custom-engineered solution to control who can use a command. Forcing
+		 * servers to create Roles with specific names makes your bot that much
+		 * less configurable on a per-guild basis, and configurability is what
+		 * YAMDBF is all about. But, for the sake of simplicity, this is available
 		 * @name Command#roles
 		 * @type {string[]}
 		 */
@@ -221,30 +230,25 @@ export class Command<T extends Client = Client>
 	 * Adds a middleware function to be used when the command is called
 	 * to make modifications to args, determine if the command can
 	 * be run, or anything else you want to do whenever this command
-	 * is called. Takes a function that will receive the message object
-	 * and the array of args.
+	 * is called.
 	 *
-	 * A middleware function must return an array where the first item
-	 * is the message object and the second item is the args array.
-	 * If a middleware function returns a string, or throws a string/error,
-	 * it will be sent to the calling channel as a message and the command
-	 * execution will be aborted. If a middleware function does not return
-	 * anything or returns something other than an array or string, it will
-	 * fail silently.
+	 * See {@link MiddlewareFunction} for information on how a middleware
+	 * function should be represented
 	 *
-	 * Example:
+	 * Usage example:
 	 * ```
-	 * this.use((message, args) => [message, args.map(a => a.toUpperCase())]);
+	 * <Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);
 	 * ```
-	 * This will add a middleware function to the command that will attempt
+	 * This will add a middleware function to this command that will attempt
 	 * to transform all args to uppercase. This will of course fail if any
 	 * of the args are not a string.
 	 *
-	 * Note: Middleware functions should only be added to a command one time each,
-	 * and thus should be added in the Command's constructor. Multiple middleware
-	 * functions can be added to a command via multiple calls to this method
-	 * @param {MiddlewareFunction} func Middleware function. `(message, args) => [message, args]`
-	 * @returns {Command} This command instance
+	 * >**Note:** Middleware functions should only be added to a command one
+	 * time each and thus should not be added within any sort of event or loop.
+	 * Multiple separate middleware functions can be added to the via multiple
+	 * separate calls to this method
+	 * @param {MiddlewareFunction} func The middleware function to use
+	 * @returns {Command}
 	 */
 	public use(func: MiddlewareFunction): this
 	{
@@ -253,13 +257,14 @@ export class Command<T extends Client = Client>
 	}
 
 	/**
-	 * Send provided response text to the command's calling channel
-	 * via edit, editCode, send, or sendCode depending on whether
-	 * or not the client is a selfbot and/or a codeblock language is given
+	 * Send provided response text to the provided message's channel
+	 * via edit or send, with or without a codeblock language, depending
+	 * on whether or not the client is a selfbot and whether or not a
+	 * codeblock language is given
 	 * @protected
 	 * @param {external:Message} message Discord.js Message object
 	 * @param {string} response String to send
-	 * @param {string} [code] Language to use if sendCode/editCode effect is desired
+	 * @param {string} [code] Language to use if a codeblock is desired
 	 * @returns {Promise<external:Message | external:Message[]>}
 	 */
 	protected respond(message: Message, response: string, code?: string): Promise<Message | Message[]>
@@ -269,7 +274,7 @@ export class Command<T extends Client = Client>
 	}
 
 	/**
-	 * Validate permissions resolvables in the given array, throwing an error
+	 * Validate PermissionResolvables in the given array, throwing an error
 	 * for any that are invalid
 	 * @private
 	 */

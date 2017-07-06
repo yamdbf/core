@@ -230,7 +230,8 @@ export class Lang
 
 	/**
 	 * Get a string resource for the given language, replacing any
-	 * templates with the given data or script result
+	 * templates with the given data and evaluating any embedded
+	 * template scripts
 	 * @static
 	 * @method res
 	 * @param {string} lang Language to get a string resource for

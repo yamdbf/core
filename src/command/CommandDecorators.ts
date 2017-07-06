@@ -11,7 +11,7 @@ import { PermissionResolvable } from 'discord.js';
  * Grouping of static decorator methods for the {@link Command}
  * class and {@link Command#action} method
  *
- * **Note:** This is a Typescript feature. Javascript users are limited to
+ * >**Note:** This is a TypeScript feature. JavaScript users are limited to
  * using CommandInfo to define their commands and {@link Command#use} for
  * assigning middleware functions to commands
  * @module CommandDecorators
@@ -19,8 +19,12 @@ import { PermissionResolvable } from 'discord.js';
 
 /**
  * Apply a middleware function to the action method of a Command.
- * Identical to {@link Command#use} but used as a method decorator
- * @param {MiddlewareFunction} func Middleware function to use for this Command action
+ * Identical to {@link Command#use} but used as a Command action
+ * method decorator
+ * @static
+ * @method using
+ * @param {MiddlewareFunction} func Middleware function to use
+ * 									for the decorated Command action
  * @returns {MethodDecorator}
  */
 export function using(func: MiddlewareFunction): MethodDecorator
@@ -28,7 +32,9 @@ export function using(func: MiddlewareFunction): MethodDecorator
 	return function(target: Command, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
 	{
 		if (!target) throw new Error('@using must be used as a method decorator for a Command action method.');
-		if (key !== 'action') throw new Error(`"${target.constructor.name}#${key}" is not a valid method target for @using.`);
+		if (key !== 'action') throw new Error(
+			`"${target.constructor.name}#${key}" is not a valid method target for @using.`);
+
 		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 		const original: any = descriptor.value;
 		descriptor.value = async function(this: Command<any>, message: Message, args: any[]): Promise<any>
@@ -62,20 +68,23 @@ export function using(func: MiddlewareFunction): MethodDecorator
  * language for the command call and passes it as the first argument
  * for that command call.
  *
- * Identical to {@link Middleware.localize} but used as a Command
- * method decorator.
+ * Identical to [localize]{@link module:Middleware.localize} but used
+ * as a Command action method decorator.
  *
  * Like the `localize` middleware, you will want to use this after
- * any other usages of middleware via the `@using()` decorator.
- * Middleware used with {@link Command#use} is evaluated before
- * middlleware used via `@using()` decorator.
- * @returns {MethodDecorator}
+ * any other usages of middleware via [@using()]{@link module:CommandDecorators.using}.
+ * Middleware added via {@link Command#use} is evaluated before
+ * middleware added via `@using()`.
+ * @static
+ * @name localizable
+ * @type {MethodDecorator}
  */
 export function localizable(target: Command, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
 {
 	if (!target) throw new Error('@localizable must be used as a method decorator for a Command action method.');
 	if (key !== 'action') throw new Error(
 		`"${target.constructor.name}#${key}" is not a valid method target for @localizable.`);
+
 	if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 	const original: any = descriptor.value;
 	descriptor.value = async function(this: Command<any>, message: Message, args: any[]): Promise<any>
@@ -92,6 +101,8 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 
 /**
  * Set `name` metadata
+ * @static
+ * @method name
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
@@ -102,6 +113,8 @@ export function name(value: string): ClassDecorator
 
 /**
  * Set `aliases` metadata
+ * @static
+ * @method aliases
  * @param {...string} values Values to set
  * @returns {ClassDecorator}
  */
@@ -112,6 +125,8 @@ export function aliases(...values: string[]): ClassDecorator
 
 /**
  * Set `desc` metadata
+ * @static
+ * @method desc
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
@@ -122,6 +137,8 @@ export function desc(value: string): ClassDecorator
 
 /**
  * Set `usage` metadata
+ * @static
+ * @method usage
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
@@ -132,6 +149,8 @@ export function usage(value: string): ClassDecorator
 
 /**
  * Set `info` metadata
+ * @static
+ * @method info
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
@@ -142,6 +161,8 @@ export function info(value: string): ClassDecorator
 
 /**
  * Set `group` metadata
+ * @static
+ * @method group
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
@@ -152,6 +173,8 @@ export function group(value: string): ClassDecorator
 
 /**
  * Set `argOpts` metadata
+ * @static
+ * @method argOpts
  * @param {ArgOpts} value Value to set
  * @returns {ClassDecorator}
  */
@@ -162,6 +185,8 @@ export function argOpts(value: ArgOpts): ClassDecorator
 
 /**
  * Set `callerPermissions` metadata
+ * @static
+ * @method callerPermissions
  * @param {...external:PermissionResolvable} values Values to set
  * @returns {ClassDecorator}
  */
@@ -172,6 +197,8 @@ export function callerPermissions(...values: PermissionResolvable[]): ClassDecor
 
 /**
  * Set `clientPermissions` metadata
+ * @static
+ * @method clientPermissions
  * @param {...external:PermissionResolvable} values Values to set
  * @returns {ClassDecorator}
  */
@@ -182,6 +209,8 @@ export function clientPermissions(...values: PermissionResolvable[]): ClassDecor
 
 /**
  * Set `roles` metadata
+ * @static
+ * @method roles
  * @param {...string} values Values to set
  * @returns {ClassDecorator}
  */
@@ -192,6 +221,8 @@ export function roles(...values: string[]): ClassDecorator
 
 /**
  * Set `ratelimit` metadata
+ * @static
+ * @method ratelimit
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
@@ -202,6 +233,8 @@ export function ratelimit(value: string): ClassDecorator
 
 /**
  * Set `overloads` metadata
+ * @static
+ * @method overloads
  * @param {string} value Value to set
  * @returns {ClassDecorator}
  */
@@ -212,7 +245,9 @@ export function overloads(value: string): ClassDecorator
 
 /**
  * Set `owneronly` flag metadata
- * @returns {ClassDecorator}
+ * @static
+ * @name ownerOnly
+ * @type {ClassDecorator}
  */
 export function ownerOnly<T extends Function>(target: T): T
 {
@@ -221,7 +256,9 @@ export function ownerOnly<T extends Function>(target: T): T
 
 /**
  * Set `guildOnly` flag metadata
- * @returns {ClassDecorator}
+ * @static
+ * @name guildOnly
+ * @type {ClassDecorator}
  */
 export function guildOnly<T extends Function>(target: T): T
 {
@@ -230,7 +267,9 @@ export function guildOnly<T extends Function>(target: T): T
 
 /**
  * Set `hidden` flag metadata
- * @returns {ClassDecorator}
+ * @static
+ * @name hidden
+ * @type {ClassDecorator}
  */
 export function hidden<T extends Function>(target: T): T
 {

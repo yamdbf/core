@@ -54,8 +54,9 @@ export const version: string = require(path.join(__dirname, '..', 'package')).ve
 /** @external {Collection} See: {@link https://discord.js.org/#/docs/main/stable/class/Collection} */
 /** @external {Guild} See: {@link https://discord.js.org/#/docs/main/stable/class/Guild} */
 /** @external {Message} See: {@link https://discord.js.org/#/docs/main/stable/class/Message} */
-/** @external {User} See: {@link https://discord.js.org/#/docs/main/stable/class/User} */
 /** @external {PermissionResolvable} See: {@link https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable} */
+/** @external {Role} See: {@link https://discord.js.org/#/docs/main/stable/class/Role} */
+/** @external {User} See: {@link https://discord.js.org/#/docs/main/stable/class/User} */
 
 /**
  * @typedef {Array<any>} Tuple Represents an array of fixed length where the the item in
