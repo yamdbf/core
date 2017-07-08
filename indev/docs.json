@@ -2302,10 +2302,31 @@
                     }
                 },
                 {
+                    "name": "addTransport",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Add a [transport]{@link TransportFunction} to the Logger\nsingleton instance</p>",
+                    "parameters": [
+                        {
+                            "name": "transport",
+                            "type": "TransportFunction",
+                            "description": "<p>The transport function to add</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "log",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log to the console. This is the base level of logging and is the default\nlog level, represented by <code>LogLevel.LOG</code>, when the logger singleton is created</p>",
+                    "description": "<p>Log to the logger transports. This is the base level of logging and is the default\nlog level, represented by <code>LogLevel.LOG</code>, when the logger singleton is created</p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2334,7 +2355,7 @@
                     "name": "info",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log information that doesn't need to be visible by default to the console.\nWill not be logged unless the logging level is <code>LogLevel.INFO</code> or higher</p>",
+                    "description": "<p>Log information that doesn't need to be visible by default to the logger\ntransports. Will not be logged unless the logging level is <code>LogLevel.INFO</code>\nor higher</p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2363,7 +2384,7 @@
                     "name": "warn",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log warning text to the console.\nWill not be logged unless the logging level is <code>LogLevel.WARN</code> or higher</p>",
+                    "description": "<p>Log warning text to the logger transports.\nWill not be logged unless the logging level is <code>LogLevel.WARN</code> or higher</p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2392,7 +2413,7 @@
                     "name": "error",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log error text to the console.\nWill not be logged unless the logging level is <code>LogLevel.ERROR</code> or higher</p>",
+                    "description": "<p>Log error text to the logger transports.\nWill not be logged unless the logging level is <code>LogLevel.ERROR</code> or higher</p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2421,7 +2442,7 @@
                     "name": "debug",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log debug text to the console.\nWill not be logged unless the logging level is <code>LogLevel.DEBUG</code></p>",
+                    "description": "<p>Log debug text to the logger transports.\nWill not be logged unless the logging level is <code>LogLevel.DEBUG</code></p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2450,7 +2471,7 @@
                     "name": "_write",
                     "access": "private",
                     "virtual": false,
-                    "description": "<p>Write to the console</p>",
+                    "description": "<p>Send log data to all transports</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -2766,6 +2787,44 @@
             "properties": []
         },
         {
+            "name": "LogData",
+            "description": "<p>Represents an object passed from {@link Logger}\nto any {@link TransportFunction}s given to it</p>",
+            "properties": [
+                {
+                    "name": "timestamp",
+                    "type": "Date",
+                    "description": "<p>Holds the time/date for this log</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "type",
+                    "type": "string",
+                    "description": "<p>The log type. Will be one of:\n                           <code>LOG | INFO | WARN | ERROR | DEBUG</code></p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "tag",
+                    "type": "string",
+                    "description": "<p>The tag given for this log</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "text",
+                    "type": "string",
+                    "description": "<p>The text content of this log</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                }
+            ]
+        },
+        {
             "name": "LogLevel",
             "description": "<p>Enum containing the different levels of\npotential logger output. Each level represents itself and everything\nabove it in the enum. The default logger log level is <code>LogLevel.LOG</code></p>\n<pre class=\"prettyprint source\"><code>enum LogLevel\n{\n    NONE,\n    LOG,\n    INFO,\n    WARN,\n    ERROR.\n    DEBUG\n}</code></pre>",
             "properties": []
@@ -2793,6 +2852,11 @@
         {
             "name": "TemplateData",
             "description": "<p>Represents an object mapping template\nkeys to string values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction like [Lang.res()]{@link module:Lang.res}</p>",
+            "properties": []
+        },
+        {
+            "name": "TransportFunction",
+            "description": "<p>Represents a function to be given\nto {@link Logger#addTransport} that will receive log data. What is done\nwith that log data is up to you, but logging to a file or a database\nwould be some examples</p>",
             "properties": []
         },
         {
