@@ -72,6 +72,11 @@
     "del",
     "gulp",
     "gulp-sourcemaps",
-    "gulp-typescript"
+    "gulp-typescript",
+    "@types/chalk",
+    "@types/glob",
+    "@types/node",
+    "@types/node-json-db",
+    "@types/sequelize"
   ]
 }
