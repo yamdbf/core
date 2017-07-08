@@ -23,9 +23,13 @@ export { CommandDecorators };
 
 export { Time } from './util/Time';
 export { Util } from './util/Util';
+
 export { Logger } from './util/logger/Logger';
 export { logger } from './util/logger/LoggerDecorator';
 export { LogLevel } from './types/LogLevel';
+export { LogData } from './types/LogData';
+export { TransportFunction } from './types/TransportFunction';
+
 export { Lang } from './localization/Lang';
 export { ResourceLoader } from './types/ResourceLoader';
 
