@@ -29,8 +29,8 @@ export default class extends Command
 		const lang: string = dm ? this.client.defaultLang
 			:  await message.guild.storage.settings.get('lang');
 
-		const cInfo: (command: Command) => LocalizedCommandInfo =
-			(command: Command) => Lang.getCommandInfo(command, lang);
+		const cInfo: (cmd: Command) => LocalizedCommandInfo =
+			(cmd: Command) => Lang.getCommandInfo(cmd, lang);
 
 		let command: Command;
 		let output: string = '';

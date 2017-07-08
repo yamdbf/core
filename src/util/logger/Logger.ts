@@ -1,4 +1,6 @@
+import { TransportFunction } from '../../types/TransportFunction';
 import { LogLevel } from '../../types/LogLevel';
+import { LogData } from '../../types/LogData';
 export { logger } from './LoggerDecorator';
 import * as chalk from 'chalk';
 
@@ -16,12 +18,29 @@ export class Logger
 {
 	private static _instance: Logger;
 	private _logLevel: LogLevel;
+	private _transports: TransportFunction[];
 	private constructor()
 	{
 		if (Logger._instance)
 			throw new Error('Cannot create multiple instances of Logger singleton. Use Logger.instance() instead');
 		Logger._instance = this;
 		this._logLevel = 1;
+		this._transports = [];
+
+		this.addTransport(data => {
+			const { type, tag, text } = data;
+			const d: Date = data.timestamp;
+			const hours: number = d.getHours();
+			const minutes: number = d.getMinutes();
+			const seconds: number = d.getSeconds();
+			const timestamp: string = `${
+				hours < 10 ? `0${hours}` : hours}:${
+				minutes < 10 ? `0${minutes}` : minutes}:${
+				seconds < 10 ? `0${seconds}` : seconds}`;
+
+			process.stdout.write(`[${chalk.grey(timestamp)}][${type}][${chalk.cyan(tag)}]: ${text}\n`);
+		});
+
 	}
 
 	/**
@@ -81,7 +100,18 @@ export class Logger
 	}
 
 	/**
-	 * Log to the console. This is the base level of logging and is the default
+	 * Add a [transport]{@link TransportFunction} to the Logger
+	 * singleton instance
+	 * @param {TransportFunction} transport The transport function to add
+	 * @returns {void}
+	 */
+	public addTransport(transport: TransportFunction): void
+	{
+		this._transports.push(transport);
+	}
+
+	/**
+	 * Log to the logger transports. This is the base level of logging and is the default
 	 * log level, represented by `LogLevel.LOG`, when the logger singleton is created
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
@@ -94,8 +124,9 @@ export class Logger
 	}
 
 	/**
-	 * Log information that doesn't need to be visible by default to the console.
-	 * Will not be logged unless the logging level is `LogLevel.INFO` or higher
+	 * Log information that doesn't need to be visible by default to the logger
+	 * transports. Will not be logged unless the logging level is `LogLevel.INFO`
+	 * or higher
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
 	 * @returns {Promise<void>}
@@ -107,7 +138,7 @@ export class Logger
 	}
 
 	/**
-	 * Log warning text to the console.
+	 * Log warning text to the logger transports.
 	 * Will not be logged unless the logging level is `LogLevel.WARN` or higher
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
@@ -120,7 +151,7 @@ export class Logger
 	}
 
 	/**
-	 * Log error text to the console.
+	 * Log error text to the logger transports.
 	 * Will not be logged unless the logging level is `LogLevel.ERROR` or higher
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
@@ -133,7 +164,7 @@ export class Logger
 	}
 
 	/**
-	 * Log debug text to the console.
+	 * Log debug text to the logger transports.
 	 * Will not be logged unless the logging level is `LogLevel.DEBUG`
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
@@ -146,20 +177,13 @@ export class Logger
 	}
 
 	/**
-	 * Write to the console
+	 * Send log data to all transports
 	 * @private
 	 */
 	private _write(type: string, tag: string, text: string): void
 	{
-		const d: Date = new Date();
-		const hours: number = d.getHours();
-		const minutes: number = d.getMinutes();
-		const seconds: number = d.getSeconds();
-		const timestamp: string = `${
-			hours < 10 ? `0${hours}` : hours}:${
-			minutes < 10 ? `0${minutes}` : minutes}:${
-			seconds < 10 ? `0${seconds}` : seconds}`;
-
-		process.stdout.write(`[${chalk.grey(timestamp)}][${type}][${chalk.cyan(tag)}]: ${text}\n`);
+		const timestamp: Date = new Date();
+		for (const transport of this._transports)
+			transport({ timestamp, type, tag, text });
 	}
 }
