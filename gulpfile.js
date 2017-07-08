@@ -1,32 +1,57 @@
 const gulp = require('gulp');
 const gulp_ts = require('gulp-typescript');
-const gulp_tslint = require('gulp-tslint');
 const gulp_sourcemaps = require('gulp-sourcemaps');
-const tslint = require('tslint');
 const del = require('del');
 const path = require('path');
-const runSequence = require('run-sequence');
 const { execSync } = require('child_process');
 
 const project = gulp_ts.createProject('tsconfig.json');
-const linter = tslint.Linter.createProgram('tsconfig.json');
+
+let _linter;
+let _gulp_tslint;
+let _tslint;
+let _runSequence;
+
+function runSequence()
+{
+	if (typeof _runSequence === 'undefined') _runSequence = require('run-sequence');
+	return _runSequence;
+}
+
+function gulp_tslint()
+{
+	if (typeof _gulp_tslint === 'undefined') _gulp_tslint = require('gulp-tslint');
+	return _gulp_tslint;
+}
+
+function tslint()
+{
+	if (typeof _tslint === 'undefined') _tslint = require('tslint');
+	return _tslint;
+}
+
+function linter()
+{
+	if (typeof _linter === 'undefined') _linter = tslint().Linter.createProgram('tsconfig.json');
+	return _linter;
+}
 
 gulp.task('default', ['build']);
-gulp.task('build:vscode', cb => runSequence('lint', 'build', cb));
+gulp.task('build:vscode', cb => runSequence()('lint', 'build', cb));
 gulp.task('build:docs', () => execSync('npm run docs:indev'));
-gulp.task('docs', cb => runSequence('build', 'build:docs', cb));
+gulp.task('docs', cb => runSequence()('build', 'build:docs', cb));
 
 gulp.task('pause', cb => setTimeout(() => cb(), 1e3));
-gulp.task('tests', cb => runSequence('lint', 'build', 'pause', 'build:tests', cb));
+gulp.task('tests', cb => runSequence()('lint', 'build', 'pause', 'build:tests', cb));
 
 gulp.task('lint', () => {
 	gulp.src('./src/**/*.ts')
-		.pipe(gulp_tslint({
+		.pipe(gulp_tslint()({
 			configuration: 'tslint.json',
 			formatter: 'prose',
-			program: linter
+			program: linter()
 		}))
-		.pipe(gulp_tslint.report());
+		.pipe(gulp_tslint().report());
 })
 
 gulp.task('build', () => {

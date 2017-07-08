@@ -69,17 +69,9 @@
   },
   "buildDependencies": [
     "typescript",
-    "tslint",
     "del",
     "gulp",
-    "gulp-typescript",
     "gulp-sourcemaps",
-	"gulp-tslint",
-    "run-sequence",
-    "@types/chalk",
-    "@types/glob",
-    "@types/node",
-    "@types/node-json-db",
-    "@types/sequelize"
+    "gulp-typescript"
   ]
 }
