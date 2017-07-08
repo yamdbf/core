@@ -74,6 +74,7 @@
     "gulp",
     "gulp-typescript",
     "gulp-sourcemaps",
+	"gulp-tslint",
     "run-sequence",
     "@types/chalk",
     "@types/glob",
