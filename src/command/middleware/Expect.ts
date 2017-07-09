@@ -24,7 +24,8 @@ export function expect(argTypes: string | MappedExpectArgType): MiddlewareFuncti
 
 		const lang: string = dm
 			? this.client.defaultLang
-			: await message.guild.storage.settings.get('lang');
+			: await message.guild.storage.settings.get('lang')
+				|| this.client.defaultLang;
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';

@@ -7,7 +7,8 @@ export async function localize<T extends Command>(this: T, message: Message, arg
 {
 	const dm: boolean = message.channel.type !== 'text';
 	const lang: string = dm ? this.client.defaultLang
-		:  await message.guild.storage.settings.get('lang');
+		: await message.guild.storage.settings.get('lang')
+			|| this.client.defaultLang;
 
 	const res: ResourceLoader = Lang.createResourceLoader(lang);
 	return [message, [res, ...args]];
