@@ -91,7 +91,8 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 	{
 		const dm: boolean = message.channel.type !== 'text';
 		const lang: string = dm ? this.client.defaultLang
-			:  await message.guild.storage.settings.get('lang');
+			: await message.guild.storage.settings.get('lang')
+				|| this.client.defaultLang;
 
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 		return await original.apply(this, [message, [res, ...args]]);
