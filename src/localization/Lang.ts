@@ -136,7 +136,7 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 
-		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\..+)?\.lang/;
+		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\.[^/]+)?\.lang$/;
 
 		let langs: { [key: string]: string[] } = {};
 		let allLangFiles: string[] = [];
