@@ -1029,7 +1029,7 @@
                     "name": "registerExternal",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Register an external command add add it to the <code>&lt;Client&gt;.commands</code>\n[collection]{@link external:Collection}, erroring on duplicate\nnames and aliases. External commands will be preserved when the\n<code>reload</code> command is called.</p>\n<blockquote>\n<p><strong>Note:</strong> This is intended for Plugins to use to register external\ncommands with the Client instance. Under normal circumstances\ncommands should be added by placing them in the directory passed\nto the <code>commandsDir</code> YAMDBF Client option</p>\n</blockquote>",
+                    "description": "<p>Register an external command and add it to the <code>&lt;Client&gt;.commands</code>\n[collection]{@link external:Collection}, erroring on duplicate\nnames and aliases. External commands will be preserved when the\n<code>reload</code> command is called.</p>\n<blockquote>\n<p><strong>Note:</strong> This is intended for Plugins to use to register external\ncommands with the Client instance. Under normal circumstances\ncommands should be added by placing them in the directory passed\nto the <code>commandsDir</code> YAMDBF Client option</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "client",
