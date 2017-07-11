@@ -51,7 +51,7 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	}
 
 	/**
-	 * Register an external command add add it to the `<Client>.commands`
+	 * Register an external command and add it to the `<Client>.commands`
 	 * [collection]{@link external:Collection}, erroring on duplicate
 	 * names and aliases. External commands will be preserved when the
 	 * `reload` command is called.
