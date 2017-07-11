@@ -69,12 +69,18 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 		if (command.overloads)
 		{
 			if (client.disableBase.includes(<BaseCommandName> command.overloads)) return;
+			let overload: boolean = this.has(<K> command.overloads);
 			this.delete(<K> command.overloads);
+			this._registerInternal(client, <V> command, false, true);
 			Logger.instance().info('CommandRegistry',
-				`External command '${command.name}' registered, overloading base command '${command.overloads}'.`);
+				`External command '${command.name}' registered${
+					overload ? `, overloading base command '${command.overloads}'.` : '.'}`);
 		}
-		else Logger.instance().info('CommandRegistry', `External command '${command.name}' registered.`);
-		this._registerInternal(client, <V> command, false, true);
+		else
+		{
+			this._registerInternal(client, <V> command, false, true);
+			Logger.instance().info('CommandRegistry', `External command '${command.name}' registered.`);
+		}
 		command.external = true;
 	}
 
