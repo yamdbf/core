@@ -26,6 +26,7 @@ export class Command<T extends Client = Client>
 	public roles: string[];
 	public ownerOnly: boolean;
 	public overloads: string;
+	public external: boolean;
 
 	public _classloc: string;
 	public readonly _rateLimiter: RateLimiter;
@@ -159,6 +160,13 @@ export class Command<T extends Client = Client>
 		 * @type {string}
 		 */
 
+		/**
+		 * Whether or not this command was registered via {@link CommandRegistry#registerExternal}
+		 * by some means other than the command loader like a Plugin
+		 * @name Command#external
+		 * @type {boolean}
+		 */
+
 		// Middleware function storage for the Command instance
 		this._middleware = [];
 
@@ -187,11 +195,11 @@ export class Command<T extends Client = Client>
 	}
 
 	/**
-	 * Make necessary asserts for Command validity. Called by the CommandLoader when
-	 * adding Commands to the CommandRegistry via {@link CommandRegistry#register}
-	 * @returns {void}
+	 * Make necessary asserts for Command validity.
+	 * Called internally by the command loader
+	 * @private
 	 */
-	public register(client: T): void
+	public _register(client: T): void
 	{
 		this.client = client;
 
@@ -206,6 +214,7 @@ export class Command<T extends Client = Client>
 		if (typeof this.clientPermissions === 'undefined') this.clientPermissions = [];
 		if (typeof this.roles === 'undefined') this.roles = [];
 		if (typeof this.ownerOnly === 'undefined') this.ownerOnly = false;
+		if (typeof this.external === 'undefined') this.external = false;
 
 		// Make necessary asserts
 		if (!this.name) throw new Error(`A command is missing a name:\n${this._classloc}`);

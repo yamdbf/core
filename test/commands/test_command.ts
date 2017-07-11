@@ -14,7 +14,7 @@ const { resolve, expect, localize } = Middleware;
 
 // @ownerOnly
 // @guildOnly
-@group('test')
+// @group('test')
 export default class extends Command
 {
 	@logger private readonly logger: Logger;
@@ -24,7 +24,8 @@ export default class extends Command
 			name: 'test',
 			aliases: ['testing', 'testo'],
 			desc: 'test command',
-			usage: '<prefix>test <test> <foo>'
+			usage: '<prefix>test <test> <foo>',
+			overloads: 'ping'
 		});
 	}
 

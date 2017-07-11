@@ -1,5 +1,6 @@
 import {
 	Client,
+	Command,
 	LogLevel,
 	Logger,
 	ListenerUtil,
@@ -10,6 +11,7 @@ import {
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
+import TestCommand from './commands/test_command';
 
 class Test extends Client
 {
@@ -20,7 +22,7 @@ class Test extends Client
 			token: config.token,
 			owner: config.owner,
 			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
-			commandsDir: './commands',
+			// commandsDir: './commands',
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
@@ -55,6 +57,7 @@ class Test extends Client
 	{
 		logger.debug('Test', foo, bar.toString());
 		await this.setDefaultSetting('foo', 'bar');
+		this.commands.registerExternal(this, new TestCommand());
 	}
 }
 const test: Test = new Test();

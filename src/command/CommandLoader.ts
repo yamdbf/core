@@ -25,7 +25,10 @@ export class CommandLoader<T extends Client>
 	 */
 	public loadCommands(): void
 	{
-		if (this._client.commands.size > 0) this._client.commands.clear();
+		if (this._client.commands.size > 0)
+			for (const cmd of this._client.commands.filter(c => !c.external).values())
+				this._client.commands.delete(cmd.name);
+
 		let commandFiles: string[] = [];
 		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
 		if (this._client.commandsDir)
@@ -37,24 +40,30 @@ export class CommandLoader<T extends Client>
 			const commandLocation: string = fileName.replace('.js', '');
 			delete require.cache[require.resolve(commandLocation)];
 
-			const loadedCommandClass: any = this.getCommandClass(commandLocation);
-			const command: Command<T> = new loadedCommandClass();
+			const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
+			const command: Command<T> = new loadedCommandClass<T>();
 
 			if (this._client.disableBase.includes(<BaseCommandName> command.name)) continue;
 			command._classloc = commandLocation;
+
+			if (this._client.commands.find(c => c.overloads === command.name))
+			{
+				this.logger.info('CommandLoader', `Skipping exterally overloaded command: '${command.name}'`);
+				continue;
+			}
 
 			if (command.overloads)
 			{
 				if (!this._client.commands.has(command.overloads))
 					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
 				this._client.commands.delete(command.overloads);
-				this._client.commands.register(this._client, command, command.name);
+				this._client.commands._registerInternal(this._client, command);
 				this.logger.info('CommandLoader',
 					`Command '${command.name}' loaded, overloading command '${command.overloads}'.`);
 			}
 			else
 			{
-				this._client.commands.register(this._client, command, command.name);
+				this._client.commands._registerInternal(this._client, command);
 				loadedCommands++;
 				this.logger.info('CommandLoader', `Command '${command.name}' loaded.`);
 			}
@@ -66,10 +75,11 @@ export class CommandLoader<T extends Client>
 	/**
 	 * Reload the given command in the Client's {@link CommandRegistry} ({@link Client#commands})
 	 */
-	public reloadCommand(nameOrAlias: string): boolean
+	public reloadCommand(nameOrAlias: string): void
 	{
 		const name: string = this._client.commands.findByNameOrAlias(nameOrAlias).name;
-		if (!name) return false;
+		if (!name) return;
+		if (this._client.commands.get(name).external) return;
 
 		const commandLocation: string = this._client.commands.get(name)._classloc;
 		delete require.cache[require.resolve(commandLocation)];
@@ -77,9 +87,8 @@ export class CommandLoader<T extends Client>
 		const loadedCommandClass: any = this.getCommandClass(commandLocation);
 		const command: Command<T> = new loadedCommandClass(this._client);
 		command._classloc = commandLocation;
-		this._client.commands.register(this._client, command, command.name, true);
+		this._client.commands._registerInternal(this._client, command, true);
 		this.logger.info('CommandLoader', `Command '${command.name}' reloaded.`);
-		return true;
 	}
 
 	/**

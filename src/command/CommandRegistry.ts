@@ -2,6 +2,8 @@ import { Collection, TextChannel, PermissionResolvable } from 'discord.js';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
 import { Message } from '../types/Message';
+import { Logger } from '../util/logger/Logger';
+import { BaseCommandName } from '../types/BaseCommandName';
 
 /**
  * @classdesc Stores loaded Commands in a Collection keyed by each Command's `name` property
@@ -13,18 +15,22 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	public constructor() { super(); }
 
 	/**
-	 * Complete registration of a command and add to the parent [Collection]{@link external:Collection},
-	 * erroring on duplicate names and aliases
-	 * @param {Command} command The Command to be registered
-	 * @param {string} key The key to store the Command at. Will be {@link Command#name}
-	 * @param {boolean} reload Whether or not the command is being reloaded and
-	 * replaced in the collection
-	 * @returns {void}
+	 * Complete registration of a command and add to the parent
+	 * collection, erroring on duplicate names and aliases.
+	 * This is an internal method and should not be used. Use
+	 * `registerExternal()` instead
+	 * @private
 	 */
-	public register(client: T, command: V, key: K, reload?: boolean): void
+	public _registerInternal(client: T, command: V, reload: boolean = false, external: boolean = false): void
 	{
-		if (super.has(<K> command.name) && !reload && !(command.overloads && command.overloads !== super.get(<K> command.overloads).name))
-			throw new Error(`A command with the name "${command.name}" already exists.`);
+		if (reload && external) return;
+		if (super.has(<K> command.name) && !reload
+			&& !(command.overloads && command.overloads !== super.get(<K> command.overloads).name))
+				if (!external) throw new Error(`A command with the name "${command.name}" already exists`);
+				else throw new Error(`External command is conflicting with command "${command.name}"`);
+
+		command._register(client);
+		super.set(<K> command.name, command);
 
 		for (const cmd of this.values())
 		{
@@ -32,12 +38,44 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 			{
 				let duplicates: Collection<K, V> = this.filter(c => c.aliases.includes(alias) && c !== cmd);
 				if (duplicates.size > 0)
-					throw new Error(`Commands may not share aliases: ${duplicates.first().name}, ${cmd.name} (shared alias: ${alias})`);
+				{
+					const duplicate: string = duplicates.first().name;
+					const name: string = cmd.name;
+					if (!external) throw new Error(
+						`Commands may not share aliases: ${name}, ${duplicate} (shared alias: "${alias}")`);
+					else throw new Error(
+						`External command has conflicting alias with "${name}" (shared alias: "${alias}")`);
+				}
 			}
 		}
+	}
 
-		command.register(client);
-		super.set(key, <V> command);
+	/**
+	 * Register an external command add add it to the `<Client>.commands`
+	 * [collection]{@link external:Collection}, erroring on duplicate
+	 * names and aliases. External commands will be preserved when the
+	 * `reload` command is called.
+	 *
+	 * >**Note:** This is intended for Plugins to use to register external
+	 * commands with the Client instance. Under normal circumstances
+	 * commands should be added by placing them in the directory passed
+	 * to the `commandsDir` YAMDBF Client option
+	 * @param {Client} client YAMDBF Client instance
+	 * @param {Command} command The Command instance to be registered
+	 * @returns {void}
+	 */
+	public registerExternal(client: T, command: Command<any>): void
+	{
+		if (command.overloads)
+		{
+			if (client.disableBase.includes(<BaseCommandName> command.overloads)) return;
+			this.delete(<K> command.overloads);
+			Logger.instance().info('CommandRegistry',
+				`External command '${command.name}' registered, overloading base command '${command.overloads}'.`);
+		}
+		else Logger.instance().info('CommandRegistry', `External command '${command.name}' registered.`);
+		this._registerInternal(client, <V> command, false, true);
+		command.external = true;
 	}
 
 	/**

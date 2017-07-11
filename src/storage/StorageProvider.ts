@@ -3,7 +3,8 @@ import { IStorageProvider } from './interface/IStorageProvider';
 /**
  * Abstract class for storage providers to extend. Provides runtime errors
  * for missing method implementations, and is necessary at compile-time
- * for the compiler to recognize a StorageProvider as valid.
+ * when using TypeScript for the compiler to recognize a StorageProvider
+ * as valid.
  *
  * StorageProviders must present an interface with a storage solution that
  * provides access to string values via string keys. Data will be stored
