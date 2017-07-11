@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import * as path from 'path';
 
 export { Client } from './client/Client';

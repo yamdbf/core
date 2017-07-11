@@ -42,7 +42,8 @@
     "node-json-db": "0.7.3",
     "performance-now": "^2.0.0",
     "postinstall-build": "^5.0.1",
-    "reflect-metadata": "^0.1.10"
+    "reflect-metadata": "^0.1.10",
+    "source-map-support": "^0.4.15"
   },
   "peerDependencies": {
     "pg": "6.4.0",
