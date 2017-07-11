@@ -37,7 +37,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 
 		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 		const original: any = descriptor.value;
-		descriptor.value = async function(this: Command<any>, message: Message, args: any[]): Promise<any>
+		descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 		{
 			let middlewarePassed: boolean = true;
 			try
@@ -87,7 +87,7 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 
 	if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 	const original: any = descriptor.value;
-	descriptor.value = async function(this: Command<any>, message: Message, args: any[]): Promise<any>
+	descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 	{
 		const dm: boolean = message.channel.type !== 'text';
 		const lang: string = dm ? this.client.defaultLang
