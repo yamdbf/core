@@ -682,6 +682,17 @@
                             "string"
                         ]
                     }
+                },
+                {
+                    "name": "external",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not this command was registered via {@link CommandRegistry#registerExternal}\nby some means other than the command loader like a Plugin</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
                 }
             ],
             "functions": [
@@ -715,16 +726,12 @@
                     }
                 },
                 {
-                    "name": "register",
-                    "access": "",
+                    "name": "_register",
+                    "access": "private",
                     "virtual": false,
-                    "description": "<p>Make necessary asserts for Command validity. Called by the CommandLoader when\nadding Commands to the CommandRegistry via {@link CommandRegistry#register}</p>",
+                    "description": "<p>Make necessary asserts for Command validity.\nCalled internally by the command loader</p>",
                     "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "void",
-                        "description": ""
-                    }
+                    "examples": []
                 },
                 {
                     "name": "use",
@@ -1011,31 +1018,31 @@
             },
             "functions": [
                 {
-                    "name": "register",
+                    "name": "_registerInternal",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Complete registration of a command and add to the parent\ncollection, erroring on duplicate names and aliases.\nThis is an internal method and should not be used. Use\n<code>registerExternal()</code> instead</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "registerExternal",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Complete registration of a command and add to the parent [Collection]{@link external:Collection},\nerroring on duplicate names and aliases</p>",
+                    "description": "<p>Register an external command add add it to the <code>&lt;Client&gt;.commands</code>\n[collection]{@link external:Collection}, erroring on duplicate\nnames and aliases. External commands will be preserved when the\n<code>reload</code> command is called.</p>\n<blockquote>\n<p><strong>Note:</strong> This is intended for Plugins to use to register external\ncommands with the Client instance. Under normal circumstances\ncommands should be added by placing them in the directory passed\nto the <code>commandsDir</code> YAMDBF Client option</p>\n</blockquote>",
                     "parameters": [
+                        {
+                            "name": "client",
+                            "type": "Client",
+                            "description": "<p>YAMDBF Client instance</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
                         {
                             "name": "command",
                             "type": "Command",
-                            "description": "<p>The Command to be registered</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key to store the Command at. Will be {@link Command#name}</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "reload",
-                            "type": "boolean",
-                            "description": "<p>Whether or not the command is being reloaded and\nreplaced in the collection</p>",
+                            "description": "<p>The Command instance to be registered</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -1852,7 +1859,7 @@
         },
         {
             "name": "StorageProvider",
-            "description": "<p>Abstract class for storage providers to extend. Provides runtime errors\nfor missing method implementations, and is necessary at compile-time\nfor the compiler to recognize a StorageProvider as valid.</p>\n<p>StorageProviders must present an interface with a storage solution that\nprovides access to string values via string keys. Data will be stored\nin the storage solution by the framework as stringified JSON-valid data</p>\n<blockquote>\n<p><strong>Note:</strong> All methods shown on this class must be implemented within\nany storage providers you create and, in the case of <code>keys()</code>\nand <code>get()</code>, <strong>must</strong> return the proper data types or your\nclient <strong>will not work</strong>.</p>\n</blockquote>",
+            "description": "<p>Abstract class for storage providers to extend. Provides runtime errors\nfor missing method implementations, and is necessary at compile-time\nwhen using TypeScript for the compiler to recognize a StorageProvider\nas valid.</p>\n<p>StorageProviders must present an interface with a storage solution that\nprovides access to string values via string keys. Data will be stored\nin the storage solution by the framework as stringified JSON-valid data</p>\n<blockquote>\n<p><strong>Note:</strong> All methods shown on this class must be implemented within\nany storage providers you create and, in the case of <code>keys()</code>\nand <code>get()</code>, <strong>must</strong> return the proper data types or your\nclient <strong>will not work</strong>.</p>\n</blockquote>",
             "extends": [],
             "access": "",
             "virtual": true,

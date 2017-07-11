@@ -904,8 +904,8 @@ for disabled groups</p>
 
     
 
-    <h4 class="name" id="register">
-		<span class="type-signature"></span>.<a href='#register' style='color: black'>register</a><span class="signature">(<span class="param-types">command: <a href="Command.html">Command</a></span>, <span class="param-types">key: string</span>, <span class="param-types">reload: boolean</span>)</span><span class="type-signature"> &rarr; void</span>
+    <h4 class="name" id="registerExternal">
+		<span class="type-signature"></span>.<a href='#registerExternal' style='color: black'>registerExternal</a><span class="signature">(<span class="param-types">client: <a href="Client.html">Client</a></span>, <span class="param-types">command: <a href="Command.html">Command</a></span>)</span><span class="type-signature"> &rarr; void</span>
 	</h4>
 
     
@@ -914,8 +914,16 @@ for disabled groups</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Complete registration of a command and add to the parent <a href="external-Collection.html"><code>Collection</code></a>,
-erroring on duplicate names and aliases</p>
+    <p>Register an external command add add it to the <code>&lt;Client&gt;.commands</code>
+<a href="external-Collection.html"><code>collection</code></a>, erroring on duplicate
+names and aliases. External commands will be preserved when the
+<code>reload</code> command is called.</p>
+<blockquote>
+<p><strong>Note:</strong> This is intended for Plugins to use to register external
+commands with the Client instance. Under normal circumstances
+commands should be added by placing them in the directory passed
+to the <code>commandsDir</code> YAMDBF Client option</p>
+</blockquote>
 </div>
 
 
@@ -951,6 +959,30 @@ erroring on duplicate names and aliases</p>
 
         <tr>
             
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Client.html">Client</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>YAMDBF Client instance</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>command</code></td>
             
 
@@ -968,56 +1000,7 @@ erroring on duplicate names and aliases</p>
 
             
 
-            <td class="description last"><p>The Command to be registered</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string</dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The key to store the Command at. Will be <a href="Command.html#name"><code>Command#name</code></a></p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>reload</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>boolean</dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Whether or not the command is being reloaded and
-replaced in the collection</p></td>
+            <td class="description last"><p>The Command instance to be registered</p></td>
         </tr>
 
     
