@@ -25,7 +25,8 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	{
 		if (reload && external) return;
 		if (super.has(<K> command.name) && !reload
-			&& !(command.overloads && command.overloads !== super.get(<K> command.overloads).name))
+			&& !(command.overloads && super.has(<K> command.overloads)
+				&& command.overloads !== super.get(<K> command.overloads).name))
 				if (!external) throw new Error(`A command with the name "${command.name}" already exists`);
 				else throw new Error(`External command is conflicting with command "${command.name}"`);
 
