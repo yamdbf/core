@@ -143,9 +143,10 @@ malicious before using it</blockquote></div>
             
 
             <td class="description last"><p>The YAMDBF Client instance. This will be passed by
-the plugin loader when the plugin is loaded at runtime. This should be
-received and stored if the plugin is meant to utilize the Client instance
-for any reason</p></td>
+the plugin loader when the plugin is loaded at runtime. This will automatically
+be received and stored under <code>&lt;Plugin&gt;.client</code> unless you provide your own
+constructor implementation, in which case it must be received and passed
+to <code>super()</code></p></td>
         </tr>
 
     

@@ -520,7 +520,7 @@
                     {
                         "name": "client",
                         "type": "Client",
-                        "description": "<p>The YAMDBF Client instance. This will be passed by\nthe plugin loader when the plugin is loaded at runtime. This should be\nreceived and stored if the plugin is meant to utilize the Client instance\nfor any reason</p>",
+                        "description": "<p>The YAMDBF Client instance. This will be passed by\nthe plugin loader when the plugin is loaded at runtime. This will automatically\nbe received and stored under <code>&lt;Plugin&gt;.client</code> unless you provide your own\nconstructor implementation, in which case it must be received and passed\nto <code>super()</code></p>",
                         "default": "",
                         "optional": "",
                         "nullable": ""
