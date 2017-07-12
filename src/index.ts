@@ -5,6 +5,7 @@ export { Client } from './client/Client';
 export { Plugin } from './client/Plugin';
 export { IPlugin } from './client/interface/IPlugin';
 export { PluginLoader } from './client/PluginLoader';
+export { PluginConstructor } from './types/PluginConstructor';
 
 export { Command } from './command/Command';
 export { CommandDispatcher } from './command/CommandDispatcher';
