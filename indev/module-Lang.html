@@ -1089,7 +1089,7 @@ given in the Command's constructor</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Load any command localizations and assign them to commands
+    <p>Load any command localizations from the Client's <code>commandsDir</code>.
 Called automatically by the YAMDBF Client at startup</p>
 </div>
 
@@ -1099,6 +1099,157 @@ Called automatically by the YAMDBF Client at startup</p>
 
 
 
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>void</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".loadCommandLocalizationsFrom">
+		<span class="type-signature">(static) </span>.<a href='#loadCommandLocalizationsFrom' style='color: black'>loadCommandLocalizationsFrom</a><span class="signature">(<span class="param-types">dir: string</span>)</span><span class="type-signature"> &rarr; void</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Load all command helptext localization files (<code>*.lang.json</code>)
+from the given directory. This can be used to manually load
+custom command helptext localizations from any given
+directory (when writing plugins, for instance)</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Directory to load from</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1188,8 +1339,9 @@ Called automatically by the YAMDBF Client at startup</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Load localization files from the Client's <code>localeDir</code>.
-Called automatically by the YAMDBF Client at startup</p>
+    <p>Load base localization files and load localization files
+from the Client's <code>localeDir</code>. Called automatically by
+the YAMDBF Client at startup</p>
 </div>
 
 
@@ -1198,6 +1350,156 @@ Called automatically by the YAMDBF Client at startup</p>
 
 
 
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>void</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".loadLocalizationsFrom">
+		<span class="type-signature">(static) </span>.<a href='#loadLocalizationsFrom' style='color: black'>loadLocalizationsFrom</a><span class="signature">(<span class="param-types">dir: string</span>)</span><span class="type-signature"> &rarr; void</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Load all localization files (<code>*.lang</code>) from the given directory.
+This can be used to manually load custom localizations
+from any given directory (when writing plugins, for instance)</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Directory to load from</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
