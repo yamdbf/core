@@ -151,6 +151,17 @@
                     }
                 },
                 {
+                    "name": "plugins",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Loads plugins and contains loaded plugins in case\naccessing a loaded plugin at runtime is desired</p>",
+                    "type": {
+                        "names": [
+                            "PluginLoader"
+                        ]
+                    }
+                },
+                {
                     "name": "provider",
                     "access": "",
                     "virtual": false,
@@ -490,6 +501,110 @@
                     "access": "",
                     "virtual": false,
                     "description": "<p>To be emitted after the <code>pause</code> event when you have finished setting\nthings up that should be set up before the client is ready for use</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "Plugin",
+            "description": "<p>Abstract class for Client plugins to extend. Provides runtime errors\nfor missing method implementations, and is necessary at compile-time\nwhen using TypeScript for the compiler to recognize a Plugin as valid.</p>\n<blockquote>\n<p><strong>Note:</strong> While abstract, this class does receive and store the Client\ninstance at runtime. You will need to receive this and pass it to <code>super()</code>\nif you are adding additional constructor functionality to a custom Plugin</p>\n</blockquote>\n<p>A plugin should be a self-contained module that provides additional\nfunctionality for a Client. A plugin could do something as simple as\nlogging all command output to a logging channel, registering a set\nof custom commands for the client to use, or even providing new\nlocalization language packs.</p>\n<p>A plugin should not attempt to register custom commands via any means\nother than [&lt;Client&gt;.commands.registerExternal()]{@link CommandRegistry#registerExternal},\notherwise any custom commands could be unloaded if the <code>reload</code> command\nis called</p>\n<blockquote><strong>Note:</strong> A plugin is expected to have two things at runtime:\na <code>name</code> property containing the name of the plugin, and an async <code>init()</code>\nmethod that will be called by the framework after loading the plugin.<br>\nSee: {@link IPlugin#name} and {@link IPlugin#init}</blockquote>\n\n<blockquote><strong>Warning:</strong> Given the nature of the Plugin system, this allows you to\nuse code from other people for your bot. Considering any plugin will\nhave access to your Client instance and thus your Bot token, you should\nbe absolutely certain that the plugin is not going to do anything\nmalicious before using it</blockquote>",
+            "extends": [],
+            "access": "",
+            "virtual": true,
+            "fires": "",
+            "constructor": {
+                "name": "Plugin",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "client",
+                        "type": "Client",
+                        "description": "<p>The YAMDBF Client instance. This will be passed by\nthe plugin loader when the plugin is loaded at runtime. This should be\nreceived and stored if the plugin is meant to utilize the Client instance\nfor any reason</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "client",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>YAMDBF Client instance</p>",
+                    "type": {
+                        "names": [
+                            "Client"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Async method that will be called by the Plugin loader when the\nPlugin is loaded. This is the only method that will be called by\nthe framework automatically, so this should be where anything\nnecessary should be done to make the Plugin operational</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "PluginLoader",
+            "description": "<p>Loads plugins and holds loaded plugins in case accessing\nloaded plugins at runtime is desired</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "PluginLoader",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "client",
+                        "type": "Client",
+                        "description": "",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "plugins",
+                        "type": "Array.<(Plugin|string)>",
+                        "description": "",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "loaded",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Object mapping Plugin names to Plugin instances</p>",
+                    "type": {
+                        "names": [
+                            "object"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "_loadPlugins",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Loads the plugins passed in the YAMDBF Client options.\nCalled internally by the YAMDBF Client at startup</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -3003,6 +3118,14 @@
                     "type": "LogLevel",
                     "description": "<p>Sets the logging level for the logger. Defaults to <code>LogLevel.LOG</code></p>",
                     "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "plugins",
+                    "type": "Array.<(Plugin|string)>",
+                    "description": "<p>An array of Plugin classes (not instances)\n                                                 or plugin package name strings to be loaded and used</p>",
+                    "default": "[]",
                     "optional": true,
                     "nullable": ""
                 }

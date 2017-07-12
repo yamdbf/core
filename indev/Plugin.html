@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Database - Documentation</title>
+    <title>Plugin - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -40,22 +40,36 @@
 	
     
         <h2>
-        Database
+        Plugin
         </h2>
         
-            <div class="class-description"><blockquote>
-<p><strong>Note:</strong> This won't do anything for you if you're not using
-a <code>StorageProvider</code> for your client that uses Sequelize</p>
+            <div class="class-description"><p>Abstract class for Client plugins to extend. Provides runtime errors
+for missing method implementations, and is necessary at compile-time
+when using TypeScript for the compiler to recognize a Plugin as valid.</p>
+<blockquote>
+<p><strong>Note:</strong> While abstract, this class does receive and store the Client
+instance at runtime. You will need to receive this and pass it to <code>super()</code>
+if you are adding additional constructor functionality to a custom Plugin</p>
 </blockquote>
-<p>Holds the Sequelize connection to whichever database backend
-is chosen via the Client StorageProvider. As long as you wait
-until <code>clientReady</code> you can safely use <a href="Database.html#.instance"><code>Database.instance</code></a>
-to get the Database instance and access the Sequelize connection
-via <a href="Database.html#db"><code>Database#db</code></a></p>
-<p>This will allow you to define and access your own Sequelize Models
-without having to create another database connection. This is
-especially important when using <code>SQLiteProvider</code> as SQLite
-does not like having multiple connections</p></div>
+<p>A plugin should be a self-contained module that provides additional
+functionality for a Client. A plugin could do something as simple as
+logging all command output to a logging channel, registering a set
+of custom commands for the client to use, or even providing new
+localization language packs.</p>
+<p>A plugin should not attempt to register custom commands via any means
+other than <a href="CommandRegistry.html#registerExternal"><code>&lt;Client&gt;.commands.registerExternal()</code></a>,
+otherwise any custom commands could be unloaded if the <code>reload</code> command
+is called</p>
+<blockquote><strong>Note:</strong> A plugin is expected to have two things at runtime:
+a <code>name</code> property containing the name of the plugin, and an async <code>init()</code>
+method that will be called by the framework after loading the plugin.<br>
+See: <a href="IPlugin.html#name"><code>IPlugin#name</code></a> and <a href="IPlugin.html#init"><code>IPlugin#init</code></a></blockquote>
+
+<blockquote><strong>Warning:</strong> Given the nature of the Plugin system, this allows you to
+use code from other people for your bot. Considering any plugin will
+have access to your Client instance and thus your Bot token, you should
+be absolutely certain that the plugin is not going to do anything
+malicious before using it</blockquote></div>
         
     
 </header>
@@ -69,8 +83,8 @@ does not like having multiple connections</p></div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Database">
-		<span class="type-signature"></span>new <a href='#Database' style='color: black'>Database</a><span class="signature">()</span><span class="type-signature"></span>
+    <h4 class="name" id="Plugin">
+		<span class="type-signature">(abstract) </span>new <a href='#Plugin' style='color: black'>Plugin</a><span class="signature">(<span class="param-types">client: <a href="Client.html">Client</a></span>)</span><span class="type-signature"></span>
 	</h4>
 
     
@@ -84,6 +98,59 @@ does not like having multiple connections</p></div>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Client.html">Client</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The YAMDBF Client instance. This will be passed by
+the plugin loader when the plugin is loaded at runtime. This should be
+received and stored if the plugin is meant to utilize the Client instance
+for any reason</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -102,6 +169,13 @@ does not like having multiple connections</p></div>
 
     
 
+    
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="IPlugin.html">IPlugin</a></li>
+        
+    </ul></dd>
     
 
     
@@ -161,21 +235,20 @@ does not like having multiple connections</p></div>
 
         
             
-<h4 class="name" id="db">.<a href='#db' style='color: black'>db</a><span class="type-signature">: Sequelize</span></h4>
+<h4 class="name" id="client">.<a href='#client' style='color: black'>client</a><span class="type-signature">: <a href="Client.html">Client</a></span></h4>
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 
 
 <div class="description">
-    <p>The Sequelize connection to the database specified by
-your chosen storage provider</p>
+    <p>YAMDBF Client instance</p>
 </div>
 
 
 
     <b>Type:</b> 
-<span class="param-type"><dd>Sequelize</dd></span>
+<span class="param-type"><dd><a href="Client.html">Client</a></dd></span>
 
 
 
@@ -237,168 +310,6 @@ your chosen storage provider</p>
 
     
 
-    <h4 class="name" id=".instance">
-		<span class="type-signature">(static) </span>.<a href='#instance' style='color: black'>instance</a><span class="signature">(<span class="param-types">url?: string</span>)</span><span class="type-signature"> &rarr; <a href="Database.html">Database</a></span>
-	</h4>
-
-    
-
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-<div class="description">
-    <p>As long as a Sequelize-using storage provider is being used,
-this will return the Database instance holding the Sequelize
-connection to the database</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string</dd></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The database connection url</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-		<b>Returns:</b>
-	
-
-        
-
-
-<span class="param-type">
-	<dd>
-<span class="param-type"><dd><a href="Database.html">Database</a></dd></span>
-
-
-</dd>
-</span>
-
-
-    
-
-
-</div>
-
-        
-            
-
-    
-
     <h4 class="name" id="init">
 		<span class="type-signature"></span>.<a href='#init' style='color: black'>init</a><span class="signature">()</span><span class="type-signature"> &rarr; Promise&lt;void></span>
 	</h4>
@@ -409,7 +320,10 @@ connection to the database</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Authenticate the connection to the database</p>
+    <p>Async method that will be called by the Plugin loader when the
+Plugin is loaded. This is the only method that will be called by
+the framework automatically, so this should be where anything
+necessary should be done to make the Plugin operational</p>
 </div>
 
 
@@ -436,6 +350,13 @@ connection to the database</p>
 
     
 
+    
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="IPlugin.html#init">IPlugin#init</a></li>
+        
+    </ul></dd>
     
 
     
