@@ -1,7 +1,9 @@
 {
-	"al_bhed": {
-		"desc": "dacd lussyht",
-		"info": "dacdehk lussyht ehvusydeuh",
-		"usage": "<prefix>test <dacd>"
+	"test": {
+		"al_bhed": {
+			"desc": "dacd lussyht",
+			"info": "dacdehk lussyht ehvusydeuh",
+			"usage": "<prefix>test <dacd>"
+		}
 	}
 }

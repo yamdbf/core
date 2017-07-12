@@ -14,7 +14,7 @@
 {{ serverOnly ?}}
 {{ ownerOnly ?}}
 Lussyht: {{ commandName }}
-nTaclnebdeuh: {{ desc }}
+Taclnebdeuh: {{ desc }}
 {{ aliasText ?}}
 Icyka: {{ usage }}
 {{ info ?}}

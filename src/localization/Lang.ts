@@ -126,24 +126,24 @@ export class Lang
 	}
 
 	/**
-	 * Load localization files from the Client's `localeDir`.
-	 * Called automatically by the YAMDBF Client at startup
+	 * Load all localization files (`*.lang`) from the given directory.
+	 * This can be used to manually load custom localizations
+	 * from any given directory (when writing plugins, for instance)
 	 * @static
-	 * @method loadLocalizations
+	 * @method loadLocalizationsFrom
+	 * @param {string} dir Directory to load from
 	 * @returns {void}
 	 */
-	public static loadLocalizations(): void
+	public static loadLocalizationsFrom(dir: string): void
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 
-		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\.[^/]+)?\.lang$/;
-
+		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\.[^\/]+)?\.lang$/;
 		let langs: { [key: string]: string[] } = {};
 		let allLangFiles: string[] = [];
-		Lang.setMetaValue('en_us', 'name', 'English');
-		allLangFiles.push(...glob.sync(`${path.join(__dirname, './en_us')}/**/*.lang`));
-		if (Lang._instance.client.localeDir)
-			allLangFiles.push(...glob.sync(`${Lang._instance.client.localeDir}/**/*.lang`));
+		dir = path.resolve(dir);
+		allLangFiles.push(...glob.sync(`${dir}/**/*.lang`));
+		if (allLangFiles.length === 0) throw new Error(`Failed to find any localization files in: ${dir}`);
 
 		for (const langFile of allLangFiles)
 		{
@@ -167,12 +167,69 @@ export class Lang
 					Lang._instance.langs[langName] = parsedLanguageFile;
 			}
 		}
+	}
+
+	/**
+	 * Load base localization files and load localization files
+	 * from the Client's `localeDir`. Called automatically by
+	 * the YAMDBF Client at startup
+	 * @static
+	 * @method loadLocalizations
+	 * @returns {void}
+	 */
+	public static loadLocalizations(): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
+		Lang.setMetaValue('en_us', 'name', 'English');
+		Lang.loadLocalizationsFrom(path.join(__dirname, './en_us'));
+		if (Lang._instance.client.localeDir)
+			Lang.loadLocalizationsFrom(Lang._instance.client.localeDir);
 
 		Lang.logger.info('Lang', `Loaded string localizations for ${Object.keys(Lang.langs).length} languages`);
 	}
 
 	/**
-	 * Load any command localizations and assign them to commands
+	 * Load all command helptext localization files (`*.lang.json`)
+	 * from the given directory. This can be used to manually load
+	 * custom command helptext localizations from any given
+	 * directory (when writing plugins, for instance)
+	 * @static
+	 * @method loadCommandLocalizationsFrom
+	 * @param {string} dir Directory to load from
+	 * @returns {void}
+	 */
+	public static loadCommandLocalizationsFrom(dir: string): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		dir = path.resolve(dir);
+		let allLangFiles: string[] = [];
+		allLangFiles.push(...glob.sync(`${dir}/**/*.lang.json`));
+		if (allLangFiles.length === 0) return;
+
+		for (const langFile of allLangFiles)
+		{
+			let localizations: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
+			try { localizations = require(langFile); }
+			catch (err) { continue; }
+
+			for (const command of Object.keys(localizations))
+				for (const lang of Object.keys(localizations[command]))
+				{
+					if (typeof Util.getNestedValue(Lang._instance.commandInfo, [command, lang]) === 'undefined')
+						Util.assignNestedValue(Lang._instance.commandInfo, [command, lang], {});
+
+					Lang._instance.commandInfo[command][lang] = {
+						...Lang._instance.commandInfo[command][lang],
+						...localizations[command][lang]
+					};
+				}
+
+		}
+	}
+
+	/**
+	 * Load any command localizations from the Client's `commandsDir`.
 	 * Called automatically by the YAMDBF Client at startup
 	 * @static
 	 * @method loadCommandLocalizations
@@ -182,16 +239,7 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 
-		for (const command of Lang._instance.client.commands.values())
-		{
-			let localizationFile: string =
-				glob.sync(`${Lang._instance.client.commandsDir}/**/${command.name}.lang.json`)[0];
-			if (!localizationFile) continue;
-			let localizations: { [name: string]: LocalizedCommandInfo };
-			try { localizations = require(localizationFile); }
-			catch (err) { continue; }
-			Lang._instance.commandInfo[command.name] = localizations;
-		}
+		Lang.loadCommandLocalizationsFrom(Lang._instance.client.commandsDir);
 
 		const helpTextLangs: Set<string> = new Set();
 		for (const command of Object.keys(Lang._instance.commandInfo))

@@ -22,7 +22,7 @@ class Test extends Client
 			token: config.token,
 			owner: config.owner,
 			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
-			// commandsDir: './commands',
+			commandsDir: './commands',
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
@@ -57,7 +57,7 @@ class Test extends Client
 	{
 		logger.debug('Test', foo, bar.toString());
 		await this.setDefaultSetting('foo', 'bar');
-		this.commands.registerExternal(this, new TestCommand());
+		// this.commands.registerExternal(this, new TestCommand());
 	}
 }
 const test: Test = new Test();

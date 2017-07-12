@@ -1,6 +1,8 @@
 {
-	"al_bhed": {
-		"desc": "Ajymiyda bnujetat Javascript luta",
-		"usage": "<prefix>eval <...luta>"
+	"eval": {
+		"al_bhed": {
+			"desc": "Ajymiyda bnujetat Javascript luta",
+			"usage": "<prefix>eval <...luta>"
+		}
 	}
 }
