@@ -37,6 +37,7 @@ import { ListenerUtil } from '../util/ListenerUtil';
 import { Lang } from '../localization/Lang';
 import { PluginLoader } from './PluginLoader';
 import { Plugin } from './Plugin';
+import { PluginConstructor } from '../types/PluginConstructor';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -70,7 +71,7 @@ export class Client extends Discord.Client
 	public readonly commands: CommandRegistry<this, string, Command<this>>;
 
 	private readonly _token: string;
-	private readonly _plugins: (typeof Plugin | string)[];
+	private readonly _plugins: (PluginConstructor | string)[];
 	private readonly _storageFactory: StorageFactory;
 	private readonly _guildDataStorage: StorageProvider;
 	private readonly _guildSettingStorage: StorageProvider;

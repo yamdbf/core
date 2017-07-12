@@ -1,6 +1,7 @@
 import { Client } from './Client';
 import { Plugin } from './Plugin';
 import { Logger } from '../util/logger/Logger';
+import { PluginConstructor } from '../types/PluginConstructor';
 
 /**
  * Loads plugins and holds loaded plugins in case accessing
@@ -12,10 +13,10 @@ export class PluginLoader
 {
 	private logger: Logger = Logger.instance();
 	private _client: Client;
-	private _plugins: (typeof Plugin | string)[];
+	private _plugins: (PluginConstructor | string)[];
 	public loaded: { [name: string]: any };
 
-	public constructor(client: Client, plugins: (typeof Plugin | string)[])
+	public constructor(client: Client, plugins: (PluginConstructor | string)[])
 	{
 		this._client = client;
 		this._plugins = plugins;
@@ -40,7 +41,7 @@ export class PluginLoader
 			let loadedPlugin: Plugin;
 			if (typeof plugin === 'string')
 			{
-				try { loadedPlugin = new (require(plugin)(this._client)); }
+				try { loadedPlugin = new (require(plugin))(this._client); }
 				catch (err)
 				{
 					this.logger.warn(tag, `Failed to load plugin '${plugin}'`);

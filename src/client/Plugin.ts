@@ -1,14 +1,14 @@
 import { IPlugin } from './interface/IPlugin';
-import { Client } from './Client';
 
 /**
  * Abstract class for Client plugins to extend. Provides runtime errors
  * for missing method implementations, and is necessary at compile-time
  * when using TypeScript for the compiler to recognize a Plugin as valid.
  *
- * >**Note:** While abstract, this class does receive and store the Client
- * instance at runtime. You will need to receive this and pass it to `super()`
- * if you are adding additional constructor functionality to a custom Plugin
+ * Plugins will always be passed the YAMDBF Client instance when loaded.
+ * If you intend to do anything with it you must receive it in your
+ * plugin constructor which means you will need a `super()` call since
+ * you will be overriding the parent Plugin constructor
  *
  * A plugin should be a self-contained module that provides additional
  * functionality for a Client. A plugin could do something as simple as
@@ -41,20 +41,6 @@ import { Client } from './Client';
  */
 export class Plugin implements IPlugin
 {
-	protected client: Client;
 	public name: string;
-
-	public constructor(client: Client)
-	{
-		/**
-		 * YAMDBF Client instance
-		 * @type {Client}
-		 */
-		this.client = client;
-	}
-
-	public async init(): Promise<void>
-	{
-		throw new Error('Plugins must implement the `init` method');
-	}
+	public async init(): Promise<void> { throw new Error('Plugins must implement the `init` method'); }
 }
