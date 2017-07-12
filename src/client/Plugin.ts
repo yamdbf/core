@@ -34,9 +34,10 @@ import { Client } from './Client';
  * @abstract
  * @implements IPlugin
  * @param {Client} client The YAMDBF Client instance. This will be passed by
- * the plugin loader when the plugin is loaded at runtime. This should be
- * received and stored if the plugin is meant to utilize the Client instance
- * for any reason
+ * the plugin loader when the plugin is loaded at runtime. This will automatically
+ * be received and stored under `<Plugin>.client` unless you provide your own
+ * constructor implementation, in which case it must be received and passed
+ * to `super()`
  */
 export class Plugin implements IPlugin
 {
