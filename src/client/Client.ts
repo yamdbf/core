@@ -35,6 +35,8 @@ import { BaseCommandName } from '../types/BaseCommandName';
 import { Logger, logger } from '../util/logger/Logger';
 import { ListenerUtil } from '../util/ListenerUtil';
 import { Lang } from '../localization/Lang';
+import { PluginLoader } from './PluginLoader';
+import { Plugin } from './Plugin';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -60,6 +62,7 @@ export class Client extends Discord.Client
 	public readonly pause: boolean;
 	public readonly disableBase: BaseCommandName[];
 	public readonly provider: StorageProviderConstructor;
+	public readonly plugins: PluginLoader;
 	public readonly _middleware: MiddlewareFunction[];
 	public readonly _rateLimiter: RateLimiter;
 
@@ -67,6 +70,7 @@ export class Client extends Discord.Client
 	public readonly commands: CommandRegistry<this, string, Command<this>>;
 
 	private readonly _token: string;
+	private readonly _plugins: (typeof Plugin | string)[];
 	private readonly _storageFactory: StorageFactory;
 	private readonly _guildDataStorage: StorageProvider;
 	private readonly _guildSettingStorage: StorageProvider;
@@ -181,6 +185,15 @@ export class Client extends Discord.Client
 		if (typeof options.logLevel !== 'undefined')
 			this._logger.setLogLevel(options.logLevel);
 
+		this._plugins = options.plugins || [];
+
+		/**
+		 * Loads plugins and contains loaded plugins in case
+		 * accessing a loaded plugin at runtime is desired
+		 * @type {PluginLoader}
+		 */
+		this.plugins = new PluginLoader(this, this._plugins);
+
 		// Middleware function storage for the client instance
 		this._middleware = [];
 
@@ -258,6 +271,7 @@ export class Client extends Discord.Client
 			this._logger.log('Client', this.readyText);
 
 		if (!this.passive) this._dispatcher.setReady();
+		await this.plugins._loadPlugins();
 		this.emit('clientReady');
 	}
 

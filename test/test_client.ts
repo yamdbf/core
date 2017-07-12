@@ -8,10 +8,11 @@ import {
 	Lang,
 	// Providers
 } from '../bin/';
+// import TestCommand from './commands/test_command';
+import { TestPlugin } from './test_plugin';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
-import TestCommand from './commands/test_command';
 
 class Test extends Client
 {
@@ -22,11 +23,12 @@ class Test extends Client
 			token: config.token,
 			owner: config.owner,
 			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
-			commandsDir: './commands',
+			// commandsDir: './commands',
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
 			logLevel: LogLevel.DEBUG,
+			plugins: [TestPlugin]
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 		});

@@ -18,11 +18,14 @@
  * @property {string[]} [disableBase=[]] See: {@link Client#disableBase}
  * @property {string} [ratelimit] Sets a global rate limit on command calls for every user
  * @property {LogLevel} [logLevel] Sets the logging level for the logger. Defaults to `LogLevel.LOG`
+ * @property {Array<Plugin|string>} [plugins=[]] An array of Plugin classes (not instances)
+ * 												 or plugin package name strings to be loaded and used
  */
 
 import { StorageProviderConstructor } from './StorageProviderConstructor';
 import { BaseCommandName } from './BaseCommandName';
 import { LogLevel } from './LogLevel';
+import { Plugin } from '../client/Plugin';
 
 export type YAMDBFOptions = {
 	token?: string;
@@ -42,4 +45,5 @@ export type YAMDBFOptions = {
 	disableBase?: BaseCommandName[];
 	ratelimit?: string;
 	logLevel?: LogLevel;
+	plugins?: (typeof Plugin | string)[];
 };

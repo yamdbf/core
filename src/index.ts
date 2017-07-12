@@ -2,10 +2,15 @@ import 'source-map-support/register';
 import * as path from 'path';
 
 export { Client } from './client/Client';
+export { Plugin } from './client/Plugin';
+export { IPlugin } from './client/interface/IPlugin';
+export { PluginLoader } from './client/PluginLoader';
+
 export { Command } from './command/Command';
 export { CommandDispatcher } from './command/CommandDispatcher';
 export { CommandLoader } from './command/CommandLoader';
 export { CommandRegistry } from './command/CommandRegistry';
+
 export { GuildSettings } from './storage/GuildSettings';
 export { GuildStorageLoader } from './storage/GuildStorageLoader';
 export { KeyedStorage } from './storage/KeyedStorage';

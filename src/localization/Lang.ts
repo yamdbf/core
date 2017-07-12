@@ -239,6 +239,7 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 
+		if (!Lang._instance.client.commandsDir) return;
 		Lang.loadCommandLocalizationsFrom(Lang._instance.client.commandsDir);
 
 		const helpTextLangs: Set<string> = new Set();
