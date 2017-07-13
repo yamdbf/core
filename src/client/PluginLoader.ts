@@ -66,8 +66,13 @@ export class PluginLoader
 
 			if (typeof this.loaded[loadedPlugin.name] !== 'undefined')
 			{
-				this.logger.warn(
-					tag, `Skipping plugin load with duplicate name: '${loadedPlugin.name}'`);
+				this.logger.warn(tag, `Skipping plugin load with duplicate name: '${loadedPlugin.name}'`);
+				continue;
+			}
+
+			if (typeof loadedPlugin.init === 'undefined')
+			{
+				this.logger.warn(tag, `Plugin at plugins[${index}] is not a valid plugin.`);
 				continue;
 			}
 
