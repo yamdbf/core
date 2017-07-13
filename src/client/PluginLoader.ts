@@ -44,7 +44,7 @@ export class PluginLoader
 				try { loadedPlugin = new (require(plugin))(this._client); }
 				catch (err)
 				{
-					this.logger.warn(tag, `Failed to load plugin '${plugin}'`);
+					this.logger.warn(tag, `Failed to load plugin '${plugin}': ${err}`);
 					continue;
 				}
 			}
@@ -53,7 +53,7 @@ export class PluginLoader
 				try { loadedPlugin = new plugin(this._client); }
 				catch (err)
 				{
-					this.logger.warn(tag, `Failed to load plugin at plugins[${index}]`);
+					this.logger.warn(tag, `Failed to load plugin at plugins[${index}]: ${err}`);
 					continue;
 				}
 			}
