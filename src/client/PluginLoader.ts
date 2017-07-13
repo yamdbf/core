@@ -41,10 +41,23 @@ export class PluginLoader
 			let loadedPlugin: Plugin;
 			if (typeof plugin === 'string')
 			{
-				try { loadedPlugin = new (require(plugin))(this._client); }
-				catch (err)
+				let error: string;
+				if (!/^yamdbf-/.test(plugin))
 				{
-					this.logger.warn(tag, `Failed to load plugin '${plugin}': ${err}`);
+					try { loadedPlugin = new (require(plugin))(this._client); }
+					catch (err) { error = `${err}, trying 'yamdbf-${plugin}'...`; }
+
+					try { loadedPlugin = loadedPlugin || new (require(`yamdbf-${plugin}`))(this._client); }
+					catch (err) { error = error ? `${error}\n${err}` : err; }
+				}
+				else
+				{
+					try { loadedPlugin = new (require(plugin))(this._client); }
+					catch (err) { error = err; }
+				}
+
+				if (!loadedPlugin) {
+					this.logger.warn(tag, `Failed to load plugin '${plugin}':\n\n${error}\n`);
 					continue;
 				}
 			}
@@ -53,26 +66,26 @@ export class PluginLoader
 				try { loadedPlugin = new plugin(this._client); }
 				catch (err)
 				{
-					this.logger.warn(tag, `Failed to load plugin at plugins[${index}]: ${err}`);
+					this.logger.warn(tag, `Failed to load plugin at plugins[${index}]:\n\n${err}`);
 					continue;
 				}
 			}
 
 			if (typeof loadedPlugin.name === 'undefined' || loadedPlugin.name === '')
 			{
-				this.logger.warn(tag, 'A plugin is missing a name and could not be loaded');
-				continue;
-			}
-
-			if (typeof this.loaded[loadedPlugin.name] !== 'undefined')
-			{
-				this.logger.warn(tag, `Skipping plugin load with duplicate name: '${loadedPlugin.name}'`);
+				this.logger.warn(tag, `Plugin at plugins[${index}] is invalid: Missing name`);
 				continue;
 			}
 
 			if (typeof loadedPlugin.init === 'undefined')
 			{
-				this.logger.warn(tag, `Plugin at plugins[${index}] is not a valid plugin.`);
+				this.logger.warn(tag, `Plugin at plugins[${index}] is invalid: Missing init()`);
+				continue;
+			}
+
+			if (typeof this.loaded[loadedPlugin.name] !== 'undefined')
+			{
+				this.logger.warn(tag, `Skipping Plugin at plugins[${index}]: Duplicate name '${loadedPlugin.name}'`);
 				continue;
 			}
 
