@@ -7,7 +7,7 @@ import { PluginConstructor } from '../types/PluginConstructor';
  * Loads plugins and holds loaded plugins in case accessing
  * loaded plugins at runtime is desired
  * @param {Client} client
- * @param {Array<Plugin|string>} plugins
+ * @param {Array<PluginConstructor|string>} plugins
  */
 export class PluginLoader
 {

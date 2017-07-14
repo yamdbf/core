@@ -113,9 +113,9 @@ export class Logger
 	}
 
 	/**
-	 * Add a [transport]{@link TransportFunction} to the Logger
-	 * singleton instance
-	 * @param {TransportFunction} transport The transport function to add
+	 * Add a {@link Transport} for the Logger to use for logging.
+	 * The logger will log to all provided transports
+	 * @param {Transport} transport The transport to add
 	 * @returns {void}
 	 */
 	public addTransport(transport: Transport): void
@@ -131,8 +131,27 @@ export class Logger
 	}
 
 	/**
-	 * Log to the logger transports. This is the base level of logging and is the default
-	 * log level, represented by `LogLevel.LOG`, when the logger singleton is created
+	 * Remove the default console logging transport. This is
+	 * useful if you want to provide your own transport that
+	 * uses the console.
+	 *
+	 * This should be run before creating a YAMDBF Client
+	 * instance if you do not any logging to be done with the
+	 * base transport before you get the chance to swap it out.
+	 * ```
+	 * Logger.instance().removeBaseTransport();
+	 * Logger.instance().addTransport({ transport[, level] });
+	 * ```
+	 * @returns {void}
+	 */
+	public removeBaseTransport(): void
+	{
+		this._transports.shift();
+	}
+
+	/**
+	 * Log useful information to the Logger transports. Will not be logged
+	 * unless the log level is `LogLevel.LOG` or higher
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
 	 * @returns {Promise<void>}
@@ -143,10 +162,10 @@ export class Logger
 	}
 
 	/**
-	 * Log information that doesn't need to be visible by default to the logger
-	 * transports. Will not be logged unless the logging level is `LogLevel.INFO`
-	 * or higher
-	 * @param {string} tag Tag to prefix the log with
+	 * Log less important information to the logger transports. Will not
+	 * be logged unless the logging level is `LogLevel.INFO` or higher
+	 * @param {string} tag Tag to prefix the log with to identify the
+	 * 					   source of the log
 	 * @param {...string} text String(s) to log
 	 * @returns {Promise<void>}
 	 */
@@ -156,8 +175,8 @@ export class Logger
 	}
 
 	/**
-	 * Log warning text to the logger transports.
-	 * Will not be logged unless the logging level is `LogLevel.WARN` or higher
+	 * Log warning text to the logger transports. Will not be logged
+	 * unless the logging level is `LogLevel.WARN` or higher
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
 	 * @returns {Promise<void>}
@@ -168,8 +187,8 @@ export class Logger
 	}
 
 	/**
-	 * Log error text to the logger transports.
-	 * Will not be logged unless the logging level is `LogLevel.ERROR` or higher
+	 * Log error text to the logger transports. Will not be logged
+	 * unless the logging level is `LogLevel.ERROR` or higher
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
 	 * @returns {Promise<void>}
@@ -180,8 +199,8 @@ export class Logger
 	}
 
 	/**
-	 * Log debug text to the logger transports.
-	 * Will not be logged unless the logging level is `LogLevel.DEBUG`
+	 * Log debug text to the logger transports. Will not be logged
+	 * unless the logging level is `LogLevel.DEBUG`
 	 * @param {string} tag Tag to prefix the log with
 	 * @param {...string} text String(s) to log
 	 * @returns {Promise<void>}
