@@ -2969,6 +2969,28 @@
             "properties": []
         },
         {
+            "name": "Transport",
+            "description": "<p>Represents a transport object for\nthe {@link Logger}.</p>",
+            "properties": [
+                {
+                    "name": "transport",
+                    "type": "TransportFunction",
+                    "description": "<p>The transport function to use for this transport</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                },
+                {
+                    "name": "level",
+                    "type": "LogLevel",
+                    "description": "<p>The log level for this transport. Will default dynamically\n                                to the Logger's log level if none is provided</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
             "name": "TransportFunction",
             "description": "<p>Represents a function to be given\nto {@link Logger#addTransport} that will receive log data. What is done\nwith that log data is up to you, but logging to a file or a database\nwould be some examples</p>",
             "properties": []
