@@ -66,7 +66,7 @@ export class PluginLoader
 				try { loadedPlugin = new plugin(this._client); }
 				catch (err)
 				{
-					this.logger.warn(tag, `Failed to load plugin at plugins[${index}]:\n\n${err}`);
+					this.logger.warn(tag, `Failed to load plugin at plugins[${index}]:\n\n${err}\n`);
 					continue;
 				}
 			}
