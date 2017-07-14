@@ -653,7 +653,7 @@ Otherwise the singleton instance can be accessed via <code>Logger.instance()</co
     
 
     <h4 class="name" id="addTransport">
-		<span class="type-signature"></span>.<a href='#addTransport' style='color: black'>addTransport</a><span class="signature">(<span class="param-types">transport: <a href="global.html#TransportFunction">TransportFunction</a></span>)</span><span class="type-signature"> &rarr; void</span>
+		<span class="type-signature"></span>.<a href='#addTransport' style='color: black'>addTransport</a><span class="signature">(<span class="param-types">transport: <a href="global.html#Transport">Transport</a></span>)</span><span class="type-signature"> &rarr; void</span>
 	</h4>
 
     
@@ -662,8 +662,8 @@ Otherwise the singleton instance can be accessed via <code>Logger.instance()</co
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Add a <a href="global.html#TransportFunction"><code>transport</code></a> to the Logger
-singleton instance</p>
+    <p>Add a <a href="global.html#Transport"><code>Transport</code></a> for the Logger to use for logging.
+The logger will log to all provided transports</p>
 </div>
 
 
@@ -705,7 +705,7 @@ singleton instance</p>
             <td class="type">
             
                 
-<span class="param-type"><dd><a href="global.html#TransportFunction">TransportFunction</a></dd></span>
+<span class="param-type"><dd><a href="global.html#Transport">Transport</a></dd></span>
 
 
 
@@ -716,7 +716,7 @@ singleton instance</p>
 
             
 
-            <td class="description last"><p>The transport function to add</p></td>
+            <td class="description last"><p>The transport to add</p></td>
         </tr>
 
     
@@ -811,8 +811,8 @@ singleton instance</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Log debug text to the logger transports.
-Will not be logged unless the logging level is <code>LogLevel.DEBUG</code></p>
+    <p>Log debug text to the logger transports. Will not be logged
+unless the logging level is <code>LogLevel.DEBUG</code></p>
 </div>
 
 
@@ -1004,8 +1004,8 @@ Will not be logged unless the logging level is <code>LogLevel.DEBUG</code></p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Log error text to the logger transports.
-Will not be logged unless the logging level is <code>LogLevel.ERROR</code> or higher</p>
+    <p>Log error text to the logger transports. Will not be logged
+unless the logging level is <code>LogLevel.ERROR</code> or higher</p>
 </div>
 
 
@@ -1197,9 +1197,202 @@ Will not be logged unless the logging level is <code>LogLevel.ERROR</code> or hi
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Log information that doesn't need to be visible by default to the logger
-transports. Will not be logged unless the logging level is <code>LogLevel.INFO</code>
-or higher</p>
+    <p>Log less important information to the logger transports. Will not
+be logged unless the logging level is <code>LogLevel.INFO</code> or higher</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tag</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Tag to prefix the log with to identify the
+                       source of the log</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>String(s) to log</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>Promise&lt;void></dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id="log">
+		<span class="type-signature"></span>.<a href='#log' style='color: black'>log</a><span class="signature">(<span class="param-types">tag: string</span>, <span class="param-types">text: string</span>)</span><span class="type-signature"> &rarr; Promise&lt;void></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Log useful information to the Logger transports. Will not be logged
+unless the log level is <code>LogLevel.LOG</code> or higher</p>
 </div>
 
 
@@ -1381,8 +1574,8 @@ or higher</p>
 
     
 
-    <h4 class="name" id="log">
-		<span class="type-signature"></span>.<a href='#log' style='color: black'>log</a><span class="signature">(<span class="param-types">tag: string</span>, <span class="param-types">text: string</span>)</span><span class="type-signature"> &rarr; Promise&lt;void></span>
+    <h4 class="name" id="removeBaseTransport">
+		<span class="type-signature"></span>.<a href='#removeBaseTransport' style='color: black'>removeBaseTransport</a><span class="signature">()</span><span class="type-signature"> &rarr; void</span>
 	</h4>
 
     
@@ -1391,8 +1584,14 @@ or higher</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Log to the logger transports. This is the base level of logging and is the default
-log level, represented by <code>LogLevel.LOG</code>, when the logger singleton is created</p>
+    <p>Remove the default console logging transport. This is
+useful if you want to provide your own transport that
+uses the console.</p>
+<p>This should be run before creating a YAMDBF Client
+instance if you do not any logging to be done with the
+base transport before you get the chance to swap it out.</p>
+<pre class="prettyprint source"><code>Logger.instance().removeBaseTransport();
+Logger.instance().addTransport({ transport[, level] });</code></pre>
 </div>
 
 
@@ -1401,100 +1600,6 @@ log level, represented by <code>LogLevel.LOG</code>, when the logger singleton i
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>tag</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string</dd></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Tag to prefix the log with</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>text</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string</dd></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                    &lt;repeatable><br>
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>String(s) to log</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -1557,7 +1662,7 @@ log level, represented by <code>LogLevel.LOG</code>, when the logger singleton i
 
 <span class="param-type">
 	<dd>
-<span class="param-type"><dd>Promise&lt;void></dd></span>
+<span class="param-type"><dd>void</dd></span>
 
 
 </dd>
@@ -1732,8 +1837,8 @@ log level, represented by <code>LogLevel.LOG</code>, when the logger singleton i
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Log warning text to the logger transports.
-Will not be logged unless the logging level is <code>LogLevel.WARN</code> or higher</p>
+    <p>Log warning text to the logger transports. Will not be logged
+unless the logging level is <code>LogLevel.WARN</code> or higher</p>
 </div>
 
 

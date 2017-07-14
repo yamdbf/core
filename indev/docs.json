@@ -564,7 +564,7 @@
                     },
                     {
                         "name": "plugins",
-                        "type": "Array.<(Plugin|string)>",
+                        "type": "Array.<(PluginConstructor|string)>",
                         "description": "",
                         "default": "",
                         "optional": "",
@@ -2414,12 +2414,12 @@
                     "name": "addTransport",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Add a [transport]{@link TransportFunction} to the Logger\nsingleton instance</p>",
+                    "description": "<p>Add a {@link Transport} for the Logger to use for logging.\nThe logger will log to all provided transports</p>",
                     "parameters": [
                         {
                             "name": "transport",
-                            "type": "TransportFunction",
-                            "description": "<p>The transport function to add</p>",
+                            "type": "Transport",
+                            "description": "<p>The transport to add</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -2432,10 +2432,22 @@
                     }
                 },
                 {
+                    "name": "removeBaseTransport",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove the default console logging transport. This is\nuseful if you want to provide your own transport that\nuses the console.</p>\n<p>This should be run before creating a YAMDBF Client\ninstance if you do not any logging to be done with the\nbase transport before you get the chance to swap it out.</p>\n<pre class=\"prettyprint source\"><code>Logger.instance().removeBaseTransport();\nLogger.instance().addTransport({ transport[, level] });</code></pre>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "log",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log to the logger transports. This is the base level of logging and is the default\nlog level, represented by <code>LogLevel.LOG</code>, when the logger singleton is created</p>",
+                    "description": "<p>Log useful information to the Logger transports. Will not be logged\nunless the log level is <code>LogLevel.LOG</code> or higher</p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2464,12 +2476,12 @@
                     "name": "info",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log information that doesn't need to be visible by default to the logger\ntransports. Will not be logged unless the logging level is <code>LogLevel.INFO</code>\nor higher</p>",
+                    "description": "<p>Log less important information to the logger transports. Will not\nbe logged unless the logging level is <code>LogLevel.INFO</code> or higher</p>",
                     "parameters": [
                         {
                             "name": "tag",
                             "type": "string",
-                            "description": "<p>Tag to prefix the log with</p>",
+                            "description": "<p>Tag to prefix the log with to identify the\n                       source of the log</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -2493,7 +2505,7 @@
                     "name": "warn",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log warning text to the logger transports.\nWill not be logged unless the logging level is <code>LogLevel.WARN</code> or higher</p>",
+                    "description": "<p>Log warning text to the logger transports. Will not be logged\nunless the logging level is <code>LogLevel.WARN</code> or higher</p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2522,7 +2534,7 @@
                     "name": "error",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log error text to the logger transports.\nWill not be logged unless the logging level is <code>LogLevel.ERROR</code> or higher</p>",
+                    "description": "<p>Log error text to the logger transports. Will not be logged\nunless the logging level is <code>LogLevel.ERROR</code> or higher</p>",
                     "parameters": [
                         {
                             "name": "tag",
@@ -2551,7 +2563,7 @@
                     "name": "debug",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Log debug text to the logger transports.\nWill not be logged unless the logging level is <code>LogLevel.DEBUG</code></p>",
+                    "description": "<p>Log debug text to the logger transports. Will not be logged\nunless the logging level is <code>LogLevel.DEBUG</code></p>",
                     "parameters": [
                         {
                             "name": "tag",
