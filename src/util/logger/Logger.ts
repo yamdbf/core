@@ -29,6 +29,15 @@ export class Logger
 		this._logLevel = LogLevel.DEBUG;
 		this._transports = [];
 
+		type Types = { [type: string]: chalk.ChalkChain };
+		const types: Types = {
+			LOG: chalk.green,
+			INFO: chalk.blue,
+			WARN: chalk.yellow,
+			ERROR: chalk.red,
+			DEBUG: chalk.magenta
+		};
+
 		this.addTransport({
 			transport: data => {
 				let { type, tag, text } = data;
@@ -41,14 +50,7 @@ export class Logger
 					minutes < 10 ? `0${minutes}` : minutes}:${
 					seconds < 10 ? `0${seconds}` : seconds}`;
 
-				type types = { [type: string]: chalk.ChalkChain };
-				type = (<types> {
-					LOG: chalk.green,
-					INFO: chalk.blue,
-					WARN: chalk.yellow,
-					ERROR: chalk.red,
-					DEBUG: chalk.magenta
-				})[type](type);
+				type = types[type](type);
 
 				process.stdout.write(`[${chalk.grey(timestamp)}][${type}][${chalk.cyan(tag)}]: ${text}\n`);
 			}
