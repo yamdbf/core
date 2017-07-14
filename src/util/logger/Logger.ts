@@ -1,4 +1,5 @@
 import { TransportFunction } from '../../types/TransportFunction';
+import { Transport } from '../../types/Transport';
 import { LogLevel } from '../../types/LogLevel';
 import { LogData } from '../../types/LogData';
 export { logger } from './LoggerDecorator';
@@ -18,27 +19,39 @@ export class Logger
 {
 	private static _instance: Logger;
 	private _logLevel: LogLevel;
-	private _transports: TransportFunction[];
+	private _transports: Transport[];
 	private constructor()
 	{
 		if (Logger._instance)
 			throw new Error('Cannot create multiple instances of Logger singleton. Use Logger.instance() instead');
+
 		Logger._instance = this;
-		this._logLevel = 1;
+		this._logLevel = LogLevel.DEBUG;
 		this._transports = [];
 
-		this.addTransport(data => {
-			const { type, tag, text } = data;
-			const d: Date = data.timestamp;
-			const hours: number = d.getHours();
-			const minutes: number = d.getMinutes();
-			const seconds: number = d.getSeconds();
-			const timestamp: string = `${
-				hours < 10 ? `0${hours}` : hours}:${
-				minutes < 10 ? `0${minutes}` : minutes}:${
-				seconds < 10 ? `0${seconds}` : seconds}`;
+		this.addTransport({
+			transport: data => {
+				let { type, tag, text } = data;
+				const d: Date = data.timestamp;
+				const hours: number = d.getHours();
+				const minutes: number = d.getMinutes();
+				const seconds: number = d.getSeconds();
+				const timestamp: string = `${
+					hours < 10 ? `0${hours}` : hours}:${
+					minutes < 10 ? `0${minutes}` : minutes}:${
+					seconds < 10 ? `0${seconds}` : seconds}`;
 
-			process.stdout.write(`[${chalk.grey(timestamp)}][${type}][${chalk.cyan(tag)}]: ${text}\n`);
+				type types = { [type: string]: chalk.ChalkChain };
+				type = (<types> {
+					LOG: chalk.green,
+					INFO: chalk.blue,
+					WARN: chalk.yellow,
+					ERROR: chalk.red,
+					DEBUG: chalk.magenta
+				})[type](type);
+
+				process.stdout.write(`[${chalk.grey(timestamp)}][${type}][${chalk.cyan(tag)}]: ${text}\n`);
+			}
 		});
 
 	}
@@ -105,8 +118,15 @@ export class Logger
 	 * @param {TransportFunction} transport The transport function to add
 	 * @returns {void}
 	 */
-	public addTransport(transport: TransportFunction): void
+	public addTransport(transport: Transport): void
 	{
+		const level: LogLevel | (() => LogLevel) = transport.level;
+		transport.level = typeof level !== 'undefined'
+			? typeof level === 'function'
+				? level
+				: () => <LogLevel> level
+			: () => this._logLevel;
+
 		this._transports.push(transport);
 	}
 
@@ -119,8 +139,7 @@ export class Logger
 	 */
 	public async log(tag: string, ...text: string[]): Promise<void>
 	{
-		if (this._logLevel < LogLevel.LOG) return;
-		this._write(chalk.green('LOG'), tag, text.join(' '));
+		this._write(LogLevel.LOG, 'LOG', tag, text.join(' '));
 	}
 
 	/**
@@ -133,8 +152,7 @@ export class Logger
 	 */
 	public async info(tag: string, ...text: string[]): Promise<void>
 	{
-		if (this._logLevel < LogLevel.INFO) return;
-		this._write(chalk.blue('INFO'), tag, text.join(' '));
+		this._write(LogLevel.INFO, 'INFO', tag, text.join(' '));
 	}
 
 	/**
@@ -146,8 +164,7 @@ export class Logger
 	 */
 	public async warn(tag: string, ...text: string[]): Promise<void>
 	{
-		if (this._logLevel < LogLevel.WARN) return;
-		this._write(chalk.yellow('WARN'), tag, text.join(' '));
+		this._write(LogLevel.WARN, 'WARN', tag, text.join(' '));
 	}
 
 	/**
@@ -159,8 +176,7 @@ export class Logger
 	 */
 	public async error(tag: string, ...text: string[]): Promise<void>
 	{
-		if (this._logLevel < LogLevel.ERROR) return;
-		this._write(chalk.red('ERROR'), tag, text.join(' '));
+		this._write(LogLevel.ERROR, 'ERROR', tag, text.join(' '));
 	}
 
 	/**
@@ -172,18 +188,18 @@ export class Logger
 	 */
 	public async debug(tag: string, ...text: string[]): Promise<void>
 	{
-		if (this._logLevel < LogLevel.DEBUG) return;
-		this._write(chalk.magenta('DEBUG'), tag, text.join(' '));
+		this._write(LogLevel.DEBUG, 'DEBUG', tag, text.join(' '));
 	}
 
 	/**
 	 * Send log data to all transports
 	 * @private
 	 */
-	private _write(type: string, tag: string, text: string): void
+	private _write(level: LogLevel, type: string, tag: string, text: string): void
 	{
 		const timestamp: Date = new Date();
-		for (const transport of this._transports)
-			transport({ timestamp, type, tag, text });
+		for (const t of this._transports)
+			if (level <= (<() => LogLevel> t.level)())
+				t.transport({ timestamp, type, tag, text });
 	}
 }

@@ -27,7 +27,6 @@ class Test extends Client
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
-			logLevel: LogLevel.DEBUG,
 			plugins: [TestPlugin]
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
