@@ -879,7 +879,7 @@
                             "nullable": ""
                         },
                         {
-                            "name": "opetions",
+                            "name": "options",
                             "type": "external:MessageOptions",
                             "description": "<p>Optional Discord.js MessageOptions</p>",
                             "default": "",
