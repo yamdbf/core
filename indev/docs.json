@@ -860,7 +860,7 @@
                     "name": "respond",
                     "access": "protected",
                     "virtual": false,
-                    "description": "<p>Send provided response text to the provided message's channel\nvia edit or send, with or without a codeblock language, depending\non whether or not the client is a selfbot and whether or not a\ncodeblock language is given</p>",
+                    "description": "<p>Send provided response to the provided message's channel\nvia edit or send, depending on whether or not the client is\na selfbot</p>",
                     "parameters": [
                         {
                             "name": "message",
@@ -879,9 +879,9 @@
                             "nullable": ""
                         },
                         {
-                            "name": "code",
-                            "type": "string",
-                            "description": "<p>Language to use if a codeblock is desired</p>",
+                            "name": "opetions",
+                            "type": "external:MessageOptions",
+                            "description": "<p>Optional Discord.js MessageOptions</p>",
                             "default": "",
                             "optional": true,
                             "nullable": ""

@@ -1461,7 +1461,7 @@ new commands</p>
     
 
     <h4 class="name" id="respond">
-		<span class="type-signature">(protected) </span>.<a href='#respond' style='color: black'>respond</a><span class="signature">(<span class="param-types">message: <a href="external-Message.html">Message</a></span>, <span class="param-types">response: string</span>, <span class="param-types">code?: string</span>)</span><span class="type-signature"> &rarr; Promise&lt;<a href="external-Message.html">Message</a> | <a href="external-Message.html">Message</a>[]></span>
+		<span class="type-signature">(protected) </span>.<a href='#respond' style='color: black'>respond</a><span class="signature">(<span class="param-types">message: <a href="external-Message.html">Message</a></span>, <span class="param-types">response: string</span>, <span class="param-types">opetions?: MessageOptions</span>)</span><span class="type-signature"> &rarr; Promise&lt;<a href="external-Message.html">Message</a> | <a href="external-Message.html">Message</a>[]></span>
 	</h4>
 
     
@@ -1470,10 +1470,9 @@ new commands</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Send provided response text to the provided message's channel
-via edit or send, with or without a codeblock language, depending
-on whether or not the client is a selfbot and whether or not a
-codeblock language is given</p>
+    <p>Send provided response to the provided message's channel
+via edit or send, depending on whether or not the client is
+a selfbot</p>
 </div>
 
 
@@ -1575,13 +1574,13 @@ codeblock language is given</p>
 
         <tr>
             
-                <td class="name"><code>code</code></td>
+                <td class="name"><code>opetions</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><dd>string</dd></span>
+<span class="param-type"><dd>MessageOptions</dd></span>
 
 
 
@@ -1602,7 +1601,7 @@ codeblock language is given</p>
 
             
 
-            <td class="description last"><p>Language to use if a codeblock is desired</p></td>
+            <td class="description last"><p>Optional Discord.js MessageOptions</p></td>
         </tr>
 
     
