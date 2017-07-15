@@ -274,7 +274,7 @@ export class Command<T extends Client = Client>
 	 * @protected
 	 * @param {external:Message} message Discord.js Message object
 	 * @param {string} response String to send
-	 * @param {external:MessageOptions} [opetions] Optional Discord.js MessageOptions
+	 * @param {external:MessageOptions} [options] Optional Discord.js MessageOptions
 	 * @returns {Promise<external:Message | external:Message[]>}
 	 */
 	protected respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>
