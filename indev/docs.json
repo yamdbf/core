@@ -3012,14 +3012,6 @@
             "description": "<p>Object containing required {@link Client} properties to be\npassed to a Client on construction</p>",
             "properties": [
                 {
-                    "name": "name",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#name}</p>",
-                    "default": "'botname'",
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
                     "name": "token",
                     "type": "string",
                     "description": "<p>Token needed to connect the Client to Discord</p>",
@@ -3112,14 +3104,6 @@
                     "type": "boolean",
                     "description": "<p>See: {@link Client#pause}</p>",
                     "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "version",
-                    "type": "string",
-                    "description": "<p>See: {@link Client#version}</p>",
-                    "default": "'0.0.0'",
                     "optional": true,
                     "nullable": ""
                 },
