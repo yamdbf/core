@@ -24,8 +24,7 @@ export default class extends Command
 		const command: Command = this.client.commands.findByNameOrAlias(commandName);
 
 		if (commandName && !command)
-			return this.respond(message, res('CMD_RELOAD_ERR_UNKNOWN_COMMAND',
-				{ commandName: commandName }));
+			return this.respond(message, res('CMD_RELOAD_ERR_UNKNOWN_COMMAND', { commandName }));
 
 		if (command) this.client.loadCommand(command.name);
 		else this.client.loadCommand('all');

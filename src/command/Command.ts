@@ -1,4 +1,4 @@
-import { PermissionResolvable, Permissions, Message } from 'discord.js';
+import { PermissionResolvable, Permissions, Message, MessageOptions } from 'discord.js';
 import { Client } from '../client/Client';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
@@ -268,20 +268,19 @@ export class Command<T extends Client = Client>
 	}
 
 	/**
-	 * Send provided response text to the provided message's channel
-	 * via edit or send, with or without a codeblock language, depending
-	 * on whether or not the client is a selfbot and whether or not a
-	 * codeblock language is given
+	 * Send provided response to the provided message's channel
+	 * via edit or send, depending on whether or not the client is
+	 * a selfbot
 	 * @protected
 	 * @param {external:Message} message Discord.js Message object
 	 * @param {string} response String to send
-	 * @param {string} [code] Language to use if a codeblock is desired
+	 * @param {external:MessageOptions} [opetions] Optional Discord.js MessageOptions
 	 * @returns {Promise<external:Message | external:Message[]>}
 	 */
-	protected respond(message: Message, response: string, code?: string): Promise<Message | Message[]>
+	protected respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>
 	{
-		if (this.client.selfbot) return message.edit(response, { code });
-		return message.channel.send(response, { code });
+		if (this.client.selfbot) return message.edit(response, options);
+		return message.channel.send(response, options);
 	}
 
 	/**

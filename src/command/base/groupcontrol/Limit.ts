@@ -30,7 +30,7 @@ export default class extends Command
 			Util.normalize(commandName) === Util.normalize(c.name));
 
 		if (!command) return this.respond(message,
-			res('CMD_LIMIT_ERR_UNKNOWN_COMMAND', { commandName: commandName }));
+			res('CMD_LIMIT_ERR_UNKNOWN_COMMAND', { commandName }));
 		if (command.group === 'base') return this.respond(message, res('CMD_LIMIT_ERR_INVALID_GROUP'));
 
 		const storage: GuildStorage = message.guild.storage;

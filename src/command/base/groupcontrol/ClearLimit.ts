@@ -25,7 +25,7 @@ export default class extends Command
 	{
 		let command: Command = this.client.commands.find(c => Util.normalize(c.name) === Util.normalize(commandName));
 		if (!command) return this.respond(message,
-			res('CMD_CLEARLIMIT_UNKNOWN_COMMAND', { commandName: commandName }));
+			res('CMD_CLEARLIMIT_UNKNOWN_COMMAND', { commandName }));
 
 		const storage: GuildStorage = message.guild.storage;
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
