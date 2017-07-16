@@ -3154,6 +3154,12 @@
             "description": "<p>Represents a Discord.js Message object that contains a modifed {@link Guild} object\ncontaining a {@link GuildStorage} for the associated guild, if the message was sent\nfrom within a guild, mixed in by the CommandDispatcher.</p>\n<blockquote>\n<p><strong>Note:</strong> For clients written in Typescript, you will want to import\n<code>Message</code> from YAMDBF rather than Discord.js to be able to\naccess <code>message.guild.storage</code> within your commands without\ncompiler errors</p>\n</blockquote>",
             "access": "",
             "virtual": false
+        },
+        {
+            "name": "Loggable",
+            "description": "<p>Extending this mixin method will give classes a <code>logger</code> property\ncontaining a reference to the {@link Logger} singleton instance.\nAccepts a parent class as a parameter when extending another class</p>\n<pre class=\"prettyprint source\"><code>class Foo extends Loggable() {}\nclass Bar extends Loggable(Baz) {}</code></pre><p>Note that this is a mixin function returning a class, not an actual\nclass itself. The method call parentheses are necessary.</p>\n<blockquote>\n<p><strong>Warning:</strong> While this is fully functional at runtime, due to a TypeScript\ncompiler bug, this will currently throw a compiler error unless you also import\n<code>ILoggable</code>. However, this will error if using the <code>noUnusedLocals</code> compiler\noption, but in my experience does not trigger TSLint's unused import rule.\nThis was labeled as <code>done</code> for the TypeScript 2.5 milestone but was removed\nwith no word so I am unsure of the state of this bug going forward. I'm leaving\nthe code in in hopes the bug will be fixed because I really like this method of\nattaching the Logger. It was my oringial intention when I first wrote the Logger\nitself but had to settle for alternatives</p>\n</blockquote>",
+            "access": "",
+            "virtual": false
         }
     ],
     "functions": [

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Guild - Documentation</title>
+    <title>Loggable - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -40,7 +40,7 @@
 	
     
         <h2>
-        Guild
+        Loggable
         </h2>
         
     
@@ -50,10 +50,79 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>See: <a href="https://discord.js.org/#/docs/main/stable/class/Guild">https://discord.js.org/#/docs/main/stable/class/Guild</a></p></div>
+            <div class="description"><p>Extending this mixin method will give classes a <code>logger</code> property
+containing a reference to the <a href="Logger.html"><code>Logger</code></a> singleton instance.
+Accepts a parent class as a parameter when extending another class</p>
+<pre class="prettyprint source"><code>class Foo extends Loggable() {}
+class Bar extends Loggable(Baz) {}</code></pre><p>Note that this is a mixin function returning a class, not an actual
+class itself. The method call parentheses are necessary.</p>
+<blockquote>
+<p><strong>Warning:</strong> While this is fully functional at runtime, due to a TypeScript
+compiler bug, this will currently throw a compiler error unless you also import
+<code>ILoggable</code>. However, this will error if using the <code>noUnusedLocals</code> compiler
+option, but in my experience does not trigger TSLint's unused import rule.
+This was labeled as <code>done</code> for the TypeScript 2.5 milestone but was removed
+with no word so I am unsure of the state of this bug going forward. I'm leaving
+the code in in hopes the bug will be fixed because I really like this method of
+attaching the Logger. It was my oringial intention when I first wrote the Logger
+itself but had to settle for alternatives</p>
+</blockquote></div>
         
 
         
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>logger</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Logger.html">Logger</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Logger instance attached to the Loggable class</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 <dl class="details">
