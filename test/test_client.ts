@@ -19,9 +19,9 @@ class Test extends Client
 	public constructor()
 	{
 		super({
-			name: 'tests',
 			token: config.token,
 			owner: config.owner,
+			readyText: 'Test client ready',
 			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
 			// commandsDir: './commands',
 			localeDir: './locale',

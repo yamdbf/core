@@ -33,6 +33,7 @@ export { Util } from './util/Util';
 
 export { Logger } from './util/logger/Logger';
 export { logger } from './util/logger/LoggerDecorator';
+export { Loggable, ILoggable } from './util/logger/Loggable';
 export { LogLevel } from './types/LogLevel';
 export { LogData } from './types/LogData';
 export { TransportFunction } from './types/TransportFunction';
