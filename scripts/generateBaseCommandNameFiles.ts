@@ -2,6 +2,13 @@ import * as fs from 'fs';
 import { Client, LogLevel, Logger } from '../bin/';
 const logger: Logger = Logger.instance();
 
+type Args = [string, string];
+function foo(...[bar, baz]: Args): string
+{
+	return bar + baz;
+}
+foo();
+
 class ScriptClient extends Client
 {
 	public constructor()

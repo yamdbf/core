@@ -1,0 +1,27 @@
+## Localizing Command helptext
+When providing helptext localizations, they will be loaded automatically when placed in the
+YAMDBF Client `commandsDir`. Localizations for the base commands can be placed in there as well
+as localizations for any custom commands. Like regular localization strings, these can be
+spread out across as many files as desired for organizational purposes.
+
+Command helptext localizations are expected to reside in `.lang.json` files as the text is
+static and doesn't quite work out with the nature of the `.lang` format. These files are expected
+to be in the format of
+```
+{
+	"commandName": {
+		"languageName": {
+			"desc": "Description of the command",
+			"info": "Extra information for the command",
+			"usage": "<prefix>commandname"
+		}
+	}
+}
+```
+As many languages as desired can be contained under the same command and as many commands as desired
+can be contained in the same file. It's encouraged to use English helptext in the command file itself
+for custom commands as commands need at least a base `desc` and `usage` field to be considered valid
+commands and this lines up with the base commands using english helptext.
+
+## Base English helptext strings
+{{ localizationStrings }}
