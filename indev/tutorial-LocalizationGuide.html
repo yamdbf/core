@@ -43,10 +43,10 @@ but it would be inaccurate to say there's not a lot of work that will go into it
 throughout all of the framework functionality and default commands that get sent to Discord so there is
 potentially a lot of translating to be done if you wish to provide localizations for any additional languages.</p>
 <h2>.lang files</h2><p>The first thing to cover is the file format. <code>.lang</code> is a simple data file format created specifically for
-the purpose of providing strings for localization throughout the framework. It's slightly reminiscent of XML
-but far simpler in that it only serves to hold key/value pairs where the value is a string. Here are a couple
+the purpose of providing strings for localization throughout the framework. Here are a couple
 simple examples:</p>
-<pre class="prettyprint source"><code>[EXAMPLE_FOO] This is a single line string [/EXAMPLE_FOO]
+<pre class="prettyprint source"><code>[EXAMPLE_FOO]
+Simple single-line string
 
 [EXAMPLE_BAR]
 This is a multi-line string.
@@ -54,29 +54,25 @@ This is a multi-line string.
   or the two spaces at the beginning of this line are preserved.
 
 Newlines are preserved as well, though you can \nadd newlines mid-line
-as seen in the line above this, here -----------^
-[/EXAMPLE_BAR]</code></pre><p>The identifying string within the opening and closing tag is the key that will be used when retrieving
-the string via <code>Lang.res()</code> or a ResourceLoader from <code>Lang.createResourceLoader()</code>.</p>
-<blockquote>
-<p>Note: The closing tag key must match the opening tag key. Nested tags are not supported and, if attempted, will be 
-parsed as part of the raw string value of the outer-most surrounding tag</p>
-</blockquote>
+as seen in the line above this, here -----------^</code></pre><p>There should not be anything directly above the key (the text in braces) or it will cause the following
+key/value set to be parsed as part of the previous set. The text present in the braces for key/value
+set is the key that will be used when retrieving the string via <code>Lang.res()</code> or a ResourceLoader from
+<code>Lang.createResourceLoader()</code>.</p>
 <p>Single-line and inline comments are also allowed, using the syntax <code>##</code>:</p>
 <pre class="prettyprint source"><code>[EXAMPLE_BAZ]
 ## This is an example of a single-line comment
 ## Here's another
 
-foo bar baz ## And here's an inline comment
-[/EXAMPLE_BAZ]</code></pre><p>Comments are removed when parsing. Any text not enclosed within key-tags is inherently treated as a comment
-and is ignored when parsing.</p>
+foo bar baz ## And here's an inline comment</code></pre><p>Comments are removed when parsing. Comments between key/value sets that do not end up captured as a part of
+of a key/value set will not be captured at all.</p>
 <h2>Templating</h2><p>Unrelated to the <code>.lang</code> file format, but arguably the most important part of the localization system as a whole,
 is the templating system. Any token surrounded with <code>{{ }}</code> or <code>{{ ?}}</code> is a template, and can be replaced at runtime
 via matching keys within a <a href="global.html#TemplateData"><code>TemplateData</code></a> object passed to <code>Lang.res()</code> or a ResourceLoader from
 <code>Lang.createResourceLoader()</code>. For example:</p>
 <pre class="prettyprint source"><code>[TEMPLATE_EXAMPLE]
 foo {{ barTemplate }} baz
-[/TEMPLATE_EXAMPLE]
 
+// When in use:
 Lang.res('en_us', 'TEMPLATE_EXAMPLE', { barTemplate: 'bar' }) // Produces: 'foo bar baz'</code></pre><p>Templates with a question mark (<code>{{ foo ?}}</code>) are &quot;maybe templates&quot;. If a value is not given for that template it will
 be removed when loaded. If a maybe template is the only thing occupying a line and no value is given for it, it will be
 removed and a blank line will not be left behind:</p>
@@ -84,8 +80,8 @@ removed and a blank line will not be left behind:</p>
 foo{{ barTemplate ?}}baz
 {{ emptyTemplate ?}}
 boo
-[/MAYBE_TEMPLATE_EXAMPLE]
 
+// When in use:
 Lang.res('en_us', 'MAYBE_TEMPLATE_EXAMPLE') // Produces: 'foobaz\nboo'</code></pre><blockquote>
 <p>Note: Passing empty strings for maybe templates results in them being removed in the same manner as if no value was given</p>
 </blockquote>
@@ -98,8 +94,7 @@ template braces.</p>
 the strings for the default help Command:</p>
 <pre class="prettyprint source"><code>[CMD_HELP_ALIASES]
 ## 'Aliases: foo, bar' | 'Alias: foo'
-{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
-[/CMD_HELP_ALIASES]</code></pre><blockquote>
+{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}</code></pre><blockquote>
 <p>Note: A template script itself is just interpreted Javascript that must return a value. A template script that does not return a
 value will simply have the template removed from the output string in the same manner as maybe templates. Implicit returns are
 possible in a manner similar to arrow functions. If the script is complex enough to necessitate an actual return statement

@@ -53,74 +53,57 @@ be used as a distinction between different lang files for the same language.</p>
 <p>This list is automatically generated and may be incomplete during development until YAMDBF 3.0.0 is finalized.</p>
 <pre class="prettyprint source"><code>[CMD_BLACKLIST_ERR_NOSELF]
 You can not blacklist your own account.
-[/CMD_BLACKLIST_ERR_NOSELF]
 
 [CMD_BLACKLIST_ERR_NOBOT]
 Bots cannot call commands and thus do not need to be blacklisted.
-[/CMD_BLACKLIST_ERR_NOBOT]
 
 [CMD_BLACKLIST_ERR_OWNERONLY]
 Only bot owners may blacklist globally.
-[/CMD_BLACKLIST_ERR_OWNERONLY]
 
 [CMD_BLACKLIST_ERR_ALREADYGLOBAL]
 That user is already globally blacklisted.
-[/CMD_BLACKLIST_ERR_ALREADYGLOBAL]
 
 [CMD_BLACKLIST_ERR_BADTARGET]
 You may not use this command on that person.
-[/CMD_BLACKLIST_ERR_BADTARGET]
 
 [CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
 That user is already blacklisted in this server.
-[/CMD_BLACKLIST_ERR_ALREADYBLACKLISTED]
 
 [CMD_BLACKLIST_GLOBALSUCCESS]
 Added {{ user }} to the global blacklist.
-[/CMD_BLACKLIST_GLOBALSUCCESS]
 
 [CMD_BLACKLIST_SUCCESS]
 Added {{ user }} to the blacklist for this server.
-[/CMD_BLACKLIST_SUCCESS]
 
 [CMD_CLEARLIMIT_UNKNOWN_COMMAND]
 Failed to find a command with the name `{{ commandName }}`
-[/CMD_CLEARLIMIT_UNKNOWN_COMMAND]
 
 [CMD_CLEARLIMIT_SUCCESS]
 Successfully cleared role limits for command: `{{ commandName }}`
-[/CMD_CLEARLIMIT_SUCCESS]
 
 [CMD_DISABLEGROUP_ERR_NOEXIST]
 Command group &quot;{{ group }}&quot; does not exist.
-[/CMD_DISABLEGROUP_ERR_NOEXIST]
 
 [CMD_DISABLEGROUP_ERR_DISABLED]
 Command group &quot;{{ group }}&quot; is already disabled or is not allowed to be disabled.
-[/CMD_DISABLEGROUP_ERR_DISABLED]
 
 [CMD_DISABLEGROUP_SUCCESS]
 **Disabled command group &quot;{{ group }}&quot;**
-[/CMD_DISABLEGROUP_SUCCESS]
 
 [CMD_ENABLEGROUP_ERR_NOEXIST]
 Command group &quot;{{ group }}&quot; does not exist.
-[/CMD_ENABLEGROUP_ERR_NOEXIST]
 
 [CMD_ENABLEGROUP_ERR_ENABLED]
 Command group &quot;{{ group }}&quot; is already enabled.
-[/CMD_ENABLEGROUP_ERR_ENABLED]
 
 [CMD_ENABLEGROUP_SUCCESS]
 **Enabled command group &quot;{{ group }}&quot;**
-[/CMD_ENABLEGROUP_SUCCESS]
 
 [CMD_EVAL_ERR_NOCODE]
 **ERROR:**
 ```xl
 No code provided to evaluate.
 ```
-[/CMD_EVAL_ERR_NOCODE]
 
 [CMD_EVAL_RESULT]
 **INPUT:**
@@ -131,7 +114,6 @@ No code provided to evaluate.
 ```xl
 {{ result }}
 ```
-[/CMD_EVAL_RESULT]
 
 [CMD_EVAL_ERROR]
 **INPUT:**
@@ -142,7 +124,6 @@ No code provided to evaluate.
 ```xl
 {{ error }}
 ```
-[/CMD_EVAL_ERROR]
 
 [CMD_HELP_COMMAND_LIST]
 Available commands: (Commands marked with `*` are server-only)
@@ -152,21 +133,20 @@ Available commands: (Commands marked with `*` are server-only)
 ## weird spacing between it and the last line.
 ## I don't recommend using one
 ```Use `{{ usage }}` or `{{ mentionUsage }}` for more info
-[/CMD_HELP_COMMAND_LIST]
 
 [CMD_HELP_UNKNOWN_COMMAND]
 A command by that name could not be found or you do
 not have permission to view it.
-[/CMD_HELP_UNKNOWN_COMMAND]
 
-[CMD_HELP_SERVERONLY] [Server Only] [/CMD_HELP_SERVERONLY]
+[CMD_HELP_SERVERONLY]
+[Server Only]
 
-[CMD_HELP_OWNERONLY] [Owner Only] [/CMD_HELP_OWNERONLY]
+[CMD_HELP_OWNERONLY]
+[Owner Only]
 
 [CMD_HELP_ALIASES]
 ## 'Aliases: foo, bar' | 'Alias: foo'
 {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
-[/CMD_HELP_ALIASES]
 
 [CMD_HELP_CODEBLOCK]
 ## I feel ldif is the best codeblock language for
@@ -181,47 +161,37 @@ Description: {{ desc }}
 Usage: {{ usage }}
 {{ info ?}}
 ```
-[/CMD_HELP_CODEBLOCK]
 
 [CMD_HELP_REPLY_CMD]
 Sent you a DM with command help information.
-[/CMD_HELP_REPLY_CMD]
 
 [CMD_HELP_REPLY_ALL]
 Sent you a DM with a list of commands.
-[/CMD_HELP_REPLY_ALL]
 
 [CMD_HELP_REPLY_FAIL]
 Failed to DM help information. Do you have DMs blocked?
-[/CMD_HELP_REPLY_FAIL]
 
 [CMD_LIMIT_ERR_UNKNOWN_COMMAND]
 Failed to find a command with the name `{{ commandName }}`
-[/CMD_LIMIT_ERR_UNKNOWN_COMMAND]
 
 [CMD_LIMIT_ERR_INVALID_GROUP]
 Cannot limit base commands.
-[/CMD_LIMIT_ERR_INVALID_GROUP]
 
 [CMD_LIMIT_ERR_ALREADY_LIMITER]
 Role `{{ roleName }}` is already a limiter for command: `{{ commandName }}`
-[/CMD_LIMIT_ERR_ALREADY_LIMITER]
 
 [CMD_LIMIT_ERR_INVALID_ROLE]
 Failed to find {{!
     args.invalidRoles.split(',').length > 1 ? 'roles' : 'role'
 !}}: {{ invalidRoles }}
-[/CMD_LIMIT_ERR_INVALID_ROLE]
 
 [CMD_LIMIT_ERR_NO_ROLES]
 Failed to add any roles to the command.
-[/CMD_LIMIT_ERR_NO_ROLES]
 
 [CMD_LIMIT_SUCCESS]
 Successfully added {{!
     args.roles.split(',').length > 1 ? 'roles' : 'role'
 !}}: {{ roles }} to the limiter for command: `{{ commandName }}`
-[/CMD_LIMIT_SUCCESS]
 
 [CMD_LISTGROUPS_GROUPS]
 Command groups:
@@ -231,11 +201,9 @@ Command groups:
         .map(g => `${args.disabledGroups.split(', ').includes(g) ? '*' : ' '}${g}`)
         .join('\n')
 !}}
-[/CMD_LISTGROUPS_GROUPS]
 
 [CMD_RELOAD_ERR_UNKNOWN_COMMAND]
 Command &quot;{{ commandName }}&quot; could not be found.
-[/CMD_RELOAD_ERR_UNKNOWN_COMMAND]
 
 [CMD_RELOAD_SUCCESS]
 {{!
@@ -243,7 +211,6 @@ Command &quot;{{ commandName }}&quot; could not be found.
         `Command &quot;${args.commandName}&quot;` :
         'Commands'
 !}} reloaded. ({{ time }} ms)
-[/CMD_RELOAD_SUCCESS]
 
 [CMD_SETLANG_LIST]
 Available languages: (Language marked with `*` is the current language)
@@ -252,15 +219,12 @@ Available languages: (Language marked with `*` is the current language)
 ## Be sure to preserve the `{{ prefix }}setlang #` part
 ```Use `{{ prefix }}setlang #`, where `#` is the number of the language to set the
 language to use for this server
-[/CMD_SETLANG_LIST]
 
 [CMD_SETLANG_ERR_INVALID]
 That is not a valid language choice!
-[/CMD_SETLANG_ERR_INVALID]
 
 [CMD_SETLANG_SUCCESS]
 Set language for this server to: `{{ lang }}`
-[/CMD_SETLANG_SUCCESS]
 
 [CMD_PREFIX_CURRENT]
 {{!
@@ -268,15 +232,12 @@ Set language for this server to: `{{ lang }}`
         `Current prefix is \`${args.prefix}\`` :
         'There is currently no prefix.'
 !}}
-[/CMD_PREFIX_CURRENT]
 
 [CMD_PREFIX_ERR_CHAR_LIMIT]
 Prefixes may only be up to 10 chars in length.
-[/CMD_PREFIX_ERR_CHAR_LIMIT]
 
 [CMD_PREFIX_ERR_INVALID_CHARS]
 Prefixes may not contain backticks or backslashes.
-[/CMD_PREFIX_ERR_INVALID_CHARS]
 
 [CMD_PREFIX_SUCCESS]
 {{!
@@ -284,48 +245,34 @@ Prefixes may not contain backticks or backslashes.
         'Command prefix removed.' :
         `Command prefix set to \`${args.prefix}\``
 !}}
-[/CMD_PREFIX_SUCCESS]
-
-[CMD_VERSION_OUTPUT]
-Current version is: **{{ version }}**
-[/CMD_VERSION_OUTPUT]
 
 [CMD_WHITELIST_ERR_OWNERONLY]
 Only bot owners may remove a user from the global blacklist.
-[/CMD_WHITELIST_ERR_OWNERONLY]
 
 [CMD_WHITELIST_ERR_NOTGLOBAL]
 That user is not currently on the global blacklist.
-[/CMD_WHITELIST_ERR_NOTGLOBAL]
 
 [CMD_WHITELIST_ERR_NOTBLACKLISTED]
 That user is not currently blacklisted in this server.
-[/CMD_WHITELIST_ERR_NOTBLACKLISTED]
 
 [CMD_WHITELIST_GLOBALSUCCESS]
 Removed {{ user }} from the global blacklist.
-[/CMD_WHITELIST_GLOBALSUCCESS]
 
 [CMD_WHITELIST_SUCCESS]
 Removed {{ user }} from the blacklist for this server.
-[/CMD_WHITELIST_SUCCESS]
 
 [DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL]
 You have used too many commands and may not use any more for **{{ time }}**.
-[/DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL]
 
 [DISPATCHER_ERR_RATELIMIT_EXCEED]
 You have used this command too many times and may not use it again for **{{ time }}**.
-[/DISPATCHER_ERR_RATELIMIT_EXCEED]
 
 [DISPATCHER_ERR_UNKNOWN_COMMAND]
 Sorry, I could not recognize any command in your message.
 Try saying &quot;help&quot; to view a list of commands.
-[/DISPATCHER_ERR_UNKNOWN_COMMAND]
 
 [DISPATCHER_ERR_GUILD_ONLY]
 That command is for servers only. Try saying &quot;help&quot; to view a list of commands.
-[/DISPATCHER_ERR_GUILD_ONLY]
 
 [DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS]
 **I must be given the following permission{{!
@@ -334,7 +281,6 @@ That command is for servers only. Try saying &quot;help&quot; to view a list of 
 ```css
 {{ missing }}
 ```
-[/DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS]
 
 [DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS]
 **You are missing the following permission{{!
@@ -343,7 +289,6 @@ That command is for servers only. Try saying &quot;help&quot; to view a list of 
 ```css
 {{ missing }}
 ```
-[/DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS]
 
 [DISPATCHER_ERR_MISSING_ROLES]
 ## This message is used for the missing roles error
@@ -356,7 +301,6 @@ That command is for servers only. Try saying &quot;help&quot; to view a list of 
 ```css
 {{ roles }}
 ```
-[/DISPATCHER_ERR_MISSING_ROLES]
 
 [EXPECT_ERR_MISSING_VALUE]
 Missing or null value for arg: `{{ name }}`{{!
@@ -365,20 +309,17 @@ Missing or null value for arg: `{{ name }}`{{!
         : `, expected ${args.type}`
 !}}
 Usage: `{{ usage }}`
-[/EXPECT_ERR_MISSING_VALUE]
 
 [EXPECT_ERR_INVALID_OPTION]
 in arg `{{ name }}`: `{{ arg }}` is not a valid option
 Usage: `{{ usage }}`
 Valid options for arg `{{ name }}`: {{ type }}
-[/EXPECT_ERR_INVALID_OPTION]
 
 [EXPECT_ERR_EXPECTED_TYPE]
 ## This is a developer error message and does
 ## not need to be translated. I have only extracted
 ## this string for ease of re-use as it is used a lot
 in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
-[/EXPECT_ERR_EXPECTED_TYPE]
 
 [RESOLVE_TYPE]
 ## Only translate the return values here
@@ -393,32 +334,27 @@ in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
         default: return;
     }
 !}}
-[/RESOLVE_TYPE]
 
 [RESOLVE_ERR_RESOLVE_NUMBER]
 in arg `{{ name }}`: `{{ arg }}` could not be resolved to a number.
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_NUMBER]
 
 [RESOLVE_ERR_RESOLVE_DURATION]
 in arg `{{ name }}`: `{{ arg }}` could not be resolved to a duration.
 Usage: `{{ usage }}`
 Duration examples: `10m`, `2h`, `1.5d`
-[/RESOLVE_ERR_RESOLVE_DURATION]
 
 [RESOLVE_ERR_RESOLVE_TYPE_ID]
 in arg `{{ name }}`: Failed to find a {{!
     res('RESOLVE_TYPE', args)
 !}} with ID `{{ arg }}`
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_TYPE_ID]
 
 [RESOLVE_ERR_RESOLVE_TYPE_TEXT]
 in arg `{{ name }}`: Failed to find a {{!
     res('RESOLVE_TYPE', args)
 !}} containing the text `{{ arg }}`
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_TYPE_TEXT]
 
 [RESOLVE_ERR_MULTIPLE_USER_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -433,7 +369,6 @@ Found multiple potential matches for arg `{{ name }}`:
 !}}
 Please refine your search or consider using an ID/mention
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_MULTIPLE_USER_RESULTS]
 
 [RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -448,7 +383,6 @@ Found multiple potential matches for arg `{{ name }}`:
 !}}
 Please refine your search or consider using an ID/channel link
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS]
 
 [RESOLVE_ERR_MULTIPLE_ROLE_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -462,8 +396,7 @@ Found multiple potential matches for arg `{{ name }}`:
     else return roles.join(', ');
 !}}
 Please refine your search or consider using an ID/role mention
-Usage: `{{ usage }}`
-[/RESOLVE_ERR_MULTIPLE_ROLE_RESULTS]</code></pre>
+Usage: `{{ usage }}`</code></pre>
 </article>
 
 </section>
