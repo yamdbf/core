@@ -5,17 +5,14 @@ Missing or null value for arg: `{{ name }}`{{!
 		: `, expected ${args.type}`
 !}}
 Usage: `{{ usage }}`
-[/EXPECT_ERR_MISSING_VALUE]
 
 [EXPECT_ERR_INVALID_OPTION]
 in arg `{{ name }}`: `{{ arg }}` is not a valid option
 Usage: `{{ usage }}`
 Valid options for arg `{{ name }}`: {{ type }}
-[/EXPECT_ERR_INVALID_OPTION]
 
 [EXPECT_ERR_EXPECTED_TYPE]
 ## This is a developer error message and does
 ## not need to be translated. I have only extracted
 ## this string for ease of re-use as it is used a lot
 in arg `{{ name }}`: `{{ expected }}` expected, got `{{ type }}`
-[/EXPECT_ERR_EXPECTED_TYPE]

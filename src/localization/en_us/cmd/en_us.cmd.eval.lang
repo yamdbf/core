@@ -3,7 +3,6 @@
 ```xl
 No code provided to evaluate.
 ```
-[/CMD_EVAL_ERR_NOCODE]
 
 [CMD_EVAL_RESULT]
 **INPUT:**
@@ -14,7 +13,6 @@ No code provided to evaluate.
 ```xl
 {{ result }}
 ```
-[/CMD_EVAL_RESULT]
 
 [CMD_EVAL_ERROR]
 **INPUT:**
@@ -25,4 +23,3 @@ No code provided to evaluate.
 ```xl
 {{ error }}
 ```
-[/CMD_EVAL_ERROR]

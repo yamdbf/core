@@ -158,8 +158,13 @@ export class Lang
 			for (const langFile of langs[langName])
 			{
 				if (!langNameRegex.test(langFile)) continue;
-				const loadedLangFile: string = fs.readFileSync(langFile).toString();
-				const parsedLanguageFile: Language = LangFileParser.parseFile(langName, loadedLangFile);
+				const loadedLangFile: string = fs
+					.readFileSync(langFile)
+					.toString()
+					.replace(/\r\n/g, '\n');
+
+				const parsedLanguageFile: Language =
+					LangFileParser.parseFile(langName, loadedLangFile);
 
 				if (typeof Lang._instance.langs[langName] !== 'undefined')
 					Lang._instance.langs[langName].concat(parsedLanguageFile);

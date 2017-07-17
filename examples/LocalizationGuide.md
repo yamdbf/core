@@ -6,11 +6,11 @@ potentially a lot of translating to be done if you wish to provide localizations
 
 ## .lang files
 The first thing to cover is the file format. `.lang` is a simple data file format created specifically for
-the purpose of providing strings for localization throughout the framework. It's slightly reminiscent of XML
-but far simpler in that it only serves to hold key/value pairs where the value is a string. Here are a couple
+the purpose of providing strings for localization throughout the framework. Here are a couple
 simple examples:
 ```
-[EXAMPLE_FOO] This is a single line string [/EXAMPLE_FOO]
+[EXAMPLE_FOO]
+Simple single-line string
 
 [EXAMPLE_BAR]
 This is a multi-line string.
@@ -19,13 +19,11 @@ This is a multi-line string.
 
 Newlines are preserved as well, though you can \nadd newlines mid-line
 as seen in the line above this, here -----------^
-[/EXAMPLE_BAR]
 ```
-The identifying string within the opening and closing tag is the key that will be used when retrieving
-the string via `Lang.res()` or a ResourceLoader from `Lang.createResourceLoader()`.
-
->Note: The closing tag key must match the opening tag key. Nested tags are not supported and, if attempted, will be 
-parsed as part of the raw string value of the outer-most surrounding tag
+There should not be anything directly above the key (the text in braces) or it will cause the following
+key/value set to be parsed as part of the previous set. The text present in the braces for key/value
+set is the key that will be used when retrieving the string via `Lang.res()` or a ResourceLoader from
+`Lang.createResourceLoader()`.
 
 Single-line and inline comments are also allowed, using the syntax `##`:
 ```
@@ -34,10 +32,9 @@ Single-line and inline comments are also allowed, using the syntax `##`:
 ## Here's another
 
 foo bar baz ## And here's an inline comment
-[/EXAMPLE_BAZ] 
 ```
-Comments are removed when parsing. Any text not enclosed within key-tags is inherently treated as a comment
-and is ignored when parsing.
+Comments are removed when parsing. Comments between key/value sets that do not end up captured as a part of
+of a key/value set will not be captured at all.
 
 ## Templating
 Unrelated to the `.lang` file format, but arguably the most important part of the localization system as a whole,
@@ -47,8 +44,8 @@ via matching keys within a {@link TemplateData} object passed to `Lang.res()` or
 ```
 [TEMPLATE_EXAMPLE]
 foo {{ barTemplate }} baz
-[/TEMPLATE_EXAMPLE]
 
+// When in use:
 Lang.res('en_us', 'TEMPLATE_EXAMPLE', { barTemplate: 'bar' }) // Produces: 'foo bar baz'
 ```
 Templates with a question mark (`{{ foo ?}}`) are "maybe templates". If a value is not given for that template it will
@@ -59,8 +56,8 @@ removed and a blank line will not be left behind:
 foo{{ barTemplate ?}}baz
 {{ emptyTemplate ?}}
 boo
-[/MAYBE_TEMPLATE_EXAMPLE]
 
+// When in use:
 Lang.res('en_us', 'MAYBE_TEMPLATE_EXAMPLE') // Produces: 'foobaz\nboo'
 ```
 >Note: Passing empty strings for maybe templates results in them being removed in the same manner as if no value was given
@@ -79,7 +76,6 @@ the strings for the default help Command:
 [CMD_HELP_ALIASES]
 ## 'Aliases: foo, bar' | 'Alias: foo'
 {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
-[/CMD_HELP_ALIASES]
 ```
 >Note: A template script itself is just interpreted Javascript that must return a value. A template script that does not return a
 value will simply have the template removed from the output string in the same manner as maybe templates. Implicit returns are

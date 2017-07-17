@@ -6,4 +6,3 @@ Command groups:
 		.map(g => `${args.disabledGroups.split(', ').includes(g) ? '*' : ' '}${g}`)
 		.join('\n')
 !}}
-[/CMD_LISTGROUPS_GROUPS]

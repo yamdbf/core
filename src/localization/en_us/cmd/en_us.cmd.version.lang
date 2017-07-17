@@ -1,3 +1,0 @@
-[CMD_VERSION_OUTPUT]
-Current version is: **{{ version }}**
-[/CMD_VERSION_OUTPUT]

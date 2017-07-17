@@ -11,32 +11,27 @@
 		default: return;
 	}
 !}}
-[/RESOLVE_TYPE]
 
 [RESOLVE_ERR_RESOLVE_NUMBER]
 in arg `{{ name }}`: `{{ arg }}` could not be resolved to a number.
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_NUMBER]
 
 [RESOLVE_ERR_RESOLVE_DURATION]
 in arg `{{ name }}`: `{{ arg }}` could not be resolved to a duration.
 Usage: `{{ usage }}`
 Duration examples: `10m`, `2h`, `1.5d`
-[/RESOLVE_ERR_RESOLVE_DURATION]
 
 [RESOLVE_ERR_RESOLVE_TYPE_ID]
 in arg `{{ name }}`: Failed to find a {{!
 	res('RESOLVE_TYPE', args)
 !}} with ID `{{ arg }}`
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_TYPE_ID]
 
 [RESOLVE_ERR_RESOLVE_TYPE_TEXT]
 in arg `{{ name }}`: Failed to find a {{!
 	res('RESOLVE_TYPE', args)
 !}} containing the text `{{ arg }}`
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_RESOLVE_TYPE_TEXT]
 
 [RESOLVE_ERR_MULTIPLE_USER_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -51,7 +46,6 @@ Found multiple potential matches for arg `{{ name }}`:
 !}}
 Please refine your search or consider using an ID/mention
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_MULTIPLE_USER_RESULTS]
 
 [RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -66,7 +60,6 @@ Found multiple potential matches for arg `{{ name }}`:
 !}}
 Please refine your search or consider using an ID/channel link
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS]
 
 [RESOLVE_ERR_MULTIPLE_ROLE_RESULTS]
 Found multiple potential matches for arg `{{ name }}`:
@@ -81,4 +74,3 @@ Found multiple potential matches for arg `{{ name }}`:
 !}}
 Please refine your search or consider using an ID/role mention
 Usage: `{{ usage }}`
-[/RESOLVE_ERR_MULTIPLE_ROLE_RESULTS]

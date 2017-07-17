@@ -1,19 +1,15 @@
 [DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL]
 You have used too many commands and may not use any more for **{{ time }}**.
-[/DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL]
 
 [DISPATCHER_ERR_RATELIMIT_EXCEED]
 You have used this command too many times and may not use it again for **{{ time }}**.
-[/DISPATCHER_ERR_RATELIMIT_EXCEED]
 
 [DISPATCHER_ERR_UNKNOWN_COMMAND]
 Sorry, I could not recognize any command in your message.
 Try saying "help" to view a list of commands.
-[/DISPATCHER_ERR_UNKNOWN_COMMAND]
 
 [DISPATCHER_ERR_GUILD_ONLY]
 That command is for servers only. Try saying "help" to view a list of commands.
-[/DISPATCHER_ERR_GUILD_ONLY]
 
 [DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS]
 **I must be given the following permission{{!
@@ -22,7 +18,6 @@ That command is for servers only. Try saying "help" to view a list of commands.
 ```css
 {{ missing }}
 ```
-[/DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS]
 
 [DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS]
 **You are missing the following permission{{!
@@ -31,7 +26,6 @@ That command is for servers only. Try saying "help" to view a list of commands.
 ```css
 {{ missing }}
 ```
-[/DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS]
 
 [DISPATCHER_ERR_MISSING_ROLES]
 ## This message is used for the missing roles error
@@ -44,5 +38,3 @@ That command is for servers only. Try saying "help" to view a list of commands.
 ```css
 {{ roles }}
 ```
-[/DISPATCHER_ERR_MISSING_ROLES]
-
