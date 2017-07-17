@@ -1,0 +1,15 @@
+## Default localization strings
+>Be sure to read the [Localization Guide](tutorial-LocalizationGuide.html) for information on how localization templates
+and template scripting work
+
+When translating these strings for your own localizations remember that it's not necessary to place them all into a single
+file. You can separate them into multiple files and they will all be loaded and merged together into a single set of strings
+for one language as long as they all have the same language name as the first part of the file name. For example, you could
+separate strings used in two separate commands into files `en_us.cmd.foo.lang` and `en_us.cmd.bar.lang`.
+
+>Note: Anything after the language name and before `.lang` in a lang file's filename is not used for anything and can simply
+be used as a distinction between different lang files for the same language.
+
+This list is automatically generated and may be incomplete during development until YAMDBF 3.0.0 is finalized.
+
+{{ localizationDefaults }}

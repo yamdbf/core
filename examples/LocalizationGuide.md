@@ -103,17 +103,3 @@ function(args, res) {
 When working with template scripts, and really templates in general, knowing what is going to be passed to the localization
 string and thus the template script is important. Be sure to pay close attention to the original defaults and their use of
 templates to get an idea of what to expect. And, of course, being sure to test the results at runtime never hurts.
-
-## Default localization strings
-When translating these strings for your own localizations remember that it's not necessary to place them all into a single
-file. You can separate them into multiple files and they will all be loaded and merged together into a single set of strings
-for one language as long as they all have the same language name as the first part of the file name. For example, you could
-separate strings used in two separate commands into files `en_us.cmd.foo.lang` and `en_us.cmd.bar.lang`.
-
->Note: Anything after the language name and before `.lang` in a lang file's filename is not used for anything and can simply
-be used as a distinction between different lang files for the same language.
-
-
-This list is automatically generated and may be incomplete during development until YAMDBF 3.0.0 is finalized.
-
-{{ localizationDefaults }}

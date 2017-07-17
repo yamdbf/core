@@ -14,13 +14,13 @@ class ScriptClient extends Client
 		for (const raw of Object.keys(Lang.langs['en_us'].raw))
 			localizationStrings.push(Lang.langs['en_us'].raw[raw]);
 
-		const localizationMarkdownFileTemplate: string =
-			fs.readFileSync('./static/DefaultLocalizationList.md.template').toString();
+		const localizationStringMarkdownTemplate: string =
+			fs.readFileSync('./static/LocalizationStringList.md.template').toString();
 
 		logger.log('Script', 'Writing localization markdown file');
 		fs.writeFileSync(
-			'../examples/Localization.md',
-			localizationMarkdownFileTemplate
+			'../examples/LocalizationStrings.md',
+			localizationStringMarkdownTemplate
 				.replace('{{ localizationDefaults }}',
 					localizationStrings
 						.join('\n\n')

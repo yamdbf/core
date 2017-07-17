@@ -1,5 +1,11 @@
 {
 	"StartingInV3": {
 		"title": "Starting a bot in 3.0.0"
+	},
+	"LocalizationGuide": {
+		"title": "Localization Guide"
+	},
+	"LocalizationStrings": {
+		"title": "Localization string list"
 	}
 }
