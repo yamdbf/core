@@ -271,8 +271,8 @@ export class Client extends Discord.Client
 		if (typeof this.readyText !== 'undefined')
 			this._logger.log('Client', this.readyText);
 
-		if (!this.passive) this._dispatcher.setReady();
 		await this.plugins._loadPlugins();
+		if (!this.passive) this._dispatcher.setReady();
 		this.emit('clientReady');
 	}
 
