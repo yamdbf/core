@@ -934,70 +934,6 @@
                     "examples": []
                 },
                 {
-                    "name": "isCommandCalled",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Return if a command has been called, the called command\nthe prefix used to call the command, and the name or alias\nof the command used to call it</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "testCommand",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Test if the command caller is allowed to use the command\nunder whatever circumstances are present at call-time</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "checkRateLimiter",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Check either global or command-specific rate limits for the given\nmessage author and also notify them if they exceed ratelimits</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "checkRateLimits",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Check global and command-specific ratelimits for the user\nfor the given command</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "checkClientPermissions",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Check that the client has the permissions requested by the\ncommand in the channel the command is being called in</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "checkCallerPermissions",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Compare user permissions to the command's requisites</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "checkLimiter",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Compare user roles to the command's limiter</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "hasRoles",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Compare user roles to the command's requisites</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
                     "name": "isBlacklisted",
                     "access": "",
                     "virtual": false,
@@ -1006,10 +942,66 @@
                     "examples": []
                 },
                 {
-                    "name": "dispatch",
+                    "name": "wasCommandCalled",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Execute the provided command with the provided args</p>",
+                    "description": "<p>Return if a command has been called, the called command,\nthe prefix used to call the command, and the name or alias\nof the command used to call it</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "canCallCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not the command is allowed to be called based\non whatever circumstances are present at call-time, throwing\nappropriate errors as necessary for unsatisfied conditions</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "passedRateLimiters",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not the message author passed global\nand command-specific ratelimits for the given command</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "isRateLimited",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check global or command-specific ratelimits for the given message\nauthor, notify them if they exceed ratelimits, and return whether\nor not the user is ratelimited</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "checkClientPermissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return permissions the client is missing to execute the given command</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "checkCallerPermissions",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return the permissions the caller is missing to call the given command</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "passedRoleLimiter",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not the message author passes the role limiter</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "hasRoles",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not the user has one of the roles specified\nin the command's requisite roles</p>",
                     "parameters": [],
                     "examples": []
                 },
