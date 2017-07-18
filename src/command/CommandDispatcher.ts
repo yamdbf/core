@@ -2,6 +2,7 @@ import { PermissionResolvable, TextChannel, User } from 'discord.js';
 import { RateLimiter } from './RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { ResourceLoader } from '../types/ResourceLoader';
+import { Logger, logger } from '../util/logger/Logger';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../types/GuildStorage';
 import { Command } from '../command/Command';
@@ -17,14 +18,16 @@ import now = require('performance-now');
  */
 export class CommandDispatcher<T extends Client>
 {
+	@logger private readonly _logger: Logger;
 	private readonly _client: T;
 	private _ready: boolean = false;
 	public constructor(client: T)
 	{
 		this._client = client;
 
-		// Register message listener
-		if (!this._client.passive) this._client.on('message', message => this.handleMessage(message));
+		if (!this._client.passive)
+			this._client.on('message', message =>
+				{ if (this._ready) this.handleMessage(message); });
 	}
 
 	/**
@@ -40,51 +43,46 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private async handleMessage(message: Message): Promise<void>
 	{
-		if (!this._ready) return;
-
 		const dispatchStart: number = now();
-		if (this._client.selfbot && message.author !== this._client.user) return;
-		if (message.author.bot) return;
-
 		const dm: boolean = message.channel.type !== 'text';
+
+		// Don't continue for bots and don't continue
+		// for other users when the client is a selfbot
+		if (message.author.bot) return;
+		if (this._client.selfbot && message.author.id !== this._client.user.id) return;
+
+		// Set `message.guild.storage` if message is not a DM
 		if (!dm) message.guild.storage = this._client.storage.guilds.get(message.guild.id);
 
-		const lang: string = dm ? this._client.defaultLang
-			:  await message.guild.storage.settings.get('lang');
-		const res: ResourceLoader = Lang.createResourceLoader(lang);
-
-		// Check blacklist
+		// Don't bother with anything else if author is blacklisted
 		if (await this.isBlacklisted(message.author, message, dm)) return;
 
-		const [commandCalled, command, prefix, name]: [boolean, Command<T>, string, string] = await this.isCommandCalled(message);
-		if (!commandCalled)
+		const lang: string = dm ? this._client.defaultLang
+			: await message.guild.storage.settings.get('lang');
+		const res: ResourceLoader = Lang.createResourceLoader(lang);
+
+		type CommandCallData = [boolean, Command<T>, string, string];
+		const [commandWasCalled, command, prefix, name]: CommandCallData =
+			await this.wasCommandCalled(message, dm);
+
+		if (!commandWasCalled)
 		{
 			if (dm && this._client.unknownCommandError)
 				message.channel.send(this.unknownCommandError(res));
 			return;
 		}
-		if (command.ownerOnly && !this._client.isOwner(message.author)) return;
 
-		// Check ratelimits
-		if (!this.checkRateLimits(res, message, command)) return;
-
-		// Alert for missing client permissions
-		const missingClientPermissions: PermissionResolvable[] = this.checkClientPermissions(command, message, dm);
-		if (missingClientPermissions.length > 0)
-		{
-			message.channel.send(this.missingClientPermissionsError(res, missingClientPermissions));
-			return;
-		}
+		let validCall: boolean = false;
+		try { validCall = await this.canCallCommand(res, command, message, dm); }
+		catch (err) { message[this._client.selfbot ? 'channel' : 'author'].send(err); }
+		if (!validCall) return;
 
 		// Remove clientuser from message.mentions if only mentioned one time as a prefix
-		if (!(!dm && prefix === await message.guild.storage.settings.get('prefix')) && prefix !== ''
-			&& (message.content.match(new RegExp(`<@!?${this._client.user.id}>`, 'g')) || []).length === 1)
+		const clientMention: RegExp = new RegExp(`<@!?${this._client.user.id}>`, 'g');
+		const startsWithClientMention: RegExp = new RegExp(`^${clientMention.source}`);
+		if (startsWithClientMention.test(message.content)
+			&& (message.content.match(clientMention) || []).length === 1)
 			message.mentions.users.delete(this._client.user.id);
-
-		let validCaller: boolean = false;
-		try { validCaller = await this.testCommand(res, command, message); }
-		catch (err) { message[this._client.selfbot ? 'channel' : 'author'].send(err); }
-		if (!validCaller) return;
 
 		let args: string[] = message.content
 			.replace(prefix, '').replace(name, '')
@@ -116,22 +114,32 @@ export class CommandDispatcher<T extends Client>
 				break;
 			}
 
-		if (middlewarePassed)
-			await this.dispatch(command, message, args).catch(console.error);
+		if (!middlewarePassed) return;
+
+		try { await command.action(message, args); }
+		catch (err) { this._logger.error(`Dispatch:${command.name}`, err.stack); }
 
 		const dispatchEnd: number = now() - dispatchStart;
-
 		this._client.emit('command', command.name, args, dispatchEnd, message);
 	}
 
 	/**
-	 * Return if a command has been called, the called command
+	 * Check if the calling user is blacklisted
+	 */
+	private async isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
+	{
+		if (await this._client.storage.get(`blacklist.${user.id}`)) return true;
+		if (!dm && await message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
+		return false;
+	}
+
+	/**
+	 * Return if a command has been called, the called command,
 	 * the prefix used to call the command, and the name or alias
 	 * of the command used to call it
 	 */
-	private async isCommandCalled(message: Message): Promise<[boolean, Command<T>, string, string]>
+	private async wasCommandCalled(message: Message, dm: boolean): Promise<[boolean, Command<T>, string, string]>
 	{
-		const dm: boolean = message.channel.type !== 'text';
 		const prefixes: string[] = [
 			`<@${this._client.user.id}>`,
 			`<@!${this._client.user.id}>`
@@ -151,54 +159,86 @@ export class CommandDispatcher<T extends Client>
 
 		const command: Command<T> = this._client.commands.find(c =>
 			c.name.toLowerCase() === commandName.toLowerCase()
-			|| c.aliases.map(a => a.toLowerCase()).includes(commandName));
+				|| c.aliases.map(a => a.toLowerCase()).includes(commandName));
 
 		if (!command) return [false, null, null, null];
+
 		return [true, command, prefix, commandName];
 	}
 
 	/**
-	 * Test if the command caller is allowed to use the command
-	 * under whatever circumstances are present at call-time
+	 * Return whether or not the command is allowed to be called based
+	 * on whatever circumstances are present at call-time, throwing
+	 * appropriate errors as necessary for unsatisfied conditions
 	 */
-	private async testCommand(res: ResourceLoader, command: Command<T>, message: Message): Promise<boolean>
+	private async canCallCommand(res: ResourceLoader, command: Command<T>, message: Message, dm: boolean): Promise<boolean>
 	{
-		const dm: boolean = message.channel.type !== 'text';
 		const storage: GuildStorage = !dm ? this._client.storage.guilds.get(message.guild.id) : null;
 
-		if (!dm && typeof await storage.settings.get('disabledGroups') !== 'undefined'
-			&& (await storage.settings.get('disabledGroups')).includes(command.group)) return false;
+		if (command.ownerOnly && !this._client.isOwner(message.author)) return false;
+		if (!dm && (await storage.settings.get('disabledGroups') || []).includes(command.group)) return false;
+		if (!this.passedRateLimiters(res, message, command)) return false;
 
-		if (dm && command.guildOnly) throw this.guildOnlyError(res);
+		if (dm && command.guildOnly)
+			throw this.guildOnlyError(res);
+
+		const missingClientPermissions: PermissionResolvable[] = this.checkClientPermissions(command, message, dm);
+		if (missingClientPermissions.length > 0)
+		{
+			// Explicitly send this error to the channel rather than throwing
+			message.channel.send(this.missingClientPermissionsError(res, missingClientPermissions));
+			return false;
+		}
+
 		const missingCallerPermissions: PermissionResolvable[] = this.checkCallerPermissions(command, message, dm);
 		if (missingCallerPermissions.length > 0)
 			throw this.missingCallerPermissionsError(res, missingCallerPermissions);
 
-		if (!(await this.checkLimiter(command, message, dm)))
+		if (!(await this.passedRoleLimiter(command, message, dm)))
 			throw await this.failedLimiterError(res, command, message);
 
-		if (!this.hasRoles(command, message, dm)) throw this.missingRolesError(res, command);
+		if (!this.hasRoles(command, message, dm))
+			throw this.missingRolesError(res, command);
 
 		return true;
 	}
 
 	/**
-	 * Check either global or command-specific rate limits for the given
-	 * message author and also notify them if they exceed ratelimits
+	 * Return whether or not the message author passed global
+	 * and command-specific ratelimits for the given command
 	 */
-	private checkRateLimiter(res: ResourceLoader, message: Message, command?: Command<T>): boolean
+	private passedRateLimiters(res: ResourceLoader, message: Message, command: Command<T>): boolean
+	{
+		const passedGlobal: boolean = !this.isRateLimited(res, message);
+		const passedCommand: boolean = !this.isRateLimited(res, message, command);
+		const passedAllLimiters: boolean = passedGlobal && passedCommand;
+
+		if (passedAllLimiters)
+			if (!(command && command._rateLimiter && !command._rateLimiter.get(message).call())
+				&& this._client._rateLimiter)
+				this._client._rateLimiter.get(message).call();
+
+		return passedAllLimiters;
+	}
+
+	/**
+	 * Check global or command-specific ratelimits for the given message
+	 * author, notify them if they exceed ratelimits, and return whether
+	 * or not the user is ratelimited
+	 */
+	private isRateLimited(res: ResourceLoader, message: Message, command?: Command<T>): boolean
 	{
 		const rateLimiter: RateLimiter = command ? command._rateLimiter : this._client._rateLimiter;
-		if (!rateLimiter) return true;
+		if (!rateLimiter) return false;
 
 		const rateLimit: RateLimit = rateLimiter.get(message);
-		if (!rateLimit.isLimited) return true;
+		if (!rateLimit.isLimited) return false;
 
 		if (!rateLimit.wasNotified)
 		{
 			const globalLimiter: RateLimiter = this._client._rateLimiter;
 			const globalLimit: RateLimit = globalLimiter ? globalLimiter.get(message) : null;
-			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return;
+			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return true;
 
 			rateLimit.setNotified();
 			if (!command) message.channel.send(
@@ -208,30 +248,12 @@ export class CommandDispatcher<T extends Client>
 				res('DISPATCHER_ERR_RATELIMIT_EXCEED',
 					{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
 		}
-		return false;
+
+		return true;
 	}
 
 	/**
-	 * Check global and command-specific ratelimits for the user
-	 * for the given command
-	 */
-	private checkRateLimits(res: ResourceLoader, message: Message, command: Command<T>): boolean
-	{
-		let passedGlobal: boolean = true;
-		let passedCommand: boolean = true;
-		let passedRateLimiters: boolean = true;
-		if (!this.checkRateLimiter(res, message)) passedGlobal = false;
-		if (!this.checkRateLimiter(res, message, command)) passedCommand = false;
-		if (!passedGlobal || !passedCommand) passedRateLimiters = false;
-		if (passedRateLimiters)
-			if (!(command && command._rateLimiter && !command._rateLimiter.get(message).call()) && this._client._rateLimiter)
-				this._client._rateLimiter.get(message).call();
-		return passedRateLimiters;
-	}
-
-	/**
-	 * Check that the client has the permissions requested by the
-	 * command in the channel the command is being called in
+	 * Return permissions the client is missing to execute the given command
 	 */
 	private checkClientPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
 	{
@@ -240,7 +262,7 @@ export class CommandDispatcher<T extends Client>
 	}
 
 	/**
-	 * Compare user permissions to the command's requisites
+	 * Return the permissions the caller is missing to call the given command
 	 */
 	private checkCallerPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
 	{
@@ -249,57 +271,31 @@ export class CommandDispatcher<T extends Client>
 	}
 
 	/**
-	 * Compare user roles to the command's limiter
+	 * Return whether or not the message author passes the role limiter
 	 */
-	private async checkLimiter(command: Command<T>, message: Message, dm: boolean): Promise<boolean>
+	private async passedRoleLimiter(command: Command<T>, message: Message, dm: boolean): Promise<boolean>
 	{
 		if (dm || this._client.selfbot) return true;
-		let storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
-		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
+
+		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
+		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
+
 		if (!limitedCommands[command.name]) return true;
 		if (limitedCommands[command.name].length === 0) return true;
+
 		return message.member.roles.filter(role =>
 			limitedCommands[command.name].includes(role.id)).size > 0;
 	}
 
 	/**
-	 * Compare user roles to the command's requisites
+	 * Return whether or not the user has one of the roles specified
+	 * in the command's requisite roles
 	 */
 	private hasRoles(command: Command<T>, message: Message, dm: boolean): boolean
 	{
 		return this._client.selfbot || command.roles.length === 0 || dm
 			|| message.member.roles.filter(role =>
 				command.roles.includes(role.name)).size > 0;
-	}
-
-	/**
-	 * Check if the calling user is blacklisted
-	 */
-	private async isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
-	{
-		if (await this._client.storage.get(`blacklist.${user.id}`)) return true;
-		if (!dm && await message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
-		return false;
-	}
-
-	/**
-	 * Execute the provided command with the provided args
-	 */
-	private async dispatch(command: Command<T>, message: Message, args: any[]): Promise<any>
-	{
-		return new Promise((resolve, reject) =>
-		{
-			try
-			{
-				const action: any = command.action(message, args);
-				if (action instanceof Promise) action.then(resolve).catch(reject);
-				else resolve(action);
-			}
-			catch (err)
-			{
-				reject(err);
-			}
-		});
 	}
 
 	/**

@@ -27,7 +27,8 @@ class Test extends Client
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
-			plugins: [TestPlugin]
+			plugins: [TestPlugin],
+			ratelimit: '5/10s',
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 		});

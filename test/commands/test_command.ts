@@ -14,7 +14,7 @@ const { resolve, expect, localize } = Middleware;
 
 // @ownerOnly
 // @guildOnly
-// @group('test')
+@group('test')
 export default class extends Command
 {
 	@logger private readonly logger: Logger;
@@ -25,7 +25,8 @@ export default class extends Command
 			aliases: ['testing', 'testo'],
 			desc: 'test command',
 			usage: '<prefix>test <test> <foo>',
-			overloads: 'ping'
+			// overloads: 'ping',
+			ratelimit: '2/10s'
 		});
 	}
 
@@ -38,5 +39,6 @@ export default class extends Command
 		message.channel.send(res('FOO_BAR_BAZ'));
 		message.channel.send(args.join(' ') || 'MISSING ARGS');
 		this.logger.debug('Command:test', util.inspect(this.group));
+		throw new Error('foo');
 	}
 }
