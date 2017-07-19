@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>localization/Lang.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="/index.html">Stable</a><a href="/indev/index.html">Indev</a></h2><h3>Pages</h3><ul><li><a href="tutorial-LocalizationGuide.html">Localization Guide</a></li><li><a href="tutorial-LocalizationHelptext.html">Localizing Command helptext</a></li><li><a href="tutorial-LocalizationStrings.html">Localization string list</a></li><li><a href="tutorial-StartingInV3.html">Starting a bot in 3.0.0</a></li></ul><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="ClientStorage.html">ClientStorage</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandRegistry.html">CommandRegistry</a></li><li><a href="Database.html">Database</a></li><li><a href="GuildSettings.html">GuildSettings</a></li><li><a href="GuildStorage.html">GuildStorage</a></li><li><a href="KeyedStorage.html">KeyedStorage</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Plugin.html">Plugin</a></li><li><a href="PluginLoader.html">PluginLoader</a></li><li><a href="RateLimit.html">RateLimit</a></li><li><a href="RateLimiter.html">RateLimiter</a></li><li><a href="StorageProvider.html">StorageProvider</a></li></ul><h3>Interfaces</h3><ul><li><a href="IPlugin.html">IPlugin</a></li><li><a href="IStorageProvider.html">IStorageProvider</a></li></ul><h3>Mixins</h3><ul><li><a href="Guild.html">Guild</a></li><li><a href="Loggable.html">Loggable</a></li><li><a href="Message.html">Message</a></li></ul><h3>Modules</h3><ul><li><a href="module-CommandDecorators.html">CommandDecorators</a></li><li><a href="module-Lang.html">Lang</a></li><li><a href="module-ListenerUtil.html">ListenerUtil</a></li><li><a href="module-Middleware.html">Middleware</a></li><li><a href="module-Providers.html">Providers</a></li><li><a href="module-Time.html">Time</a></li><li><a href="module-Util.html">Util</a></li></ul><h3>Decorators</h3><ul><li><a href="global.html#deprecated">deprecated</a></li><li><a href="global.html#logger">logger</a></li></ul><h3>TypeDefs</h3><ul><li><a href="global.html#ArgOpts">ArgOpts</a></li><li><a href="global.html#CommandInfo">CommandInfo</a></li><li><a href="global.html#DefaultGuildSettings">DefaultGuildSettings</a></li><li><a href="global.html#Difference">Difference</a></li><li><a href="global.html#ExpectArgType">ExpectArgType</a></li><li><a href="global.html#LocalizedCommandInfo">LocalizedCommandInfo</a></li><li><a href="global.html#LogData">LogData</a></li><li><a href="global.html#LogLevel">LogLevel</a></li><li><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></li><li><a href="global.html#PluginConstructor">PluginConstructor</a></li><li><a href="global.html#ResolveArgType">ResolveArgType</a></li><li><a href="global.html#ResourceLoader">ResourceLoader</a></li><li><a href="global.html#StorageProviderConstructor">StorageProviderConstructor</a></li><li><a href="global.html#TemplateData">TemplateData</a></li><li><a href="global.html#Transport">Transport</a></li><li><a href="global.html#TransportFunction">TransportFunction</a></li><li><a href="global.html#Tuple">Tuple</a></li><li><a href="global.html#YAMDBFOptions">YAMDBFOptions</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-ClientOptions.html">ClientOptions</a></li><li><a href="external-Collection.html">Collection</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-MessageOptions.html">MessageOptions</a></li><li><a href="external-PermissionResolvable.html">PermissionResolvable</a></li><li><a href="external-Role.html">Role</a></li><li><a href="external-User.html">User</a></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Client } from '../client/Client';
+import { Command } from '../command/Command';
+import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
+import { ResourceLoader } from '../types/ResourceLoader';
+import { TemplateData } from '../types/TemplateData';
+import { Logger, logger } from '../util/logger/Logger';
+import { LangFileParser } from './LangFileParser';
+import { Language } from './Language';
+import { Util } from '../util/Util';
+import * as fs from 'fs';
+import * as glob from 'glob';
+import * as path from 'path';
+
+/**
+ * Module providing localization support throughout the framework.
+ * Allows client output to be translated to other languages
+ * @module Lang
+ */
+export class Lang
+{
+	@logger private static logger: Logger;
+	private static _instance: Lang;
+	private client: Client;
+	private commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
+	private langs: { [lang: string]: Language };
+	private meta: { [lang: string]: { [key: string]: any } };
+	private constructor(client: Client)
+	{
+		if (Lang._instance)
+			throw new Error('Cannot create multiple instances of Lang singleton. Use Lang.createInstance() instead');
+
+		this.client = client;
+		this.commandInfo = {};
+		this.langs = {};
+		this.meta = {};
+	}
+
+	/**
+	 * Contains all loaded languages and their strings.
+	 * This does not include localized command helptext.
+	 * Rather than using this directly, loading stings with
+	 * a {@link ResourceLoader} function is preferred
+	 * @static
+	 * @name langs
+	 * @type {object}
+	 */
+	public static get langs(): { [lang: string]: Language }
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		return Lang._instance.langs;
+	}
+
+	/**
+	 * Contains all available localization languages
+	 * @static
+	 * @name langNames
+	 * @type {string[]}
+	 */
+	public static get langNames(): string[]
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
+		let langs: Set&lt;string> = new Set();
+		for (const commandName of Object.keys(Lang._instance.commandInfo))
+			for (const lang of Object.keys(Lang._instance.commandInfo[commandName]))
+				langs.add(lang);
+
+		for (const lang of Object.keys(Lang.langs)) langs.add(lang);
+
+		return Array.from(langs);
+	}
+
+	/**
+	 * Create the singleton instance.
+	 * Called automatically by the YAMDBF Client at startup
+	 * @static
+	 * @method createInstance
+	 * @param {Client} client YAMDBF Client instance
+	 * @returns {void}
+	 */
+	public static createInstance(client: Client): void
+	{
+		if (!Lang._instance) Lang._instance = new Lang(client);
+	}
+
+	/**
+	 * Set a metadata key/value for a given language
+	 * @static
+	 * @method setMetaValue
+	 * @param {string} lang Language to set metadata for
+	 * @param {string} key Metadata key to set
+	 * @param {any} value Metadata value to assign
+	 * @returns {void}
+	 */
+	public static setMetaValue(lang: string, key: string, value: any): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		Util.assignNestedValue(Lang._instance.meta, [lang, key], value);
+	}
+
+	/**
+	 * Get a metadata value by key for a given language
+	 * @static
+	 * @method getMetaValue
+	 * @param {string} lang Language to get metadata for
+	 * @param {string} key Metadata key to get
+	 * @returns {any}
+	 */
+	public static getMetaValue(lang: string, key: string): any
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		return Util.getNestedValue(Lang._instance.meta, [lang, key]);
+	}
+
+	/**
+	 * Get all metadata for a given language
+	 * @static
+	 * @method getMetadata
+	 * @param {string} lang Language to get metadata for
+	 * @returns {object}
+	 */
+	public static getMetadata(lang: string): { [key: string]: any }
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		return Lang._instance.meta[lang] || {};
+	}
+
+	/**
+	 * Load all localization files (`*.lang`) from the given directory.
+	 * This can be used to manually load custom localizations
+	 * from any given directory (when writing plugins, for instance)
+	 * @static
+	 * @method loadLocalizationsFrom
+	 * @param {string} dir Directory to load from
+	 * @returns {void}
+	 */
+	public static loadLocalizationsFrom(dir: string): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
+		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\.[^\/]+)?\.lang$/;
+		let langs: { [key: string]: string[] } = {};
+		let allLangFiles: string[] = [];
+		dir = path.resolve(dir);
+		allLangFiles.push(...glob.sync(`${dir}/**/*.lang`));
+		if (allLangFiles.length === 0) throw new Error(`Failed to find any localization files in: ${dir}`);
+
+		for (const langFile of allLangFiles)
+		{
+			if (!langNameRegex.test(langFile)) continue;
+			const langName: string = langFile.match(langNameRegex)[1];
+			if (!langs[langName]) langs[langName] = [];
+			langs[langName].push(langFile);
+		}
+
+		for (const langName of Object.keys(langs))
+		{
+			for (const langFile of langs[langName])
+			{
+				if (!langNameRegex.test(langFile)) continue;
+				const loadedLangFile: string = fs
+					.readFileSync(langFile)
+					.toString()
+					.replace(/\r\n/g, '\n');
+
+				const parsedLanguageFile: Language =
+					LangFileParser.parseFile(langName, loadedLangFile);
+
+				if (typeof Lang._instance.langs[langName] !== 'undefined')
+					Lang._instance.langs[langName].concat(parsedLanguageFile);
+				else
+					Lang._instance.langs[langName] = parsedLanguageFile;
+			}
+		}
+	}
+
+	/**
+	 * Load base localization files and load localization files
+	 * from the Client's `localeDir`. Called automatically by
+	 * the YAMDBF Client at startup
+	 * @static
+	 * @method loadLocalizations
+	 * @returns {void}
+	 */
+	public static loadLocalizations(): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
+		Lang.setMetaValue('en_us', 'name', 'English');
+		Lang.loadLocalizationsFrom(path.join(__dirname, './en_us'));
+		if (Lang._instance.client.localeDir)
+			Lang.loadLocalizationsFrom(Lang._instance.client.localeDir);
+
+		Lang.logger.info('Lang', `Loaded string localizations for ${Object.keys(Lang.langs).length} languages`);
+	}
+
+	/**
+	 * Load all command helptext localization files (`*.lang.json`)
+	 * from the given directory. This can be used to manually load
+	 * custom command helptext localizations from any given
+	 * directory (when writing plugins, for instance)
+	 * @static
+	 * @method loadCommandLocalizationsFrom
+	 * @param {string} dir Directory to load from
+	 * @returns {void}
+	 */
+	public static loadCommandLocalizationsFrom(dir: string): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		dir = path.resolve(dir);
+		let allLangFiles: string[] = [];
+		allLangFiles.push(...glob.sync(`${dir}/**/*.lang.json`));
+		if (allLangFiles.length === 0) return;
+
+		for (const langFile of allLangFiles)
+		{
+			let localizations: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
+			try { localizations = require(langFile); }
+			catch (err) { continue; }
+
+			for (const command of Object.keys(localizations))
+				for (const lang of Object.keys(localizations[command]))
+				{
+					if (typeof Util.getNestedValue(Lang._instance.commandInfo, [command, lang]) === 'undefined')
+						Util.assignNestedValue(Lang._instance.commandInfo, [command, lang], {});
+
+					Lang._instance.commandInfo[command][lang] = {
+						...Lang._instance.commandInfo[command][lang],
+						...localizations[command][lang]
+					};
+				}
+
+		}
+	}
+
+	/**
+	 * Load any command localizations from the Client's `commandsDir`.
+	 * Called automatically by the YAMDBF Client at startup
+	 * @static
+	 * @method loadCommandLocalizations
+	 * @returns {void}
+	 */
+	public static loadCommandLocalizations(): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
+		if (!Lang._instance.client.commandsDir) return;
+		Lang.loadCommandLocalizationsFrom(Lang._instance.client.commandsDir);
+
+		const helpTextLangs: Set&lt;string> = new Set();
+		for (const command of Object.keys(Lang._instance.commandInfo))
+			for (const lang of Object.keys(Lang._instance.commandInfo[command]))
+				helpTextLangs.add(lang);
+
+		Lang.logger.info('Lang', `Loaded helptext localizations for ${helpTextLangs.size} languages`);
+	}
+
+	/**
+	 * Get localized Command info, defaulting to the info
+	 * given in the Command's constructor
+	 * @static
+	 * @method getCommandInfo
+	 * @param {Command} command Command to get localized info for
+	 * @param {string} lang Language to get the localized info in
+	 * @returns {LocalizedCommandInfo}
+	 */
+	public static getCommandInfo(command: Command, lang: string): LocalizedCommandInfo
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+
+		if (!command) throw new Error('A Command must be given for which to get Command info.');
+		let desc: string, info: string, usage: string;
+		if (!Lang._instance.commandInfo[command.name]
+			|| (Lang._instance.commandInfo[command.name]
+				&amp;&amp; !Lang._instance.commandInfo[command.name][lang]))
+			return { desc, info, usage } = command;
+
+		desc = Lang._instance.commandInfo[command.name][lang].desc || command.desc;
+		info = Lang._instance.commandInfo[command.name][lang].info || command.info;
+		usage = Lang._instance.commandInfo[command.name][lang].usage || command.usage;
+
+		return { desc, info, usage };
+	}
+
+	/**
+	 * Get a string resource for the given language, replacing any
+	 * templates with the given data and evaluating any embedded
+	 * template scripts
+	 * @static
+	 * @method res
+	 * @param {string} lang Language to get a string resource for
+	 * @param {string} key String key to get
+	 * @param {TemplateData} [data] Values to replace in the string
+	 * @returns {string}
+	 */
+	public static res(lang: string, key: string, data: TemplateData = {}): string
+	{
+		if (!Lang.langs[lang]) return `${lang}::${key}`;
+		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
+		const scriptTemplate: RegExp = /^{{!([\s\S]+)!}}[\t ]*\n|{{!([\s\S]+)!}}/m;
+		const strings: { [key: string]: string } = Lang.langs[lang].strings;
+		let loadedString: string = strings[key];
+
+		if (!loadedString) return `${lang}::${key}`;
+		if (typeof data === 'undefined') return loadedString;
+
+		for (const template of Object.keys(data))
+		{
+			// Skip maybe templates so they can be removed properly later
+			if (new RegExp(`{{ *${template} *\\?}}`, 'g').test(loadedString)
+				&amp;&amp; (data[template] === '' || data[template] === undefined)) continue;
+
+			loadedString = loadedString.replace(
+				new RegExp(`{{ *${template} *\\??}}`, 'g'), () => data[template]);
+		}
+
+		const scriptTemplates: RegExp = new RegExp(scriptTemplate, 'gm');
+		if (scriptTemplates.test(loadedString))
+		{
+			const resourceLoader: ResourceLoader = Lang.createResourceLoader(lang);
+			const res: ResourceLoader =
+				(stringKey: string, args: TemplateData = data) => resourceLoader(stringKey, args);
+
+			for (const scriptData of loadedString.match(scriptTemplates))
+			{
+				let functionBody: string =
+					scriptData.match(scriptTemplate)[1] || scriptData.match(scriptTemplate)[2];
+
+				let script: Function = new Function('args', 'res', functionBody);
+
+				let result: string;
+				try { result = script(data, res); }
+				catch (err) { throw new Error(`in embedded localization script for: ${lang}::${key}\n${err}`); }
+
+				// Try to coerce an implicit return
+				if (typeof result === 'undefined')
+					try
+					{
+						functionBody = `return ${functionBody.replace(/^[\s]+/, '')}`;
+						script = new Function('args', 'res', functionBody);
+						result = script(data, res);
+					}
+					catch (err) {}
+
+				if (/^{{!([\s\S]+)!}}[\t ]*\n/.test(scriptData) &amp;&amp; result !== '')
+					loadedString = loadedString.replace(scriptData, () => `${result}\n`);
+				else loadedString = loadedString.replace(scriptData, () => result);
+			}
+		}
+
+		return loadedString
+			.replace(maybeTemplates, '')
+			.replace(/\\n/g, '\n');
+	}
+
+	/**
+	 * Takes a language string and returns a function that loads string
+	 * resources for that specific language
+	 * @static
+	 * @method createResourceLoader
+	 * @param {string} lang The language to create a loader for
+	 * @returns {ResourceLoader}
+	 */
+	public static createResourceLoader(lang: string): ResourceLoader
+	{
+		return (key: string, data?: TemplateData) => Lang.res(lang, key, data);
+	}
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+	<div align="right">
+    	<a href="https://github.com/jsdoc3/jsdoc">JSDoc3.5.0-dev</a> | Minami
+	</div>
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>storage/GuildSettings.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="/index.html">Stable</a><a href="/indev/index.html">Indev</a></h2><h3>Pages</h3><ul><li><a href="tutorial-LocalizationGuide.html">Localization Guide</a></li><li><a href="tutorial-LocalizationHelptext.html">Localizing Command helptext</a></li><li><a href="tutorial-LocalizationStrings.html">Localization string list</a></li><li><a href="tutorial-StartingInV3.html">Starting a bot in 3.0.0</a></li></ul><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="ClientStorage.html">ClientStorage</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandRegistry.html">CommandRegistry</a></li><li><a href="Database.html">Database</a></li><li><a href="GuildSettings.html">GuildSettings</a></li><li><a href="GuildStorage.html">GuildStorage</a></li><li><a href="KeyedStorage.html">KeyedStorage</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Plugin.html">Plugin</a></li><li><a href="PluginLoader.html">PluginLoader</a></li><li><a href="RateLimit.html">RateLimit</a></li><li><a href="RateLimiter.html">RateLimiter</a></li><li><a href="StorageProvider.html">StorageProvider</a></li></ul><h3>Interfaces</h3><ul><li><a href="IPlugin.html">IPlugin</a></li><li><a href="IStorageProvider.html">IStorageProvider</a></li></ul><h3>Mixins</h3><ul><li><a href="Guild.html">Guild</a></li><li><a href="Loggable.html">Loggable</a></li><li><a href="Message.html">Message</a></li></ul><h3>Modules</h3><ul><li><a href="module-CommandDecorators.html">CommandDecorators</a></li><li><a href="module-Lang.html">Lang</a></li><li><a href="module-ListenerUtil.html">ListenerUtil</a></li><li><a href="module-Middleware.html">Middleware</a></li><li><a href="module-Providers.html">Providers</a></li><li><a href="module-Time.html">Time</a></li><li><a href="module-Util.html">Util</a></li></ul><h3>Decorators</h3><ul><li><a href="global.html#deprecated">deprecated</a></li><li><a href="global.html#logger">logger</a></li></ul><h3>TypeDefs</h3><ul><li><a href="global.html#ArgOpts">ArgOpts</a></li><li><a href="global.html#CommandInfo">CommandInfo</a></li><li><a href="global.html#DefaultGuildSettings">DefaultGuildSettings</a></li><li><a href="global.html#Difference">Difference</a></li><li><a href="global.html#ExpectArgType">ExpectArgType</a></li><li><a href="global.html#LocalizedCommandInfo">LocalizedCommandInfo</a></li><li><a href="global.html#LogData">LogData</a></li><li><a href="global.html#LogLevel">LogLevel</a></li><li><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></li><li><a href="global.html#PluginConstructor">PluginConstructor</a></li><li><a href="global.html#ResolveArgType">ResolveArgType</a></li><li><a href="global.html#ResourceLoader">ResourceLoader</a></li><li><a href="global.html#StorageProviderConstructor">StorageProviderConstructor</a></li><li><a href="global.html#TemplateData">TemplateData</a></li><li><a href="global.html#Transport">Transport</a></li><li><a href="global.html#TransportFunction">TransportFunction</a></li><li><a href="global.html#Tuple">Tuple</a></li><li><a href="global.html#YAMDBFOptions">YAMDBFOptions</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-ClientOptions.html">ClientOptions</a></li><li><a href="external-Collection.html">Collection</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-MessageOptions.html">MessageOptions</a></li><li><a href="external-PermissionResolvable.html">PermissionResolvable</a></li><li><a href="external-Role.html">Role</a></li><li><a href="external-User.html">User</a></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Guild } from 'discord.js';
+import { StorageProvider } from './StorageProvider';
+import { Util } from '../util/Util';
+import { Client } from '../client/Client';
+
+/**
+ * Class containing asynchronous methods for storing, retrieving, and
+ * interacting with settings for a specific guild. Will be contained
+ * under {@link GuildStorage#settings}
+ */
+export class GuildSettings
+{
+	private readonly _provider: StorageProvider;
+	private readonly _guild: Guild;
+	private readonly _id: string;
+	private readonly _client: any;
+	private _cache: { [key: string]: any };
+	public constructor(storage: StorageProvider, guild: Guild, client: Client)
+	{
+		this._provider = storage;
+		this._guild = guild;
+		this._id = guild.id;
+		this._client = client;
+		this._cache = {};
+	}
+
+	/**
+	 * Initialize this storage instance
+	 * @returns {Promise&lt;void>}
+	 */
+	public async init(useDefaults: boolean = false): Promise&lt;void>
+	{
+		try
+		{
+			let data: any = await this._provider.get(this._id);
+			if (typeof data === 'undefined')
+			{
+				data = {};
+				await this._provider.set(this._id, JSON.stringify(data));
+			}
+			else data = JSON.parse(data);
+
+			if (useDefaults)
+			{
+				const defaults: any = await this._client.storage.get('defaultGuildSettings');
+				for (const key of Object.keys(defaults))
+					if (typeof data[key] === 'undefined')
+						data[key] = defaults[key];
+
+				await this._provider.set(this._id, JSON.stringify(data));
+			}
+
+			this._cache = data;
+		}
+		catch (err)
+		{
+			console.error(err.stack);
+		}
+	}
+
+	/**
+	 * Get the names of all keys in this storage for this Guild
+	 * @returns {Promise&lt;string[]>}
+	 */
+	public async keys(): Promise&lt;string[]>
+	{
+		return Object.keys(this._cache);
+	}
+
+	/**
+	 * Get a value from storage for this Guild
+	 * @param {string} key The key in storage to get
+	 * @returns {Promise&lt;any>}
+	 */
+	public async get(key: string): Promise&lt;any>
+	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
+		if (key.includes('.'))
+		{
+			let path: string[] = key.split('.');
+			return Util.getNestedValue(this._cache[path.shift()], path);
+		}
+		else
+		{
+			return this._cache[key];
+		}
+	}
+
+	/**
+	 * Check if a value exists in storage for this Guild
+	 * @param {string} key The key in storage to check
+	 * @returns {Promise&lt;boolean>}
+	 */
+	public async exists(key: string): Promise&lt;boolean>
+	{
+		return typeof await this.get(key) !== 'undefined';
+	}
+
+	/**
+	 * Set a value in storage for this Guild
+	 * @param {string} key The key in storage to set
+	 * @param {any} value The value to set
+	 * @returns {Promise&lt;void>}
+	 */
+	public async set(key: string, value: any): Promise&lt;void>
+	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
+
+		try { JSON.stringify(value); }
+		catch (err) { value = {}; }
+
+		if (key.includes('.'))
+		{
+			let path: string[] = key.split('.');
+			let first: string = path.shift();
+			if (typeof this._cache[first] === 'undefined')
+				this._cache[first] = {};
+			Util.assignNestedValue(this._cache[first], path, value);
+		}
+		else
+		{
+			this._cache[key] = value;
+		}
+		await this._provider.set(this._id, JSON.stringify(this._cache));
+	}
+
+	/**
+	 * Remove a value from storage for this Guild
+	 * @param {string} key The key in storage to remove
+	 * @returns {Promise&lt;void>}
+	 */
+	public async remove(key: string): Promise&lt;void>
+	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
+		if (key.includes('.'))
+		{
+			let path: string[] = key.split('.');
+			let first: string = path.shift();
+			if (typeof this._cache[first] !== 'undefined')
+				Util.removeNestedValue(this._cache[first], path);
+		}
+		else
+		{
+			delete this._cache[key];
+		}
+		await this._provider.set(this._id, JSON.stringify(this._cache));
+	}
+
+	/**
+	 * Remove all key/value pairs from storage for this Guild
+	 * @returns {Promise&lt;void>}
+	 */
+	public async clear(): Promise&lt;void>
+	{
+		this._cache = {};
+		await this._provider.set(this._id, JSON.stringify(this._cache));
+	}
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+	<div align="right">
+    	<a href="https://github.com/jsdoc3/jsdoc">JSDoc3.5.0-dev</a> | Minami
+	</div>
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
