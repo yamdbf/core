@@ -40,7 +40,7 @@ export default class extends Command
 		{
 			const usableCommands: Collection<string, Command> = this.client.commands
 				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
-				.filter(c => !c.hidden);
+				.filter(c => !c.hidden && !c.disabled);
 
 			const widest: number = usableCommands
 				.map(c => c.name.length)
@@ -78,7 +78,7 @@ export default class extends Command
 		else
 		{
 			command = this.client.commands
-				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
+				.filter(c => !c.disabled && !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.find(c => c.name === commandName || c.aliases.includes(commandName));
 
 			if (!command) output = res('CMD_HELP_UNKNOWN_COMMAND');

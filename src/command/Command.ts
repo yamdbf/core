@@ -11,6 +11,8 @@ import { ArgOpts } from '../types/ArgOpts';
  */
 export class Command<T extends Client = Client>
 {
+	private _disabled: boolean;
+
 	public client: T;
 	public name: string;
 	public desc: string;
@@ -167,6 +169,13 @@ export class Command<T extends Client = Client>
 		 * @type {boolean}
 		 */
 
+		/**
+		 * Whether or not this command is disabled and unable to be called
+		 * currently
+		 * @name Command#disabled
+		 * @type {boolean}
+		 */
+
 		// Middleware function storage for the Command instance
 		this._middleware = [];
 
@@ -215,6 +224,7 @@ export class Command<T extends Client = Client>
 		if (typeof this.roles === 'undefined') this.roles = [];
 		if (typeof this.ownerOnly === 'undefined') this.ownerOnly = false;
 		if (typeof this.external === 'undefined') this.external = false;
+		if (typeof this._disabled === 'undefined') this._disabled = false;
 
 		// Make necessary asserts
 		if (!this.name) throw new Error(`A command is missing a name:\n${this._classloc}`);
@@ -235,6 +245,33 @@ export class Command<T extends Client = Client>
 
 		if (!this.action) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 		if (!(this.action instanceof Function)) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
+	}
+
+	/**
+	 * Whether or not this command is disabled
+	 * @type {boolean}
+	 */
+	public get disabled(): boolean
+	{
+		return this._disabled;
+	}
+
+	/**
+	 * Enable this command if it is disabled
+	 * @returns {void}
+	 */
+	public enable(): void
+	{
+		this._disabled = false;
+	}
+
+	/**
+	 * Disable this command if it is enabled
+	 * @returns {void}
+	 */
+	public disable(): void
+	{
+		this._disabled = true;
 	}
 
 	/**

@@ -24,7 +24,7 @@ class Test extends Client
 			readyText: 'Test client ready',
 			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
 			// commandsDir: './commands',
-			localeDir: './locale',
+			// localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
 			plugins: [TestPlugin],

@@ -140,6 +140,8 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private async wasCommandCalled(message: Message, dm: boolean): Promise<[boolean, Command<T>, string, string]>
 	{
+		type CommandCallData = [boolean, Command<T>, string, string];
+		const negative: CommandCallData = [false, null, null, null];
 		const prefixes: string[] = [
 			`<@${this._client.user.id}>`,
 			`<@!${this._client.user.id}>`
@@ -151,14 +153,15 @@ export class CommandDispatcher<T extends Client>
 		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
 
 		if (dm && typeof prefix === 'undefined') prefix = '';
-		if (typeof prefix === 'undefined' && !dm) return [false, null, null, null];
+		if (typeof prefix === 'undefined' && !dm) return negative;
 
 		const commandName: string = message.content.trim()
 			.slice(prefix.length).trim()
 			.split(' ')[0];
 
 		const command: Command<T> = this._client.commands.findByNameOrAlias(commandName);
-		if (!command) return [false, null, null, null];
+		if (!command) return negative;
+		if (command.disabled) return negative;
 
 		return [true, command, prefix, commandName];
 	}

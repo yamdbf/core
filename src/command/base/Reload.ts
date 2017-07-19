@@ -1,3 +1,4 @@
+import { Collection } from 'discord.js';
 import { ResourceLoader } from '../../types/ResourceLoader';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
@@ -26,8 +27,15 @@ export default class extends Command
 		if (commandName && !command)
 			return this.respond(message, res('CMD_RELOAD_ERR_UNKNOWN_COMMAND', { commandName }));
 
+		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
+
 		if (command) this.client.loadCommand(command.name);
 		else this.client.loadCommand('all');
+
+		let filteredCommands: Collection<string, Command> =
+			this.client.commands.filter(c => disabled.includes(c.name));
+
+		for (const cmd of filteredCommands.values()) cmd.disable();
 
 		const end: number = now();
 		const name: string = command ? command.name : null;

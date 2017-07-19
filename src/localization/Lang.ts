@@ -126,6 +126,19 @@ export class Lang
 	}
 
 	/**
+	 * To be run after loading any localizations
+	 * @private
+	 */
+	private static postLoad(): void
+	{
+		if (Lang.langNames.length > 1 && Lang._instance.client.commands.get('setlang').disabled)
+		{
+			Lang._instance.client.commands.get('setlang').enable();
+			Lang.logger.info('Lang', `Additional langugage loaded, enabled 'setlang' command.`);
+		}
+	}
+
+	/**
 	 * Load all localization files (`*.lang`) from the given directory.
 	 * This can be used to manually load custom localizations
 	 * from any given directory (when writing plugins, for instance)
@@ -172,6 +185,8 @@ export class Lang
 					Lang._instance.langs[langName] = parsedLanguageFile;
 			}
 		}
+
+		Lang.postLoad();
 	}
 
 	/**
@@ -191,7 +206,7 @@ export class Lang
 		if (Lang._instance.client.localeDir)
 			Lang.loadLocalizationsFrom(Lang._instance.client.localeDir);
 
-		Lang.logger.info('Lang', `Loaded string localizations for ${Object.keys(Lang.langs).length} languages`);
+		Lang.logger.info('Lang', `Loaded string localizations for ${Object.keys(Lang.langs).length} languages.`);
 	}
 
 	/**
@@ -231,6 +246,8 @@ export class Lang
 				}
 
 		}
+
+		Lang.postLoad();
 	}
 
 	/**
@@ -252,7 +269,7 @@ export class Lang
 			for (const lang of Object.keys(Lang._instance.commandInfo[command]))
 				helpTextLangs.add(lang);
 
-		Lang.logger.info('Lang', `Loaded helptext localizations for ${helpTextLangs.size} languages`);
+		Lang.logger.info('Lang', `Loaded helptext localizations for ${helpTextLangs.size} languages.`);
 	}
 
 	/**

@@ -1,7 +1,6 @@
-import { Collection, TextChannel, PermissionResolvable } from 'discord.js';
+import { Collection } from 'discord.js';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
-import { Message } from '../types/Message';
 import { Logger } from '../util/logger/Logger';
 import { BaseCommandName } from '../types/BaseCommandName';
 
@@ -101,64 +100,8 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 */
 	public findByNameOrAlias(text: string): V
 	{
-		text = text.toLowerCase();
+		text = text ? text.toLowerCase() : text;
 		return this.find(c => c.name.toLowerCase() === text
 			|| !!c.aliases.find(a => a.toLowerCase() === text));
-	}
-
-	/**
-	 * Returns a Promise resolving with a collection of all commands usable
-	 * by the caller in the guild text channel the provided message is in.
-	 * Needs to be async due to having to access guild settings to check
-	 * for disabled groups
-	 * @param {Client} client YAMDBF Client instance
-	 * @param {external:Message} message Discord.js Message object
-	 * @returns {Promise<external:Collection<string, Command>>}
-	 */
-	public async filterGuildUsable(client: T, message: Message): Promise<Collection<K, V>>
-	{
-		let filtered: Collection<K, V> = new Collection<K, V>();
-		const currentPermissions: (a: PermissionResolvable) => boolean = a =>
-			(<TextChannel> message.channel).permissionsFor(message.author).has(a);
-
-		const byPermissions: (c: V) => boolean = c =>
-			c.callerPermissions.length > 0 ? c.callerPermissions.filter(currentPermissions).length > 0 : true;
-
-		const byRoles: (c: V) => boolean = c =>
-			!(c.roles.length > 0 && message.member.roles.filter(role => c.roles.includes(role.name)).size === 0);
-
-		const byOwnerOnly: (c: V) => boolean = c =>
-			(client.isOwner(message.author) && c.ownerOnly) || !c.ownerOnly;
-
-		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
-		for (const [name, command] of this.filter(byPermissions).filter(byRoles).filter(byOwnerOnly).entries())
-			if (!disabledGroups.includes(command.group)) filtered.set(name, command);
-
-		return filtered;
-	}
-
-	/**
-	 * Returns all commands usable by the caller within the DM channel the provided
-	 * message is in
-	 * @param {Client} client YAMDBF Client instance
-	 * @param {external:Message} message - Discord.js Message object
-	 * @returns {external:Collection<string, Command>}
-	 */
-	public filterDMUsable(client: T, message: Message): Collection<K, V>
-	{
-		return this.filter(c => !c.guildOnly &&
-			((client.isOwner(message.author) && c.ownerOnly) || !c.ownerOnly));
-	}
-
-	/**
-	 * Returns all commands that can have their help looked up by the caller
-	 * in the DM channel the message is in
-	 * @param {Client} client YAMDBF Client instance
-	 * @param {external:Message} message Discord.js Message object
-	 * @returns {external:Collection<string, Command>}
-	 */
-	public filterDMHelp(client: T, message: Message): Collection<K, V>
-	{
-		return this.filter(c => (client.isOwner(message.author) && c.ownerOnly) || !c.ownerOnly);
 	}
 }
