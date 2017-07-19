@@ -32,10 +32,10 @@ export default class extends Command
 		if (command) this.client.loadCommand(command.name);
 		else this.client.loadCommand('all');
 
-		let filteredCommands: Collection<string, Command> =
+		let toDisable: Collection<string, Command> =
 			this.client.commands.filter(c => disabled.includes(c.name));
 
-		for (const cmd of filteredCommands.values()) cmd.disable();
+		for (const cmd of toDisable.values()) cmd.disable();
 
 		const end: number = now();
 		const name: string = command ? command.name : null;
