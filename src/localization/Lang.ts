@@ -318,6 +318,9 @@ export class Lang
 		if (scriptTemplates.test(loadedString))
 		{
 			const resourceLoader: ResourceLoader = Lang.createResourceLoader(lang);
+			const res: ResourceLoader =
+				(stringKey: string, args: TemplateData = data) => resourceLoader(stringKey, args);
+
 			for (const scriptData of loadedString.match(scriptTemplates))
 			{
 				let functionBody: string =
@@ -326,7 +329,7 @@ export class Lang
 				let script: Function = new Function('args', 'res', functionBody);
 
 				let result: string;
-				try { result = script(data, resourceLoader); }
+				try { result = script(data, res); }
 				catch (err) { throw new Error(`in embedded localization script for: ${lang}::${key}\n${err}`); }
 
 				// Try to coerce an implicit return
@@ -335,7 +338,7 @@ export class Lang
 					{
 						functionBody = `return ${functionBody.replace(/^[\s]+/, '')}`;
 						script = new Function('args', 'res', functionBody);
-						result = script(data, resourceLoader);
+						result = script(data, res);
 					}
 					catch (err) {}
 

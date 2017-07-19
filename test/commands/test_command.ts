@@ -31,8 +31,8 @@ export default class extends Command
 	}
 
 	// @using((message, args) => [message, args.map(a => a.toUpperCase())])
-	@using(resolve(`test: Number, foo: String`))
-	@using(expect(`test: Number, foo: ['foo', 'bar']`))
+	@using(resolve(`test: Member, foo: String`))
+	@using(expect(`test: Member, foo: ['foo', 'bar']`))
 	@using(localize)
 	public action(message: Message, [res, ...args]: [ResourceLoader, string[]]): void
 	{
