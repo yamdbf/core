@@ -795,6 +795,28 @@
                             "boolean"
                         ]
                     }
+                },
+                {
+                    "name": "disabled",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not this command is disabled and unable to be called\ncurrently</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "disabled",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not this command is disabled</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
                 }
             ],
             "functions": [
@@ -834,6 +856,30 @@
                     "description": "<p>Make necessary asserts for Command validity.\nCalled internally by the command loader</p>",
                     "parameters": [],
                     "examples": []
+                },
+                {
+                    "name": "enable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Enable this command if it is disabled</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "disable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Disable this command if it is enabled</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "use",
@@ -1166,93 +1212,6 @@
                     "examples": [],
                     "returns": {
                         "type": "Command",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "filterGuildUsable",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Returns a Promise resolving with a collection of all commands usable\nby the caller in the guild text channel the provided message is in.\nNeeds to be async due to having to access guild settings to check\nfor disabled groups</p>",
-                    "parameters": [
-                        {
-                            "name": "client",
-                            "type": "Client",
-                            "description": "<p>YAMDBF Client instance</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "message",
-                            "type": "external:Message",
-                            "description": "<p>Discord.js Message object</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<external:Collection.<string, Command>>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "filterDMUsable",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Returns all commands usable by the caller within the DM channel the provided\nmessage is in</p>",
-                    "parameters": [
-                        {
-                            "name": "client",
-                            "type": "Client",
-                            "description": "<p>YAMDBF Client instance</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "message",
-                            "type": "external:Message",
-                            "description": "<p>Discord.js Message object</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "external:Collection.<string, Command>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "filterDMHelp",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Returns all commands that can have their help looked up by the caller\nin the DM channel the message is in</p>",
-                    "parameters": [
-                        {
-                            "name": "client",
-                            "type": "Client",
-                            "description": "<p>YAMDBF Client instance</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "message",
-                            "type": "external:Message",
-                            "description": "<p>Discord.js Message object</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "external:Collection.<string, Command>",
                         "description": ""
                     }
                 }
