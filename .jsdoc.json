@@ -5,7 +5,7 @@
         "monospaceLinks": true,
         "useLongnameInNav": false,
 		"default": {
-            "outputSourceFiles": false
+            "outputSourceFiles": true
         }
     },
 	"opts": {
