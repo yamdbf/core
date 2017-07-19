@@ -104,6 +104,11 @@ then an implicit return is not possible</p>
 object passed to the resource loader that is loading the string resource containing the template script in question. This
 parameter is called <code>args</code>. The second parameter, called <code>res</code>, is a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function that can be used
 for loading other string resources for the same language in case you need to nest localizable strings.</p>
+<blockquote>
+<p>The same <code>args</code> object received in a template script is automatically forwarded by reference to <code>res()</code> within that template
+script when called (meaning new values can be attached and old values modified), so unless a new args object is created to pass
+to <code>res()</code> you will not need to pass more than a string key to nested <code>res()</code> calls within template scripts</p>
+</blockquote>
 <p>It's easiest to imagine that the script itself is surrounded by an anonymous function declaration taking the parameters
 <code>args</code>, and <code>res</code> with simple arrow-function style implicit returns converted explicitly. Using the example script from above:</p>
 <pre class="prettyprint source"><code>// {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
