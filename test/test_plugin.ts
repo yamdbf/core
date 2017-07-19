@@ -18,5 +18,6 @@ export class TestPlugin extends Plugin implements IPlugin
 	{
 		this.client.commands.registerExternal(this.client, new TestCommand());
 		Lang.loadCommandLocalizationsFrom('./commands');
+		// throw new Error('foo');
 	}
 }

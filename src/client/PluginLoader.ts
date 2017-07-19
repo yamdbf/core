@@ -90,9 +90,17 @@ export class PluginLoader
 			}
 
 			this.logger.info(tag, `Plugin '${loadedPlugin.name}' loaded, initializing...`);
-
-			await loadedPlugin.init();
-			this.logger.info(tag, `Plugin '${loadedPlugin.name}' initialized.`);
+			try
+			{
+				await loadedPlugin.init();
+				this.logger.info(tag, `Plugin '${loadedPlugin.name}' initialized.`);
+			}
+			catch (err)
+			{
+				this.logger.warn(tag, `Plugin '${loadedPlugin.name}' errored during initialization:\n\n${err.stack}`,
+					'\n\nPlease report the error to the plugin author.\n');
+				this.logger.info(tag, `Plugin '${loadedPlugin.name}' initialized with errors.`);
+			}
 			this.loaded[loadedPlugin.name] = loadedPlugin;
 		}
 	}
