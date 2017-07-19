@@ -159,12 +159,11 @@ export class Util
 
 			if (/\[ *(?:(?: *, *)?(['"])(\S+)\1)+ *\]|\[ *\]/.test(arg))
 			{
-				let data: string = arg.match(/\[(.*)\]/)[1];
+				const data: string = arg.match(/\[(.*)\]/)[1];
 				if (!data) throw new Error('String literal array cannot be empty');
-				let values: string[] = data
+				const values: string[] = data
 					.split(',')
-					.map(a => a.trim())
-					.map(a => a.slice(1, a.length - 1));
+					.map(a => a.trim().slice(1, a.length - 1));
 				output[name] = values;
 			}
 			else output[name] = arg;

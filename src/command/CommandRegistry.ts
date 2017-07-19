@@ -101,7 +101,9 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 */
 	public findByNameOrAlias(text: string): V
 	{
-		return this.filter(c => c.name === text || c.aliases.includes(text)).first();
+		text = text.toLowerCase();
+		return this.find(c => c.name.toLowerCase() === text
+			|| !!c.aliases.find(a => a.toLowerCase() === text));
 	}
 
 	/**

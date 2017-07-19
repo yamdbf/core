@@ -157,10 +157,7 @@ export class CommandDispatcher<T extends Client>
 			.slice(prefix.length).trim()
 			.split(' ')[0];
 
-		const command: Command<T> = this._client.commands.find(c =>
-			c.name.toLowerCase() === commandName.toLowerCase()
-				|| c.aliases.map(a => a.toLowerCase()).includes(commandName));
-
+		const command: Command<T> = this._client.commands.findByNameOrAlias(commandName);
 		if (!command) return [false, null, null, null];
 
 		return [true, command, prefix, commandName];
