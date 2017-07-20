@@ -49,7 +49,13 @@ import { BaseCommandName } from '../types/BaseCommandName';
  */
 export class CommandRegistry&lt;T extends Client, K extends string, V extends Command&lt;T>> extends Collection&lt;K, V>
 {
-	public constructor() { super(); }
+	private client: T;
+
+	public constructor(client: T)
+	{
+		super();
+		Object.defineProperty(this, 'client', { value: client });
+	}
 
 	/**
 	 * Complete registration of a command and add to the parent
@@ -58,7 +64,7 @@ export class CommandRegistry&lt;T extends Client, K extends string, V extends Co
 	 * `registerExternal()` instead
 	 * @private
 	 */
-	public _registerInternal(client: T, command: V, reload: boolean = false, external: boolean = false): void
+	public _registerInternal(command: V, reload: boolean = false, external: boolean = false): void
 	{
 		if (reload &amp;&amp; external) return;
 		if (super.has(&lt;K> command.name) &amp;&amp; !reload
@@ -67,7 +73,7 @@ export class CommandRegistry&lt;T extends Client, K extends string, V extends Co
 				if (!external) throw new Error(`A command with the name "${command.name}" already exists`);
 				else throw new Error(`External command is conflicting with command "${command.name}"`);
 
-		command._register(client);
+		command._register(this.client);
 		super.set(&lt;K> command.name, command);
 
 		for (const cmd of this.values())
@@ -102,21 +108,21 @@ export class CommandRegistry&lt;T extends Client, K extends string, V extends Co
 	 * @param {Command} command The Command instance to be registered
 	 * @returns {void}
 	 */
-	public registerExternal(client: T, command: Command&lt;any>): void
+	public registerExternal(command: Command&lt;any>): void
 	{
 		if (command.overloads)
 		{
-			if (client.disableBase.includes(&lt;BaseCommandName> command.overloads)) return;
+			if (this.client.disableBase.includes(&lt;BaseCommandName> command.overloads)) return;
 			let overload: boolean = this.has(&lt;K> command.overloads);
 			this.delete(&lt;K> command.overloads);
-			this._registerInternal(client, &lt;V> command, false, true);
+			this._registerInternal(&lt;V> command, false, true);
 			Logger.instance().info('CommandRegistry',
 				`External command '${command.name}' registered${
 					overload ? `, overloading base command '${command.overloads}'.` : '.'}`);
 		}
 		else
 		{
-			this._registerInternal(client, &lt;V> command, false, true);
+			this._registerInternal(&lt;V> command, false, true);
 			Logger.instance().info('CommandRegistry', `External command '${command.name}' registered.`);
 		}
 		command.external = true;
