@@ -16,7 +16,7 @@ export class TestPlugin extends Plugin implements IPlugin
 
 	public async init(): Promise<void>
 	{
-		this.client.commands.registerExternal(this.client, new TestCommand());
+		this.client.commands.registerExternal(new TestCommand());
 		// Lang.loadCommandLocalizationsFrom('./commands');
 		// Lang.loadLocalizationsFrom('./locale');
 		// throw new Error('foo');

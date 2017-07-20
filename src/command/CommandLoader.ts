@@ -57,13 +57,13 @@ export class CommandLoader<T extends Client>
 				if (!this._client.commands.has(command.overloads))
 					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
 				this._client.commands.delete(command.overloads);
-				this._client.commands._registerInternal(this._client, command);
+				this._client.commands._registerInternal(command);
 				this.logger.info('CommandLoader',
 					`Command '${command.name}' loaded, overloading command '${command.overloads}'.`);
 			}
 			else
 			{
-				this._client.commands._registerInternal(this._client, command);
+				this._client.commands._registerInternal(command);
 				loadedCommands++;
 				this.logger.info('CommandLoader', `Command '${command.name}' loaded.`);
 			}
@@ -87,7 +87,7 @@ export class CommandLoader<T extends Client>
 		const loadedCommandClass: any = this.getCommandClass(commandLocation);
 		const command: Command<T> = new loadedCommandClass(this._client);
 		command._classloc = commandLocation;
-		this._client.commands._registerInternal(this._client, command, true);
+		this._client.commands._registerInternal(command, true);
 		this.logger.info('CommandLoader', `Command '${command.name}' reloaded.`);
 	}
 

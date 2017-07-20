@@ -221,7 +221,7 @@ export class Client extends Discord.Client
 		 * [Collection]{@link external:Collection} containing all loaded commands
 		 * @type {CommandRegistry<string, Command>}
 		 */
-		this.commands = new CommandRegistry<this, string, Command<this>>();
+		this.commands = new CommandRegistry<this, string, Command<this>>(this);
 
 		this._commandLoader = !this.passive ? new CommandLoader(this) : null;
 		this._dispatcher = !this.passive ? new CommandDispatcher<this>(this) : null;
