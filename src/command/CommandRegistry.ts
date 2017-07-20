@@ -11,7 +11,7 @@ import { BaseCommandName } from '../types/BaseCommandName';
  */
 export class CommandRegistry<T extends Client, K extends string, V extends Command<T>> extends Collection<K, V>
 {
-	private client: T;
+	private readonly client: T;
 
 	public constructor(client: T)
 	{
