@@ -49,7 +49,7 @@ import { BaseCommandName } from '../types/BaseCommandName';
  */
 export class CommandRegistry&lt;T extends Client, K extends string, V extends Command&lt;T>> extends Collection&lt;K, V>
 {
-	private client: T;
+	private readonly client: T;
 
 	public constructor(client: T)
 	{
