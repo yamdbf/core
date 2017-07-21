@@ -26,6 +26,6 @@ export default class extends Command
 		let output: string = res('CMD_LISTGROUPS_GROUPS',
 			{ groups: groups.join(', '), disabledGroups: disabledGroups.join(', ') });
 
-		this.respond(message, output, { code: 'ldif '});
+		this.respond(message, output, { code: 'ldif'});
 	}
 }
