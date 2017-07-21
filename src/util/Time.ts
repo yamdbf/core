@@ -61,7 +61,7 @@ export class Time
 	 * Shorthand examples: 10m, 5h, 1d
 	 * @method parseShorthand
 	 * @param {string} shorthand The shorthand to parse
-	 * @returns {number} The parsed duration in MS
+	 * @returns {number}
 	 */
 	public static parseShorthand(shorthand: string): number
 	{
