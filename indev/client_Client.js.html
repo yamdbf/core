@@ -306,11 +306,12 @@ export class Client extends Discord.Client
 
 		await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
 
+		await this.plugins._loadPlugins();
+
+		if (!this.passive) this._dispatcher.setReady();
 		if (typeof this.readyText !== 'undefined')
 			this._logger.log('Client', this.readyText);
 
-		await this.plugins._loadPlugins();
-		if (!this.passive) this._dispatcher.setReady();
 		this.emit('clientReady');
 	}
 
