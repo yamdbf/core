@@ -98,7 +98,7 @@ export class PluginLoader
 			catch (err)
 			{
 				this.logger.warn(tag, `Plugin '${loadedPlugin.name}' errored during initialization:\n\n${err.stack}`,
-					'\n\nPlease report the error to the plugin author.\n');
+					'\n\nPlease report this error to the plugin author.\n');
 				this.logger.info(tag, `Plugin '${loadedPlugin.name}' initialized with errors.`);
 			}
 			this.loaded[loadedPlugin.name] = loadedPlugin;

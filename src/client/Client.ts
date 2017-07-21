@@ -235,7 +235,7 @@ export class Client extends Discord.Client
 			Lang.loadCommandLocalizations();
 
 			// Disable setlang command if there is only one language
-			if (Lang.langNames.length === 1)
+			if (Lang.langNames.length === 1 && !this.disableBase.includes('setlang'))
 				this.commands.get('setlang').disable();
 		}
 

@@ -131,7 +131,9 @@ export class Lang
 	 */
 	private static postLoad(): void
 	{
-		if (Lang.langNames.length > 1 && Lang._instance.client.commands.get('setlang').disabled)
+		if (Lang.langNames.length > 1
+			&& (!Lang._instance.client.disableBase.includes('setlang')
+				&& Lang._instance.client.commands.get('setlang').disabled))
 		{
 			Lang._instance.client.commands.get('setlang').enable();
 			Lang.logger.info('Lang', `Additional langugage loaded, enabled 'setlang' command.`);

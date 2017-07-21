@@ -29,6 +29,7 @@ class Test extends Client
 			pause: true,
 			plugins: [TestPlugin],
 			ratelimit: '5/10s',
+			disableBase: ['setlang']
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 		});
