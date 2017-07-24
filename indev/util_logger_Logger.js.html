@@ -80,10 +80,8 @@ export class Logger
 			grey: [90, 39]
 		};
 
-		function wrapColor(c: Color, ...text: string[]): string
-		{
-			return `\u001B[${c[0]}m${text.join(' ')}\u001B[${c[1]}m`;
-		}
+		const wrapColor: (c: Color, ...text: string[]) => string =
+			(c, ...text) => `\u001B[${c[0]}m${text.join(' ')}\u001B[${c[1]}m`;
 
 		type ColorWrapper = (...text: string[]) => string;
 		const createWrapper: (color: Color) => ColorWrapper =
