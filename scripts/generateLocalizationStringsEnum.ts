@@ -15,11 +15,12 @@ class ScriptClient extends Client
 		let localizationStringsEnumFile: string = `// Generated automatically at ${new Date().toString()}
 
 /**
- * Contains all base localization string keys
+ * @typedef {enum} BaseStrings Enum containing all base framework
+ * localization string keys
  */
 export enum BaseStrings
 {
-	${strings.map(c => `${c} = '${c}'`).join(',\n\t')};
+	${strings.map(c => `${c} = '${c}'`).join(',\n\t')}
 }
 `;
 

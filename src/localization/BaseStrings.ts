@@ -1,7 +1,8 @@
-// Generated automatically at Sun Jul 23 2017 22:53:52 GMT-0500 (Central Daylight Time)
+// Generated automatically at Mon Jul 24 2017 01:05:35 GMT-0500 (Central Daylight Time)
 
 /**
- * Contains all base localization string keys
+ * @typedef {enum} BaseStrings Enum containing all base framework
+ * localization string keys
  */
 export enum BaseStrings
 {
@@ -71,5 +72,5 @@ export enum BaseStrings
 	RESOLVE_ERR_RESOLVE_TYPE_TEXT = 'RESOLVE_ERR_RESOLVE_TYPE_TEXT',
 	RESOLVE_ERR_MULTIPLE_USER_RESULTS = 'RESOLVE_ERR_MULTIPLE_USER_RESULTS',
 	RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS = 'RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS',
-	RESOLVE_ERR_MULTIPLE_ROLE_RESULTS = 'RESOLVE_ERR_MULTIPLE_ROLE_RESULTS';
+	RESOLVE_ERR_MULTIPLE_ROLE_RESULTS = 'RESOLVE_ERR_MULTIPLE_ROLE_RESULTS'
 }
