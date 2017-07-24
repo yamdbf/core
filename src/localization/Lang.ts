@@ -133,6 +133,7 @@ export class Lang
 	{
 		if (Lang.langNames.length > 1
 			&& (!Lang._instance.client.disableBase.includes('setlang')
+				&& Lang._instance.client.commands.has('setlang')
 				&& Lang._instance.client.commands.get('setlang').disabled))
 		{
 			Lang._instance.client.commands.get('setlang').enable();
