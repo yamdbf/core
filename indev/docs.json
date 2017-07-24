@@ -2625,6 +2625,11 @@
             "properties": []
         },
         {
+            "name": "BaseStrings",
+            "description": "<p>Enum containing all base framework\nlocalization string keys</p>",
+            "properties": []
+        },
+        {
             "name": "ArgOpts",
             "description": "<p>Object containing options for\ncontrolling how command arguments will be parsed</p>",
             "properties": [
@@ -3091,15 +3096,6 @@
                     "nullable": ""
                 }
             ]
-        }
-    ],
-    "properties": [
-        {
-            "name": "BaseStrings",
-            "access": "",
-            "virtual": false,
-            "description": "<p>Contains all base localization string keys</p>",
-            "type": ""
         }
     ],
     "mixins": [
