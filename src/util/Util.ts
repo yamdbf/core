@@ -170,4 +170,21 @@ export class Util
 		}
 		return output;
 	}
+
+	/**
+	 * Implementation of `performance-now`
+	 * @static
+	 * @method now
+	 * @returns {number}
+	 */
+	public static now(): number
+	{
+		function ns(): number
+		{
+			const hr: [number, number] = process.hrtime();
+			return hr[0] * 1e9 + hr[1];
+		}
+
+		return (ns() - (ns() - (process.uptime() * 1e9))) / 1e6;
+	}
 }

@@ -10,7 +10,8 @@ import { Client } from '../client/Client';
 import { RateLimit } from './RateLimit';
 import { Time } from '../util/Time';
 import { Lang } from '../localization/Lang';
-import now = require('performance-now');
+import { Util } from '../util/Util';
+const { now } = Util;
 
 /**
  * Handles dispatching commands

@@ -3,7 +3,8 @@ import { ResourceLoader } from '../../types/ResourceLoader';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
-import now = require('performance-now');
+import { Util } from '../../util/Util';
+const { now } = Util;
 
 export default class extends Command
 {
