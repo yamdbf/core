@@ -37,7 +37,6 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "chalk": "^2.0.1",
     "discord.js": "github:hydrabolt/discord.js#11.1-dev",
     "glob": "7.1.1",
     "node-json-db": "0.7.3",
