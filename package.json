@@ -13,6 +13,7 @@
     "test": "npm run lint -s && npm run build -s",
     "test:client": "node test/client_test.js",
     "localization": "cd scripts && gulp build && gulp build:scripts && node generateDefaultLocalizationMarkdown",
+    "basestrings": "cd scripts && gulp build && gulp build:scripts && node generateLocalizationStringsEnum",
     "basecommands": "cd scripts && gulp build && gulp build:scripts && node generateBaseCommandNameFiles"
   },
   "author": "Zackary Campbell <zajrik@gmail.com>",

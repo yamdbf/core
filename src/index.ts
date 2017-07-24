@@ -39,6 +39,7 @@ export { LogData } from './types/LogData';
 export { TransportFunction } from './types/TransportFunction';
 
 export { Lang } from './localization/Lang';
+export { BaseStrings } from './localization/BaseStrings';
 export { ResourceLoader } from './types/ResourceLoader';
 
 export { deprecated } from './util/DeprecatedDecorator';
