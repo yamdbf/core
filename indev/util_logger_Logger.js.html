@@ -86,10 +86,8 @@ export class Logger
 		}
 
 		type ColorWrapper = (...text: string[]) => string;
-		function createWrapper(color: Color): ColorWrapper
-		{
-			return (...text: string[]) => wrapColor(color, ...text);
-		}
+		const createWrapper: (color: Color) => ColorWrapper =
+			color => (...text) => wrapColor(color, ...text);
 
 		type LogTypeColorWrappers = { [type: string]: ColorWrapper };
 		const typeColorWrappers: LogTypeColorWrappers = {
@@ -100,21 +98,19 @@ export class Logger
 			[LogType.DEBUG]: createWrapper(colors.magenta)
 		};
 
+		const zeroPad: (n: number) => string = n => `0${n}`.slice(-2);
 		const transport: TransportFunction = data => {
 			let { type, tag, text } = data;
 			const d: Date = data.timestamp;
-			const hours: number = d.getHours();
-			const minutes: number = d.getMinutes();
-			const seconds: number = d.getSeconds();
-			const timestamp: string = wrapColor(colors.grey, `${
-				hours &lt; 10 ? `0${hours}` : hours}:${
-				minutes &lt; 10 ? `0${minutes}` : minutes}:${
-				seconds &lt; 10 ? `0${seconds}` : seconds}`);
+			const h: string = zeroPad(d.getHours());
+			const m: string = zeroPad(d.getMinutes());
+			const s: string = zeroPad(d.getSeconds());
+			const t: string = wrapColor(colors.grey, `${h}:${m}:${s}`);
 
 			type = typeColorWrappers[type](type);
 			tag = wrapColor(colors.cyan, tag);
 
-			process.stdout.write(`[${timestamp}][${type}][${tag}]: ${text}\n`);
+			process.stdout.write(`[${t}][${type}][${tag}]: ${text}\n`);
 		};
 
 		this.addTransport({ transport });
