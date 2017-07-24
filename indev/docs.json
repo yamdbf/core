@@ -3093,6 +3093,15 @@
             ]
         }
     ],
+    "properties": [
+        {
+            "name": "BaseStrings",
+            "access": "",
+            "virtual": false,
+            "description": "<p>Contains all base localization string keys</p>",
+            "type": ""
+        }
+    ],
     "mixins": [
         {
             "name": "Guild",
