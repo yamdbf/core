@@ -2316,7 +2316,7 @@
         },
         {
             "name": "Logger",
-            "description": "<p>Singleton containing methods for asynchronous logging with clean,\nconfigurable output</p>\n<p>Easiest manner of use is via the <code>@logger</code> parameter decorator\nto attach the logger to a class property for use within that class.\nOtherwise the singleton instance can be accessed via <code>Logger.instance()</code></p>\n<p>Logging can be turned off by setting the logging level to <code>LogLevel.NONE</code></p>",
+            "description": "<p>Singleton containing methods for asynchronous logging with clean,\nconfigurable output via custom Logger transports</p>\n<p>Easiest manner of use is via the <code>@logger</code> parameter decorator\nto attach the logger to a class property for use within that class.\nOtherwise the singleton instance can be accessed via <code>Logger.instance()</code></p>\n<p>Logging can be turned off by setting the logging level to <code>LogLevel.NONE</code></p>",
             "extends": [],
             "access": "",
             "virtual": false,
@@ -3151,6 +3151,15 @@
                 "type": "PropertyDecorator",
                 "description": ""
             }
+        }
+    ],
+    "properties": [
+        {
+            "name": "LogType",
+            "access": "private",
+            "virtual": false,
+            "description": "<p>Enum containing log type string constants</p>",
+            "type": ""
         }
     ]
 }

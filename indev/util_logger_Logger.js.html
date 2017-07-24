@@ -40,12 +40,12 @@
 import { Transport } from '../../types/Transport';
 import { LogLevel } from '../../types/LogLevel';
 import { LogData } from '../../types/LogData';
+import { LogType } from './LogType';
 export { logger } from './LoggerDecorator';
-import * as chalk from 'chalk';
 
 /**
  * Singleton containing methods for asynchronous logging with clean,
- * configurable output
+ * configurable output via custom Logger transports
  *
  * Easiest manner of use is via the `@logger` parameter decorator
  * to attach the logger to a class property for use within that class.
@@ -67,32 +67,57 @@ export class Logger
 		this._logLevel = LogLevel.DEBUG;
 		this._transports = [];
 
-		type Types = { [type: string]: chalk.ChalkChain };
-		const types: Types = {
-			LOG: chalk.green,
-			INFO: chalk.blue,
-			WARN: chalk.yellow,
-			ERROR: chalk.red,
-			DEBUG: chalk.magenta
+		// Create and add base transport
+
+		type Color = [number, number];
+		const colors: { [name: string]: Color } = {
+			red: [31, 39],
+			green: [32, 39],
+			yellow: [33, 39],
+			blue: [34, 39],
+			magenta: [35, 39],
+			cyan: [36, 39],
+			grey: [90, 39]
 		};
 
-		this.addTransport({
-			transport: data => {
-				let { type, tag, text } = data;
-				const d: Date = data.timestamp;
-				const hours: number = d.getHours();
-				const minutes: number = d.getMinutes();
-				const seconds: number = d.getSeconds();
-				const timestamp: string = `${
-					hours &lt; 10 ? `0${hours}` : hours}:${
-					minutes &lt; 10 ? `0${minutes}` : minutes}:${
-					seconds &lt; 10 ? `0${seconds}` : seconds}`;
+		function wrapColor(c: Color, ...text: string[]): string
+		{
+			return `\u001B[${c[0]}m${text.join(' ')}\u001B[${c[1]}m`;
+		}
 
-				type = types[type](type);
+		type ColorWrapper = (...text: string[]) => string;
+		function createWrapper(color: Color): ColorWrapper
+		{
+			return (...text: string[]) => wrapColor(color, ...text);
+		}
 
-				process.stdout.write(`[${chalk.grey(timestamp)}][${type}][${chalk.cyan(tag)}]: ${text}\n`);
-			}
-		});
+		type LogTypeColorWrappers = { [type: string]: ColorWrapper };
+		const typeColorWrappers: LogTypeColorWrappers = {
+			[LogType.LOG]: createWrapper(colors.green),
+			[LogType.INFO]: createWrapper(colors.blue),
+			[LogType.WARN]: createWrapper(colors.yellow),
+			[LogType.ERROR]: createWrapper(colors.red),
+			[LogType.DEBUG]: createWrapper(colors.magenta)
+		};
+
+		const transport: TransportFunction = data => {
+			let { type, tag, text } = data;
+			const d: Date = data.timestamp;
+			const hours: number = d.getHours();
+			const minutes: number = d.getMinutes();
+			const seconds: number = d.getSeconds();
+			const timestamp: string = wrapColor(colors.grey, `${
+				hours &lt; 10 ? `0${hours}` : hours}:${
+				minutes &lt; 10 ? `0${minutes}` : minutes}:${
+				seconds &lt; 10 ? `0${seconds}` : seconds}`);
+
+			type = typeColorWrappers[type](type);
+			tag = wrapColor(colors.cyan, tag);
+
+			process.stdout.write(`[${timestamp}][${type}][${tag}]: ${text}\n`);
+		};
+
+		this.addTransport({ transport });
 
 	}
 
@@ -198,7 +223,7 @@ export class Logger
 	 */
 	public async log(tag: string, ...text: string[]): Promise&lt;void>
 	{
-		this._write(LogLevel.LOG, 'LOG', tag, text.join(' '));
+		this._write(LogLevel.LOG, LogType.LOG, tag, text.join(' '));
 	}
 
 	/**
@@ -211,7 +236,7 @@ export class Logger
 	 */
 	public async info(tag: string, ...text: string[]): Promise&lt;void>
 	{
-		this._write(LogLevel.INFO, 'INFO', tag, text.join(' '));
+		this._write(LogLevel.INFO, LogType.INFO, tag, text.join(' '));
 	}
 
 	/**
@@ -223,7 +248,7 @@ export class Logger
 	 */
 	public async warn(tag: string, ...text: string[]): Promise&lt;void>
 	{
-		this._write(LogLevel.WARN, 'WARN', tag, text.join(' '));
+		this._write(LogLevel.WARN, LogType.WARN, tag, text.join(' '));
 	}
 
 	/**
@@ -235,7 +260,7 @@ export class Logger
 	 */
 	public async error(tag: string, ...text: string[]): Promise&lt;void>
 	{
-		this._write(LogLevel.ERROR, 'ERROR', tag, text.join(' '));
+		this._write(LogLevel.ERROR, LogType.ERROR, tag, text.join(' '));
 	}
 
 	/**
@@ -247,14 +272,14 @@ export class Logger
 	 */
 	public async debug(tag: string, ...text: string[]): Promise&lt;void>
 	{
-		this._write(LogLevel.DEBUG, 'DEBUG', tag, text.join(' '));
+		this._write(LogLevel.DEBUG, LogType.DEBUG, tag, text.join(' '));
 	}
 
 	/**
 	 * Send log data to all transports
 	 * @private
 	 */
-	private _write(level: LogLevel, type: string, tag: string, text: string): void
+	private _write(level: LogLevel, type: LogType, tag: string, text: string): void
 	{
 		const timestamp: Date = new Date();
 		for (const t of this._transports)
