@@ -1,4 +1,5 @@
 import { BaseCommandName } from '../types/BaseCommandName';
+import { GuildStorage } from '../types/GuildStorage';
 import { Message } from '../types/Message';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
@@ -40,7 +41,11 @@ export class Util
 			`<@!${client.user.id}>`
 		];
 
-		if (!dm) prefixes.push(await message.guild.storage.settings.get('prefix'));
+		const guildStorage: GuildStorage = !dm
+			? message.guild.storage || client.storage.guilds.get(message.guild.id)
+			: null;
+
+		if (!dm) prefixes.push(await guildStorage.settings.get('prefix'));
 		else prefixes.push(await client.storage.get('defaultGuildSettings.prefix'));
 
 		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
