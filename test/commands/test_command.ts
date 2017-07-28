@@ -26,19 +26,19 @@ export default class extends Command
 			desc: 'test command',
 			usage: '<prefix>test <test> <foo>',
 			// overloads: 'ping',
-			ratelimit: '2/10s'
+			// ratelimit: '2/10s'
 		});
 	}
 
 	// @using((message, args) => [message, args.map(a => a.toUpperCase())])
-	@using(resolve(`test: Member, foo: String`))
-	@using(expect(`test: Member, foo: ['foo', 'bar']`))
-	@using(localize)
+	// @using(resolve(`test: Member, foo: String`))
+	// @using(expect(`test: Member, foo: ['foo', 'bar']`))
+	// @using(localize)
 	public action(message: Message, [res, ...args]: [ResourceLoader, string[]]): void
 	{
-		message.channel.send(res('FOO_BAR_BAZ'));
-		message.channel.send(args.join(' ') || 'MISSING ARGS');
-		this.logger.debug('Command:test', util.inspect(this.group));
-		throw new Error('foo');
+		// message.channel.send(res('FOO_BAR_BAZ'));
+		// message.channel.send(args.join(' ') || 'MISSING ARGS');
+		// this.logger.debug('Command:test', util.inspect(this.group));
+		// // throw new Error('foo');
 	}
 }

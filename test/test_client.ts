@@ -28,7 +28,7 @@ class Test extends Client
 			// defaultLang: 'al_bhed',
 			pause: true,
 			plugins: [TestPlugin],
-			ratelimit: '5/10s',
+			// ratelimit: '5/10s',
 			disableBase: ['setlang']
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
@@ -60,7 +60,7 @@ class Test extends Client
 	{
 		logger.debug('Test', foo, bar.toString());
 		await this.setDefaultSetting('foo', 'bar');
-		// this.commands.registerExternal(this, new TestCommand());
+		this.on('command', (name, args, exec) => console.log(name, args, exec));
 	}
 }
 const test: Test = new Test();

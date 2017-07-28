@@ -11,7 +11,6 @@ import { RateLimit } from './RateLimit';
 import { Time } from '../util/Time';
 import { Lang } from '../localization/Lang';
 import { Util } from '../util/Util';
-const { now } = Util;
 
 /**
  * Handles dispatching commands
@@ -44,7 +43,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private async handleMessage(message: Message): Promise<void>
 	{
-		const dispatchStart: number = now();
+		const dispatchStart: number = Util.now();
 		const dm: boolean = message.channel.type !== 'text';
 
 		// Don't continue for bots and don't continue
@@ -58,13 +57,15 @@ export class CommandDispatcher<T extends Client>
 		// Don't bother with anything else if author is blacklisted
 		if (await this.isBlacklisted(message.author, message, dm)) return;
 
-		const lang: string = dm ? this._client.defaultLang
-			: await message.guild.storage.settings.get('lang');
+		const lang: string = dm
+			? this._client.defaultLang
+			: await message.guild.storage.settings.get('lang')
+				|| this._client.defaultLang;
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 
-		type CommandCallData = [boolean, Command<T>, string, string];
+		type CommandCallData = [boolean, Command, string, string];
 		const [commandWasCalled, command, prefix, name]: CommandCallData =
-			await this.wasCommandCalled(message, dm);
+			await Util.wasCommandCalled(message);
 
 		if (!commandWasCalled)
 		{
@@ -74,7 +75,7 @@ export class CommandDispatcher<T extends Client>
 		}
 
 		let validCall: boolean = false;
-		try { validCall = await this.canCallCommand(res, command, message, dm); }
+		try { validCall = await this.canCallCommand(res, <Command<T>> command, message, dm); }
 		catch (err) { message[this._client.selfbot ? 'channel' : 'author'].send(err); }
 		if (!validCall) return;
 
@@ -120,7 +121,7 @@ export class CommandDispatcher<T extends Client>
 		try { await command.action(message, args); }
 		catch (err) { this._logger.error(`Dispatch:${command.name}`, err.stack); }
 
-		const dispatchEnd: number = now() - dispatchStart;
+		const dispatchEnd: number = Util.now() - dispatchStart;
 		this._client.emit('command', command.name, args, dispatchEnd, message);
 	}
 
@@ -132,39 +133,6 @@ export class CommandDispatcher<T extends Client>
 		if (await this._client.storage.get(`blacklist.${user.id}`)) return true;
 		if (!dm && await message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
 		return false;
-	}
-
-	/**
-	 * Return if a command has been called, the called command,
-	 * the prefix used to call the command, and the name or alias
-	 * of the command used to call it
-	 */
-	private async wasCommandCalled(message: Message, dm: boolean): Promise<[boolean, Command<T>, string, string]>
-	{
-		type CommandCallData = [boolean, Command<T>, string, string];
-		const negative: CommandCallData = [false, null, null, null];
-		const prefixes: string[] = [
-			`<@${this._client.user.id}>`,
-			`<@!${this._client.user.id}>`
-		];
-
-		if (!dm) prefixes.push(await message.guild.storage.settings.get('prefix'));
-		else prefixes.push(await this._client.storage.get('defaultGuildSettings.prefix'));
-
-		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
-
-		if (dm && typeof prefix === 'undefined') prefix = '';
-		if (typeof prefix === 'undefined' && !dm) return negative;
-
-		const commandName: string = message.content.trim()
-			.slice(prefix.length).trim()
-			.split(' ')[0];
-
-		const command: Command<T> = this._client.commands.findByNameOrAlias(commandName);
-		if (!command) return negative;
-		if (command.disabled) return negative;
-
-		return [true, command, prefix, commandName];
 	}
 
 	/**

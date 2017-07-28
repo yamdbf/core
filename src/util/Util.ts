@@ -1,4 +1,7 @@
 import { BaseCommandName } from '../types/BaseCommandName';
+import { Message } from '../types/Message';
+import { Command } from '../command/Command';
+import { Client } from '../client/Client';
 
 /**
  * Utility class containing handy static methods that can
@@ -7,7 +10,6 @@ import { BaseCommandName } from '../types/BaseCommandName';
  */
 export class Util
 {
-
 	/**
 	 * Tangible representation of all base command names
 	 * @static
@@ -15,6 +17,47 @@ export class Util
 	 * @type {BaseCommandName[]}
 	 */
 	public static baseCommandNames: BaseCommandName[] = require('./static/baseCommandNames.json');
+
+	/**
+	 * Return whether or not a command was called in the given
+	 * message, the called command, the prefix used to call the
+	 * command, and the name or alias of the command used to call it.
+	 * >Returns `[false, null, null, null]` if no command was called
+	 * @static
+	 * @method wasCommandCalled
+	 * @param {Message} message Message to check
+	 * @returns {Tuple<boolean, Command, string, string>}
+	 */
+	public static async wasCommandCalled(message: Message): Promise<[boolean, Command, string, string]>
+	{
+		type CommandCallData = [boolean, Command, string, string];
+
+		const client: Client = <Client> message.client;
+		const dm: boolean = message.channel.type !== 'text';
+		const negative: CommandCallData = [false, null, null, null];
+		const prefixes: string[] = [
+			`<@${client.user.id}>`,
+			`<@!${client.user.id}>`
+		];
+
+		if (!dm) prefixes.push(await message.guild.storage.settings.get('prefix'));
+		else prefixes.push(await client.storage.get('defaultGuildSettings.prefix'));
+
+		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
+
+		if (dm && typeof prefix === 'undefined') prefix = '';
+		if (typeof prefix === 'undefined' && !dm) return negative;
+
+		const commandName: string = message.content.trim()
+			.slice(prefix.length).trim()
+			.split(' ')[0];
+
+		const command: Command = client.commands.findByNameOrAlias(commandName);
+		if (!command) return negative;
+		if (command.disabled) return negative;
+
+		return [true, command, prefix, commandName];
+	}
 
 	/**
 	 * Pads the right side of a string with spaces to the given length
