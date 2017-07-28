@@ -103,7 +103,7 @@ be used anywhere</p></div>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L3">util/Util.ts, Line 3</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L6">util/Util.ts, Line 6</a>
     </li></ul></dd>
     
 
@@ -203,7 +203,7 @@ be used anywhere</p></div>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L11">util/Util.ts, Line 11</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L13">util/Util.ts, Line 13</a>
     </li></ul></dd>
     
 
@@ -386,7 +386,7 @@ the provided initial object</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L46">util/Util.ts, Line 46</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L89">util/Util.ts, Line 89</a>
     </li></ul></dd>
     
 
@@ -565,7 +565,7 @@ provided path</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L96">util/Util.ts, Line 96</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L139">util/Util.ts, Line 139</a>
     </li></ul></dd>
     
 
@@ -720,7 +720,7 @@ alphanumeric chars removed</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L33">util/Util.ts, Line 33</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L76">util/Util.ts, Line 76</a>
     </li></ul></dd>
     
 
@@ -824,7 +824,7 @@ alphanumeric chars removed</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L174">util/Util.ts, Line 174</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L217">util/Util.ts, Line 217</a>
     </li></ul></dd>
     
 
@@ -1002,7 +1002,7 @@ alphanumeric chars removed</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L19">util/Util.ts, Line 19</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L62">util/Util.ts, Line 62</a>
     </li></ul></dd>
     
 
@@ -1169,7 +1169,7 @@ use <code>String</code> when you know you will be later giving a string literal 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L118">util/Util.ts, Line 118</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L161">util/Util.ts, Line 161</a>
     </li></ul></dd>
     
 
@@ -1347,7 +1347,7 @@ use <code>String</code> when you know you will be later giving a string literal 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L73">util/Util.ts, Line 73</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L116">util/Util.ts, Line 116</a>
     </li></ul></dd>
     
 
@@ -1380,6 +1380,165 @@ use <code>String</code> when you know you will be later giving a string literal 
 <span class="param-type">
 	<dd>
 <span class="param-type"><dd>void</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".wasCommandCalled">
+		<span class="type-signature">(static) </span>.<a href='#wasCommandCalled' style='color: black'>wasCommandCalled</a><span class="signature">(<span class="param-types">message: <a href="Message.html">Message</a></span>)</span><span class="type-signature"> &rarr; <a href="global.html#Tuple">Tuple</a>&lt;boolean, <a href="Command.html">Command</a>, string, string></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Return whether or not a command was called in the given
+message, the called command, the prefix used to call the
+command, and the name or alias of the command used to call it.</p>
+<blockquote>
+<p>Returns <code>[false, null, null, null]</code> if no command was called</p>
+</blockquote>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Message.html">Message</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message to check</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L21">util/Util.ts, Line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd><a href="global.html#Tuple">Tuple</a>&lt;boolean, <a href="Command.html">Command</a>, string, string></dd></span>
 
 
 </dd>

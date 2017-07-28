@@ -988,14 +988,6 @@
                     "examples": []
                 },
                 {
-                    "name": "wasCommandCalled",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Return if a command has been called, the called command,\nthe prefix used to call the command, and the name or alias\nof the command used to call it</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
                     "name": "canCallCommand",
                     "access": "",
                     "virtual": false,
