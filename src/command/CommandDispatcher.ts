@@ -58,8 +58,10 @@ export class CommandDispatcher<T extends Client>
 		// Don't bother with anything else if author is blacklisted
 		if (await this.isBlacklisted(message.author, message, dm)) return;
 
-		const lang: string = dm ? this._client.defaultLang
-			: await message.guild.storage.settings.get('lang');
+		const lang: string = dm
+			? this._client.defaultLang
+			: await message.guild.storage.settings.get('lang')
+				|| this._client.defaultLang;
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 
 		type CommandCallData = [boolean, Command<T>, string, string];
