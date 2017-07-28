@@ -37,6 +37,7 @@ export { Loggable, ILoggable } from './util/logger/Loggable';
 export { LogLevel } from './types/LogLevel';
 export { LogData } from './types/LogData';
 export { TransportFunction } from './types/TransportFunction';
+export { Transport } from './types/Transport';
 
 export { Lang } from './localization/Lang';
 export { BaseStrings } from './localization/BaseStrings';
