@@ -2,6 +2,7 @@ import { PermissionResolvable, TextChannel, User } from 'discord.js';
 import { RateLimiter } from './RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { ResourceLoader } from '../types/ResourceLoader';
+import { BaseStrings as s } from '../localization/BaseStrings';
 import { Logger, logger } from '../util/logger/Logger';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../types/GuildStorage';
@@ -211,10 +212,10 @@ export class CommandDispatcher<T extends Client>
 
 			rateLimit.setNotified();
 			if (!command) message.channel.send(
-				res('DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL',
+				res(s.DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL,
 					{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
 			else message.channel.send(
-				res('DISPATCHER_ERR_RATELIMIT_EXCEED',
+				res(s.DISPATCHER_ERR_RATELIMIT_EXCEED,
 					{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
 		}
 
@@ -272,7 +273,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private unknownCommandError(res: ResourceLoader): string
 	{
-		return res('DISPATCHER_ERR_UNKNOWN_COMMAND');
+		return res(s.DISPATCHER_ERR_UNKNOWN_COMMAND);
 	}
 
 	/**
@@ -280,7 +281,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private guildOnlyError(res: ResourceLoader): string
 	{
-		return res('DISPATCHER_ERR_GUILD_ONLY');
+		return res(s.DISPATCHER_ERR_GUILD_ONLY);
 	}
 
 	/**
@@ -288,7 +289,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private missingClientPermissionsError(res: ResourceLoader, missing: PermissionResolvable[]): string
 	{
-		return res('DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS',
+		return res(s.DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS,
 			{ missing: missing.join(', ') });
 	}
 
@@ -297,7 +298,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private missingCallerPermissionsError(res: ResourceLoader, missing: PermissionResolvable[]): string
 	{
-		return res('DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS',
+		return res(s.DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS,
 			{ missing: missing.join(', ') });
 	}
 
@@ -312,7 +313,7 @@ export class CommandDispatcher<T extends Client>
 			.filter(r => limitedCommands[command.name].includes(r.id))
 			.map(r => r.name);
 
-		return res('DISPATCHER_ERR_MISSING_ROLES', { roles: roles.join(', ')});
+		return res(s.DISPATCHER_ERR_MISSING_ROLES, { roles: roles.join(', ')});
 	}
 
 	/**
@@ -320,6 +321,6 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private missingRolesError(res: ResourceLoader, command: Command<T>): string
 	{
-		return res('DISPATCHER_ERR_MISSING_ROLES', { roles: command.roles.join(', ') });
+		return res(s.DISPATCHER_ERR_MISSING_ROLES, { roles: command.roles.join(', ') });
 	}
 }

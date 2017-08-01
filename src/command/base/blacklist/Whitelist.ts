@@ -4,6 +4,7 @@ import { Middleware } from '../../middleware/Middleware';
 import { User } from 'discord.js';
 import { using, localizable } from '../../CommandDecorators';
 import { ResourceLoader } from '../../../types/ResourceLoader';
+import { BaseStrings as s } from '../../../localization/BaseStrings';
 
 export default class extends Command
 {
@@ -26,23 +27,23 @@ export default class extends Command
 		if (global === 'global')
 		{
 			if (!this.client.isOwner(message.author))
-				return message.channel.send(res('CMD_WHITELIST_ERR_OWNERONLY'));
+				return message.channel.send(res(s.CMD_WHITELIST_ERR_OWNERONLY));
 
 			const globalBlacklist: any = await this.client.storage.get('blacklist') || {};
 			if (!globalBlacklist[user.id])
-				return message.channel.send(res('CMD_WHITELIST_ERR_NOTGLOBAL'));
+				return message.channel.send(res(s.CMD_WHITELIST_ERR_NOTGLOBAL));
 
 			await this.client.storage.remove(`blacklist.${user.id}`);
 			this.client.emit('blacklistRemove', user, true);
-			return message.channel.send(res('CMD_WHITELIST_GLOBALSUCCESS', { user: user.tag }));
+			return message.channel.send(res(s.CMD_WHITELIST_GLOBALSUCCESS, { user: user.tag }));
 		}
 
 		const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
 		if (!guildBlacklist[user.id])
-			return message.channel.send(res('CMD_WHITELIST_ERR_NOTBLACKLISTED'));
+			return message.channel.send(res(s.CMD_WHITELIST_ERR_NOTBLACKLISTED));
 
 		await message.guild.storage.settings.remove(`blacklist.${user.id}`);
 		this.client.emit('blacklistRemove', user, false);
-		return message.channel.send(res('CMD_WHITELIST_SUCCESS', { user: user.tag }));
+		return message.channel.send(res(s.CMD_WHITELIST_SUCCESS, { user: user.tag }));
 	}
 }

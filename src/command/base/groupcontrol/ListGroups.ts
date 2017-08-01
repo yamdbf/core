@@ -2,6 +2,7 @@ import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { localizable } from '../../CommandDecorators';
 import { ResourceLoader } from '../../../types/ResourceLoader';
+import { BaseStrings as s } from '../../../localization/BaseStrings';
 
 export default class extends Command
 {
@@ -23,7 +24,7 @@ export default class extends Command
 		let groups: string[] = this.client.commands.groups;
 		let disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 
-		let output: string = res('CMD_LISTGROUPS_GROUPS',
+		let output: string = res(s.CMD_LISTGROUPS_GROUPS,
 			{ groups: groups.join(', '), disabledGroups: disabledGroups.join(', ') });
 
 		this.respond(message, output, { code: 'ldif'});

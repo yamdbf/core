@@ -1,5 +1,6 @@
 import { Collection } from 'discord.js';
 import { ResourceLoader } from '../../types/ResourceLoader';
+import { BaseStrings as s } from '../../localization/BaseStrings';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
@@ -26,7 +27,7 @@ export default class extends Command
 		const command: Command = this.client.commands.findByNameOrAlias(commandName);
 
 		if (commandName && !command)
-			return this.respond(message, res('CMD_RELOAD_ERR_UNKNOWN_COMMAND', { commandName }));
+			return this.respond(message, res(s.CMD_RELOAD_ERR_UNKNOWN_COMMAND, { commandName }));
 
 		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
 
@@ -40,7 +41,7 @@ export default class extends Command
 
 		const end: number = now();
 		const name: string = command ? command.name : null;
-		return this.respond(message, res('CMD_RELOAD_SUCCESS',
+		return this.respond(message, res(s.CMD_RELOAD_SUCCESS,
 			{ commandName: name, time: (end - start).toFixed(3) }));
 	}
 }

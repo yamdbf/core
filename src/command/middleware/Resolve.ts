@@ -2,6 +2,7 @@ import { Collection, GuildMember, Role, TextChannel, User } from 'discord.js';
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { ResolveArgType } from '../../types/ResolveArgType';
 import { ResourceLoader } from '../../types/ResourceLoader';
+import { BaseStrings as s } from '../../localization/BaseStrings';
 import { Lang } from '../../localization/Lang';
 import { Message } from '../../types/Message';
 import { Util } from '../../util/Util';
@@ -66,7 +67,7 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 			else if (type === 'Number')
 			{
 				if (isNaN(arg))
-					throw new Error(res('RESOLVE_ERR_RESOLVE_NUMBER', { name, arg, usage }));
+					throw new Error(res(s.RESOLVE_ERR_RESOLVE_NUMBER, { name, arg, usage }));
 
 				args[index] = parseFloat(arg);
 			}
@@ -75,7 +76,7 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 			{
 				let duration: number = Time.parseShorthand(arg);
 				if (!duration)
-					throw new Error(res('RESOLVE_ERR_RESOLVE_DURATION', { name, arg, usage }));
+					throw new Error(res(s.RESOLVE_ERR_RESOLVE_DURATION, { name, arg, usage }));
 
 				args[index] = duration;
 			}
@@ -88,7 +89,7 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 					try { user = await message.client.fetchUser(arg.match(idRegex)[1]); }
 					catch (err) {}
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_ID, { name, arg, usage, type }));
 				}
 				else
 				{
@@ -103,12 +104,12 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 								.map(a => <[string, User]> [a.id, a.user])));
 
 					if (users.size > 1)
-						throw String(res('RESOLVE_ERR_MULTIPLE_USER_RESULTS',
+						throw String(res(s.RESOLVE_ERR_MULTIPLE_USER_RESULTS,
 							{ name, usage, users: users.map(u => `\`${u.tag}\``).join(', ') }));
 
 					user = users.first();
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_TEXT, { name, arg, usage, type }));
 				}
 				args[index] = user;
 			}
@@ -121,7 +122,7 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 					try { member = await message.guild.fetchMember(arg.match(idRegex)[1]); }
 					catch (err) {}
 					if (!member) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_ID, { name, arg, usage, type }));
 				}
 				else
 				{
@@ -132,12 +133,12 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 							|| normalizeUser(a.user.tag).includes(normalized));
 
 					if (members.size > 1)
-						throw String(res('RESOLVE_ERR_MULTIPLE_USER_RESULTS',
+						throw String(res(s.RESOLVE_ERR_MULTIPLE_USER_RESULTS,
 							{ name, usage, users: members.map(m => `\`${m.user.tag}\``).join(', ') }));
 
 					member = members.first();
 					if (!member) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_TEXT, { name, arg, usage, type }));
 				}
 				args[index] = member;
 			}
@@ -150,7 +151,7 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 				{
 					user = bannedUsers.get(arg.match(idRegex)[1]);
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_ID, { name, arg, usage, type }));
 				}
 				else
 				{
@@ -160,12 +161,12 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 							|| normalizeUser(a.tag).includes(normalized));
 
 					if (users.size > 1)
-						throw String(res('RESOLVE_ERR_MULTIPLE_USER_RESULTS',
+						throw String(res(s.RESOLVE_ERR_MULTIPLE_USER_RESULTS,
 							{ name, usage, users: users.map(u => `\`${u.tag}\``).join(', ') }));
 
 					user = users.first();
 					if (!user) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_TEXT, { name, arg, usage, type }));
 				}
 				args[index] = user;
 			}
@@ -179,7 +180,7 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 					const id: string = arg.match(channelRegex)[1];
 					channel = <TextChannel> message.guild.channels.get(id);
 					if (!channel) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_ID, { name, arg, usage, type }));
 				}
 				else
 				{
@@ -190,12 +191,12 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 							.filter(a => Util.normalize(a.name).includes(normalized));
 
 					if (channels.size > 1) throw String(
-						res('RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS',
+						res(s.RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS,
 							{ name, usage, channels: channels.map(c => `\`#${c.name}\``).join(', ') }));
 
 					channel = channels.first();
 					if (!channel) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_TEXT, { name, arg, usage, type }));
 				}
 				args[index] = channel;
 			}
@@ -209,7 +210,7 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 					const id: string = arg.match(roleRegex)[1];
 					role = message.guild.roles.get(id);
 					if (!role) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_ID', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_ID, { name, arg, usage, type }));
 				}
 				else
 				{
@@ -218,12 +219,12 @@ export function resolve(argTypes: string | MappedResolveArgType): MiddlewareFunc
 						Util.normalize(a.name).includes(normalized));
 
 					if (roles.size > 1) throw String(
-						res('RESOLVE_ERR_MULTIPLE_ROLE_RESULTS',
+						res(s.RESOLVE_ERR_MULTIPLE_ROLE_RESULTS,
 							{ name, usage, roles: roles.map(r => `\`${r.name}\``).join(', ') }));
 
 					role = roles.first();
 					if (!role) throw new Error(
-						res('RESOLVE_ERR_RESOLVE_TYPE_TEXT', { name, arg, usage, type }));
+						res(s.RESOLVE_ERR_RESOLVE_TYPE_TEXT, { name, arg, usage, type }));
 				}
 				args[index] = role;
 			}

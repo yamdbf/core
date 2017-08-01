@@ -3,6 +3,7 @@ import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
 import { ResourceLoader } from '../../types/ResourceLoader';
+import { BaseStrings as s } from '../../localization/BaseStrings';
 import { inspect } from 'util';
 import * as fs from 'fs';
 const Discord = require('discord.js'); // tslint:disable-line
@@ -39,7 +40,7 @@ export default class extends Command
 	{
 		const client: Client = this.client; // tslint:disable-line
 		const code: string = message.content.split(this.name).slice(1).join(this.name).trim();
-		if (!code) return this.respond(message, res('CMD_EVAL_ERR_NOCODE'));
+		if (!code) return this.respond(message, res(s.CMD_EVAL_ERR_NOCODE));
 
 		let start: Message = ts ? <Message> await this.respond(message, '*Compiling...*') : message;
 		let evaled: string | Promise<string | object>;
@@ -50,7 +51,7 @@ export default class extends Command
 		}
 		catch (err)
 		{
-			return start.edit(res('CMD_EVAL_ERROR', { code, error: this._clean(err) }));
+			return start.edit(res(s.CMD_EVAL_ERROR, { code, error: this._clean(err) }));
 		}
 
 		if (evaled instanceof Promise)
@@ -58,17 +59,17 @@ export default class extends Command
 			evaled.then(result =>
 			{
 				if (typeof result !== 'string') result = inspect(result, { depth: 0 });
-				start.edit(res('CMD_EVAL_RESULT', { code, result: this._clean(result) }));
+				start.edit(res(s.CMD_EVAL_RESULT, { code, result: this._clean(result) }));
 			})
 			.catch(err =>
 			{
-				start.edit(res('CMD_EVAL_ERROR', { code, error: this._clean(err) }));
+				start.edit(res(s.CMD_EVAL_ERROR, { code, error: this._clean(err) }));
 			});
 		}
 		else
 		{
 			if (typeof evaled !== 'string')	evaled = inspect(evaled, { depth: 0 });
-			return start.edit(res('CMD_EVAL_RESULT', { code, result: this._clean(evaled) }));
+			return start.edit(res(s.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
 		}
 	}
 

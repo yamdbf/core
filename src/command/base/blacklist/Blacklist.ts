@@ -4,6 +4,7 @@ import { Middleware } from '../../middleware/Middleware';
 import { User, GuildMember } from 'discord.js';
 import { using, localizable } from '../../CommandDecorators';
 import { ResourceLoader } from '../../../types/ResourceLoader';
+import { BaseStrings as s } from '../../../localization/BaseStrings';
 
 export default class extends Command
 {
@@ -25,22 +26,22 @@ export default class extends Command
 	public async action(message: Message, [res, user, global]: [ResourceLoader, User, string]): Promise<Message | Message[]>
 	{
 		if (user.id === message.author.id)
-			return message.channel.send(res('CMD_BLACKLIST_ERR_NOSELF'));
+			return message.channel.send(res(s.CMD_BLACKLIST_ERR_NOSELF));
 
-		if (user.bot) return message.channel.send(res('CMD_BLACKLIST_ERR_NOBOT'));
+		if (user.bot) return message.channel.send(res(s.CMD_BLACKLIST_ERR_NOBOT));
 
 		if (global === 'global')
 		{
 			if (!this.client.isOwner(message.author))
-				return message.channel.send(res('CMD_BLACKLIST_ERR_OWNERONLY'));
+				return message.channel.send(res(s.CMD_BLACKLIST_ERR_OWNERONLY));
 
 			const globalBlacklist: any = await this.client.storage.get('blacklist') || {};
 			if (globalBlacklist[user.id])
-				return message.channel.send(res('CMD_BLACKLIST_ERR_ALREADYGLOBAL'));
+				return message.channel.send(res(s.CMD_BLACKLIST_ERR_ALREADYGLOBAL));
 
 			await this.client.storage.set(`blacklist.${user.id}`, true);
 			this.client.emit('blacklistAdd', user, true);
-			return message.channel.send(res('CMD_BLACKLIST_GLOBALSUCCESS', { user: user.tag }));
+			return message.channel.send(res(s.CMD_BLACKLIST_GLOBALSUCCESS, { user: user.tag }));
 		}
 
 		let member: GuildMember;
@@ -48,14 +49,14 @@ export default class extends Command
 		catch (err) {}
 
 		if (member && member.permissions.has('ADMINISTRATOR'))
-			return message.channel.send(res('CMD_BLACKLIST_ERR_BADTARGET'));
+			return message.channel.send(res(s.CMD_BLACKLIST_ERR_BADTARGET));
 
 		const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
 		if (guildBlacklist[user.id])
-			return message.channel.send(res('CMD_BLACKLIST_ERR_ALREADYBLACKLISTED'));
+			return message.channel.send(res(s.CMD_BLACKLIST_ERR_ALREADYBLACKLISTED));
 
 		await message.guild.storage.settings.set(`blacklist.${user.id}`, true);
 		this.client.emit('blacklistAdd', user, false);
-		return message.channel.send(res('CMD_BLACKLIST_SUCCESS', { user: user.tag }));
+		return message.channel.send(res(s.CMD_BLACKLIST_SUCCESS, { user: user.tag }));
 	}
 }

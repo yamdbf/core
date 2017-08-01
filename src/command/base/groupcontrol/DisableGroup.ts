@@ -3,6 +3,7 @@ import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { using, localizable } from '../../CommandDecorators';
 import { ResourceLoader } from '../../../types/ResourceLoader';
+import { BaseStrings as s } from '../../../localization/BaseStrings';
 
 export default class extends Command
 {
@@ -23,8 +24,8 @@ export default class extends Command
 	public async action(message: Message, [res, group]: [ResourceLoader, string]): Promise<Message | Message[]>
 	{
 		const err: { [error: string]: string } = {
-			NO_EXIST: res('CMD_DISABLEGROUP_ERR_NOEXIST', { group }),
-			DISABLED: res('CMD_DISABLEGROUP_ERR_DISABLED', { group })
+			NO_EXIST: res(s.CMD_DISABLEGROUP_ERR_NOEXIST, { group }),
+			DISABLED: res(s.CMD_DISABLEGROUP_ERR_DISABLED, { group })
 		};
 
 		if (!this.client.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
@@ -35,6 +36,6 @@ export default class extends Command
 		disabledGroups.push(group);
 		await message.guild.storage.settings.set('disabledGroups', disabledGroups);
 
-		this.respond(message, res('CMD_DISABLEGROUP_SUCCESS', { group }));
+		this.respond(message, res(s.CMD_DISABLEGROUP_SUCCESS, { group }));
 	}
 }

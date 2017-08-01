@@ -4,6 +4,7 @@ import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { GuildStorage } from '../../../types/GuildStorage';
 import { ResourceLoader } from '../../../types/ResourceLoader';
+import { BaseStrings as s } from '../../../localization/BaseStrings';
 import * as CommandDecorators from '../../CommandDecorators';
 const { using, localizable } = CommandDecorators;
 
@@ -25,7 +26,7 @@ export default class extends Command
 	{
 		let command: Command = this.client.commands.find(c => Util.normalize(c.name) === Util.normalize(commandName));
 		if (!command) return this.respond(message,
-			res('CMD_CLEARLIMIT_UNKNOWN_COMMAND', { commandName }));
+			res(s.CMD_CLEARLIMIT_UNKNOWN_COMMAND, { commandName }));
 
 		const storage: GuildStorage = message.guild.storage;
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
@@ -33,6 +34,6 @@ export default class extends Command
 		storage.settings.set('limitedCommands', limitedCommands);
 
 		return this.respond(message,
-			res('CMD_CLEARLIMIT_SUCCESS', { commandName: command.name }));
+			res(s.CMD_CLEARLIMIT_SUCCESS, { commandName: command.name }));
 	}
 }

@@ -5,6 +5,7 @@ import { Command } from '../Command';
 import { Lang } from '../../localization/Lang';
 import { Util } from '../../util/Util';
 import { ResourceLoader } from '../../types/ResourceLoader';
+import { BaseStrings as s } from '../../localization/BaseStrings';
 import { GuildMember, Role, TextChannel, User } from 'discord.js';
 
 export type MappedExpectArgType = { [name: string]: ExpectArgType };
@@ -42,7 +43,7 @@ export function expect(argTypes: string | MappedExpectArgType): MiddlewareFuncti
 					`in arg \`${name}\`: Type \`${type}\` is not usable within DM-capable commands.`);
 
 			if (typeof arg === 'undefined' || arg === null)
-				throw new Error(res('EXPECT_ERR_MISSING_VALUE', {
+				throw new Error(res(s.EXPECT_ERR_MISSING_VALUE, {
 					type: type instanceof Array ? type.map(t => `\`${t}\``).join(', ') : `\`${type}\``,
 					name,
 					usage
@@ -53,43 +54,43 @@ export function expect(argTypes: string | MappedExpectArgType): MiddlewareFuncti
 			if (type instanceof Array)
 			{
 				if (!type.map(a => a.toLowerCase()).includes(arg.toLowerCase()))
-					throw new Error(res('EXPECT_ERR_INVALID_OPTION',
+					throw new Error(res(s.EXPECT_ERR_INVALID_OPTION,
 						{ type: type.map(t => `\`${t}\``).join(', '), name, arg, usage }));
 			}
 			else if (type === 'String')
 			{
 				if (typeof arg !== 'string')
-					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+					throw new Error(res(s.EXPECT_ERR_EXPECTED_TYPE,
 						{ name, expected: 'String', type: arg.constructor.name }));
 			}
 			else if (type === 'Number')
 			{
 				if (typeof arg !== 'number' || (!isNaN(arg) && !isFinite(arg)))
-					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+					throw new Error(res(s.EXPECT_ERR_EXPECTED_TYPE,
 						{ name, expected: 'Number', type: arg === Infinity ? 'Infinity' : arg.constructor.name }));
 			}
 			else if (type === 'User')
 			{
 				if (!(arg instanceof User))
-					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+					throw new Error(res(s.EXPECT_ERR_EXPECTED_TYPE,
 						{ name, expected: 'User', type: arg.constructor.name }));
 			}
 			else if (type === 'Member')
 			{
 				if (!(arg instanceof GuildMember))
-					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+					throw new Error(res(s.EXPECT_ERR_EXPECTED_TYPE,
 						{ name, expected: 'GuildMember', type: arg.constructor.name }));
 			}
 			else if (type === 'Channel')
 			{
 				if (!(arg instanceof TextChannel))
-					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+					throw new Error(res(s.EXPECT_ERR_EXPECTED_TYPE,
 						{ name, expected: 'TextChannel', type: arg.constructor.name }));
 			}
 			else if (type === 'Role')
 			{
 				if (!(arg instanceof Role))
-					throw new Error(res('EXPECT_ERR_EXPECTED_TYPE',
+					throw new Error(res(s.EXPECT_ERR_EXPECTED_TYPE,
 						{ name, expected: 'Role', type: arg.constructor.name }));
 			}
 			else
