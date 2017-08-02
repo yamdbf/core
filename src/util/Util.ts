@@ -53,11 +53,7 @@ export class Util
 		if (dm && typeof prefix === 'undefined') prefix = '';
 		if (typeof prefix === 'undefined' && !dm) return negative;
 
-		const commandName: string = message.content.trim()
-			.slice(prefix.length)
-			.trim()
-			.split(' ')[0];
-
+		const commandName: string = message.content.trim().slice(prefix.length).trim().split(' ')[0];
 		const command: Command = client.commands.findByNameOrAlias(commandName);
 		if (!command) return negative;
 		if (command.disabled) return negative;
