@@ -54,7 +54,8 @@ export class Util
 		if (typeof prefix === 'undefined' && !dm) return negative;
 
 		const commandName: string = message.content.trim()
-			.slice(prefix.length).trim()
+			.slice(prefix.length)
+			.trim()
 			.split(' ')[0];
 
 		const command: Command = client.commands.findByNameOrAlias(commandName);
