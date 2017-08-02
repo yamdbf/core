@@ -289,8 +289,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private missingClientPermissionsError(res: ResourceLoader, missing: PermissionResolvable[]): string
 	{
-		return res(s.DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS,
-			{ missing: missing.join(', ') });
+		return res(s.DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS, { missing: missing.join(', ') });
 	}
 
 	/**
@@ -298,8 +297,7 @@ export class CommandDispatcher<T extends Client>
 	 */
 	private missingCallerPermissionsError(res: ResourceLoader, missing: PermissionResolvable[]): string
 	{
-		return res(s.DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS,
-			{ missing: missing.join(', ') });
+		return res(s.DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS, { missing: missing.join(', ') });
 	}
 
 	/**
@@ -308,8 +306,8 @@ export class CommandDispatcher<T extends Client>
 	private async failedLimiterError(res: ResourceLoader, command: Command<T>, message: Message): Promise<string>
 	{
 		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
-		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands');
-		let roles: string[] = message.guild.roles
+		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands');
+		const roles: string[] = message.guild.roles
 			.filter(r => limitedCommands[command.name].includes(r.id))
 			.map(r => r.name);
 
