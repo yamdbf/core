@@ -225,6 +225,20 @@ export class Command&lt;T extends Client = Client>
 	}
 
 	/**
+	 * Can be included in a command to initlialize any resources a command
+	 * needs at runtime that require things that are not available within
+	 * a command's constructor like the client instance or client/guild storages.
+	 *
+	 * Will be called after all commands are loaded (including those from
+	 * any loaded plugins) and after all base framework storages (client and guild)
+	 * are ready for use.
+	 *
+	 * >**Note:** Can be async if needed
+	 * @returns {Promise&lt;void>}
+	 */
+	public async init(): Promise&lt;void> {}
+
+	/**
 	 * Action to be executed when the command is called. The following parameters
 	 * are what command actions will be passed by the {@link CommandDispatcher} whenever
 	 * a command is called. Be sure to receive these in proper order when writing
@@ -279,7 +293,8 @@ export class Command&lt;T extends Client = Client>
 		// Default guildOnly to true if permissions/roles are given
 		if (!this.guildOnly &amp;&amp; (this.callerPermissions.length
 			|| this.clientPermissions.length
-			|| this.roles.length)) this.guildOnly = true;
+			|| this.roles.length))
+			this.guildOnly = true;
 
 		if (!this.action) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 		if (!(this.action instanceof Function)) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);

@@ -821,6 +821,18 @@
             ],
             "functions": [
                 {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Can be included in a command to initlialize any resources a command\nneeds at runtime that require things that are not available within\na command's constructor like the client instance or client/guild storages.</p>\n<p>Will be called after all commands are loaded (including those from\nany loaded plugins) and after all base framework storages (client and guild)\nare ready for use.</p>\n<blockquote>\n<p><strong>Note:</strong> Can be async if needed</p>\n</blockquote>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "action",
                     "access": "",
                     "virtual": false,
@@ -1154,6 +1166,14 @@
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Complete registration of a command and add to the parent\ncollection, erroring on duplicate names and aliases.\nThis is an internal method and should not be used. Use\n<code>registerExternal()</code> instead</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "_initCommands",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Run the <code>init()</code> method of all loaded commands.\nThis is an internal method and should not be used</p>",
                     "parameters": [],
                     "examples": []
                 },
