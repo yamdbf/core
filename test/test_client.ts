@@ -23,11 +23,11 @@ class Test extends Client
 			owner: config.owner,
 			readyText: 'Test client ready',
 			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
-			// commandsDir: './commands',
+			commandsDir: './commands',
 			// localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
-			plugins: [TestPlugin],
+			// plugins: [TestPlugin],
 			// ratelimit: '5/10s',
 			disableBase: ['setlang']
 			// disableBase: Util.baseCommandNames

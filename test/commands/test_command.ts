@@ -35,6 +35,7 @@ export default class extends Command
 		await this.logger.debug('Command:test', await this.client.storage.get('defaultGuildSettings.prefix'));
 		await this.logger.debug('Command:test', await this.client.storage.guilds.first().settings.get('prefix'));
 		await this.logger.debug('Command:test', 'Test command initialized.');
+		// throw new Error('foooo');
 	}
 
 	// @using((message, args) => [message, args.map(a => a.toUpperCase())])

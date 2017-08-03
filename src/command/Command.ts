@@ -239,27 +239,41 @@ export class Command<T extends Client = Client>
 		if (typeof this.ownerOnly === 'undefined') this.ownerOnly = false;
 		if (typeof this.external === 'undefined') this.external = false;
 		if (typeof this._disabled === 'undefined') this._disabled = false;
+		if (typeof this._classloc === 'undefined') this._classloc = '<External Command>';
 
 		// Make necessary asserts
 		if (!this.name) throw new Error(`A command is missing a name:\n${this._classloc}`);
 		if (!this.desc) throw new Error(`A description must be provided for Command: ${this.name}`);
 		if (!this.usage) throw new Error(`Usage information must be provided for Command: ${this.name}`);
-		if (this.aliases && !Array.isArray(this.aliases)) throw new TypeError(`Aliases for Command "${this.name}" must be an array of alias strings`);
-		if (this.callerPermissions && !Array.isArray(this.callerPermissions)) throw new TypeError(`\`callerPermissions\` for Command "${this.name}" must be an array`);
-		if (this.clientPermissions && !Array.isArray(this.clientPermissions)) throw new TypeError(`\`clientPermissions\` for Command "${this.name}" must be an array`);
-		if (this.callerPermissions && this.callerPermissions.length) this._validatePermissions('callerPermissions', this.callerPermissions);
-		if (this.clientPermissions && this.clientPermissions.length) this._validatePermissions('clientPermissions', this.clientPermissions);
-		if (this.roles && !Array.isArray(this.roles)) throw new TypeError(`\`roles\` for Command "${this.name}" must be an array`);
-		if (this.overloads && this.group !== 'base') throw new TypeError(`Expected Command#overloads to equal "base", got: "${this.group}"`);
+		if (this.aliases && !Array.isArray(this.aliases))
+			throw new TypeError(`Aliases for Command "${this.name}" must be an array of alias strings`);
+
+		if (this.callerPermissions && !Array.isArray(this.callerPermissions))
+			throw new TypeError(`\`callerPermissions\` for Command "${this.name}" must be an array`);
+
+		if (this.clientPermissions && !Array.isArray(this.clientPermissions))
+			throw new TypeError(`\`clientPermissions\` for Command "${this.name}" must be an array`);
+
+		if (this.callerPermissions && this.callerPermissions.length)
+			this._validatePermissions('callerPermissions', this.callerPermissions);
+
+		if (this.clientPermissions && this.clientPermissions.length)
+			this._validatePermissions('clientPermissions', this.clientPermissions);
+
+		if (this.roles && !Array.isArray(this.roles))
+			throw new TypeError(`\`roles\` for Command "${this.name}" must be an array`);
+
+		if (this.overloads && this.group !== 'base')
+			throw new TypeError(`Expected Command#overloads to equal "base", got: "${this.group}"`);
+
+		if (!this.action || !(this.action instanceof Function))
+			throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 
 		// Default guildOnly to true if permissions/roles are given
 		if (!this.guildOnly && (this.callerPermissions.length
 			|| this.clientPermissions.length
 			|| this.roles.length))
 			this.guildOnly = true;
-
-		if (!this.action) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
-		if (!(this.action instanceof Function)) throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 	}
 
 	/**
@@ -340,12 +354,12 @@ export class Command<T extends Client = Client>
 	 * for any that are invalid
 	 * @private
 	 */
-	private _validatePermissions(field: string, permissions: PermissionResolvable[]): void
+	private _validatePermissions(field: string, perms: PermissionResolvable[]): void
 	{
 		let errString: (i: number, err: any) => string = (i: number, err: any) =>
-			`Command "${this.name}" permission "${permissions[i]}" at "${this.name}".${field}[${i}] is not a valid permission.\n\n${err}`;
+			`Command "${this.name}" permission "${perms[i]}" in ${field}[${i}] is not a valid permission.\n\n${err}`;
 
-		for (const [index, perm] of permissions.entries())
+		for (const [index, perm] of perms.entries())
 			try { Permissions.resolve(perm); }
 			catch (err) { throw new TypeError(errString(index, err)); }
 	}

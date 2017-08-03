@@ -271,8 +271,8 @@ export class Client extends Discord.Client
 		if (!this.passive)
 		{
 			this._logger.info('Client', 'Initializing commands...');
-			await this.commands._initCommands();
-			this._logger.info('Client', 'Commands initialized.');
+			let initSuccess: boolean = await this.commands._initCommands();
+			this._logger.info('Client', `Commands initialized${initSuccess ? '' : ' with errors'}.`);
 			this._dispatcher.setReady();
 			this._logger.info('Client', 'Command dispatcher ready.');
 		}

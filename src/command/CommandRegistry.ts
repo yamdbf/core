@@ -61,9 +61,21 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	 * This is an internal method and should not be used
 	 * @private
 	 */
-	public async _initCommands(): Promise<void>
+	public async _initCommands(): Promise<boolean>
 	{
-		for (const command of this.values()) await command.init();
+		let success: boolean = true;
+		for (const command of this.values())
+		{
+			try { await command.init(); }
+			catch (err)
+			{
+				success = false;
+				Logger.instance().error('CommandRegistry',
+					`Command "${command.name}" errored during initialization: \n\n${err.stack}`,
+					command.external ? '\n\nPlease report this error to the command author.\n' : '\n');
+			}
+		}
+		return success;
 	}
 
 	/**
