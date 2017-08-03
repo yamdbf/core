@@ -57,6 +57,16 @@ export class CommandRegistry<T extends Client, K extends string, V extends Comma
 	}
 
 	/**
+	 * Run the `init()` method of all loaded commands.
+	 * This is an internal method and should not be used
+	 * @private
+	 */
+	public async _initCommands(): Promise<void>
+	{
+		for (const command of this.values()) await command.init();
+	}
+
+	/**
 	 * Register an external command and add it to the `<Client>.commands`
 	 * [collection]{@link external:Collection}, erroring on duplicate
 	 * names and aliases. External commands will be preserved when the

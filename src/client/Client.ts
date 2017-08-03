@@ -265,12 +265,18 @@ export class Client extends Discord.Client
 	{
 		await this._guildDataStorage.init();
 		await this._guildSettingStorage.init();
-
 		await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
-
 		await this.plugins._loadPlugins();
 
-		if (!this.passive) this._dispatcher.setReady();
+		if (!this.passive)
+		{
+			this._logger.info('Client', 'Initializing commands...');
+			await this.commands._initCommands();
+			this._logger.info('Client', 'Commands initialized.');
+			this._dispatcher.setReady();
+			this._logger.info('Client', 'Command dispatcher ready.');
+		}
+
 		if (typeof this.readyText !== 'undefined')
 			this._logger.log('Client', this.readyText);
 

@@ -30,6 +30,13 @@ export default class extends Command
 		});
 	}
 
+	public async init(): Promise<void>
+	{
+		await this.logger.debug('Command:test', await this.client.storage.get('defaultGuildSettings.prefix'));
+		await this.logger.debug('Command:test', await this.client.storage.guilds.first().settings.get('prefix'));
+		await this.logger.debug('Command:test', 'Test command initialized.');
+	}
+
 	// @using((message, args) => [message, args.map(a => a.toUpperCase())])
 	// @using(resolve(`test: Member, foo: String`))
 	// @using(expect(`test: Member, foo: ['foo', 'bar']`))
