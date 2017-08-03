@@ -198,7 +198,7 @@ export class Command<T extends Client = Client>
 	 * >**Note:** Can be async if needed
 	 * @returns {Promise<void>}
 	 */
-	public async init(): Promise<void> {}
+	public init(): void {}
 
 	/**
 	 * Action to be executed when the command is called. The following parameters
