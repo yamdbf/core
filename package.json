@@ -53,9 +53,9 @@
   "devDependencies": {
     "@types/chalk": "^0.4.31",
     "@types/glob": "^5.0.30",
-    "@types/node": "^8.0.8",
+    "@types/node": "^8.0.19",
     "@types/node-json-db": "0.0.1",
-    "@types/sequelize": "^4.0.62",
+    "@types/sequelize": "^4.0.67",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.4.1",

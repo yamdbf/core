@@ -11,6 +11,9 @@
 	"LocalizationHelptext": {
 		"title": "Localizing Command helptext"
 	},
+	"PluginAuthoring": {
+		"title": "Plugin Authoring Guide"
+	},
 	"PluginList": {
 		"title": "Plugin list"
 	}

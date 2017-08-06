@@ -34,6 +34,7 @@ and also requires > Node 8.0.0 to run.
   - Ships with a default JSON provider, and other optional providers using Sequelize:
     - Postgres
 	- SQLite
+- Plugin system
 - Full TypeScript support (It's written in it!)
   - Support for decorators for simpler handling of:
 	- Event listeners
