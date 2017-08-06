@@ -10,6 +10,7 @@
     "postinstall": "postinstall-build --only-as-dependency bin \"npm run build -s\"",
     "build": "gulp",
     "lint": "gulp lint",
+    "pkg": "gulp pkg",
     "test": "npm run lint -s && npm run build -s",
     "test:client": "node test/client_test.js",
     "localization": "cd scripts && gulp build && gulp build:scripts && node generateDefaultLocalizationMarkdown",

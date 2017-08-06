@@ -223,14 +223,14 @@ export class Client extends Discord.Client
 		 */
 		this.commands = new CommandRegistry<this, string, Command<this>>(this);
 
-		this._commandLoader = !this.passive ? new CommandLoader(this) : null;
-		this._dispatcher = !this.passive ? new CommandDispatcher<this>(this) : null;
-
 		Lang.createInstance(this);
 		Lang.loadLocalizations();
 
 		if (!this.passive)
 		{
+			this._commandLoader = new CommandLoader(this);
+			this._dispatcher = new CommandDispatcher<this>(this);
+
 			this.loadCommand('all');
 			Lang.loadCommandLocalizations();
 

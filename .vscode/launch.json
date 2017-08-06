@@ -10,16 +10,18 @@
 			"name": "Launch Program",
 			"program": "${workspaceRoot}/test/test_client.js",
 			"cwd": "${workspaceRoot}/test",
-			"outFiles": [],
 			"preLaunchTask": "tests",
-			"console": "integratedTerminal"
+			"console": "integratedTerminal",
+			"outFiles": ["bin/**/*.js"],
+			"sourceMaps": true
 		},
 		{
 			"type": "node",
 			"request": "attach",
 			"name": "Attach to Process",
 			"port": 5858,
-			"outFiles": []
+			"outFiles": ["bin/**/*.js"],
+			"sourceMaps": true
 		}
 	]
 }

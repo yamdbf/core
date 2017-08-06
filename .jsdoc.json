@@ -1,14 +1,14 @@
 {
-	"plugins": ["plugins/markdown", "node_modules/jsdoc-strip-async-await"],
-	"templates": {
+    "plugins": ["plugins/markdown", "node_modules/jsdoc-strip-async-await"],
+    "templates": {
         "cleverLinks": true,
         "monospaceLinks": true,
         "useLongnameInNav": false,
-		"default": {
+        "default": {
             "outputSourceFiles": true
         }
     },
-	"opts": {
+    "opts": {
         "recurse": true,
         "template": "./node_modules/minami"
     }

@@ -383,6 +383,6 @@ export class Lang
 	 */
 	public static createResourceLoader(lang: string): ResourceLoader
 	{
-		return (key: string, data?: TemplateData) => Lang.res(lang, key, data);
+		return (key, data) => Lang.res(lang, key, data);
 	}
 }
