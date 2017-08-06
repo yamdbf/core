@@ -454,7 +454,7 @@ export class Client extends Discord.Client
 	public on(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
 	public on(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
 	public on(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-	public on(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: Guild) => void): this;
+	public on(event: 'guildMembersChunk', listener: (members: GuildMember[], guild: Guild) => void): this;
 	public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
 	public on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 	public on(event: 'guildUnavailable', listener: (guild: Guild) => void): this;
