@@ -9,11 +9,11 @@ import { Logger, logger } from '../util/logger/Logger';
  * Handles loading all commands from the given Client's commandsDir
  * @private
  */
-export class CommandLoader<T extends Client>
+export class CommandLoader
 {
 	@logger private readonly logger: Logger;
-	private readonly _client: T;
-	public constructor(client: T)
+	private readonly _client: Client;
+	public constructor(client: Client)
 	{
 		this._client = client;
 	}
@@ -41,7 +41,7 @@ export class CommandLoader<T extends Client>
 			delete require.cache[require.resolve(commandLocation)];
 
 			const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
-			const command: Command<T> = new loadedCommandClass<T>();
+			const command: Command = new loadedCommandClass();
 
 			if (this._client.disableBase.includes(<BaseCommandName> command.name)) continue;
 			command._classloc = commandLocation;
@@ -84,8 +84,8 @@ export class CommandLoader<T extends Client>
 		const commandLocation: string = this._client.commands.get(name)._classloc;
 		delete require.cache[require.resolve(commandLocation)];
 
-		const loadedCommandClass: any = this.getCommandClass(commandLocation);
-		const command: Command<T> = new loadedCommandClass(this._client);
+		const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
+		const command: Command = new loadedCommandClass();
 		command._classloc = commandLocation;
 		this._client.commands._registerInternal(command, true);
 		this.logger.info('CommandLoader', `Command '${command.name}' reloaded.`);

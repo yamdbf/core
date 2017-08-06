@@ -17,12 +17,12 @@ import { Util } from '../util/Util';
  * Handles dispatching commands
  * @private
  */
-export class CommandDispatcher<T extends Client>
+export class CommandDispatcher
 {
 	@logger private readonly _logger: Logger;
-	private readonly _client: T;
+	private readonly _client: Client;
 	private _ready: boolean = false;
-	public constructor(client: T)
+	public constructor(client: Client)
 	{
 		this._client = client;
 
@@ -76,7 +76,7 @@ export class CommandDispatcher<T extends Client>
 		}
 
 		let validCall: boolean = false;
-		try { validCall = await this.canCallCommand(res, <Command<T>> command, message, dm); }
+		try { validCall = await this.canCallCommand(res, <Command> command, message, dm); }
 		catch (err) { message[this._client.selfbot ? 'channel' : 'author'].send(err); }
 		if (!validCall) return;
 
@@ -141,7 +141,7 @@ export class CommandDispatcher<T extends Client>
 	 * on whatever circumstances are present at call-time, throwing
 	 * appropriate errors as necessary for unsatisfied conditions
 	 */
-	private async canCallCommand(res: ResourceLoader, command: Command<T>, message: Message, dm: boolean): Promise<boolean>
+	private async canCallCommand(res: ResourceLoader, command: Command, message: Message, dm: boolean): Promise<boolean>
 	{
 		const storage: GuildStorage = !dm ? this._client.storage.guilds.get(message.guild.id) : null;
 
@@ -177,7 +177,7 @@ export class CommandDispatcher<T extends Client>
 	 * Return whether or not the message author passed global
 	 * and command-specific ratelimits for the given command
 	 */
-	private passedRateLimiters(res: ResourceLoader, message: Message, command: Command<T>): boolean
+	private passedRateLimiters(res: ResourceLoader, message: Message, command: Command): boolean
 	{
 		const passedGlobal: boolean = !this.isRateLimited(res, message);
 		const passedCommand: boolean = !this.isRateLimited(res, message, command);
@@ -196,7 +196,7 @@ export class CommandDispatcher<T extends Client>
 	 * author, notify them if they exceed ratelimits, and return whether
 	 * or not the user is ratelimited
 	 */
-	private isRateLimited(res: ResourceLoader, message: Message, command?: Command<T>): boolean
+	private isRateLimited(res: ResourceLoader, message: Message, command?: Command): boolean
 	{
 		const rateLimiter: RateLimiter = command ? command._rateLimiter : this._client._rateLimiter;
 		if (!rateLimiter) return false;
@@ -225,7 +225,7 @@ export class CommandDispatcher<T extends Client>
 	/**
 	 * Return permissions the client is missing to execute the given command
 	 */
-	private checkClientPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
+	private checkClientPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.clientPermissions.filter(a =>
 			!(<TextChannel> message.channel).permissionsFor(this._client.user).has(a));
@@ -234,7 +234,7 @@ export class CommandDispatcher<T extends Client>
 	/**
 	 * Return the permissions the caller is missing to call the given command
 	 */
-	private checkCallerPermissions(command: Command<T>, message: Message, dm: boolean): PermissionResolvable[]
+	private checkCallerPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return this._client.selfbot || dm ? [] : command.callerPermissions.filter(a =>
 			!(<TextChannel> message.channel).permissionsFor(message.author).has(a));
@@ -243,7 +243,7 @@ export class CommandDispatcher<T extends Client>
 	/**
 	 * Return whether or not the message author passes the role limiter
 	 */
-	private async passedRoleLimiter(command: Command<T>, message: Message, dm: boolean): Promise<boolean>
+	private async passedRoleLimiter(command: Command, message: Message, dm: boolean): Promise<boolean>
 	{
 		if (dm || this._client.selfbot) return true;
 
@@ -261,7 +261,7 @@ export class CommandDispatcher<T extends Client>
 	 * Return whether or not the user has one of the roles specified
 	 * in the command's requisite roles
 	 */
-	private hasRoles(command: Command<T>, message: Message, dm: boolean): boolean
+	private hasRoles(command: Command, message: Message, dm: boolean): boolean
 	{
 		return this._client.selfbot || command.roles.length === 0 || dm
 			|| message.member.roles.filter(role =>
@@ -303,7 +303,7 @@ export class CommandDispatcher<T extends Client>
 	/**
 	 * Return an error for failing a command limiter
 	 */
-	private async failedLimiterError(res: ResourceLoader, command: Command<T>, message: Message): Promise<string>
+	private async failedLimiterError(res: ResourceLoader, command: Command, message: Message): Promise<string>
 	{
 		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
 		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands');
@@ -317,7 +317,7 @@ export class CommandDispatcher<T extends Client>
 	/**
 	 * Return an error for missing roles
 	 */
-	private missingRolesError(res: ResourceLoader, command: Command<T>): string
+	private missingRolesError(res: ResourceLoader, command: Command): string
 	{
 		return res(s.DISPATCHER_ERR_MISSING_ROLES, { roles: command.roles.join(', ') });
 	}

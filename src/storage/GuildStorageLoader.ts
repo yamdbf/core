@@ -9,11 +9,11 @@ import { GuildStorage } from '../types/GuildStorage';
  * {@link GuildStorage} objects
  * @private
  */
-export class GuildStorageLoader<T extends Client>
+export class GuildStorageLoader
 {
-	private readonly _client: T;
+	private readonly _client: Client;
 	private readonly _storageFactory: StorageFactory;
-	public constructor(client: T, storageFactory: StorageFactory)
+	public constructor(client: Client, storageFactory: StorageFactory)
 	{
 		this._client = client;
 		this._storageFactory = storageFactory;

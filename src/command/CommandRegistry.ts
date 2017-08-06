@@ -9,7 +9,11 @@ import { BaseCommandName } from '../types/BaseCommandName';
  * @class CommandRegistry
  * @extends {external:Collection}
  */
-export class CommandRegistry<T extends Client, K extends string, V extends Command<T>> extends Collection<K, V>
+export class CommandRegistry<
+	T extends Client,
+	K extends string = string,
+	V extends Command<T> = Command<T>>
+	extends Collection<K, V>
 {
 	private readonly client: T;
 

@@ -68,16 +68,16 @@ export class Client extends Discord.Client
 	public readonly _rateLimiter: RateLimiter;
 
 	public readonly storage: ClientStorage;
-	public readonly commands: CommandRegistry<this, string, Command<this>>;
+	public readonly commands: CommandRegistry<this>;
 
 	private readonly _token: string;
 	private readonly _plugins: (PluginConstructor | string)[];
 	private readonly _storageFactory: StorageFactory;
 	private readonly _guildDataStorage: StorageProvider;
 	private readonly _guildSettingStorage: StorageProvider;
-	private readonly _guildStorageLoader: GuildStorageLoader<this>;
-	private readonly _commandLoader: CommandLoader<this>;
-	private readonly _dispatcher: CommandDispatcher<this>;
+	private readonly _guildStorageLoader: GuildStorageLoader;
+	private readonly _commandLoader: CommandLoader;
+	private readonly _dispatcher: CommandDispatcher;
 
 	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
 	{
@@ -229,7 +229,7 @@ export class Client extends Discord.Client
 		if (!this.passive)
 		{
 			this._commandLoader = new CommandLoader(this);
-			this._dispatcher = new CommandDispatcher<this>(this);
+			this._dispatcher = new CommandDispatcher(this);
 
 			this.loadCommand('all');
 			Lang.loadCommandLocalizations();
