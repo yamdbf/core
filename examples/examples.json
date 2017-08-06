@@ -10,5 +10,8 @@
 	},
 	"LocalizationHelptext": {
 		"title": "Localizing Command helptext"
+	},
+	"PluginList": {
+		"title": "Plugin list"
 	}
 }
