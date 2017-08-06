@@ -63,10 +63,17 @@ gulp.task('package', () => {
 });
 
 gulp.task('build:tests', () => {
-	del.sync(['./test/**/*.js']);
-	gulp.src('./test/**/*.ts')
-		.pipe(project())		
-		.pipe(gulp.dest('./test/'));
+	del.sync(['test/**/*.js']);
+	const tsCompile = gulp.src('test/**/*.ts')
+		.pipe(gulp_sourcemaps.init({ base: 'test' }))
+		.pipe(project());
+
+	tsCompile.pipe(gulp.dest('test/'));
+
+	return tsCompile.js
+		.pipe(gulp_sourcemaps.mapSources(sourcePath => path.join(__dirname, 'test', sourcePath)))
+		.pipe(gulp_sourcemaps.write())
+		.pipe(gulp.dest('test/'));
 });
 
 gulp.task('build:scripts', () => {

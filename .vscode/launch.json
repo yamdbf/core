@@ -11,17 +11,13 @@
 			"program": "${workspaceRoot}/test/test_client.js",
 			"cwd": "${workspaceRoot}/test",
 			"preLaunchTask": "tests",
-			"console": "integratedTerminal",
-			"outFiles": ["bin/**/*.js"],
-			"sourceMaps": true
+			"console": "integratedTerminal"
 		},
 		{
 			"type": "node",
 			"request": "attach",
 			"name": "Attach to Process",
-			"port": 5858,
-			"outFiles": ["bin/**/*.js"],
-			"sourceMaps": true
+			"port": 5858
 		}
 	]
 }
