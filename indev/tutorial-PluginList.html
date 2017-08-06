@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>storage/KeyedStorage.js - Documentation</title>
+    <title> - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,165 +29,39 @@
 <div id="main">
     
 
-    
-
-
-
-    
     <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
-import { StorageProvider } from './StorageProvider';
-import { Util } from '../util/Util';
 
-/**
- * Simple key/value storage abstraction operating on top of the
- * given StorageProvider. Supports nested object paths in
- * get/set/remove using `.` like normal object accessors
- * @param {string} name Unique identifier for this storage, used by the given StorageProvider
- * @param {StorageProviderConstructor} provider The storage provider class that will be instantiated
- * 												and used as the backend for this storage abstraction
- */
-export class KeyedStorage
-{
-	private readonly _storage: StorageProvider;
-	public constructor(name: string, provider: StorageProviderConstructor)
-	{
-		this._storage = new provider(name);
-	}
+<header>
+    
 
-	/**
-	 * Initialize this storage. Any other method calls should not be made
-	 * until this method has been called and resolved
-	 * @returns {Promise&lt;void>}
-	 */
-	public async init(): Promise&lt;void>
-	{
-		await this._storage.init();
-	}
+    <!-- <h2>Plugin list</h2> -->
+</header>
 
-	/**
-	 * Get the names of all keys in this storage
-	 * @returns {Promise&lt;string[]>}
-	 */
-	public async keys(): Promise&lt;string[]>
-	{
-		return await this._storage.keys();
-	}
+<article>
+    <h2>Plugin List</h2><blockquote>
+<p><strong>Disclaimer:</strong> I have not taken and really cannot take the time to verify in-depth
+that the plugins listed on this page are legitimate (with regard to an absolute lack
+of malicious code or the accuracy of translations in the case of language packs)
+other than plugins plugins written by me (Zajrik).</p>
+<p>If you would like to have a plugin you've written added to this list, contact me
+on the official YAMDBF Discord server.</p>
+</blockquote>
+<h3>General plugins</h3><ul>
+<li><a href="https://github.com/zajrik/yamdbf-dm-manager">dm-manager</a> (Zajrik)</li>
+<li><a href="https://github.com/zajrik/yamdbf-command-usage">command-usage</a> (Zajrik)</li>
+<li><a href="https://github.com/SpaceEEC/yamdbf-anilist-unofficial">anilist-unofficial</a> (SpaceEEC)</li>
+<li><a href="https://github.com/SpaceEEC/yamdbf-league">league</a> (SpaceEEC)</li>
+<li><a href="https://github.com/Damon-haHAA/yamdbf-music">music</a> (Damon-haHAA)<ul>
+<li><em>May contain memory leaks</em></li>
+</ul>
+</li>
+</ul>
+<h3>Language packs</h3><ul>
+<li><a href="https://github.com/SpaceEEC/yamdbf-lang-german">lang-german</a> (SpaceEEC)</li>
+</ul>
+</article>
 
-	/**
-	 * Get a value from this storage for the specified key
-	 * @param {string} key The key in storage to get
-	 * @returns {Promise&lt;any>}
-	 */
-	public async get(key: string): Promise&lt;any>
-	{
-		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
-		if (typeof key !== 'string') throw new TypeError('Key must be a string');
-
-		if (key.includes('.'))
-		{
-			let path: string[] = key.split('.');
-			let stringData: string = await this._storage.get(path.shift());
-			if (typeof stringData === 'undefined') return;
-			let data: object = JSON.parse(stringData);
-			return Util.getNestedValue(data, path);
-		}
-		else
-		{
-			let stringData: string = await this._storage.get(key);
-			if (typeof stringData === 'undefined') return;
-			return JSON.parse(stringData);
-		}
-	}
-
-	/**
-	 * Check if a value exists in storage
-	 * @param {string} key The key in storage to check
-	 * @returns {Promise&lt;boolean>}
-	 */
-	public async exists(key: string): Promise&lt;boolean>
-	{
-		return typeof await this.get(key) !== 'undefined';
-	}
-
-	/**
-	 * Set a value in this storage for the specified key
-	 * @param {string} key The key in storage to set
-	 * @param {any} value The value to set
-	 * @returns {Promise&lt;void>}
-	 */
-	public async set(key: string, value: any): Promise&lt;void>
-	{
-		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
-		if (typeof key !== 'string') throw new TypeError('Key must be a string');
-		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
-
-		try { JSON.stringify(value); }
-		catch (err) { value = {}; }
-
-		let data: any;
-		if (key.includes('.'))
-		{
-			let path: string[] = key.split('.');
-			let first: string = path.shift();
-			data = await this.get(first);
-			if (typeof data === 'undefined')
-				data = {};
-			Util.assignNestedValue(data, path, value);
-			key = first;
-		}
-		else
-		{
-			data = value;
-		}
-		await this._storage.set(key, JSON.stringify(data));
-	}
-
-	/**
-	 * Remove a key/value pair from this storage
-	 * @param {string} key The key in storage to remove
-	 * @returns {Promise&lt;void>}
-	 */
-	public async remove(key: string): Promise&lt;void>
-	{
-		if (typeof key === 'undefined') throw new Error('Key must be provided');
-		if (typeof key !== 'string') throw new Error('Key must be a string');
-
-		let data: any;
-		if (key.includes('.'))
-		{
-			let path: string[] = key.split('.');
-			let first: string = path.shift();
-			data = await this.get(first);
-			if (typeof data !== 'undefined')
-				Util.removeNestedValue(data, path);
-
-			key = first;
-			await this._storage.set(key, JSON.stringify(data));
-		}
-		else
-		{
-			await this._storage.remove(key);
-		}
-	}
-
-	/**
-	 * Remove all key/value pairs from this storage
-	 * @returns {Promise&lt;void>}
-	 */
-	public async clear(): Promise&lt;void>
-	{
-		await this._storage.clear();
-	}
-}
-</code></pre>
-        </article>
-    </section>
-
-
-
-
+</section>
 
 </div>
 
