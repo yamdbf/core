@@ -1,4 +1,4 @@
-// Generated automatically at Thu Jul 06 2017 09:05:41 GMT-0500 (CDT)
+// Generated automatically at Mon Aug 07 2017 02:16:27 GMT-0500 (Central Daylight Time)
 
 /**
  * @typedef {string} BaseCommandName String representing a name of a base command. Valid names are:
@@ -15,8 +15,7 @@
  * 'ping',
  * 'reload',
  * 'setlang',
- * 'setprefix',
- * 'whitelist'
+ * 'setprefix'
  * ```
  */
 
@@ -32,5 +31,4 @@ export type BaseCommandName = 'blacklist'
 	| 'ping'
 	| 'reload'
 	| 'setlang'
-	| 'setprefix'
-	| 'whitelist';
+	| 'setprefix';
