@@ -58,19 +58,6 @@ can be contained in the same file. It's encouraged to use English helptext in th
 for custom commands as commands need at least a base <code>desc</code> and <code>usage</code> field to be considered valid
 commands and this lines up with the base commands using english helptext.</p>
 <h2>Base English helptext strings</h2><pre class="prettyprint source"><code>{
-    &quot;blacklist&quot;: {
-        &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Blacklist a user from calling commands&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>blacklist &lt;user> ['global']&quot;,
-            &quot;info&quot;: &quot;If global, this will block the user from calling commands in ANY server and DMs&quot;
-        }
-    },
-    &quot;whitelist&quot;: {
-        &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Remove a user from the command blacklist&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>whitelist &lt;user> ['global']&quot;
-        }
-    },
     &quot;eval&quot;: {
         &quot;en_us&quot;: {
             &quot;desc&quot;: &quot;Evaluate provided Javascript code&quot;,
@@ -82,12 +69,6 @@ commands and this lines up with the base commands using english helptext.</p>
             &quot;desc&quot;: &quot;Evaluate provided Typescript code&quot;,
             &quot;usage&quot;: &quot;&lt;prefix>eval:ts &lt;...code>&quot;,
             &quot;info&quot;: &quot;Runs pretty slowly due to having to run diagnostics before compiling. If Typescript is not installed the provided code will be evaluated as Javascript and diagnostics/compilation will be skipped.&quot;
-        }
-    },
-    &quot;clearlimit&quot;: {
-        &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Clear role restrictions from a command&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>clearlimit &lt;command>&quot;
         }
     },
     &quot;disablegroup&quot;: {
@@ -102,13 +83,6 @@ commands and this lines up with the base commands using english helptext.</p>
             &quot;desc&quot;: &quot;Enable a command group&quot;,
             &quot;usage&quot;: &quot;&lt;prefix>enablegroup &lt;group>&quot;,
             &quot;info&quot;: &quot;Enables a command group so that all of the commands in the group can be used on this server.&quot;
-        }
-    },
-    &quot;limit&quot;: {
-        &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Limit a command to the provided roles&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>limit &lt;command>, &lt;role names, ...>&quot;,
-            &quot;info&quot;: &quot;The comma after the command name -- before the role names list -- is necessary.&quot;
         }
     },
     &quot;listgroups&quot;: {
@@ -149,6 +123,26 @@ commands and this lines up with the base commands using english helptext.</p>
             &quot;desc&quot;: &quot;Set or check command prefix&quot;,
             &quot;usage&quot;: &quot;&lt;prefix>setprefix [prefix]&quot;,
             &quot;info&quot;: &quot;Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Use \&quot;clear\&quot; to clear the prefix and allow commands to be called without a prefix.&quot;
+        }
+    },
+    &quot;blacklist&quot;: {
+        &quot;en_us&quot;: {
+            &quot;desc&quot;: &quot;Blacklist a user from calling commands&quot;,
+            &quot;usage&quot;: &quot;&lt;prefix>blacklist &lt;action> &lt;user> ['global']&quot;,
+            &quot;info&quot;: &quot;If global, this will block the user from calling commands in ANY server and DMs&quot;
+        }
+    },
+    &quot;clearlimit&quot;: {
+        &quot;en_us&quot;: {
+            &quot;desc&quot;: &quot;Clear role restrictions from a command&quot;,
+            &quot;usage&quot;: &quot;&lt;prefix>clearlimit &lt;command>&quot;
+        }
+    },
+    &quot;limit&quot;: {
+        &quot;en_us&quot;: {
+            &quot;desc&quot;: &quot;Limit a command to the provided roles&quot;,
+            &quot;usage&quot;: &quot;&lt;prefix>limit &lt;command>, &lt;role names, ...>&quot;,
+            &quot;info&quot;: &quot;The comma after the command name -- before the role names list -- is necessary.&quot;
         }
     }
 }</code></pre>

@@ -75,6 +75,21 @@ Added {{ user }} to the global blacklist.
 [CMD_BLACKLIST_SUCCESS]
 Added {{ user }} to the blacklist for this server.
 
+[CMD_WHITELIST_ERR_OWNERONLY]
+Only bot owners may remove a user from the global blacklist.
+
+[CMD_WHITELIST_ERR_NOTGLOBAL]
+That user is not currently on the global blacklist.
+
+[CMD_WHITELIST_ERR_NOTBLACKLISTED]
+That user is not currently blacklisted in this server.
+
+[CMD_WHITELIST_GLOBALSUCCESS]
+Removed {{ user }} from the global blacklist.
+
+[CMD_WHITELIST_SUCCESS]
+Removed {{ user }} from the blacklist for this server.
+
 [CMD_CLEARLIMIT_UNKNOWN_COMMAND]
 Failed to find a command with the name `{{ commandName }}`
 
@@ -245,21 +260,6 @@ Prefixes may not contain backticks or backslashes.
         'Command prefix removed.' :
         `Command prefix set to \`${args.prefix}\``
 !}}
-
-[CMD_WHITELIST_ERR_OWNERONLY]
-Only bot owners may remove a user from the global blacklist.
-
-[CMD_WHITELIST_ERR_NOTGLOBAL]
-That user is not currently on the global blacklist.
-
-[CMD_WHITELIST_ERR_NOTBLACKLISTED]
-That user is not currently blacklisted in this server.
-
-[CMD_WHITELIST_GLOBALSUCCESS]
-Removed {{ user }} from the global blacklist.
-
-[CMD_WHITELIST_SUCCESS]
-Removed {{ user }} from the blacklist for this server.
 
 [DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL]
 You have used too many commands and may not use any more for **{{ time }}**.
