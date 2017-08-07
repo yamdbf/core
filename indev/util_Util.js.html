@@ -246,7 +246,7 @@ export class Util
 				if (!data) throw new Error('String literal array cannot be empty');
 				const values: string[] = data
 					.split(',')
-					.map(a => a.trim().slice(1, a.length - 1));
+					.map(a => a.trim().slice(1, -1));
 				output[name] = values;
 			}
 			else output[name] = arg;
