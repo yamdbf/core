@@ -17,6 +17,9 @@ is currently preferred due to the proximity to release and dependency issues in 
 >Use `npm install --save zajrik/yamdbf` to install from GitHub. This requires `git` to be installed and in your PATH,
 and also requires > Node 8.0.0 to run.
 
+>**Warning:** NPM 5.3.0 breaks YAMDBF post-install compiling for some reason. Just to be safe,
+install 5.0.3 with `npm i -g npm@5.0.3` as this version is confirmed to work with YAMDBF
+
 >Documentation for the master branch can be found [here](https://yamdbf.js.org/indev).
 
 ## Features
