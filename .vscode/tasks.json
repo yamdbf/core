@@ -10,17 +10,14 @@
 			"args": [],
 			"isBuildCommand": true,
 			"isBackground": false,
-			"problemMatcher": [
-				"$lessCompile",
-				"$tsc",
-				"$jshint"
-			]
+			"problemMatcher": ["$tsc"]
 		},
 		{
 			"taskName": "tests",
 			"args": ["tests"],
 			"command": "gulp",
-			"isShellCommand": true
+			"isShellCommand": true,
+			"problemMatcher": ["$tsc"]
 		},
 		{
 			"taskName": "docs",
