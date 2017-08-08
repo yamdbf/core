@@ -5,10 +5,7 @@
 		// "noUnusedParameters": true,
         "module": "commonjs",
         "target": "es2017",
-        "lib": [
-			"es7",
-			"es2017"
-        ],
+        "lib": ["es2017"],
         "declaration": true,
         "sourceMap": true,
         "removeComments": false,
