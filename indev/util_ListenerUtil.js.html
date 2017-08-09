@@ -40,6 +40,19 @@
 import { EventEmitter } from 'events';
 
 /**
+ * Represents metadata used to build an event listener
+ * and assign it to a class method at runtime
+ */
+type ListenerMetadata =
+{
+	event: string;
+	method: string;
+	once: boolean;
+	args: any[];
+	attached?: boolean;
+};
+
+/**
  * Contains static decorator methods for declaring class methods (within a class extending `EventEmitter`)
  * as listeners for events that will be emitted by the class or parent classes
  *
@@ -66,16 +79,21 @@ export class ListenerUtil
 	{
 		if (!(emitter instanceof EventEmitter))
 			throw new TypeError('Listeners can only be registered on classes extending EventEmitter');
-		const listenerTarget: object = listenerSource ? listenerSource : emitter;
+
+		const listenerTarget: object = typeof listenerSource !== 'undefined' ? listenerSource : emitter;
 		if (typeof Reflect.getMetadata('listeners', listenerTarget.constructor.prototype) === 'undefined') return;
 
-		for (const listener of &lt;ListenerMetadata[]> Reflect.getMetadata('listeners', listenerTarget.constructor.prototype))
+		const metaDataTarget: any = listenerTarget.constructor.prototype;
+		for (const listener of &lt;ListenerMetadata[]> Reflect.getMetadata('listeners', metaDataTarget))
 		{
 			if (!(&lt;any> listenerTarget)[listener.method]) continue;
 			if (listener.attached) continue;
+
 			listener.attached = true;
-			emitter[listener.once ? 'once' : 'on'](listener.event,
-				(...eventArgs: any[]) => (&lt;any> listenerTarget)[listener.method](...eventArgs, ...listener.args));
+			const eventHandler: (...eventArgs: any[]) => void =
+				(...eventArgs) => (&lt;any> listenerTarget)[listener.method](...eventArgs, ...listener.args);
+
+			emitter[listener.once ? 'once' : 'on'](listener.event, eventHandler);
 		}
 	}
 
@@ -128,25 +146,12 @@ export class ListenerUtil
 		return function&lt;T extends EventEmitter>(target: T, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
 		{
 			const listeners: ListenerMetadata[] = Reflect.getMetadata('listeners', target) || [];
-			listeners.push({ event: event, method: key, once: once, args: args });
+			listeners.push({ event, method: key, once, args });
 			Reflect.defineMetadata('listeners', listeners, target);
 			return descriptor;
 		};
 	}
 }
-
-/**
- * Represents metadata used to build an event listener
- * and assign it to a class method at runtime
- */
-type ListenerMetadata =
-{
-	event: string;
-	method: string;
-	once: boolean;
-	args: any[];
-	attached?: boolean;
-};
 </code></pre>
         </article>
     </section>
