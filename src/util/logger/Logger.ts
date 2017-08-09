@@ -1,7 +1,6 @@
 import { TransportFunction } from '../../types/TransportFunction';
 import { Transport } from '../../types/Transport';
 import { LogLevel } from '../../types/LogLevel';
-import { LogData } from '../../types/LogData';
 import { LogType } from './LogType';
 export { logger } from './LoggerDecorator';
 
