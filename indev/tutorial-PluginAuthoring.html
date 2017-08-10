@@ -89,7 +89,7 @@ explanation of how your plugin should be used.</p>
         this.client = client;
     }
 
-    async init()
+    init()
     {
         console.log('Custom plugin initialized.');
     }
@@ -99,8 +99,8 @@ instance:</p>
 <pre class="prettyprint source lang-js"><code>&lt;Client>.plugins.loaded.CustomPlugin</code></pre><p>The Plugin <code>init()</code> method will be called when the plugin is loaded, which is after
 all storages (including guild storages) are available but before <code>clientReady</code> is
 emitted. Assuming you store the client instance passed in the Plugin constructor
-like in the example above, you will be able to use it here. This method is expected
-to be async.</p>
+like in the example above, you will be able to use it here. This method can be async
+if needed to make things easier for yourself.</p>
 <h2>Plugin tools</h2><p>There are a few methods in YAMDBF designed to make some things that would be
 desirable for plugins to do easier (Or in the case of TypeScript, possible at all
 by providing public workarounds to the more complex private methods). These methods

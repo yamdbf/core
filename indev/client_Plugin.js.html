@@ -60,7 +60,7 @@
  * is called
  *
  * &lt;blockquote>**Note:** A plugin is expected to have two things at runtime:
- * a `name` property containing the name of the plugin, and an async `init()`
+ * a `name` property containing the name of the plugin, and an `init()`
  * method that will be called by the framework after loading the plugin.&lt;br>
  * See: {@link IPlugin#name} and {@link IPlugin#init}&lt;/blockquote>
  *
@@ -80,7 +80,7 @@
 export class Plugin implements IPlugin
 {
 	public name: string;
-	public async init(): Promise&lt;void> { throw new Error('Plugins must implement the `init` method'); }
+	public init(): void { throw new Error('Plugins must implement the `init` method'); }
 }
 </code></pre>
         </article>
