@@ -22,7 +22,7 @@ import { IPlugin } from './interface/IPlugin';
  * is called
  *
  * <blockquote>**Note:** A plugin is expected to have two things at runtime:
- * a `name` property containing the name of the plugin, and an async `init()`
+ * a `name` property containing the name of the plugin, and an `init()`
  * method that will be called by the framework after loading the plugin.<br>
  * See: {@link IPlugin#name} and {@link IPlugin#init}</blockquote>
  *
@@ -42,5 +42,5 @@ import { IPlugin } from './interface/IPlugin';
 export class Plugin implements IPlugin
 {
 	public name: string;
-	public async init(): Promise<void> { throw new Error('Plugins must implement the `init` method'); }
+	public init(): void { throw new Error('Plugins must implement the `init` method'); }
 }

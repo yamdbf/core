@@ -59,7 +59,7 @@ class CustomPlugin extends Plugin
 		this.client = client;
 	}
 
-	async init()
+	init()
 	{
 		console.log('Custom plugin initialized.');
 	}
@@ -75,8 +75,8 @@ instance:
 The Plugin `init()` method will be called when the plugin is loaded, which is after
 all storages (including guild storages) are available but before `clientReady` is
 emitted. Assuming you store the client instance passed in the Plugin constructor
-like in the example above, you will be able to use it here. This method is expected
-to be async.
+like in the example above, you will be able to use it here. This method can be async
+if needed to make things easier for yourself.
 
 
 ## Plugin tools
