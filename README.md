@@ -11,17 +11,6 @@
 YAMDBF is a lightweight Discord Bot framework for rapid bot development using [Discord.js](https://discord.js.org),
 making it simple to get a bot up and running with minimal effort and configuration.
 
->Note: Features described here are representative of the state of the master branch. Installing directly from GitHub
-is currently preferred due to the proximity to release and dependency issues in the latest stable release.
-
->Use `npm install --save zajrik/yamdbf` to install from GitHub. This requires `git` to be installed and in your PATH,
-and also requires > Node 8.0.0 to run.
-
->**Warning:** NPM 5.3.0 breaks YAMDBF post-install compiling for some reason. Just to be safe,
-install 5.0.3 with `npm i -g npm@5.0.3` as this version is confirmed to work with YAMDBF
-
->Documentation for the master branch can be found [here](https://yamdbf.js.org/indev).
-
 ## Features
 - Fully localizable (English by default)
 - Base commands for control over default settings
@@ -37,7 +26,7 @@ install 5.0.3 with `npm i -g npm@5.0.3` as this version is confirmed to work wit
   - Ships with a default JSON provider, and other optional providers using Sequelize:
     - Postgres
 	- SQLite
-- Plugin system
+- Easy to use Plugin system
 - Full TypeScript support (It's written in it!)
   - Support for decorators for simpler handling of:
 	- Event listeners
@@ -46,11 +35,21 @@ install 5.0.3 with `npm i -g npm@5.0.3` as this version is confirmed to work wit
 	- Attaching Logger for logging/debugging
 
 ## Installation
-Ignore any warnings about unmet peer dependencies as they are all optional unless using a Sequelize-based storage provider.
+Ignore any warnings about unmet peer dependencies as they are all optional unless
+using a Sequelize-based storage provider.
 
-Regular install: `npm install --save yamdbf`   
-With a Postgres provider: `npm install --save yamdbf pg sequelize`   
-With an SQLite provider: `npm install --save yamdbf sqlite3 sequelize`
+>**Note:** YAMDBF Requires > Node 8.0.0 to run
+
+- Regular install: `npm install --save yamdbf`   
+- With a Postgres provider: `npm install --save yamdbf pg sequelize`   
+- With an SQLite provider: `npm install --save yamdbf sqlite3 sequelize`
+
+>Indev builds can be installed from github with `npm install --save zajrik/yamdbf`.
+This requires `git` to be installed and in your path. NPM 5.3.0 is broken for
+installing dev builds as they have to compile after installation and the compilation
+script will fail on NPM 5.3.0. To be safe, use NPM 5.0.3 via `npm install -g npm@5.0.3`
+
+>Documentation for indev builds can be found [here](https://yamdbf.js.org/indev).
 
 ## Links
 - [YAMDBF Documentation](https://yamdbf.js.org)
