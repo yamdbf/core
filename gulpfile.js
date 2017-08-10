@@ -55,7 +55,7 @@ gulp.task('build', () => {
 });
 
 gulp.task('package', () => {
-	del.sync(['../pkg/yamdbf/**/*.*']);
+	del.sync(['../pkg/yamdbf/**/*.*'], { force: true });
 	gulp.src('bin/**/*.*').pipe(gulp.dest('../pkg/yamdbf/bin'));
 	gulp.src('src/**/*.*').pipe(gulp.dest('../pkg/yamdbf/src'));
 	gulp.src('*.json').pipe(gulp.dest('../pkg/yamdbf'));
