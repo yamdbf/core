@@ -55,11 +55,12 @@ gulp.task('build', () => {
 });
 
 gulp.task('package', () => {
-	del.sync(['pkg/**/*.*']);
-	gulp.src('bin/**/*.*').pipe(gulp.dest('pkg/bin'));
-	gulp.src('src/**/*.*').pipe(gulp.dest('pkg/src'));
-	gulp.src('*.json').pipe(gulp.dest('pkg'));
-	gulp.src('README.md').pipe(gulp.dest('pkg'));
+	del.sync(['../pkg/yamdbf/**/*.*']);
+	gulp.src('bin/**/*.*').pipe(gulp.dest('../pkg/yamdbf/bin'));
+	gulp.src('src/**/*.*').pipe(gulp.dest('../pkg/yamdbf/src'));
+	gulp.src('*.json').pipe(gulp.dest('../pkg/yamdbf'));
+	gulp.src('gulpfile.js').pipe(gulp.dest('../pkg/yamdbf'));
+	gulp.src('README.md').pipe(gulp.dest('../pkg/yamdbf'));
 });
 
 gulp.task('build:tests', () => {
