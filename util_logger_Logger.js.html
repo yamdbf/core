@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>util/logger/Logger.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="/index.html">Stable</a><a href="/indev/index.html">Indev</a></h2><h3>Pages</h3><ul><li><a href="tutorial-LocalizationGuide.html">Localization Guide</a></li><li><a href="tutorial-LocalizationHelptext.html">Localizing Command helptext</a></li><li><a href="tutorial-LocalizationStrings.html">Localization string list</a></li><li><a href="tutorial-PluginAuthoring.html">Plugin Authoring Guide</a></li><li><a href="tutorial-PluginList.html">Plugin list</a></li><li><a href="tutorial-StartingInV3.html">Starting a bot in 3.0.0</a></li></ul><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li><li><a href="ClientStorage.html">ClientStorage</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandRegistry.html">CommandRegistry</a></li><li><a href="Database.html">Database</a></li><li><a href="GuildSettings.html">GuildSettings</a></li><li><a href="GuildStorage.html">GuildStorage</a></li><li><a href="KeyedStorage.html">KeyedStorage</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Plugin.html">Plugin</a></li><li><a href="PluginLoader.html">PluginLoader</a></li><li><a href="RateLimit.html">RateLimit</a></li><li><a href="RateLimiter.html">RateLimiter</a></li><li><a href="StorageProvider.html">StorageProvider</a></li></ul><h3>Interfaces</h3><ul><li><a href="IPlugin.html">IPlugin</a></li><li><a href="IStorageProvider.html">IStorageProvider</a></li></ul><h3>Mixins</h3><ul><li><a href="Guild.html">Guild</a></li><li><a href="Loggable.html">Loggable</a></li><li><a href="Message.html">Message</a></li></ul><h3>Modules</h3><ul><li><a href="module-CommandDecorators.html">CommandDecorators</a></li><li><a href="module-Lang.html">Lang</a></li><li><a href="module-ListenerUtil.html">ListenerUtil</a></li><li><a href="module-Middleware.html">Middleware</a></li><li><a href="module-Providers.html">Providers</a></li><li><a href="module-Time.html">Time</a></li><li><a href="module-Util.html">Util</a></li></ul><h3>Decorators</h3><ul><li><a href="global.html#deprecated">deprecated</a></li><li><a href="global.html#logger">logger</a></li></ul><h3>TypeDefs</h3><ul><li><a href="global.html#ArgOpts">ArgOpts</a></li><li><a href="global.html#BaseStrings">BaseStrings</a></li><li><a href="global.html#CommandInfo">CommandInfo</a></li><li><a href="global.html#DefaultGuildSettings">DefaultGuildSettings</a></li><li><a href="global.html#Difference">Difference</a></li><li><a href="global.html#ExpectArgType">ExpectArgType</a></li><li><a href="global.html#LocalizedCommandInfo">LocalizedCommandInfo</a></li><li><a href="global.html#LogData">LogData</a></li><li><a href="global.html#LogLevel">LogLevel</a></li><li><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></li><li><a href="global.html#PluginConstructor">PluginConstructor</a></li><li><a href="global.html#ResolveArgType">ResolveArgType</a></li><li><a href="global.html#ResourceLoader">ResourceLoader</a></li><li><a href="global.html#StorageProviderConstructor">StorageProviderConstructor</a></li><li><a href="global.html#TemplateData">TemplateData</a></li><li><a href="global.html#Transport">Transport</a></li><li><a href="global.html#TransportFunction">TransportFunction</a></li><li><a href="global.html#Tuple">Tuple</a></li><li><a href="global.html#YAMDBFOptions">YAMDBFOptions</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-ClientOptions.html">ClientOptions</a></li><li><a href="external-Collection.html">Collection</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-MessageOptions.html">MessageOptions</a></li><li><a href="external-PermissionResolvable.html">PermissionResolvable</a></li><li><a href="external-Role.html">Role</a></li><li><a href="external-User.html">User</a></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { TransportFunction } from '../../types/TransportFunction';
+import { Transport } from '../../types/Transport';
+import { LogLevel } from '../../types/LogLevel';
+import { LogType } from './LogType';
+export { logger } from './LoggerDecorator';
+
+/**
+ * Singleton containing methods for asynchronous logging with clean,
+ * configurable output via custom Logger transports
+ *
+ * Easiest manner of use is via the `@logger` parameter decorator
+ * to attach the logger to a class property for use within that class.
+ * Otherwise the singleton instance can be accessed via `Logger.instance()`
+ *
+ * Logging can be turned off by setting the logging level to `LogLevel.NONE`
+ */
+export class Logger
+{
+	private static _instance: Logger;
+	private _logLevel: LogLevel;
+	private _transports: Transport[];
+	private constructor()
+	{
+		if (Logger._instance)
+			throw new Error('Cannot create multiple instances of Logger singleton. Use Logger.instance() instead');
+
+		Logger._instance = this;
+		this._logLevel = LogLevel.DEBUG;
+		this._transports = [];
+
+		// Create and add base transport
+
+		type Color = [number, number];
+		const colors: { [name: string]: Color } = {
+			red: [31, 39],
+			green: [32, 39],
+			yellow: [33, 39],
+			blue: [34, 39],
+			magenta: [35, 39],
+			cyan: [36, 39],
+			grey: [90, 39]
+		};
+
+		const wrapColor: (c: Color, ...text: string[]) => string =
+			(c, ...text) => `\u001B[${c[0]}m${text.join(' ')}\u001B[${c[1]}m`;
+
+		type ColorWrapper = (...text: string[]) => string;
+		const createWrapper: (color: Color) => ColorWrapper =
+			color => (...text) => wrapColor(color, ...text);
+
+		type LogTypeColorWrappers = { [type: string]: ColorWrapper };
+		const typeColorWrappers: LogTypeColorWrappers = {
+			[LogType.LOG]: createWrapper(colors.green),
+			[LogType.INFO]: createWrapper(colors.blue),
+			[LogType.WARN]: createWrapper(colors.yellow),
+			[LogType.ERROR]: createWrapper(colors.red),
+			[LogType.DEBUG]: createWrapper(colors.magenta)
+		};
+
+		const zeroPad: (n: number) => string = n => `0${n}`.slice(-2);
+		const transport: TransportFunction = data => {
+			let { type, tag, text } = data;
+			const d: Date = data.timestamp;
+			const h: string = zeroPad(d.getHours());
+			const m: string = zeroPad(d.getMinutes());
+			const s: string = zeroPad(d.getSeconds());
+			const t: string = wrapColor(colors.grey, `${h}:${m}:${s}`);
+
+			type = typeColorWrappers[type](type);
+			tag = wrapColor(colors.cyan, tag);
+
+			process.stdout.write(`[${t}][${type}][${tag}]: ${text}\n`);
+		};
+
+		this.addTransport({ transport });
+
+	}
+
+	/**
+	 * `LogLevel.NONE` enum shortcut
+	 * @type {LogLevel}
+	 */
+	public static readonly NONE: LogLevel = LogLevel.NONE;
+
+	/**
+	 * `LogLevel.LOG` enum shortcut
+	 * @type {LogLevel}
+	 */
+	public static readonly LOG: LogLevel = LogLevel.LOG;
+
+	/**
+	 * `LogLevel.INFO` enum shortcut
+	 * @type LogLevel
+	 */
+	public static readonly INFO: LogLevel = LogLevel.INFO;
+
+	/**
+	 * `LogLevel.WARN` enum shortcut
+	 * @type {LogLevel}
+	 */
+	public static readonly WARN: LogLevel = LogLevel.WARN;
+
+	/**
+	 * `LogLevel.ERROR` enum shortcut
+	 * @type {LogLevel}
+	 */
+	public static readonly ERROR: LogLevel = LogLevel.ERROR;
+
+	/**
+	 * `LogLevel.DEBUG` enum shortcut
+	 * @type LogLevel
+	 */
+	public static readonly DEBUG: LogLevel = LogLevel.DEBUG;
+
+	/**
+	 * Returns the Logger singleton instance
+	 * @returns {Logger}
+	 */
+	public static instance(): Logger
+	{
+		if (!Logger._instance) return new Logger();
+		else return Logger._instance;
+	}
+
+	/**
+	 * Set the level of output that will be logged
+	 * @param {LogLevel} level The level of logging to output
+	 * @returns {void}
+	 */
+	public setLogLevel(level: LogLevel): void
+	{
+		this._logLevel = level;
+	}
+
+	/**
+	 * Add a {@link Transport} for the Logger to use for logging.
+	 * The logger will log to all provided transports
+	 * @param {Transport} transport The transport to add
+	 * @returns {void}
+	 */
+	public addTransport(transport: Transport): void
+	{
+		const level: LogLevel | (() => LogLevel) = transport.level;
+		transport.level = typeof level !== 'undefined'
+			? typeof level === 'function'
+				? level
+				: () => &lt;LogLevel> level
+			: () => this._logLevel;
+
+		this._transports.push(transport);
+	}
+
+	/**
+	 * Remove the default console logging transport. This is
+	 * useful if you want to provide your own transport that
+	 * uses the console.
+	 *
+	 * This should be run before creating a YAMDBF Client
+	 * instance if you do not any logging to be done with the
+	 * base transport before you get the chance to swap it out.
+	 * ```
+	 * Logger.instance().removeBaseTransport();
+	 * Logger.instance().addTransport({ transport[, level] });
+	 * ```
+	 * @returns {void}
+	 */
+	public removeBaseTransport(): void
+	{
+		this._transports.shift();
+	}
+
+	/**
+	 * Log useful information to the Logger transports. Will not be logged
+	 * unless the log level is `LogLevel.LOG` or higher
+	 * @param {string} tag Tag to prefix the log with
+	 * @param {...string} text String(s) to log
+	 * @returns {Promise&lt;void>}
+	 */
+	public async log(tag: string, ...text: string[]): Promise&lt;void>
+	{
+		this._write(LogLevel.LOG, LogType.LOG, tag, text.join(' '));
+	}
+
+	/**
+	 * Log less important information to the logger transports. Will not
+	 * be logged unless the logging level is `LogLevel.INFO` or higher
+	 * @param {string} tag Tag to prefix the log with to identify the
+	 * 					   source of the log
+	 * @param {...string} text String(s) to log
+	 * @returns {Promise&lt;void>}
+	 */
+	public async info(tag: string, ...text: string[]): Promise&lt;void>
+	{
+		this._write(LogLevel.INFO, LogType.INFO, tag, text.join(' '));
+	}
+
+	/**
+	 * Log warning text to the logger transports. Will not be logged
+	 * unless the logging level is `LogLevel.WARN` or higher
+	 * @param {string} tag Tag to prefix the log with
+	 * @param {...string} text String(s) to log
+	 * @returns {Promise&lt;void>}
+	 */
+	public async warn(tag: string, ...text: string[]): Promise&lt;void>
+	{
+		this._write(LogLevel.WARN, LogType.WARN, tag, text.join(' '));
+	}
+
+	/**
+	 * Log error text to the logger transports. Will not be logged
+	 * unless the logging level is `LogLevel.ERROR` or higher
+	 * @param {string} tag Tag to prefix the log with
+	 * @param {...string} text String(s) to log
+	 * @returns {Promise&lt;void>}
+	 */
+	public async error(tag: string, ...text: string[]): Promise&lt;void>
+	{
+		this._write(LogLevel.ERROR, LogType.ERROR, tag, text.join(' '));
+	}
+
+	/**
+	 * Log debug text to the logger transports. Will not be logged
+	 * unless the logging level is `LogLevel.DEBUG`
+	 * @param {string} tag Tag to prefix the log with
+	 * @param {...string} text String(s) to log
+	 * @returns {Promise&lt;void>}
+	 */
+	public async debug(tag: string, ...text: string[]): Promise&lt;void>
+	{
+		this._write(LogLevel.DEBUG, LogType.DEBUG, tag, text.join(' '));
+	}
+
+	/**
+	 * Send log data to all transports
+	 * @private
+	 */
+	private _write(level: LogLevel, type: LogType, tag: string, text: string): void
+	{
+		const timestamp: Date = new Date();
+		for (const t of this._transports)
+			if (level &lt;= (&lt;() => LogLevel> t.level)())
+				t.transport({ timestamp, type, tag, text });
+	}
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+	<div align="right">
+    	<a href="https://github.com/jsdoc3/jsdoc">JSDoc3.5.0-dev</a> | Minami
+	</div>
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
