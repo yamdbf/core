@@ -17,3 +17,4 @@ on the official YAMDBF Discord server.
 
 ### Language packs
   - [lang-german](https://github.com/SpaceEEC/yamdbf-lang-german) (SpaceEEC)
+  - [lang-dutch](https://github.com/Kolkies/yamdbf-lang-dutch) (Kolkies)
