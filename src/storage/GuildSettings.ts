@@ -2,6 +2,7 @@ import { Guild } from 'discord.js';
 import { StorageProvider } from './StorageProvider';
 import { Util } from '../util/Util';
 import { Client } from '../client/Client';
+import { Logger } from '../util/logger/Logger';
 
 /**
  * Class containing asynchronous methods for storing, retrieving, and
@@ -54,7 +55,7 @@ export class GuildSettings
 		}
 		catch (err)
 		{
-			console.error(err.stack);
+			Logger.instance().error('GuildStorage', err.stack);
 		}
 	}
 
@@ -82,10 +83,7 @@ export class GuildSettings
 			let path: string[] = key.split('.');
 			return Util.getNestedValue(this._cache[path.shift()], path);
 		}
-		else
-		{
-			return this._cache[key];
-		}
+		else return this._cache[key];
 	}
 
 	/**
@@ -116,15 +114,15 @@ export class GuildSettings
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			let first: string = path.shift();
-			if (typeof this._cache[first] === 'undefined')
-				this._cache[first] = {};
-			Util.assignNestedValue(this._cache[first], path, value);
+			key = path.shift();
+
+			if (typeof this._cache[key] === 'undefined')
+				this._cache[key] = {};
+
+			Util.assignNestedValue(this._cache[key], path, value);
 		}
-		else
-		{
-			this._cache[key] = value;
-		}
+		else this._cache[key] = value;
+
 		await this._provider.set(this._id, JSON.stringify(this._cache));
 	}
 
@@ -141,14 +139,13 @@ export class GuildSettings
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			let first: string = path.shift();
-			if (typeof this._cache[first] !== 'undefined')
-				Util.removeNestedValue(this._cache[first], path);
+			key = path.shift();
+
+			if (typeof this._cache[key] !== 'undefined')
+				Util.removeNestedValue(this._cache[key], path);
 		}
-		else
-		{
-			delete this._cache[key];
-		}
+		else delete this._cache[key];
+
 		await this._provider.set(this._id, JSON.stringify(this._cache));
 	}
 
