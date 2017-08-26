@@ -130,17 +130,15 @@ export class KeyedStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			let first: string = path.shift();
-			data = await this.get(first);
-			if (typeof data === 'undefined')
-				data = {};
+			key = path.shift();
+
+			data = await this.get(key);
+			if (typeof data === 'undefined') data = {};
+
 			Util.assignNestedValue(data, path, value);
-			key = first;
 		}
-		else
-		{
-			data = value;
-		}
+		else data = value;
+
 		await this._storage.set(key, JSON.stringify(data));
 	}
 
@@ -158,18 +156,15 @@ export class KeyedStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			let first: string = path.shift();
-			data = await this.get(first);
+			key = path.shift();
+
+			data = await this.get(key);
 			if (typeof data !== 'undefined')
 				Util.removeNestedValue(data, path);
 
-			key = first;
 			await this._storage.set(key, JSON.stringify(data));
 		}
-		else
-		{
-			await this._storage.remove(key);
-		}
+		else await this._storage.remove(key);
 	}
 
 	/**
