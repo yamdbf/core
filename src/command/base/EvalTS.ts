@@ -59,7 +59,7 @@ export default class extends Command
 		}
 
 		if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
-		start.edit(res(s.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
+		return start.edit(res(s.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
 	}
 
 	private _compile(code: string): string

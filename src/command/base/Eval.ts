@@ -40,7 +40,7 @@ export default class extends Command
 		if (error) return this.respond(message, res(s.CMD_EVAL_ERROR, { code, error: this._clean(error) }));
 		if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
 
-		this.respond(message, res(s.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
+		return this.respond(message, res(s.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
 	}
 
 	private _clean(text: string): string

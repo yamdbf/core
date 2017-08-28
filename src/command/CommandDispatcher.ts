@@ -1,4 +1,4 @@
-import { PermissionResolvable, TextChannel, User } from 'discord.js';
+import { PermissionResolvable, TextChannel, User, MessageOptions, Message as DMessage } from 'discord.js';
 import { RateLimiter } from './RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { ResourceLoader } from '../types/ResourceLoader';
@@ -94,17 +94,21 @@ export class CommandDispatcher
 			.map(a => a.trim())
 			.filter(a => a !== '');
 
+		type Result = string | MessageOptions | Message | Message[];
+		type CommandResult = Result | Promise<Result>;
+		type MiddlewareResult = [Message, any[]] | Promise<[Message, any[]]> | string | Error;
+
+		let commandResult: CommandResult;
 		let middlewarePassed: boolean = true;
 		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command._middleware);
 		for (let func of middleware)
 			try
 			{
-				let result: Promise<[Message, any[]]> | [Message, any[]] =
-					func.call(command, message, args);
+				let result: MiddlewareResult = func.call(command, message, args);
 				if (result instanceof Promise) result = await result;
 				if (!(result instanceof Array))
 				{
-					if (typeof result === 'string') message.channel.send(result);
+					if (typeof result === 'string') commandResult = await message.channel.send(result);
 					middlewarePassed = false;
 					break;
 				}
@@ -112,15 +116,23 @@ export class CommandDispatcher
 			}
 			catch (err)
 			{
+				commandResult = await message.channel.send(err.toString(), { split: true });
 				middlewarePassed = false;
-				message.channel.send(err.toString(), { split: true });
 				break;
 			}
 
 		if (!middlewarePassed) return;
 
-		try { await command.action(message, args); }
+		try { commandResult = await command.action(message, args); }
 		catch (err) { this._logger.error(`Dispatch:${command.name}`, err.stack); }
+
+		if (typeof commandResult !== 'undefined'
+			&& !(commandResult instanceof Array)
+			&& !(commandResult instanceof DMessage))
+			commandResult = await message.channel.send(<string> commandResult);
+
+		// commandResult = Util.flattenArray([<Message | Message[]> commandResult]);
+		// TODO: Store command result information for command editing
 
 		const dispatchEnd: number = Util.now() - dispatchStart;
 		this._client.emit('command', command.name, args, dispatchEnd, message);

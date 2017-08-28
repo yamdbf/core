@@ -210,7 +210,7 @@ export class Command<T extends Client = Client>
 	 * 					   Will contain strings unless middleware is used to transform the args
 	 * @returns {any}
 	 */
-	public action(message: Message, args: any[]): void
+	public action(message: Message, args: any[]): any
 	{
 		message = null;
 		args = null;

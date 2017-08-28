@@ -19,7 +19,7 @@ export default class extends Command
 	}
 
 	@localizable
-	public async action(message: Message, [res]: [ResourceLoader]): Promise<void>
+	public async action(message: Message, [res]: [ResourceLoader]): Promise<any>
 	{
 		let groups: string[] = this.client.commands.groups;
 		let disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
@@ -27,6 +27,6 @@ export default class extends Command
 		let output: string = res(s.CMD_LISTGROUPS_GROUPS,
 			{ groups: groups.join(', '), disabledGroups: disabledGroups.join(', ') });
 
-		this.respond(message, output, { code: 'ldif'});
+		return this.respond(message, output, { code: 'ldif' });
 	}
 }
