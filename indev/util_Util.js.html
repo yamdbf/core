@@ -266,6 +266,23 @@ export class Util
 		const ns: NSFunction = (hr = process.hrtime()) => hr[0] * 1e9 + hr[1];
 		return (ns() - (ns() - (process.uptime() * 1e9))) / 1e6;
 	}
+
+	/**
+	 * Flatten an array that may contain nested arrays
+	 * @static
+	 * @method flattenArray
+	 * @param {any[]} array
+	 * @returns {any[]}
+	 */
+	public static flattenArray&lt;T>(array: (T| T[])[]): T[]
+	{
+		const result: T[] = [];
+		for (const item of array)
+			item instanceof Array
+				? result.push(...Util.flattenArray(item))
+				: result.push(item);
+		return result;
+	}
 }
 </code></pre>
         </article>
