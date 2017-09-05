@@ -22,6 +22,7 @@ export class CommandDispatcher
 	@logger private readonly _logger: Logger;
 	private readonly _client: Client;
 	private _ready: boolean = false;
+
 	public constructor(client: Client)
 	{
 		this._client = client;
@@ -94,8 +95,8 @@ export class CommandDispatcher
 			.map(a => a.trim())
 			.filter(a => a !== '');
 
-		type Result = string | MessageOptions | Message | Message[];
-		type CommandResult = Result | Promise<Result>;
+		type Result = string | MessageOptions | Message;
+		type CommandResult = Result | Result[] | Promise<Result> | Promise<Result[]>;
 		type MiddlewareResult = [Message, any[]] | Promise<[Message, any[]]> | string | Error;
 
 		let commandResult: CommandResult;
@@ -223,12 +224,10 @@ export class CommandDispatcher
 			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return true;
 
 			rateLimit.setNotified();
-			if (!command) message.channel.send(
-				res(s.DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL,
-					{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
-			else message.channel.send(
-				res(s.DISPATCHER_ERR_RATELIMIT_EXCEED,
-					{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
+			message.channel.send(res(!command
+				? s.DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL
+				: s.DISPATCHER_ERR_RATELIMIT_EXCEED,
+				{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));
 		}
 
 		return true;
