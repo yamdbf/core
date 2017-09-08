@@ -2347,13 +2347,30 @@
                     "name": "instance",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns the Logger singleton instance</p>",
-                    "parameters": [],
+                    "description": "<p>Returns the Logger singleton instance</p>\n<p>When given a tag parameter, a Logger proxy will be returned\nthat automatically applies the given tag to all logging methods\nin lieu of them requiring a tag parameter before the log content</p>",
+                    "parameters": [
+                        {
+                            "name": "tag",
+                            "type": "string",
+                            "description": "<p>Tag for this instance proxy</p>",
+                            "default": "",
+                            "optional": true,
+                            "nullable": ""
+                        }
+                    ],
                     "examples": [],
                     "returns": {
                         "type": "Logger",
                         "description": ""
                     }
+                },
+                {
+                    "name": "taggedInstance",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Returns an instance proxy that prefixes logging\nmethod calls with the given tag</p>",
+                    "parameters": [],
+                    "examples": []
                 },
                 {
                     "name": "setLogLevel",
@@ -3152,18 +3169,6 @@
             "examples": [],
             "returns": {
                 "type": "MethodDecorator",
-                "description": ""
-            }
-        },
-        {
-            "name": "logger",
-            "access": "",
-            "virtual": false,
-            "description": "<p>Property decorator that will automatically assign\nthe Logger singleton instance to the decorated\nclass property</p>\n<p>Example:</p>\n<pre class=\"prettyprint source\"><code>class Foo {\n    &#64logger private readonly logger: Logger;\n    ...</code></pre><blockquote>\n<p><strong>Note:</strong> This is a Typescript feature. If using the logger is desired\nin Javascript you should simply retrieve the singleton instance via\n<code>Logger.instance()</code></p>\n</blockquote>",
-            "parameters": [],
-            "examples": [],
-            "returns": {
-                "type": "PropertyDecorator",
                 "description": ""
             }
         }
