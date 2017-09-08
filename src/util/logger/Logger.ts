@@ -114,12 +114,41 @@ export class Logger
 
 	/**
 	 * Returns the Logger singleton instance
+	 *
+	 * When given a tag parameter, a Logger proxy will be returned
+	 * that automatically applies the given tag to all logging methods
+	 * in lieu of them requiring a tag parameter before the log content
+	 * @param {string} [tag] Tag for this instance proxy
 	 * @returns {Logger}
 	 */
-	public static instance(): Logger
+	public static instance(tag?: string): Logger
 	{
-		if (!Logger._instance) return new Logger();
-		else return Logger._instance;
+		if (tag) return Logger.taggedInstance(tag);
+		else return Logger._instance || new Logger();
+	}
+
+	/**
+	 * Returns an instance proxy that prefixes logging
+	 * method calls with the given tag
+	 * @private
+	 */
+	private static taggedInstance(tag: string): Logger
+	{
+		return new Proxy(Logger.instance(), {
+			get: (target: any, key: PropertyKey) => {
+				switch (key)
+				{
+					case 'log':
+					case 'info':
+					case 'warn':
+					case 'error':
+					case 'debug':
+						return (...text: string[]) => target[key](tag, ...text);
+					default:
+						return target[key];
+				}
+			}
+		});
 	}
 
 	/**
