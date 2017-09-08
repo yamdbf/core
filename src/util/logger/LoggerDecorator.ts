@@ -26,6 +26,8 @@ import { Logger } from './Logger';
 // 	return <Loggable<T>> target;
 // }
 
+export function logger(key: string): PropertyDecorator;
+export function logger<T>(target: T, key: string): void;
 /**
  * Property decorator that will automatically assign
  * the Logger singleton instance to the decorated
@@ -42,8 +44,6 @@ import { Logger } from './Logger';
  * `Logger.instance()`
  * @returns {PropertyDecorator}
  */
-export function logger(key: string): PropertyDecorator;
-export function logger<T>(target: T, key: string): void;
 export function logger(...args: any[]): any
 {
 	if (typeof args[0] === 'string')
