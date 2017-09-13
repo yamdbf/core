@@ -26,7 +26,7 @@ export default class extends Command
 	{
 		const client: Client = this.client; // tslint:disable-line
 		const [, , prefix, name] = await Util.wasCommandCalled(message);
-		const call: RegExp = new RegExp(`^${prefix} *${name}`);
+		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
 		const code: string = message.content.replace(call, '').trim();
 
 		if (!code) return this.respond(message, res(s.CMD_EVAL_ERR_NOCODE));

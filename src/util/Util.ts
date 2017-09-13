@@ -89,6 +89,18 @@ export class Util
 	}
 
 	/**
+	 * Returns the given string with special characters escaped
+	 * @static
+	 * @method escape
+	 * @param {string} input String to escape
+	 * @returns {string}
+	 */
+	public static escape(input: string): string
+	{
+		return input.replace(/[[\](){}|\\^$+\-*?.]/g, '\\$&');
+	}
+
+	/**
 	 * Assigns the given value along the given nested path within
 	 * the provided initial object
 	 * @static
