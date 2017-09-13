@@ -38,31 +38,31 @@
         <article>
             <pre class="prettyprint source linenums"><code>import { Logger } from './Logger';
 
-/**
- * Represents a type that has a `logger` property
- * containing the Logger singleton instance
- */
-// export type Loggable&lt;T> = T &amp; { logger: Logger };
+// /**
+//  * Represents a type that has a `logger` property
+//  * containing the Logger singleton instance
+//  */
+// // export type Loggable&lt;T> = T &amp; { logger: Logger };
 
-/**
- * Class decorator that transforms a class to Loggable&lt;T>.
- * Regrettably works but is not properly picked up by intellisense
- * at this point in time, meaning compiler errors when attempting
- * to access the `logger` property on the decorated class.
- * Maybe someday.
- *
- * Example:
- * ```
- * &amp;#64loggable
- * class Foo { }
- * ```
- */
-// export function loggable&lt;T extends Function>(target: T): Loggable&lt;T>
-// {
-// 	Object.defineProperty(target.prototype, 'logger',
-// 		{ value: Logger.instance });
-// 	return &lt;Loggable&lt;T>> target;
-// }
+// /**
+//  * Class decorator that transforms a class to Loggable&lt;T>.
+//  * Regrettably works but is not properly picked up by intellisense
+//  * at this point in time, meaning compiler errors when attempting
+//  * to access the `logger` property on the decorated class.
+//  * Maybe someday.
+//  *
+//  * Example:
+//  * ```
+//  * &amp;#64loggable
+//  * class Foo { }
+//  * ```
+//  */
+// // export function loggable&lt;T extends Function>(target: T): Loggable&lt;T>
+// // {
+// // 	Object.defineProperty(target.prototype, 'logger',
+// // 		{ value: Logger.instance });
+// // 	return &lt;Loggable&lt;T>> target;
+// // }
 
 export function logger(key: string): PropertyDecorator;
 export function logger&lt;T>(target: T, key: string): void;
