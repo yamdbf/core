@@ -54,6 +54,7 @@ export class GuildSettings
 	private readonly _id: string;
 	private readonly _client: any;
 	private _cache: { [key: string]: any };
+
 	public constructor(storage: StorageProvider, guild: Guild, client: Client)
 	{
 		this._provider = storage;

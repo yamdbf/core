@@ -68,9 +68,10 @@ export class Command&lt;T extends Client = Client>
 	public overloads: string;
 	public external: boolean;
 
-	public _classloc: string;
+	// Internals
 	public readonly _rateLimiter: RateLimiter;
 	public readonly _middleware: MiddlewareFunction[];
+	public _classloc: string;
 
 	public constructor(info: CommandInfo = null)
 	{

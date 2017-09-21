@@ -48,7 +48,9 @@ export class RateLimit
 	private readonly _duration: number;
 	private _count: number;
 	private _notified: boolean;
+
 	public expires: number;
+
 	public constructor(limit: [number, number])
 	{
 		[this._limit, this._duration] = limit;
