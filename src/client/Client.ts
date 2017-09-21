@@ -49,7 +49,9 @@ const { on, once, registerListeners } = ListenerUtil;
  */
 export class Client extends Discord.Client
 {
-	@logger private readonly _logger: Logger;
+	@logger('Client')
+	private readonly _logger: Logger;
+
 	public readonly commandsDir: string;
 	public readonly localeDir: string;
 	public readonly owner: string[];
@@ -269,15 +271,15 @@ export class Client extends Discord.Client
 
 		if (!this.passive)
 		{
-			this._logger.info('Client', 'Initializing commands...');
+			this._logger.info('Initializing commands...');
 			let initSuccess: boolean = await this.commands._initCommands();
-			this._logger.info('Client', `Commands initialized${initSuccess ? '' : ' with errors'}.`);
+			this._logger.info(`Commands initialized${initSuccess ? '' : ' with errors'}.`);
 			this._dispatcher.setReady();
-			this._logger.info('Client', 'Command dispatcher ready.');
+			this._logger.info('Command dispatcher ready.');
 		}
 
 		if (typeof this.readyText !== 'undefined')
-			this._logger.log('Client', this.readyText);
+			this._logger.log(this.readyText);
 
 		this.emit('clientReady');
 	}

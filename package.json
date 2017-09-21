@@ -38,7 +38,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "discord.js": "github:zajrik/discord.js#11.1-dev",
+    "discord.js": "^11.2.1",
     "glob": "7.1.1",
     "node-json-db": "0.7.3",
     "postinstall-build": "^5.0.1",

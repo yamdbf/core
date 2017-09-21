@@ -22,6 +22,7 @@ class Test extends Client
 			token: config.token,
 			owner: config.owner,
 			readyText: 'Test client ready',
+			statusText: 'Foo bar baz',
 			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
 			commandsDir: './commands',
 			// localeDir: './locale',
