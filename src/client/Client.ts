@@ -15,7 +15,8 @@ import {
 	User,
 	UserResolvable,
 	ClientUserSettings,
-	Snowflake
+	Snowflake,
+	ClientUserGuildSettings
 } from 'discord.js';
 
 import { Command } from '../command/Command';
@@ -441,6 +442,7 @@ export class Client extends Discord.Client
 	public on(event: 'channelDelete', listener: (channel: Channel) => void): this;
 	public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 	public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+	public on(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
 	public on(event: 'clientUserSettingsUpdate', listener: (clientUserSettings: ClientUserSettings) => void): this;
 	public on(event: 'debug', listener: (info: string) => void): this;
 	public on(event: 'disconnect', listener: (event: any) => void): this;
@@ -470,6 +472,7 @@ export class Client extends Discord.Client
 	public on(event: 'presenceUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 	public on(event: 'ready', listener: () => void): this;
 	public on(event: 'reconnecting', listener: () => void): this;
+	public on(event: 'resume', listener: (replayed: number) => void): this;
 	public on(event: 'roleCreate', listener: (role: Role) => void): this;
 	public on(event: 'roleDelete', listener: (role: Role) => void): this;
 	public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
