@@ -11,8 +11,10 @@ import { Logger, logger } from '../util/logger/Logger';
  */
 export class CommandLoader
 {
-	@logger private readonly logger: Logger;
+	@logger('CommandLoader')
+	private readonly _logger: Logger;
 	private readonly _client: Client;
+
 	public constructor(client: Client)
 	{
 		this._client = client;
@@ -48,7 +50,7 @@ export class CommandLoader
 
 			if (this._client.commands.find(c => c.overloads === command.name))
 			{
-				this.logger.info('CommandLoader', `Skipping exterally overloaded command: '${command.name}'`);
+				this._logger.info(`Skipping exterally overloaded command: '${command.name}'`);
 				continue;
 			}
 
@@ -58,18 +60,18 @@ export class CommandLoader
 					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
 				this._client.commands.delete(command.overloads);
 				this._client.commands._registerInternal(command);
-				this.logger.info('CommandLoader',
-					`Command '${command.name}' loaded, overloading command '${command.overloads}'.`);
+				this._logger.info(`Command '${command.name}' loaded, overloading command '${command.overloads}'.`);
 			}
 			else
 			{
 				this._client.commands._registerInternal(command);
 				loadedCommands++;
-				this.logger.info('CommandLoader', `Command '${command.name}' loaded.`);
+				this._logger.info(`Command '${command.name}' loaded.`);
 			}
 		}
-		this.logger.info('CommandLoader',
-			`Loaded ${loadedCommands} total commands in ${this._client.commands.groups.length} groups.`);
+
+		const groupLength: number = this._client.commands.groups.length;
+		this._logger.info(`Loaded ${loadedCommands} total commands in ${groupLength} groups.`);
 	}
 
 	/**
@@ -88,7 +90,7 @@ export class CommandLoader
 		const command: Command = new loadedCommandClass();
 		command._classloc = commandLocation;
 		this._client.commands._registerInternal(command, true);
-		this.logger.info('CommandLoader', `Command '${command.name}' reloaded.`);
+		this._logger.info(`Command '${command.name}' reloaded.`);
 	}
 
 	/**

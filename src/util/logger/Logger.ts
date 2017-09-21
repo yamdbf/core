@@ -19,6 +19,7 @@ export class Logger
 	private static _instance: Logger;
 	private _logLevel: LogLevel;
 	private _transports: Transport[];
+
 	private constructor()
 	{
 		if (Logger._instance)

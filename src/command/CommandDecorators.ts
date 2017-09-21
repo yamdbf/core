@@ -90,7 +90,8 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 	descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 	{
 		const dm: boolean = message.channel.type !== 'text';
-		const lang: string = dm ? this.client.defaultLang
+		const lang: string = dm
+			? this.client.defaultLang
 			: await message.guild.storage.settings.get('lang')
 				|| this.client.defaultLang;
 

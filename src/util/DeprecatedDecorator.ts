@@ -12,10 +12,10 @@ export function deprecated<T extends Function>(message?: string): MethodDecorato
 	{
 		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 		const original: any = descriptor.value;
-		const logger: Logger = Logger.instance();
+		const logger: Logger = Logger.instance('Deprecation');
 		descriptor.value = function(...args: any[]): any
 		{
-			logger.warn('Deprecation', message || `${target.constructor.name}#${key}() is deprecated and will be removed in a future release.`);
+			logger.warn(message || `${target.constructor.name}#${key}() is deprecated and will be removed in a future release.`);
 			return original.apply(this, args);
 		};
 		return descriptor;

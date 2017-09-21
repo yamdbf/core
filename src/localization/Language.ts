@@ -4,12 +4,13 @@
  */
 export class Language
 {
-	public lang: string;
+	public name: string;
 	public strings: { [key: string]: string };
 	public raw: { [key: string]: string };
-	public constructor(lang: string)
+
+	public constructor(name: string)
 	{
-		this.lang = lang;
+		this.name = name;
 		this.strings = {};
 		this.raw = {};
 	}
@@ -19,11 +20,12 @@ export class Language
 	 * same language with this Language object's strings,
 	 * saving them to this Language object's `strings` value
 	 */
-	public concat(lang: Language): void
+	public concat(name: Language): void
 	{
-		if (lang.lang !== this.lang)
+		if (name.name !== this.name)
 			throw new Error('Cannot concatenate strings for different languages.');
-		this.strings = { ...this.strings, ...lang.strings };
-		this.raw = { ...this.raw, ...lang.raw };
+
+		this.strings = { ...this.strings, ...name.strings };
+		this.raw = { ...this.raw, ...name.raw };
 	}
 }

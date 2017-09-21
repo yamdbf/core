@@ -6,6 +6,7 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 {
 	private readonly _name: string;
 	private _db: DB;
+
 	public constructor(name: string)
 	{
 		super();

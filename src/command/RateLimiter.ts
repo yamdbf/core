@@ -15,6 +15,7 @@ export class RateLimiter
 	private readonly _global: boolean;
 	private readonly _rateLimits: Collection<string, Collection<string, RateLimit>>;
 	private readonly _globalLimits: Collection<string, RateLimit>;
+
 	public constructor(limit: string, global: boolean)
 	{
 		this._limit = this._parseLimit(limit);

@@ -21,7 +21,9 @@ export class Database
 	private readonly logger: Logger = Logger.instance();
 	private static _instance: Database;
 	private _url: string;
+
 	public db: Sequelize.Sequelize;
+
 	private constructor(url: string)
 	{
 		if (Database._instance)

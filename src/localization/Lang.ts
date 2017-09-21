@@ -18,21 +18,23 @@ import * as path from 'path';
  */
 export class Lang
 {
-	@logger private static logger: Logger;
+	@logger('Lang')
+	private static _logger: Logger;
 	private static _instance: Lang;
-	private client: Client;
-	private commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
-	private langs: { [lang: string]: Language };
-	private meta: { [lang: string]: { [key: string]: any } };
+	private _client: Client;
+	private _commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
+	private _langs: { [lang: string]: Language };
+	private _meta: { [lang: string]: { [key: string]: any } };
+
 	private constructor(client: Client)
 	{
 		if (Lang._instance)
 			throw new Error('Cannot create multiple instances of Lang singleton. Use Lang.createInstance() instead');
 
-		this.client = client;
-		this.commandInfo = {};
-		this.langs = {};
-		this.meta = {};
+		this._client = client;
+		this._commandInfo = {};
+		this._langs = {};
+		this._meta = {};
 	}
 
 	/**
@@ -47,7 +49,7 @@ export class Lang
 	public static get langs(): { [lang: string]: Language }
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
-		return Lang._instance.langs;
+		return Lang._instance._langs;
 	}
 
 	/**
@@ -61,8 +63,8 @@ export class Lang
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 
 		let langs: Set<string> = new Set();
-		for (const commandName of Object.keys(Lang._instance.commandInfo))
-			for (const lang of Object.keys(Lang._instance.commandInfo[commandName]))
+		for (const commandName of Object.keys(Lang._instance._commandInfo))
+			for (const lang of Object.keys(Lang._instance._commandInfo[commandName]))
 				langs.add(lang);
 
 		for (const lang of Object.keys(Lang.langs)) langs.add(lang);
@@ -95,7 +97,7 @@ export class Lang
 	public static setMetaValue(lang: string, key: string, value: any): void
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
-		Util.assignNestedValue(Lang._instance.meta, [lang, key], value);
+		Util.assignNestedValue(Lang._instance._meta, [lang, key], value);
 	}
 
 	/**
@@ -109,7 +111,7 @@ export class Lang
 	public static getMetaValue(lang: string, key: string): any
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
-		return Util.getNestedValue(Lang._instance.meta, [lang, key]);
+		return Util.getNestedValue(Lang._instance._meta, [lang, key]);
 	}
 
 	/**
@@ -122,7 +124,7 @@ export class Lang
 	public static getMetadata(lang: string): { [key: string]: any }
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
-		return Lang._instance.meta[lang] || {};
+		return Lang._instance._meta[lang] || {};
 	}
 
 	/**
@@ -132,12 +134,12 @@ export class Lang
 	private static postLoad(): void
 	{
 		if (Lang.langNames.length > 1
-			&& (!Lang._instance.client.disableBase.includes('setlang')
-				&& Lang._instance.client.commands.has('setlang')
-				&& Lang._instance.client.commands.get('setlang').disabled))
+			&& (!Lang._instance._client.disableBase.includes('setlang')
+				&& Lang._instance._client.commands.has('setlang')
+				&& Lang._instance._client.commands.get('setlang').disabled))
 		{
-			Lang._instance.client.commands.get('setlang').enable();
-			Lang.logger.info('Lang', `Additional langugage loaded, enabled 'setlang' command.`);
+			Lang._instance._client.commands.get('setlang').enable();
+			Lang._logger.info(`Additional langugage loaded, enabled 'setlang' command.`);
 		}
 	}
 
@@ -182,10 +184,10 @@ export class Lang
 				const parsedLanguageFile: Language =
 					LangFileParser.parseFile(langName, loadedLangFile);
 
-				if (typeof Lang._instance.langs[langName] !== 'undefined')
-					Lang._instance.langs[langName].concat(parsedLanguageFile);
+				if (typeof Lang._instance._langs[langName] !== 'undefined')
+					Lang._instance._langs[langName].concat(parsedLanguageFile);
 				else
-					Lang._instance.langs[langName] = parsedLanguageFile;
+					Lang._instance._langs[langName] = parsedLanguageFile;
 			}
 		}
 
@@ -206,10 +208,10 @@ export class Lang
 
 		Lang.setMetaValue('en_us', 'name', 'English');
 		Lang.loadLocalizationsFrom(path.join(__dirname, './en_us'));
-		if (Lang._instance.client.localeDir)
-			Lang.loadLocalizationsFrom(Lang._instance.client.localeDir);
+		if (Lang._instance._client.localeDir)
+			Lang.loadLocalizationsFrom(Lang._instance._client.localeDir);
 
-		Lang.logger.info('Lang', `Loaded string localizations for ${Object.keys(Lang.langs).length} languages.`);
+		Lang._logger.info(`Loaded string localizations for ${Object.keys(Lang.langs).length} languages.`);
 	}
 
 	/**
@@ -239,11 +241,11 @@ export class Lang
 			for (const command of Object.keys(localizations))
 				for (const lang of Object.keys(localizations[command]))
 				{
-					if (typeof Util.getNestedValue(Lang._instance.commandInfo, [command, lang]) === 'undefined')
-						Util.assignNestedValue(Lang._instance.commandInfo, [command, lang], {});
+					if (typeof Util.getNestedValue(Lang._instance._commandInfo, [command, lang]) === 'undefined')
+						Util.assignNestedValue(Lang._instance._commandInfo, [command, lang], {});
 
-					Lang._instance.commandInfo[command][lang] = {
-						...Lang._instance.commandInfo[command][lang],
+					Lang._instance._commandInfo[command][lang] = {
+						...Lang._instance._commandInfo[command][lang],
 						...localizations[command][lang]
 					};
 				}
@@ -264,15 +266,15 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
 
-		if (!Lang._instance.client.commandsDir) return;
-		Lang.loadCommandLocalizationsFrom(Lang._instance.client.commandsDir);
+		if (!Lang._instance._client.commandsDir) return;
+		Lang.loadCommandLocalizationsFrom(Lang._instance._client.commandsDir);
 
 		const helpTextLangs: Set<string> = new Set();
-		for (const command of Object.keys(Lang._instance.commandInfo))
-			for (const lang of Object.keys(Lang._instance.commandInfo[command]))
+		for (const command of Object.keys(Lang._instance._commandInfo))
+			for (const lang of Object.keys(Lang._instance._commandInfo[command]))
 				helpTextLangs.add(lang);
 
-		Lang.logger.info('Lang', `Loaded helptext localizations for ${helpTextLangs.size} languages.`);
+		Lang._logger.info(`Loaded helptext localizations for ${helpTextLangs.size} languages.`);
 	}
 
 	/**
@@ -290,14 +292,14 @@ export class Lang
 
 		if (!command) throw new Error('A Command must be given for which to get Command info.');
 		let desc: string, info: string, usage: string;
-		if (!Lang._instance.commandInfo[command.name]
-			|| (Lang._instance.commandInfo[command.name]
-				&& !Lang._instance.commandInfo[command.name][lang]))
+		if (!Lang._instance._commandInfo[command.name]
+			|| (Lang._instance._commandInfo[command.name]
+				&& !Lang._instance._commandInfo[command.name][lang]))
 			return { desc, info, usage } = command;
 
-		desc = Lang._instance.commandInfo[command.name][lang].desc || command.desc;
-		info = Lang._instance.commandInfo[command.name][lang].info || command.info;
-		usage = Lang._instance.commandInfo[command.name][lang].usage || command.usage;
+		desc = Lang._instance._commandInfo[command.name][lang].desc || command.desc;
+		info = Lang._instance._commandInfo[command.name][lang].info || command.info;
+		usage = Lang._instance._commandInfo[command.name][lang].usage || command.usage;
 
 		return { desc, info, usage };
 	}

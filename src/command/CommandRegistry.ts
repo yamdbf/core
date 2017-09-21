@@ -1,7 +1,7 @@
 import { Collection } from 'discord.js';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
-import { Logger } from '../util/logger/Logger';
+import { Logger, logger } from '../util/logger/Logger';
 import { BaseCommandName } from '../types/BaseCommandName';
 
 /**
@@ -15,12 +15,14 @@ export class CommandRegistry<
 	V extends Command<T> = Command<T>>
 	extends Collection<K, V>
 {
-	private readonly client: T;
+	@logger('CommandRegistry')
+	private readonly _logger: Logger;
+	private readonly _client: T;
 
 	public constructor(client: T)
 	{
 		super();
-		Object.defineProperty(this, 'client', { value: client });
+		Object.defineProperty(this, '_client', { value: client });
 	}
 
 	/**
@@ -39,7 +41,7 @@ export class CommandRegistry<
 				if (!external) throw new Error(`A command with the name "${command.name}" already exists`);
 				else throw new Error(`External command is conflicting with command "${command.name}"`);
 
-		command._register(this.client);
+		command._register(this._client);
 		super.set(<K> command.name, command);
 
 		for (const cmd of this.values())
@@ -74,7 +76,7 @@ export class CommandRegistry<
 			catch (err)
 			{
 				success = false;
-				Logger.instance().error('CommandRegistry',
+				this._logger.error(
 					`Command "${command.name}" errored during initialization: \n\n${err.stack}`,
 					command.external ? '\n\nPlease report this error to the command author.\n' : '\n');
 			}
@@ -100,18 +102,18 @@ export class CommandRegistry<
 	{
 		if (command.overloads)
 		{
-			if (this.client.disableBase.includes(<BaseCommandName> command.overloads)) return;
+			if (this._client.disableBase.includes(<BaseCommandName> command.overloads)) return;
 			let overload: boolean = this.has(<K> command.overloads);
 			this.delete(<K> command.overloads);
 			this._registerInternal(<V> command, false, true);
-			Logger.instance().info('CommandRegistry',
+			this._logger.info(
 				`External command '${command.name}' registered${
 					overload ? `, overloading base command '${command.overloads}'.` : '.'}`);
 		}
 		else
 		{
 			this._registerInternal(<V> command, false, true);
-			Logger.instance().info('CommandRegistry', `External command '${command.name}' registered.`);
+			this._logger.info(`External command '${command.name}' registered.`);
 		}
 		command.external = true;
 	}

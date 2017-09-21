@@ -13,6 +13,7 @@ export class GuildStorageLoader
 {
 	private readonly _client: Client;
 	private readonly _storageFactory: StorageFactory;
+
 	public constructor(client: Client, storageFactory: StorageFactory)
 	{
 		this._client = client;

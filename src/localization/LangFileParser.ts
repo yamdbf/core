@@ -6,10 +6,10 @@ import { Language } from './Language';
  */
 export class LangFileParser
 {
-	private static parseBlock: RegExp = /(\[(\w+)\]\n([\s\S]*?))(?=\n\n+?(?:## *.*\n)*\[\w+\]\n.+|\n*?$)/;
-	private static parseBlocks: RegExp = new RegExp(LangFileParser.parseBlock, 'g');
-	private static stripComments: RegExp = /^(?!$)\s*##.*\n|##.*$/gm;
-	private static trimNewlines: RegExp = /^\n|\n$/g;
+	private static _parseBlock: RegExp = /(\[(\w+)\]\n([\s\S]*?))(?=\n\n+?(?:## *.*\n)*\[\w+\]\n.+|\n*?$)/;
+	private static _parseBlocks: RegExp = new RegExp(LangFileParser._parseBlock, 'g');
+	private static _stripComments: RegExp = /^(?!$)\s*##.*\n|##.*$/gm;
+	private static _trimNewlines: RegExp = /^\n|\n$/g;
 
 	/**
 	 * Parse a given language file string and return a Language
@@ -18,15 +18,15 @@ export class LangFileParser
 	public static parseFile(langName: string, fileContents: string): Language
 	{
 		const lang: Language = new Language(langName);
-		const blocks: string[] = fileContents.match(LangFileParser.parseBlocks);
+		const blocks: string[] = fileContents.match(LangFileParser._parseBlocks);
 		for (const block of blocks)
 		{
-			const match: RegExpMatchArray = block.match(LangFileParser.parseBlock);
+			const match: RegExpMatchArray = block.match(LangFileParser._parseBlock);
 			const raw: string = match[1];
 			const key: string = match[2];
 			const value: string = match[3]
-				.replace(LangFileParser.stripComments, '')
-				.replace(LangFileParser.trimNewlines, '')
+				.replace(LangFileParser._stripComments, '')
+				.replace(LangFileParser._trimNewlines, '')
 				.trim();
 
 			lang.strings[key] = value;

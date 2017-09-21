@@ -31,6 +31,7 @@ export function SequelizeProvider(url: string, dialect: Dialect): StorageProvide
 		private _url: string;
 		private _backend: Database;
 		private _model: Sequelize.Model<object, object>;
+
 		public constructor(name: string)
 		{
 			super();

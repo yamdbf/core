@@ -14,6 +14,7 @@ export class PluginLoader
 	private logger: Logger = Logger.instance();
 	private _client: Client;
 	private _plugins: (PluginConstructor | string)[];
+
 	public loaded: { [name: string]: any };
 
 	public constructor(client: Client, plugins: (PluginConstructor | string)[])
