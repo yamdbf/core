@@ -55,7 +55,7 @@ via <a href="Database.html#db"><code>Database#db</code></a></p>
 <p>This will allow you to define and access your own Sequelize Models
 without having to create another database connection. This is
 especially important when using <code>SQLiteProvider</code> as SQLite
-does not like having multiple connections</p></div>
+does not like having multiple connections to an sqlite file</p></div>
         
     
 </header>
@@ -167,6 +167,84 @@ does not like having multiple connections</p></div>
 
         
             
+<h4 class="name" id=".db">.<a href='#db' style='color: black'>db</a><span class="type-signature">: Sequelize</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    <p><strong>(Static)</strong> The Sequelize connection to the database
+specified by your chosen storage provider.</p>
+<blockquote>
+<p><strong>WARNING:</strong> Accessing this before the client has created
+the singleton instance will throw an error. To be safe,
+wait until <code>clientReady</code> before accessing the Database
+connection</p>
+</blockquote>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>Sequelize</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Database.ts#L59">storage/Database.ts, Line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
 <h4 class="name" id="db">.<a href='#db' style='color: black'>db</a><span class="type-signature">: Sequelize</span></h4>
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
@@ -220,7 +298,7 @@ your chosen storage provider</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Database.ts#L42">storage/Database.ts, Line 42</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Database.ts#L46">storage/Database.ts, Line 46</a>
     </li></ul></dd>
     
 
@@ -250,7 +328,7 @@ your chosen storage provider</p>
     
 
     <h4 class="name" id=".instance">
-		<span class="type-signature">(static) </span>.<a href='#instance' style='color: black'>instance</a><span class="signature">(<span class="param-types">url?: string</span>)</span><span class="type-signature"> &rarr; <a href="Database.html">Database</a></span>
+		<span class="type-signature">(static) </span>.<a href='#instance' style='color: black'>instance</a><span class="signature">(<span class="param-types">url?: string</span>, <span class="param-types">debug?: boolean</span>)</span><span class="type-signature"> &rarr; <a href="Database.html">Database</a></span>
 	</h4>
 
     
@@ -261,7 +339,16 @@ your chosen storage provider</p>
 <div class="description">
     <p>As long as a Sequelize-using storage provider is being used,
 this will return the Database instance holding the Sequelize
-connection to the database</p>
+connection to the database.</p>
+<p>Parameters are not needed and will be passed internally by
+the framework when the Database singleton is created before
+<code>clientReady</code> is emitted.</p>
+<blockquote>
+<p><strong>WARNING:</strong> Accessing this before the client has created
+the singleton instance will throw an error. To be safe,
+wait until <code>clientReady</code> before accessing the Database
+connection</p>
+</blockquote>
 </div>
 
 
@@ -288,6 +375,8 @@ connection to the database</p>
         <th>Attributes</th>
         
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -325,8 +414,52 @@ connection to the database</p>
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last"><p>The database connection url</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>debug</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>boolean</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>false</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>Whether or not to log Database debug info</p></td>
         </tr>
 
     
@@ -368,7 +501,7 @@ connection to the database</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Database.ts#L53">storage/Database.ts, Line 53</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Database.ts#L81">storage/Database.ts, Line 81</a>
     </li></ul></dd>
     
 
@@ -427,7 +560,8 @@ connection to the database</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Authenticate the connection to the database</p>
+    <p>Authenticate the connection to the database. This is called
+internally by the framework</p>
 </div>
 
 
@@ -472,7 +606,7 @@ connection to the database</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Database.ts#L66">storage/Database.ts, Line 66</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Database.ts#L95">storage/Database.ts, Line 95</a>
     </li></ul></dd>
     
 

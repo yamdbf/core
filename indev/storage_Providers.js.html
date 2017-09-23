@@ -45,7 +45,12 @@ import { JSONProvider } from './JSONProvider';
  * for storage providers that require extra data to operate.
  *
  * Be sure to install the necessary peer dependencies if using
- * a storage provider that necessitates them
+ * a storage provider that necessitates them.
+ *
+ * >**Note:** PostgresProvider and SQLiteProvider are mutually
+ * exclusive. You cannot use one while using the other as they
+ * utilize a singleton to maintain a shared Database connection
+ * between all Provider instances with a Sequelize backend
  * @module Providers
  */
 export class Providers
@@ -64,8 +69,8 @@ export class Providers
 	 * @param {string} url Postgres database url
 	 * @returns {StorageProviderConstructor}
 	 */
-	public static PostgresProvider: (url: string) => StorageProviderConstructor =
-		(url: string) => SequelizeProvider(url, Dialect.Postgres);
+	public static PostgresProvider: (url: string, debug?: boolean) => StorageProviderConstructor =
+		(url, debug = false) => SequelizeProvider(url, Dialect.Postgres, debug);
 
 	/**
 	 * Factory method that returns a StorageProvider class for
@@ -78,8 +83,8 @@ export class Providers
 	 * @param {string} path SQLite file path
 	 * @returns {StorageProviderConstructor}
 	 */
-	public static SQLiteProvider: (path: string) => StorageProviderConstructor =
-		(path: string) => SequelizeProvider(path, Dialect.SQLite);
+	public static SQLiteProvider: (path: string, debug?: boolean) => StorageProviderConstructor =
+		(path, debug = false) => SequelizeProvider(path, Dialect.SQLite, debug);
 
 	/**
 	 * Default storage provider for the framework. If no storage provider is passed

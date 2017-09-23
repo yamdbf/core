@@ -1446,7 +1446,7 @@
         },
         {
             "name": "Database",
-            "description": "<blockquote>\n<p><strong>Note:</strong> This won't do anything for you if you're not using\na <code>StorageProvider</code> for your client that uses Sequelize</p>\n</blockquote>\n<p>Holds the Sequelize connection to whichever database backend\nis chosen via the Client StorageProvider. As long as you wait\nuntil <code>clientReady</code> you can safely use {@link Database.instance}\nto get the Database instance and access the Sequelize connection\nvia {@link Database#db}</p>\n<p>This will allow you to define and access your own Sequelize Models\nwithout having to create another database connection. This is\nespecially important when using <code>SQLiteProvider</code> as SQLite\ndoes not like having multiple connections</p>",
+            "description": "<blockquote>\n<p><strong>Note:</strong> This won't do anything for you if you're not using\na <code>StorageProvider</code> for your client that uses Sequelize</p>\n</blockquote>\n<p>Holds the Sequelize connection to whichever database backend\nis chosen via the Client StorageProvider. As long as you wait\nuntil <code>clientReady</code> you can safely use {@link Database.instance}\nto get the Database instance and access the Sequelize connection\nvia {@link Database#db}</p>\n<p>This will allow you to define and access your own Sequelize Models\nwithout having to create another database connection. This is\nespecially important when using <code>SQLiteProvider</code> as SQLite\ndoes not like having multiple connections to an sqlite file</p>",
             "extends": [],
             "access": "",
             "virtual": false,
@@ -1468,6 +1468,17 @@
                             "Sequelize"
                         ]
                     }
+                },
+                {
+                    "name": "db",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p><strong>(Static)</strong> The Sequelize connection to the database\nspecified by your chosen storage provider.</p>\n<blockquote>\n<p><strong>WARNING:</strong> Accessing this before the client has created\nthe singleton instance will throw an error. To be safe,\nwait until <code>clientReady</code> before accessing the Database\nconnection</p>\n</blockquote>",
+                    "type": {
+                        "names": [
+                            "Sequelize"
+                        ]
+                    }
                 }
             ],
             "functions": [
@@ -1475,13 +1486,21 @@
                     "name": "instance",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>As long as a Sequelize-using storage provider is being used,\nthis will return the Database instance holding the Sequelize\nconnection to the database</p>",
+                    "description": "<p>As long as a Sequelize-using storage provider is being used,\nthis will return the Database instance holding the Sequelize\nconnection to the database.</p>\n<p>Parameters are not needed and will be passed internally by\nthe framework when the Database singleton is created before\n<code>clientReady</code> is emitted.</p>\n<blockquote>\n<p><strong>WARNING:</strong> Accessing this before the client has created\nthe singleton instance will throw an error. To be safe,\nwait until <code>clientReady</code> before accessing the Database\nconnection</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "url",
                             "type": "string",
                             "description": "<p>The database connection url</p>",
                             "default": "",
+                            "optional": true,
+                            "nullable": ""
+                        },
+                        {
+                            "name": "debug",
+                            "type": "boolean",
+                            "description": "<p>Whether or not to log Database debug info</p>",
+                            "default": false,
                             "optional": true,
                             "nullable": ""
                         }
@@ -1496,7 +1515,7 @@
                     "name": "init",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Authenticate the connection to the database</p>",
+                    "description": "<p>Authenticate the connection to the database. This is called\ninternally by the framework</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
