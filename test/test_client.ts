@@ -6,7 +6,7 @@ import {
 	ListenerUtil,
 	// Util,
 	Lang,
-	// Providers
+	Providers
 } from '../bin/';
 // import TestCommand from './commands/test_command';
 import { TestPlugin } from './test_plugin';
@@ -23,7 +23,7 @@ class Test extends Client
 			owner: config.owner,
 			readyText: 'Test client ready',
 			statusText: 'Foo bar baz',
-			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
+			provider: Providers.SQLiteProvider('sqlite://./db.sqlite', false),
 			commandsDir: './commands',
 			// localeDir: './locale',
 			// defaultLang: 'al_bhed',
