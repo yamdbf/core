@@ -127,7 +127,7 @@ export class CommandDispatcher
 		try { commandResult = await command.action(message, args); }
 		catch (err) { this._logger.error(`Dispatch:${command.name}`, err.stack); }
 
-		if (typeof commandResult !== 'undefined'
+		if (commandResult
 			&& !(commandResult instanceof Array)
 			&& !(commandResult instanceof DMessage))
 			commandResult = await message.channel.send(<string> commandResult);
