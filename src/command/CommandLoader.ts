@@ -39,7 +39,8 @@ export class CommandLoader
 		let loadedCommands: number = 0;
 		for (const fileName of commandFiles)
 		{
-			const commandLocation: string = fileName.replace('.js', '');
+			const { dir, name }: path.ParsedPath = path.parse(fileName);
+			const commandLocation: string = `${dir}/${name}`;
 			delete require.cache[require.resolve(commandLocation)];
 
 			const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
