@@ -51,7 +51,7 @@ export class CommandLoader
 
 			if (this._client.commands.find(c => c.overloads === command.name))
 			{
-				this._logger.info(`Skipping exterally overloaded command: '${command.name}'`);
+				this._logger.info(`Skipping externally overloaded command: '${command.name}'`);
 				continue;
 			}
 
