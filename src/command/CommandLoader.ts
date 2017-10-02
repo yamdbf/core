@@ -37,9 +37,8 @@ export class CommandLoader
 			commandFiles.push(...glob.sync(`${this._client.commandsDir}/**/*.js`));
 
 		let loadedCommands: number = 0;
-		for (const fileName of commandFiles)
+		for (const commandLocation of commandFiles)
 		{
-			const commandLocation: string = fileName.replace('.js', '');
 			delete require.cache[require.resolve(commandLocation)];
 
 			const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
@@ -50,7 +49,7 @@ export class CommandLoader
 
 			if (this._client.commands.find(c => c.overloads === command.name))
 			{
-				this._logger.info(`Skipping exterally overloaded command: '${command.name}'`);
+				this._logger.info(`Skipping externally overloaded command: '${command.name}'`);
 				continue;
 			}
 
