@@ -37,10 +37,8 @@ export class CommandLoader
 			commandFiles.push(...glob.sync(`${this._client.commandsDir}/**/*.js`));
 
 		let loadedCommands: number = 0;
-		for (const fileName of commandFiles)
+		for (const commandLocation of commandFiles)
 		{
-			const { dir, name }: path.ParsedPath = path.parse(fileName);
-			const commandLocation: string = `${dir}/${name}`;
 			delete require.cache[require.resolve(commandLocation)];
 
 			const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
