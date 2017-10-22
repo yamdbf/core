@@ -151,17 +151,6 @@
                     }
                 },
                 {
-                    "name": "plugins",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Loads plugins and contains loaded plugins in case\naccessing a loaded plugin at runtime is desired</p>",
-                    "type": {
-                        "names": [
-                            "PluginLoader"
-                        ]
-                    }
-                },
-                {
                     "name": "provider",
                     "access": "",
                     "virtual": false,
@@ -169,6 +158,17 @@
                     "type": {
                         "names": [
                             "StorageProvider"
+                        ]
+                    }
+                },
+                {
+                    "name": "plugins",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Loads plugins and contains loaded plugins in case\naccessing a loaded plugin at runtime is desired</p>",
+                    "type": {
+                        "names": [
+                            "PluginLoader"
                         ]
                     }
                 },
@@ -527,24 +527,7 @@
                     }
                 ],
                 "examples": []
-            },
-            "functions": [
-                {
-                    "name": "init",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Method that will be called by the Plugin loader when the\nPlugin is loaded. This is the only method that will be called by\nthe framework automatically, so this should be where anything\nnecessary should be done to make the Plugin operational.</p>\n<blockquote>\n<p>This method can be async if desired or needed</p>\n</blockquote>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": [
-                            "Promise.<void>",
-                            "void"
-                        ],
-                        "description": ""
-                    }
-                }
-            ]
+            }
         },
         {
             "name": "PluginLoader",
