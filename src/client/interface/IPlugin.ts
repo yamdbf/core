@@ -1,3 +1,5 @@
+import { SharedProviderStorage } from '../../storage/SharedProviderStorage';
+
 /**
  * Interface for plugins to implement, providing compile-time
  * errors for incorrect implementations alongside the abstract
@@ -22,13 +24,19 @@
  * the framework automatically, so this should be where anything
  * necessary should be done to make the Plugin operational.
  *
- * > This method can be async if desired or needed
+ * When `init()` is called by the PluginLoader, the method will also
+ * be passed a {@link SharedProviderStorage} instance that should be
+ * saved and set aside for use if you need to use storage for anything
+ * within your plugins
+ *
+ * >This method can be async if desired or needed
  * @method IPlugin#init
+ * @param {SharedProviderStorage} storage Storage that the plugin can use
  * @returns {Promise<void>|void}
  */
 
 export interface IPlugin
 {
 	name: string;
-	init(): Promise<void> | void;
+	init(storage?: SharedProviderStorage): Promise<void> | void;
 }
