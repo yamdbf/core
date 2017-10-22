@@ -39,14 +39,14 @@
   },
   "dependencies": {
     "discord.js": "^11.2.1",
-    "glob": "7.1.1",
+    "glob": "7.1.2",
     "node-json-db": "0.7.3",
     "postinstall-build": "^5.0.1",
     "reflect-metadata": "^0.1.10",
-    "source-map-support": "^0.4.15"
+    "source-map-support": "^0.5.0"
   },
   "peerDependencies": {
-    "pg": "6.4.0",
+    "pg": "6.4.2",
     "sequelize": "4.2.1",
     "sqlite3": "3.1.8"
   },
