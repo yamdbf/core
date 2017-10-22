@@ -48,7 +48,9 @@
   "peerDependencies": {
     "pg": "6.4.2",
     "sequelize": "4.2.1",
-    "sqlite3": "3.1.8"
+    "sqlite3": "3.1.8",
+    "tedious": "2.0.0",
+    "mysql2": "1.4.2"
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",
