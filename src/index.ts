@@ -15,6 +15,7 @@ export { CommandRegistry } from './command/CommandRegistry';
 export { GuildSettings } from './storage/GuildSettings';
 export { GuildStorageLoader } from './storage/GuildStorageLoader';
 export { KeyedStorage } from './storage/KeyedStorage';
+export { SharedProviderStorage } from './storage/SharedProviderStorage';
 export { Middleware } from './command/middleware/Middleware';
 export { RateLimit } from './command/RateLimit';
 export { RateLimiter } from './command/RateLimiter';
