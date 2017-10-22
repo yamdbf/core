@@ -1,4 +1,5 @@
 import { IPlugin } from './interface/IPlugin';
+import { SharedProviderStorage } from '../storage/SharedProviderStorage';
 
 /**
  * Abstract class for Client plugins to extend. Provides runtime errors
@@ -42,5 +43,5 @@ import { IPlugin } from './interface/IPlugin';
 export class Plugin implements IPlugin
 {
 	public name: string;
-	public init(): void { throw new Error('Plugins must implement the `init` method'); }
+	public init(storage?: SharedProviderStorage): void { throw new Error('Plugins must implement the `init` method'); }
 }

@@ -24,11 +24,11 @@ class Test extends Client
 			readyText: 'Test client ready',
 			statusText: 'Foo bar baz',
 			provider: Providers.SQLiteProvider('sqlite://./db.sqlite', false),
-			commandsDir: './commands',
+			// commandsDir: './commands',
 			// localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
-			// plugins: [TestPlugin],
+			plugins: [TestPlugin],
 			// ratelimit: '5/10s',
 			disableBase: ['setlang']
 			// disableBase: Util.baseCommandNames

@@ -188,6 +188,13 @@ export class Client extends Discord.Client
 		if (typeof options.logLevel !== 'undefined')
 			this._logger.setLogLevel(options.logLevel);
 
+		/**
+		 * The chosen storage provider to use for the Client.
+		 * Defaults to {@link JSONProvider}
+		 * @type {StorageProvider}
+		 */
+		this.provider = options.provider || JSONProvider;
+
 		this._plugins = options.plugins || [];
 
 		/**
@@ -199,13 +206,6 @@ export class Client extends Discord.Client
 
 		// Middleware function storage for the client instance
 		this._middleware = [];
-
-		/**
-		 * The chosen storage provider to use for the Client.
-		 * Defaults to {@link JSONProvider}
-		 * @type {StorageProvider}
-		 */
-		this.provider = options.provider || JSONProvider;
 
 		this._guildDataStorage = new this.provider('guild_storage');
 		this._guildSettingStorage = new this.provider('guild_settings');

@@ -1,6 +1,8 @@
 import { Client } from './Client';
 import { Plugin } from './Plugin';
-import { Logger } from '../util/logger/Logger';
+import { Logger, logger } from '../util/logger/Logger';
+import { StorageProvider } from '../storage/StorageProvider';
+import { SharedProviderStorage } from '../storage/SharedProviderStorage';
 import { PluginConstructor } from '../types/PluginConstructor';
 
 /**
@@ -11,8 +13,10 @@ import { PluginConstructor } from '../types/PluginConstructor';
  */
 export class PluginLoader
 {
-	private logger: Logger = Logger.instance();
-	private _client: Client;
+	@logger('PluginLoader')
+	private readonly _logger: Logger;
+	private readonly _client: Client;
+	private readonly _provider: StorageProvider;
 	private _plugins: (PluginConstructor | string)[];
 
 	public loaded: { [name: string]: any };
@@ -21,6 +25,7 @@ export class PluginLoader
 	{
 		this._client = client;
 		this._plugins = plugins;
+		this._provider = new this._client.provider('plugin_storage');
 
 		/**
 		 * Object mapping Plugin names to Plugin instances
@@ -36,7 +41,9 @@ export class PluginLoader
 	 */
 	public async _loadPlugins(): Promise<void>
 	{
-		const tag: string = 'PluginLoader';
+		await this._provider.init();
+		this._logger.debug('Plugin storage provider initialized.');
+
 		for (const [index, plugin] of this._plugins.entries())
 		{
 			let loadedPlugin: Plugin;
@@ -58,7 +65,7 @@ export class PluginLoader
 				}
 
 				if (!loadedPlugin) {
-					this.logger.warn(tag, `Failed to load plugin '${plugin}':\n\n${error}\n`);
+					this._logger.warn(`Failed to load plugin '${plugin}':\n\n${error}\n`);
 					continue;
 				}
 			}
@@ -67,40 +74,44 @@ export class PluginLoader
 				try { loadedPlugin = new plugin(this._client); }
 				catch (err)
 				{
-					this.logger.warn(tag, `Failed to load plugin at plugins[${index}]:\n\n${err}\n`);
+					this._logger.warn(`Failed to load plugin at plugins[${index}]:\n\n${err}\n`);
 					continue;
 				}
 			}
 
 			if (typeof loadedPlugin.name === 'undefined' || loadedPlugin.name === '')
 			{
-				this.logger.warn(tag, `Plugin at plugins[${index}] is invalid: Missing name`);
+				this._logger.warn(`Plugin at plugins[${index}] is invalid: Missing name`);
 				continue;
 			}
 
 			if (typeof loadedPlugin.init === 'undefined')
 			{
-				this.logger.warn(tag, `Plugin at plugins[${index}] is invalid: Missing init()`);
+				this._logger.warn(`Plugin at plugins[${index}] is invalid: Missing init()`);
 				continue;
 			}
 
 			if (typeof this.loaded[loadedPlugin.name] !== 'undefined')
 			{
-				this.logger.warn(tag, `Skipping Plugin at plugins[${index}]: Duplicate name '${loadedPlugin.name}'`);
+				this._logger.warn(`Skipping Plugin at plugins[${index}]: Duplicate name '${loadedPlugin.name}'`);
 				continue;
 			}
 
-			this.logger.info(tag, `Plugin '${loadedPlugin.name}' loaded, initializing...`);
+			let pluginStorage: SharedProviderStorage;
+			try { pluginStorage = new SharedProviderStorage(this._provider, loadedPlugin.name); }
+			catch { this._logger.warn(`Failed to create storage for Plugin '${loadedPlugin.name}'`); }
+
+			this._logger.info(`Plugin '${loadedPlugin.name}' loaded, initializing...`);
 			try
 			{
-				await loadedPlugin.init();
-				this.logger.info(tag, `Plugin '${loadedPlugin.name}' initialized.`);
+				await loadedPlugin.init(pluginStorage);
+				this._logger.info(`Plugin '${loadedPlugin.name}' initialized.`);
 			}
 			catch (err)
 			{
-				this.logger.warn(tag, `Plugin '${loadedPlugin.name}' errored during initialization:\n\n${err.stack}`,
+				this._logger.warn(`Plugin '${loadedPlugin.name}' errored during initialization:\n\n${err.stack}`,
 					'\n\nPlease report this error to the plugin author.\n');
-				this.logger.info(tag, `Plugin '${loadedPlugin.name}' initialized with errors.`);
+				this._logger.info(`Plugin '${loadedPlugin.name}' initialized with errors.`);
 			}
 			this.loaded[loadedPlugin.name] = loadedPlugin;
 		}
