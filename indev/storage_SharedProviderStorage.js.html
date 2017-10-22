@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>command/CommandRegistry.js - Documentation</title>
+    <title>storage/SharedProviderStorage.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -36,145 +36,153 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Collection } from 'discord.js';
-import { Command } from '../command/Command';
-import { Client } from '../client/Client';
-import { Logger, logger } from '../util/logger/Logger';
-import { BaseCommandName } from '../types/BaseCommandName';
+            <pre class="prettyprint source linenums"><code>import { StorageProvider } from './StorageProvider';
+import { Util } from '../util/Util';
+import { Logger } from '../util/logger/Logger';
 
 /**
- * @classdesc Stores loaded Commands in a Collection keyed by each Command's `name` property
- * @class CommandRegistry
- * @extends {external:Collection}
+ * Class containing asynchronous methods for storing, retrieving, and
+ * interacting with data stored under a single key within a storage
+ * provider that can be shared by other instances of this class.
+ *
+ * >**Note:** The storage provider given to the constructor should
+ * already be initialized via its `init()` method
  */
-export class CommandRegistry&lt;
-	T extends Client,
-	K extends string = string,
-	V extends Command&lt;T> = Command&lt;T>>
-	extends Collection&lt;K, V>
+export class SharedProviderStorage
 {
-	@logger('CommandRegistry')
-	private readonly _logger: Logger;
-	private readonly _client: T;
+	protected readonly _provider: StorageProvider;
+	protected readonly _key: string;
+	protected _cache: { [key: string]: any };
 
-	public constructor(client: T)
+	public constructor(storage: StorageProvider, key: string)
 	{
-		super();
-		Object.defineProperty(this, '_client', { value: client });
+		this._provider = storage;
+		this._key = key;
+		this._cache = {};
 	}
 
 	/**
-	 * Complete registration of a command and add to the parent
-	 * collection, erroring on duplicate names and aliases.
-	 * This is an internal method and should not be used. Use
-	 * `registerExternal()` instead
-	 * @private
+	 * Initialize this storage instance
+	 * @returns {Promise&lt;void>}
 	 */
-	public _registerInternal(command: V, reload: boolean = false, external: boolean = false): void
+	public async init(): Promise&lt;void>
 	{
-		if (reload &amp;&amp; external) return;
-		if (super.has(&lt;K> command.name) &amp;&amp; !reload
-			&amp;&amp; !(command.overloads &amp;&amp; super.has(&lt;K> command.overloads)
-				&amp;&amp; command.overloads !== super.get(&lt;K> command.overloads).name))
-				if (!external) throw new Error(`A command with the name "${command.name}" already exists`);
-				else throw new Error(`External command is conflicting with command "${command.name}"`);
-
-		command._register(this._client);
-		super.set(&lt;K> command.name, command);
-
-		for (const cmd of this.values())
+		try
 		{
-			for (const alias of cmd.aliases)
+			let data: any = await this._provider.get(this._key);
+			if (typeof data === 'undefined')
 			{
-				let duplicates: Collection&lt;K, V> = this.filter(c => c.aliases.includes(alias) &amp;&amp; c !== cmd);
-				if (duplicates.size > 0)
-				{
-					const duplicate: string = duplicates.first().name;
-					const name: string = cmd.name;
-					if (!external) throw new Error(
-						`Commands may not share aliases: ${name}, ${duplicate} (shared alias: "${alias}")`);
-					else throw new Error(
-						`External command has conflicting alias with "${name}" (shared alias: "${alias}")`);
-				}
+				data = {};
+				await this._provider.set(this._key, JSON.stringify(data));
 			}
-		}
-	}
+			else data = JSON.parse(data);
 
-	/**
-	 * Run the `init()` method of all loaded commands.
-	 * This is an internal method and should not be used
-	 * @private
-	 */
-	public async _initCommands(): Promise&lt;boolean>
-	{
-		let success: boolean = true;
-		for (const command of this.values())
+			this._cache = data;
+		}
+		catch (err)
 		{
-			try { await command.init(); }
-			catch (err)
-			{
-				success = false;
-				this._logger.error(
-					`Command "${command.name}" errored during initialization: \n\n${err.stack}`,
-					command.external ? '\n\nPlease report this error to the command author.\n' : '\n');
-			}
+			Logger.instance().error('SharedProviderStorage', err.stack);
 		}
-		return success;
 	}
 
 	/**
-	 * Register an external command and add it to the `&lt;Client>.commands`
-	 * [collection]{@link external:Collection}, erroring on duplicate
-	 * names and aliases. External commands will be preserved when the
-	 * `reload` command is called.
-	 *
-	 * >**Note:** This is intended for Plugins to use to register external
-	 * commands with the Client instance. Under normal circumstances
-	 * commands should be added by placing them in the directory passed
-	 * to the `commandsDir` YAMDBF Client option
-	 * @param {Client} client YAMDBF Client instance
-	 * @param {Command} command The Command instance to be registered
-	 * @returns {void}
+	 * Get the names of all keys in this storage for this instance
+	 * @returns {Promise&lt;string[]>}
 	 */
-	public registerExternal(command: Command&lt;any>): void
+	public async keys(): Promise&lt;string[]>
 	{
-		if (command.overloads)
+		return Object.keys(this._cache);
+	}
+
+	/**
+	 * Get a value from storage for this instance
+	 * @param {string} key The key in storage to get
+	 * @returns {Promise&lt;any>}
+	 */
+	public async get(key: string): Promise&lt;any>
+	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
+		if (key.includes('.'))
 		{
-			if (this._client.disableBase.includes(&lt;BaseCommandName> command.overloads)) return;
-			let overload: boolean = this.has(&lt;K> command.overloads);
-			this.delete(&lt;K> command.overloads);
-			this._registerInternal(&lt;V> command, false, true);
-			this._logger.info(
-				`External command '${command.name}' registered${
-					overload ? `, overloading base command '${command.overloads}'.` : '.'}`);
+			let path: string[] = key.split('.');
+			return Util.getNestedValue(this._cache[path.shift()], path);
 		}
-		else
+		else return this._cache[key];
+	}
+
+	/**
+	 * Check if a value exists in storage for this instance
+	 * @param {string} key The key in storage to check
+	 * @returns {Promise&lt;boolean>}
+	 */
+	public async exists(key: string): Promise&lt;boolean>
+	{
+		return typeof await this.get(key) !== 'undefined';
+	}
+
+	/**
+	 * Set a value in storage for this instance
+	 * @param {string} key The key in storage to set
+	 * @param {any} value The value to set
+	 * @returns {Promise&lt;void>}
+	 */
+	public async set(key: string, value: any): Promise&lt;void>
+	{
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
+
+		try { JSON.stringify(value); }
+		catch (err) { value = {}; }
+
+		if (key.includes('.'))
 		{
-			this._registerInternal(&lt;V> command, false, true);
-			this._logger.info(`External command '${command.name}' registered.`);
+			let path: string[] = key.split('.');
+			key = path.shift();
+
+			if (typeof this._cache[key] === 'undefined')
+				this._cache[key] = {};
+
+			Util.assignNestedValue(this._cache[key], path, value);
 		}
-		command.external = true;
+		else this._cache[key] = value;
+
+		await this._provider.set(this._key, JSON.stringify(this._cache));
 	}
 
 	/**
-	 * Contains all [Command groups]{@link Command#group}
-	 * @type {string[]}
+	 * Remove a value from storage for this instance
+	 * @param {string} key The key in storage to remove
+	 * @returns {Promise&lt;void>}
 	 */
-	public get groups(): string[]
+	public async remove(key: string): Promise&lt;void>
 	{
-		return this.map(a => a.group).filter((a, i, self) => self.indexOf(a) === i);
+		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
+		if (typeof key !== 'string') throw new TypeError('Key must be a string');
+
+		if (key.includes('.'))
+		{
+			let path: string[] = key.split('.');
+			key = path.shift();
+
+			if (typeof this._cache[key] !== 'undefined')
+				Util.removeNestedValue(this._cache[key], path);
+		}
+		else delete this._cache[key];
+
+		await this._provider.set(this._key, JSON.stringify(this._cache));
 	}
 
 	/**
-	 * Finds a command by [name]{@link Command#name} or [alias]{@link Command#aliases}
-	 * @param {string} text The name or alias of the Command
-	 * @returns {Command}
+	 * Remove all key/value pairs from storage for this instance
+	 * @returns {Promise&lt;void>}
 	 */
-	public findByNameOrAlias(text: string): V
+	public async clear(): Promise&lt;void>
 	{
-		text = text ? text.toLowerCase() : text;
-		return this.find(c => c.name.toLowerCase() === text
-			|| !!c.aliases.find(a => a.toLowerCase() === text));
+		this._cache = {};
+		await this._provider.set(this._key, JSON.stringify(this._cache));
 	}
 }
 </code></pre>
