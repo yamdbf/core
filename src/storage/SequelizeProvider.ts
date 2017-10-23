@@ -85,7 +85,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 		{
 			if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 			if (typeof key !== 'string') throw new TypeError('Key must be a string');
-			await this._model.destroy({ where: { key }});
+			await this._model.destroy({ where: { key } });
 		}
 
 		public async clear(): Promise<void>
