@@ -42,7 +42,7 @@ export class Providers
 	 * mssql://username:password@hostname:port/dbname
 	 * ```
 	 *
-	 * >**Note:** Requires `pg` and `sequelize` peer dependencies
+	 * >**Note:** Requires `tedious` and `sequelize` peer dependencies
 	 * @static
 	 * @method MSSQLProvider
 	 * @param {string} url MSSQL database url
@@ -59,9 +59,9 @@ export class Providers
 	 * mysql://username:password@hostname:port/dbname
 	 * ```
 	 *
-	 * >**Note:** Requires `pg` and `sequelize` peer dependencies
+	 * >**Note:** Requires `mysql2` and `sequelize` peer dependencies
 	 * @static
-	 * @method MSSQLProvider
+	 * @method MySQLProvider
 	 * @param {string} url MySQL database url
 	 * @returns {StorageProviderConstructor}
 	 */
