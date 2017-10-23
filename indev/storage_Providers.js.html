@@ -74,6 +74,40 @@ export class Providers
 
 	/**
 	 * Factory method that returns a StorageProvider class for
+	 * an MSSQL database via the given MSSQL url. The given
+	 * url should follow the format:
+	 * ```
+	 * mssql://username:password@hostname:port/dbname
+	 * ```
+	 *
+	 * >**Note:** Requires `pg` and `sequelize` peer dependencies
+	 * @static
+	 * @method MSSQLProvider
+	 * @param {string} url MSSQL database url
+	 * @returns {StorageProviderConstructor}
+	 */
+	public static MSSQLProvider: (url: string, debug?: boolean) => StorageProviderConstructor =
+		(url, debug = false) => SequelizeProvider(url, Dialect.MSSQL, debug);
+
+	/**
+	 * Factory method that returns a StorageProvider class for
+	 * an MySQL database via the given MySQL url. The given
+	 * url should follow the format:
+	 * ```
+	 * mysql://username:password@hostname:port/dbname
+	 * ```
+	 *
+	 * >**Note:** Requires `pg` and `sequelize` peer dependencies
+	 * @static
+	 * @method MSSQLProvider
+	 * @param {string} url MySQL database url
+	 * @returns {StorageProviderConstructor}
+	 */
+	public static MySQLProvider: (url: string, debug?: boolean) => StorageProviderConstructor =
+		(url, debug = false) => SequelizeProvider(url, Dialect.MySQL, debug);
+
+	/**
+	 * Factory method that returns a StorageProvider class for
 	 * an SQLite database via the given SQLite filepath.
 	 * The given path should be prefixed with `sqlite://`
 	 *
