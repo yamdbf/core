@@ -17,13 +17,7 @@ type Entry = { key: string, value: string };
  */
 type ReturnedModel = { get(key: string): string };
 
-export enum Dialect
-{
-	Postgres,
-	SQLite,
-	MSSQL,
-	MySQL
-}
+export enum Dialect { Postgres, SQLite, MSSQL, MySQL }
 
 export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean): StorageProviderConstructor
 {
