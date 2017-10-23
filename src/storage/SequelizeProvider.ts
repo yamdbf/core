@@ -20,17 +20,19 @@ type ReturnedModel = { get(key: string): string };
 export enum Dialect
 {
 	Postgres,
-	SQLite
+	SQLite,
+	MSSQL,
+	MySQL
 }
 
 export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean): StorageProviderConstructor
 {
 	return class extends StorageProvider implements IStorageProvider
 	{
-		private _name: string;
-		private _url: string;
-		private _backend: Database;
-		private _model: Sequelize.Model<object, object>;
+		private readonly _name: string;
+		private readonly _url: string;
+		private readonly _backend: Database;
+		private readonly _model: Sequelize.Model<object, object>;
 
 		public constructor(name: string)
 		{
@@ -44,7 +46,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			this._backend = Database.instance(url, debug);
 			this._model = this._backend.db.define(name, {
 				key: { type: seq.STRING, allowNull: false, primaryKey: true },
-				value: (dialect === Dialect.Postgres || dialect === Dialect.SQLite) ?
+				value: (dialect === Dialect.Postgres || dialect === Dialect.SQLite || dialect === Dialect.MSSQL) ?
 					seq.TEXT : seq.TEXT('long') },
 				{ timestamps: false, freezeTableName: true });
 		}
