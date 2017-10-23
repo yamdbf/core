@@ -252,169 +252,10 @@ in the client constructor, this provider will be used</p>
 
 <div class="description">
     <p>Factory method that returns a StorageProvider class for
-an MySQL database via the given MySQL url. The given
-url should follow the format:</p>
-<pre class="prettyprint source"><code>mysql://username:password@hostname:port/dbname</code></pre><blockquote>
-<p><strong>Note:</strong> Requires <code>pg</code> and <code>sequelize</code> peer dependencies</p>
-</blockquote>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>string</dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>MySQL database url</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Providers.ts#L54">storage/Providers.ts, Line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-		<b>Returns:</b>
-	
-
-        
-
-
-<span class="param-type">
-	<dd>
-<span class="param-type"><dd><a href="global.html#StorageProviderConstructor">StorageProviderConstructor</a></dd></span>
-
-
-</dd>
-</span>
-
-
-    
-
-
-</div>
-
-        
-            
-
-    
-
-    <h4 class="name" id=".MSSQLProvider">
-		<span class="type-signature">(static) </span>.<a href='#MSSQLProvider' style='color: black'>MSSQLProvider</a><span class="signature">(<span class="param-types">url: string</span>)</span><span class="type-signature"> &rarr; <a href="global.html#StorageProviderConstructor">StorageProviderConstructor</a></span>
-	</h4>
-
-    
-
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-<div class="description">
-    <p>Factory method that returns a StorageProvider class for
 an MSSQL database via the given MSSQL url. The given
 url should follow the format:</p>
 <pre class="prettyprint source"><code>mssql://username:password@hostname:port/dbname</code></pre><blockquote>
-<p><strong>Note:</strong> Requires <code>pg</code> and <code>sequelize</code> peer dependencies</p>
+<p><strong>Note:</strong> Requires <code>tedious</code> and <code>sequelize</code> peer dependencies</p>
 </blockquote>
 </div>
 
@@ -511,6 +352,165 @@ url should follow the format:</p>
     <dd class="tag-source"><ul class="dummy"><li>
 		
         <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Providers.ts#L37">storage/Providers.ts, Line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd><a href="global.html#StorageProviderConstructor">StorageProviderConstructor</a></dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".MySQLProvider">
+		<span class="type-signature">(static) </span>.<a href='#MySQLProvider' style='color: black'>MySQLProvider</a><span class="signature">(<span class="param-types">url: string</span>)</span><span class="type-signature"> &rarr; <a href="global.html#StorageProviderConstructor">StorageProviderConstructor</a></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Factory method that returns a StorageProvider class for
+an MySQL database via the given MySQL url. The given
+url should follow the format:</p>
+<pre class="prettyprint source"><code>mysql://username:password@hostname:port/dbname</code></pre><blockquote>
+<p><strong>Note:</strong> Requires <code>mysql2</code> and <code>sequelize</code> peer dependencies</p>
+</blockquote>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>MySQL database url</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/storage/Providers.ts#L54">storage/Providers.ts, Line 54</a>
     </li></ul></dd>
     
 
