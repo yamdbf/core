@@ -1,5 +1,3 @@
-import { SharedProviderStorage } from '../../storage/SharedProviderStorage';
-
 /**
  * Interface for plugins to implement, providing compile-time
  * errors for incorrect implementations alongside the abstract
@@ -34,6 +32,8 @@ import { SharedProviderStorage } from '../../storage/SharedProviderStorage';
  * @param {SharedProviderStorage} storage Storage that the plugin can use
  * @returns {Promise<void>|void}
  */
+
+import { SharedProviderStorage } from '../../storage/SharedProviderStorage';
 
 export interface IPlugin
 {
