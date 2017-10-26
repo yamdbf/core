@@ -79,9 +79,10 @@ export class GuildStorageLoader
 			const guild: Guild = this._client.guilds.get(key);
 			if (!guild) continue;
 
-			const storage: GuildStorage = new GuildStorage(this._client, guild, this._storageProvider, this._settingsProvider);
-			await storage.init();
+			const storage: GuildStorage = new GuildStorage(
+				this._client, guild, this._storageProvider, this._settingsProvider);
 
+			await storage.init();
 			this._client.storage.guilds.set(key, storage);
 		}
 
@@ -102,7 +103,9 @@ export class GuildStorageLoader
 
 		for (const guild of storagelessGuilds.values())
 		{
-			const storage: GuildStorage = new GuildStorage(this._client, guild, this._storageProvider, this._settingsProvider);
+			const storage: GuildStorage = new GuildStorage(
+				this._client, guild, this._storageProvider, this._settingsProvider);
+
 			await storage.init();
 			this._client.storage.guilds.set(guild.id, storage);
 		}
