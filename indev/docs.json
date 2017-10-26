@@ -1454,6 +1454,142 @@
             ]
         },
         {
+            "name": "ClientStorage",
+            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with data specific to the Client instance, and for\naccessing guild storages/settings</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "ClientStorage",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "guilds",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Collection mapping Guild IDs to GuildStorages</p>",
+                    "type": {
+                        "names": [
+                            "external:Collection.<string, GuildStorage>"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage. Any other method calls should not be made\nuntil this method has been called and resolved</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from this storage for the specified key</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in this storage for the specified key</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a key/value pair from this storage</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from this storage</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
             "name": "Database",
             "description": "<blockquote>\n<p><strong>Note:</strong> This won't do anything for you if you're not using\na <code>StorageProvider</code> for your client that uses Sequelize</p>\n</blockquote>\n<p>Holds the Sequelize connection to whichever database backend\nis chosen via the Client StorageProvider. As long as you wait\nuntil <code>clientReady</code> you can safely use {@link Database.instance}\nto get the Database instance and access the Sequelize connection\nvia {@link Database#db}</p>\n<p>This will allow you to define and access your own Sequelize Models\nwithout having to create another database connection. This is\nespecially important when using <code>SQLiteProvider</code> as SQLite\ndoes not like having multiple connections to an sqlite file</p>",
             "extends": [],
@@ -2167,43 +2303,6 @@
             ]
         },
         {
-            "name": "StorageFactory",
-            "description": "",
-            "extends": [],
-            "access": "private",
-            "virtual": false,
-            "fires": "",
-            "constructor": {
-                "name": "StorageFactory",
-                "description": "<p>Used for creating the different storage class mixins used throughout\nand needed by YAMDBF Clients. Used internally, shouldn't ever\nneed to be used directly in a custom client</p>",
-                "parameters": [
-                    {
-                        "name": "client",
-                        "type": "Client",
-                        "description": "<p>The YAMDBF Client instance</p>",
-                        "default": "",
-                        "optional": "",
-                        "nullable": ""
-                    }
-                ],
-                "examples": []
-            },
-            "functions": [
-                {
-                    "name": "createClientStorage",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Creates a ClientStorage mixin using KeyedStorage as a base. Adds a <code>guilds</code> Collection\nthat will map Guild IDs to GuildStorages</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "ClientStorage",
-                        "description": ""
-                    }
-                }
-            ]
-        },
-        {
             "name": "StorageProvider",
             "description": "<p>Abstract class for storage providers to extend. Provides runtime errors\nfor missing method implementations, and is necessary at compile-time\nwhen using TypeScript for the compiler to recognize a StorageProvider\nas valid.</p>\n<p>StorageProviders must present an interface with a storage solution that\nprovides access to string values via string keys. Data will be stored\nin the storage solution by the framework as stringified JSON-valid data</p>\n<blockquote>\n<p><strong>Note:</strong> All methods shown on this class must be implemented within\nany storage providers you create and, in the case of <code>keys()</code>\nand <code>get()</code>, <strong>must</strong> return the proper data types or your\nclient <strong>will not work</strong>.</p>\n</blockquote>",
             "extends": [],
@@ -2326,142 +2425,6 @@
                     "access": "",
                     "virtual": false,
                     "description": "<p>Async method that removes all keys and their values from storage</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                }
-            ]
-        },
-        {
-            "name": "ClientStorage",
-            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with data specific to the Client instance. Can not be\ncreated directly via a constructor due to mixin mechanics.\nCreated internally via <code>StorageFactory#createClientStorage</code></p>",
-            "extends": [],
-            "access": "",
-            "virtual": false,
-            "fires": "",
-            "constructor": {
-                "name": "ClientStorage",
-                "description": "",
-                "parameters": [],
-                "examples": []
-            },
-            "properties": [
-                {
-                    "name": "guilds",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Collection mapping Guild IDs to GuildStorages</p>",
-                    "type": {
-                        "names": [
-                            "external:Collection.<string, GuildStorage>"
-                        ]
-                    }
-                }
-            ],
-            "functions": [
-                {
-                    "name": "init",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Initialize this storage. Any other method calls should not be made\nuntil this method has been called and resolved</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "keys",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Get the names of all keys in this storage</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<Array.<string>>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "get",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Get a value from this storage for the specified key</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key in storage to get</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<any>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "set",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Set a value in this storage for the specified key</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key in storage to set</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "value",
-                            "type": "any",
-                            "description": "<p>The value to set</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "remove",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Remove a key/value pair from this storage</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key in storage to remove</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "clear",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Remove all key/value pairs from this storage</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
