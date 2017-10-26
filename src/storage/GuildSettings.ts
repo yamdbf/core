@@ -8,11 +8,11 @@ import { Logger } from '../util/logger/Logger';
  * Class containing asynchronous methods for storing, retrieving, and
  * interacting with settings for a specific guild. Will be contained
  * under {@link GuildStorage#settings}
- * @borrows GuildStorage#keys as GuildSettings#keys
- * @borrows GuildStorage#get as GuildSettings#get
- * @borrows GuildStorage#set as GuildSettings#set
- * @borrows GuildStorage#remove as GuildSettings#remove
- * @borrows GuildStorage#clear as GuildSettings#clear
+ * @borrows SharedProviderStorage#keys as GuildSettings#keys
+ * @borrows SharedProviderStorage#get as GuildSettings#get
+ * @borrows SharedProviderStorage#set as GuildSettings#set
+ * @borrows SharedProviderStorage#remove as GuildSettings#remove
+ * @borrows SharedProviderStorage#clear as GuildSettings#clear
  */
 export class GuildSettings extends SharedProviderStorage
 {
