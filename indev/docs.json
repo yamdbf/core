@@ -527,7 +527,33 @@
                     }
                 ],
                 "examples": []
-            }
+            },
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Method that will be called by the Plugin loader when the\nPlugin is loaded. This is the only method that will be called by\nthe framework automatically, so this should be where anything\nnecessary should be done to make the Plugin operational.</p>\n<p>When <code>init()</code> is called by the PluginLoader, the method will also\nbe passed a {@link SharedProviderStorage} instance that should be\nsaved and set aside for use if you need to use storage for anything\nwithin your plugins</p>\n<blockquote>\n<p>This method can be async if desired or needed</p>\n</blockquote>",
+                    "parameters": [
+                        {
+                            "name": "storage",
+                            "type": "SharedProviderStorage",
+                            "description": "<p>Storage that the plugin can use</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": [
+                            "Promise.<void>",
+                            "void"
+                        ],
+                        "description": ""
+                    }
+                }
+            ]
         },
         {
             "name": "PluginLoader",
