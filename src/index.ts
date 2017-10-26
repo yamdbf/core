@@ -12,6 +12,7 @@ export { CommandDispatcher } from './command/CommandDispatcher';
 export { CommandLoader } from './command/CommandLoader';
 export { CommandRegistry } from './command/CommandRegistry';
 
+export { ClientStorage } from './storage/ClientStorage';
 export { GuildStorage } from './storage/GuildStorage';
 export { GuildSettings } from './storage/GuildSettings';
 export { GuildStorageLoader } from './storage/GuildStorageLoader';
@@ -23,7 +24,6 @@ export { RateLimiter } from './command/RateLimiter';
 
 export { IStorageProvider } from './storage/interface/IStorageProvider';
 export { StorageProvider } from './storage/StorageProvider';
-export { StorageFactory } from './storage/StorageFactory';
 export { Providers } from './storage/Providers';
 export { Database } from './storage/Database';
 
@@ -51,7 +51,6 @@ export { ListenerUtil } from './util/ListenerUtil';
 
 export { ArgOpts } from './types/ArgOpts';
 export { BaseCommandName } from './types/BaseCommandName';
-export { ClientStorage } from './types/ClientStorage';
 export { CommandInfo } from './types/CommandInfo';
 export { DefaultGuildSettings } from './types/DefaultGuildSettings';
 export { Difference } from './types/Difference';

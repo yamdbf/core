@@ -24,13 +24,12 @@ import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
 import { RateLimiter } from '../command/RateLimiter';
-import { GuildStorageLoader } from '../storage/GuildStorageLoader';
 import { JSONProvider } from '../storage/JSONProvider';
-import { StorageFactory } from '../storage/StorageFactory';
-import { YAMDBFOptions } from '../types/YAMDBFOptions';
-import { ClientStorage } from '../types/ClientStorage';
-import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { ClientStorage } from '../storage/ClientStorage';
+import { GuildStorageLoader } from '../storage/GuildStorageLoader';
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
+import { YAMDBFOptions } from '../types/YAMDBFOptions';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { BaseCommandName } from '../types/BaseCommandName';
 import { Logger, logger } from '../util/logger/Logger';
 import { ListenerUtil } from '../util/ListenerUtil';
@@ -73,7 +72,6 @@ export class Client extends Discord.Client
 
 	private readonly _token: string;
 	private readonly _plugins: (PluginConstructor | string)[];
-	private readonly _storageFactory: StorageFactory;
 	private readonly _guildStorageLoader: GuildStorageLoader;
 	private readonly _commandLoader: CommandLoader;
 	private readonly _dispatcher: CommandDispatcher;
@@ -204,15 +202,14 @@ export class Client extends Discord.Client
 		// Middleware function storage for the client instance
 		this._middleware = [];
 
-		this._storageFactory = new StorageFactory(this);
-		this._guildStorageLoader = new GuildStorageLoader(this);
-
 		/**
 		 * Client-specific storage. Also contains a `guilds` Collection property containing
 		 * all GuildStorage instances
 		 * @type {ClientStorage}
 		 */
-		this.storage = this._storageFactory.createClientStorage();
+		this.storage = new ClientStorage(this);
+
+		this._guildStorageLoader = new GuildStorageLoader(this);
 
 		/**
 		 * [Collection]{@link external:Collection} containing all loaded commands
