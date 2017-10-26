@@ -362,7 +362,7 @@
                     "parameters": [],
                     "examples": [],
                     "returns": {
-                        "type": "void",
+                        "type": "Promise.<void>",
                         "description": ""
                     }
                 },
@@ -1537,6 +1537,154 @@
             ]
         },
         {
+            "name": "GuildStorage",
+            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with data for a specific guild</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "GuildStorage",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "settings",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>GuildSettings object containing settings for this guild</p>",
+                    "type": {
+                        "names": [
+                            "GuildSettings"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage for this instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a value from storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from storage for this instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
             "name": "GuildStorageLoader",
             "description": "<p>Handles loading all guild-specific data from persistent storage into\n{@link GuildStorage} objects</p>",
             "extends": [],
@@ -1551,6 +1699,14 @@
             },
             "functions": [
                 {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize storage providers for guild storage and settings</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
                     "name": "loadStorages",
                     "access": "",
                     "virtual": false,
@@ -1563,6 +1719,14 @@
                     "access": "",
                     "virtual": false,
                     "description": "<p>Create GuildStorage for all guilds that do not\ncurrently have one for the Client session</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "removeGuild",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove storage entries for a guild that the bot\nhas been removed from</p>",
                     "parameters": [],
                     "examples": []
                 },
@@ -1899,48 +2063,11 @@
                         "default": "",
                         "optional": "",
                         "nullable": ""
-                    },
-                    {
-                        "name": "guildDataStorage",
-                        "type": "StorageProvider",
-                        "description": "<p>StorageProvider instance that provides all guild data</p>",
-                        "default": "",
-                        "optional": "",
-                        "nullable": ""
-                    },
-                    {
-                        "name": "guildSettingStorage",
-                        "type": "StorageProvider",
-                        "description": "<p>StorageProvider instance that provides all guild settings</p>",
-                        "default": "",
-                        "optional": "",
-                        "nullable": ""
                     }
                 ],
                 "examples": []
             },
             "functions": [
-                {
-                    "name": "createGuildStorage",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Creates a GuildStorage mixin, creating the GuildSettings instance under <code>.settings</code></p>",
-                    "parameters": [
-                        {
-                            "name": "id",
-                            "type": "string",
-                            "description": "<p>ID of the Guild to create storage for</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<GuildStorage>",
-                        "description": ""
-                    }
-                },
                 {
                     "name": "createClientStorage",
                     "access": "",
@@ -2214,47 +2341,6 @@
                     "access": "",
                     "virtual": false,
                     "description": "<p>Remove all key/value pairs from this storage</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                }
-            ]
-        },
-        {
-            "name": "GuildStorage",
-            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with data for a specific guild. Can not be created directly\nvia a constructor due to mixin mechanics. Created internally via\n<code>StorageFactory#createGuildStorage</code></p>",
-            "extends": [],
-            "access": "",
-            "virtual": false,
-            "fires": "",
-            "constructor": {
-                "name": "GuildStorage",
-                "description": "",
-                "parameters": [],
-                "examples": []
-            },
-            "properties": [
-                {
-                    "name": "settings",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>GuildSettings object containing settings for this guild</p>",
-                    "type": {
-                        "names": [
-                            "GuildSettings"
-                        ]
-                    }
-                }
-            ],
-            "functions": [
-                {
-                    "name": "init",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Initialize this storage instance</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
