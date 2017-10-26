@@ -1,4 +1,4 @@
-import { GuildStorage } from '../../../types/GuildStorage';
+import { GuildStorage } from '../../../storage/GuildStorage';
 import { ResourceLoader } from '../../../types/ResourceLoader';
 import { BaseStrings as s } from '../../../localization/BaseStrings';
 import { Message } from '../../../types/Message';

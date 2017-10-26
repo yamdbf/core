@@ -26,7 +26,6 @@ import { CommandRegistry } from '../command/CommandRegistry';
 import { RateLimiter } from '../command/RateLimiter';
 import { GuildStorageLoader } from '../storage/GuildStorageLoader';
 import { JSONProvider } from '../storage/JSONProvider';
-import { StorageProvider } from '../storage/StorageProvider';
 import { StorageFactory } from '../storage/StorageFactory';
 import { YAMDBFOptions } from '../types/YAMDBFOptions';
 import { ClientStorage } from '../types/ClientStorage';
@@ -75,8 +74,6 @@ export class Client extends Discord.Client
 	private readonly _token: string;
 	private readonly _plugins: (PluginConstructor | string)[];
 	private readonly _storageFactory: StorageFactory;
-	private readonly _guildDataStorage: StorageProvider;
-	private readonly _guildSettingStorage: StorageProvider;
 	private readonly _guildStorageLoader: GuildStorageLoader;
 	private readonly _commandLoader: CommandLoader;
 	private readonly _dispatcher: CommandDispatcher;
@@ -207,10 +204,8 @@ export class Client extends Discord.Client
 		// Middleware function storage for the client instance
 		this._middleware = [];
 
-		this._guildDataStorage = new this.provider('guild_storage');
-		this._guildSettingStorage = new this.provider('guild_settings');
-		this._storageFactory = new StorageFactory(this, this._guildDataStorage, this._guildSettingStorage);
-		this._guildStorageLoader = new GuildStorageLoader(this, this._storageFactory);
+		this._storageFactory = new StorageFactory(this);
+		this._guildStorageLoader = new GuildStorageLoader(this);
 
 		/**
 		 * Client-specific storage. Also contains a `guilds` Collection property containing
@@ -265,9 +260,8 @@ export class Client extends Discord.Client
 	@once('continue')
 	private async __onContinueEvent(): Promise<void>
 	{
-		await this._guildDataStorage.init();
-		await this._guildSettingStorage.init();
-		await this._guildStorageLoader.loadStorages(this._guildDataStorage, this._guildSettingStorage);
+		await this._guildStorageLoader.init();
+		await this._guildStorageLoader.loadStorages();
 		await this.plugins._loadPlugins();
 
 		if (!this.passive)
@@ -288,15 +282,14 @@ export class Client extends Discord.Client
 	@on('guildCreate')
 	private __onGuildCreateEvent(): void
 	{
-		this._guildStorageLoader.initNewGuilds(this._guildDataStorage, this._guildSettingStorage);
+		this._guildStorageLoader.initNewGuilds();
 	}
 
 	@on('guildDelete')
 	private __onGuildDeleteEvent(guild: Guild): void
 	{
 		this.storage.guilds.delete(guild.id);
-		this._guildDataStorage.remove(guild.id);
-		this._guildSettingStorage.remove(guild.id);
+		this._guildStorageLoader.removeGuild(guild);
 	}
 
 //#endregion
@@ -399,11 +392,11 @@ export class Client extends Discord.Client
 	/**
 	 * Clean out any guild storage/settings that no longer have
 	 * an associated guild
-	 * @returns {void}
+	 * @returns {Promise<void>}
 	 */
-	public sweepStorages(): void
+	public async sweepStorages(): Promise<void>
 	{
-		this._guildStorageLoader.cleanGuilds(this._guildDataStorage, this._guildSettingStorage);
+		await this._guildStorageLoader.cleanGuilds();
 	}
 
 	/**

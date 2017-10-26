@@ -5,7 +5,7 @@ import { ResourceLoader } from '../types/ResourceLoader';
 import { BaseStrings as s } from '../localization/BaseStrings';
 import { Logger, logger } from '../util/logger/Logger';
 import { Message } from '../types/Message';
-import { GuildStorage } from '../types/GuildStorage';
+import { GuildStorage } from '../storage/GuildStorage';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
 import { RateLimit } from './RateLimit';

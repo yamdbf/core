@@ -2,7 +2,7 @@ import { Message } from '../../../types/Message';
 import { Util } from '../../../util/Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
-import { GuildStorage } from '../../../types/GuildStorage';
+import { GuildStorage } from '../../../storage/GuildStorage';
 import { ResourceLoader } from '../../../types/ResourceLoader';
 import { BaseStrings as s } from '../../../localization/BaseStrings';
 import * as CommandDecorators from '../../CommandDecorators';

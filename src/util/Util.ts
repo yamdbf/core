@@ -1,5 +1,5 @@
 import { BaseCommandName } from '../types/BaseCommandName';
-import { GuildStorage } from '../types/GuildStorage';
+import { GuildStorage } from '../storage/GuildStorage';
 import { Message } from '../types/Message';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';

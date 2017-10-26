@@ -20,6 +20,6 @@
 
 import { KeyedStorage } from '../storage/KeyedStorage';
 import { Collection } from 'discord.js';
-import { GuildStorage } from './GuildStorage';
+import { GuildStorage } from '../storage/GuildStorage';
 
 export type ClientStorage = KeyedStorage & { guilds: Collection<string, GuildStorage>; };
