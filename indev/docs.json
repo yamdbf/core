@@ -1533,6 +1533,101 @@
                         "type": "Promise.<void>",
                         "description": ""
                     }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage for this instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a value from storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from storage for this instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 }
             ]
         },
