@@ -83,14 +83,16 @@ explanation of how your plugin should be used.</p>
 <pre class="prettyprint source lang-js"><code>class CustomPlugin extends Plugin
 {
     name = 'CustomPlugin';
+
     constructor(client)
     {
         super();
         this.client = client;
     }
 
-    init()
+    init(storage)
     {
+        this.storage = storage;
         console.log('Custom plugin initialized.');
     }
 }</code></pre><p>The <code>name</code> field is what is used for identifying the plugin if there are any errors
@@ -100,7 +102,10 @@ instance:</p>
 all storages (including guild storages) are available but before <code>clientReady</code> is
 emitted. Assuming you store the client instance passed in the Plugin constructor
 like in the example above, you will be able to use it here. This method can be async
-if needed to make things easier for yourself.</p>
+if needed to make things easier for yourself. This method will also be passed a
+<code>SharedProviderStorage</code> instance specific to your plugin when called by the PluginLoader
+at runtime. This should be set aside for use like in the example if storage is needed
+for your plugin.</p>
 <h2>Plugin tools</h2><p>There are a few methods in YAMDBF designed to make some things that would be
 desirable for plugins to do easier (Or in the case of TypeScript, possible at all
 by providing public workarounds to the more complex private methods). These methods
