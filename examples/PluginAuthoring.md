@@ -53,14 +53,16 @@ Example:
 class CustomPlugin extends Plugin
 {
 	name = 'CustomPlugin';
+
 	constructor(client)
 	{
 		super();
 		this.client = client;
 	}
 
-	init()
+	init(storage)
 	{
+		this.storage = storage;
 		console.log('Custom plugin initialized.');
 	}
 }
@@ -76,7 +78,10 @@ The Plugin `init()` method will be called when the plugin is loaded, which is af
 all storages (including guild storages) are available but before `clientReady` is
 emitted. Assuming you store the client instance passed in the Plugin constructor
 like in the example above, you will be able to use it here. This method can be async
-if needed to make things easier for yourself.
+if needed to make things easier for yourself. This method will also be passed a
+`SharedProviderStorage` instance specific to your plugin when called by the PluginLoader
+at runtime. This should be set aside for use like in the example if storage is needed
+for your plugin.
 
 
 ## Plugin tools
