@@ -27,7 +27,7 @@ export class Util
 	 * @static
 	 * @method wasCommandCalled
 	 * @param {Message} message Message to check
-	 * @returns {Tuple<boolean, Command, string, string>}
+	 * @returns {Promise<Tuple<boolean, Command, string, string>>}
 	 */
 	public static async wasCommandCalled(message: Message): Promise<[boolean, Command, string, string]>
 	{
