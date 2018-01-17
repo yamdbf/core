@@ -1328,8 +1328,57 @@
             ]
         },
         {
+            "name": "RateLimitManager",
+            "description": "<p>Handles creation and retrieval of {@link RateLimit} objects for the given interval\nand a given set of descriptors. Similar to {@link RateLimiter} but not designed around\nMessages and Users. This simplifies the process of assigning ratelimits for any\narbitrary process/task</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "RateLimitManager",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a {@link RateLimit} object for the given target descriptors. This can be\nany arbitrary set of strings representing whatever you want. A good example\nwould be a RateLimit for a User within a Guild with 5 uses per minute:</p>\n<pre class=\"prettyprint source\"><code>&lt;RateLimitManager>.get('5/1m', guild.id, user.id);</code></pre><p>Or if you wanted to limit something in a DM for the specific User to 10\nuses per 5 minutes:</p>\n<pre class=\"prettyprint source\"><code>&lt;RateLimitManager>.get('10/5m', user.id, 'DM');</code></pre><p>The possibilities are endless.<br><br></p>\n<p><strong>Note:</strong> The limit string counts as part of the descriptor. As such</p>\n<pre class=\"prettyprint source\"><code>&lt;RateLimitManager>.get('1/5m');</code></pre><p>is a valid descriptor, but keep in mind that every time you retrieve it, it\nwill be the same RateLimit instance, so if you need unique RateLimits for the\nsame limit/duration, you must create a unique descriptor</p>",
+                    "parameters": [
+                        {
+                            "name": "limit",
+                            "type": "string",
+                            "description": "<p>Ratelimit string matching the regex <code>\\d+\\/\\d+[s|m|h|d]</code><br>\n                         <strong>Example:</strong> <code>1/10m</code> to create ratelimits of 1 per 10 minutes</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "descriptors",
+                            "type": "string",
+                            "description": "<p>RateLimit target descriptors</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "_cleanup",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Clean up expired RateLimits</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
             "name": "RateLimiter",
-            "description": "<p>Handles assigning ratelimits to guildmembers and users</p>",
+            "description": "<p>Handles assigning ratelimits to guildmembers and users.\nFor assigning ratelimits to arbitrary tasks/processes,\nuse {@link RateLimitManager} instead</p>",
             "extends": [],
             "access": "",
             "virtual": false,
@@ -1386,14 +1435,6 @@
                         "type": "RateLimit",
                         "description": ""
                     }
-                },
-                {
-                    "name": "_parseLimit",
-                    "access": "private",
-                    "virtual": false,
-                    "description": "<p>Parse the ratelimit from the given input string</p>",
-                    "parameters": [],
-                    "examples": []
                 },
                 {
                     "name": "_isGlobal",
@@ -2755,6 +2796,37 @@
             ]
         }
     ],
+    "properties": [
+        {
+            "name": "limit",
+            "access": "",
+            "virtual": false,
+            "description": "<p>The number of time this RateLimit can be\ncalled within its duration</p>",
+            "type": {
+                "names": [
+                    "number"
+                ]
+            }
+        },
+        {
+            "name": "duration",
+            "access": "",
+            "virtual": false,
+            "description": "<p>The time from last call until reset</p>",
+            "type": {
+                "names": [
+                    "number"
+                ]
+            }
+        },
+        {
+            "name": "LogType",
+            "access": "private",
+            "virtual": false,
+            "description": "<p>Enum containing log type string constants</p>",
+            "type": ""
+        }
+    ],
     "typedefs": [
         {
             "name": "Tuple",
@@ -3288,15 +3360,6 @@
                 "type": "PropertyDecorator",
                 "description": ""
             }
-        }
-    ],
-    "properties": [
-        {
-            "name": "LogType",
-            "access": "private",
-            "virtual": false,
-            "description": "<p>Enum containing log type string constants</p>",
-            "type": ""
         }
     ]
 }

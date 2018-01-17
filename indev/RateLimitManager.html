@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>types/ResolveArgType.js - Documentation</title>
+    <title>RateLimitManager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,23 +33,330 @@
 
 
 
+
+<section>
+
+<header>
+	
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @typedef {string} ResolveArgType Valid arg type values for
- * [resolve]{@link module:Middleware.resolve}. Can be one of
- * the following string literals:
- * ```
- * 'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role'
- * ```
- */
+        <h2>
+        RateLimitManager
+        </h2>
+        
+            <div class="class-description"><p>Handles creation and retrieval of <a href="RateLimit.html"><code>RateLimit</code></a> objects for the given interval
+and a given set of descriptors. Similar to <a href="RateLimiter.html"><code>RateLimiter</code></a> but not designed around
+Messages and Users. This simplifies the process of assigning ratelimits for any
+arbitrary process/task</p></div>
+        
+    
+</header>
 
-export type ResolveArgType = 'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role';
-</code></pre>
-        </article>
-    </section>
+<article>
+    <div class="container-overview">
+    
+        
 
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="RateLimitManager">
+		<span class="type-signature"></span>new <a href='#RateLimitManager' style='color: black'>RateLimitManager</a><span class="signature">()</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimitManager.ts#L12">command/RateLimitManager.ts, Line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+	
+        <h3 class="subsection-title">Methods</h3>
+	
+        
+            
+
+    
+
+    <h4 class="name" id="get">
+		<span class="type-signature"></span>.<a href='#get' style='color: black'>get</a><span class="signature">(<span class="param-types">limit: string</span>, <span class="param-types">descriptors: string</span>)</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Get a <a href="RateLimit.html"><code>RateLimit</code></a> object for the given target descriptors. This can be
+any arbitrary set of strings representing whatever you want. A good example
+would be a RateLimit for a User within a Guild with 5 uses per minute:</p>
+<pre class="prettyprint source"><code>&lt;RateLimitManager>.get('5/1m', guild.id, user.id);</code></pre><p>Or if you wanted to limit something in a DM for the specific User to 10
+uses per 5 minutes:</p>
+<pre class="prettyprint source"><code>&lt;RateLimitManager>.get('10/5m', user.id, 'DM');</code></pre><p>The possibilities are endless.<br><br></p>
+<p><strong>Note:</strong> The limit string counts as part of the descriptor. As such</p>
+<pre class="prettyprint source"><code>&lt;RateLimitManager>.get('1/5m');</code></pre><p>is a valid descriptor, but keep in mind that every time you retrieve it, it
+will be the same RateLimit instance, so if you need unique RateLimits for the
+same limit/duration, you must create a unique descriptor</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Ratelimit string matching the regex <code>\d+\/\d+[s|m|h|d]</code><br>
+                         <strong>Example:</strong> <code>1/10m</code> to create ratelimits of 1 per 10 minutes</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>descriptors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>RateLimit target descriptors</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimitManager.ts#L48">command/RateLimitManager.ts, Line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+</article>
+
+</section>
 
 
 
