@@ -16,16 +16,14 @@ export class RateLimit
 	public constructor(limit: [number, number])
 	{
 		/**
-		 * The number of time this RateLimit can be
+		 * The number of times this RateLimit can be
 		 * called within its duration
-		 * @name limit
 		 * @type {number}
 		 */
 		this.limit = limit[0];
 
 		/**
 		 * The time from last call until reset
-		 * @name duration
 		 * @type {number}
 		 */
 		this.duration = limit[1];
