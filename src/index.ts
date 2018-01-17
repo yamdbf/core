@@ -21,6 +21,7 @@ export { SharedProviderStorage } from './storage/SharedProviderStorage';
 export { Middleware } from './command/middleware/Middleware';
 export { RateLimit } from './command/RateLimit';
 export { RateLimiter } from './command/RateLimiter';
+export { RateLimitManager } from './command/RateLimitManager';
 
 export { IStorageProvider } from './storage/interface/IStorageProvider';
 export { StorageProvider } from './storage/StorageProvider';

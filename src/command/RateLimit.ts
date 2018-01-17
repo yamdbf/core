@@ -6,16 +6,30 @@
  */
 export class RateLimit
 {
-	private readonly _limit: number;
-	private readonly _duration: number;
 	private _count: number;
 	private _notified: boolean;
 
+	public readonly limit: number;
+	public readonly duration: number;
 	public expires: number;
 
 	public constructor(limit: [number, number])
 	{
-		[this._limit, this._duration] = limit;
+		/**
+		 * The number of time this RateLimit can be
+		 * called within its duration
+		 * @name limit
+		 * @type {number}
+		 */
+		this.limit = limit[0];
+
+		/**
+		 * The time from last call until reset
+		 * @name duration
+		 * @type {number}
+		 */
+		this.duration = limit[1];
+
 		this._reset();
 	}
 
@@ -25,8 +39,8 @@ export class RateLimit
 	 */
 	private _reset(): void
 	{
-		this._count = 0;
 		this.expires = 0;
+		this._count = 0;
 		this._notified = false;
 	}
 
@@ -39,9 +53,9 @@ export class RateLimit
 	public call(): boolean
 	{
 		if (this.expires < Date.now()) this._reset();
-		if (this._count >= this._limit) return false;
+		if (this._count >= this.limit) return false;
 		this._count++;
-		if (this._count === 1) this.expires = Date.now() + this._duration;
+		if (this._count === 1) this.expires = Date.now() + this.duration;
 		return true;
 	}
 
@@ -51,7 +65,7 @@ export class RateLimit
 	 */
 	public get isLimited(): boolean
 	{
-		return (this._count >= this._limit) && (Date.now() < this.expires);
+		return (this._count >= this.limit) && (Date.now() < this.expires);
 	}
 
 	/**

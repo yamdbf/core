@@ -3,6 +3,7 @@ import { GuildStorage } from '../storage/GuildStorage';
 import { Message } from '../types/Message';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
+import { Time } from './Time';
 
 /**
  * Utility class containing handy static methods that can
@@ -226,6 +227,24 @@ export class Util
 			else output[name] = arg;
 		}
 		return output;
+	}
+
+	/**
+	 * Parse a ratelimit Tuple from the given shorthand string
+	 * @param {string} limitString Ratelimit string matching the regex `\d+\/\d+[s|m|h|d]`<br>
+	 * 						 	   **Example:** `1/10m` to limit a command to one use per 10 minutes
+	 */
+	public static parseRateLimit(limitString: string): [number, number]
+	{
+		const limitRegex: RegExp = /^(\d+)\/(\d+)(s|m|h|d)?$/;
+		if (!limitRegex.test(limitString)) throw new Error(`Failed to parse a ratelimit from '${limitString}'`);
+		let [limit, duration, post]: (string | number)[] = limitRegex.exec(limitString).slice(1, 4);
+
+		if (post) duration = Time.parseShorthand(duration + post);
+		else duration = parseInt(duration);
+		limit = parseInt(limit);
+
+		return [limit, duration];
 	}
 
 	/**

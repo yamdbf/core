@@ -1,10 +1,12 @@
 import { Collection, User } from 'discord.js';
 import { RateLimit } from './RateLimit';
-import { Time } from '../util/Time';
 import { Message } from '../types/Message';
+import { Util } from '../util/Util';
 
 /**
- * Handles assigning ratelimits to guildmembers and users
+ * Handles assigning ratelimits to guildmembers and users.
+ * For assigning ratelimits to arbitrary tasks/processes,
+ * use {@link RateLimitManager} instead
  * @param {string} limit Ratelimit string matching the regex `\d+\/\d+[s|m|h|d]`<br>
  * 						 **Example:** `1/10m` to limit a command to one use per 10 minutes
  * @param {boolean} global Whether or not this RateLimiter handles global ratelimits
@@ -18,7 +20,7 @@ export class RateLimiter
 
 	public constructor(limit: string, global: boolean)
 	{
-		this._limit = this._parseLimit(limit);
+		this._limit = Util.parseRateLimit(limit);
 		this._global = global;
 
 		this._rateLimits = new Collection<string, Collection<string, RateLimit>>();
@@ -53,23 +55,6 @@ export class RateLimiter
 
 			return this._rateLimits.get(message.guild.id).get(user.id);
 		}
-	}
-
-	/**
-	 * Parse the ratelimit from the given input string
-	 * @private
-	 */
-	private _parseLimit(limitString: string): [number, number]
-	{
-		const limitRegex: RegExp = /^(\d+)\/(\d+)(s|m|h|d)?$/;
-		if (!limitRegex.test(limitString)) throw new Error(`Failed to parse a ratelimit from '${limitString}'`);
-		let [limit, duration, post]: (string | number)[] = limitRegex.exec(limitString).slice(1, 4);
-
-		if (post) duration = Time.parseShorthand(duration + post);
-		else duration = parseInt(duration);
-		limit = parseInt(limit);
-
-		return [limit, duration];
 	}
 
 	/**
