@@ -1292,7 +1292,7 @@
                     "name": "duration",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>The time from last call until reset</p>",
+                    "description": "<p>The time from first call until reset</p>",
                     "type": {
                         "names": [
                             "number"
