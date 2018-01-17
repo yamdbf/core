@@ -1276,6 +1276,44 @@
                 ],
                 "examples": []
             },
+            "properties": [
+                {
+                    "name": "limit",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The number of times this RateLimit can be\ncalled within its duration</p>",
+                    "type": {
+                        "names": [
+                            "number"
+                        ]
+                    }
+                },
+                {
+                    "name": "duration",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The time from last call until reset</p>",
+                    "type": {
+                        "names": [
+                            "number"
+                        ]
+                    }
+                },
+                {
+                    "name": "isLimited",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not this ratelimit is currently capped out</p>",
+                    "type": ""
+                },
+                {
+                    "name": "wasNotified",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not this RateLimit was flagged after\nnotifying the user of being rate limited</p>",
+                    "type": ""
+                }
+            ],
             "functions": [
                 {
                     "name": "_reset",
@@ -1308,22 +1346,6 @@
                         "type": "void",
                         "description": ""
                     }
-                }
-            ],
-            "properties": [
-                {
-                    "name": "isLimited",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Return whether or not this ratelimit is currently capped out</p>",
-                    "type": ""
-                },
-                {
-                    "name": "wasNotified",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Return whether or not this RateLimit was flagged after\nnotifying the user of being rate limited</p>",
-                    "type": ""
                 }
             ]
         },
@@ -2796,37 +2818,6 @@
             ]
         }
     ],
-    "properties": [
-        {
-            "name": "limit",
-            "access": "",
-            "virtual": false,
-            "description": "<p>The number of time this RateLimit can be\ncalled within its duration</p>",
-            "type": {
-                "names": [
-                    "number"
-                ]
-            }
-        },
-        {
-            "name": "duration",
-            "access": "",
-            "virtual": false,
-            "description": "<p>The time from last call until reset</p>",
-            "type": {
-                "names": [
-                    "number"
-                ]
-            }
-        },
-        {
-            "name": "LogType",
-            "access": "private",
-            "virtual": false,
-            "description": "<p>Enum containing log type string constants</p>",
-            "type": ""
-        }
-    ],
     "typedefs": [
         {
             "name": "Tuple",
@@ -3360,6 +3351,15 @@
                 "type": "PropertyDecorator",
                 "description": ""
             }
+        }
+    ],
+    "properties": [
+        {
+            "name": "LogType",
+            "access": "private",
+            "virtual": false,
+            "description": "<p>Enum containing log type string constants</p>",
+            "type": ""
         }
     ]
 }
