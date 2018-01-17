@@ -164,6 +164,190 @@ arbitrary process/task</p></div>
 
     
 
+    <h4 class="name" id="call">
+		<span class="type-signature"></span>.<a href='#call' style='color: black'>call</a><span class="signature">(<span class="param-types">limit: string</span>, <span class="param-types">descriptors: string</span>)</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Return the result of the <a href="RateLimit.html#call"><code>RateLimit#call</code></a> for the given
+descriptors. See <a href="RateLimitManager.html#get"><code>RateLimitManager#get</code></a> for details on
+fetching RateLimits via descriptors</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Ratelimit string matching the regex <code>\d+\/\d+[s|m|h|d]</code><br>
+                         <strong>Example:</strong> <code>1/10m</code> to create ratelimits of 1 per 10 minutes</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>descriptors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>RateLimit target descriptors</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimitManager.ts#L66">command/RateLimitManager.ts, Line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+        
+            
+
+    
+
     <h4 class="name" id="get">
 		<span class="type-signature"></span>.<a href='#get' style='color: black'>get</a><span class="signature">(<span class="param-types">limit: string</span>, <span class="param-types">descriptors: string</span>)</span><span class="type-signature"></span>
 	</h4>

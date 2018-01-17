@@ -94,6 +94,19 @@ export class RateLimitManager
 	}
 
 	/**
+	 * Return the result of the {@link RateLimit#call} for the given
+	 * descriptors. See {@link RateLimitManager#get} for details on
+	 * fetching RateLimits via descriptors
+	 * @param {string} limit Ratelimit string matching the regex `\d+\/\d+[s|m|h|d]`&lt;br>
+	 * 						 **Example:** `1/10m` to create ratelimits of 1 per 10 minutes
+	 * @param {...string} descriptors RateLimit target descriptors
+	 */
+	public call(limit: string, ...descriptors: string[]): boolean
+	{
+		return this.get(limit, ...descriptors).call();
+	}
+
+	/**
 	 * Clean up expired RateLimits
 	 * @private
 	 */

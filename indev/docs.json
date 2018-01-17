@@ -1389,6 +1389,31 @@
                     "examples": []
                 },
                 {
+                    "name": "call",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return the result of the {@link RateLimit#call} for the given\ndescriptors. See {@link RateLimitManager#get} for details on\nfetching RateLimits via descriptors</p>",
+                    "parameters": [
+                        {
+                            "name": "limit",
+                            "type": "string",
+                            "description": "<p>Ratelimit string matching the regex <code>\\d+\\/\\d+[s|m|h|d]</code><br>\n                         <strong>Example:</strong> <code>1/10m</code> to create ratelimits of 1 per 10 minutes</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "descriptors",
+                            "type": "string",
+                            "description": "<p>RateLimit target descriptors</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
                     "name": "_cleanup",
                     "access": "private",
                     "virtual": false,
@@ -2996,12 +3021,12 @@
             "description": "<p>Represents a difference between two given valid Unix time signatures</p>",
             "properties": [
                 {
-                    "name": "ms",
+                    "name": "raw",
                     "type": "number",
                     "description": "<p>Total number of MS difference</p>",
                     "default": "",
                     "optional": "",
-                    "nullable": true
+                    "nullable": ""
                 },
                 {
                     "name": "days",
@@ -3034,6 +3059,14 @@
                     "default": "",
                     "optional": "",
                     "nullable": true
+                },
+                {
+                    "name": "ms",
+                    "type": "number",
+                    "description": "<p>Number of ms spanned after higher units are subtracted</p>",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
                 },
                 {
                     "name": "toString()",
