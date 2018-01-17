@@ -15,23 +15,22 @@ export class Time
 	 */
 	public static difference(a: number, b: number): Difference
 	{
-		let difference: Difference = {};
+		let difference: Partial<Difference> = {};
 		let ms: number = a - b;
-		difference.ms = ms;
+		difference.raw = ms;
 
-		let days: number = Math.floor(ms / 1000 / 60 / 60 / 24);
-		ms -= days * 1000 * 60 * 60 * 24;
-		let hours: number = Math.floor(ms / 1000 / 60 / 60);
-		ms -= hours * 1000 * 60 * 60;
-		let mins: number = Math.floor(ms / 1000 / 60);
-		ms -= mins * 1000 * 60;
-		let secs: number = Math.floor(ms / 1000);
+		let days: number = Math.floor(ms / 864e5);
+		let hours: number = Math.floor((ms % 864e5) / 36e5);
+		let mins: number = Math.floor(((ms % 865e5) % 36e5) / 6e4);
+		let secs: number = Math.floor((((ms % 864e5) % 36e5) % 6e4) / 1000);
+		ms = (((ms % 864e5) % 36e5) % 6e5) % 1000;
 
 		let timeString: string = '';
 		if (days) { difference.days = days; timeString += `${days} days${hours ? ', ' : ' '}`; }
 		if (hours) { difference.hours = hours; timeString += `${hours} hours${mins ? ', ' : ' '}`; }
 		if (mins) { difference.mins = mins; timeString += `${mins} mins${secs ? ', ' : ' '}`; }
 		if (secs) { difference.secs = secs; timeString += `${secs} secs`; }
+		difference.ms = ms;
 
 		// Returns the time string as '# days, # hours, # mins, # secs'
 		difference.toString = () => timeString.trim() || `${(ms / 1000).toFixed(2)} seconds`;
@@ -40,7 +39,7 @@ export class Time
 		difference.toSimplifiedString = () =>
 			timeString.replace(/ays|ours|ins|ecs| /g, '').replace(/,/g, ' ').trim();
 
-		return difference;
+		return <Difference> difference;
 	}
 
 	/**
