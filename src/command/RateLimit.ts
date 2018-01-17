@@ -23,7 +23,7 @@ export class RateLimit
 		this.limit = limit[0];
 
 		/**
-		 * The time from last call until reset
+		 * The time from first call until reset
 		 * @type {number}
 		 */
 		this.duration = limit[1];
