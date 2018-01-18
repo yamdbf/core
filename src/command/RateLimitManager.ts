@@ -44,6 +44,7 @@ export class RateLimitManager
 	 * @param {string} limit Ratelimit string matching the regex `\d+\/\d+[s|m|h|d]`<br>
 	 * 						 **Example:** `1/10m` to create ratelimits of 1 per 10 minutes
 	 * @param {...string} descriptors RateLimit target descriptors
+	 * @returns {RateLimit}
 	 */
 	public get(limit: string, ...descriptors: string[]): RateLimit
 	{
@@ -62,6 +63,7 @@ export class RateLimitManager
 	 * @param {string} limit Ratelimit string matching the regex `\d+\/\d+[s|m|h|d]`<br>
 	 * 						 **Example:** `1/10m` to create ratelimits of 1 per 10 minutes
 	 * @param {...string} descriptors RateLimit target descriptors
+	 * @returns {boolean}
 	 */
 	public call(limit: string, ...descriptors: string[]): boolean
 	{

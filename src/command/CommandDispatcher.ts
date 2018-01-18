@@ -1,5 +1,4 @@
 import { PermissionResolvable, TextChannel, User, MessageOptions, Message as DMessage } from 'discord.js';
-import { RateLimiter } from './RateLimiter';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { ResourceLoader } from '../types/ResourceLoader';
 import { BaseStrings as s } from '../localization/BaseStrings';
@@ -8,6 +7,7 @@ import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Command } from '../command/Command';
 import { Client } from '../client/Client';
+import { RateLimitManager } from './RateLimitManager';
 import { RateLimit } from './RateLimit';
 import { Time } from '../util/Time';
 import { Lang } from '../localization/Lang';
@@ -193,14 +193,20 @@ export class CommandDispatcher
 	 */
 	private passedRateLimiters(res: ResourceLoader, message: Message, command: Command): boolean
 	{
-		const passedGlobal: boolean = !this.isRateLimited(res, message);
+		const passedGlobal: boolean = !this.isRateLimited(res, message, command, true);
 		const passedCommand: boolean = !this.isRateLimited(res, message, command);
 		const passedAllLimiters: boolean = passedGlobal && passedCommand;
 
 		if (passedAllLimiters)
-			if (!(command && command._rateLimiter && !command._rateLimiter.get(message).call())
-				&& this._client._rateLimiter)
-				this._client._rateLimiter.get(message).call();
+		{
+			const manager: RateLimitManager = this._client.rateLimitManager;
+			const limit: string = command.ratelimit;
+			const identifier: string = command.ratelimit ? command.name : 'global';
+			const descriptors: string[] = [message.author.id, identifier];
+
+			if (!(limit && !manager.call(limit, ...descriptors)) && this._client.ratelimit)
+				manager.call(this._client.ratelimit, message.author.id, 'global');
+		}
 
 		return passedAllLimiters;
 	}
@@ -210,22 +216,27 @@ export class CommandDispatcher
 	 * author, notify them if they exceed ratelimits, and return whether
 	 * or not the user is ratelimited
 	 */
-	private isRateLimited(res: ResourceLoader, message: Message, command?: Command): boolean
+	private isRateLimited(res: ResourceLoader, message: Message, command: Command, global: boolean = false): boolean
 	{
-		const rateLimiter: RateLimiter = command ? command._rateLimiter : this._client._rateLimiter;
-		if (!rateLimiter) return false;
+		const manager: RateLimitManager = this._client.rateLimitManager;
+		const limit: string = command.ratelimit || this._client.ratelimit;
+		if (!limit) return false;
 
-		const rateLimit: RateLimit = rateLimiter.get(message);
+		const identifier: string = command.ratelimit ? !global ? command.name : 'global' : 'global';
+		const descriptors: string[] = [message.author.id, identifier];
+		const rateLimit: RateLimit = manager.get(limit, ...descriptors);
 		if (!rateLimit.isLimited) return false;
 
 		if (!rateLimit.wasNotified)
 		{
-			const globalLimiter: RateLimiter = this._client._rateLimiter;
-			const globalLimit: RateLimit = globalLimiter ? globalLimiter.get(message) : null;
+			const globalLimitString: string = this._client.ratelimit;
+			const globalLimit: RateLimit = globalLimitString
+				? manager.get(globalLimitString, message.author.id, 'global')
+				: null;
 			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return true;
 
 			rateLimit.setNotified();
-			message.channel.send(res(!command
+			message.channel.send(res(global
 				? s.DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL
 				: s.DISPATCHER_ERR_RATELIMIT_EXCEED,
 				{ time: Time.difference(rateLimit.expires, Date.now()).toString() }));

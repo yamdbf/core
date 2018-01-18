@@ -23,7 +23,7 @@ import { Command } from '../command/Command';
 import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
-import { RateLimiter } from '../command/RateLimiter';
+import { RateLimitManager } from '../command/RateLimitManager';
 import { JSONProvider } from '../storage/JSONProvider';
 import { ClientStorage } from '../storage/ClientStorage';
 import { GuildStorageLoader } from '../storage/GuildStorageLoader';
@@ -36,6 +36,7 @@ import { ListenerUtil } from '../util/ListenerUtil';
 import { Lang } from '../localization/Lang';
 import { PluginLoader } from './PluginLoader';
 import { PluginConstructor } from '../types/PluginConstructor';
+import { Util } from '../util/Util';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -50,6 +51,12 @@ export class Client extends Discord.Client
 {
 	@logger('Client')
 	private readonly _logger: Logger;
+	private readonly _token: string;
+	private readonly _plugins: (PluginConstructor | string)[];
+	private readonly _guildStorageLoader: GuildStorageLoader;
+	private readonly _commandLoader: CommandLoader;
+	private readonly _dispatcher: CommandDispatcher;
+	private _ratelimit: string;
 
 	public readonly commandsDir: string;
 	public readonly localeDir: string;
@@ -64,17 +71,12 @@ export class Client extends Discord.Client
 	public readonly disableBase: BaseCommandName[];
 	public readonly provider: StorageProviderConstructor;
 	public readonly plugins: PluginLoader;
-	public readonly _middleware: MiddlewareFunction[];
-	public readonly _rateLimiter: RateLimiter;
-
 	public readonly storage: ClientStorage;
 	public readonly commands: CommandRegistry<this>;
+	public readonly rateLimitManager: RateLimitManager;
 
-	private readonly _token: string;
-	private readonly _plugins: (PluginConstructor | string)[];
-	private readonly _guildStorageLoader: GuildStorageLoader;
-	private readonly _commandLoader: CommandLoader;
-	private readonly _dispatcher: CommandDispatcher;
+	// Internals
+	public readonly _middleware: MiddlewareFunction[];
 
 	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
 	{
@@ -175,9 +177,15 @@ export class Client extends Discord.Client
 		 */
 		this.disableBase = options.disableBase || [];
 
-		// Create the global RateLimiter instance if a ratelimit is specified
-		if (options.ratelimit)
-			this._rateLimiter = new RateLimiter(options.ratelimit, true);
+		// Set the global ratelimit if provided
+		if (options.ratelimit) this.ratelimit = options.ratelimit;
+
+		/**
+		 * A convenient instance of {@link RateLimitManager} for use anywhere
+		 * the Client is available
+		 * @type {RateLimitManager}
+		 */
+		this.rateLimitManager = new RateLimitManager();
 
 		// Set the logger level if provided
 		if (typeof options.logLevel !== 'undefined')
@@ -287,6 +295,21 @@ export class Client extends Discord.Client
 	{
 		this.storage.guilds.delete(guild.id);
 		this._guildStorageLoader.removeGuild(guild);
+	}
+
+//#endregion
+
+//#region Getters/Setters
+
+	/**
+	 * The global ratelimit for all command usage per user
+	 * @type {string}
+	 */
+	public get ratelimit(): string { return this._ratelimit; }
+	public set ratelimit(value: string)
+	{
+		Util.parseRateLimit(value);
+		this._ratelimit = value;
 	}
 
 //#endregion

@@ -2,11 +2,11 @@ import { Collection, User } from 'discord.js';
 import { RateLimit } from './RateLimit';
 import { Message } from '../types/Message';
 import { Util } from '../util/Util';
+import { Logger } from '../util/logger/Logger';
 
 /**
- * Handles assigning ratelimits to guildmembers and users.
- * For assigning ratelimits to arbitrary tasks/processes,
- * use {@link RateLimitManager} instead
+ * Handles assigning ratelimits to guildmembers and users
+ * @deprecated Will be removed in a future release. Use {@link RateLimitManager} instead
  * @param {string} limit Ratelimit string matching the regex `\d+\/\d+[s|m|h|d]`<br>
  * 						 **Example:** `1/10m` to limit a command to one use per 10 minutes
  * @param {boolean} global Whether or not this RateLimiter handles global ratelimits
@@ -20,6 +20,8 @@ export class RateLimiter
 
 	public constructor(limit: string, global: boolean)
 	{
+		Logger.instance().warn('Deprecation', 'RateLimiter: Use RateLimitManager instead');
+
 		this._limit = Util.parseRateLimit(limit);
 		this._global = global;
 

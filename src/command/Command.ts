@@ -2,8 +2,8 @@ import { PermissionResolvable, Permissions, Message, MessageOptions } from 'disc
 import { Client } from '../client/Client';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
-import { RateLimiter } from './RateLimiter';
 import { ArgOpts } from '../types/ArgOpts';
+import { Util } from '../util/Util';
 
 /**
  * Command class to extend to create commands users can execute
@@ -12,6 +12,7 @@ import { ArgOpts } from '../types/ArgOpts';
 export class Command<T extends Client = Client>
 {
 	private _disabled: boolean;
+	private _ratelimit: string;
 
 	public client: T;
 	public name: string;
@@ -31,7 +32,6 @@ export class Command<T extends Client = Client>
 	public external: boolean;
 
 	// Internals
-	public readonly _rateLimiter: RateLimiter;
 	public readonly _middleware: MiddlewareFunction[];
 	public _classloc: string;
 
@@ -181,10 +181,17 @@ export class Command<T extends Client = Client>
 		this._middleware = [];
 
 		if (info) Object.assign(this, info);
+	}
 
-		// Create the RateLimiter instance if a ratelimit is specified
-		if (info && info.ratelimit)
-			this._rateLimiter = new RateLimiter(info.ratelimit, false);
+	/**
+	 * The ratelimit for this command per user
+	 * @type {string}
+	 */
+	public get ratelimit(): string { return this._ratelimit; }
+	public set ratelimit(value: string)
+	{
+		Util.parseRateLimit(value);
+		this._ratelimit = value;
 	}
 
 	/**
@@ -357,7 +364,7 @@ export class Command<T extends Client = Client>
 	 */
 	private _validatePermissions(field: string, perms: PermissionResolvable[]): void
 	{
-		let errString: (i: number, err: any) => string = (i: number, err: any) =>
+		let errString: (i: number, err: any) => string = (i, err) =>
 			`Command "${this.name}" permission "${perms[i]}" in ${field}[${i}] is not a valid permission.\n\n${err}`;
 
 		for (const [index, perm] of perms.entries())

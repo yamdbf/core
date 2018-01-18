@@ -4,7 +4,7 @@ import { Message } from '../types/Message';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { ResourceLoader } from '../types/ResourceLoader';
 import { Command } from './Command';
-import { RateLimiter } from './RateLimiter';
+import { Util } from '../util/Util';
 import { PermissionResolvable } from 'discord.js';
 
 /**
@@ -230,7 +230,8 @@ export function roles(...values: string[]): ClassDecorator
  */
 export function ratelimit(value: string): ClassDecorator
 {
-	return _setMetaData('_rateLimiter', new RateLimiter(value, false));
+	Util.parseRateLimit(value);
+	return _setMetaData('_ratelimit', value);
 }
 
 /**
