@@ -151,6 +151,17 @@
                     }
                 },
                 {
+                    "name": "rateLimitManager",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>A convenient instance of {@link RateLimitManager} for use anywhere\nthe Client is available</p>",
+                    "type": {
+                        "names": [
+                            "RateLimitManager"
+                        ]
+                    }
+                },
+                {
                     "name": "provider",
                     "access": "",
                     "virtual": false,
@@ -191,6 +202,17 @@
                     "type": {
                         "names": [
                             "CommandRegistry.<string, Command>"
+                        ]
+                    }
+                },
+                {
+                    "name": "ratelimit",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The global ratelimit for all command usage per user</p>",
+                    "type": {
+                        "names": [
+                            "string"
                         ]
                     }
                 }
@@ -820,6 +842,17 @@
                     }
                 },
                 {
+                    "name": "ratelimit",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The ratelimit for this command per user</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
                     "name": "disabled",
                     "access": "",
                     "virtual": false,
@@ -1386,7 +1419,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "RateLimit",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "call",
@@ -1411,7 +1448,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "_cleanup",
@@ -1425,7 +1466,7 @@
         },
         {
             "name": "RateLimiter",
-            "description": "<p>Handles assigning ratelimits to guildmembers and users.\nFor assigning ratelimits to arbitrary tasks/processes,\nuse {@link RateLimitManager} instead</p>",
+            "description": "<p>Handles assigning ratelimits to guildmembers and users</p>",
             "extends": [],
             "access": "",
             "virtual": false,
