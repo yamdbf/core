@@ -10,3 +10,4 @@ test_*.js
 /scripts/**/*.d.ts
 /scripts/storage
 *.sqlite
+package-lock.json
