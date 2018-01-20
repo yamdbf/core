@@ -10,6 +10,7 @@ import {
 } from '../bin/';
 // import TestCommand from './commands/test_command';
 import { TestPlugin } from './test_plugin';
+import { EvenNumberResolver } from './EvenNumberResolver';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
@@ -30,7 +31,8 @@ class Test extends Client
 			pause: true,
 			plugins: [TestPlugin],
 			// ratelimit: '5/10s',
-			disableBase: ['setlang']
+			disableBase: ['setlang'],
+			customResolvers: [EvenNumberResolver],
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 		});

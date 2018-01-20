@@ -1,6 +1,6 @@
 import { MiddlewareFunction } from '../../types/MiddlewareFunction';
-import { resolve, MappedResolveArgType } from './Resolve';
-import { expect, MappedExpectArgType } from './Expect';
+import { resolve, MappedArgType } from './Resolve';
+import { expect } from './Expect';
 import { localize } from './Localize';
 
 /**
@@ -10,73 +10,72 @@ import { localize } from './Localize';
 export class Middleware
 {
 	/**
-	 * Takes an object mapping argument names to argument types that
-	 * resolves args to their specified type or throws errors for
+	 * Takes an object mapping argument names to {@link Resolver} type names
+	 * and resolves args to their specified type or throws errors for
 	 * any invalid input. An argument list string can also be used --
 	 * See [Util.parseArgTypes]{@link module:Util.parseArgTypes}
 	 * for an example of how the list should be formatted
 	 *
-	 * See {@link ResolveArgType} for information on valid types.
+	 * See {@link BaseResolverType} for a list of base Resolver type names.
 	 *
 	 * Example:
 	 * ```
-	 * { '<mem>': 'Member', '<age>': 'Number', '<...desc>': 'String' }
+	 * { '<mem>': 'Member', '<age>': 'Number', '<desc>': 'String' }
+	 * // or: 'mem: Member, age: Number, desc: String'
+	 *
+	 * // An array literal for expecting specific strings can also be used
+	 * { '<height>': ['short', 'medium', 'tall'] }
+	 * // or: `height: ['short', 'medium', 'tall']`
 	 * ```
 	 *
 	 * Supports `'...'` in the argument name as the final argument to gather
 	 * all remaining input into one string and attempt to resolve them to
 	 * the provided argument type
-	 *
-	 * >**Note:** If you are using a string literal array type with
-	 * [expect]{@link module:Middleware.expect} alongside this, the
-	 * corresponding type you should resolve for that arg before using
-	 * `expect` is `String`
 	 * @static
 	 * @method resolve
-	 * @param {object|string} argTypes An object of argument names mapped to argument types
+	 * @param {object|string} argTypes An object of argument names mapped to Resolver type names
 	 * 								   or a TypeScript-style argument list string<br>
-	 * 								   See: {@link ResolveArgType}<br>
+	 * 								   See: {@link BaseResolverType}<br>
 	 * 								   See: [Util.parseArgTypes]{@link module:Util.parseArgTypes}
 	 * @returns {MiddlewareFunction}
 	 */
-	public static resolve: (argTypes: string | MappedResolveArgType) =>
+	public static resolve: (argTypes: string | MappedArgType) =>
 		MiddlewareFunction = resolve;
 
 	/**
-	 * Takes an object mapping argument names to argument types that
-	 * checks the types of passed arguments and ensures required
+	 * Takes an object mapping argument names to {@link Resolver} type names
+	 * and checks the types of passed arguments, ensuring required
 	 * arguments are present and valid. An argument list string
 	 * can also be used -- See [Util.parseArgTypes]{@link module:Util.parseArgTypes}
-	 * for an example of how the list should be formatted
+	 * for an example of how the list string should be formatted
 	 *
 	 * Should be added to the command AFTER any and all middleware functions
 	 * that modify args in any way are added ([resolve]{@link module:Middleware.resolve},
-	 * for example), the only exception being [localize]{@link module:Middleware.localize},
+	 * for example), an exception being [localize]{@link module:Middleware.localize},
 	 * which should always come last.
 	 *
-	 * See {@link ExpectArgType} for information on valid types.
+	 * See {@link BaseResolverType} for a list of base Resolver type names.
 	 *
 	 * Examples:
 	 * ```
 	 * { '<mem>': 'Member', '<age>': 'Number', '<desc>': 'String' }
-	 * ```
-	 * ```
-	 * { '<height>': ['short', 'medium', 'tall'] }
-	 * ```
+	 * // or: 'mem: Member, age: Number, desc: String'
 	 *
-	 * >**Note:** If verifying a `BannedUser` returned from [resolve]{@link module:Middleware.resolve},
-	 * use the `User` type. If verifying a `Duration` type, use `Number`.
+	 * // An array literal for expecting specific strings can also be used
+	 * { '<height>': ['short', 'medium', 'tall'] }
+	 * // or: `height: ['short', 'medium', 'tall']`
+	 * ```
 	 *
 	 * ***This middleware does not modify args in any way.***
 	 * @static
 	 * @method expect
-	 * @param {object|string} argTypes An object of argument names mapped to argument types
+	 * @param {object|string} argTypes An object of argument names mapped to Resolver type names
 	 * 								   or a TypeScript-style argument list string<br>
-	 * 								   See: {@link ExpectArgType}<br>
+	 * 								   See: {@link BaseResolverType}<br>
 	 * 								   See: [Util.parseArgTypes]{@link module:Util.parseArgTypes}
 	 * @returns {MiddlewareFunction}
 	 */
-	public static expect: (argTypes: string | MappedExpectArgType) =>
+	public static expect: (argTypes: string | MappedArgType) =>
 		MiddlewareFunction = expect;
 
 	/**

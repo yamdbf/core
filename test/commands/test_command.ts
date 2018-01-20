@@ -42,6 +42,8 @@ export default class extends Command
 	// @using(resolve(`test: Member, foo: String`))
 	// @using(expect(`test: Member, foo: ['foo', 'bar']`))
 	// @using(localize)
+	@using(resolve('foo: EvenNumber'))
+	@using(expect('foo: EvenNumber'))
 	public action(message: Message, [res, ...args]: [ResourceLoader, string[]]): void
 	{
 		// message.channel.send(res('FOO_BAR_BAZ'));

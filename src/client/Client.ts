@@ -23,6 +23,7 @@ import { Command } from '../command/Command';
 import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
+import { ResolverLoader } from '../command/resolvers/ResolverLoader';
 import { RateLimitManager } from '../command/RateLimitManager';
 import { JSONProvider } from '../storage/JSONProvider';
 import { ClientStorage } from '../storage/ClientStorage';
@@ -36,6 +37,7 @@ import { ListenerUtil } from '../util/ListenerUtil';
 import { Lang } from '../localization/Lang';
 import { PluginLoader } from './PluginLoader';
 import { PluginConstructor } from '../types/PluginConstructor';
+import { ResolverConstructor } from '../types/ResolverConstructor';
 import { Util } from '../util/Util';
 
 const { on, once, registerListeners } = ListenerUtil;
@@ -74,9 +76,11 @@ export class Client extends Discord.Client
 	public readonly storage: ClientStorage;
 	public readonly commands: CommandRegistry<this>;
 	public readonly rateLimitManager: RateLimitManager;
+	public readonly resolvers: ResolverLoader;
 
 	// Internals
 	public readonly _middleware: MiddlewareFunction[];
+	public readonly _customResolvers: ResolverConstructor[];
 
 	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
 	{
@@ -224,6 +228,14 @@ export class Client extends Discord.Client
 		 * @type {CommandRegistry<string, Command>}
 		 */
 		this.commands = new CommandRegistry<this, string, Command<this>>(this);
+
+		/**
+		 * ResolverLoader instance containing loaded argument resolvers
+		 * @type {ResolverLoader}
+		 */
+		this.resolvers = new ResolverLoader(this);
+		this._customResolvers = options.customResolvers || [];
+		this.resolvers._loadResolvers();
 
 		Lang.createInstance(this);
 		Lang.loadLocalizations();

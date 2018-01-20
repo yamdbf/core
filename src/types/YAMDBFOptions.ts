@@ -18,10 +18,12 @@
  * @property {LogLevel} [logLevel] Sets the logging level for the logger. Defaults to `LogLevel.DEBUG`
  * @property {Array<PluginConstructor|string>} [plugins=[]] An array of Plugin classes (not instances)
  * 															or plugin package name strings to be loaded and used
+ * @property {ResolverConstructor[]} [customResolvers=[]] An array of Resolver classes (not instances)
  */
 
 import { StorageProviderConstructor } from './StorageProviderConstructor';
 import { PluginConstructor } from './PluginConstructor';
+import { ResolverConstructor } from './ResolverConstructor';
 import { BaseCommandName } from './BaseCommandName';
 import { LogLevel } from './LogLevel';
 
@@ -42,4 +44,5 @@ export type YAMDBFOptions = {
 	ratelimit?: string;
 	logLevel?: LogLevel;
 	plugins?: (PluginConstructor | string)[];
+	customResolvers?: ResolverConstructor[];
 };

@@ -190,10 +190,6 @@ export class Util
 	 * // becomes:
 	 * { '<user>': 'User', '<height>': ['short', 'tall'], '[...desc]': 'String' }
 	 * ```
-	 *
-	 * When specifying argument types for [resolve]{@link module:Middleware.resolve},
-	 * use `String` when you know you will be later giving a string literal array to
-	 * [expect]{@link module:Middleware.expect} for the corresponding arg
 	 * @static
 	 * @method parseArgTypes
 	 * @param {string} input Argument list string
