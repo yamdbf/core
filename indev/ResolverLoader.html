@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/DeprecatedDecorator.js - Documentation</title>
+    <title>ResolverLoader - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,36 +33,206 @@
 
 
 
+
+<section>
+
+<header>
+	
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import { Logger } from './logger/Logger';
+        <h2>
+        ResolverLoader
+        </h2>
+        
+            <div class="class-description"><p>Loads and stores Command argument <a href="Resolver.html"><code>Resolver</code></a>s</p></div>
+        
+    
+</header>
 
-/**
- * Logs a deprecation warning for the decorated class method
- * whenever it is called
- * @param {string} [message] Method deprecation message
- * @returns {MethodDecorator}
- */
-export function deprecated&lt;T extends Function>(message?: string): MethodDecorator
-{
-	return function(target: T, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
-	{
-		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
-		const original: any = descriptor.value;
-		const logger: Logger = Logger.instance('Deprecation');
-		descriptor.value = function(...args: any[]): any
-		{
-			logger.warn(message || `${target.constructor.name}#${key}() is deprecated and will be removed in a future release.`);
-			return original.apply(this, args);
-		};
-		return descriptor;
-	};
-}
-</code></pre>
-        </article>
-    </section>
+<article>
+    <div class="container-overview">
+    
+        
 
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="ResolverLoader">
+		<span class="type-signature"></span>new <a href='#ResolverLoader' style='color: black'>ResolverLoader</a><span class="signature">()</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/resolvers/ResolverLoader.ts#L17">command/resolvers/ResolverLoader.ts, Line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Properties</h3>
+
+        
+            
+<h4 class="name" id="loaded">.<a href='#loaded' style='color: black'>loaded</a><span class="type-signature">: object</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    <p>Object mapping Resolver type names to their instances</p>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>object</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/resolvers/ResolverLoader.ts#L30">command/resolvers/ResolverLoader.ts, Line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

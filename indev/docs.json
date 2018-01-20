@@ -206,6 +206,17 @@
                     }
                 },
                 {
+                    "name": "resolvers",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>ResolverLoader instance containing loaded argument resolvers</p>",
+                    "type": {
+                        "names": [
+                            "ResolverLoader"
+                        ]
+                    }
+                },
+                {
                     "name": "ratelimit",
                     "access": "",
                     "virtual": false,
@@ -1529,6 +1540,134 @@
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Determine whether or not to use the global rate limit collection</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "Resolver",
+            "description": "<p>Resolver class to extend for creating Command argument resolvers.\nCustom Resolvers must implement the <code>validate()</code> and <code>resolve()</code> methods</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "Resolver",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "client",
+                        "type": "Client",
+                        "description": "<p>YAMDBF Client instance</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "description": "<p>Resolver type name. This is the type name used\n                        when specifying types in [resolve]{@link module:Middleware.resolve}\n                        and [expect]{@link module:Middleware.expect}<br><br>\n                        <strong>Note:</strong> This is not passed by the ResolverLoader, so\n                        pass it to <code>super()</code> yourself when creating custom Resolvers</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "validate",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Method to implement that returns whether or not the given value\nmatches the type the resolver is meant to resolve</p>",
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>Value to validate</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
+                    "name": "resolve",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Method to implement that accepts a string and returns a resolved\nvalue of the type the resolver is meant to resolve</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "Message",
+                            "description": "<p>Discord.js Message instance</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "command",
+                            "type": "Command",
+                            "description": "<p>Instance of the Command being called</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "description": "<p>Argument name</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "description": "<p>Argument value</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "ResolverLoader",
+            "description": "<p>Loads and stores Command argument {@link Resolver}s</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "ResolverLoader",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "properties": [
+                {
+                    "name": "loaded",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Object mapping Resolver type names to their instances</p>",
+                    "type": {
+                        "names": [
+                            "object"
+                        ]
+                    }
+                }
+            ],
+            "functions": [
+                {
+                    "name": "_loadResolvers",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Load resolvers from _base and client._customResolvers</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -2910,6 +3049,11 @@
             ]
         },
         {
+            "name": "BaseResolverType",
+            "description": "<p>Valid argument resolver types\nfor use with [resolve]{@link module:Middleware.resolve} and\n[expect]{@link module:Middleware.expect}. Can be one of\nthe following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role' | 'Any'</code></pre><p>or an Array of possible string literal values</p>",
+            "properties": []
+        },
+        {
             "name": "CommandInfo",
             "description": "<p>Object containing required {@link Command} properties\nto be passed to a Command on construction</p>",
             "properties": [
@@ -3128,11 +3272,6 @@
             ]
         },
         {
-            "name": "ExpectArgType",
-            "description": "<p>Valid arg type values\nfor [expect]{@link module:Middleware.expect}. Can be one of\nthe following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'User' | 'Member' | 'Role' | 'Channel' | 'Any'</code></pre><p>or an Array of possible string literal values if specific string options are desired</p>",
-            "properties": []
-        },
-        {
             "name": "LocalizedCommandInfo",
             "description": "<p>Represents an object\ncontaining localization overrides for a command's <code>desc</code>,\n<code>info</code>, and <code>usage</code> fields</p>",
             "properties": []
@@ -3191,8 +3330,8 @@
             "properties": []
         },
         {
-            "name": "ResolveArgType",
-            "description": "<p>Valid arg type values for\n[resolve]{@link module:Middleware.resolve}. Can be one of\nthe following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role'</code></pre>",
+            "name": "ResolverConstrucot",
+            "description": "<p>Any class that extends and\nimplements {@link Resolver}. <em>Not to be confused with an <strong>instance</strong>\nof a Plugin.</em></p>",
             "properties": []
         },
         {
@@ -3365,6 +3504,14 @@
                     "name": "plugins",
                     "type": "Array.<(PluginConstructor|string)>",
                     "description": "<p>An array of Plugin classes (not instances)\n                                                            or plugin package name strings to be loaded and used</p>",
+                    "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "customResolvers",
+                    "type": "Array.<ResolverConstructor>",
+                    "description": "<p>An array of Resolver classes (not instances)</p>",
                     "default": "[]",
                     "optional": true,
                     "nullable": ""

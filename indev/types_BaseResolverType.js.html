@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/DeprecatedDecorator.js - Documentation</title>
+    <title>types/BaseResolverType.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -36,29 +36,18 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Logger } from './logger/Logger';
-
-/**
- * Logs a deprecation warning for the decorated class method
- * whenever it is called
- * @param {string} [message] Method deprecation message
- * @returns {MethodDecorator}
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {string} BaseResolverType Valid argument resolver types
+ * for use with [resolve]{@link module:Middleware.resolve} and
+ * [expect]{@link module:Middleware.expect}. Can be one of
+ * the following string literals:
+ * ```
+ * 'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role' | 'Any'
+ * ```
+ * or an Array of possible string literal values
  */
-export function deprecated&lt;T extends Function>(message?: string): MethodDecorator
-{
-	return function(target: T, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
-	{
-		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
-		const original: any = descriptor.value;
-		const logger: Logger = Logger.instance('Deprecation');
-		descriptor.value = function(...args: any[]): any
-		{
-			logger.warn(message || `${target.constructor.name}#${key}() is deprecated and will be removed in a future release.`);
-			return original.apply(this, args);
-		};
-		return descriptor;
-	};
-}
+
+export type BaseResolverType = 'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role' | 'Any';
 </code></pre>
         </article>
     </section>

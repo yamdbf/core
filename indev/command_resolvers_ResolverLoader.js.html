@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>util/DeprecatedDecorator.js - Documentation</title>
+    <title>command/resolvers/ResolverLoader.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -36,28 +36,62 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Logger } from './logger/Logger';
+            <pre class="prettyprint source linenums"><code>import { Resolver } from './Resolver';
+import { Client } from '../../client/Client';
+import { ResolverConstructor } from '../../types/ResolverConstructor';
+
+import { NumberResolver } from './base/NumberResolver';
+import { StringResolver } from './base/StringResolver';
+import { DurationResolver } from './base/DurationResolver';
+import { UserResolver } from './base/UserResolver';
+import { MemberResolver } from './base/MemberResolver';
+import { BannedUserResolver } from './base/BannedUserResolver';
+import { ChannelResolver } from './base/ChannelResolver';
+import { RoleResolver } from './base/RoleResolver';
 
 /**
- * Logs a deprecation warning for the decorated class method
- * whenever it is called
- * @param {string} [message] Method deprecation message
- * @returns {MethodDecorator}
+ * Loads and stores Command argument {@link Resolver}s
  */
-export function deprecated&lt;T extends Function>(message?: string): MethodDecorator
+export class ResolverLoader
 {
-	return function(target: T, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
+	private readonly _client: Client;
+	private readonly _base: ResolverConstructor[];
+
+	public loaded: { [name: string]: Resolver };
+
+	public constructor(client: Client)
 	{
-		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
-		const original: any = descriptor.value;
-		const logger: Logger = Logger.instance('Deprecation');
-		descriptor.value = function(...args: any[]): any
+		/**
+		 * Object mapping Resolver type names to their instances
+		 * @type {object}
+		 */
+		this.loaded = {};
+
+		this._client = client;
+		this._base = [
+			NumberResolver,
+			StringResolver,
+			DurationResolver,
+			UserResolver,
+			MemberResolver,
+			BannedUserResolver,
+			ChannelResolver,
+			RoleResolver
+		];
+	}
+
+	/**
+	 * Load resolvers from _base and client._customResolvers
+	 * @private
+	 */
+	public _loadResolvers(): void
+	{
+		for (const resolver of this._base.concat(this._client._customResolvers))
 		{
-			logger.warn(message || `${target.constructor.name}#${key}() is deprecated and will be removed in a future release.`);
-			return original.apply(this, args);
-		};
-		return descriptor;
-	};
+			let newResolver = new resolver(this._client);
+			this.loaded[newResolver.name] = newResolver;
+		}
+	}
 }
 </code></pre>
         </article>

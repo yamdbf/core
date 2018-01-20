@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Middleware - Documentation</title>
+    <title>Resolver - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -38,11 +38,13 @@
 
 <header>
 	
-		<h2>Middleware</h2>
-	
     
+        <h2>
+        Resolver
+        </h2>
         
-            
+            <div class="class-description"><p>Resolver class to extend for creating Command argument resolvers.
+Custom Resolvers must implement the <code>validate()</code> and <code>resolve()</code> methods</p></div>
         
     
 </header>
@@ -51,11 +53,16 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Contains static command middleware methods</p></div>
-        
 
-        
-            
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="Resolver">
+		<span class="type-signature"></span>new <a href='#Resolver' style='color: black'>Resolver</a><span class="signature">(<span class="param-types">client: <a href="Client.html">Client</a></span>, <span class="param-types">name: string</span>)</span><span class="type-signature"></span>
+	</h4>
+
+    
 
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
@@ -66,6 +73,84 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Client.html">Client</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>YAMDBF Client instance</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Resolver type name. This is the type name used
+                        when specifying types in <a href="module-Middleware.html#.resolve"><code>resolve</code></a>
+                        and <a href="module-Middleware.html#.expect"><code>expect</code></a><br><br>
+                        <strong>Note:</strong> This is not passed by the ResolverLoader, so
+                        pass it to <code>super()</code> yourself when creating custom Resolvers</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -102,7 +187,7 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L6">command/middleware/Middleware.ts, Line 6</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/resolvers/Resolver.ts#L15">command/resolvers/Resolver.ts, Line 15</a>
     </li></ul></dd>
     
 
@@ -129,7 +214,6 @@
 
 </div>
 
-        
     
     </div>
 
@@ -156,8 +240,8 @@
 
     
 
-    <h4 class="name" id=".expect">
-		<span class="type-signature">(static) </span>.<a href='#expect' style='color: black'>expect</a><span class="signature">(<span class="param-types">argTypes: object</span>)</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
+    <h4 class="name" id="resolve">
+		<span class="type-signature"></span>.<a href='#resolve' style='color: black'>resolve</a><span class="signature">(<span class="param-types">message: <a href="Message.html">Message</a></span>, <span class="param-types">command: <a href="Command.html">Command</a></span>, <span class="param-types">name: string</span>, <span class="param-types">value: string</span>)</span><span class="type-signature"></span>
 	</h4>
 
     
@@ -166,23 +250,8 @@
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Takes an object mapping argument names to <a href="Resolver.html"><code>Resolver</code></a> type names
-and checks the types of passed arguments, ensuring required
-arguments are present and valid. An argument list string
-can also be used -- See <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a>
-for an example of how the list string should be formatted</p>
-<p>Should be added to the command AFTER any and all middleware functions
-that modify args in any way are added (<a href="module-Middleware.html#.resolve"><code>resolve</code></a>,
-for example), an exception being <a href="module-Middleware.html#.localize"><code>localize</code></a>,
-which should always come last.</p>
-<p>See <a href="global.html#BaseResolverType"><code>BaseResolverType</code></a> for a list of base Resolver type names.</p>
-<p>Examples:</p>
-<pre class="prettyprint source"><code>{ '&lt;mem>': 'Member', '&lt;age>': 'Number', '&lt;desc>': 'String' }
-// or: 'mem: Member, age: Number, desc: String'
-
-// An array literal for expecting specific strings can also be used
-{ '&lt;height>': ['short', 'medium', 'tall'] }
-// or: `height: ['short', 'medium', 'tall']`</code></pre><p><strong><em>This middleware does not modify args in any way.</em></strong></p>
+    <p>Method to implement that accepts a string and returns a resolved
+value of the type the resolver is meant to resolve</p>
 </div>
 
 
@@ -218,15 +287,60 @@ which should always come last.</p>
 
         <tr>
             
-                <td class="name"><code>argTypes</code></td>
+                <td class="name"><code>message</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><dd>object</dd></span>
-|
+<span class="param-type"><dd><a href="Message.html">Message</a></dd></span>
 
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Discord.js Message instance</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Command.html">Command</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Instance of the Command being called</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type"><dd>string</dd></span>
 
 
@@ -238,10 +352,31 @@ which should always come last.</p>
 
             
 
-            <td class="description last"><p>An object of argument names mapped to Resolver type names
-                                   or a TypeScript-style argument list string<br>
-                                   See: <a href="global.html#BaseResolverType"><code>BaseResolverType</code></a><br>
-                                   See: <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a></p></td>
+            <td class="description last"><p>Argument name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Argument value</p></td>
         </tr>
 
     
@@ -283,7 +418,7 @@ which should always come last.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L45">command/middleware/Middleware.ts, Line 45</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/resolvers/Resolver.ts#L45">command/resolvers/Resolver.ts, Line 45</a>
     </li></ul></dd>
     
 
@@ -306,23 +441,6 @@ which should always come last.</p>
 
 
 
-	
-		<b>Returns:</b>
-	
-
-        
-
-
-<span class="param-type">
-	<dd>
-<span class="param-type"><dd><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></dd></span>
-
-
-</dd>
-</span>
-
-
-    
 
 
 </div>
@@ -332,8 +450,8 @@ which should always come last.</p>
 
     
 
-    <h4 class="name" id=".localize">
-		<span class="type-signature">(static) </span>.<a href='#localize' style='color: black'>localize</a><span class="signature">()</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
+    <h4 class="name" id="validate">
+		<span class="type-signature"></span>.<a href='#validate' style='color: black'>validate</a><span class="signature">(<span class="param-types">value: any</span>)</span><span class="type-signature"></span>
 	</h4>
 
     
@@ -342,131 +460,8 @@ which should always come last.</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Middleware function that inserts a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function for the
-language that will be used for the command call as the first arg for that
-command call. This middleware should be used <em>after</em> any other middleware
-like <a href="module-Middleware.html#.expect"><code>expect</code></a> or <a href="module-Middleware.html#.resolve"><code>resolve</code></a>
-because those are based around user input whereas this should be handled
-after user input related things as to not interfere with the other middleware
-and their inputs</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L81">command/middleware/Middleware.ts, Line 81</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-		<b>Returns:</b>
-	
-
-        
-
-
-<span class="param-type">
-	<dd>
-<span class="param-type"><dd><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></dd></span>
-
-
-</dd>
-</span>
-
-
-    
-
-
-</div>
-
-        
-            
-
-    
-
-    <h4 class="name" id=".resolve">
-		<span class="type-signature">(static) </span>.<a href='#resolve' style='color: black'>resolve</a><span class="signature">(<span class="param-types">argTypes: object</span>)</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
-	</h4>
-
-    
-
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-<div class="description">
-    <p>Takes an object mapping argument names to <a href="Resolver.html"><code>Resolver</code></a> type names
-and resolves args to their specified type or throws errors for
-any invalid input. An argument list string can also be used --
-See <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a>
-for an example of how the list should be formatted</p>
-<p>See <a href="global.html#BaseResolverType"><code>BaseResolverType</code></a> for a list of base Resolver type names.</p>
-<p>Example:</p>
-<pre class="prettyprint source"><code>{ '&lt;mem>': 'Member', '&lt;age>': 'Number', '&lt;desc>': 'String' }
-// or: 'mem: Member, age: Number, desc: String'
-
-// An array literal for expecting specific strings can also be used
-{ '&lt;height>': ['short', 'medium', 'tall'] }
-// or: `height: ['short', 'medium', 'tall']`</code></pre><p>Supports <code>'...'</code> in the argument name as the final argument to gather
-all remaining input into one string and attempt to resolve them to
-the provided argument type</p>
+    <p>Method to implement that returns whether or not the given value
+matches the type the resolver is meant to resolve</p>
 </div>
 
 
@@ -502,16 +497,13 @@ the provided argument type</p>
 
         <tr>
             
-                <td class="name"><code>argTypes</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><dd>object</dd></span>
-|
-
-<span class="param-type"><dd>string</dd></span>
+<span class="param-type"><dd>any</dd></span>
 
 
 
@@ -522,10 +514,7 @@ the provided argument type</p>
 
             
 
-            <td class="description last"><p>An object of argument names mapped to Resolver type names
-                                   or a TypeScript-style argument list string<br>
-                                   See: <a href="global.html#BaseResolverType"><code>BaseResolverType</code></a><br>
-                                   See: <a href="module-Util.html#.parseArgTypes"><code>Util.parseArgTypes</code></a></p></td>
+            <td class="description last"><p>Value to validate</p></td>
         </tr>
 
     
@@ -567,7 +556,7 @@ the provided argument type</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L12">command/middleware/Middleware.ts, Line 12</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/resolvers/Resolver.ts#L32">command/resolvers/Resolver.ts, Line 32</a>
     </li></ul></dd>
     
 
@@ -590,23 +579,6 @@ the provided argument type</p>
 
 
 
-	
-		<b>Returns:</b>
-	
-
-        
-
-
-<span class="param-type">
-	<dd>
-<span class="param-type"><dd><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></dd></span>
-
-
-</dd>
-</span>
-
-
-    
 
 
 </div>
