@@ -1567,7 +1567,7 @@
                     {
                         "name": "name",
                         "type": "string",
-                        "description": "<p>Resolver type name. This is the type name used\n                        when specifying types in [resolve]{@link module:Middleware.resolve}\n                        and [expect]{@link module:Middleware.expect}<br><br>\n                        <strong>Note:</strong> This is not passed by the ResolverLoader, so\n                        pass it to <code>super()</code> yourself when creating custom Resolvers</p>",
+                        "description": "<p>Resolver type name. This is the type name used\n                        when specifying types in [resolve]{@link module:Middleware.resolve}\n                        and [expect]{@link module:Middleware.expect}<br>\n                        <strong>Note:</strong> This is not passed by the ResolverLoader, so\n                        pass it to <code>super()</code> yourself when creating custom Resolvers</p>",
                         "default": "",
                         "optional": "",
                         "nullable": ""
@@ -1580,7 +1580,7 @@
                     "name": "validate",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Method to implement that returns whether or not the given value\nmatches the type the resolver is meant to resolve</p>",
+                    "description": "<p>Method to implement that should return whether or not the\ngiven value matches the type the resolver is meant to resolve</p>",
                     "parameters": [
                         {
                             "name": "value",
@@ -1597,7 +1597,7 @@
                     "name": "resolve",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Method to implement that accepts a string and returns a resolved\nvalue of the type the resolver is meant to resolve</p>",
+                    "description": "<p>Method to implement that should accept a string and return\na resolved value of the type the resolver is meant to resolve</p>",
                     "parameters": [
                         {
                             "name": "message",
