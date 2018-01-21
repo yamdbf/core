@@ -11,9 +11,8 @@ export class Middleware
 {
 	/**
 	 * Takes an object mapping argument names to {@link Resolver} type names
-	 * and resolves args to their specified type or throws errors for
-	 * any invalid input. An argument list string can also be used --
-	 * See [Util.parseArgTypes]{@link module:Util.parseArgTypes}
+	 * and resolves args to their specified type. An argument list string
+	 * can also be used -- See [Util.parseArgTypes]{@link module:Util.parseArgTypes}
 	 * for an example of how the list should be formatted
 	 *
 	 * See {@link BaseResolverType} for a list of base Resolver type names.
