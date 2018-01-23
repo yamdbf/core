@@ -23,6 +23,7 @@ export class Lang
 	private static _instance: Lang;
 	private _client: Client;
 	private _commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
+	private _groupInfo: { [group: string]: { [lang: string]: string } };
 	private _langs: { [lang: string]: Language };
 	private _meta: { [lang: string]: { [key: string]: any } };
 
@@ -33,6 +34,7 @@ export class Lang
 
 		this._client = client;
 		this._commandInfo = {};
+		this._groupInfo = {};
 		this._langs = {};
 		this._meta = {};
 	}
@@ -48,7 +50,7 @@ export class Lang
 	 */
 	public static get langs(): { [lang: string]: Language }
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 		return Lang._instance._langs;
 	}
 
@@ -60,7 +62,7 @@ export class Lang
 	 */
 	public static get langNames(): string[]
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
 		let langs: Set<string> = new Set();
 		for (const commandName of Object.keys(Lang._instance._commandInfo))
@@ -96,7 +98,7 @@ export class Lang
 	 */
 	public static setMetaValue(lang: string, key: string, value: any): void
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 		Util.assignNestedValue(Lang._instance._meta, [lang, key], value);
 	}
 
@@ -110,7 +112,7 @@ export class Lang
 	 */
 	public static getMetaValue(lang: string, key: string): any
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 		return Util.getNestedValue(Lang._instance._meta, [lang, key]);
 	}
 
@@ -123,7 +125,7 @@ export class Lang
 	 */
 	public static getMetadata(lang: string): { [key: string]: any }
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 		return Lang._instance._meta[lang] || {};
 	}
 
@@ -154,7 +156,7 @@ export class Lang
 	 */
 	public static loadLocalizationsFrom(dir: string): void
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
 		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\.[^\/]+)?\.lang$/;
 		let langs: { [key: string]: string[] } = {};
@@ -204,7 +206,7 @@ export class Lang
 	 */
 	public static loadLocalizations(): void
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
 		Lang.setMetaValue('en_us', 'name', 'English');
 		Lang.loadLocalizationsFrom(path.join(__dirname, './en_us'));
@@ -226,7 +228,7 @@ export class Lang
 	 */
 	public static loadCommandLocalizationsFrom(dir: string): void
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 		dir = path.resolve(dir);
 		let allLangFiles: string[] = [];
 		allLangFiles.push(...glob.sync(`${dir}/**/*.lang.json`));
@@ -234,9 +236,11 @@ export class Lang
 
 		for (const langFile of allLangFiles)
 		{
+			// Ignore reserved commandgroups.lang.json
+			if (/commandgroups\.lang\.json$/.test(langFile)) continue;
 			let localizations: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
 			try { localizations = require(langFile); }
-			catch (err) { continue; }
+			catch { continue; }
 
 			for (const command of Object.keys(localizations))
 				for (const lang of Object.keys(localizations[command]))
@@ -249,25 +253,56 @@ export class Lang
 						...localizations[command][lang]
 					};
 				}
-
 		}
 
 		Lang.postLoad();
 	}
 
 	/**
-	 * Load any command localizations from the Client's `commandsDir`.
-	 * Called automatically by the YAMDBF Client at startup
+	 * Find and load `commandgroups.lang.json` from the provided directory,
+	 * setting command group descriptions for the given groups and languages
+	 * in the file
+	 * @static
+	 * @method loadGroupLocalizationsFrom
+	 * @param {string} dir Directory to load from
+	 * @returns {void}
+	 */
+	public static loadGroupLocalizationsFrom(dir: string): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
+		dir = path.resolve(dir);
+		const filePath: string = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
+		if (!filePath) return;
+
+		let groupInfo: { [group: string]: { [lang: string]: string } };
+		try { groupInfo = require(filePath); }
+		catch (err) { throw new Error(`Failed to load group localizations from '${filePath}:\n${err.stack}`); }
+
+		for (const group of Object.keys(groupInfo))
+			for (const lang of Object.keys(groupInfo[group]))
+				Util.assignNestedValue(
+					Lang._instance._groupInfo,
+					[group, lang],
+					groupInfo[group][lang]);
+	}
+
+	/**
+	 * Load any command info and command group localizations
+	 * from the Client's `commandsDir`. Called automatically
+	 * by the YAMDBF Client at startup
 	 * @static
 	 * @method loadCommandLocalizations
 	 * @returns {void}
 	 */
 	public static loadCommandLocalizations(): void
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
+
+		Lang.loadGroupLocalizationsFrom(path.join(__dirname, './en_us'));
 
 		if (!Lang._instance._client.commandsDir) return;
 		Lang.loadCommandLocalizationsFrom(Lang._instance._client.commandsDir);
+		Lang.loadGroupLocalizationsFrom(Lang._instance._client.commandsDir);
 
 		const helpTextLangs: Set<string> = new Set();
 		for (const command of Object.keys(Lang._instance._commandInfo))
@@ -288,9 +323,9 @@ export class Lang
 	 */
 	public static getCommandInfo(command: Command, lang: string): LocalizedCommandInfo
 	{
-		if (!Lang._instance) throw new Error('Lang singleton instance has not been created.');
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
-		if (!command) throw new Error('A Command must be given for which to get Command info.');
+		if (!command) throw new Error('A Command must be given for which to get Command info');
 		let desc: string, info: string, usage: string;
 		if (!Lang._instance._commandInfo[command.name]
 			|| (Lang._instance._commandInfo[command.name]
@@ -302,6 +337,19 @@ export class Lang
 		usage = Lang._instance._commandInfo[command.name][lang].usage || command.usage;
 
 		return { desc, info, usage };
+	}
+
+	/**
+	 * Get the localized Command group description for the
+	 * given group and language
+	 * @param {string} group Command group to get localized info for
+	 * @param {string} lang Language to get localized group info in
+	 */
+	public static getGroupInfo(group: string, lang: string): string
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
+		if (!group) throw new Error('A group must be provided');
+		return Util.getNestedValue(Lang._instance._groupInfo, [group, lang]) || `${lang}::group_${group}`;
 	}
 
 	/**
