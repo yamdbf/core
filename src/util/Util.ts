@@ -60,8 +60,11 @@ export class Util
 
 	/**
 	 * Split args from the input by the given Command's argument separator
+	 * @static
+	 * @method parseArgs
 	 * @param {string} input Input string to parse args from
 	 * @param {Command} command Command object, used to determine the args separator
+	 * @returns {string[]}
 	 */
 	public static parseArgs(input: string, command: Command): string[]
 	{
