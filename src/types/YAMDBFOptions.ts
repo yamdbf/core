@@ -19,6 +19,11 @@
  * @property {Array<PluginConstructor|string>} [plugins=[]] An array of Plugin classes (not instances)
  * 															or plugin package name strings to be loaded and used
  * @property {ResolverConstructor[]} [customResolvers=[]] An array of Resolver classes (not instances)
+ * @property {Function} [argsParser] Function taking an input string, an optional {@link Command} object,
+ * 									 and an optional {@link Message} object that returns an array of argument
+ * 									 strings. Should be used instead of middleware for providing an
+ * 									 alternative to the default args parsing of splitting input on the
+ * 									 Command's specified argument separator
  */
 
 import { StorageProviderConstructor } from './StorageProviderConstructor';
@@ -26,6 +31,8 @@ import { PluginConstructor } from './PluginConstructor';
 import { ResolverConstructor } from './ResolverConstructor';
 import { BaseCommandName } from './BaseCommandName';
 import { LogLevel } from './LogLevel';
+import { Message } from './Message';
+import { Command } from '../command/Command';
 
 export type YAMDBFOptions = {
 	token?: string;
@@ -45,4 +52,5 @@ export type YAMDBFOptions = {
 	logLevel?: LogLevel;
 	plugins?: (PluginConstructor | string)[];
 	customResolvers?: ResolverConstructor[];
+	argsParser?: (input: string, command?: Command, message?: Message) => string[];
 };

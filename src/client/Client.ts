@@ -77,6 +77,7 @@ export class Client extends Discord.Client
 	public readonly commands: CommandRegistry<this>;
 	public readonly rateLimitManager: RateLimitManager;
 	public readonly resolvers: ResolverLoader;
+	public readonly argsParser: (input: string, command?: Command, message?: Message) => string[];
 
 	// Internals
 	public readonly _middleware: MiddlewareFunction[];
@@ -202,6 +203,7 @@ export class Client extends Discord.Client
 		 */
 		this.provider = options.provider || JSONProvider;
 
+		// Plugins to load
 		this._plugins = options.plugins || [];
 
 		/**
@@ -236,6 +238,14 @@ export class Client extends Discord.Client
 		this.resolvers = new ResolverLoader(this);
 		this._customResolvers = options.customResolvers || [];
 		this.resolvers._loadResolvers();
+
+		/**
+		 * The argument parsing function the framework will use to parse
+		 * command arguments from message content input. Defaults to
+		 * splitting on {@link Command#argOpts.separator}
+		 * @type {Function}
+		 */
+		this.argsParser = options.argsParser || Util.parseArgs;
 
 		Lang.createInstance(this);
 		Lang.loadLocalizations();
@@ -452,6 +462,12 @@ export class Client extends Discord.Client
 	 * time each and thus should not be added within any sort of event or loop.
 	 * Multiple separate middleware functions can be added to the via multiple
 	 * separate calls to this method
+	 *
+	 * >**Warning:** Do not use middleware for overriding the default argument
+	 * splitting. Use {@link YAMDBFOptions.argsParser} instead. Otherwise
+	 * you will see inconsistent results when using Command shortcuts, as
+	 * argument splitting for shortcut interpolation always happens before
+	 * middleware is run
 	 * @param {MiddlewareFunction} func The middleware function to use
 	 * @returns {Client}
 	 */

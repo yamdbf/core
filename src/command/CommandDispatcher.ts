@@ -110,12 +110,9 @@ export class CommandDispatcher
 			&& (message.content.match(clientMention) || []).length === 1)
 			message.mentions.users.delete(this._client.user.id);
 
-		let args: string[] = message.content
-			.replace(prefix, '').replace(name, '')
-			.trim()
-			.split(command.argOpts.separator)
-			.map(a => a.trim())
-			.filter(a => a !== '');
+		// Prepare args
+		const preppedInput: string = message.content.replace(prefix, '').replace(name, '').trim();
+		let args: string[] = this._client.argsParser(preppedInput, command, message);
 
 		type Result = string | MessageOptions | Message;
 		type CommandResult = Result | Result[] | Promise<Result> | Promise<Result[]>;
