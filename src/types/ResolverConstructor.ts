@@ -1,5 +1,5 @@
 /**
- * @typedef {Function} ResolverConstrucot Any class that extends and
+ * @typedef {Function} ResolverConstructor Any class that extends and
  * implements {@link Resolver}. *Not to be confused with an **instance**
  * of a Plugin.*
  */
