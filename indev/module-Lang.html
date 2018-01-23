@@ -203,7 +203,7 @@ Allows client output to be translated to other languages</p></div>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L55">localization/Lang.ts, Line 55</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L57">localization/Lang.ts, Line 57</a>
     </li></ul></dd>
     
 
@@ -277,7 +277,7 @@ a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function 
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L40">localization/Lang.ts, Line 40</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L42">localization/Lang.ts, Line 42</a>
     </li></ul></dd>
     
 
@@ -412,7 +412,7 @@ Called automatically by the YAMDBF Client at startup</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L75">localization/Lang.ts, Line 75</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L77">localization/Lang.ts, Line 77</a>
     </li></ul></dd>
     
 
@@ -567,7 +567,7 @@ resources for that specific language</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L378">localization/Lang.ts, Line 378</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L426">localization/Lang.ts, Line 426</a>
     </li></ul></dd>
     
 
@@ -746,7 +746,7 @@ given in the Command's constructor</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L280">localization/Lang.ts, Line 280</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L315">localization/Lang.ts, Line 315</a>
     </li></ul></dd>
     
 
@@ -900,7 +900,7 @@ given in the Command's constructor</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L117">localization/Lang.ts, Line 117</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L119">localization/Lang.ts, Line 119</a>
     </li></ul></dd>
     
 
@@ -1078,7 +1078,7 @@ given in the Command's constructor</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L103">localization/Lang.ts, Line 103</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L105">localization/Lang.ts, Line 105</a>
     </li></ul></dd>
     
 
@@ -1137,8 +1137,9 @@ given in the Command's constructor</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Load any command localizations from the Client's <code>commandsDir</code>.
-Called automatically by the YAMDBF Client at startup</p>
+    <p>Load any command info and command group localizations
+from the Client's <code>commandsDir</code>. Called automatically
+by the YAMDBF Client at startup</p>
 </div>
 
 
@@ -1183,7 +1184,7 @@ Called automatically by the YAMDBF Client at startup</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L258">localization/Lang.ts, Line 258</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L289">localization/Lang.ts, Line 289</a>
     </li></ul></dd>
     
 
@@ -1340,7 +1341,163 @@ directory (when writing plugins, for instance)</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L217">localization/Lang.ts, Line 217</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L219">localization/Lang.ts, Line 219</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>void</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".loadGroupLocalizationsFrom">
+		<span class="type-signature">(static) </span>.<a href='#loadGroupLocalizationsFrom' style='color: black'>loadGroupLocalizationsFrom</a><span class="signature">(<span class="param-types">dir: string</span>)</span><span class="type-signature"> &rarr; void</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Find and load <code>commandgroups.lang.json</code> from the provided directory,
+setting command group descriptions for the given groups and languages
+in the file</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Directory to load from</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L261">localization/Lang.ts, Line 261</a>
     </li></ul></dd>
     
 
@@ -1446,7 +1603,7 @@ the YAMDBF Client at startup</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L197">localization/Lang.ts, Line 197</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L199">localization/Lang.ts, Line 199</a>
     </li></ul></dd>
     
 
@@ -1602,7 +1759,7 @@ from any given directory (when writing plugins, for instance)</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L146">localization/Lang.ts, Line 146</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L148">localization/Lang.ts, Line 148</a>
     </li></ul></dd>
     
 
@@ -1834,7 +1991,7 @@ template scripts</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L307">localization/Lang.ts, Line 307</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L355">localization/Lang.ts, Line 355</a>
     </li></ul></dd>
     
 
@@ -2036,7 +2193,7 @@ template scripts</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L88">localization/Lang.ts, Line 88</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/localization/Lang.ts#L90">localization/Lang.ts, Line 90</a>
     </li></ul></dd>
     
 
