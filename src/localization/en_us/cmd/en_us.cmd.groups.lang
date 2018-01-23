@@ -1,0 +1,41 @@
+[CMD_GROUPS_LIST]
+**Command groups:** (Groups marked with ***** are disabled)
+```ldif
+{{!
+	function padRight(text, length)
+	{
+		let pad = Math.max(0, Math.min(length, length - text.length));
+		return `${text}${' '.repeat(pad)}`;
+	}
+
+	let groups = args.groups.split(', ');
+	let info = args.info.split('::::');
+	let disabled = args.disabledGroups.split(', ');
+	
+	let widest = groups
+		.map(g => g.length)
+		.reduce((a, b) => Math.max(a, b));
+	
+	let combined = [];
+	for (const group in groups) combined.push([groups[group], info[group]]);
+
+	return combined
+		.map(c => `${padRight(c[0], widest + 1)}${disabled.includes(c[0]) ? '*' : ' '}: ${c[1]}`)
+		.join('\n');
+!}}
+```
+
+[CMD_GROUPS_ERR_NOEXIST]
+Command group "{{ group }}" does not exist.
+
+[CMD_GROUPS_ERR_ENABLED]
+Command group "{{ group }}" is already enabled.
+
+[CMD_GROUPS_ENABLE_SUCCESS]
+**Enabled command group "{{ group }}"**
+
+[CMD_GROUPS_ERR_DISABLED]
+Command group "{{ group }}" is already disabled or is not allowed to be disabled.
+
+[CMD_GROUPS_DISABLE_SUCCESS]
+**Disabled command group "{{ group }}"**

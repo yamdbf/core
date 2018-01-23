@@ -1,17 +1,15 @@
-// Generated automatically at Thu Aug 10 2017 18:22:56 GMT-0500 (CDT)
+// Generated automatically at Tue Jan 23 2018 01:47:19 GMT-0600 (Central Standard Time)
 
 /**
  * @typedef {string} BaseCommandName String representing a name of a base command. Valid names are:
  * ```
  * 'blacklist',
  * 'clearlimit',
- * 'disablegroup',
- * 'enablegroup',
  * 'eval',
  * 'eval:ts',
+ * 'groups',
  * 'help',
  * 'limit',
- * 'listgroups',
  * 'ping',
  * 'reload',
  * 'setlang',
@@ -21,13 +19,11 @@
 
 export type BaseCommandName = 'blacklist'
 	| 'clearlimit'
-	| 'disablegroup'
-	| 'enablegroup'
 	| 'eval'
 	| 'eval:ts'
+	| 'groups'
 	| 'help'
 	| 'limit'
-	| 'listgroups'
 	| 'ping'
 	| 'reload'
 	| 'setlang'
