@@ -3330,7 +3330,7 @@
             "properties": []
         },
         {
-            "name": "ResolverConstrucot",
+            "name": "ResolverConstructor",
             "description": "<p>Any class that extends and\nimplements {@link Resolver}. <em>Not to be confused with an <strong>instance</strong>\nof a Plugin.</em></p>",
             "properties": []
         },
