@@ -276,11 +276,47 @@ Prefixes may not contain backticks or backslashes.
         `Command prefix set to \`${args.prefix}\``
 !}}
 
+[CMD_SHORTCUTS_LIST]
+List of command shortcuts:
+```ldif
+{{ names }}
+```
+
+[CMD_SHORTCUTS_SET_SUCCESS]
+Set shortcut **&quot;{{ name }}&quot;** with content: 
+```md
+{{ content }}
+```
+
+[CMD_SHORTCUTS_GET_CONTENT]
+Shortcut **&quot;{{ name }}&quot;** content:
+```md
+{{ content }}
+```
+
+[CMD_SHORTCUTS_REMOVE_SUCCESS]
+Removed shortcut **&quot;{{ name }}&quot;**.
+
+[CMD_SHORTCUTS_ERR_NO_SHORTCUTS]
+Error: This server has no configured command shortcuts.
+
+[CMD_SHORTCUTS_ERR_MISSING]
+Error: A shortcut called **&quot;{{ name }}&quot;** does not exist.
+
+[CMD_SHORTCUTS_ERR_SET_LENGTH]
+Error: Shortcut content is limited to 500 characters.
+
+[CMD_SHORTCUTS_ERR_MAX_SHORTCUTS]
+Error: Servers may only have up to 50 command shortcuts.
+
 [DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL]
 You have used too many commands and may not use any more for **{{ time }}**.
 
 [DISPATCHER_ERR_RATELIMIT_EXCEED]
 You have used this command too many times and may not use it again for **{{ time }}**.
+
+[DISPATCHER_ERR_INVALID_SHORTCUT]
+Error: Shortcut **&quot;{{ name }}&quot;** does not map to a valid command.
 
 [DISPATCHER_ERR_UNKNOWN_COMMAND]
 Sorry, I could not recognize any command in your message.
