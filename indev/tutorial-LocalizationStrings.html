@@ -96,24 +96,6 @@ Failed to find a command with the name `{{ commandName }}`
 [CMD_CLEARLIMIT_SUCCESS]
 Successfully cleared role limits for command: `{{ commandName }}`
 
-[CMD_DISABLEGROUP_ERR_NOEXIST]
-Command group &quot;{{ group }}&quot; does not exist.
-
-[CMD_DISABLEGROUP_ERR_DISABLED]
-Command group &quot;{{ group }}&quot; is already disabled or is not allowed to be disabled.
-
-[CMD_DISABLEGROUP_SUCCESS]
-**Disabled command group &quot;{{ group }}&quot;**
-
-[CMD_ENABLEGROUP_ERR_NOEXIST]
-Command group &quot;{{ group }}&quot; does not exist.
-
-[CMD_ENABLEGROUP_ERR_ENABLED]
-Command group &quot;{{ group }}&quot; is already enabled.
-
-[CMD_ENABLEGROUP_SUCCESS]
-**Enabled command group &quot;{{ group }}&quot;**
-
 [CMD_EVAL_ERR_NOCODE]
 **ERROR:**
 ```xl
@@ -139,6 +121,48 @@ No code provided to evaluate.
 ```xl
 {{ error }}
 ```
+
+[CMD_GROUPS_LIST]
+**Command groups:** (Groups marked with ***** are disabled)
+```ldif
+{{!
+    function padRight(text, length)
+    {
+        let pad = Math.max(0, Math.min(length, length - text.length));
+        return `${text}${' '.repeat(pad)}`;
+    }
+
+    let groups = args.groups.split(', ');
+    let info = args.info.split('::::');
+    let disabled = args.disabledGroups.split(', ');
+
+    let widest = groups
+        .map(g => g.length)
+        .reduce((a, b) => Math.max(a, b));
+
+    let combined = [];
+    for (const group in groups) combined.push([groups[group], info[group]]);
+
+    return combined
+        .map(c => `${padRight(c[0], widest + 1)}${disabled.includes(c[0]) ? '*' : ' '}: ${c[1]}`)
+        .join('\n');
+!}}
+```
+
+[CMD_GROUPS_ERR_NOEXIST]
+Command group &quot;{{ group }}&quot; does not exist.
+
+[CMD_GROUPS_ERR_ENABLED]
+Command group &quot;{{ group }}&quot; is already enabled.
+
+[CMD_GROUPS_ENABLE_SUCCESS]
+**Enabled command group &quot;{{ group }}&quot;**
+
+[CMD_GROUPS_ERR_DISABLED]
+Command group &quot;{{ group }}&quot; is already disabled or is not allowed to be disabled.
+
+[CMD_GROUPS_DISABLE_SUCCESS]
+**Disabled command group &quot;{{ group }}&quot;**
 
 [CMD_HELP_COMMAND_LIST]
 Available commands: (Commands marked with `*` are server-only)
@@ -207,15 +231,6 @@ Failed to add any roles to the command.
 Successfully added {{!
     args.roles.split(',').length > 1 ? 'roles' : 'role'
 !}}: {{ roles }} to the limiter for command: `{{ commandName }}`
-
-[CMD_LISTGROUPS_GROUPS]
-Command groups:
-{{!
-    args.groups
-        .split(', ')
-        .map(g => `${args.disabledGroups.split(', ').includes(g) ? '*' : ' '}${g}`)
-        .join('\n')
-!}}
 
 [CMD_RELOAD_ERR_UNKNOWN_COMMAND]
 Command &quot;{{ commandName }}&quot; could not be found.

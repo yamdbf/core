@@ -71,24 +71,10 @@ commands and this lines up with the base commands using english helptext.</p>
             &quot;info&quot;: &quot;Runs pretty slowly due to having to run diagnostics before compiling. If Typescript is not installed the provided code will be evaluated as Javascript and diagnostics/compilation will be skipped.&quot;
         }
     },
-    &quot;disablegroup&quot;: {
+    &quot;groups&quot;: {
         &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Disable a command group&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>disablegroup &lt;group>&quot;,
-            &quot;info&quot;: &quot;Disables a command group so that all of the commands in the group cannot be used on this server.&quot;
-        }
-    },
-    &quot;enablegroup&quot;: {
-        &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Enable a command group&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>enablegroup &lt;group>&quot;,
-            &quot;info&quot;: &quot;Enables a command group so that all of the commands in the group can be used on this server.&quot;
-        }
-    },
-    &quot;listgroups&quot;: {
-        &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;List all command groups and their status&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>listgroups&quot;,
+            &quot;desc&quot;: &quot;Configure or list command groups&quot;,
+            &quot;usage&quot;: &quot;&lt;prefix>groups ['enable'|'on'|'disable'|'off'] [...group]&quot;,
             &quot;info&quot;: &quot;A '*' denotes a disabled group when listing all command groups.&quot;
         }
     },
