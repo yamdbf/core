@@ -217,6 +217,17 @@
                     }
                 },
                 {
+                    "name": "argsParser",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The argument parsing function the framework will use to parse\ncommand arguments from message content input. Defaults to\nsplitting on {@link Command#argOpts.separator}</p>",
+                    "type": {
+                        "names": [
+                            "function"
+                        ]
+                    }
+                },
+                {
                     "name": "ratelimit",
                     "access": "",
                     "virtual": false,
@@ -403,7 +414,7 @@
                     "name": "use",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Adds a middleware function to be used when any command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do every time any command\nis called.</p>\n<p>See {@link MiddlewareFunction} for information on how a middleware\nfunction should be represented</p>\n<p>Usage example:</p>\n<pre class=\"prettyprint source\"><code>&lt;Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<blockquote>\n<p><strong>Note:</strong> Middleware functions should only be added to the client one\ntime each and thus should not be added within any sort of event or loop.\nMultiple separate middleware functions can be added to the via multiple\nseparate calls to this method</p>\n</blockquote>",
+                    "description": "<p>Adds a middleware function to be used when any command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do every time any command\nis called.</p>\n<p>See {@link MiddlewareFunction} for information on how a middleware\nfunction should be represented</p>\n<p>Usage example:</p>\n<pre class=\"prettyprint source\"><code>&lt;Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to all commands that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<blockquote>\n<p><strong>Note:</strong> Middleware functions should only be added to the client one\ntime each and thus should not be added within any sort of event or loop.\nMultiple separate middleware functions can be added to the via multiple\nseparate calls to this method</p>\n<p><strong>Warning:</strong> Do not use middleware for overriding the default argument\nsplitting. Use {@link YAMDBFOptions.argsParser} instead. Otherwise\nyou will see inconsistent results when using Command shortcuts, as\nargument splitting for shortcut interpolation always happens before\nmiddleware is run</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "func",
@@ -3513,6 +3524,14 @@
                     "type": "Array.<ResolverConstructor>",
                     "description": "<p>An array of Resolver classes (not instances)</p>",
                     "default": "[]",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "argsParser",
+                    "type": "function",
+                    "description": "<p>Function taking an input string, an optional {@link Command} object,\n                                     and an optional {@link Message} object that returns an array of argument\n                                     strings. Should be used instead of middleware for providing an\n                                     alternative to the default args parsing of splitting input on the\n                                     Command's specified argument separator</p>",
+                    "default": "",
                     "optional": true,
                     "nullable": ""
                 }

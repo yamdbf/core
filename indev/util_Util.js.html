@@ -97,6 +97,18 @@ export class Util
 	}
 
 	/**
+	 * Split args from the input by the given Command's argument separator
+	 * @param {string} input Input string to parse args from
+	 * @param {Command} command Command object, used to determine the args separator
+	 */
+	public static parseArgs(input: string, command: Command): string[]
+	{
+		return input.split(command.argOpts.separator)
+			.map(a => a.trim())
+			.filter(a => a !== '');
+	}
+
+	/**
 	 * Pads the right side of a string with spaces to the given length
 	 * @static
 	 * @method padRight
