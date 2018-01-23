@@ -93,7 +93,7 @@ export class CommandDispatcher
 
 			// Send unknownCommandError in DMs
 			if (dm && this._client.unknownCommandError)
-					message.channel.send(this.unknownCommandError(res));
+				message.channel.send(this.unknownCommandError(res));
 
 			if (!commandWasCalled) return;
 		}
