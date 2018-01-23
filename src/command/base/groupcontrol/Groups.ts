@@ -41,7 +41,7 @@ export default class extends Command
 	 */
 	private async listGroups(message: Message, res: ResourceLoader): Promise<void>
 	{
-		const lang: string = await message.guild.storage.settings.get('lang');
+		const lang: string = await message.guild.storage.settings.get('lang') || this.client.defaultLang;
 		const info: string[] = this.client.commands.groups.map(g => Lang.getGroupInfo(g, lang));
 		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 
