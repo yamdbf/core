@@ -4,6 +4,9 @@ You have used too many commands and may not use any more for **{{ time }}**.
 [DISPATCHER_ERR_RATELIMIT_EXCEED]
 You have used this command too many times and may not use it again for **{{ time }}**.
 
+[DISPATCHER_ERR_INVALID_SHORTCUT]
+Error: Shortcut **"{{ name }}"** does not map to a valid command.
+
 [DISPATCHER_ERR_UNKNOWN_COMMAND]
 Sorry, I could not recognize any command in your message.
 Try saying "help" to view a list of commands.

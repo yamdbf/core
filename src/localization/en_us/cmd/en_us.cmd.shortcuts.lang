@@ -1,0 +1,32 @@
+[CMD_SHORTCUTS_LIST]
+List of command shortcuts:
+```ldif
+{{ names }}
+```
+
+[CMD_SHORTCUTS_SET_SUCCESS]
+Set shortcut **"{{ name }}"** with content: 
+```md
+{{ content }}
+```
+
+[CMD_SHORTCUTS_GET_CONTENT]
+Shortcut **"{{ name }}"** content:
+```md
+{{ content }}
+```
+
+[CMD_SHORTCUTS_REMOVE_SUCCESS]
+Removed shortcut **"{{ name }}"**.
+
+[CMD_SHORTCUTS_ERR_NO_SHORTCUTS]
+Error: This server has no configured command shortcuts.
+
+[CMD_SHORTCUTS_ERR_MISSING]
+Error: A shortcut called **"{{ name }}"** does not exist.
+
+[CMD_SHORTCUTS_ERR_SET_LENGTH]
+Error: Shortcut content is limited to 500 characters.
+
+[CMD_SHORTCUTS_ERR_MAX_SHORTCUTS]
+Error: Servers may only have up to 50 command shortcuts.

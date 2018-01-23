@@ -3,5 +3,6 @@
 	"prefix": "/",
 	"disabledGroups": [],
 	"limitedCommands": {},
-	"blacklist": {}
+	"blacklist": {},
+	"shortcuts": {}
 }

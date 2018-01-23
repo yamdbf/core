@@ -24,7 +24,7 @@ export class Util
 	 * Return whether or not a command was called in the given
 	 * message, the called command, the prefix used to call the
 	 * command, and the name or alias of the command used to call it.
-	 * >Returns `[false, null, null, null]` if no command was called
+	 * >Returns everything it manages to determine up to the point of failure
 	 * @static
 	 * @method wasCommandCalled
 	 * @param {Message} message Message to check
@@ -32,11 +32,8 @@ export class Util
 	 */
 	public static async wasCommandCalled(message: Message): Promise<[boolean, Command, string, string]>
 	{
-		type CommandCallData = [boolean, Command, string, string];
-
 		const client: Client = <Client> message.client;
 		const dm: boolean = message.channel.type !== 'text';
-		const negative: CommandCallData = [false, null, null, null];
 		const prefixes: string[] = [
 			`<@${client.user.id}>`,
 			`<@!${client.user.id}>`
@@ -50,14 +47,13 @@ export class Util
 		else prefixes.push(await client.storage.get('defaultGuildSettings.prefix'));
 
 		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
-
 		if (dm && typeof prefix === 'undefined') prefix = '';
-		if (typeof prefix === 'undefined' && !dm) return negative;
+		if (typeof prefix === 'undefined' && !dm) return [false, null, prefix, null];
 
 		const commandName: string = message.content.trim().slice(prefix.length).trim().split(' ')[0];
 		const command: Command = client.commands.findByNameOrAlias(commandName);
-		if (!command) return negative;
-		if (command.disabled) return negative;
+		if (!command) return [false, null, prefix, commandName];
+		if (command.disabled) return [false, command, prefix, commandName];
 
 		return [true, command, prefix, commandName];
 	}

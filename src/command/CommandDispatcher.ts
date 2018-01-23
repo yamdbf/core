@@ -66,14 +66,36 @@ export class CommandDispatcher
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 
 		type CommandCallData = [boolean, Command, string, string];
-		const [commandWasCalled, command, prefix, name]: CommandCallData =
+		let [commandWasCalled, command, prefix, name]: CommandCallData =
 			await Util.wasCommandCalled(message);
 
 		if (!commandWasCalled)
 		{
+			// Handle shortcuts
+			if (!dm)
+			{
+				let shortcuts: { [name: string]: string } =
+					await message.guild.storage.settings.get('shortcuts') || {};
+
+				if (shortcuts && prefix && name && shortcuts[name])
+				{
+					const shortcutName: string = name;
+					const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
+					const bonusArgs: string = message.content.replace(call, '');
+
+					message.content = `${prefix}${shortcuts[name]}${bonusArgs}`;
+					[commandWasCalled, command, prefix, name] = await Util.wasCommandCalled(message);
+
+					if (!commandWasCalled)
+						message.channel.send(res(s.DISPATCHER_ERR_INVALID_SHORTCUT, { name: shortcutName }));
+				}
+			}
+
+			// Send unknownCommandError in DMs
 			if (dm && this._client.unknownCommandError)
-				message.channel.send(this.unknownCommandError(res));
-			return;
+					message.channel.send(this.unknownCommandError(res));
+
+			if (!commandWasCalled) return;
 		}
 
 		let validCall: boolean = false;
