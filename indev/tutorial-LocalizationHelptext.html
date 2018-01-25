@@ -82,7 +82,7 @@ commands and this lines up with the base commands using english helptext.</p>
         &quot;en_us&quot;: {
             &quot;desc&quot;: &quot;Provides information on bot commands&quot;,
             &quot;usage&quot;: &quot;&lt;prefix>help [command]&quot;,
-            &quot;info&quot;: &quot;Will DM bot command help information to the user to keep clutter down in guild channels&quot;
+            &quot;info&quot;: &quot;Will DM command help information to the user to keep clutter down in guild channels&quot;
         }
     },
     &quot;ping&quot;: {
@@ -115,7 +115,7 @@ commands and this lines up with the base commands using english helptext.</p>
         &quot;en_us&quot;: {
             &quot;desc&quot;: &quot;Configure or list command shortcuts&quot;,
             &quot;usage&quot;: &quot;&lt;prefix>shortcuts ['get'|'set'|'remove'] [name] [...content]&quot;,
-            &quot;info&quot;: &quot;Shortcuts allow calling preconfigured command+argument sets&quot;
+            &quot;info&quot;: &quot;Shortcuts allow creating and calling preconfigured command+argument sets, or simple aliases\n\nExample:\n\t&lt;prefix>shortcuts set h help\n\nWhich would set the shortcut \&quot;h\&quot; to call the command \&quot;help\&quot;\n\n\nShortcuts also allow substitution tokens for argument interpolation.\n\nExample:\n\t&lt;prefix>shortcuts set add eval %s + %s\n\nWhich would set the shortcut \&quot;add\&quot;, to add two numbers --\n\&quot;&lt;prefix>add 2 3\&quot;, which becomes \&quot;&lt;prefix>eval 2 + 3\&quot;\n\nOf course the eval command is owner-only, but this should give you an idea of how shortcuts work&quot;
         }
     },
     &quot;blacklist&quot;: {
