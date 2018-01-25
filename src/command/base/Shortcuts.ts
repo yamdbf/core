@@ -15,7 +15,23 @@ export default class extends Command
 			name: 'shortcuts',
 			desc: 'Configure or list command shortcuts',
 			usage: `<prefix>shortcuts ['get'|'set'|'remove'] [name] [...content]`,
-			info: `Shortcuts allow calling preconfigured command+argument sets`,
+			info: `Shortcuts allow creating and calling preconfigured command+argument sets, or simple aliases
+
+Example:
+	<prefix>shortcuts set h help
+
+Which would set the shortcut "h" to call the command "help"
+
+
+Shortcuts also allow substitution tokens for argument interpolation.
+
+Example:
+	<prefix>shortcuts set add eval %s + %s
+
+Which would set the shortcut "add", to add two numbers --
+"<prefix>add 2 3", which becomes "<prefix>eval 2 + 3"
+
+Of course the eval command is owner-only, but this should give you an idea of how shortcuts work`,
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}

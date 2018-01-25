@@ -17,7 +17,7 @@ export default class extends Command
 			name: 'help',
 			desc: 'Provides information on bot commands',
 			usage: `<prefix>help [command]`,
-			info: 'Will DM bot command help information to the user to keep clutter down in guild channels'
+			info: 'Will DM command help information to the user to keep clutter down in guild channels'
 		});
 	}
 

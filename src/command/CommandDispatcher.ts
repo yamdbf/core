@@ -12,6 +12,7 @@ import { RateLimit } from './RateLimit';
 import { Time } from '../util/Time';
 import { Lang } from '../localization/Lang';
 import { Util } from '../util/Util';
+import { format } from 'util';
 
 /**
  * Handles dispatching commands
@@ -81,10 +82,14 @@ export class CommandDispatcher
 				{
 					const shortcutName: string = name;
 					const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
-					const bonusArgs: string = message.content.replace(call, '');
+					const oldArgsStr: string = message.content.replace(call, '');
+					const newCommand: string = `${prefix}${shortcuts[name]}`;
 
-					message.content = `${prefix}${shortcuts[name]}${bonusArgs}`;
+					message.content = newCommand;
 					[commandWasCalled, command, prefix, name] = await Util.wasCommandCalled(message);
+
+					const shortcutArgs: string[] = this._client.argsParser(oldArgsStr, command, message);
+					message.content = format(newCommand, ...shortcutArgs);
 
 					if (!commandWasCalled)
 						message.channel.send(res(s.DISPATCHER_ERR_INVALID_SHORTCUT, { name: shortcutName }));
