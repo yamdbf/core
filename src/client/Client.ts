@@ -39,6 +39,8 @@ import { PluginLoader } from './PluginLoader';
 import { PluginConstructor } from '../types/PluginConstructor';
 import { ResolverConstructor } from '../types/ResolverConstructor';
 import { Util } from '../util/Util';
+import { Time } from '../util/Time';
+import { GuildStorage } from '../storage/GuildStorage';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -289,12 +291,14 @@ export class Client extends Discord.Client
 	{
 		await this._guildStorageLoader.init();
 		await this._guildStorageLoader.loadStorages();
+		await this._guildStorageLoader.cleanGuilds();
+
 		await this.plugins._loadPlugins();
 
 		if (!this.passive)
 		{
 			this._logger.info('Initializing commands...');
-			let initSuccess: boolean = await this.commands._initCommands();
+			const initSuccess: boolean = await this.commands._initCommands();
 			this._logger.info(`Commands initialized${initSuccess ? '' : ' with errors'}.`);
 			this._dispatcher.setReady();
 			this._logger.info('Command dispatcher ready.');
@@ -307,16 +311,23 @@ export class Client extends Discord.Client
 	}
 
 	@on('guildCreate')
-	private __onGuildCreateEvent(): void
+	private async __onGuildCreateEvent(guild: Guild): Promise<void>
 	{
-		this._guildStorageLoader.initNewGuilds();
+		if (this.storage.guilds.has(guild.id))
+		{
+			// Handle guild returning to the same shard in the same session
+			const storage: GuildStorage = this.storage.guilds.get(guild.id);
+			if (await storage.settings.exists('YAMDBFInternal.remove'))
+				await storage.settings.remove('YAMDBFInternal.remove');
+		}
+		else await this._guildStorageLoader.loadStorages();
 	}
 
 	@on('guildDelete')
 	private __onGuildDeleteEvent(guild: Guild): void
 	{
-		this.storage.guilds.delete(guild.id);
-		this._guildStorageLoader.removeGuild(guild);
+		this.storage.guilds.get(guild.id).settings.set(
+			'YAMDBFInternal.remove', Date.now() + Time.parseShorthand('7d'));
 	}
 
 //#endregion

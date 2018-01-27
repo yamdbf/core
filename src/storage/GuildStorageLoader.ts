@@ -1,7 +1,8 @@
-import { Collection, Guild } from 'discord.js';
+import { Guild } from 'discord.js';
 import { Client } from '../client/Client';
 import { StorageProvider } from './StorageProvider';
 import { GuildStorage } from '../storage/GuildStorage';
+import { Util } from '../util/Util';
 
 /**
  * Handles loading all guild-specific data from persistent storage into
@@ -23,6 +24,7 @@ export class GuildStorageLoader
 
 	/**
 	 * Initialize storage providers for guild storage and settings
+	 * @returns {Promise<void>}
 	 */
 	public async init(): Promise<void>
 	{
@@ -33,72 +35,52 @@ export class GuildStorageLoader
 	/**
 	 * Load data for each guild from persistent storage and store it in a
 	 * {@link GuildStorage} object
+	 * @returns {Promise<void>}
 	 */
 	public async loadStorages(): Promise<void>
 	{
-		for (const key of await this._storageProvider.keys())
+		for (const guild of this._client.guilds.values())
 		{
-			const guild: Guild = this._client.guilds.get(key);
-			if (!guild) continue;
+			if (this._client.storage.guilds.has(guild.id)) continue;
 
 			const storage: GuildStorage = new GuildStorage(
 				this._client, guild, this._storageProvider, this._settingsProvider);
 
 			await storage.init();
-			this._client.storage.guilds.set(key, storage);
-		}
 
-		await this.initNewGuilds();
-	}
+			// Handle guild returning, possibly in a new shard or a new session
+			if (await storage.settings.exists('YAMDBFInternal.remove'))
+				await storage.settings.remove('YAMDBFInternal.remove');
 
-	/**
-	 * Create GuildStorage for all guilds that do not
-	 * currently have one for the Client session
-	 */
-	public async initNewGuilds(): Promise<void>
-	{
-		const storageKeys: string[] = Array.from(
-			new Set([...(await this._storageProvider.keys()), ...(await this._settingsProvider.keys())]));
-
-		const storagelessGuilds: Collection<string, Guild> =
-			this._client.guilds.filter(g => !storageKeys.includes(g.id));
-
-		for (const guild of storagelessGuilds.values())
-		{
-			const storage: GuildStorage = new GuildStorage(
-				this._client, guild, this._storageProvider, this._settingsProvider);
-
-			await storage.init();
 			this._client.storage.guilds.set(guild.id, storage);
 		}
 	}
 
 	/**
-	 * Remove storage entries for a guild that the bot
-	 * has been removed from
-	 */
-	public async removeGuild(guild: Guild): Promise<void>
-	{
-		await this._storageProvider.remove(guild.id);
-		await this._settingsProvider.remove(guild.id);
-	}
-
-	/**
 	 * Clean out any storages/settings storages for guilds the
-	 * bot is no longer a part of
+	 * bot has no longer been a part of for more than 5 days
+	 * @returns {Promise<void>}
 	 */
 	public async cleanGuilds(): Promise<void>
 	{
-		const dataStorageKeys: string[] = await this._storageProvider.keys();
 		const settingsStorageKeys: string[] = await this._settingsProvider.keys();
-		const guildlessStorages: string[] = dataStorageKeys.filter(guild => !this._client.guilds.has(guild));
-		const guildlessSettings: string[] = settingsStorageKeys.filter(guild => !this._client.guilds.has(guild));
-
-		for (const settingsKey of guildlessSettings) await this._settingsProvider.remove(settingsKey);
-		for (const storageKey of guildlessStorages)
+		for (const guildID of settingsStorageKeys)
 		{
-			this._client.storage.guilds.delete(storageKey);
-			await this._storageProvider.remove(storageKey);
+			const data: string = await this._settingsProvider.get(guildID);
+			if (!data) continue;
+
+			const parsed: any = JSON.parse(data);
+			const removeTime: number = Util.getNestedValue(parsed, ['YAMDBFInternal', 'remove']);
+
+			if (!removeTime) continue;
+			if (removeTime < Date.now())
+			{
+				await this._settingsProvider.remove(guildID);
+				await this._storageProvider.remove(guildID);
+
+				if (this._client.storage.guilds.has(guildID))
+					this._client.storage.guilds.delete(guildID);
+			}
 		}
 	}
 }

@@ -24,7 +24,7 @@ class Test extends Client
 			owner: config.owner,
 			readyText: 'Test client ready',
 			statusText: 'Foo bar baz',
-			provider: Providers.SQLiteProvider('sqlite://./db.sqlite', false),
+			// provider: Providers.SQLiteProvider('sqlite://./db.sqlite', false),
 			commandsDir: './commands',
 			// localeDir: './locale',
 			// defaultLang: 'al_bhed',
