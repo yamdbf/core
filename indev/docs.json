@@ -2240,7 +2240,11 @@
                     "virtual": false,
                     "description": "<p>Initialize storage providers for guild storage and settings</p>",
                     "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "loadStorages",
@@ -2248,31 +2252,23 @@
                     "virtual": false,
                     "description": "<p>Load data for each guild from persistent storage and store it in a\n{@link GuildStorage} object</p>",
                     "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "initNewGuilds",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Create GuildStorage for all guilds that do not\ncurrently have one for the Client session</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "removeGuild",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Remove storage entries for a guild that the bot\nhas been removed from</p>",
-                    "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "cleanGuilds",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Clean out any storages/settings storages for guilds the\nbot is no longer a part of</p>",
+                    "description": "<p>Clean out any storages/settings storages for guilds the\nbot has no longer been a part of for more than 5 days</p>",
                     "parameters": [],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
                 }
             ]
         },
