@@ -265,27 +265,6 @@
                     }
                 },
                 {
-                    "name": "loadCommand",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Loads/reloads all/specific commands</p>",
-                    "parameters": [
-                        {
-                            "name": "command",
-                            "type": "string",
-                            "description": "<p>The name of a command to reload, or 'all' to load all commands</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "void",
-                        "description": ""
-                    }
-                },
-                {
                     "name": "isOwner",
                     "access": "",
                     "virtual": false,
@@ -430,6 +409,14 @@
                         "type": "Client",
                         "description": ""
                     }
+                },
+                {
+                    "name": "_reloadCustomCommands",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Reload custom commands. Used internally by the <code>reload</code> command</p>",
+                    "parameters": [],
+                    "examples": []
                 }
             ],
             "events": [
@@ -1187,26 +1174,39 @@
             },
             "functions": [
                 {
-                    "name": "loadCommands",
+                    "name": "loadCommandsFrom",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Load or reload all commands from the base commands directory and the\nuser-specified {@link Client#commandsDir} directory and stores them in\nthe Client's {@link CommandRegistry} instance ({@link Client#commands})</p>",
-                    "parameters": [],
-                    "examples": []
+                    "description": "<p>Load commands from the given directory</p>",
+                    "parameters": [
+                        {
+                            "name": "dir",
+                            "type": "string",
+                            "description": "<p>Directory to load from</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "base",
+                            "type": "boolean",
+                            "description": "<p>Whether or not the commands being loaded are base commands</p>",
+                            "default": false,
+                            "optional": true,
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "number",
+                        "description": "<p>The number of Commands loaded from the directory</p>"
+                    }
                 },
                 {
-                    "name": "reloadCommand",
-                    "access": "",
+                    "name": "_findCommandClass",
+                    "access": "private",
                     "virtual": false,
-                    "description": "<p>Reload the given command in the Client's {@link CommandRegistry} ({@link Client#commands})</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "getCommandClass",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Get the Command class from an attempted Command class import</p>",
+                    "description": "<p>Recursively search for a Command class within the given object</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -1227,37 +1227,26 @@
                 "parameters": [],
                 "examples": []
             },
+            "properties": [
+                {
+                    "name": "groups",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Contains all [Command groups]{@link Command#group}</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                }
+            ],
             "functions": [
-                {
-                    "name": "_registerInternal",
-                    "access": "private",
-                    "virtual": false,
-                    "description": "<p>Complete registration of a command and add to the parent\ncollection, erroring on duplicate names and aliases.\nThis is an internal method and should not be used. Use\n<code>registerExternal()</code> instead</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "_initCommands",
-                    "access": "private",
-                    "virtual": false,
-                    "description": "<p>Run the <code>init()</code> method of all loaded commands.\nThis is an internal method and should not be used</p>",
-                    "parameters": [],
-                    "examples": []
-                },
                 {
                     "name": "registerExternal",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Register an external command and add it to the <code>&lt;Client&gt;.commands</code>\n[collection]{@link external:Collection}, erroring on duplicate\nnames and aliases. External commands will be preserved when the\n<code>reload</code> command is called.</p>\n<blockquote>\n<p><strong>Note:</strong> This is intended for Plugins to use to register external\ncommands with the Client instance. Under normal circumstances\ncommands should be added by placing them in the directory passed\nto the <code>commandsDir</code> YAMDBF Client option</p>\n</blockquote>",
+                    "description": "<p>Register an external command and add it to the <code>&lt;Client&gt;.commands</code>\n[collection]{@link external:Collection}, erroring on duplicate\naliases</p>\n<blockquote>\n<p><strong>Note:</strong> This is intended for Plugins to use to register external\ncommands with the Client instance. Under normal circumstances\ncommands should be added by placing them in the directory passed\nto the <code>commandsDir</code> YAMDBF Client option</p>\n</blockquote>",
                     "parameters": [
-                        {
-                            "name": "client",
-                            "type": "Client",
-                            "description": "<p>YAMDBF Client instance</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
                         {
                             "name": "command",
                             "type": "Command",
@@ -1274,15 +1263,15 @@
                     }
                 },
                 {
-                    "name": "findByNameOrAlias",
+                    "name": "resolve",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Finds a command by [name]{@link Command#name} or [alias]{@link Command#aliases}</p>",
+                    "description": "<p>Resolve the given Command name or alias to a registered Command</p>",
                     "parameters": [
                         {
-                            "name": "text",
+                            "name": "input",
                             "type": "string",
-                            "description": "<p>The name or alias of the Command</p>",
+                            "description": "<p>Command name or alias</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -1290,22 +1279,33 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "Command",
-                        "description": ""
+                        "type": "",
+                        "description": "<p>Command</p>"
                     }
-                }
-            ],
-            "properties": [
+                },
                 {
-                    "name": "groups",
-                    "access": "",
+                    "name": "_registerInternal",
+                    "access": "private",
                     "virtual": false,
-                    "description": "<p>Contains all [Command groups]{@link Command#group}</p>",
-                    "type": {
-                        "names": [
-                            "Array.<string>"
-                        ]
-                    }
+                    "description": "<p>Complete registration of a command and add to the parent\ncollection, erroring on duplicate names and aliases.\nThis is an internal method and should not be used. Use\n<code>registerExternal()</code> instead</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "_checkDuplicateAliases",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Check for duplicate aliases. Used internally</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "_initCommands",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Run the <code>init()</code> method of all loaded commands.\nThis is an internal method and should not be used</p>",
+                    "parameters": [],
+                    "examples": []
                 }
             ]
         },
