@@ -1,9 +1,4 @@
-[CMD_RELOAD_ERR_UNKNOWN_COMMAND]
-Command "{{ commandName }}" could not be found.
-
 [CMD_RELOAD_SUCCESS]
-{{!
-	args.commandName ? 
-		`Command "${args.commandName}"` :
-		'Commands'
-!}} reloaded. ({{ time }} ms)
+Reloaded {{ number }} command{{!
+	parseInt(args.number) === 1 ? '' : 's'
+!}}. ({{ time }} ms) -- Check the logger for relevant information.

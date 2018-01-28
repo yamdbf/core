@@ -17,7 +17,9 @@ const { resolve, expect, localize } = Middleware;
 @group('test')
 export default class extends Command
 {
-	@logger private readonly logger: Logger;
+	@logger('Command:test')
+	private readonly logger: Logger;
+
 	public constructor()
 	{
 		super({
@@ -32,9 +34,9 @@ export default class extends Command
 
 	public async init(): Promise<void>
 	{
-		await this.logger.debug('Command:test', await this.client.storage.get('defaultGuildSettings.prefix'));
-		await this.logger.debug('Command:test', await this.client.storage.guilds.first().settings.get('prefix'));
-		await this.logger.debug('Command:test', 'Test command initialized.');
+		await this.logger.debug(await this.client.storage.get('defaultGuildSettings.prefix'));
+		await this.logger.debug(await this.client.storage.guilds.first().settings.get('prefix'));
+		await this.logger.debug('Test command initialized.');
 		// throw new Error('foooo');
 	}
 
@@ -50,5 +52,6 @@ export default class extends Command
 		// message.channel.send(args.join(' ') || 'MISSING ARGS');
 		// this.logger.debug('Command:test', util.inspect(this.group));
 		// // throw new Error('foo');
+		message.channel.send('Test command called');
 	}
 }

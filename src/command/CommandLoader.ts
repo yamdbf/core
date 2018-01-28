@@ -1,9 +1,10 @@
 import * as glob from 'glob';
 import * as path from 'path';
 import { Client } from '../client/Client';
+import { Logger, logger } from '../util/logger/Logger';
+import { CommandRegistry } from './CommandRegistry';
 import { Command } from './Command';
 import { BaseCommandName } from '../types/BaseCommandName';
-import { Logger, logger } from '../util/logger/Logger';
 
 /**
  * Handles loading all commands from the given Client's commandsDir
@@ -14,103 +15,75 @@ export class CommandLoader
 	@logger('CommandLoader')
 	private readonly _logger: Logger;
 	private readonly _client: Client;
+	private readonly _commands: CommandRegistry<any>;
 
 	public constructor(client: Client)
 	{
 		this._client = client;
+		this._commands = client.commands;
 	}
 
 	/**
-	 * Load or reload all commands from the base commands directory and the
-	 * user-specified {@link Client#commandsDir} directory and stores them in
-	 * the Client's {@link CommandRegistry} instance ({@link Client#commands})
+	 * Load commands from the given directory
+	 * @param {string} dir Directory to load from
+	 * @param {boolean} [base=false] Whether or not the commands being loaded are base commands
+	 * @returns {number} The number of Commands loaded from the directory
 	 */
-	public loadCommands(): void
+	public loadCommandsFrom(dir: string, base: boolean = false): number
 	{
-		if (this._client.commands.size > 0)
-			for (const cmd of this._client.commands.filter(c => !c.external).values())
-				this._client.commands.delete(cmd.name);
+		dir = path.resolve(dir);
+		const commandFiles: string[] = glob.sync(`${dir}/**/*.js`);
 
-		let commandFiles: string[] = [];
-		commandFiles.push(...glob.sync(`${path.join(__dirname, './base')}/**/*.js`));
-		if (this._client.commandsDir)
-			commandFiles.push(...glob.sync(`${this._client.commandsDir}/**/*.js`));
+		const loadedCommands: Command[] = [];
+		this._logger.debug(`Loading commands in: ${dir}`);
 
-		let loadedCommands: number = 0;
-		for (const commandLocation of commandFiles)
+		for (const file of commandFiles)
 		{
-			delete require.cache[require.resolve(commandLocation)];
-
-			const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
-			const command: Command = new loadedCommandClass();
-
-			if (this._client.disableBase.includes(<BaseCommandName> command.name)) continue;
-			command._classloc = commandLocation;
-
-			if (this._client.commands.find(c => c.overloads === command.name))
+			delete require.cache[require.resolve(file)];
+			const loadedFile: any = require(file);
+			const commandClass: typeof Command = this._findCommandClass(loadedFile);
+			if (!commandClass)
 			{
-				this._logger.info(`Skipping externally overloaded command: '${command.name}'`);
+				this._logger.debug(`Failed to find Command class in file: ${file}`);
 				continue;
 			}
 
-			if (command.overloads)
-			{
-				if (!this._client.commands.has(command.overloads))
-					throw new Error(`Command "${command.overloads}" does not exist to be overloaded.`);
-				this._client.commands.delete(command.overloads);
-				this._client.commands._registerInternal(command);
-				this._logger.info(`Command '${command.name}' loaded, overloading command '${command.overloads}'.`);
-			}
-			else
-			{
-				this._client.commands._registerInternal(command);
-				loadedCommands++;
-				this._logger.info(`Command '${command.name}' loaded.`);
-			}
+			const commandInstance: Command = new commandClass();
+
+			if (base && this._client.disableBase
+				.includes(<BaseCommandName> commandInstance.name))
+				continue;
+
+			this._logger.info(`Loaded command: ${commandInstance.name}`);
+			commandInstance._classloc = file;
+			loadedCommands.push(commandInstance);
 		}
 
-		const groupLength: number = this._client.commands.groups.length;
-		this._logger.info(`Loaded ${loadedCommands} total commands in ${groupLength} groups.`);
+		for (const command of loadedCommands)
+			this._commands._registerInternal(command);
+
+		return loadedCommands.length;
 	}
 
 	/**
-	 * Reload the given command in the Client's {@link CommandRegistry} ({@link Client#commands})
+	 * Recursively search for a Command class within the given object
+	 * @private
 	 */
-	public reloadCommand(nameOrAlias: string): void
+	private _findCommandClass(obj: any): typeof Command
 	{
-		const name: string = this._client.commands.findByNameOrAlias(nameOrAlias).name;
-		if (!name) return;
-		if (this._client.commands.get(name).external) return;
+		let foundClass: typeof Command;
+		const keys: string[] = Object.keys(obj);
+		if (Object.getPrototypeOf(obj).name === 'Command')
+			foundClass = obj;
 
-		const commandLocation: string = this._client.commands.get(name)._classloc;
-		delete require.cache[require.resolve(commandLocation)];
+		else if (keys.length > 0)
+			for (const key of keys)
+			{
+				foundClass = this._findCommandClass(obj[key]);
+				if (!foundClass) continue;
+				if (Object.getPrototypeOf(foundClass).name === 'Command') break;
+			}
 
-		const loadedCommandClass: typeof Command = this.getCommandClass(commandLocation);
-		const command: Command = new loadedCommandClass();
-		command._classloc = commandLocation;
-		this._client.commands._registerInternal(command, true);
-		this._logger.info(`Command '${command.name}' reloaded.`);
-	}
-
-	/**
-	 * Get the Command class from an attempted Command class import
-	 */
-	private getCommandClass(loc: string): typeof Command
-	{
-		const importedObj: any = require(loc);
-		let commandClass: typeof Command;
-		if (importedObj && Object.getPrototypeOf(importedObj).name !== 'Command')
-		{
-			for (const key of Object.keys(importedObj))
-				if (Object.getPrototypeOf(importedObj[key]).name === 'Command')
-				{
-					commandClass = importedObj[key];
-					break;
-				}
-		}
-		else commandClass = importedObj;
-		if (!commandClass || Object.getPrototypeOf(commandClass).name !== 'Command')
-			throw new Error(`Failed to find an exported Command class in file '${loc}'`);
-		return commandClass;
+		return foundClass;
 	}
 }

@@ -257,8 +257,8 @@ export class Client extends Discord.Client
 			this._commandLoader = new CommandLoader(this);
 			this._dispatcher = new CommandDispatcher(this);
 
-			this.loadCommand('all');
-			Lang.loadCommandLocalizations();
+			this._logger.info('Loading base commands...');
+			this._commandLoader.loadCommandsFrom(path.join(__dirname, '../command/base'), true);
 
 			// Disable setlang command if there is only one language
 			if (Lang.langNames.length === 1 && !this.disableBase.includes('setlang'))
@@ -293,15 +293,26 @@ export class Client extends Discord.Client
 		await this._guildStorageLoader.loadStorages();
 		await this._guildStorageLoader.cleanGuilds();
 
+		this._logger.info('Loading plugins...');
 		await this.plugins._loadPlugins();
 
 		if (!this.passive)
 		{
+			this._logger.info('Loading custom commands...');
+			this._commandLoader.loadCommandsFrom(this.commandsDir);
+			this.commands._checkDuplicateAliases();
+
 			this._logger.info('Initializing commands...');
 			const initSuccess: boolean = await this.commands._initCommands();
 			this._logger.info(`Commands initialized${initSuccess ? '' : ' with errors'}.`);
+
+			Lang.loadCommandLocalizations();
+
 			this._dispatcher.setReady();
-			this._logger.info('Command dispatcher ready.');
+			const commands: number = this.commands.size;
+			const groups: number = this.commands.groups.length;
+			this._logger.info(
+				`Command dispatcher ready -- ${commands} commands in ${groups} groups` );
 		}
 
 		if (typeof this.readyText !== 'undefined')
@@ -365,18 +376,6 @@ export class Client extends Discord.Client
 	protected continue(): void
 	{
 		this.emit('continue');
-	}
-
-	/**
-	 * Loads/reloads all/specific commands
-	 * @param {string} command The name of a command to reload, or 'all' to load all commands
-	 * @returns {void}
-	 */
-	public loadCommand(command: string): void
-	{
-		if (!command) throw new Error(`A command name must be provided to load, or 'all' to load all commands`);
-		if (command === 'all') this._commandLoader.loadCommands();
-		else this._commandLoader.reloadCommand(command);
 	}
 
 	/**
@@ -486,6 +485,15 @@ export class Client extends Discord.Client
 	{
 		this._middleware.push(func);
 		return this;
+	}
+
+	/**
+	 * Reload custom commands. Used internally by the `reload` command
+	 * @private
+	 */
+	public _reloadCustomCommands(): number
+	{
+		return this._commandLoader.loadCommandsFrom(this.commandsDir);
 	}
 
 //#region Discord.js events

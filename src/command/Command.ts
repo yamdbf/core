@@ -34,6 +34,7 @@ export class Command<T extends Client = Client>
 	// Internals
 	public readonly _middleware: MiddlewareFunction[];
 	public _classloc: string;
+	public _initialized: boolean;
 
 	public constructor(info: CommandInfo = null)
 	{
@@ -179,6 +180,8 @@ export class Command<T extends Client = Client>
 
 		// Middleware function storage for the Command instance
 		this._middleware = [];
+
+		this._initialized = false;
 
 		if (info) Object.assign(this, info);
 	}

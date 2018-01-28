@@ -51,7 +51,7 @@ export class Util
 		if (typeof prefix === 'undefined' && !dm) return [false, null, prefix, null];
 
 		const commandName: string = message.content.trim().slice(prefix.length).trim().split(' ')[0];
-		const command: Command = client.commands.findByNameOrAlias(commandName);
+		const command: Command = client.commands.resolve(commandName);
 		if (!command) return [false, null, prefix, commandName];
 		if (command.disabled) return [false, command, prefix, commandName];
 

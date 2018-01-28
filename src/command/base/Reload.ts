@@ -24,7 +24,7 @@ export default class extends Command
 	public action(message: Message, [res, commandName]: [ResourceLoader, string]): Promise<Message | Message[]>
 	{
 		const start: number = now();
-		const command: Command = this.client.commands.findByNameOrAlias(commandName);
+		const command: Command = this.client.commands.resolve(commandName);
 
 		if (commandName && !command)
 			return this.respond(message, res(s.CMD_RELOAD_ERR_UNKNOWN_COMMAND, { commandName }));

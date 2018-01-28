@@ -11,6 +11,7 @@ import {
 // import TestCommand from './commands/test_command';
 import { TestPlugin } from './test_plugin';
 import { EvenNumberResolver } from './EvenNumberResolver';
+import { CommandLoader } from '../bin/command/NewCommandLoader';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;
@@ -29,10 +30,11 @@ class Test extends Client
 			// localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
-			// plugins: [TestPlugin],
+			plugins: [TestPlugin],
 			// ratelimit: '5/10s',
 			disableBase: ['setlang'],
 			customResolvers: [EvenNumberResolver],
+			// logLevel: LogLevel.INFO,
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 		});
@@ -43,25 +45,24 @@ class Test extends Client
 	@once('pause')
 	private async _onPause(): Promise<void>
 	{
-		logger.debug('Test', 'Paused...');
 		await this.setDefaultSetting('prefix', '-');
 		this.continue();
 	}
 
-	@once('continue')
-	private _onContinue(): void
-	{
-		logger.debug('Test', 'Continuing');
+	// @once('continue')
+	// private _onContinue(): void
+	// {
+	// 	logger.debug('Test', 'Continuing');
 
-		logger.warn('Test', 'Testing Logger#warn()');
-		logger.debug('Test', 'Testing Logger#debug()');
-		logger.error('Test', 'Testing Logger#error()');
-	}
+	// 	logger.warn('Test', 'Testing Logger#warn()');
+	// 	logger.debug('Test', 'Testing Logger#debug()');
+	// 	logger.error('Test', 'Testing Logger#error()');
+	// }
 
 	@once('clientReady', 'foo', 1)
 	private async _onClientReady(foo: string, bar: number): Promise<void>
 	{
-		logger.debug('Test', foo, bar.toString());
+		// logger.debug('Test', foo, bar.toString());
 		await this.setDefaultSetting('foo', 'bar');
 		this.on('command', (name, args, exec) => console.log(name, args, exec));
 	}

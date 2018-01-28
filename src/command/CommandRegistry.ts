@@ -1,8 +1,7 @@
-import { Collection } from 'discord.js';
-import { Command } from '../command/Command';
 import { Client } from '../client/Client';
+import { Command } from './Command';
+import { Collection } from 'discord.js';
 import { Logger, logger } from '../util/logger/Logger';
-import { BaseCommandName } from '../types/BaseCommandName';
 
 /**
  * @classdesc Stores loaded Commands in a Collection keyed by each Command's `name` property
@@ -26,40 +25,88 @@ export class CommandRegistry<
 	}
 
 	/**
+	 * Contains all [Command groups]{@link Command#group}
+	 * @readonly
+	 * @type {string[]}
+	 */
+	public get groups(): string[]
+	{
+		return Array.from(new Set(this.map(c => c.group)));
+	}
+
+	/**
+	 * Register an external command and add it to the `<Client>.commands`
+	 * [collection]{@link external:Collection}, erroring on duplicate
+	 * aliases
+	 *
+	 * >**Note:** This is intended for Plugins to use to register external
+	 * commands with the Client instance. Under normal circumstances
+	 * commands should be added by placing them in the directory passed
+	 * to the `commandsDir` YAMDBF Client option
+	 * @param {Command} command The Command instance to be registered
+	 * @returns {void}
+	 */
+	public registerExternal(command: Command<any>): void
+	{
+		this._logger.info(`External command loaded: ${command.name}`);
+		this._registerInternal(<V> command, true);
+	}
+
+	/**
+	 * Resolve the given Command name or alias to a registered Command
+	 * @param {string} input Command name or alias
+	 * @returns Command
+	 */
+	public resolve(input: string): V
+	{
+		input = input ? input.toLowerCase() : input;
+		return this.find(c => c.name.toLowerCase() === input
+			|| !!c.aliases.find(a => a.toLowerCase() === input));
+	}
+
+	/**
 	 * Complete registration of a command and add to the parent
 	 * collection, erroring on duplicate names and aliases.
 	 * This is an internal method and should not be used. Use
 	 * `registerExternal()` instead
 	 * @private
 	 */
-	public _registerInternal(command: V, reload: boolean = false, external: boolean = false): void
+	public _registerInternal(command: V, external: boolean = false): void
 	{
-		if (reload && external) return;
-		if (super.has(<K> command.name) && !reload
-			&& !(command.overloads && super.has(<K> command.overloads)
-				&& command.overloads !== super.get(<K> command.overloads).name))
-				if (!external) throw new Error(`A command with the name "${command.name}" already exists`);
-				else throw new Error(`External command is conflicting with command "${command.name}"`);
-
-		command._register(this._client);
-		super.set(<K> command.name, command);
-
-		for (const cmd of this.values())
+		if (this.has(<K> command.name))
 		{
-			for (const alias of cmd.aliases)
-			{
-				let duplicates: Collection<K, V> = this.filter(c => c.aliases.includes(alias) && c !== cmd);
-				if (duplicates.size > 0)
-				{
-					const duplicate: string = duplicates.first().name;
-					const name: string = cmd.name;
-					if (!external) throw new Error(
-						`Commands may not share aliases: ${name}, ${duplicate} (shared alias: "${alias}")`);
-					else throw new Error(
-						`External command has conflicting alias with "${name}" (shared alias: "${alias}")`);
-				}
-			}
+			if (!this.get(<K> command.name).external)
+				this._logger.info(`Replacing previously loaded command: ${command.name}`);
+			else
+				this._logger.info(`Replacing externally loaded command: ${command.name}`);
+
+			this.delete(<K> command.name);
 		}
+		this.set(<K> command.name, command);
+		command._register(this._client);
+		if (external) command.external = true;
+	}
+
+	/**
+	 * Check for duplicate aliases. Used internally
+	 * @private
+	 */
+	public _checkDuplicateAliases(): void
+	{
+		for (const command of this.values())
+			for (const alias of command.aliases)
+			{
+				const duplicate: V = this.filter(c => c !== command).find(c => c.aliases.includes(alias));
+				const name: string = command.name;
+
+				if (!duplicate) continue;
+				if (!command.external) throw new Error(
+					`Commands may not share aliases: ${name}, ${duplicate.name} (shared alias: "${alias}")`);
+
+				else throw new Error(
+					`External command "${
+						duplicate.name}" has conflicting alias with "${name}" (shared alias: "${alias}")`);
+			}
 	}
 
 	/**
@@ -72,7 +119,12 @@ export class CommandRegistry<
 		let success: boolean = true;
 		for (const command of this.values())
 		{
-			try { await command.init(); }
+			if (command._initialized) continue;
+			try
+			{
+				await command.init();
+				command._initialized = true;
+			}
 			catch (err)
 			{
 				success = false;
@@ -82,60 +134,5 @@ export class CommandRegistry<
 			}
 		}
 		return success;
-	}
-
-	/**
-	 * Register an external command and add it to the `<Client>.commands`
-	 * [collection]{@link external:Collection}, erroring on duplicate
-	 * names and aliases. External commands will be preserved when the
-	 * `reload` command is called.
-	 *
-	 * >**Note:** This is intended for Plugins to use to register external
-	 * commands with the Client instance. Under normal circumstances
-	 * commands should be added by placing them in the directory passed
-	 * to the `commandsDir` YAMDBF Client option
-	 * @param {Client} client YAMDBF Client instance
-	 * @param {Command} command The Command instance to be registered
-	 * @returns {void}
-	 */
-	public registerExternal(command: Command<any>): void
-	{
-		if (command.overloads)
-		{
-			if (this._client.disableBase.includes(<BaseCommandName> command.overloads)) return;
-			let overload: boolean = this.has(<K> command.overloads);
-			this.delete(<K> command.overloads);
-			this._registerInternal(<V> command, false, true);
-			this._logger.info(
-				`External command '${command.name}' registered${
-					overload ? `, overloading base command '${command.overloads}'.` : '.'}`);
-		}
-		else
-		{
-			this._registerInternal(<V> command, false, true);
-			this._logger.info(`External command '${command.name}' registered.`);
-		}
-		command.external = true;
-	}
-
-	/**
-	 * Contains all [Command groups]{@link Command#group}
-	 * @type {string[]}
-	 */
-	public get groups(): string[]
-	{
-		return this.map(a => a.group).filter((a, i, self) => self.indexOf(a) === i);
-	}
-
-	/**
-	 * Finds a command by [name]{@link Command#name} or [alias]{@link Command#aliases}
-	 * @param {string} text The name or alias of the Command
-	 * @returns {Command}
-	 */
-	public findByNameOrAlias(text: string): V
-	{
-		text = text ? text.toLowerCase() : text;
-		return this.find(c => c.name.toLowerCase() === text
-			|| !!c.aliases.find(a => a.toLowerCase() === text));
 	}
 }
