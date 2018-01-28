@@ -324,17 +324,15 @@ export class Lang
 	public static getCommandInfo(command: Command, lang: string): LocalizedCommandInfo
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
-
 		if (!command) throw new Error('A Command must be given for which to get Command info');
-		let desc: string, info: string, usage: string;
-		if (!Lang._instance._commandInfo[command.name]
-			|| (Lang._instance._commandInfo[command.name]
-				&& !Lang._instance._commandInfo[command.name][lang]))
-			return { desc, info, usage } = command;
+		if (!(command instanceof Command))
+			throw new TypeError('command must be an instance of Command class');
 
-		desc = Lang._instance._commandInfo[command.name][lang].desc || command.desc;
-		info = Lang._instance._commandInfo[command.name][lang].info || command.info;
-		usage = Lang._instance._commandInfo[command.name][lang].usage || command.usage;
+		const paths: string[] = [command.name, lang];
+		let desc: string, info: string, usage: string;
+		desc = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'desc']) || command.desc;
+		info = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'info']) || command.info;
+		usage = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'usage']) || command.usage;
 
 		return { desc, info, usage };
 	}
