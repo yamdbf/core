@@ -5,43 +5,45 @@ import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
 import { Util } from '../../util/Util';
+import { Logger, logger } from '../../util/logger/Logger';
 const { now } = Util;
 
 export default class extends Command
 {
+	@logger('Command:reload')
+	private readonly _logger: Logger;
+
 	public constructor()
 	{
 		super({
 			name: 'reload',
-			desc: 'Reload a command or all commands',
-			usage: '<prefix>reload [command]',
-			info: `If a command name or alias is provided the specific command will be reloaded. Otherwise, all commands will be reloaded.`,
+			desc: 'Reload all custom commands',
+			usage: '<prefix>reload',
 			ownerOnly: true
 		});
 	}
 
 	@localizable
-	public action(message: Message, [res, commandName]: [ResourceLoader, string]): Promise<Message | Message[]>
+	public action(message: Message, [res]: [ResourceLoader]): Promise<Message | Message[]>
 	{
-		const start: number = now();
-		const command: Command = this.client.commands.resolve(commandName);
+		this._logger.log(`Reloading commands from: $${this.client.commandsDir}`);
 
-		if (commandName && !command)
-			return this.respond(message, res(s.CMD_RELOAD_ERR_UNKNOWN_COMMAND, { commandName }));
+		const start: number = now();
 
 		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
+		const reloaded: number = this.client._reloadCustomCommands() + 1;
 
-		if (command) this.client.loadCommand(command.name);
-		else this.client.loadCommand('all');
+		this._logger.log(`Re-initializing reloaded commands...`);
+		this.client.commands._initCommands();
 
-		let toDisable: Collection<string, Command> =
+		const toDisable: Collection<string, Command> =
 			this.client.commands.filter(c => disabled.includes(c.name));
 
-		for (const cmd of toDisable.values()) cmd.disable();
+		// Re-disable previously disabled commands
+		for (const command of toDisable.values()) command.disable();
 
 		const end: number = now();
-		const name: string = command ? command.name : null;
 		return this.respond(message, res(s.CMD_RELOAD_SUCCESS,
-			{ commandName: name, time: (end - start).toFixed(3) }));
+			{ number: reloaded.toString(), time: (end - start).toFixed(3) }));
 	}
 }

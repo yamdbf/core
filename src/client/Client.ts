@@ -442,8 +442,7 @@ export class Client extends Discord.Client
 	}
 
 	/**
-	 * Clean out any guild storage/settings that no longer have
-	 * an associated guild
+	 * Clean out expired guild storage/settings
 	 * @returns {Promise<void>}
 	 */
 	public async sweepStorages(): Promise<void>

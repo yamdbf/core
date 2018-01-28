@@ -58,7 +58,7 @@ export class GuildStorageLoader
 
 	/**
 	 * Clean out any storages/settings storages for guilds the
-	 * bot has no longer been a part of for more than 5 days
+	 * bot has no longer been a part of for more than 7 days
 	 * @returns {Promise<void>}
 	 */
 	public async cleanGuilds(): Promise<void>
