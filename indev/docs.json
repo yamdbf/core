@@ -381,7 +381,7 @@
                     "name": "sweepStorages",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Clean out any guild storage/settings that no longer have\nan associated guild</p>",
+                    "description": "<p>Clean out expired guild storage/settings</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
@@ -2262,7 +2262,7 @@
                     "name": "cleanGuilds",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Clean out any storages/settings storages for guilds the\nbot has no longer been a part of for more than 5 days</p>",
+                    "description": "<p>Clean out any storages/settings storages for guilds the\nbot has no longer been a part of for more than 7 days</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
