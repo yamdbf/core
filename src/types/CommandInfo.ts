@@ -14,7 +14,6 @@
  * @property {PermissionResolvable[]} [clientPermissions=[]] See: {@link Command#clientPermissions}
  * @property {string[]} [roles=[]] See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] See: {@link Command#ownerOnly}
- * @property {string} [overloads=null] See: {@link Command#overloads}
  * @property {string} [ratelimit] Sets a rate limit on calls to this command for every user
  */
 
@@ -36,6 +35,5 @@ export type CommandInfo = {
 	clientPermissions?: PermissionResolvable[];
 	roles?: string[];
 	ownerOnly?: boolean;
-	overloads?: BaseCommandName;
 	ratelimit?: string;
 };

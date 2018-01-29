@@ -27,7 +27,6 @@ export default class extends Command
 			aliases: ['testing', 'testo'],
 			desc: 'test command',
 			usage: '<prefix>test <test> <foo>',
-			// overloads: 'ping',
 			// ratelimit: '2/10s'
 		});
 	}
