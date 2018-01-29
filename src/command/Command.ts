@@ -263,9 +263,6 @@ export class Command<T extends Client = Client>
 		if (this.roles && !Array.isArray(this.roles))
 			throw new TypeError(`\`roles\` for Command "${this.name}" must be an array`);
 
-		if (this.overloads && this.group !== 'base')
-			throw new TypeError(`Expected Command#overloads to equal "base", got: "${this.group}"`);
-
 		if (!this.action || !(this.action instanceof Function))
 			throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 

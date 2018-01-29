@@ -235,18 +235,6 @@ export function ratelimit(value: string): ClassDecorator
 }
 
 /**
- * Set `overloads` metadata
- * @static
- * @method overloads
- * @param {string} value Value to set
- * @returns {ClassDecorator}
- */
-export function overloads(value: string): ClassDecorator
-{
-	return _setMetaData('overloads', value);
-}
-
-/**
  * Set `owneronly` flag metadata
  * @static
  * @name ownerOnly
