@@ -66,7 +66,6 @@ export class Command&lt;T extends Client = Client>
 	public clientPermissions: PermissionResolvable[];
 	public roles: string[];
 	public ownerOnly: boolean;
-	public overloads: string;
 	public external: boolean;
 
 	// Internals
@@ -190,16 +189,6 @@ export class Command&lt;T extends Client = Client>
 		 * **See:** [Client#config.owner]{@link Client#config}
 		 * @name Command#ownerOnly
 		 * @type {boolean}
-		 */
-
-		/**
-		 * The name of a base command to overload. Commands may only overload
-		 * base commands so the {@link Command#group} must be set to 'base' in
-		 * order to overload. You must also be sure to **not** disable the base
-		 * command that you are overloading. Commands may only be overloaded by
-		 * name, not by alias
-		 * @name Command#overloads
-		 * @type {string}
 		 */
 
 		/**

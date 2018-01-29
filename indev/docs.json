@@ -818,17 +818,6 @@
                     }
                 },
                 {
-                    "name": "overloads",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>The name of a base command to overload. Commands may only overload\nbase commands so the {@link Command#group} must be set to 'base' in\norder to overload. You must also be sure to <strong>not</strong> disable the base\ncommand that you are overloading. Commands may only be overloaded by\nname, not by alias</p>",
-                    "type": {
-                        "names": [
-                            "string"
-                        ]
-                    }
-                },
-                {
                     "name": "external",
                     "access": "",
                     "virtual": false,
@@ -3165,14 +3154,6 @@
                     "type": "boolean",
                     "description": "<p>See: {@link Command#ownerOnly}</p>",
                     "default": false,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "overloads",
-                    "type": "string",
-                    "description": "<p>See: {@link Command#overloads}</p>",
-                    "default": null,
                     "optional": true,
                     "nullable": ""
                 },
