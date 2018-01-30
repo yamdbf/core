@@ -18,7 +18,6 @@
  */
 
 import { PermissionResolvable } from 'discord.js';
-import { BaseCommandName } from './BaseCommandName';
 import { ArgOpts } from './ArgOpts';
 
 export type CommandInfo = {
