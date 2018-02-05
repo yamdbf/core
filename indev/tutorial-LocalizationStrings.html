@@ -232,15 +232,10 @@ Successfully added {{!
     args.roles.split(',').length > 1 ? 'roles' : 'role'
 !}}: {{ roles }} to the limiter for command: `{{ commandName }}`
 
-[CMD_RELOAD_ERR_UNKNOWN_COMMAND]
-Command &quot;{{ commandName }}&quot; could not be found.
-
 [CMD_RELOAD_SUCCESS]
-{{!
-    args.commandName ? 
-        `Command &quot;${args.commandName}&quot;` :
-        'Commands'
-!}} reloaded. ({{ time }} ms)
+Reloaded {{ number }} command{{!
+    parseInt(args.number) === 1 ? '' : 's'
+!}}. ({{ time }} ms) -- Check the logger for relevant information.
 
 [CMD_SETLANG_LIST]
 Available languages: (Language marked with `*` is the current language)

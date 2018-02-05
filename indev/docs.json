@@ -1571,16 +1571,48 @@
                         "default": "",
                         "optional": "",
                         "nullable": ""
+                    },
+                    {
+                        "name": "aliases",
+                        "type": "string",
+                        "description": "<p>Alternative names the Resolver can be identified by</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
                     }
                 ],
                 "examples": []
             },
+            "properties": [
+                {
+                    "name": "name",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Name that servers as an identifier for the resolver</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "aliases",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Additional identifier strings</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
+                    }
+                }
+            ],
             "functions": [
                 {
                     "name": "validate",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Method to implement that should return whether or not the\ngiven value matches the type the resolver is meant to resolve</p>",
+                    "description": "<p>Method to implement that should return whether or not the\ngiven value matches the type the resolver is meant to resolve.</p>\n<blockquote>\n<p>Can be async</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "value",
@@ -1591,13 +1623,17 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<boolean>",
+                        "description": ""
+                    }
                 },
                 {
                     "name": "resolve",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Method to implement that should accept a string and return\na resolved value of the type the resolver is meant to resolve</p>",
+                    "description": "<p>Method to implement that should accept a string and return\na resolved value of the type the resolver is meant to resolve.</p>\n<blockquote>\n<p>Can be async</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "message",
@@ -1632,7 +1668,11 @@
                             "nullable": ""
                         }
                     ],
-                    "examples": []
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
                 }
             ]
         },
@@ -1664,10 +1704,31 @@
             ],
             "functions": [
                 {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a loaded Resolver by name or alias</p>",
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "description": "<p>Identifier of the Resolver to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Resolver",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "_loadResolvers",
                     "access": "private",
                     "virtual": false,
-                    "description": "<p>Load resolvers from _base and client._customResolvers</p>",
+                    "description": "<p>Load resolvers from _base and client._customResolvers.\nUsed internally</p>",
                     "parameters": [],
                     "examples": []
                 }
