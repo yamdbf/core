@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { Client, LogLevel, Logger, Lang } from '../bin/';
 const logger: Logger = Logger.instance();
 
@@ -8,7 +9,7 @@ class ScriptClient extends Client
 	{
 		super({ logLevel: LogLevel.NONE });
 		this.disableBase.shift();
-		this.loadCommand('all');
+		(<any> this)._commandLoader.loadCommandsFrom(path.join(__dirname, '../bin/command/base'), true);
 
 		logger.setLogLevel(LogLevel.DEBUG);
 		logger.log('Script', 'Building localization string list');
