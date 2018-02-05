@@ -6,6 +6,7 @@ import { Util } from '../../util/Util';
 import { ResourceLoader } from '../../types/ResourceLoader';
 import { BaseStrings as s } from '../../localization/BaseStrings';
 import { MappedArgType } from './Resolve';
+import { Resolver } from '../resolvers/Resolver';
 
 export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 {
@@ -48,10 +49,12 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 						{ type: type.map(t => `\`${t}\``).join(', '), name, arg, usage }));
 				continue;
 			}
-			else if (!(type in this.client.resolvers.loaded))
+
+			const resolver: Resolver = this.client.resolvers.get(type);
+			if (!resolver)
 				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not a valid argument type.`);
 
-			if (!(await this.client.resolvers.loaded[<string> type].validate(arg)))
+			if (!(await resolver.validate(arg)))
 				throw new Error(Lang.res('en_us', s.EXPECT_ERR_EXPECTED_TYPE,
 					{ name, expected: type, type: arg === 'Infinity' ? arg : arg.constructor.name }));
 		}

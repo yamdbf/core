@@ -12,7 +12,7 @@ export class ChannelResolver extends Resolver
 {
 	public constructor(client: Client)
 	{
-		super(client, 'Channel');
+		super(client, 'Channel', 'TextChannel');
 	}
 
 	public async validate(value: any): Promise<boolean>

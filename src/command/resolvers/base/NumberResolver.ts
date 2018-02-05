@@ -10,7 +10,7 @@ export class NumberResolver extends Resolver
 {
 	public constructor(client: Client)
 	{
-		super(client, 'Number');
+		super(client, 'Number', 'number');
 	}
 
 	public async validate(value: any): Promise<boolean>

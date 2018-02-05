@@ -4,7 +4,7 @@ export class EvenNumberResolver extends Resolver
 {
 	public constructor(client: Client)
 	{
-		super(client, 'EvenNumber');
+		super(client, 'EvenNumber', 'Even');
 	}
 
 	public async validate(value: any): Promise<boolean>

@@ -11,17 +11,20 @@ import { Command } from '../Command';
  * 						and [expect]{@link module:Middleware.expect}<br>
  * 						**Note:** This is not passed by the ResolverLoader, so
  * 						pass it to `super()` yourself when creating custom Resolvers
+ * @param {...string} aliases Alternative names the Resolver can be identified by
  */
 export class Resolver
 {
 	protected client: Client;
 
 	public name: string;
+	public aliases: string[];
 
-	public constructor(client: Client, name: string)
+	public constructor(client: Client, name: string, ...aliases: string[])
 	{
 		this.client = client;
 		this.name = name;
+		this.aliases = aliases;
 	}
 
 	/**

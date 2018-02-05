@@ -7,7 +7,7 @@ export class StringResolver extends Resolver
 {
 	public constructor(client: Client)
 	{
-		super(client, 'String');
+		super(client, 'String', 'string');
 	}
 
 	public async validate(value: any): Promise<boolean>

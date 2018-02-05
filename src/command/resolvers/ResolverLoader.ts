@@ -43,7 +43,17 @@ export class ResolverLoader
 	}
 
 	/**
-	 * Load resolvers from _base and client._customResolvers
+	 * Get a loaded Resolver by name or alias
+	 * @param name Identifier of the Resolver to get
+	 */
+	public get(name: string): Resolver
+	{
+		return Object.values(this.loaded).find(r => r.name === name || r.aliases.includes(name));
+	}
+
+	/**
+	 * Load resolvers from _base and client._customResolvers.
+	 * Used internally
 	 * @private
 	 */
 	public _loadResolvers(): void

@@ -2,6 +2,7 @@ import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { Message } from '../../types/Message';
 import { Util } from '../../util/Util';
 import { Command } from '../Command';
+import { Resolver } from '../resolvers/Resolver';
 
 export type MappedArgType = { [arg: string]: string | string[] };
 
@@ -38,10 +39,11 @@ export function resolve(argTypes: string | MappedArgType): MiddlewareFunction
 
 			if (<string> type === 'Any') continue;
 
-			if (!(type in this.client.resolvers.loaded))
+			const resolver: Resolver = this.client.resolvers.get(type);
+			if (!resolver)
 				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not a valid argument type.`);
 
-			const value: any = await this.client.resolvers.loaded[<string> type].resolve(message, this, name, arg);
+			const value: any = await resolver.resolve(message, this, name, arg);
 			args[index] = value;
 
 			if (foundRestArg) break;

@@ -11,7 +11,7 @@ export class MemberResolver extends Resolver
 {
 	public constructor(client: Client)
 	{
-		super(client, 'Member');
+		super(client, 'Member', 'GuildMember');
 	}
 
 	public async validate(value: any): Promise<boolean>
