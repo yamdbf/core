@@ -44,7 +44,7 @@ export class ResolverLoader
 
 	/**
 	 * Get a loaded Resolver by name or alias
-	 * @param name Identifier of the Resolver to get
+	 * @param {string} name Identifier of the Resolver to get
 	 * @returns {Resolver}
 	 */
 	public get(name: string): Resolver

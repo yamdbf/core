@@ -23,14 +23,24 @@ export class Resolver
 	public constructor(client: Client, name: string, ...aliases: string[])
 	{
 		this.client = client;
+
+		/**
+		 * Name that servers as an identifier for the resolver
+		 * @type {string}
+		 */
 		this.name = name;
+
+		/**
+		 * Additional identifier strings
+		 * @type {string[]}
+		 */
 		this.aliases = aliases;
 	}
 
 	/**
 	 * Method to implement that should return whether or not the
 	 * given value matches the type the resolver is meant to resolve.
-	 * Can be async
+	 * >Can be async
 	 * @param {any} value Value to validate
 	 * @returns {Promise<boolean>}
 	 */
@@ -42,7 +52,7 @@ export class Resolver
 	/**
 	 * Method to implement that should accept a string and return
 	 * a resolved value of the type the resolver is meant to resolve.
-	 * Can be async
+	 * >Can be async
 	 * @param {Message} message Discord.js Message instance
 	 * @param {Command} command Instance of the Command being called
 	 * @param {string} name Argument name
