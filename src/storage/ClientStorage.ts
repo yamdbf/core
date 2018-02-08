@@ -1,4 +1,4 @@
-import { KeyedStorage } from './KeyedStorage';
+import { SingleProviderStorage } from './SingleProviderStorage';
 import { GuildStorage } from './GuildStorage';
 import { Client } from '../client/Client';
 import { Collection } from 'discord.js';
@@ -7,14 +7,14 @@ import { Collection } from 'discord.js';
  * Class containing asynchronous methods for storing, retrieving, and
  * interacting with data specific to the Client instance, and for
  * accessing guild storages/settings
- * @borrows KeyedStorage#init as ClientStorage#init
- * @borrows KeyedStorage#keys as ClientStorage#keys
- * @borrows KeyedStorage#get as ClientStorage#get
- * @borrows KeyedStorage#set as ClientStorage#set
- * @borrows KeyedStorage#remove as ClientStorage#remove
- * @borrows KeyedStorage#clear as ClientStorage#clear
+ * @borrows SingleProviderStorage#init as ClientStorage#init
+ * @borrows SingleProviderStorage#keys as ClientStorage#keys
+ * @borrows SingleProviderStorage#get as ClientStorage#get
+ * @borrows SingleProviderStorage#set as ClientStorage#set
+ * @borrows SingleProviderStorage#remove as ClientStorage#remove
+ * @borrows SingleProviderStorage#clear as ClientStorage#clear
  */
-export class ClientStorage extends KeyedStorage
+export class ClientStorage extends SingleProviderStorage
 {
 	public readonly guilds: Collection<string, GuildStorage>;
 

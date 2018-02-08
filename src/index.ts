@@ -16,7 +16,7 @@ export { ClientStorage } from './storage/ClientStorage';
 export { GuildStorage } from './storage/GuildStorage';
 export { GuildSettings } from './storage/GuildSettings';
 export { GuildStorageLoader } from './storage/GuildStorageLoader';
-export { KeyedStorage } from './storage/KeyedStorage';
+export { SingleProviderStorage } from './storage/SingleProviderStorage';
 export { SharedProviderStorage } from './storage/SharedProviderStorage';
 export { Middleware } from './command/middleware/Middleware';
 export { Resolver } from './command/resolvers/Resolver';

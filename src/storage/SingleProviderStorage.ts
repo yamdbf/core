@@ -3,14 +3,17 @@ import { StorageProvider } from './StorageProvider';
 import { Util } from '../util/Util';
 
 /**
- * Simple key/value storage abstraction operating on top of the
- * given StorageProvider. Supports nested object paths in
- * get/set/remove using `.` like normal object accessors
+ * Simple async key/value storage abstraction operating on top of
+ * a single StorageProvider instance. Each key in this storage
+ * reflects a single key in the given StorageProvider
+ *
+ * >Supports nested object paths in get/set/remove using `.`
+ * like normal object accessors
  * @param {string} name Unique identifier for this storage, used by the given StorageProvider
  * @param {StorageProviderConstructor} provider The storage provider class that will be instantiated
  * 												and used as the backend for this storage abstraction
  */
-export class KeyedStorage
+export class SingleProviderStorage
 {
 	private readonly _storage: StorageProvider;
 

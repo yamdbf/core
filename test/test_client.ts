@@ -11,7 +11,6 @@ import {
 // import TestCommand from './commands/test_command';
 import { TestPlugin } from './test_plugin';
 import { EvenNumberResolver } from './EvenNumberResolver';
-import { CommandLoader } from '../bin/command/NewCommandLoader';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
 const { once } = ListenerUtil;

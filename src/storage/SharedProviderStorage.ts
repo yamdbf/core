@@ -3,9 +3,13 @@ import { Util } from '../util/Util';
 import { Logger } from '../util/logger/Logger';
 
 /**
- * Class containing asynchronous methods for storing, retrieving, and
- * interacting with data stored under a single key within a storage
- * provider that can be shared by other instances of this class.
+ * Simple async key/value storage abstraction operating on top
+ * of a single key within the given StorageProvider instance.
+ * As the name suggests, the given StorageProvider instance
+ * can be shared between multiple SharedProviderStorage instances
+ *
+ * >Supports nested object paths in get/set/remove using `.`
+ * like normal object accessors
  *
  * >**Note:** The storage provider given to the constructor should
  * already be initialized via its `init()` method
