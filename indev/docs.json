@@ -2323,14 +2323,158 @@
             ]
         },
         {
-            "name": "KeyedStorage",
-            "description": "<p>Simple key/value storage abstraction operating on top of the\ngiven StorageProvider. Supports nested object paths in\nget/set/remove using <code>.</code> like normal object accessors</p>",
+            "name": "SharedProviderStorage",
+            "description": "<p>Simple async key/value storage abstraction operating on top\nof a single key within the given StorageProvider instance.\nAs the name suggests, the given StorageProvider instance\ncan be shared between multiple SharedProviderStorage instances</p>\n<blockquote>\n<p>Supports nested object paths in get/set/remove using <code>.</code>\nlike normal object accessors</p>\n<p><strong>Note:</strong> The storage provider given to the constructor should\nalready be initialized via its <code>init()</code> method</p>\n</blockquote>",
             "extends": [],
             "access": "",
             "virtual": false,
             "fires": "",
             "constructor": {
-                "name": "KeyedStorage",
+                "name": "SharedProviderStorage",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Initialize this storage instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "keys",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get the names of all keys in this storage for this instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<Array.<string>>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "get",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get a value from storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to get</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<any>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "exists",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Check if a value exists in storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to check</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<boolean>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "set",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Set a value in storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "value",
+                            "type": "any",
+                            "description": "<p>The value to set</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "remove",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove a value from storage for this instance</p>",
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "type": "string",
+                            "description": "<p>The key in storage to remove</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "clear",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Remove all key/value pairs from storage for this instance</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SingleProviderStorage",
+            "description": "<p>Simple async key/value storage abstraction operating on top of\na single StorageProvider instance. Each key in this storage\nreflects a single key in the given StorageProvider</p>\n<blockquote>\n<p>Supports nested object paths in get/set/remove using <code>.</code>\nlike normal object accessors</p>\n</blockquote>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "SingleProviderStorage",
                 "description": "",
                 "parameters": [
                     {
@@ -2474,150 +2618,6 @@
                     "access": "",
                     "virtual": false,
                     "description": "<p>Remove all key/value pairs from this storage</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                }
-            ]
-        },
-        {
-            "name": "SharedProviderStorage",
-            "description": "<p>Class containing asynchronous methods for storing, retrieving, and\ninteracting with data stored under a single key within a storage\nprovider that can be shared by other instances of this class.</p>\n<blockquote>\n<p><strong>Note:</strong> The storage provider given to the constructor should\nalready be initialized via its <code>init()</code> method</p>\n</blockquote>",
-            "extends": [],
-            "access": "",
-            "virtual": false,
-            "fires": "",
-            "constructor": {
-                "name": "SharedProviderStorage",
-                "description": "",
-                "parameters": [],
-                "examples": []
-            },
-            "functions": [
-                {
-                    "name": "init",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Initialize this storage instance</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "keys",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Get the names of all keys in this storage for this instance</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<Array.<string>>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "get",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Get a value from storage for this instance</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key in storage to get</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<any>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "exists",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Check if a value exists in storage for this instance</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key in storage to check</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<boolean>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "set",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Set a value in storage for this instance</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key in storage to set</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "value",
-                            "type": "any",
-                            "description": "<p>The value to set</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "remove",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Remove a value from storage for this instance</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The key in storage to remove</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "clear",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Remove all key/value pairs from storage for this instance</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
