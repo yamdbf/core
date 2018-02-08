@@ -132,7 +132,7 @@
                     "name": "pause",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Whether or not the client will pause after loading Client\nStorage, giving the opportunity to add/change default\nsettings before guild settings are created for the first\ntime. If this is used, you must create a listener for <code>'pause'</code>,\nand emit <code>'continue'</code> when you have finished doing what you\nneed to do.</p>\n<p>If adding new default settings is desired <em>after</em> guild settings\nhave already been generated for the first time, they should be\nadded after <code>'clientReady'</code> so they can be properly pushed to\nthe settings for all guilds</p>",
+                    "description": "<p>Whether or not the client will pause after loading Client\nStorage, giving the opportunity to add/change default\nsettings before guild settings are created for the first\ntime. If this is used, you must create a listener for <code>'pause'</code>,\nand call <code>&lt;Client&gt;.continue()</code> when you have finished doing\nwhat you need to do.</p>\n<p>If adding new default settings is desired <em>after</em> guild settings\nhave already been generated for the first time, they should be\nadded after <code>'clientReady'</code> so they can be properly pushed to\nthe settings for all guilds</p>",
                     "type": {
                         "names": [
                             "boolean"
