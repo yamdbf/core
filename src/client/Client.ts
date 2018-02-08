@@ -98,9 +98,11 @@ export class Client extends Discord.Client
 		 * `ownerOnly`
 		 * @type {string[]}
 		 */
-		this.owner = options.owner instanceof Array ?
-			options.owner : typeof options.owner !== 'undefined' ?
-				[options.owner] : [];
+		this.owner = typeof options.owner !== 'undefined'
+			? options.owner instanceof Array
+				? options.owner
+				: [options.owner]
+			: [];
 
 		/**
 		 * Directory to find command class files. Optional
@@ -142,7 +144,7 @@ export class Client extends Discord.Client
 		 * use the `help` command. `true` by default
 		 * @type {string}
 		 */
-		this.unknownCommandError = options.unknownCommandError === undefined ?
+		this.unknownCommandError = typeof options.unknownCommandError === 'undefined' ?
 			true : options.unknownCommandError;
 
 		/**
@@ -166,8 +168,8 @@ export class Client extends Discord.Client
 		 * Storage, giving the opportunity to add/change default
 		 * settings before guild settings are created for the first
 		 * time. If this is used, you must create a listener for `'pause'`,
-		 * and emit `'continue'` when you have finished doing what you
-		 * need to do.
+		 * and call `<Client>.continue()` when you have finished doing
+		 * what you need to do.
 		 *
 		 * If adding new default settings is desired *after* guild settings
 		 * have already been generated for the first time, they should be
@@ -364,7 +366,9 @@ export class Client extends Discord.Client
 	 */
 	public start(): this
 	{
-		if (!this._token) throw new Error('Client cannot be started without being given a token.');
+		if (!this._token)
+			throw new Error('Client cannot be started without being given a token.');
+
 		this.login(this._token);
 		return this;
 	}
