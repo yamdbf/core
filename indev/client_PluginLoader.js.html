@@ -139,6 +139,9 @@ export class PluginLoader
 			try { pluginStorage = new SharedProviderStorage(this._provider, loadedPlugin.name); }
 			catch { this._logger.warn(`Failed to create storage for Plugin '${loadedPlugin.name}'`); }
 
+			try { await pluginStorage.init(); }
+			catch { this._logger.warn(`Failed to initialize storage for Plugin '${loadedPlugin.name}'`); }
+
 			this._logger.info(`Plugin '${loadedPlugin.name}' loaded, initializing...`);
 			try
 			{
