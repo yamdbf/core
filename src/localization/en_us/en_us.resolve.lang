@@ -1,14 +1,17 @@
 [RESOLVE_TYPE]
-## Only translate the return values here
+## Only translate the string return values here
+## Also don't do anything with the default return
 {{!
 	switch (args.type)
 	{
+		case 'Command': return 'command';
+		case 'CommandGroup': return 'command group';
 		case 'User': return 'user';
 		case 'Member': return 'member';
 		case 'BannedUser': return 'banned user';
 		case 'Channel': return 'channel';
 		case 'Role': return 'role';
-		default: return;
+		default: return args.type;
 	}
 !}}
 

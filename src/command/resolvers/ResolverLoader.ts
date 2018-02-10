@@ -10,6 +10,8 @@ import { MemberResolver } from './base/MemberResolver';
 import { BannedUserResolver } from './base/BannedUserResolver';
 import { ChannelResolver } from './base/ChannelResolver';
 import { RoleResolver } from './base/RoleResolver';
+import { CommandGroupResolver } from './base/CommandGroupResolver';
+import { CommandResolver } from './base/CommandResolver';
 
 /**
  * Loads and stores Command argument {@link Resolver}s
@@ -38,7 +40,9 @@ export class ResolverLoader
 			MemberResolver,
 			BannedUserResolver,
 			ChannelResolver,
-			RoleResolver
+			RoleResolver,
+			CommandGroupResolver,
+			CommandResolver
 		];
 	}
 
