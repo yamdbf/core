@@ -1731,8 +1731,8 @@ unless the log level is <code>LogLevel.LOG</code> or higher</p>
 useful if you want to provide your own transport that
 uses the console.</p>
 <p>This should be run before creating a YAMDBF Client
-instance if you do not any logging to be done with the
-base transport before you get the chance to swap it out.</p>
+instance if you do not want any logging to be done with
+the base transport before you get the chance to swap it out.</p>
 <pre class="prettyprint source"><code>Logger.instance().removeBaseTransport();
 Logger.instance().addTransport({ transport[, level] });</code></pre>
 </div>

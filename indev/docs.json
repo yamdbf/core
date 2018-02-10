@@ -2848,7 +2848,7 @@
                     "name": "removeBaseTransport",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Remove the default console logging transport. This is\nuseful if you want to provide your own transport that\nuses the console.</p>\n<p>This should be run before creating a YAMDBF Client\ninstance if you do not any logging to be done with the\nbase transport before you get the chance to swap it out.</p>\n<pre class=\"prettyprint source\"><code>Logger.instance().removeBaseTransport();\nLogger.instance().addTransport({ transport[, level] });</code></pre>",
+                    "description": "<p>Remove the default console logging transport. This is\nuseful if you want to provide your own transport that\nuses the console.</p>\n<p>This should be run before creating a YAMDBF Client\ninstance if you do not want any logging to be done with\nthe base transport before you get the chance to swap it out.</p>\n<pre class=\"prettyprint source\"><code>Logger.instance().removeBaseTransport();\nLogger.instance().addTransport({ transport[, level] });</code></pre>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
