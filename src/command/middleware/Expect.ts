@@ -26,7 +26,7 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
-		const usage: string = Lang.getCommandInfo(this, lang).usage.replace('<prefix>', prefix);
+		const usage: string = Lang.getCommandInfo(this, lang).usage.replace(/<prefix>/g, prefix);
 
 		for (const [index, name] of names.entries())
 		{

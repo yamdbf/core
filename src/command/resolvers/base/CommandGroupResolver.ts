@@ -29,7 +29,7 @@ export class CommandGroupResolver extends Resolver
 
 		const res: ResourceLoader = Lang.createResourceLoader(lang);
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
-		const usage: string = Lang.getCommandInfo(command, lang).usage.replace('<prefix>', prefix);
+		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const result: string = this.client.commands.groups
 			.find(g => Util.normalize(g).includes(Util.normalize(value)));
