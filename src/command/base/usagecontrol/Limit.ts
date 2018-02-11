@@ -2,12 +2,13 @@ import { GuildStorage } from '../../../storage/GuildStorage';
 import { ResourceLoader } from '../../../types/ResourceLoader';
 import { BaseStrings as s } from '../../../localization/BaseStrings';
 import { Message } from '../../../types/Message';
-import { Util } from '../../../util/Util';
 import { Command } from '../../Command';
 import { Middleware } from '../../middleware/Middleware';
 import { Role } from 'discord.js';
 import * as CommandDecorators from '../../CommandDecorators';
+import { Resolver } from '../../resolvers/Resolver';
 const { using, localizable } = CommandDecorators;
+const { expect, resolve } = Middleware;
 
 export default class extends Command
 {
@@ -15,50 +16,94 @@ export default class extends Command
 	{
 		super({
 			name: 'limit',
-			desc: 'Limit a command to the provided roles',
-			usage: '<prefix>limit <command>, <role names, ...>',
-			info: 'The comma after the command name -- before the role names list -- is necessary.',
-			argOpts: { separator: ',' },
+			desc: 'Limit commands to certain roles',
+			usage: `<prefix>limit <command> <roles, ...> | <prefix>limit <'clear'> <command>`,
+			info: `Multiple roles can be passed to the command as a comma-separated list.
+
+If a role is unable to be found and you know it exists, it could be that there are multiple roles containing the given role name search text. Consider refining your search, or using an @mention for the role you want to use.
+
+Limiting a command will add the given roles to set of roles the command is limited to.
+
+Use '<prefix>limit clear <command>' to clear all of the roles a command is limited to.
+
+Removing individual roles is not possible to keep the command simple to use.`,
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 
-	@using(Middleware.expect({ '<command>': 'String' }))
-	@localizable
-	public async action(message: Message, [res, commandName, ...roleNames]: [ResourceLoader, string, string[]]): Promise<Message | Message[]>
+	@using(function(message, args)
 	{
-		const command: Command = this.client.commands.find(c =>
-			Util.normalize(commandName) === Util.normalize(c.name));
+		if (args[0] === 'clear')
+			return resolve(`clear: String, command: Command`)
+				.call(this, message, args);
+		else
+			return resolve(`command: Command, ...roles: String`)
+				.call(this, message, args);
+	})
+	@using(function(message, args)
+	{
+		if (args[0] === 'clear')
+			return expect(`clear: String, command: Command`)
+				.call(this, message, args);
+		else
+			return expect(`command: Command, ...roles: String`)
+				.call(this, message, args);
+	})
+	@localizable
+	public async action(message: Message, [res, clearOrCommand, rolesOrCommand]: [ResourceLoader, Command | string, Command | string]): Promise<any>
+	{
+		if (clearOrCommand === 'clear') return this.clearLimit(message, res, <Command> rolesOrCommand);
+		else return this.limitCommand(message, res, <Command> clearOrCommand, <string> rolesOrCommand);
+	}
 
-		if (!command) return this.respond(message,
-			res(s.CMD_LIMIT_ERR_UNKNOWN_COMMAND, { commandName }));
-		if (command.group === 'base') return this.respond(message, res(s.CMD_LIMIT_ERR_INVALID_GROUP));
-
+	/**
+	 * Clear all roles limiting the given command
+	 */
+	public async clearLimit(message: Message, res: ResourceLoader, command: Command): Promise<any>
+	{
 		const storage: GuildStorage = message.guild.storage;
 		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
-		let newLimit: string[] = limitedCommands[command.name] || [];
+		delete limitedCommands[command.name];
+		storage.settings.set('limitedCommands', limitedCommands);
 
-		let roles: Role[] = [];
-		let invalidRoles: string[] = [];
-		for (const name of <string[]> roleNames)
-		{
-			let foundRole: Role = message.guild.roles.find(role => Util.normalize(role.name) === Util.normalize(name));
-			if (!foundRole) invalidRoles.push(name);
-			else if (foundRole && newLimit.includes(foundRole.id))
-				message.channel.send(res(s.CMD_LIMIT_ERR_ALREADY_LIMITER,
-					{ roleName: foundRole.name, commandName: command.name }));
-			else roles.push(foundRole);
-		}
+		return this.respond(message,
+			res(s.CMD_LIMIT_CLEAR_SUCCESS, { commandName: command.name }));
+	}
+
+	/**
+	 * Add the given roles to the limiter for the given command
+	 */
+	public async limitCommand(message: Message, res: ResourceLoader, command: Command, roles: string): Promise<any>
+	{
+		if (command.group === 'base') return this.respond(message, res(s.CMD_LIMIT_ERR_INVALID_GROUP));
+
+		const roleResolver: Resolver = this.client.resolvers.get('Role');
+		const roleStrings: string[] = roles.split(/ *, */).filter(r => r !== '' && r !== ',');
+
+		const foundRoles: Role[] = [];
+		const invalidRoles: string[] = [];
+
+		for (const roleString of roleStrings)
+			try
+			{
+				const role: Role = await roleResolver.resolve(message, this, 'role', roleString);
+				foundRoles.push(role);
+			}
+			catch { invalidRoles.push(roleString); }
 
 		if (invalidRoles.length > 0) message.channel.send(res(s.CMD_LIMIT_ERR_INVALID_ROLE,
 			{ invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
-		if (roles.length === 0) return this.respond(message, res(s.CMD_LIMIT_ERR_NO_ROLES));
 
-		newLimit = newLimit.concat(roles.map(role => role.id));
-		limitedCommands[command.name] = newLimit;
-		await storage.settings.set('limitedCommands', limitedCommands);
+		if (foundRoles.length === 0) return this.respond(message, res(s.CMD_LIMIT_ERR_NO_ROLES));
+
+		const storage: GuildStorage = message.guild.storage;
+		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
+		const newLimit: Set<string> = new Set(limitedCommands[command.name] || []);
+
+		for (const role of foundRoles) newLimit.add(role.id);
+		limitedCommands[command.name] = Array.from(newLimit);
 
 		return this.respond(message, res(s.CMD_LIMIT_SUCCESS,
-			{ roles: roles.map(r => `\`${r.name}\``).join(', '), commandName: command.name }));
+			{ roles: foundRoles.map(r => `\`${r.name}\``).join(', '), commandName: command.name }));
 	}
 }

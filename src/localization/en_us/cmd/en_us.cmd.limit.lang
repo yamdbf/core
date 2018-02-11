@@ -1,11 +1,5 @@
-[CMD_LIMIT_ERR_UNKNOWN_COMMAND]
-Failed to find a command with the name `{{ commandName }}`
-
 [CMD_LIMIT_ERR_INVALID_GROUP]
 Cannot limit base commands.
-
-[CMD_LIMIT_ERR_ALREADY_LIMITER]
-Role `{{ roleName }}` is already a limiter for command: `{{ commandName }}`
 
 [CMD_LIMIT_ERR_INVALID_ROLE]
 Failed to find {{!
@@ -19,3 +13,6 @@ Failed to add any roles to the command.
 Successfully added {{!
 	args.roles.split(',').length > 1 ? 'roles' : 'role'
 !}}: {{ roles }} to the limiter for command: `{{ commandName }}`
+
+[CMD_LIMIT_CLEAR_SUCCESS]
+Successfully cleared role limits for command: `{{ commandName }}`
