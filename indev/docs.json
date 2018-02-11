@@ -1289,6 +1289,14 @@
                     "examples": []
                 },
                 {
+                    "name": "_checkReservedCommandNames",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Check for commands with reserved names. Used internally</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
                     "name": "_initCommands",
                     "access": "private",
                     "virtual": false,
