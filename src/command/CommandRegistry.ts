@@ -17,11 +17,16 @@ export class CommandRegistry<
 	@logger('CommandRegistry')
 	private readonly _logger: Logger;
 	private readonly _client: T;
+	private readonly _reserved: ((() => string) | string)[];
 
 	public constructor(client: T)
 	{
 		super();
 		Object.defineProperty(this, '_client', { value: client });
+
+		this._reserved = [
+			() => this.has(<K> 'limit') ? 'clear' : null
+		];
 	}
 
 	/**
@@ -107,6 +112,23 @@ export class CommandRegistry<
 					`External command "${
 						duplicate.name}" has conflicting alias with "${name}" (shared alias: "${alias}")`);
 			}
+	}
+
+	/**
+	 * Check for commands with reserved names. Used internally
+	 * @private
+	 */
+	public _checkReservedCommandNames(): void
+	{
+		const reserved: string[] = this._reserved.map(r => typeof r !== 'string' ? r() : r);
+		for (const name of reserved)
+		{
+			if (!name) continue;
+
+			const command: Command = this.resolve(name);
+			if (command)
+				throw new Error(`Command '${command.name}' is using reserved name or alias: '${name}'`);
+		}
 	}
 
 	/**

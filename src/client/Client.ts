@@ -303,6 +303,7 @@ export class Client extends Discord.Client
 			this._logger.info('Loading custom commands...');
 			this._commandLoader.loadCommandsFrom(this.commandsDir);
 			this.commands._checkDuplicateAliases();
+			this.commands._checkReservedCommandNames();
 
 			this._logger.info('Initializing commands...');
 			const initSuccess: boolean = await this.commands._initCommands();
