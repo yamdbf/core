@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>localization/BaseStrings.js - Documentation</title>
+    <title>command/base/usagecontrol/Limit.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -36,85 +36,114 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// Generated automatically at Sun Feb 11 2018 00:43:20 GMT-0600 (Central Standard Time)
+            <pre class="prettyprint source linenums"><code>import { GuildStorage } from '../../../storage/GuildStorage';
+import { ResourceLoader } from '../../../types/ResourceLoader';
+import { BaseStrings as s } from '../../../localization/BaseStrings';
+import { Message } from '../../../types/Message';
+import { Command } from '../../Command';
+import { Middleware } from '../../middleware/Middleware';
+import { Role } from 'discord.js';
+import * as CommandDecorators from '../../CommandDecorators';
+import { Resolver } from '../../resolvers/Resolver';
+const { using, localizable } = CommandDecorators;
+const { expect, resolve } = Middleware;
 
-/**
- * @typedef {enum} BaseStrings Enum containing all base framework
- * localization string keys
- */
-export enum BaseStrings
+export default class extends Command
 {
-	CMD_BLACKLIST_ERR_NOSELF = 'CMD_BLACKLIST_ERR_NOSELF',
-	CMD_BLACKLIST_ERR_NOBOT = 'CMD_BLACKLIST_ERR_NOBOT',
-	CMD_BLACKLIST_ERR_OWNERONLY = 'CMD_BLACKLIST_ERR_OWNERONLY',
-	CMD_BLACKLIST_ERR_ALREADYGLOBAL = 'CMD_BLACKLIST_ERR_ALREADYGLOBAL',
-	CMD_BLACKLIST_ERR_BADTARGET = 'CMD_BLACKLIST_ERR_BADTARGET',
-	CMD_BLACKLIST_ERR_ALREADYBLACKLISTED = 'CMD_BLACKLIST_ERR_ALREADYBLACKLISTED',
-	CMD_BLACKLIST_GLOBALSUCCESS = 'CMD_BLACKLIST_GLOBALSUCCESS',
-	CMD_BLACKLIST_SUCCESS = 'CMD_BLACKLIST_SUCCESS',
-	CMD_WHITELIST_ERR_OWNERONLY = 'CMD_WHITELIST_ERR_OWNERONLY',
-	CMD_WHITELIST_ERR_NOTGLOBAL = 'CMD_WHITELIST_ERR_NOTGLOBAL',
-	CMD_WHITELIST_ERR_NOTBLACKLISTED = 'CMD_WHITELIST_ERR_NOTBLACKLISTED',
-	CMD_WHITELIST_GLOBALSUCCESS = 'CMD_WHITELIST_GLOBALSUCCESS',
-	CMD_WHITELIST_SUCCESS = 'CMD_WHITELIST_SUCCESS',
-	CMD_EVAL_ERR_NOCODE = 'CMD_EVAL_ERR_NOCODE',
-	CMD_EVAL_RESULT = 'CMD_EVAL_RESULT',
-	CMD_EVAL_ERROR = 'CMD_EVAL_ERROR',
-	CMD_GROUPS_LIST = 'CMD_GROUPS_LIST',
-	CMD_GROUPS_ERR_NOEXIST = 'CMD_GROUPS_ERR_NOEXIST',
-	CMD_GROUPS_ERR_ENABLED = 'CMD_GROUPS_ERR_ENABLED',
-	CMD_GROUPS_ENABLE_SUCCESS = 'CMD_GROUPS_ENABLE_SUCCESS',
-	CMD_GROUPS_ERR_DISABLED = 'CMD_GROUPS_ERR_DISABLED',
-	CMD_GROUPS_DISABLE_SUCCESS = 'CMD_GROUPS_DISABLE_SUCCESS',
-	CMD_HELP_COMMAND_LIST = 'CMD_HELP_COMMAND_LIST',
-	CMD_HELP_UNKNOWN_COMMAND = 'CMD_HELP_UNKNOWN_COMMAND',
-	CMD_HELP_SERVERONLY = 'CMD_HELP_SERVERONLY',
-	CMD_HELP_OWNERONLY = 'CMD_HELP_OWNERONLY',
-	CMD_HELP_ALIASES = 'CMD_HELP_ALIASES',
-	CMD_HELP_CODEBLOCK = 'CMD_HELP_CODEBLOCK',
-	CMD_HELP_REPLY_CMD = 'CMD_HELP_REPLY_CMD',
-	CMD_HELP_REPLY_ALL = 'CMD_HELP_REPLY_ALL',
-	CMD_HELP_REPLY_FAIL = 'CMD_HELP_REPLY_FAIL',
-	CMD_LIMIT_ERR_INVALID_GROUP = 'CMD_LIMIT_ERR_INVALID_GROUP',
-	CMD_LIMIT_ERR_INVALID_ROLE = 'CMD_LIMIT_ERR_INVALID_ROLE',
-	CMD_LIMIT_ERR_NO_ROLES = 'CMD_LIMIT_ERR_NO_ROLES',
-	CMD_LIMIT_SUCCESS = 'CMD_LIMIT_SUCCESS',
-	CMD_LIMIT_CLEAR_SUCCESS = 'CMD_LIMIT_CLEAR_SUCCESS',
-	CMD_RELOAD_SUCCESS = 'CMD_RELOAD_SUCCESS',
-	CMD_SETLANG_LIST = 'CMD_SETLANG_LIST',
-	CMD_SETLANG_ERR_INVALID = 'CMD_SETLANG_ERR_INVALID',
-	CMD_SETLANG_SUCCESS = 'CMD_SETLANG_SUCCESS',
-	CMD_PREFIX_CURRENT = 'CMD_PREFIX_CURRENT',
-	CMD_PREFIX_ERR_CHAR_LIMIT = 'CMD_PREFIX_ERR_CHAR_LIMIT',
-	CMD_PREFIX_ERR_INVALID_CHARS = 'CMD_PREFIX_ERR_INVALID_CHARS',
-	CMD_PREFIX_SUCCESS = 'CMD_PREFIX_SUCCESS',
-	CMD_SHORTCUTS_LIST = 'CMD_SHORTCUTS_LIST',
-	CMD_SHORTCUTS_SET_SUCCESS = 'CMD_SHORTCUTS_SET_SUCCESS',
-	CMD_SHORTCUTS_GET_CONTENT = 'CMD_SHORTCUTS_GET_CONTENT',
-	CMD_SHORTCUTS_REMOVE_SUCCESS = 'CMD_SHORTCUTS_REMOVE_SUCCESS',
-	CMD_SHORTCUTS_ERR_NO_SHORTCUTS = 'CMD_SHORTCUTS_ERR_NO_SHORTCUTS',
-	CMD_SHORTCUTS_ERR_MISSING = 'CMD_SHORTCUTS_ERR_MISSING',
-	CMD_SHORTCUTS_ERR_SET_LENGTH = 'CMD_SHORTCUTS_ERR_SET_LENGTH',
-	CMD_SHORTCUTS_ERR_MAX_SHORTCUTS = 'CMD_SHORTCUTS_ERR_MAX_SHORTCUTS',
-	DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL = 'DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL',
-	DISPATCHER_ERR_RATELIMIT_EXCEED = 'DISPATCHER_ERR_RATELIMIT_EXCEED',
-	DISPATCHER_ERR_INVALID_SHORTCUT = 'DISPATCHER_ERR_INVALID_SHORTCUT',
-	DISPATCHER_ERR_UNKNOWN_COMMAND = 'DISPATCHER_ERR_UNKNOWN_COMMAND',
-	DISPATCHER_ERR_GUILD_ONLY = 'DISPATCHER_ERR_GUILD_ONLY',
-	DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS = 'DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS',
-	DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS = 'DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS',
-	DISPATCHER_ERR_MISSING_ROLES = 'DISPATCHER_ERR_MISSING_ROLES',
-	EXPECT_ERR_MISSING_VALUE = 'EXPECT_ERR_MISSING_VALUE',
-	EXPECT_ERR_INVALID_OPTION = 'EXPECT_ERR_INVALID_OPTION',
-	EXPECT_ERR_EXPECTED_TYPE = 'EXPECT_ERR_EXPECTED_TYPE',
-	RESOLVE_TYPE = 'RESOLVE_TYPE',
-	RESOLVE_ERR_RESOLVE_NUMBER = 'RESOLVE_ERR_RESOLVE_NUMBER',
-	RESOLVE_ERR_RESOLVE_DURATION = 'RESOLVE_ERR_RESOLVE_DURATION',
-	RESOLVE_ERR_RESOLVE_TYPE_ID = 'RESOLVE_ERR_RESOLVE_TYPE_ID',
-	RESOLVE_ERR_RESOLVE_TYPE_TEXT = 'RESOLVE_ERR_RESOLVE_TYPE_TEXT',
-	RESOLVE_ERR_MULTIPLE_USER_RESULTS = 'RESOLVE_ERR_MULTIPLE_USER_RESULTS',
-	RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS = 'RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS',
-	RESOLVE_ERR_MULTIPLE_ROLE_RESULTS = 'RESOLVE_ERR_MULTIPLE_ROLE_RESULTS'
+	public constructor()
+	{
+		super({
+			name: 'limit',
+			desc: 'Limit commands to certain roles',
+			usage: `&lt;prefix>limit &lt;command> &lt;roles, ...> | &lt;prefix>limit &lt;'clear'> &lt;command>`,
+			info: `Multiple roles can be passed to the command as a comma-separated list.
+
+If a role is unable to be found and you know it exists, it could be that there are multiple roles containing the given role name search text. Consider refining your search, or using an @mention for the role you want to use.
+
+Limiting a command will add the given roles to set of roles the command is limited to.
+
+Use '&lt;prefix>limit clear &lt;command>' to clear all of the roles a command is limited to.
+
+Removing individual roles is not possible to keep the command simple to use.`,
+			callerPermissions: ['ADMINISTRATOR']
+		});
+	}
+
+	@using(function(message, args)
+	{
+		if (args[0] === 'clear')
+			return resolve(`clear: String, command: Command`)
+				.call(this, message, args);
+		else
+			return resolve(`command: Command, ...roles: String`)
+				.call(this, message, args);
+	})
+	@using(function(message, args)
+	{
+		if (args[0] === 'clear')
+			return expect(`clear: String, command: Command`)
+				.call(this, message, args);
+		else
+			return expect(`command: Command, ...roles: String`)
+				.call(this, message, args);
+	})
+	@localizable
+	public async action(message: Message, [res, clearOrCommand, rolesOrCommand]: [ResourceLoader, Command | string, Command | string]): Promise&lt;any>
+	{
+		if (clearOrCommand === 'clear') return this.clearLimit(message, res, &lt;Command> rolesOrCommand);
+		else return this.limitCommand(message, res, &lt;Command> clearOrCommand, &lt;string> rolesOrCommand);
+	}
+
+	/**
+	 * Clear all roles limiting the given command
+	 */
+	public async clearLimit(message: Message, res: ResourceLoader, command: Command): Promise&lt;any>
+	{
+		const storage: GuildStorage = message.guild.storage;
+		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
+		delete limitedCommands[command.name];
+		storage.settings.set('limitedCommands', limitedCommands);
+
+		return this.respond(message,
+			res(s.CMD_LIMIT_CLEAR_SUCCESS, { commandName: command.name }));
+	}
+
+	/**
+	 * Add the given roles to the limiter for the given command
+	 */
+	public async limitCommand(message: Message, res: ResourceLoader, command: Command, roles: string): Promise&lt;any>
+	{
+		if (command.group === 'base') return this.respond(message, res(s.CMD_LIMIT_ERR_INVALID_GROUP));
+
+		const roleResolver: Resolver = this.client.resolvers.get('Role');
+		const roleStrings: string[] = roles.split(/ *, */).filter(r => r !== '' &amp;&amp; r !== ',');
+
+		const foundRoles: Role[] = [];
+		const invalidRoles: string[] = [];
+
+		for (const roleString of roleStrings)
+			try
+			{
+				const role: Role = await roleResolver.resolve(message, this, 'role', roleString);
+				foundRoles.push(role);
+			}
+			catch { invalidRoles.push(roleString); }
+
+		if (invalidRoles.length > 0) message.channel.send(res(s.CMD_LIMIT_ERR_INVALID_ROLE,
+			{ invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
+
+		if (foundRoles.length === 0) return this.respond(message, res(s.CMD_LIMIT_ERR_NO_ROLES));
+
+		const storage: GuildStorage = message.guild.storage;
+		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
+		const newLimit: Set&lt;string> = new Set(limitedCommands[command.name] || []);
+
+		for (const role of foundRoles) newLimit.add(role.id);
+		limitedCommands[command.name] = Array.from(newLimit);
+
+		return this.respond(message, res(s.CMD_LIMIT_SUCCESS,
+			{ roles: foundRoles.map(r => `\`${r.name}\``).join(', '), commandName: command.name }));
+	}
 }
 </code></pre>
         </article>

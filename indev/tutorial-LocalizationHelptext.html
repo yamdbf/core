@@ -124,17 +124,11 @@ commands and this lines up with the base commands using english helptext.</p>
             &quot;info&quot;: &quot;If global, this will block the user from calling commands in ANY server and DMs&quot;
         }
     },
-    &quot;clearlimit&quot;: {
-        &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Clear role restrictions from a command&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>clearlimit &lt;command>&quot;
-        }
-    },
     &quot;limit&quot;: {
         &quot;en_us&quot;: {
-            &quot;desc&quot;: &quot;Limit a command to the provided roles&quot;,
-            &quot;usage&quot;: &quot;&lt;prefix>limit &lt;command>, &lt;role names, ...>&quot;,
-            &quot;info&quot;: &quot;The comma after the command name -- before the role names list -- is necessary.&quot;
+            &quot;desc&quot;: &quot;Limit commands to certain roles&quot;,
+            &quot;usage&quot;: &quot;&lt;prefix>limit &lt;command> &lt;roles, ...> | &lt;prefix>limit &lt;'clear'> &lt;command>&quot;,
+            &quot;info&quot;: &quot;Multiple roles can be passed to the command as a comma-separated list.\n\nIf a role is unable to be found and you know it exists, it could be that there are multiple roles containing the given role name search text. Consider refining your search, or using an @mention for the role you want to use.\n\nLimiting a command will add the given roles to set of roles the command is limited to.\n\nUse '&lt;prefix>limit clear &lt;command>' to clear all of the roles a command is limited to.\n\nRemoving individual roles is not possible to keep the command simple to use.&quot;
         }
     }
 }</code></pre>
