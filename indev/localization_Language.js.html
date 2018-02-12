@@ -58,13 +58,13 @@ export class Language
 	 * same language with this Language object's strings,
 	 * saving them to this Language object's `strings` value
 	 */
-	public concat(name: Language): void
+	public concat(lang: Language): void
 	{
-		if (name.name !== this.name)
+		if (lang.name !== this.name)
 			throw new Error('Cannot concatenate strings for different languages.');
 
-		this.strings = { ...this.strings, ...name.strings };
-		this.raw = { ...this.raw, ...name.raw };
+		this.strings = { ...this.strings, ...lang.strings };
+		this.raw = { ...this.raw, ...lang.raw };
 	}
 }
 </code></pre>
