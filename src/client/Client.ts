@@ -300,8 +300,12 @@ export class Client extends Discord.Client
 
 		if (!this.passive)
 		{
-			this._logger.info('Loading custom commands...');
-			this._commandLoader.loadCommandsFrom(this.commandsDir);
+			if (this.commandsDir)
+			{
+				this._logger.info('Loading custom commands...');
+				this._commandLoader.loadCommandsFrom(this.commandsDir);
+			}
+
 			this.commands._checkDuplicateAliases();
 			this.commands._checkReservedCommandNames();
 
