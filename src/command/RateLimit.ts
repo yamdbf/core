@@ -59,11 +59,33 @@ export class RateLimit
 
 	/**
 	 * Return whether or not this ratelimit is currently capped out
-	 * @returns {boolean}
+	 * @type {boolean}
 	 */
 	public get isLimited(): boolean
 	{
 		return (this._count >= this.limit) && (Date.now() < this.expires);
+	}
+
+	/**
+	 * The remaining number of uses this RateLimit has for
+	 * this expiry period
+	 * @type {number}
+	 */
+	public get remaining(): number
+	{
+		return (((this.limit - this._count) === 0) && !this.isLimited)
+			? this.limit
+			: this.limit - this._count;
+	}
+
+	/**
+	 * Whether or not this RateLimit was flagged after
+	 * notifying the user of being rate limited
+	 * @type {boolean}
+	 */
+	public get wasNotified(): boolean
+	{
+		return this._notified;
 	}
 
 	/**
@@ -74,15 +96,5 @@ export class RateLimit
 	public setNotified(): void
 	{
 		this._notified = true;
-	}
-
-	/**
-	 * Return whether or not this RateLimit was flagged after
-	 * notifying the user of being rate limited
-	 * @returns {boolean}
-	 */
-	public get wasNotified(): boolean
-	{
-		return this._notified;
 	}
 }
