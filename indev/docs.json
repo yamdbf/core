@@ -2331,6 +2331,20 @@
             ]
         },
         {
+            "name": "KeyedStorage",
+            "description": "<p>Compat for renamed KeyedStorage class</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "KeyedStorage",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            }
+        },
+        {
             "name": "SharedProviderStorage",
             "description": "<p>Simple async key/value storage abstraction operating on top\nof a single key within the given StorageProvider instance.\nAs the name suggests, the given StorageProvider instance\ncan be shared between multiple SharedProviderStorage instances</p>\n<blockquote>\n<p>Supports nested object paths in get/set/remove using <code>.</code>\nlike normal object accessors</p>\n<p><strong>Note:</strong> The storage provider given to the constructor should\nalready be initialized via its <code>init()</code> method</p>\n</blockquote>",
             "extends": [],
