@@ -1356,14 +1356,33 @@
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return whether or not this ratelimit is currently capped out</p>",
-                    "type": ""
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "remaining",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The remaining number of uses this RateLimit has for\nthis expiry period</p>",
+                    "type": {
+                        "names": [
+                            "number"
+                        ]
+                    }
                 },
                 {
                     "name": "wasNotified",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Return whether or not this RateLimit was flagged after\nnotifying the user of being rate limited</p>",
-                    "type": ""
+                    "description": "<p>Whether or not this RateLimit was flagged after\nnotifying the user of being rate limited</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
                 }
             ],
             "functions": [

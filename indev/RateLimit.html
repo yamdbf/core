@@ -278,7 +278,7 @@ a given timeframe</p></div>
 
         
             
-<h4 class="name" id="isLimited">.<a href='#isLimited' style='color: black'>isLimited</a><span class="type-signature"></span></h4>
+<h4 class="name" id="isLimited">.<a href='#isLimited' style='color: black'>isLimited</a><span class="type-signature">: boolean</span></h4>
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
@@ -287,6 +287,12 @@ a given timeframe</p></div>
 <div class="description">
     <p>Return whether or not this ratelimit is currently capped out</p>
 </div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>boolean</dd></span>
+
 
 
 
@@ -415,16 +421,22 @@ called within its duration</p>
 
         
             
-<h4 class="name" id="wasNotified">.<a href='#wasNotified' style='color: black'>wasNotified</a><span class="type-signature"></span></h4>
+<h4 class="name" id="remaining">.<a href='#remaining' style='color: black'>remaining</a><span class="type-signature">: number</span></h4>
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 
 
 <div class="description">
-    <p>Return whether or not this RateLimit was flagged after
-notifying the user of being rate limited</p>
+    <p>The remaining number of uses this RateLimit has for
+this expiry period</p>
 </div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>number</dd></span>
+
 
 
 
@@ -462,7 +474,79 @@ notifying the user of being rate limited</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L84">command/RateLimit.ts, Line 84</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L74">command/RateLimit.ts, Line 74</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+</div>
+
+        
+            
+<h4 class="name" id="wasNotified">.<a href='#wasNotified' style='color: black'>wasNotified</a><span class="type-signature">: boolean</span></h4>
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+<div class="description">
+    <p>Whether or not this RateLimit was flagged after
+notifying the user of being rate limited</p>
+</div>
+
+
+
+    <b>Type:</b> 
+<span class="param-type"><dd>boolean</dd></span>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L86">command/RateLimit.ts, Line 86</a>
     </li></ul></dd>
     
 
@@ -653,7 +737,7 @@ is for notified of being rate limited</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L74">command/RateLimit.ts, Line 74</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L96">command/RateLimit.ts, Line 96</a>
     </li></ul></dd>
     
 
