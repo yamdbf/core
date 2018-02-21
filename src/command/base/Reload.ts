@@ -31,7 +31,7 @@ export default class extends Command
 		const start: number = now();
 
 		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
-		const reloaded: number = this.client._reloadCustomCommands() + 1;
+		const reloaded: number = this.client._reloadCustomCommands();
 
 		this._logger.log(`Re-initializing reloaded commands...`);
 		this.client.commands._initCommands();
