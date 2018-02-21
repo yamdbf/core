@@ -59,7 +59,7 @@ export class Time
 
 		let days: number = Math.floor(ms / 864e5);
 		let hours: number = Math.floor((ms % 864e5) / 36e5);
-		let mins: number = Math.floor(((ms % 865e5) % 36e5) / 6e4);
+		let mins: number = Math.floor(((ms % 864e5) % 36e5) / 6e4);
 		let secs: number = Math.floor((((ms % 864e5) % 36e5) % 6e4) / 1000);
 		ms = (((ms % 864e5) % 36e5) % 6e5) % 1000;
 
