@@ -450,6 +450,11 @@ Custom Resolvers must implement the <code>validate()</code> and <code>resolve()<
 <div class="description">
     <p>Method to implement that should accept a string and return
 a resolved value of the type the resolver is meant to resolve.</p>
+<p>Resolvers can and should throw errors when invalid input is given.
+These errors will be sent to Discord as argument errors when using
+the <code>resolve</code> middleware. Refer to the base Resolver error strings
+for examples on what these errors should look like if you're trying
+to keep things in-line with YAMDBF</p>
 <blockquote>
 <p>Can be async</p>
 </blockquote>
@@ -619,7 +624,7 @@ a resolved value of the type the resolver is meant to resolve.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/resolvers/Resolver.ts#L62">command/resolvers/Resolver.ts, Line 62</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/resolvers/Resolver.ts#L69">command/resolvers/Resolver.ts, Line 69</a>
     </li></ul></dd>
     
 

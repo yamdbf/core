@@ -1660,7 +1660,7 @@
                     "name": "resolve",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Method to implement that should accept a string and return\na resolved value of the type the resolver is meant to resolve.</p>\n<blockquote>\n<p>Can be async</p>\n</blockquote>",
+                    "description": "<p>Method to implement that should accept a string and return\na resolved value of the type the resolver is meant to resolve.</p>\n<p>Resolvers can and should throw errors when invalid input is given.\nThese errors will be sent to Discord as argument errors when using\nthe <code>resolve</code> middleware. Refer to the base Resolver error strings\nfor examples on what these errors should look like if you're trying\nto keep things in-line with YAMDBF</p>\n<blockquote>\n<p>Can be async</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "message",
