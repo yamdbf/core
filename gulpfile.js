@@ -49,8 +49,7 @@ gulp.task('build', () => {
 	gulp.src('src/**/*.lang').pipe(gulp.dest('bin/'));
 
 	return tsCompile.js
-		.pipe(gulp_sourcemaps.mapSources(sourcePath => path.join(__dirname, 'src', sourcePath)))
-		.pipe(gulp_sourcemaps.write())
+		.pipe(gulp_sourcemaps.write('.', { sourceRoot: '../src' }))
 		.pipe(gulp.dest('bin/'));
 });
 
