@@ -52,6 +52,13 @@ export class Resolver
 	/**
 	 * Method to implement that should accept a string and return
 	 * a resolved value of the type the resolver is meant to resolve.
+	 *
+	 * Resolvers can and should throw errors when invalid input is given.
+	 * These errors will be sent to Discord as argument errors when using
+	 * the `resolve` middleware. Refer to the base Resolver error strings
+	 * for examples on what these errors should look like if you're trying
+	 * to keep things in-line with YAMDBF
+	 *
 	 * >Can be async
 	 * @param {Message} message Discord.js Message instance
 	 * @param {Command} command Instance of the Command being called
