@@ -21,6 +21,7 @@ gulp.task('default', ['build']);
 gulp.task('build:vscode', cb => runSequence()('lint', 'build', cb));
 gulp.task('build:docs', () => execSync('npm run docs:indev'));
 gulp.task('docs', cb => runSequence()('build', 'build:docs', cb));
+gulp.task('gh-prebuild', cb => runSequence()('build', 'gh-prebuild-prepare', cb));
 
 gulp.task('pause', cb => setTimeout(() => cb(), 1e3));
 gulp.task('tests', cb => runSequence()('lint', 'build', 'pause', 'build:tests', cb));
@@ -56,11 +57,21 @@ gulp.task('build', () => {
 gulp.task('package', () => {
 	del.sync(['../pkg/yamdbf/**/*.*'], { force: true });
 	gulp.src('bin/**/*.*').pipe(gulp.dest('../pkg/yamdbf/bin'));
-	gulp.src('src/**/*.*').pipe(gulp.dest('../pkg/yamdbf/src'));
-	gulp.src('*.json').pipe(gulp.dest('../pkg/yamdbf'));
-	gulp.src('gulpfile.js').pipe(gulp.dest('../pkg/yamdbf'));
+	gulp.src('package.json').pipe(gulp.dest('../pkg/yamdbf'));
 	gulp.src('README.md').pipe(gulp.dest('../pkg/yamdbf'));
 });
+
+gulp.task('gh-prebuild-prepare', () => {
+	del.sync([
+		'../yamdbf-prebuilt/**',
+		'../yamdbf-prebuilt/.*',
+		'!../yamdbf-prebuilt',
+		'!../yamdbf-prebuilt/.git',
+		'!../yamdbf-prebuilt/.git/**'
+	], { force: true });
+	gulp.src('bin/**/*.*').pipe(gulp.dest('../yamdbf-prebuilt/bin'));
+	gulp.src('package.json').pipe(gulp.dest('../yamdbf-prebuilt'));
+})
 
 gulp.task('build:tests', () => {
 	del.sync(['test/**/*.js']);
