@@ -1,0 +1,101 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseStrings_1 = require("../../../localization/BaseStrings");
+const Command_1 = require("../../Command");
+const Middleware_1 = require("../../middleware/Middleware");
+const CommandDecorators = require("../../CommandDecorators");
+const { using, localizable } = CommandDecorators;
+const { expect, resolve } = Middleware_1.Middleware;
+class default_1 extends Command_1.Command {
+    constructor() {
+        super({
+            name: 'limit',
+            desc: 'Limit commands to certain roles',
+            usage: `<prefix>limit <command> <roles, ...> | <prefix>limit <'clear'> <command>`,
+            info: `Multiple roles can be passed to the command as a comma-separated list.
+
+If a role is unable to be found and you know it exists, it could be that there are multiple roles containing the given role name search text. Consider refining your search, or using an @mention for the role you want to use.
+
+Limiting a command will add the given roles to set of roles the command is limited to.
+
+Use '<prefix>limit clear <command>' to clear all of the roles a command is limited to.
+
+Removing individual roles is not possible to keep the command simple to use.`,
+            callerPermissions: ['ADMINISTRATOR']
+        });
+    }
+    async action(message, [res, clearOrCommand, rolesOrCommand]) {
+        if (clearOrCommand === 'clear')
+            return this.clearLimit(message, res, rolesOrCommand);
+        else
+            return this.limitCommand(message, res, clearOrCommand, rolesOrCommand);
+    }
+    /**
+     * Clear all roles limiting the given command
+     */
+    async clearLimit(message, res, command) {
+        const storage = message.guild.storage;
+        let limitedCommands = await storage.settings.get('limitedCommands') || {};
+        delete limitedCommands[command.name];
+        storage.settings.set('limitedCommands', limitedCommands);
+        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_CLEAR_SUCCESS, { commandName: command.name }));
+    }
+    /**
+     * Add the given roles to the limiter for the given command
+     */
+    async limitCommand(message, res, command, roles) {
+        if (command.group === 'base')
+            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_ERR_INVALID_GROUP));
+        const roleResolver = this.client.resolvers.get('Role');
+        const roleStrings = roles.split(/ *, */).filter(r => r !== '' && r !== ',');
+        const foundRoles = [];
+        const invalidRoles = [];
+        for (const roleString of roleStrings)
+            try {
+                const role = await roleResolver.resolve(message, this, 'role', roleString);
+                foundRoles.push(role);
+            }
+            catch (_a) {
+                invalidRoles.push(roleString);
+            }
+        if (invalidRoles.length > 0)
+            message.channel.send(res(BaseStrings_1.BaseStrings.CMD_LIMIT_ERR_INVALID_ROLE, { invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
+        if (foundRoles.length === 0)
+            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_ERR_NO_ROLES));
+        const storage = message.guild.storage;
+        const limitedCommands = await storage.settings.get('limitedCommands') || {};
+        const newLimit = new Set(limitedCommands[command.name] || []);
+        for (const role of foundRoles)
+            newLimit.add(role.id);
+        limitedCommands[command.name] = Array.from(newLimit);
+        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_SUCCESS, { roles: foundRoles.map(r => `\`${r.name}\``).join(', '), commandName: command.name }));
+    }
+}
+__decorate([
+    using(function (message, args) {
+        if (args[0] === 'clear')
+            return resolve(`clear: String, command: Command`)
+                .call(this, message, args);
+        else
+            return resolve(`command: Command, ...roles: String`)
+                .call(this, message, args);
+    }),
+    using(function (message, args) {
+        if (args[0] === 'clear')
+            return expect(`clear: String, command: Command`)
+                .call(this, message, args);
+        else
+            return expect(`command: Command, ...roles: String`)
+                .call(this, message, args);
+    }),
+    localizable
+], default_1.prototype, "action", null);
+exports.default = default_1;
+
+//# sourceMappingURL=Limit.js.map
