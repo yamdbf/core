@@ -1,13 +1,12 @@
 {
   "name": "yamdbf",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "Yet Another Modular Discord Bot Framework: A lightweight framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
   "typings": "bin/index.d.ts",
   "scripts": {
     "docs:stable": "cross-env TYPE=stable jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
     "docs:indev": "cross-env TYPE=indev jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/indev/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/indev/docs.json",
-    "postinstall": "postinstall-build --only-as-dependency bin \"npm run build -s\"",
     "build": "gulp",
     "lint": "gulp lint",
     "pkg": "gulp pkg",
@@ -41,7 +40,6 @@
     "discord.js": "^11.2.1",
     "glob": "7.1.2",
     "node-json-db": "0.7.3",
-    "postinstall-build": "^5.0.1",
     "reflect-metadata": "^0.1.10",
     "source-map-support": "^0.5.0"
   },
@@ -70,17 +68,5 @@
     "run-sequence": "^1.2.2",
     "tslint": "^5.4.3",
     "typescript": "^2.4.0"
-  },
-  "buildDependencies": [
-    "typescript",
-    "del",
-    "gulp",
-    "gulp-sourcemaps",
-    "gulp-typescript",
-    "@types/chalk",
-    "@types/glob",
-    "@types/node",
-    "@types/node-json-db",
-    "@types/sequelize"
-  ]
+  }
 }
