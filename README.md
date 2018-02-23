@@ -44,10 +44,10 @@ using a Sequelize-based storage provider.
 - With a Postgres provider: `npm install --save yamdbf pg sequelize`   
 - With an SQLite provider: `npm install --save yamdbf sqlite3 sequelize`
 
->Indev builds can be installed from github with `npm install --save zajrik/yamdbf`.
-This requires `git` to be installed and in your path. NPM 5.3.0 is broken for
-installing dev builds as they have to compile after installation and the compilation
-script will fail on NPM 5.3.0. To be safe, use NPM 5.0.3 via `npm install -g npm@5.0.3`
+>Indev builds can be installed from github with `npm install --save zajrik/yamdbf#indev`.
+This requires `git` to be installed and in your path.
+
+>Yarn can also be used for installation (I recommend it!)
 
 >Documentation for indev builds can be found [here](https://yamdbf.js.org/indev).
 
@@ -58,3 +58,5 @@ script will fail on NPM 5.3.0. To be safe, use NPM 5.0.3 via `npm install -g npm
 - [YAMDBF Issues](https://github.com/zajrik/yamdbf/issues)
 - [YAMDBF Generator](https://github.com/zajrik/generator-yamdbf)
 - [YAMDBF NPM](https://www.npmjs.com/package/yamdbf)
+- [YAMDBF Yarnpkg](https://yarnpkg.com/en/package/yamdbf)
+- [Zajrik on Patreon](https://patreon.com/zajrik)
