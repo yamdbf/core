@@ -56,7 +56,6 @@ This requires `git` to be installed and in your path.
 - [YAMDBF Discord server](https://discord.gg/cMXkbXV)
 - [YAMDBF GitHub](https://github.com/zajrik/yamdbf)
 - [YAMDBF Issues](https://github.com/zajrik/yamdbf/issues)
-- [YAMDBF Generator](https://github.com/zajrik/generator-yamdbf)
 - [YAMDBF NPM](https://www.npmjs.com/package/yamdbf)
 - [YAMDBF Yarnpkg](https://yarnpkg.com/en/package/yamdbf)
 - [Zajrik on Patreon](https://patreon.com/zajrik)
