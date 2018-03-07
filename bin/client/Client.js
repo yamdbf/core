@@ -196,7 +196,8 @@ class Client extends Discord.Client {
             this.emit('pause');
         else
             this.__onContinueEvent();
-        this.user.setGame(this.statusText);
+        if (this.statusText)
+            this.user.setActivity(this.statusText);
     }
     async __onContinueEvent() {
         await this._guildStorageLoader.init();

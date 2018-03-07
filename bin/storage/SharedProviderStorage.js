@@ -87,7 +87,7 @@ class SharedProviderStorage {
         try {
             JSON.stringify(value);
         }
-        catch (err) {
+        catch (_a) {
             value = {};
         }
         if (key.includes('.')) {

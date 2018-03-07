@@ -21,6 +21,7 @@ class Logger {
         Logger._instance = this;
         this._logLevel = LogLevel_1.LogLevel.DEBUG;
         this._transports = [];
+        this._baseTransportRemoved = false;
         const colors = {
             red: [31, 39],
             green: [32, 39],
@@ -83,8 +84,7 @@ class Logger {
                     case 'error':
                     case 'debug':
                         return (...text) => target[key](tag, ...text);
-                    default:
-                        return target[key];
+                    default: return target[key];
                 }
             }
         });
@@ -105,11 +105,11 @@ class Logger {
      */
     addTransport(transport) {
         const level = transport.level;
-        transport.level = typeof level !== 'undefined'
-            ? typeof level === 'function'
+        transport.level = typeof level === 'undefined'
+            ? () => this._logLevel
+            : typeof level === 'function'
                 ? level
-                : () => level
-            : () => this._logLevel;
+                : () => level;
         this._transports.push(transport);
     }
     /**
@@ -127,6 +127,9 @@ class Logger {
      * @returns {void}
      */
     removeBaseTransport() {
+        if (this._baseTransportRemoved)
+            return;
+        this._baseTransportRemoved = true;
         this._transports.shift();
     }
     /**

@@ -80,7 +80,7 @@ class SingleProviderStorage {
         try {
             JSON.stringify(value);
         }
-        catch (err) {
+        catch (_a) {
             value = {};
         }
         let data;

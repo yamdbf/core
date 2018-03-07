@@ -15,7 +15,7 @@ class JSONProvider extends StorageProvider_1.StorageProvider {
             let data = this._db.getData('/');
             return Object.keys(data);
         }
-        catch (err) {
+        catch (_a) {
             return [];
         }
     }
@@ -28,7 +28,7 @@ class JSONProvider extends StorageProvider_1.StorageProvider {
             let data = this._db.getData(`/${key}`);
             return data;
         }
-        catch (err) {
+        catch (_a) {
             return undefined;
         }
     }
@@ -51,7 +51,7 @@ class JSONProvider extends StorageProvider_1.StorageProvider {
         try {
             this._db.delete(`/${key}`);
         }
-        catch (err) {
+        catch (_a) {
             return;
         }
     }
@@ -60,7 +60,7 @@ class JSONProvider extends StorageProvider_1.StorageProvider {
             for (const key of await this.keys())
                 this._db.delete(`/${key}`);
         }
-        catch (err) {
+        catch (_a) {
             return;
         }
     }

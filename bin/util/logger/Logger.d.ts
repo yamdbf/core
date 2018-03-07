@@ -15,6 +15,7 @@ export declare class Logger {
     private static _instance;
     private _logLevel;
     private _transports;
+    private _baseTransportRemoved;
     private constructor();
     /**
      * `LogLevel.NONE` enum shortcut
