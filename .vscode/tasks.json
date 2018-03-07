@@ -1,29 +1,29 @@
 {
 	// See https://go.microsoft.com/fwlink/?LinkId=733558
 	// for the documentation about the tasks.json format
-	"version": "0.1.0",
+	"version": "2.0.0",
 	"command": "gulp",
-	"isShellCommand": true,
+	"type": "shell",
 	"tasks": [
 		{
-			"taskName": "build:vscode",
+			"label": "build:vscode",
 			"args": [],
-			"isBuildCommand": true,
+			"group": "build",
 			"isBackground": false,
 			"problemMatcher": ["$tsc"]
 		},
 		{
-			"taskName": "tests",
+			"label": "tests",
 			"args": ["tests"],
 			"command": "gulp",
-			"isShellCommand": true,
+			"type": "shell",
 			"problemMatcher": ["$tsc"]
 		},
 		{
-			"taskName": "docs",
+			"label": "docs",
 			"args": ["docs"],
 			"command": "gulp",
-			"isShellCommand": true
+			"type": "shell"
 		}
 	]
 }
