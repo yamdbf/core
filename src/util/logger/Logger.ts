@@ -19,6 +19,7 @@ export class Logger
 	private static _instance: Logger;
 	private _logLevel: LogLevel;
 	private _transports: Transport[];
+	private _baseTransportRemoved: boolean;
 
 	private constructor()
 	{
@@ -28,6 +29,7 @@ export class Logger
 		Logger._instance = this;
 		this._logLevel = LogLevel.DEBUG;
 		this._transports = [];
+		this._baseTransportRemoved = false;
 
 		// Create and add base transport
 
@@ -139,14 +141,9 @@ export class Logger
 			get: (target: any, key: PropertyKey) => {
 				switch (key)
 				{
-					case 'log':
-					case 'info':
-					case 'warn':
-					case 'error':
-					case 'debug':
+					case 'log': case 'info': case 'warn': case 'error': case 'debug':
 						return (...text: string[]) => target[key](tag, ...text);
-					default:
-						return target[key];
+					default: return target[key];
 				}
 			}
 		});
@@ -171,11 +168,11 @@ export class Logger
 	public addTransport(transport: Transport): void
 	{
 		const level: LogLevel | (() => LogLevel) = transport.level;
-		transport.level = typeof level !== 'undefined'
-			? typeof level === 'function'
+		transport.level = typeof level === 'undefined'
+			? () => this._logLevel
+			: typeof level === 'function'
 				? level
-				: () => <LogLevel> level
-			: () => this._logLevel;
+				: () => <LogLevel> level;
 
 		this._transports.push(transport);
 	}
@@ -196,6 +193,8 @@ export class Logger
 	 */
 	public removeBaseTransport(): void
 	{
+		if (this._baseTransportRemoved) return;
+		this._baseTransportRemoved = true;
 		this._transports.shift();
 	}
 

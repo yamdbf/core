@@ -45,10 +45,7 @@ export class SharedProviderStorage
 
 			this._cache = data;
 		}
-		catch (err)
-		{
-			Logger.instance().error('SharedProviderStorage', err.stack);
-		}
+		catch (err) { Logger.instance().error('SharedProviderStorage', err.stack); }
 	}
 
 	/**
@@ -101,7 +98,7 @@ export class SharedProviderStorage
 		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
 
 		try { JSON.stringify(value); }
-		catch (err) { value = {}; }
+		catch { value = {}; }
 
 		if (key.includes('.'))
 		{

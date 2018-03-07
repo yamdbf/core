@@ -37,7 +37,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "discord.js": "^11.2.1",
+    "discord.js": "11.3.2",
     "glob": "7.1.2",
     "node-json-db": "0.7.3",
     "reflect-metadata": "^0.1.10",

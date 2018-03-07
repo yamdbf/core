@@ -285,7 +285,8 @@ export class Client extends Discord.Client
 		if (this.pause) this.emit('pause');
 		else this.__onContinueEvent();
 
-		this.user.setGame(this.statusText);
+		if (this.statusText)
+			this.user.setActivity(this.statusText);
 	}
 
 	@once('continue')

@@ -43,9 +43,6 @@ export class GuildSettings extends SharedProviderStorage
 
 			this._cache = data;
 		}
-		catch (err)
-		{
-			Logger.instance().error('GuildSettings', err.stack);
-		}
+		catch (err) { Logger.instance().error('GuildSettings', err.stack); }
 	}
 }

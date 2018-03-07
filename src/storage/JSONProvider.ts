@@ -25,10 +25,7 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 			let data: object = this._db.getData('/');
 			return Object.keys(data);
 		}
-		catch (err)
-		{
-			return [];
-		}
+		catch { return []; }
 	}
 
 	public async get(key: string): Promise<string>
@@ -41,10 +38,7 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 			let data: string = this._db.getData(`/${key}`);
 			return data;
 		}
-		catch (err)
-		{
-			return undefined;
-		}
+		catch { return undefined; }
 	}
 
 	public async set(key: string, value: string): Promise<void>
@@ -63,12 +57,12 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 		if (typeof key !== 'string') throw new TypeError('Key must be a string');
 
 		try { this._db.delete(`/${key}`); }
-		catch (err) { return; }
+		catch { return; }
 	}
 
 	public async clear(): Promise<void>
 	{
 		try { for (const key of await this.keys()) this._db.delete(`/${key}`); }
-		catch (err) { return; }
+		catch { return; }
 	}
 }

@@ -90,7 +90,7 @@ export class SingleProviderStorage
 		if (typeof value === 'undefined') throw new TypeError('Value must be provided');
 
 		try { JSON.stringify(value); }
-		catch (err) { value = {}; }
+		catch { value = {}; }
 
 		let data: any;
 		if (key.includes('.'))

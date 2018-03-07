@@ -43,10 +43,11 @@ export class ListenerUtil
 			throw new TypeError('Listeners can only be registered on classes extending EventEmitter');
 
 		const listenerTarget: object = typeof listenerSource !== 'undefined' ? listenerSource : emitter;
-		if (typeof Reflect.getMetadata('listeners', listenerTarget.constructor.prototype) === 'undefined') return;
-
 		const metaDataTarget: any = listenerTarget.constructor.prototype;
-		for (const listener of <ListenerMetadata[]> Reflect.getMetadata('listeners', metaDataTarget))
+		const listeners: ListenerMetadata[] = Reflect.getMetadata('listeners', metaDataTarget);
+		if (typeof listeners === 'undefined') return;
+
+		for (const listener of listeners)
 		{
 			if (!(<any> listenerTarget)[listener.method]) continue;
 			if (listener.attached) continue;

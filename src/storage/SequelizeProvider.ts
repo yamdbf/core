@@ -39,10 +39,12 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 
 			this._backend = Database.instance(url, debug);
 			this._model = this._backend.db.define(name, {
-				key: { type: seq.STRING, allowNull: false, primaryKey: true },
-				value: (dialect === Dialect.Postgres || dialect === Dialect.SQLite || dialect === Dialect.MSSQL) ?
-					seq.TEXT : seq.TEXT('long') },
-				{ timestamps: false, freezeTableName: true });
+					key: { type: seq.STRING, allowNull: false, primaryKey: true },
+					value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect) ?
+						seq.TEXT : seq.TEXT('long')
+				},
+				{ timestamps: false, freezeTableName: true }
+			);
 		}
 
 		public async init(): Promise<void>
