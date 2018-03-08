@@ -1320,7 +1320,7 @@
                     {
                         "name": "limit",
                         "type": "Tuple.<number, number>",
-                        "description": "<p>Tuple containing quantity and duration</p>",
+                        "description": "<p>Tuple containing limit and duration</p>",
                         "default": "",
                         "optional": "",
                         "nullable": ""
@@ -1333,7 +1333,7 @@
                     "name": "limit",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>The number of times this RateLimit can be\ncalled within its duration</p>",
+                    "description": "<p>The number of times this RateLimit can be\ncalled within its expiry period</p>",
                     "type": {
                         "names": [
                             "number"
@@ -1355,7 +1355,7 @@
                     "name": "isLimited",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Return whether or not this ratelimit is currently capped out</p>",
+                    "description": "<p>Return whether or not this ratelimit is currently capped out\nfor the current expiry period</p>",
                     "type": {
                         "names": [
                             "boolean"
@@ -1377,7 +1377,7 @@
                     "name": "wasNotified",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Whether or not this RateLimit was flagged after\nnotifying the user of being rate limited</p>",
+                    "description": "<p>Whether or not this RateLimit was flagged for having had\na notification given for being capped for this expiry period</p>",
                     "type": {
                         "names": [
                             "boolean"
@@ -1398,7 +1398,7 @@
                     "name": "call",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Returns whether or not this rate limit has been capped out\nfor its current expiry window while incrementing calls\ntowards the rate limit cap if not currently capped</p>",
+                    "description": "<p>Returns whether or not this rate limit has been capped out\nfor its current expiry period while incrementing calls\ntowards the rate limit cap if not currently capped</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {
@@ -1410,7 +1410,7 @@
                     "name": "setNotified",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Flag this RateLimit as having had the user the RateLimit\nis for notified of being rate limited</p>",
+                    "description": "<p>Flag this RateLimit as having had a notification given\nfor being capped for this expiry period</p>",
                     "parameters": [],
                     "examples": [],
                     "returns": {

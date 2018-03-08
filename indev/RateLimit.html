@@ -118,7 +118,7 @@ a given timeframe</p></div>
 
             
 
-            <td class="description last"><p>Tuple containing quantity and duration</p></td>
+            <td class="description last"><p>Tuple containing limit and duration</p></td>
         </tr>
 
     
@@ -285,7 +285,8 @@ a given timeframe</p></div>
 
 
 <div class="description">
-    <p>Return whether or not this ratelimit is currently capped out</p>
+    <p>Return whether or not this ratelimit is currently capped out
+for the current expiry period</p>
 </div>
 
 
@@ -330,7 +331,7 @@ a given timeframe</p></div>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L64">command/RateLimit.ts, Line 64</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L65">command/RateLimit.ts, Line 65</a>
     </li></ul></dd>
     
 
@@ -357,7 +358,7 @@ a given timeframe</p></div>
 
 <div class="description">
     <p>The number of times this RateLimit can be
-called within its duration</p>
+called within its expiry period</p>
 </div>
 
 
@@ -474,7 +475,7 @@ this expiry period</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L74">command/RateLimit.ts, Line 74</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L75">command/RateLimit.ts, Line 75</a>
     </li></ul></dd>
     
 
@@ -500,8 +501,8 @@ this expiry period</p>
 
 
 <div class="description">
-    <p>Whether or not this RateLimit was flagged after
-notifying the user of being rate limited</p>
+    <p>Whether or not this RateLimit was flagged for having had
+a notification given for being capped for this expiry period</p>
 </div>
 
 
@@ -546,7 +547,7 @@ notifying the user of being rate limited</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L86">command/RateLimit.ts, Line 86</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L87">command/RateLimit.ts, Line 87</a>
     </li></ul></dd>
     
 
@@ -586,7 +587,7 @@ notifying the user of being rate limited</p>
 
 <div class="description">
     <p>Returns whether or not this rate limit has been capped out
-for its current expiry window while incrementing calls
+for its current expiry period while incrementing calls
 towards the rate limit cap if not currently capped</p>
 </div>
 
@@ -691,8 +692,8 @@ towards the rate limit cap if not currently capped</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Flag this RateLimit as having had the user the RateLimit
-is for notified of being rate limited</p>
+    <p>Flag this RateLimit as having had a notification given
+for being capped for this expiry period</p>
 </div>
 
 
@@ -737,7 +738,7 @@ is for notified of being rate limited</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L96">command/RateLimit.ts, Line 96</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/RateLimit.ts#L97">command/RateLimit.ts, Line 97</a>
     </li></ul></dd>
     
 
