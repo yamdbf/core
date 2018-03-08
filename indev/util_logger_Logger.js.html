@@ -59,6 +59,13 @@ export class Logger
 	private _transports: Transport[];
 	private _baseTransportRemoved: boolean;
 
+	/**
+	 * Internal, set via Client at runtime if Client is running
+	 * in a shard process
+	 * @internal
+	 */
+	public static _shard: number;
+
 	private constructor()
 	{
 		if (Logger._instance)
@@ -99,6 +106,13 @@ export class Logger
 		};
 
 		const zeroPad: (n: number) => string = n => `0${n}`.slice(-2);
+		const shard: () => string = () => {
+			const isSharded: boolean = typeof Logger._shard !== 'undefined';
+			const shardNum: string = (Logger._shard || 0) &lt; 10 ? zeroPad(Logger._shard || 0) : Logger._shard.toString();
+			const shardTag: string = `[${wrapColor(colors.cyan, `SHARD-${shardNum}`)}]`;
+			return isSharded ? shardTag : '';
+		};
+
 		const transport: TransportFunction = data => {
 			let { type, tag, text } = data;
 			const d: Date = data.timestamp;
@@ -110,7 +124,7 @@ export class Logger
 			type = typeColorWrappers[type](type);
 			tag = wrapColor(colors.cyan, tag);
 
-			process.stdout.write(`[${t}][${type}][${tag}]: ${text}\n`);
+			process.stdout.write(`[${t}]${shard()}[${type}][${tag}]: ${text}\n`);
 		};
 
 		this.addTransport({ transport });
