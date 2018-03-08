@@ -44,7 +44,7 @@ class Logger {
         const shard = () => {
             const isSharded = typeof Logger._shard !== 'undefined';
             const shardNum = (Logger._shard || 0) < 10 ? zeroPad(Logger._shard || 0) : Logger._shard.toString();
-            const shardTag = `[${wrapColor(colors.cyan, `SHARD-${shardNum}`)}]`;
+            const shardTag = `[${wrapColor(colors.cyan, `SHARD_${shardNum}`)}]`;
             return isSharded ? shardTag : '';
         };
         const transport = data => {
