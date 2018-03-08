@@ -4,13 +4,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Maintains its own call count and expiry for making sure
  * things only happen a certain number of times within
  * a given timeframe
- * @param {Tuple<number, number>} limit Tuple containing quantity and duration
+ * @param {Tuple<number, number>} limit Tuple containing limit and duration
  */
 class RateLimit {
     constructor(limit) {
         /**
          * The number of times this RateLimit can be
-         * called within its duration
+         * called within its expiry period
          * @type {number}
          */
         this.limit = limit[0];
@@ -32,7 +32,7 @@ class RateLimit {
     }
     /**
      * Returns whether or not this rate limit has been capped out
-     * for its current expiry window while incrementing calls
+     * for its current expiry period while incrementing calls
      * towards the rate limit cap if not currently capped
      * @returns {boolean}
      */
@@ -48,6 +48,7 @@ class RateLimit {
     }
     /**
      * Return whether or not this ratelimit is currently capped out
+     * for the current expiry period
      * @type {boolean}
      */
     get isLimited() {
@@ -64,16 +65,16 @@ class RateLimit {
             : this.limit - this._count;
     }
     /**
-     * Whether or not this RateLimit was flagged after
-     * notifying the user of being rate limited
+     * Whether or not this RateLimit was flagged for having had
+     * a notification given for being capped for this expiry period
      * @type {boolean}
      */
     get wasNotified() {
         return this._notified;
     }
     /**
-     * Flag this RateLimit as having had the user the RateLimit
-     * is for notified of being rate limited
+     * Flag this RateLimit as having had a notification given
+     * for being capped for this expiry period
      * @returns {void}
      */
     setNotified() {
