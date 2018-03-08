@@ -90,6 +90,9 @@ export class Client extends Discord.Client
 		super(clientOptions);
 		Reflect.defineMetadata('YAMDBFClient', true, this);
 
+		// Hook logger to provide shard ID in base transport logs
+		if (this.shard) Logger._shard = this.shard.id;
+
 		this._token = options.token;
 
 		/**
