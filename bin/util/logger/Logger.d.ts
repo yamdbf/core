@@ -16,6 +16,12 @@ export declare class Logger {
     private _logLevel;
     private _transports;
     private _baseTransportRemoved;
+    /**
+     * Internal, set via Client at runtime if Client is running
+     * in a shard process
+     * @internal
+     */
+    static _shard: number;
     private constructor();
     /**
      * `LogLevel.NONE` enum shortcut

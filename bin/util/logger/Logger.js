@@ -41,6 +41,12 @@ class Logger {
             [LogType_1.LogType.DEBUG]: createWrapper(colors.magenta)
         };
         const zeroPad = n => `0${n}`.slice(-2);
+        const shard = () => {
+            const isSharded = typeof Logger._shard !== 'undefined';
+            const shardNum = (Logger._shard || 0) < 10 ? zeroPad(Logger._shard || 0) : Logger._shard.toString();
+            const shardTag = `[${wrapColor(colors.cyan, `SHARD-${shardNum}`)}]`;
+            return isSharded ? shardTag : '';
+        };
         const transport = data => {
             let { type, tag, text } = data;
             const d = data.timestamp;
@@ -50,7 +56,7 @@ class Logger {
             const t = wrapColor(colors.grey, `${h}:${m}:${s}`);
             type = typeColorWrappers[type](type);
             tag = wrapColor(colors.cyan, tag);
-            process.stdout.write(`[${t}][${type}][${tag}]: ${text}\n`);
+            process.stdout.write(`[${t}]${shard()}[${type}][${tag}]: ${text}\n`);
         };
         this.addTransport({ transport });
     }

@@ -35,6 +35,9 @@ class Client extends Discord.Client {
     constructor(options, clientOptions) {
         super(clientOptions);
         Reflect.defineMetadata('YAMDBFClient', true, this);
+        // Hook logger to provide shard ID in base transport logs
+        if (this.shard)
+            Logger_1.Logger._shard = this.shard.id;
         this._token = options.token;
         /**
          * The owner/owners of the bot, represented as an array of IDs.
