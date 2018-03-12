@@ -195,6 +195,9 @@ class Client extends Discord.Client {
             // Disable setlang command if there is only one language
             if (Lang_1.Lang.langNames.length === 1 && !this.disableBase.includes('setlang'))
                 this.commands.get('setlang').disable();
+            // Disable the blacklist command if the client is a selfbot
+            if (this.selfbot && !this.disableBase.includes('blacklist'))
+                this.commands.get('blacklist').disable();
         }
         registerListeners(this);
     }
