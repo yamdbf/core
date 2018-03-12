@@ -34,6 +34,7 @@ export declare class Client extends Discord.Client {
     readonly statusText: string;
     readonly readyText: string;
     readonly unknownCommandError: boolean;
+    readonly dmHelp: boolean;
     readonly selfbot: boolean;
     readonly passive: boolean;
     readonly pause: boolean;

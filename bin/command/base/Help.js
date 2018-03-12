@@ -22,8 +22,6 @@ class default_1 extends Command_1.Command {
         });
     }
     async action(message, [res, commandName]) {
-        if (this.client.selfbot)
-            message.delete();
         const dm = message.channel.type !== 'text';
         const mentionName = `@${this.client.user.tag} `;
         const lang = dm ? this.client.defaultLang
@@ -87,25 +85,22 @@ class default_1 extends Command_1.Command {
         output = dm ? output.replace(/<prefix>/g, '')
             : output.replace(/<prefix>/g, await this.client.getPrefix(message.guild) || '');
         embed.setColor(11854048).setDescription(output);
-        let outMessage;
         try {
-            if (this.client.selfbot)
-                outMessage = await message.channel.send({ embed });
+            if (!this.client.dmHelp)
+                await this.respond(message, '', { embed });
             else
                 await message.author.send({ embed });
-            if (!dm && !this.client.selfbot) {
+            if (!dm && this.client.dmHelp) {
                 if (command)
                     message.reply(res(BaseStrings_1.BaseStrings.CMD_HELP_REPLY_CMD));
                 else
                     message.reply(res(BaseStrings_1.BaseStrings.CMD_HELP_REPLY_ALL));
             }
         }
-        catch (err) {
+        catch (_a) {
             if (!dm && !this.client.selfbot)
                 message.reply(res(BaseStrings_1.BaseStrings.CMD_HELP_REPLY_FAIL));
         }
-        if (outMessage)
-            outMessage.delete(30e3);
     }
 }
 __decorate([

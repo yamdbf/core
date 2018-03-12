@@ -83,15 +83,24 @@ class Client extends Discord.Client {
          * Whether or not a generic 'command not found' message
          * should be given in DMs to instruct the user to
          * use the `help` command. `true` by default
-         * @type {string}
+         * @type {boolean}
          */
         this.unknownCommandError = typeof options.unknownCommandError === 'undefined' ?
             true : options.unknownCommandError;
+        /**
+         * Whether or not the help command should send its output
+         * in a DM to the command caller
+         * @type {boolean}
+         */
+        this.dmHelp = typeof options.dmHelp === 'undefined' ? true : options.dmHelp;
         /**
          * Whether or not the client is a selfbot
          * @type {boolean}
          */
         this.selfbot = options.selfbot || false;
+        // Set dmHelp to false if the client is a selfbot
+        if (this.selfbot)
+            this.dmHelp = false;
         /**
          * Whether or not this client is passive. Passive clients
          * will not register a command dispatcher or a message

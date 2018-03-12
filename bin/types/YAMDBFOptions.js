@@ -11,6 +11,7 @@
  * @property {string} [statusText=null] See: {@link Client#statusText}
  * @property {string} [readyText='Client ready!'] See: {@link Client#readyText}
  * @property {boolean} [unknownCommandError=true] See: {@link Client#unknownCommandError}
+ * @property {boolean} [dmHelp=true] See: {@link Client#dmHelp}
  * @property {boolean} [selfbot=false] See: {@link Client#selfbot}
  * @property {boolean} [passive=false] See: {@link Client#passive}
  * @property {boolean} [pause=false] See: {@link Client#pause}
