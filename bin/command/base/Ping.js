@@ -10,11 +10,7 @@ class default_1 extends Command_1.Command {
         });
     }
     async action(message) {
-        let msg;
-        if (this.client.selfbot)
-            msg = await message.edit('Pong!');
-        else
-            msg = await message.channel.send('Pong!');
+        let msg = await message.channel.send('Pong!');
         msg.edit(`Pong! (${msg.createdTimestamp - message.createdTimestamp}ms)`);
     }
 }
