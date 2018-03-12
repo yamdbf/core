@@ -102,7 +102,18 @@
                     "description": "<p>Whether or not a generic 'command not found' message\nshould be given in DMs to instruct the user to\nuse the <code>help</code> command. <code>true</code> by default</p>",
                     "type": {
                         "names": [
-                            "string"
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "dmHelp",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not the help command should send its output\nin a DM to the command caller</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
                         ]
                     }
                 },
@@ -3538,6 +3549,14 @@
                     "name": "unknownCommandError",
                     "type": "boolean",
                     "description": "<p>See: {@link Client#unknownCommandError}</p>",
+                    "default": true,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "dmHelp",
+                    "type": "boolean",
+                    "description": "<p>See: {@link Client#dmHelp}</p>",
                     "default": true,
                     "optional": true,
                     "nullable": ""
