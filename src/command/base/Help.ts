@@ -24,7 +24,6 @@ export default class extends Command
 	@localizable
 	public async action(message: Message, [res, commandName]: [ResourceLoader, string]): Promise<void>
 	{
-		if (this.client.selfbot) message.delete();
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user.tag} `;
 		const lang: string = dm ? this.client.defaultLang
@@ -105,23 +104,17 @@ export default class extends Command
 
 		embed.setColor(11854048).setDescription(output);
 
-		let outMessage: Message;
 		try
 		{
-			if (this.client.selfbot) outMessage = <Message> await message.channel.send({ embed });
+			if (!this.client.dmHelp) await this.respond(message, '', { embed });
 			else await message.author.send({ embed });
-			if (!dm && !this.client.selfbot)
+
+			if (!dm && this.client.dmHelp)
 			{
 				if (command) message.reply(res(s.CMD_HELP_REPLY_CMD));
 				else message.reply(res(s.CMD_HELP_REPLY_ALL));
 			}
 		}
-		catch (err)
-		{
-			if (!dm && !this.client.selfbot)
-				message.reply(res(s.CMD_HELP_REPLY_FAIL));
-		}
-
-		if (outMessage) outMessage.delete(30e3);
+		catch { if (!dm && !this.client.selfbot) message.reply(res(s.CMD_HELP_REPLY_FAIL)); }
 	}
 }

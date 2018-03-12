@@ -21,6 +21,8 @@ class Test extends Client
 	{
 		super({
 			token: config.token,
+			// token: config.selfbotToken,
+			// selfbot: true,
 			owner: config.owner,
 			readyText: 'Test client ready',
 			statusText: 'Foo bar baz',
@@ -36,6 +38,7 @@ class Test extends Client
 			// logLevel: LogLevel.INFO,
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
+			dmHelp: false,
 		});
 
 		Lang.setMetaValue('al_bhed', 'name', 'Al Bhed');
