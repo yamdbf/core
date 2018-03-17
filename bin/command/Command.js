@@ -116,12 +116,6 @@ class Command {
          * @name Command#external
          * @type {boolean}
          */
-        /**
-         * Whether or not this command is disabled and unable to be called
-         * currently
-         * @name Command#disabled
-         * @type {boolean}
-         */
         // Middleware function storage for the Command instance
         this._middleware = [];
         this._initialized = false;
