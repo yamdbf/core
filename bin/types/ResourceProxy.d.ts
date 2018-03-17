@@ -1,5 +1,3 @@
-import { TemplateData } from '../../bin/types/TemplateData';
-import { BaseStrings } from '..';
 /**
  * @typedef {object} ResourceProxy A Proxy where calling functions will treat the
  * function name as a Lang string key and act as a ResourceLoader, requiring only
@@ -20,6 +18,8 @@ import { BaseStrings } from '..';
  *                 // so this returns a string
  * ```
  */
+import { TemplateData } from '../../bin/types/TemplateData';
+import { BaseStrings } from '..';
 export declare type ResourceProxy<T = {}> = {
     [key in BaseStrings]: (data?: TemplateData) => string;
 } & {
