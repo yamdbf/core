@@ -840,17 +840,6 @@
                     }
                 },
                 {
-                    "name": "disabled",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Whether or not this command is disabled and unable to be called\ncurrently</p>",
-                    "type": {
-                        "names": [
-                            "boolean"
-                        ]
-                    }
-                },
-                {
                     "name": "ratelimit",
                     "access": "",
                     "virtual": false,
