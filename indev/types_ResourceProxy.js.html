@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ClientOptions - Documentation</title>
+    <title>types/ResourceProxy.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,95 +33,42 @@
 
 
 
-
-<section>
-
-<header>
-	
     
-        <h2>
-        ClientOptions
-        </h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @typedef {object} ResourceProxy A Proxy where calling functions will treat the
+ * function name as a Lang string key and act as a ResourceLoader, requiring only
+ * the strings TemplateData (or nothing for non-dynamic strings)
+ *
+ * >TypeScript users can pass a generic type parameter to the ResourceProxy type
+ * which will append all the keys of the passed type to the valid keys on the
+ * ResourceProxy itself. This makes it easier to get type hinting for custom
+ * localization strings. Example:
+ * ```
+ * type C = {
+ *     FOO: any;
+ *     BAR: any;
+ * };
+ * ...
+ * let r: ResourceProxy&lt;C> = Lang.createResourceProxy('en_us');
+ * return r.FOO(); // `FOO` will be of type `(data?: TemplateData) => string`
+ *                 // so this returns a string
+ * ```
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>See: <a href="https://discord.js.org/#/docs/main/stable/typedef/ClientOptions">https://discord.js.org/#/docs/main/stable/typedef/ClientOptions</a></p></div>
-        
+import { TemplateData } from '../../bin/types/TemplateData';
+import { BaseStrings } from '..';
 
-        
+export type ResourceProxy&lt;T = {}> = {
+	[key in BaseStrings]: (data?: TemplateData) => string
+} &amp; {
+	[key in keyof T]: (data?: TemplateData) => string
+};
+</code></pre>
+        </article>
+    </section>
 
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/index.ts#L70">index.ts, Line 70</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 

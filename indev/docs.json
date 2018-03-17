@@ -3430,6 +3430,11 @@
             "properties": []
         },
         {
+            "name": "ResourceProxy",
+            "description": "<p>A Proxy where calling functions will treat the\nfunction name as a Lang string key and act as a ResourceLoader, requiring only\nthe strings TemplateData (or nothing for non-dynamic strings)</p>\n<blockquote>\n<p>TypeScript users can pass a generic type parameter to the ResourceProxy type\nwhich will append all the keys of the passed type to the valid keys on the\nResourceProxy itself. This makes it easier to get type hinting for custom\nlocalization strings. Example:</p>\n<pre class=\"prettyprint source\"><code>type C = {\n    FOO: any;\n    BAR: any;\n};\n...\nlet r: ResourceProxy&lt;C> = Lang.createResourceProxy('en_us');\nreturn r.FOO(); // `FOO` will be of type `(data?: TemplateData) => string`\n                // so this returns a string</code></pre></blockquote>",
+            "properties": []
+        },
+        {
             "name": "StorageProviderConstructor",
             "description": "<p>Any class that extends and\nimplements {@link StorageProvider} and provides an interface with a storage\nmedium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
             "properties": []
