@@ -10,6 +10,7 @@ import { Util } from '../util/Util';
 import * as fs from 'fs';
 import * as glob from 'glob';
 import * as path from 'path';
+import { ResourceProxy } from '../types/ResourceProxy';
 
 /**
  * Module providing localization support throughout the framework.
@@ -432,5 +433,22 @@ export class Lang
 	public static createResourceLoader(lang: string): ResourceLoader
 	{
 		return (key, data) => Lang.res(lang, key, data);
+	}
+
+	/**
+	 * Creates a ResourceProxy, where keys are ResourceLoader functions
+	 * that only need the TemplateData
+	 * @static
+	 * @method createResourceProxy
+	 * @param {string} Lang The language to create a ResourceProxy for
+	 * @returns {ResourceProxy}
+	 */
+	public static createResourceProxy(lang: string): ResourceProxy
+	{
+		return new Proxy({}, {
+			get: (target: any, key: PropertyKey) => {
+				return (data: TemplateData) => Lang.res(lang, key as string, data);
+			}
+		});
 	}
 }
