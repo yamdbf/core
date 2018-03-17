@@ -4,6 +4,7 @@ import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { ResourceLoader } from '../types/ResourceLoader';
 import { TemplateData } from '../types/TemplateData';
 import { Language } from './Language';
+import { ResourceProxy } from '../types/ResourceProxy';
 /**
  * Module providing localization support throughout the framework.
  * Allows client output to be translated to other languages
@@ -167,4 +168,13 @@ export declare class Lang {
      * @returns {ResourceLoader}
      */
     static createResourceLoader(lang: string): ResourceLoader;
+    /**
+     * Creates a ResourceProxy, where keys are ResourceLoader functions
+     * that only need the TemplateData
+     * @static
+     * @method createResourceProxy
+     * @param {string} Lang The language to create a ResourceProxy for
+     * @returns {ResourceProxy}
+     */
+    static createResourceProxy(lang: string): ResourceProxy;
 }

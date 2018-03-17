@@ -379,6 +379,21 @@ class Lang {
     static createResourceLoader(lang) {
         return (key, data) => Lang.res(lang, key, data);
     }
+    /**
+     * Creates a ResourceProxy, where keys are ResourceLoader functions
+     * that only need the TemplateData
+     * @static
+     * @method createResourceProxy
+     * @param {string} Lang The language to create a ResourceProxy for
+     * @returns {ResourceProxy}
+     */
+    static createResourceProxy(lang) {
+        return new Proxy({}, {
+            get: (target, key) => {
+                return (data) => Lang.res(lang, key, data);
+            }
+        });
+    }
 }
 __decorate([
     Logger_1.logger('Lang')
