@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
-const BaseStrings_1 = require("../../localization/BaseStrings");
 const Middleware_1 = require("../middleware/Middleware");
 const discord_js_1 = require("discord.js");
 const { resolve, expect, } = Middleware_1.Middleware;
@@ -56,9 +55,9 @@ Of course the eval command is owner-only, but this should give you an idea of ho
         const names = Object.keys(shortcuts);
         let output;
         if (names.length === 0)
-            output = res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_ERR_NO_SHORTCUTS);
+            output = res.CMD_SHORTCUTS_ERR_NO_SHORTCUTS();
         else
-            output = res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_LIST, { names: names.join(', ') });
+            output = res.CMD_SHORTCUTS_LIST({ names: names.join(', ') });
         this.respond(message, output);
     }
     /**
@@ -67,12 +66,12 @@ Of course the eval command is owner-only, but this should give you an idea of ho
     async setShortcut(message, res, name, content) {
         const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
         if (Object.keys(shortcuts).length >= 50)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_ERR_MAX_SHORTCUTS));
+            return this.respond(message, res.CMD_SHORTCUTS_ERR_MAX_SHORTCUTS());
         if (content.length > 500)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_ERR_SET_LENGTH));
+            return this.respond(message, res.CMD_SHORTCUTS_ERR_SET_LENGTH());
         await message.guild.storage.settings.set(`shortcuts.${name}`, content);
         content = discord_js_1.Util.escapeMarkdown(content, true);
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_SET_SUCCESS, { name, content }));
+        return this.respond(message, res.CMD_SHORTCUTS_SET_SUCCESS({ name, content }));
     }
     /**
      * Get command shortcut content
@@ -80,9 +79,9 @@ Of course the eval command is owner-only, but this should give you an idea of ho
     async getShortcut(message, res, name) {
         const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
         if (!shortcuts[name])
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_ERR_MISSING, { name }));
+            return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
         const content = discord_js_1.Util.escapeMarkdown(shortcuts[name], true);
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_GET_CONTENT, { name, content }));
+        return this.respond(message, res.CMD_SHORTCUTS_GET_CONTENT({ name, content }));
     }
     /**
      * Remove a command shortcut
@@ -90,9 +89,9 @@ Of course the eval command is owner-only, but this should give you an idea of ho
     async removeShortcut(message, res, name) {
         const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
         if (!shortcuts[name])
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_ERR_MISSING, { name }));
+            return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
         await message.guild.storage.settings.remove(`shortcuts.${name}`);
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_SHORTCUTS_REMOVE_SUCCESS, { name }));
+        return this.respond(message, res.CMD_SHORTCUTS_REMOVE_SUCCESS({ name }));
     }
 }
 __decorate([

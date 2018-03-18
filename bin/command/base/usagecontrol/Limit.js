@@ -6,10 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseStrings_1 = require("../../../localization/BaseStrings");
+const CommandDecorators = require("../../CommandDecorators");
 const Command_1 = require("../../Command");
 const Middleware_1 = require("../../middleware/Middleware");
-const CommandDecorators = require("../../CommandDecorators");
 const { using, localizable } = CommandDecorators;
 const { expect, resolve } = Middleware_1.Middleware;
 class default_1 extends Command_1.Command {
@@ -44,14 +43,14 @@ Removing individual roles is not possible to keep the command simple to use.`,
         let limitedCommands = await storage.settings.get('limitedCommands') || {};
         delete limitedCommands[command.name];
         storage.settings.set('limitedCommands', limitedCommands);
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_CLEAR_SUCCESS, { commandName: command.name }));
+        return this.respond(message, res.CMD_LIMIT_CLEAR_SUCCESS({ commandName: command.name }));
     }
     /**
      * Add the given roles to the limiter for the given command
      */
     async limitCommand(message, res, command, roles) {
         if (command.group === 'base')
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_ERR_INVALID_GROUP));
+            return this.respond(message, res.CMD_LIMIT_ERR_INVALID_GROUP());
         const roleResolver = this.client.resolvers.get('Role');
         const roleStrings = roles.split(/ *, */).filter(r => r !== '' && r !== ',');
         const foundRoles = [];
@@ -65,16 +64,20 @@ Removing individual roles is not possible to keep the command simple to use.`,
                 invalidRoles.push(roleString);
             }
         if (invalidRoles.length > 0)
-            message.channel.send(res(BaseStrings_1.BaseStrings.CMD_LIMIT_ERR_INVALID_ROLE, { invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
+            message.channel
+                .send(res.CMD_LIMIT_ERR_INVALID_ROLE({ invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
         if (foundRoles.length === 0)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_ERR_NO_ROLES));
+            return this.respond(message, res.CMD_LIMIT_ERR_NO_ROLES());
         const storage = message.guild.storage;
         const limitedCommands = await storage.settings.get('limitedCommands') || {};
         const newLimit = new Set(limitedCommands[command.name] || []);
         for (const role of foundRoles)
             newLimit.add(role.id);
         limitedCommands[command.name] = Array.from(newLimit);
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_LIMIT_SUCCESS, { roles: foundRoles.map(r => `\`${r.name}\``).join(', '), commandName: command.name }));
+        return this.respond(message, res.CMD_LIMIT_SUCCESS({
+            roles: foundRoles.map(r => `\`${r.name}\``).join(', '),
+            commandName: command.name
+        }));
     }
 }
 __decorate([

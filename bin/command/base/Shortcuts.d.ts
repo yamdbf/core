@@ -1,9 +1,9 @@
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { ResourceLoader } from '../../types/ResourceLoader';
+import { ResourceProxy } from '../../types/ResourceProxy';
 export default class  extends Command {
     constructor();
-    action(message: Message, [res, action, name, content]: [ResourceLoader, string, string, string]): Promise<any>;
+    action(message: Message, [res, action, name, content]: [ResourceProxy, string, string, string]): Promise<any>;
     /**
      * List command shortcuts
      */

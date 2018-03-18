@@ -7,10 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const BaseStrings_1 = require("../localization/BaseStrings");
 const Logger_1 = require("../util/logger/Logger");
 const Time_1 = require("../util/Time");
 const Lang_1 = require("../localization/Lang");
+const BaseStrings_1 = require("../localization/BaseStrings");
 const Util_1 = require("../util/Util");
 const util_1 = require("util");
 /**
@@ -49,11 +49,8 @@ class CommandDispatcher {
         // Don't bother with anything else if author is blacklisted
         if (await this.isBlacklisted(message.author, message, dm))
             return;
-        const lang = dm
-            ? this._client.defaultLang
-            : await message.guild.storage.settings.get('lang')
-                || this._client.defaultLang;
-        const res = Lang_1.Lang.createResourceLoader(lang);
+        const lang = await Lang_1.Lang.getLangFromMessage(message);
+        const res = Lang_1.Lang.createResourceProxy(lang);
         let [commandWasCalled, command, prefix, name] = await Util_1.Util.wasCommandCalled(message);
         if (!commandWasCalled) {
             // Handle shortcuts
@@ -69,7 +66,7 @@ class CommandDispatcher {
                     const shortcutArgs = this._client.argsParser(oldArgsStr, command, message);
                     message.content = util_1.format(newCommand, ...shortcutArgs);
                     if (!commandWasCalled)
-                        message.channel.send(res(BaseStrings_1.BaseStrings.DISPATCHER_ERR_INVALID_SHORTCUT, { name: shortcutName }));
+                        message.channel.send(res.DISPATCHER_ERR_INVALID_SHORTCUT({ name: shortcutName }));
                 }
             }
             // Send unknownCommandError in DMs
@@ -215,10 +212,11 @@ class CommandDispatcher {
                 : null;
             if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified)
                 return true;
-            rateLimit.setNotified();
-            message.channel.send(res(global
+            const errStr = global
                 ? BaseStrings_1.BaseStrings.DISPATCHER_ERR_RATELIMIT_EXCEED_GLOBAL
-                : BaseStrings_1.BaseStrings.DISPATCHER_ERR_RATELIMIT_EXCEED, { time: Time_1.Time.difference(rateLimit.expires, Date.now()).toString() }));
+                : BaseStrings_1.BaseStrings.DISPATCHER_ERR_RATELIMIT_EXCEED;
+            rateLimit.setNotified();
+            message.channel.send(res[errStr]({ time: Time_1.Time.difference(rateLimit.expires, Date.now()).toString() }));
         }
         return true;
     }
@@ -260,25 +258,25 @@ class CommandDispatcher {
      * Return an error for unknown commands in DMs
      */
     unknownCommandError(res) {
-        return res(BaseStrings_1.BaseStrings.DISPATCHER_ERR_UNKNOWN_COMMAND);
+        return res.DISPATCHER_ERR_UNKNOWN_COMMAND();
     }
     /**
      * Return an error for guild only commands
      */
     guildOnlyError(res) {
-        return res(BaseStrings_1.BaseStrings.DISPATCHER_ERR_GUILD_ONLY);
+        return res.DISPATCHER_ERR_GUILD_ONLY();
     }
     /**
      * Return an error for missing caller permissions
      */
     missingClientPermissionsError(res, missing) {
-        return res(BaseStrings_1.BaseStrings.DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS, { missing: missing.join(', ') });
+        return res.DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS({ missing: missing.join(', ') });
     }
     /**
      * Return an error for missing caller permissions
      */
     missingCallerPermissionsError(res, missing) {
-        return res(BaseStrings_1.BaseStrings.DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS, { missing: missing.join(', ') });
+        return res.DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS({ missing: missing.join(', ') });
     }
     /**
      * Return an error for failing a command limiter
@@ -289,13 +287,13 @@ class CommandDispatcher {
         const roles = message.guild.roles
             .filter(r => limitedCommands[command.name].includes(r.id))
             .map(r => r.name);
-        return res(BaseStrings_1.BaseStrings.DISPATCHER_ERR_MISSING_ROLES, { roles: roles.join(', ') });
+        return res.DISPATCHER_ERR_MISSING_ROLES({ roles: roles.join(', ') });
     }
     /**
      * Return an error for missing roles
      */
     missingRolesError(res, command) {
-        return res(BaseStrings_1.BaseStrings.DISPATCHER_ERR_MISSING_ROLES, { roles: command.roles.join(', ') });
+        return res.DISPATCHER_ERR_MISSING_ROLES({ roles: command.roles.join(', ') });
     }
 }
 __decorate([

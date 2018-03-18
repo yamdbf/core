@@ -323,8 +323,7 @@ class Lang {
             : null;
         const lang = dm
             ? Lang._instance._client.defaultLang
-            : await storage.settings.get('lang')
-                || Lang._instance._client.defaultLang;
+            : await storage.settings.get('lang') || Lang._instance._client.defaultLang;
         return lang;
     }
     /**
@@ -358,8 +357,12 @@ class Lang {
         }
         const scriptTemplates = new RegExp(scriptTemplate, 'gm');
         if (scriptTemplates.test(loadedString)) {
-            const resourceLoader = Lang.createResourceLoader(lang);
-            const res = (stringKey, args = data) => resourceLoader(stringKey, args);
+            const proxy = Lang.createResourceProxy(lang);
+            const res = new Proxy({}, {
+                get: (target, prop) => {
+                    return (args = data) => proxy[prop](args);
+                }
+            });
             for (const scriptData of loadedString.match(scriptTemplates)) {
                 let functionBody = scriptData.match(scriptTemplate)[1] || scriptData.match(scriptTemplate)[2];
                 let script = new Function('args', 'res', functionBody);

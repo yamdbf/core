@@ -15,14 +15,14 @@ function expect(argTypes) {
             ? this.client.defaultLang
             : await message.guild.storage.settings.get('lang')
                 || this.client.defaultLang;
-        const res = Lang_1.Lang.createResourceLoader(lang);
+        const res = Lang_1.Lang.createResourceProxy(lang);
         const prefix = !dm ? await message.guild.storage.settings.get('prefix') : '';
         const usage = Lang_1.Lang.getCommandInfo(this, lang).usage.replace(/<prefix>/g, prefix);
         for (const [index, name] of names.entries()) {
             const arg = args[index];
             const type = types[index];
             if (typeof arg === 'undefined' || arg === null)
-                throw new Error(res(BaseStrings_1.BaseStrings.EXPECT_ERR_MISSING_VALUE, {
+                throw new Error(res.EXPECT_ERR_MISSING_VALUE({
                     type: type instanceof Array ? type.map(t => `\`${t}\``).join(', ') : `\`${type}\``,
                     name,
                     usage
@@ -31,7 +31,12 @@ function expect(argTypes) {
                 continue;
             if (type instanceof Array) {
                 if (!type.map(a => a.toLowerCase()).includes(arg.toLowerCase()))
-                    throw new Error(res(BaseStrings_1.BaseStrings.EXPECT_ERR_INVALID_OPTION, { type: type.map(t => `\`${t}\``).join(', '), name, arg, usage }));
+                    throw new Error(res.EXPECT_ERR_INVALID_OPTION({
+                        type: type.map(t => `\`${t}\``).join(', '),
+                        name,
+                        arg,
+                        usage
+                    }));
                 continue;
             }
             const resolver = this.client.resolvers.get(type);

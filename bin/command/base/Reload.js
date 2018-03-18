@@ -6,12 +6,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseStrings_1 = require("../../localization/BaseStrings");
 const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
 const Util_1 = require("../../util/Util");
 const Logger_1 = require("../../util/logger/Logger");
-const { now } = Util_1.Util;
 class default_1 extends Command_1.Command {
     constructor() {
         super({
@@ -23,7 +21,7 @@ class default_1 extends Command_1.Command {
     }
     action(message, [res]) {
         this._logger.log(`Reloading commands from: $${this.client.commandsDir}`);
-        const start = now();
+        const start = Util_1.Util.now();
         const disabled = this.client.commands.filter(c => c.disabled).map(c => c.name);
         const reloaded = this.client._reloadCustomCommands();
         this._logger.log(`Re-initializing reloaded commands...`);
@@ -32,8 +30,10 @@ class default_1 extends Command_1.Command {
         // Re-disable previously disabled commands
         for (const command of toDisable.values())
             command.disable();
-        const end = now();
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_RELOAD_SUCCESS, { number: reloaded.toString(), time: (end - start).toFixed(3) }));
+        const end = Util_1.Util.now();
+        const num = reloaded.toString();
+        const time = (end - start).toFixed(3);
+        return this.respond(message, res.CMD_RELOAD_SUCCESS({ number: num, time }));
     }
 }
 __decorate([

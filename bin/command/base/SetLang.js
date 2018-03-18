@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
-const BaseStrings_1 = require("../../localization/BaseStrings");
 const Lang_1 = require("../../localization/Lang");
 const Resolve_1 = require("../middleware/Resolve");
 class default_1 extends Command_1.Command {
@@ -31,19 +30,20 @@ class default_1 extends Command_1.Command {
             names = names
                 .map((l, i) => `${i + 1}:  ${l}`)
                 .map(l => l.replace(` ${currentLang}`, `*${currentLang}`));
-            let output = res(BaseStrings_1.BaseStrings.CMD_SETLANG_LIST, { langList: names.join('\n'), prefix });
+            let output = res.CMD_SETLANG_LIST({ langList: names.join('\n'), prefix });
             return message.channel.send(output);
         }
         if (!((lang - 1) in langs))
-            return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_SETLANG_ERR_INVALID));
+            return message.channel.send(res.CMD_SETLANG_ERR_INVALID());
         const newLang = langs[lang - 1];
         await message.guild.storage.settings.set('lang', newLang);
-        res = Lang_1.Lang.createResourceLoader(newLang);
-        return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_SETLANG_SUCCESS, { lang: Lang_1.Lang.getMetaValue(newLang, 'name') || newLang }));
+        res = Lang_1.Lang.createResourceProxy(newLang);
+        const langName = Lang_1.Lang.getMetaValue(newLang, 'name') || newLang;
+        return message.channel.send(res.CMD_SETLANG_SUCCESS({ lang: langName }));
     }
 }
 __decorate([
-    CommandDecorators_1.using(Resolve_1.resolve({ '[lang]': 'Number' })),
+    CommandDecorators_1.using(Resolve_1.resolve('lang?: Number')),
     CommandDecorators_1.localizable
 ], default_1.prototype, "action", null);
 exports.default = default_1;

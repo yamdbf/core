@@ -1,9 +1,9 @@
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { ResourceLoader } from '../../types/ResourceLoader';
+import { ResourceProxy } from '../../types/ResourceProxy';
 export default class  extends Command {
     constructor();
-    action(message: Message, [res]: [ResourceLoader]): Promise<any>;
+    action(message: Message, [res]: [ResourceProxy]): Promise<any>;
     private _compile(code);
     private _clean(text);
 }

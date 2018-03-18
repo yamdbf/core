@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../../Command");
 const CommandDecorators_1 = require("../../CommandDecorators");
-const BaseStrings_1 = require("../../../localization/BaseStrings");
 const Middleware_1 = require("../../middleware/Middleware");
 const Lang_1 = require("../../../localization/Lang");
 const { resolve, expect, } = Middleware_1.Middleware;
@@ -37,7 +36,7 @@ class default_1 extends Command_1.Command {
         const lang = await message.guild.storage.settings.get('lang') || this.client.defaultLang;
         const info = this.client.commands.groups.map(g => Lang_1.Lang.getGroupInfo(g, lang));
         const disabledGroups = await message.guild.storage.settings.get('disabledGroups') || [];
-        const output = res(BaseStrings_1.BaseStrings.CMD_GROUPS_LIST, {
+        const output = res.CMD_GROUPS_LIST({
             groups: this.client.commands.groups.join(', '),
             disabledGroups: disabledGroups.join(', '),
             info: info.join('::::')
@@ -49,8 +48,8 @@ class default_1 extends Command_1.Command {
      */
     async enableGroup(message, res, group) {
         const err = {
-            NO_EXIST: res(BaseStrings_1.BaseStrings.CMD_GROUPS_ERR_NOEXIST, { group }),
-            ENABLED: res(BaseStrings_1.BaseStrings.CMD_GROUPS_ERR_ENABLED, { group })
+            NO_EXIST: res.CMD_GROUPS_ERR_NOEXIST({ group }),
+            ENABLED: res.CMD_GROUPS_ERR_ENABLED({ group })
         };
         if (!this.client.commands.groups.includes(group))
             return this.respond(message, err.NO_EXIST);
@@ -59,15 +58,15 @@ class default_1 extends Command_1.Command {
             return this.respond(message, err.ENABLED);
         disabledGroups.splice(disabledGroups.indexOf(group), 1);
         await message.guild.storage.settings.set('disabledGroups', disabledGroups);
-        this.respond(message, res(BaseStrings_1.BaseStrings.CMD_GROUPS_ENABLE_SUCCESS, { group }));
+        this.respond(message, res.CMD_GROUPS_ENABLE_SUCCESS({ group }));
     }
     /**
      * Disable a command group
      */
     async disableGroup(message, res, group) {
         const err = {
-            NO_EXIST: res(BaseStrings_1.BaseStrings.CMD_GROUPS_ERR_NOEXIST, { group }),
-            DISABLED: res(BaseStrings_1.BaseStrings.CMD_GROUPS_ERR_DISABLED, { group })
+            NO_EXIST: res.CMD_GROUPS_ERR_NOEXIST({ group }),
+            DISABLED: res.CMD_GROUPS_ERR_DISABLED({ group })
         };
         if (!this.client.commands.groups.includes(group))
             return this.respond(message, err.NO_EXIST);
@@ -76,7 +75,7 @@ class default_1 extends Command_1.Command {
             return this.respond(message, err.DISABLED);
         disabledGroups.push(group);
         await message.guild.storage.settings.set('disabledGroups', disabledGroups);
-        this.respond(message, res(BaseStrings_1.BaseStrings.CMD_GROUPS_DISABLE_SUCCESS, { group }));
+        this.respond(message, res.CMD_GROUPS_DISABLE_SUCCESS({ group }));
     }
 }
 __decorate([

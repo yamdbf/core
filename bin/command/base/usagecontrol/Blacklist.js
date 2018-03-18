@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../../Command");
 const Middleware_1 = require("../../middleware/Middleware");
 const CommandDecorators_1 = require("../../CommandDecorators");
-const BaseStrings_1 = require("../../../localization/BaseStrings");
+const { resolve, expect } = Middleware_1.Middleware;
 class default_1 extends Command_1.Command {
     constructor() {
         super({
@@ -24,18 +24,18 @@ class default_1 extends Command_1.Command {
     async action(message, [res, action, user, global]) {
         if (action === 'add') {
             if (user.id === message.author.id)
-                return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_ERR_NOSELF));
+                return message.channel.send(res.CMD_BLACKLIST_ERR_NOSELF());
             if (user.bot)
-                return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_ERR_NOBOT));
+                return message.channel.send(res.CMD_BLACKLIST_ERR_NOBOT());
             if (global === 'global') {
                 if (!this.client.isOwner(message.author))
-                    return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_ERR_OWNERONLY));
+                    return message.channel.send(res.CMD_BLACKLIST_ERR_OWNERONLY());
                 const globalBlacklist = await this.client.storage.get('blacklist') || {};
                 if (globalBlacklist[user.id])
-                    return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_ERR_ALREADYGLOBAL));
+                    return message.channel.send(res.CMD_BLACKLIST_ERR_ALREADYGLOBAL());
                 await this.client.storage.set(`blacklist.${user.id}`, true);
                 this.client.emit('blacklistAdd', user, true);
-                return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_GLOBALSUCCESS, { user: user.tag }));
+                return message.channel.send(res.CMD_BLACKLIST_GLOBALSUCCESS({ user: user.tag }));
             }
             let member;
             try {
@@ -43,37 +43,37 @@ class default_1 extends Command_1.Command {
             }
             catch (err) { }
             if (member && member.permissions.has('ADMINISTRATOR'))
-                return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_ERR_BADTARGET));
+                return message.channel.send(res.CMD_BLACKLIST_ERR_BADTARGET());
             const guildBlacklist = await message.guild.storage.settings.get('blacklist') || {};
             if (guildBlacklist[user.id])
-                return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_ERR_ALREADYBLACKLISTED));
+                return message.channel.send(res.CMD_BLACKLIST_ERR_ALREADYBLACKLISTED());
             await message.guild.storage.settings.set(`blacklist.${user.id}`, true);
             this.client.emit('blacklistAdd', user, false);
-            return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_BLACKLIST_SUCCESS, { user: user.tag }));
+            return message.channel.send(res.CMD_BLACKLIST_SUCCESS({ user: user.tag }));
         }
         else if (action === 'remove') {
             if (global === 'global') {
                 if (!this.client.isOwner(message.author))
-                    return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_WHITELIST_ERR_OWNERONLY));
+                    return message.channel.send(res.CMD_WHITELIST_ERR_OWNERONLY());
                 const globalBlacklist = await this.client.storage.get('blacklist') || {};
                 if (!globalBlacklist[user.id])
-                    return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_WHITELIST_ERR_NOTGLOBAL));
+                    return message.channel.send(res.CMD_WHITELIST_ERR_NOTGLOBAL());
                 await this.client.storage.remove(`blacklist.${user.id}`);
                 this.client.emit('blacklistRemove', user, true);
-                return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_WHITELIST_GLOBALSUCCESS, { user: user.tag }));
+                return message.channel.send(res.CMD_WHITELIST_GLOBALSUCCESS({ user: user.tag }));
             }
             const guildBlacklist = await message.guild.storage.settings.get('blacklist') || {};
             if (!guildBlacklist[user.id])
-                return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_WHITELIST_ERR_NOTBLACKLISTED));
+                return message.channel.send(res.CMD_WHITELIST_ERR_NOTBLACKLISTED());
             await message.guild.storage.settings.remove(`blacklist.${user.id}`);
             this.client.emit('blacklistRemove', user, false);
-            return message.channel.send(res(BaseStrings_1.BaseStrings.CMD_WHITELIST_SUCCESS, { user: user.tag }));
+            return message.channel.send(res.CMD_WHITELIST_SUCCESS({ user: user.tag }));
         }
     }
 }
 __decorate([
-    CommandDecorators_1.using(Middleware_1.Middleware.resolve('action: String, user: User')),
-    CommandDecorators_1.using(Middleware_1.Middleware.expect(`action: ['add', 'remove'], user: User`)),
+    CommandDecorators_1.using(resolve(`action: ['add', 'remove'], user: User`)),
+    CommandDecorators_1.using(expect(`action: ['add', 'remove'], user: User`)),
     CommandDecorators_1.localizable
 ], default_1.prototype, "action", null);
 exports.default = default_1;

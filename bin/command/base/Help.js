@@ -7,7 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-const BaseStrings_1 = require("../../localization/BaseStrings");
 const CommandDecorators_1 = require("../CommandDecorators");
 const Lang_1 = require("../../localization/Lang");
 const Util_1 = require("../../util/Util");
@@ -46,7 +45,7 @@ class default_1 extends Command_1.Command {
                 mentionUsage: cInfo(this).usage
                     .replace('<prefix>', mentionName)
             };
-            output = res(BaseStrings_1.BaseStrings.CMD_HELP_COMMAND_LIST, data);
+            output = res.CMD_HELP_COMMAND_LIST(data);
             if (output.length >= 1024) {
                 commandList = '';
                 let mappedCommands = usableCommands
@@ -58,7 +57,7 @@ class default_1 extends Command_1.Command {
                         commandList += '\n';
                 }
                 data.commandList = commandList;
-                output = res(BaseStrings_1.BaseStrings.CMD_HELP_COMMAND_LIST, data);
+                output = res.CMD_HELP_COMMAND_LIST(data);
             }
         }
         else {
@@ -66,16 +65,16 @@ class default_1 extends Command_1.Command {
                 .filter(c => !c.disabled && !(!this.client.isOwner(message.author) && c.ownerOnly))
                 .find(c => c.name === commandName || c.aliases.includes(commandName));
             if (!command)
-                output = res(BaseStrings_1.BaseStrings.CMD_HELP_UNKNOWN_COMMAND);
+                output = res.CMD_HELP_UNKNOWN_COMMAND();
             else {
                 const info = cInfo(command);
-                output = res(BaseStrings_1.BaseStrings.CMD_HELP_CODEBLOCK, {
-                    serverOnly: command.guildOnly ? res(BaseStrings_1.BaseStrings.CMD_HELP_SERVERONLY) : '',
-                    ownerOnly: command.ownerOnly ? res(BaseStrings_1.BaseStrings.CMD_HELP_OWNERONLY) : '',
+                output = res.CMD_HELP_CODEBLOCK({
+                    serverOnly: command.guildOnly ? res.CMD_HELP_SERVERONLY() : '',
+                    ownerOnly: command.ownerOnly ? res.CMD_HELP_OWNERONLY() : '',
                     commandName: command.name,
                     desc: info.desc,
                     aliasText: command.aliases.length > 0
-                        ? res(BaseStrings_1.BaseStrings.CMD_HELP_ALIASES, { aliases: command.aliases.join(', ') })
+                        ? res.CMD_HELP_ALIASES({ aliases: command.aliases.join(', ') })
                         : '',
                     usage: info.usage,
                     info: info.info ? `\n${info.info}` : ''
@@ -92,14 +91,14 @@ class default_1 extends Command_1.Command {
                 await message.author.send({ embed });
             if (!dm && this.client.dmHelp) {
                 if (command)
-                    message.reply(res(BaseStrings_1.BaseStrings.CMD_HELP_REPLY_CMD));
+                    message.reply(res.CMD_HELP_REPLY_CMD());
                 else
-                    message.reply(res(BaseStrings_1.BaseStrings.CMD_HELP_REPLY_ALL));
+                    message.reply(res.CMD_HELP_REPLY_ALL());
             }
         }
         catch (_a) {
             if (!dm && !this.client.selfbot)
-                message.reply(res(BaseStrings_1.BaseStrings.CMD_HELP_REPLY_FAIL));
+                message.reply(res.CMD_HELP_REPLY_FAIL());
         }
     }
 }

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Resolve_1 = require("./Resolve");
 const Expect_1 = require("./Expect");
 const Localize_1 = require("./Localize");
+const LocalizeLoader_1 = require("./LocalizeLoader");
 /**
  * Contains static command middleware methods
  * @module Middleware
@@ -74,9 +75,18 @@ Middleware.resolve = Resolve_1.resolve;
  */
 Middleware.expect = Expect_1.expect;
 /**
- * Middleware function that inserts a {@link ResourceLoader} function for the
+ * Middleware function that inserts a {@link ResourceProxy} object for the
  * language that will be used for the command call as the first arg for that
- * command call. This middleware should be used *after* any other middleware
+ * command call.
+ *
+ * >**Note:** The original `localize` middleware that inserted {@link ResourceLoader}
+ * functions into the command args has been moved to {@link module:Middleware.localizeLoader}
+ * temporarily, but `ResourceLoader` functions themselves are deprecated
+ * in favor of `ResourceProxy`. `ResourceLoader` and associated functionality
+ * will be removed in a future release, only being left in despite the major
+ * version bump of 4.0.0 to ease the transition
+ *
+ * >**Note:** This middleware should be used *after* any other middleware
  * like [expect]{@link module:Middleware.expect} or [resolve]{@link module:Middleware.resolve}
  * because those are based around user input whereas this should be handled
  * after user input related things as to not interfere with the other middleware
@@ -86,6 +96,21 @@ Middleware.expect = Expect_1.expect;
  * @returns {MiddlewareFunction}
  */
 Middleware.localize = Localize_1.localize;
+/**
+ * Middleware function that inserts a {@link ResourceLoader} function for the
+ * language that will be used for the command call as the first arg for that
+ * command call.
+ *
+ * >**Note:** This middleware should be used *after* any other middleware
+ * like [expect]{@link module:Middleware.expect} or [resolve]{@link module:Middleware.resolve}
+ * because those are based around user input whereas this should be handled
+ * after user input related things as to not interfere with the other middleware
+ * and their inputs
+ * @static
+ * @method localize
+ * @returns {MiddlewareFunction}
+ */
+Middleware.localizeLoader = LocalizeLoader_1.localizeLoader;
 exports.Middleware = Middleware;
 
 //# sourceMappingURL=Middleware.js.map

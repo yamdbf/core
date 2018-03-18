@@ -6,12 +6,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
 const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
-const BaseStrings_1 = require("../../localization/BaseStrings");
 const Util_1 = require("../../util/Util");
 const util_1 = require("util");
-const fs = require("fs");
 const Discord = require('discord.js'); // tslint:disable-line
 const Yamdbf = require('../../index'); // tslint:disable-line
 let ts;
@@ -41,7 +40,7 @@ class default_1 extends Command_1.Command {
         const call = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
         const code = message.content.replace(call, '').trim();
         if (!code)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_EVAL_ERR_NOCODE));
+            return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
         let start = ts ? await this.respond(message, '*Compiling...*') : message;
         let evaled;
         try {
@@ -49,11 +48,11 @@ class default_1 extends Command_1.Command {
             evaled = await eval(compiled);
         }
         catch (err) {
-            return start.edit(res(BaseStrings_1.BaseStrings.CMD_EVAL_ERROR, { code, error: this._clean(err) }));
+            return start.edit(res.CMD_EVAL_ERROR({ code, error: this._clean(err) }));
         }
         if (typeof evaled !== 'string')
             evaled = util_1.inspect(evaled, { depth: 0 });
-        return start.edit(res(BaseStrings_1.BaseStrings.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
+        return start.edit(res.CMD_EVAL_RESULT({ code, result: this._clean(evaled) }));
     }
     _compile(code) {
         let message;
@@ -76,9 +75,10 @@ class default_1 extends Command_1.Command {
         }
         if (message)
             throw new CompilerError(message);
-        return ts ? ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS } })
-            .outputText
-            .replace('"use strict";\r\nexports.__esModule = true;\r\n', '')
+        return ts
+            ? ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS } })
+                .outputText
+                .replace('"use strict";\r\nexports.__esModule = true;\r\n', '')
             : code;
     }
     _clean(text) {

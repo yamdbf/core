@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
-const BaseStrings_1 = require("../../localization/BaseStrings");
 const Util_1 = require("../../util/Util");
 const util_1 = require("util");
 const Discord = require('discord.js'); // tslint:disable-line
@@ -28,7 +27,7 @@ class default_1 extends Command_1.Command {
         const call = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
         const code = message.content.replace(call, '').trim();
         if (!code)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_EVAL_ERR_NOCODE));
+            return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
         let evaled;
         let error;
         try {
@@ -38,10 +37,10 @@ class default_1 extends Command_1.Command {
             error = err;
         }
         if (error)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_EVAL_ERROR, { code, error: this._clean(error) }));
+            return this.respond(message, res.CMD_EVAL_ERROR({ code, error: this._clean(error) }));
         if (typeof evaled !== 'string')
             evaled = util_1.inspect(evaled, { depth: 0 });
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
+        return this.respond(message, res.CMD_EVAL_RESULT({ code, result: this._clean(evaled) }));
     }
     _clean(text) {
         return typeof text === 'string' ? text

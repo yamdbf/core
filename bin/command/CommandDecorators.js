@@ -56,7 +56,7 @@ function using(func) {
 }
 exports.using = using;
 /**
- * Creates a {@link ResourceLoader} function using the localization
+ * Creates a {@link ResourceProxy} object using the localization
  * language for the command call and passes it as the first argument
  * for that command call.
  *
@@ -85,7 +85,7 @@ function localizable(target, key, descriptor) {
             ? this.client.defaultLang
             : await message.guild.storage.settings.get('lang')
                 || this.client.defaultLang;
-        const res = Lang_1.Lang.createResourceLoader(lang);
+        const res = Lang_1.Lang.createResourceProxy(lang);
         return await original.apply(this, [message, [res, ...args]]);
     };
     return descriptor;

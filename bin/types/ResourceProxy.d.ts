@@ -18,7 +18,7 @@
  *                 // so this returns a string
  * ```
  */
-import { TemplateData } from '../../bin/types/TemplateData';
+import { TemplateData } from '../types/TemplateData';
 import { BaseStrings } from '..';
 export declare type ResourceProxy<T = {}> = {
     [key in BaseStrings]: (data?: TemplateData) => string;

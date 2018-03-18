@@ -6,7 +6,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseStrings_1 = require("../../localization/BaseStrings");
 const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
 class default_1 extends Command_1.Command {
@@ -22,11 +21,11 @@ class default_1 extends Command_1.Command {
     }
     async action(message, [res, prefix]) {
         if (!prefix)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_PREFIX_CURRENT, { prefix: await this.client.getPrefix(message.guild) }));
+            return this.respond(message, res.CMD_PREFIX_CURRENT({ prefix: await this.client.getPrefix(message.guild) }));
         if (prefix.length > 10)
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_PREFIX_ERR_CHAR_LIMIT));
+            return this.respond(message, res.CMD_PREFIX_ERR_CHAR_LIMIT());
         if (/[\\`]/.test(prefix))
-            return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_PREFIX_ERR_INVALID_CHARS));
+            return this.respond(message, res.CMD_PREFIX_ERR_INVALID_CHARS());
         if (prefix === 'clear')
             prefix = '';
         if (this.client.selfbot)
@@ -34,7 +33,7 @@ class default_1 extends Command_1.Command {
                 await guild.settings.set('prefix', prefix);
         else
             await message.guild.storage.settings.set('prefix', prefix);
-        return this.respond(message, res(BaseStrings_1.BaseStrings.CMD_PREFIX_SUCCESS, { prefix }));
+        return this.respond(message, res.CMD_PREFIX_SUCCESS({ prefix }));
     }
 }
 __decorate([

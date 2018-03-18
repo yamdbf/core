@@ -23,7 +23,7 @@ import { PermissionResolvable } from 'discord.js';
  */
 export declare function using(func: MiddlewareFunction): MethodDecorator;
 /**
- * Creates a {@link ResourceLoader} function using the localization
+ * Creates a {@link ResourceProxy} object using the localization
  * language for the command call and passes it as the first argument
  * for that command call.
  *
