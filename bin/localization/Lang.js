@@ -6,13 +6,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
+const glob = require("glob");
+const path = require("path");
 const Command_1 = require("../command/Command");
 const Logger_1 = require("../util/logger/Logger");
 const LangFileParser_1 = require("./LangFileParser");
 const Util_1 = require("../util/Util");
-const fs = require("fs");
-const glob = require("glob");
-const path = require("path");
 /**
  * Module providing localization support throughout the framework.
  * Allows client output to be translated to other languages
@@ -306,6 +306,26 @@ class Lang {
         if (!group)
             throw new Error('A group must be provided');
         return Util_1.Util.getNestedValue(Lang._instance._groupInfo, [group, lang]) || `${lang}::group_${group}`;
+    }
+    /**
+     * Gets the language that should be used for localization via the given {@link Message}
+     * based on whether the Message is a DM, the Guild's configured language,
+     * and the Client's default language
+     * @static
+     * @method getLangFromMessage
+     * @param {Message} message
+     * @returns {string}
+     */
+    static async getLangFromMessage(message) {
+        const dm = message.channel.type !== 'text';
+        const storage = !dm
+            ? Lang._instance._client.storage.guilds.get(message.guild.id)
+            : null;
+        const lang = dm
+            ? Lang._instance._client.defaultLang
+            : await storage.settings.get('lang')
+                || Lang._instance._client.defaultLang;
+        return lang;
     }
     /**
      * Get a string resource for the given language, replacing any

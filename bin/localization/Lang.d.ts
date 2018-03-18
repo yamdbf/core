@@ -2,9 +2,10 @@ import { Client } from '../client/Client';
 import { Command } from '../command/Command';
 import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { ResourceLoader } from '../types/ResourceLoader';
+import { ResourceProxy } from '../types/ResourceProxy';
 import { TemplateData } from '../types/TemplateData';
 import { Language } from './Language';
-import { ResourceProxy } from '../types/ResourceProxy';
+import { Message } from '../types/Message';
 /**
  * Module providing localization support throughout the framework.
  * Allows client output to be translated to other languages
@@ -147,6 +148,16 @@ export declare class Lang {
      * @param {string} lang Language to get localized group info in
      */
     static getGroupInfo(group: string, lang: string): string;
+    /**
+     * Gets the language that should be used for localization via the given {@link Message}
+     * based on whether the Message is a DM, the Guild's configured language,
+     * and the Client's default language
+     * @static
+     * @method getLangFromMessage
+     * @param {Message} message
+     * @returns {string}
+     */
+    static getLangFromMessage(message: Message): Promise<string>;
     /**
      * Get a string resource for the given language, replacing any
      * templates with the given data and evaluating any embedded
