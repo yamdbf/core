@@ -36,19 +36,21 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Client } from '../client/Client';
+            <pre class="prettyprint source linenums"><code>import * as fs from 'fs';
+import * as glob from 'glob';
+import * as path from 'path';
+import { Client } from '../client/Client';
 import { Command } from '../command/Command';
 import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
 import { ResourceLoader } from '../types/ResourceLoader';
+import { ResourceProxy } from '../types/ResourceProxy';
 import { TemplateData } from '../types/TemplateData';
 import { Logger, logger } from '../util/logger/Logger';
 import { LangFileParser } from './LangFileParser';
 import { Language } from './Language';
+import { Message } from '../types/Message';
+import { GuildStorage } from '../storage/GuildStorage';
 import { Util } from '../util/Util';
-import * as fs from 'fs';
-import * as glob from 'glob';
-import * as path from 'path';
-import { ResourceProxy } from '../types/ResourceProxy';
 
 /**
  * Module providing localization support throughout the framework.
@@ -387,6 +389,30 @@ export class Lang
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 		if (!group) throw new Error('A group must be provided');
 		return Util.getNestedValue(Lang._instance._groupInfo, [group, lang]) || `${lang}::group_${group}`;
+	}
+
+	/**
+	 * Gets the language that should be used for localization via the given {@link Message}
+	 * based on whether the Message is a DM, the Guild's configured language,
+	 * and the Client's default language
+	 * @static
+	 * @method getLangFromMessage
+	 * @param {Message} message
+	 * @returns {string}
+	 */
+	public static async getLangFromMessage(message: Message): Promise&lt;string>
+	{
+		const dm: boolean = message.channel.type !== 'text';
+		const storage: GuildStorage = !dm
+			? Lang._instance._client.storage.guilds.get(message.guild.id)
+			: null;
+
+		const lang: string = dm
+			? Lang._instance._client.defaultLang
+			: await storage.settings.get('lang')
+				|| Lang._instance._client.defaultLang;
+
+		return lang;
 	}
 
 	/**
