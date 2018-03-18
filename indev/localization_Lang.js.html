@@ -51,6 +51,7 @@ import { Language } from './Language';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Util } from '../util/Util';
+import { BaseStrings } from '..';
 
 /**
  * Module providing localization support throughout the framework.
@@ -409,8 +410,7 @@ export class Lang
 
 		const lang: string = dm
 			? Lang._instance._client.defaultLang
-			: await storage.settings.get('lang')
-				|| Lang._instance._client.defaultLang;
+			: await storage.settings.get('lang') || Lang._instance._client.defaultLang;
 
 		return lang;
 	}
@@ -450,9 +450,12 @@ export class Lang
 		const scriptTemplates: RegExp = new RegExp(scriptTemplate, 'gm');
 		if (scriptTemplates.test(loadedString))
 		{
-			const resourceLoader: ResourceLoader = Lang.createResourceLoader(lang);
-			const res: ResourceLoader =
-				(stringKey: string, args: TemplateData = data) => resourceLoader(stringKey, args);
+			const proxy: ResourceProxy = Lang.createResourceProxy(lang);
+			const res: any = new Proxy({}, {
+				get: (target: any, prop: PropertyKey) => {
+					return (args: TemplateData = data) => proxy[prop as BaseStrings](args);
+				}
+			});
 
 			for (const scriptData of loadedString.match(scriptTemplates))
 			{

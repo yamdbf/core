@@ -67,8 +67,8 @@ foo bar baz ## And here's an inline comment</code></pre><p>Comments are removed 
 of a key/value set will not be captured at all.</p>
 <h2>Templating</h2><p>Unrelated to the <code>.lang</code> file format, but arguably the most important part of the localization system as a whole,
 is the templating system. Any token surrounded with <code>{{ }}</code> or <code>{{ ?}}</code> is a template, and can be replaced at runtime
-via matching keys within a <a href="global.html#TemplateData"><code>TemplateData</code></a> object passed to <code>Lang.res()</code> or a ResourceLoader from
-<code>Lang.createResourceLoader()</code>. For example:</p>
+via matching keys within a <a href="global.html#TemplateData"><code>TemplateData</code></a> object passed to <code>Lang.res()</code> or a <code>ResourceProxy</code> proxy method from
+<code>Lang.createResourceProxy()</code>. For example:</p>
 <pre class="prettyprint source"><code>[TEMPLATE_EXAMPLE]
 foo {{ barTemplate }} baz
 
@@ -102,18 +102,24 @@ then an implicit return is not possible</p>
 </blockquote>
 <p>Template scripts receive two parameter values within their scope at runtime, the first of which is the <a href="global.html#TemplateData"><code>TemplateData</code></a>
 object passed to the resource loader that is loading the string resource containing the template script in question. This
-parameter is called <code>args</code>. The second parameter, called <code>res</code>, is a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function that can be used
-for loading other string resources for the same language in case you need to nest localizable strings.</p>
+parameter is called <code>args</code>. The second parameter, called <code>res</code>, is a <a href="global.html#ResourceProxy"><code>ResourceProxy</code></a> object that can be used for loading
+other string resources from within template scripts for the same language in case you need to nest localizable strings.</p>
 <blockquote>
-<p>The same <code>args</code> object received in a template script is automatically forwarded by reference to <code>res()</code> within that template
-script when called (meaning new values can be attached and old values modified), so unless a new args object is created to pass
-to <code>res()</code> you will not need to pass more than a string key to nested <code>res()</code> calls within template scripts</p>
+<p>The same <code>args</code> object received in a template script is automatically forwarded by reference to any <code>res</code> string loading proxy
+methods when they are called (meaning new values and be attached and old values modified), so unless a new args object is created
+to pass to the proxy methods on <code>res</code>, you will not need to pass the args yourself when calling the proxy methods</p>
 </blockquote>
 <p>It's easiest to imagine that the script itself is surrounded by an anonymous function declaration taking the parameters
 <code>args</code>, and <code>res</code> with simple arrow-function style implicit returns converted explicitly. Using the example script from above:</p>
 <pre class="prettyprint source"><code>// {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
 function(args, res) {
     return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
+}
+...
+function(args, res) {
+    args.foo = 'new value';
+    return res.OTHER_STRING(); // `args` is automatically forwarded
+                               // but can be passed manually if desired
 }</code></pre><p>When working with template scripts, and really templates in general, knowing what is going to be passed to the localization
 string and thus the template script is important. Be sure to pay close attention to the original defaults and their use of
 templates to get an idea of what to expect. And, of course, being sure to test the results at runtime never hurts.</p>

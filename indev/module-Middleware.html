@@ -102,7 +102,7 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L6">command/middleware/Middleware.ts, Line 6</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L7">command/middleware/Middleware.ts, Line 7</a>
     </li></ul></dd>
     
 
@@ -283,7 +283,7 @@ which should always come last.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L44">command/middleware/Middleware.ts, Line 44</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L45">command/middleware/Middleware.ts, Line 45</a>
     </li></ul></dd>
     
 
@@ -344,11 +344,14 @@ which should always come last.</p>
 <div class="description">
     <p>Middleware function that inserts a <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a> function for the
 language that will be used for the command call as the first arg for that
-command call. This middleware should be used <em>after</em> any other middleware
+command call.</p>
+<blockquote>
+<p><strong>Note:</strong> This middleware should be used <em>after</em> any other middleware
 like <a href="module-Middleware.html#.expect"><code>expect</code></a> or <a href="module-Middleware.html#.resolve"><code>resolve</code></a>
 because those are based around user input whereas this should be handled
 after user input related things as to not interfere with the other middleware
 and their inputs</p>
+</blockquote>
 </div>
 
 
@@ -393,7 +396,128 @@ and their inputs</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L80">command/middleware/Middleware.ts, Line 80</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L104">command/middleware/Middleware.ts, Line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd><a href="global.html#MiddlewareFunction">MiddlewareFunction</a></dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".localize">
+		<span class="type-signature">(static) </span>.<a href='#localize' style='color: black'>localize</a><span class="signature">()</span><span class="type-signature"> &rarr; <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Middleware function that inserts a <a href="global.html#ResourceProxy"><code>ResourceProxy</code></a> object for the
+language that will be used for the command call as the first arg for that
+command call.</p>
+<blockquote>
+<p><strong>Note:</strong> The original <code>localize</code> middleware that inserted <a href="global.html#ResourceLoader"><code>ResourceLoader</code></a>
+functions into the command args has been moved to <code>module:Middleware.localizeLoader</code>
+temporarily, but <code>ResourceLoader</code> functions themselves are deprecated
+in favor of <code>ResourceProxy</code>. <code>ResourceLoader</code> and associated functionality
+will be removed in a future release, only being left in despite the major
+version bump of 4.0.0 to ease the transition</p>
+</blockquote>
+<blockquote>
+<p><strong>Note:</strong> This middleware should be used <em>after</em> any other middleware
+like <a href="module-Middleware.html#.expect"><code>expect</code></a> or <a href="module-Middleware.html#.resolve"><code>resolve</code></a>
+because those are based around user input whereas this should be handled
+after user input related things as to not interfere with the other middleware
+and their inputs</p>
+</blockquote>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L81">command/middleware/Middleware.ts, Line 81</a>
     </li></ul></dd>
     
 
@@ -566,7 +690,7 @@ the provided argument type</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L12">command/middleware/Middleware.ts, Line 12</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/middleware/Middleware.ts#L13">command/middleware/Middleware.ts, Line 13</a>
     </li></ul></dd>
     
 

@@ -39,10 +39,9 @@
             <pre class="prettyprint source linenums"><code>import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable, using } from '../CommandDecorators';
-import { ResourceLoader } from '../../types/ResourceLoader';
-import { BaseStrings as s } from '../../localization/BaseStrings';
 import { Middleware } from '../middleware/Middleware';
 import { Util } from 'discord.js';
+import { ResourceProxy } from '../../types/ResourceProxy';
 const { resolve, expect, } = Middleware;
 
 export default class extends Command
@@ -90,7 +89,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 		else return [message, args];
 	})
 	@localizable
-	public async action(message: Message, [res, action, name, content]: [ResourceLoader, string, string, string]): Promise&lt;any>
+	public async action(message: Message, [res, action, name, content]: [ResourceProxy, string, string, string]): Promise&lt;any>
 	{
 		if (!action) return this.listShortcuts(message, res);
 		else if (action === 'set') return this.setShortcut(message, res, name, content);
@@ -101,15 +100,15 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	/**
 	 * List command shortcuts
 	 */
-	private async listShortcuts(message: Message, res: ResourceLoader): Promise&lt;void>
+	private async listShortcuts(message: Message, res: ResourceProxy): Promise&lt;void>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
 		const names: string[] = Object.keys(shortcuts);
 
 		let output: string;
 
-		if (names.length === 0) output = res(s.CMD_SHORTCUTS_ERR_NO_SHORTCUTS);
-		else output = res(s.CMD_SHORTCUTS_LIST, { names: names.join(', ') });
+		if (names.length === 0) output = res.CMD_SHORTCUTS_ERR_NO_SHORTCUTS();
+		else output = res.CMD_SHORTCUTS_LIST({ names: names.join(', ') });
 
 		this.respond(message, output);
 	}
@@ -117,45 +116,45 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	/**
 	 * Set command shortcut content
 	 */
-	private async setShortcut(message: Message, res: ResourceLoader, name: string, content: string): Promise&lt;any>
+	private async setShortcut(message: Message, res: ResourceProxy, name: string, content: string): Promise&lt;any>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
 		if (Object.keys(shortcuts).length >= 50)
-			return this.respond(message, res(s.CMD_SHORTCUTS_ERR_MAX_SHORTCUTS));
+			return this.respond(message, res.CMD_SHORTCUTS_ERR_MAX_SHORTCUTS());
 
 		if (content.length > 500)
-			return this.respond(message, res(s.CMD_SHORTCUTS_ERR_SET_LENGTH));
+			return this.respond(message, res.CMD_SHORTCUTS_ERR_SET_LENGTH());
 
 		await message.guild.storage.settings.set(`shortcuts.${name}`, content);
 
 		content = Util.escapeMarkdown(content, true);
-		return this.respond(message, res(s.CMD_SHORTCUTS_SET_SUCCESS, { name, content }));
+		return this.respond(message, res.CMD_SHORTCUTS_SET_SUCCESS({ name, content }));
 	}
 
 	/**
 	 * Get command shortcut content
 	 */
-	private async getShortcut(message: Message, res: ResourceLoader, name: string): Promise&lt;any>
+	private async getShortcut(message: Message, res: ResourceProxy, name: string): Promise&lt;any>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
 		if (!shortcuts[name])
-			return this.respond(message, res(s.CMD_SHORTCUTS_ERR_MISSING, { name }));
+			return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
 
 		const content: string = Util.escapeMarkdown(shortcuts[name], true);
-		return this.respond(message, res(s.CMD_SHORTCUTS_GET_CONTENT, { name, content }));
+		return this.respond(message, res.CMD_SHORTCUTS_GET_CONTENT({ name, content }));
 	}
 
 	/**
 	 * Remove a command shortcut
 	 */
-	private async removeShortcut(message: Message, res: ResourceLoader, name: string): Promise&lt;any>
+	private async removeShortcut(message: Message, res: ResourceProxy, name: string): Promise&lt;any>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
 		if (!shortcuts[name])
-			return this.respond(message, res(s.CMD_SHORTCUTS_ERR_MISSING, { name }));
+			return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
 
 		await message.guild.storage.settings.remove(`shortcuts.${name}`);
-		return this.respond(message, res(s.CMD_SHORTCUTS_REMOVE_SUCCESS, { name }));
+		return this.respond(message, res.CMD_SHORTCUTS_REMOVE_SUCCESS({ name }));
 	}
 }
 </code></pre>
