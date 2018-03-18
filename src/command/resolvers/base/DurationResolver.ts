@@ -3,9 +3,8 @@ import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
 import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
-import { ResourceLoader } from '../../../types/ResourceLoader';
-import { BaseStrings as s } from '../../../localization/BaseStrings';
 import { Time } from '../../../util/Time';
+import { ResourceProxy } from '../../../types/ResourceProxy';
 
 export class DurationResolver extends Resolver
 {
@@ -21,19 +20,16 @@ export class DurationResolver extends Resolver
 
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<number>
 	{
-		const dm: boolean = message.channel.type !== 'text';
-		const lang: string = dm
-			? this.client.defaultLang
-			: await message.guild.storage.settings.get('lang')
-				|| this.client.defaultLang;
+		const lang: string = await Lang.getLangFromMessage(message);
+		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
-		const res: ResourceLoader = Lang.createResourceLoader(lang);
+		const dm: boolean = message.channel.type !== 'text';
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const result: number = Time.parseShorthand(value);
 		if (!result)
-			throw new Error(res(s.RESOLVE_ERR_RESOLVE_DURATION, { name, arg: value, usage }));
+			throw new Error(res.RESOLVE_ERR_RESOLVE_DURATION({ name, arg: value, usage }));
 
 		return result;
 	}

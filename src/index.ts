@@ -48,6 +48,7 @@ export { Transport } from './types/Transport';
 export { Lang } from './localization/Lang';
 export { BaseStrings } from './localization/BaseStrings';
 export { ResourceLoader } from './types/ResourceLoader';
+export { ResourceProxy } from './types/ResourceProxy';
 
 export { deprecated } from './util/DeprecatedDecorator';
 

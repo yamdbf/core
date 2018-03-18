@@ -39,8 +39,8 @@ of a key/value set will not be captured at all.
 ## Templating
 Unrelated to the `.lang` file format, but arguably the most important part of the localization system as a whole,
 is the templating system. Any token surrounded with `{{ }}` or `{{ ?}}` is a template, and can be replaced at runtime
-via matching keys within a {@link TemplateData} object passed to `Lang.res()` or a ResourceLoader from
-`Lang.createResourceLoader()`. For example:
+via matching keys within a {@link TemplateData} object passed to `Lang.res()` or a `ResourceProxy` proxy method from
+`Lang.createResourceProxy()`. For example:
 ```
 [TEMPLATE_EXAMPLE]
 foo {{ barTemplate }} baz
@@ -85,12 +85,12 @@ then an implicit return is not possible
 
 Template scripts receive two parameter values within their scope at runtime, the first of which is the {@link TemplateData}
 object passed to the resource loader that is loading the string resource containing the template script in question. This
-parameter is called `args`. The second parameter, called `res`, is a {@link ResourceLoader} function that can be used
-for loading other string resources for the same language in case you need to nest localizable strings.
+parameter is called `args`. The second parameter, called `res`, is a {@link ResourceProxy} object that can be used for loading
+other string resources from within template scripts for the same language in case you need to nest localizable strings.
 
->The same `args` object received in a template script is automatically forwarded by reference to `res()` within that template
-script when called (meaning new values can be attached and old values modified), so unless a new args object is created to pass
-to `res()` you will not need to pass more than a string key to nested `res()` calls within template scripts
+>The same `args` object received in a template script is automatically forwarded by reference to any `res` string loading proxy
+methods when they are called (meaning new values and be attached and old values modified), so unless a new args object is created
+to pass to the proxy methods on `res`, you will not need to pass the args yourself when calling the proxy methods
 
 It's easiest to imagine that the script itself is surrounded by an anonymous function declaration taking the parameters
 `args`, and `res` with simple arrow-function style implicit returns converted explicitly. Using the example script from above:
@@ -98,6 +98,12 @@ It's easiest to imagine that the script itself is surrounded by an anonymous fun
 // {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}
 function(args, res) {
 	return args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias';
+}
+...
+function(args, res) {
+	args.foo = 'new value';
+	return res.OTHER_STRING(); // `args` is automatically forwarded
+	                           // but can be passed manually if desired
 }
 ```
 When working with template scripts, and really templates in general, knowing what is going to be passed to the localization

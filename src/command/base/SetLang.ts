@@ -1,8 +1,7 @@
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable, using } from '../CommandDecorators';
-import { ResourceLoader } from '../../types/ResourceLoader';
-import { BaseStrings as s } from '../../localization/BaseStrings';
+import { ResourceProxy } from '../../types/ResourceProxy';
 import { Lang } from '../../localization/Lang';
 import { resolve } from '../middleware/Resolve';
 
@@ -19,9 +18,9 @@ export default class extends Command
 		});
 	}
 
-	@using(resolve({ '[lang]': 'Number' }))
+	@using(resolve('lang?: Number'))
 	@localizable
-	public async action(message: Message, [res, lang]: [ResourceLoader, number]): Promise<any>
+	public async action(message: Message, [res, lang]: [ResourceProxy, number]): Promise<any>
 	{
 		let langs: string[] = Lang.langNames;
 		if (typeof lang === 'undefined')
@@ -34,15 +33,18 @@ export default class extends Command
 				.map((l, i) => `${i + 1}:  ${l}`)
 				.map(l => l.replace(` ${currentLang}`, `*${currentLang}`));
 
-			let output: string = res(s.CMD_SETLANG_LIST, { langList: names.join('\n'), prefix });
+			let output: string = res.CMD_SETLANG_LIST({ langList: names.join('\n'), prefix });
 			return message.channel.send(output);
 		}
 
-		if (!((lang - 1) in langs)) return message.channel.send(res(s.CMD_SETLANG_ERR_INVALID));
+		if (!((lang - 1) in langs))
+			return message.channel.send(res.CMD_SETLANG_ERR_INVALID());
+
 		const newLang: string = langs[lang - 1];
 		await message.guild.storage.settings.set('lang', newLang);
-		res = Lang.createResourceLoader(newLang);
-		return message.channel.send(res(s.CMD_SETLANG_SUCCESS,
-			{ lang: Lang.getMetaValue(newLang, 'name') || newLang }));
+
+		res = Lang.createResourceProxy(newLang);
+		const langName: string = Lang.getMetaValue(newLang, 'name') || newLang;
+		return message.channel.send(res.CMD_SETLANG_SUCCESS({ lang: langName }));
 	}
 }

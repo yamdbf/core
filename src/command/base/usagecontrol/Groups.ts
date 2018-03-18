@@ -1,8 +1,7 @@
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
 import { localizable, using } from '../../CommandDecorators';
-import { ResourceLoader } from '../../../types/ResourceLoader';
-import { BaseStrings as s } from '../../../localization/BaseStrings';
+import { ResourceProxy } from '../../../types/ResourceProxy';
 import { Middleware } from '../../middleware/Middleware';
 import { Lang } from '../../../localization/Lang';
 const { resolve, expect, } = Middleware;
@@ -29,7 +28,7 @@ export default class extends Command
 		else return [message, args];
 	})
 	@localizable
-	public async action(message: Message, [res, action, group]: [ResourceLoader, string, string]): Promise<any>
+	public async action(message: Message, [res, action, group]: [ResourceProxy, string, string]): Promise<any>
 	{
 		if (!action) return this.listGroups(message, res);
 		else if (['enable', 'on'].includes(action)) return this.enableGroup(message, res, group);
@@ -39,13 +38,13 @@ export default class extends Command
 	/**
 	 * List command groups
 	 */
-	private async listGroups(message: Message, res: ResourceLoader): Promise<void>
+	private async listGroups(message: Message, res: ResourceProxy): Promise<void>
 	{
 		const lang: string = await message.guild.storage.settings.get('lang') || this.client.defaultLang;
 		const info: string[] = this.client.commands.groups.map(g => Lang.getGroupInfo(g, lang));
 		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
 
-		const output: string = res(s.CMD_GROUPS_LIST, {
+		const output: string = res.CMD_GROUPS_LIST({
 			groups: this.client.commands.groups.join(', '),
 			disabledGroups: disabledGroups.join(', '),
 			info: info.join('::::')
@@ -57,11 +56,11 @@ export default class extends Command
 	/**
 	 * Enable a command group
 	 */
-	private async enableGroup(message: Message, res: ResourceLoader, group: string): Promise<any>
+	private async enableGroup(message: Message, res: ResourceProxy, group: string): Promise<any>
 	{
 		const err: { [error: string]: string } = {
-			NO_EXIST: res(s.CMD_GROUPS_ERR_NOEXIST, { group }),
-			ENABLED: res(s.CMD_GROUPS_ERR_ENABLED, { group })
+			NO_EXIST: res.CMD_GROUPS_ERR_NOEXIST({ group }),
+			ENABLED: res.CMD_GROUPS_ERR_ENABLED({ group })
 		};
 
 		if (!this.client.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
@@ -72,17 +71,17 @@ export default class extends Command
 		disabledGroups.splice(disabledGroups.indexOf(group), 1);
 		await message.guild.storage.settings.set('disabledGroups', disabledGroups);
 
-		this.respond(message, res(s.CMD_GROUPS_ENABLE_SUCCESS, { group }));
+		this.respond(message, res.CMD_GROUPS_ENABLE_SUCCESS({ group }));
 	}
 
 	/**
 	 * Disable a command group
 	 */
-	private async disableGroup(message: Message, res: ResourceLoader, group: string): Promise<any>
+	private async disableGroup(message: Message, res: ResourceProxy, group: string): Promise<any>
 	{
 		const err: { [error: string]: string } = {
-			NO_EXIST: res(s.CMD_GROUPS_ERR_NOEXIST, { group }),
-			DISABLED: res(s.CMD_GROUPS_ERR_DISABLED, { group })
+			NO_EXIST: res.CMD_GROUPS_ERR_NOEXIST({ group }),
+			DISABLED: res.CMD_GROUPS_ERR_DISABLED({ group })
 		};
 
 		if (!this.client.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
@@ -93,6 +92,6 @@ export default class extends Command
 		disabledGroups.push(group);
 		await message.guild.storage.settings.set('disabledGroups', disabledGroups);
 
-		this.respond(message, res(s.CMD_GROUPS_DISABLE_SUCCESS, { group }));
+		this.respond(message, res.CMD_GROUPS_DISABLE_SUCCESS({ group }));
 	}
 }

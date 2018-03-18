@@ -19,7 +19,7 @@
  * ```
  */
 
-import { TemplateData } from '../../bin/types/TemplateData';
+import { TemplateData } from '../types/TemplateData';
 import { BaseStrings } from '..';
 
 export type ResourceProxy<T = {}> = {

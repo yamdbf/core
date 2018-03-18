@@ -3,10 +3,10 @@ import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { Lang } from '../../localization/Lang';
 import { Util } from '../../util/Util';
-import { ResourceLoader } from '../../types/ResourceLoader';
-import { BaseStrings as s } from '../../localization/BaseStrings';
 import { MappedArgType } from './Resolve';
 import { Resolver } from '../resolvers/Resolver';
+import { ResourceProxy } from '../../types/ResourceProxy';
+import { BaseStrings as s } from '../../localization/BaseStrings';
 
 export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 {
@@ -24,7 +24,7 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 			: await message.guild.storage.settings.get('lang')
 				|| this.client.defaultLang;
 
-		const res: ResourceLoader = Lang.createResourceLoader(lang);
+		const res: ResourceProxy = Lang.createResourceProxy(lang);
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(this, lang).usage.replace(/<prefix>/g, prefix);
 
@@ -34,7 +34,7 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 			const type: string | string[] = types[index];
 
 			if (typeof arg === 'undefined' || arg === null)
-				throw new Error(res(s.EXPECT_ERR_MISSING_VALUE, {
+				throw new Error(res.EXPECT_ERR_MISSING_VALUE({
 					type: type instanceof Array ? type.map(t => `\`${t}\``).join(', ') : `\`${type}\``,
 					name,
 					usage
@@ -45,8 +45,12 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 			if (type instanceof Array)
 			{
 				if (!type.map(a => a.toLowerCase()).includes(arg.toLowerCase()))
-					throw new Error(res(s.EXPECT_ERR_INVALID_OPTION,
-						{ type: type.map(t => `\`${t}\``).join(', '), name, arg, usage }));
+					throw new Error(res.EXPECT_ERR_INVALID_OPTION({
+						type: type.map(t => `\`${t}\``).join(', '),
+						name,
+						arg,
+						usage
+					}));
 				continue;
 			}
 

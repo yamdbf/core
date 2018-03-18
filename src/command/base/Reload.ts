@@ -1,12 +1,10 @@
 import { Collection } from 'discord.js';
-import { ResourceLoader } from '../../types/ResourceLoader';
-import { BaseStrings as s } from '../../localization/BaseStrings';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
+import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { Logger, logger } from '../../util/logger/Logger';
-const { now } = Util;
 
 export default class extends Command
 {
@@ -24,11 +22,11 @@ export default class extends Command
 	}
 
 	@localizable
-	public action(message: Message, [res]: [ResourceLoader]): Promise<Message | Message[]>
+	public action(message: Message, [res]: [ResourceProxy]): Promise<Message | Message[]>
 	{
 		this._logger.log(`Reloading commands from: $${this.client.commandsDir}`);
 
-		const start: number = now();
+		const start: number = Util.now();
 
 		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
 		const reloaded: number = this.client._reloadCustomCommands();
@@ -42,8 +40,9 @@ export default class extends Command
 		// Re-disable previously disabled commands
 		for (const command of toDisable.values()) command.disable();
 
-		const end: number = now();
-		return this.respond(message, res(s.CMD_RELOAD_SUCCESS,
-			{ number: reloaded.toString(), time: (end - start).toFixed(3) }));
+		const end: number = Util.now();
+		const num: string = reloaded.toString();
+		const time: string = (end - start).toFixed(3);
+		return this.respond(message, res.CMD_RELOAD_SUCCESS({ number: num, time }));
 	}
 }

@@ -2,7 +2,7 @@ import { Lang } from '../localization/Lang';
 import { ArgOpts } from '../types/ArgOpts';
 import { Message } from '../types/Message';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
-import { ResourceLoader } from '../types/ResourceLoader';
+import { ResourceProxy } from '../types/ResourceProxy';
 import { Command } from './Command';
 import { Util } from '../util/Util';
 import { PermissionResolvable } from 'discord.js';
@@ -64,7 +64,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 }
 
 /**
- * Creates a {@link ResourceLoader} function using the localization
+ * Creates a {@link ResourceProxy} object using the localization
  * language for the command call and passes it as the first argument
  * for that command call.
  *
@@ -87,6 +87,7 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 
 	if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
 	const original: any = descriptor.value;
+
 	descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 	{
 		const dm: boolean = message.channel.type !== 'text';
@@ -95,9 +96,10 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 			: await message.guild.storage.settings.get('lang')
 				|| this.client.defaultLang;
 
-		const res: ResourceLoader = Lang.createResourceLoader(lang);
+		const res: ResourceProxy = Lang.createResourceProxy(lang);
 		return await original.apply(this, [message, [res, ...args]]);
 	};
+
 	return descriptor;
 }
 

@@ -2,8 +2,7 @@ import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
 import { localizable } from '../CommandDecorators';
-import { ResourceLoader } from '../../types/ResourceLoader';
-import { BaseStrings as s } from '../../localization/BaseStrings';
+import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { inspect } from 'util';
 const Discord = require('discord.js'); // tslint:disable-line
@@ -22,14 +21,14 @@ export default class extends Command
 	}
 
 	@localizable
-	public async action(message: Message, [res]: [ResourceLoader]): Promise<any>
+	public async action(message: Message, [res]: [ResourceProxy]): Promise<any>
 	{
 		const client: Client = this.client; // tslint:disable-line
 		const [, , prefix, name] = await Util.wasCommandCalled(message);
 		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
 		const code: string = message.content.replace(call, '').trim();
 
-		if (!code) return this.respond(message, res(s.CMD_EVAL_ERR_NOCODE));
+		if (!code) return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
 
 		let evaled: string | object;
 		let error: string;
@@ -37,10 +36,10 @@ export default class extends Command
 		try { evaled = await eval(code); }
 		catch (err) { error = err; }
 
-		if (error) return this.respond(message, res(s.CMD_EVAL_ERROR, { code, error: this._clean(error) }));
+		if (error) return this.respond(message, res.CMD_EVAL_ERROR({ code, error: this._clean(error) }));
 		if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
 
-		return this.respond(message, res(s.CMD_EVAL_RESULT, { code, result: this._clean(evaled) }));
+		return this.respond(message, res.CMD_EVAL_RESULT({ code, result: this._clean(evaled) }));
 	}
 
 	private _clean(text: string): string
