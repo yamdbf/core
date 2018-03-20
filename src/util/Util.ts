@@ -274,7 +274,7 @@ export class Util
 	 * @param {any[]} array
 	 * @returns {any[]}
 	 */
-	public static flattenArray<T>(array: (T| T[])[]): T[]
+	public static flattenArray<T>(array: (T | T[])[]): T[]
 	{
 		const result: T[] = [];
 		for (const item of array)
