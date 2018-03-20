@@ -1,0 +1,4 @@
+[TEST_STR]
+foo{{!
+	return 'bar'
+!}}{{! return 'baz' !}}

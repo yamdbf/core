@@ -392,7 +392,7 @@ export class Lang
 	{
 		if (!Lang.langs[lang]) return `${lang}::${key}`;
 		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
-		const scriptTemplate: RegExp = /^{{!([\s\S]+)!}}[\t ]*\n|{{!([\s\S]+)!}}/m;
+		const scriptTemplate: RegExp = /^{{!([\s\S]+?)!}}[\t ]*?\n?|{{!([\s\S]+?)!}}/m;
 		const strings: { [key: string]: string } = Lang.langs[lang].strings;
 		let loadedString: string = strings[key];
 
@@ -438,7 +438,7 @@ export class Lang
 						script = new Function('args', 'res', functionBody);
 						result = script(data, res);
 					}
-					catch (err) {}
+					catch {}
 
 				if (/^{{!([\s\S]+)!}}[\t ]*\n/.test(scriptData) && result !== '')
 					loadedString = loadedString.replace(scriptData, () => `${result}\n`);
