@@ -341,7 +341,7 @@ class Lang {
         if (!Lang.langs[lang])
             return `${lang}::${key}`;
         const maybeTemplates = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
-        const scriptTemplate = /^{{!([\s\S]+)!}}[\t ]*\n|{{!([\s\S]+)!}}/m;
+        const scriptTemplate = /^{{!([\s\S]+?)!}}[\t ]*?\n?|{{!([\s\S]+?)!}}/m;
         const strings = Lang.langs[lang].strings;
         let loadedString = strings[key];
         if (!loadedString)
@@ -380,7 +380,7 @@ class Lang {
                         script = new Function('args', 'res', functionBody);
                         result = script(data, res);
                     }
-                    catch (err) { }
+                    catch (_a) { }
                 if (/^{{!([\s\S]+)!}}[\t ]*\n/.test(scriptData) && result !== '')
                     loadedString = loadedString.replace(scriptData, () => `${result}\n`);
                 else
