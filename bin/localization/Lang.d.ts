@@ -12,13 +12,13 @@ import { Message } from '../types/Message';
  * @module Lang
  */
 export declare class Lang {
-    private static _logger;
+    private static readonly _logger;
+    private readonly _client;
+    private readonly _commandInfo;
+    private readonly _groupInfo;
+    private readonly _langs;
+    private readonly _meta;
     private static _instance;
-    private _client;
-    private _commandInfo;
-    private _groupInfo;
-    private _langs;
-    private _meta;
     private constructor();
     /**
      * Contains all loaded languages and their strings.

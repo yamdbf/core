@@ -21,7 +21,7 @@ const Util_1 = require("../util/Util");
 class Lang {
     constructor(client) {
         if (Lang._instance)
-            throw new Error('Cannot create multiple instances of Lang singleton. Use Lang.createInstance() instead');
+            throw new Error('Cannot create multiple instances of Lang singleton');
         this._client = client;
         this._commandInfo = {};
         this._groupInfo = {};
@@ -137,32 +137,32 @@ class Lang {
             throw new Error('Lang singleton instance has not been created');
         const langNameRegex = /\/([^\/\.]+)(?:\.[^\/]+)?\.lang$/;
         let langs = {};
-        let allLangFiles = [];
+        let files = [];
         dir = path.resolve(dir);
-        allLangFiles.push(...glob.sync(`${dir}/**/*.lang`));
-        if (allLangFiles.length === 0)
+        files.push(...glob.sync(`${dir}/**/*.lang`));
+        if (files.length === 0)
             throw new Error(`Failed to find any localization files in: ${dir}`);
-        for (const langFile of allLangFiles) {
-            if (!langNameRegex.test(langFile))
+        for (const file of files) {
+            if (!langNameRegex.test(file))
                 continue;
-            const langName = langFile.match(langNameRegex)[1];
-            if (!langs[langName])
-                langs[langName] = [];
-            langs[langName].push(langFile);
+            const name = file.match(langNameRegex)[1];
+            if (!langs[name])
+                langs[name] = [];
+            langs[name].push(file);
         }
-        for (const langName of Object.keys(langs)) {
-            for (const langFile of langs[langName]) {
-                if (!langNameRegex.test(langFile))
+        for (const lang in langs) {
+            for (const file of langs[lang]) {
+                if (!langNameRegex.test(file))
                     continue;
-                const loadedLangFile = fs
-                    .readFileSync(langFile)
+                const contents = fs
+                    .readFileSync(file)
                     .toString()
                     .replace(/\r\n/g, '\n');
-                const parsedLanguageFile = LangFileParser_1.LangFileParser.parseFile(langName, loadedLangFile);
-                if (typeof Lang._instance._langs[langName] !== 'undefined')
-                    Lang._instance._langs[langName].concat(parsedLanguageFile);
+                const parsedLanguageFile = LangFileParser_1.LangFileParser.parseFile(lang, file, contents);
+                if (typeof Lang._instance._langs[lang] !== 'undefined')
+                    Lang._instance._langs[lang].concat(parsedLanguageFile);
                 else
-                    Lang._instance._langs[langName] = parsedLanguageFile;
+                    Lang._instance._langs[lang] = parsedLanguageFile;
             }
         }
         Lang.postLoad();
@@ -197,18 +197,18 @@ class Lang {
     static loadCommandLocalizationsFrom(dir) {
         if (!Lang._instance)
             throw new Error('Lang singleton instance has not been created');
+        let files = [];
         dir = path.resolve(dir);
-        let allLangFiles = [];
-        allLangFiles.push(...glob.sync(`${dir}/**/*.lang.json`));
-        if (allLangFiles.length === 0)
+        files.push(...glob.sync(`${dir}/**/*.lang.json`));
+        if (files.length === 0)
             return;
-        for (const langFile of allLangFiles) {
+        for (const file of files) {
             // Ignore reserved commandgroups.lang.json
-            if (/commandgroups\.lang\.json$/.test(langFile))
+            if (/commandgroups\.lang\.json$/.test(file))
                 continue;
             let localizations;
             try {
-                localizations = require(langFile);
+                localizations = require(file);
             }
             catch (_a) {
                 continue;
@@ -234,16 +234,16 @@ class Lang {
     static loadGroupLocalizationsFrom(dir) {
         if (!Lang._instance)
             throw new Error('Lang singleton instance has not been created');
+        const file = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
         dir = path.resolve(dir);
-        const filePath = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
-        if (!filePath)
+        if (!file)
             return;
         let groupInfo;
         try {
-            groupInfo = require(filePath);
+            groupInfo = require(file);
         }
         catch (err) {
-            throw new Error(`Failed to load group localizations from '${filePath}:\n${err.stack}`);
+            throw new Error(`Failed to load group localizations from '${file}:\n${err.stack}`);
         }
         for (const group of Object.keys(groupInfo))
             for (const lang of Object.keys(groupInfo[group]))
@@ -348,6 +348,7 @@ class Lang {
             return `${lang}::${key}`;
         if (typeof data === 'undefined')
             return loadedString;
+        // Handle templates
         for (const template of Object.keys(data)) {
             // Skip maybe templates so they can be removed properly later
             if (new RegExp(`{{ *${template} *\\?}}`, 'g').test(loadedString)
@@ -355,6 +356,7 @@ class Lang {
                 continue;
             loadedString = loadedString.replace(new RegExp(`{{ *${template} *\\??}}`, 'g'), () => data[template]);
         }
+        // Handle script templates
         const scriptTemplates = new RegExp(scriptTemplate, 'gm');
         if (scriptTemplates.test(loadedString)) {
             const proxy = Lang.createResourceProxy(lang);

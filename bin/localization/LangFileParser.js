@@ -10,9 +10,11 @@ class LangFileParser {
      * Parse a given language file string and return a Language
      * object containing all the parsed values
      */
-    static parseFile(langName, fileContents) {
+    static parseFile(langName, filePath, fileContents) {
         const lang = new Language_1.Language(langName);
         const blocks = fileContents.match(LangFileParser._parseBlocks);
+        if (!blocks)
+            throw new Error(`The given Lang file contains no valid localization strings: ${filePath}`);
         for (const block of blocks) {
             const match = block.match(LangFileParser._parseBlock);
             const raw = match[1];
