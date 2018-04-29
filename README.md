@@ -40,14 +40,16 @@ using a Sequelize-based storage provider.
 
 >**Note:** YAMDBF Requires > Node 8.0.0 to run
 
-- Regular install: `npm install --save yamdbf`   
-- With a Postgres provider: `npm install --save yamdbf pg sequelize`   
-- With an SQLite provider: `npm install --save yamdbf sqlite3 sequelize`
+- Regular install: `yarn add yamdbf`   
+- With a Postgres provider: `yarn add yamdbf pg sequelize`   
+- With an SQLite provider: `yarn add yamdbf sqlite3 sequelize`
+- With a MySQL provider: `yarn add yamdbf mysql2 sequelize`
+- With an MSSQL provider: `yarn add yamdbf tedious sequelize`
 
->Indev builds can be installed from github with `npm install --save zajrik/yamdbf#indev`.
+>Indev builds can be installed from github with `yarn add zajrik/yamdbf#indev`.
 This requires `git` to be installed and in your path.
 
->Yarn can also be used for installation (I recommend it!)
+>NPM can also be used for installation.
 
 >Documentation for indev builds can be found [here](https://yamdbf.js.org/indev).
 

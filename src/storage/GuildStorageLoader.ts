@@ -1,4 +1,3 @@
-import { Guild } from 'discord.js';
 import { Client } from '../client/Client';
 import { StorageProvider } from './StorageProvider';
 import { GuildStorage } from '../storage/GuildStorage';

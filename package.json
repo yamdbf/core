@@ -61,12 +61,12 @@
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.4.1",
     "gulp-tslint": "^8.1.1",
-    "gulp-typescript": "^3.1.5",
+    "gulp-typescript": "^4.0.2",
     "jsdoc": "zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "zajrik/minami",
     "run-sequence": "^1.2.2",
     "tslint": "^5.4.3",
-    "typescript": "^2.4.0"
+    "typescript": "^2.8.3"
   }
 }

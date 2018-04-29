@@ -1,15 +1,16 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
-		// "noUnusedLocals": true,
-		// "noUnusedParameters": true,
+        // "noUnusedLocals": true,
+        // "noUnusedParameters": true,
         "module": "commonjs",
         "target": "es2017",
         "lib": ["es2017"],
         "declaration": true,
         "sourceMap": true,
         "removeComments": false,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": true
     },
 	"exclude": [
 		"node_modules",
