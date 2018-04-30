@@ -234,8 +234,8 @@ class Lang {
     static loadGroupLocalizationsFrom(dir) {
         if (!Lang._instance)
             throw new Error('Lang singleton instance has not been created');
-        const file = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
         dir = path.resolve(dir);
+        const file = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
         if (!file)
             return;
         let groupInfo;
