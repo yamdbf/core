@@ -61,18 +61,20 @@ import { BaseStrings } from '..';
 export class Lang
 {
 	@logger('Lang')
-	private static _logger: Logger;
+	private static readonly _logger: Logger;
+
+	private readonly _client: Client;
+	private readonly _commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
+	private readonly _groupInfo: { [group: string]: { [lang: string]: string } };
+	private readonly _langs: { [lang: string]: Language };
+	private readonly _meta: { [lang: string]: { [key: string]: any } };
+
 	private static _instance: Lang;
-	private _client: Client;
-	private _commandInfo: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
-	private _groupInfo: { [group: string]: { [lang: string]: string } };
-	private _langs: { [lang: string]: Language };
-	private _meta: { [lang: string]: { [key: string]: any } };
 
 	private constructor(client: Client)
 	{
 		if (Lang._instance)
-			throw new Error('Cannot create multiple instances of Lang singleton. Use Lang.createInstance() instead');
+			throw new Error('Cannot create multiple instances of Lang singleton');
 
 		this._client = client;
 		this._commandInfo = {};
@@ -179,8 +181,8 @@ export class Lang
 	{
 		if (Lang.langNames.length > 1
 			&amp;&amp; (!Lang._instance._client.disableBase.includes('setlang')
-				&amp;&amp; Lang._instance._client.commands.has('setlang')
-				&amp;&amp; Lang._instance._client.commands.get('setlang').disabled))
+			&amp;&amp; Lang._instance._client.commands.has('setlang')
+			&amp;&amp; Lang._instance._client.commands.get('setlang').disabled))
 		{
 			Lang._instance._client.commands.get('setlang').enable();
 			Lang._logger.info(`Additional langugage loaded, enabled 'setlang' command.`);
@@ -202,36 +204,40 @@ export class Lang
 
 		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\.[^\/]+)?\.lang$/;
 		let langs: { [key: string]: string[] } = {};
-		let allLangFiles: string[] = [];
-		dir = path.resolve(dir);
-		allLangFiles.push(...glob.sync(`${dir}/**/*.lang`));
-		if (allLangFiles.length === 0) throw new Error(`Failed to find any localization files in: ${dir}`);
+		let files: string[] = [];
 
-		for (const langFile of allLangFiles)
+		dir = path.resolve(dir);
+		files.push(...glob.sync(`${dir}/**/*.lang`));
+
+		if (files.length === 0)
+			throw new Error(`Failed to find any localization files in: ${dir}`);
+
+		for (const file of files)
 		{
-			if (!langNameRegex.test(langFile)) continue;
-			const langName: string = langFile.match(langNameRegex)[1];
-			if (!langs[langName]) langs[langName] = [];
-			langs[langName].push(langFile);
+			if (!langNameRegex.test(file)) continue;
+			const name: string = file.match(langNameRegex)[1];
+			if (!langs[name]) langs[name] = [];
+
+			langs[name].push(file);
 		}
 
-		for (const langName of Object.keys(langs))
+		for (const lang in langs)
 		{
-			for (const langFile of langs[langName])
+			for (const file of langs[lang])
 			{
-				if (!langNameRegex.test(langFile)) continue;
-				const loadedLangFile: string = fs
-					.readFileSync(langFile)
+				if (!langNameRegex.test(file)) continue;
+				const contents: string = fs
+					.readFileSync(file)
 					.toString()
 					.replace(/\r\n/g, '\n');
 
 				const parsedLanguageFile: Language =
-					LangFileParser.parseFile(langName, loadedLangFile);
+					LangFileParser.parseFile(lang, file, contents);
 
-				if (typeof Lang._instance._langs[langName] !== 'undefined')
-					Lang._instance._langs[langName].concat(parsedLanguageFile);
+				if (typeof Lang._instance._langs[lang] !== 'undefined')
+					Lang._instance._langs[lang].concat(parsedLanguageFile);
 				else
-					Lang._instance._langs[langName] = parsedLanguageFile;
+					Lang._instance._langs[lang] = parsedLanguageFile;
 			}
 		}
 
@@ -271,17 +277,20 @@ export class Lang
 	public static loadCommandLocalizationsFrom(dir: string): void
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
-		dir = path.resolve(dir);
-		let allLangFiles: string[] = [];
-		allLangFiles.push(...glob.sync(`${dir}/**/*.lang.json`));
-		if (allLangFiles.length === 0) return;
 
-		for (const langFile of allLangFiles)
+		let files: string[] = [];
+		dir = path.resolve(dir);
+		files.push(...glob.sync(`${dir}/**/*.lang.json`));
+
+		if (files.length === 0) return;
+
+		for (const file of files)
 		{
 			// Ignore reserved commandgroups.lang.json
-			if (/commandgroups\.lang\.json$/.test(langFile)) continue;
+			if (/commandgroups\.lang\.json$/.test(file)) continue;
+
 			let localizations: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
-			try { localizations = require(langFile); }
+			try { localizations = require(file); }
 			catch { continue; }
 
 			for (const command of Object.keys(localizations))
@@ -312,13 +321,15 @@ export class Lang
 	public static loadGroupLocalizationsFrom(dir: string): void
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
+
 		dir = path.resolve(dir);
-		const filePath: string = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
-		if (!filePath) return;
+		const file: string = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
+
+		if (!file) return;
 
 		let groupInfo: { [group: string]: { [lang: string]: string } };
-		try { groupInfo = require(filePath); }
-		catch (err) { throw new Error(`Failed to load group localizations from '${filePath}:\n${err.stack}`); }
+		try { groupInfo = require(file); }
+		catch (err) { throw new Error(`Failed to load group localizations from '${file}:\n${err.stack}`); }
 
 		for (const group of Object.keys(groupInfo))
 			for (const lang of Object.keys(groupInfo[group]))
@@ -429,6 +440,7 @@ export class Lang
 	public static res(lang: string, key: string, data: TemplateData = {}): string
 	{
 		if (!Lang.langs[lang]) return `${lang}::${key}`;
+
 		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
 		const scriptTemplate: RegExp = /^{{!([\s\S]+?)!}}[\t ]*?\n?|{{!([\s\S]+?)!}}/m;
 		const strings: { [key: string]: string } = Lang.langs[lang].strings;
@@ -437,6 +449,7 @@ export class Lang
 		if (!loadedString) return `${lang}::${key}`;
 		if (typeof data === 'undefined') return loadedString;
 
+		// Handle templates
 		for (const template of Object.keys(data))
 		{
 			// Skip maybe templates so they can be removed properly later
@@ -447,6 +460,7 @@ export class Lang
 				new RegExp(`{{ *${template} *\\??}}`, 'g'), () => data[template]);
 		}
 
+		// Handle script templates
 		const scriptTemplates: RegExp = new RegExp(scriptTemplate, 'gm');
 		if (scriptTemplates.test(loadedString))
 		{
