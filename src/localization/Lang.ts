@@ -284,8 +284,8 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
-		const file: string = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
 		dir = path.resolve(dir);
+		const file: string = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
 
 		if (!file) return;
 
