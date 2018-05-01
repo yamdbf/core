@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PluginLoader - Documentation</title>
+    <title>command/CompactModeHelper.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,281 +33,100 @@
 
 
 
-
-<section>
-
-<header>
-	
     
-        <h2>
-        PluginLoader
-        </h2>
-        
-            <div class="class-description"><p>Loads plugins and holds loaded plugins in case accessing
-loaded plugins at runtime is desired</p></div>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Client } from '../client/Client';
+import { Message } from 'discord.js';
+
+type SingleUseButton = { expires: number, consumed: boolean, emoji: string, action: Function };
+
+/**
+ * Helper singleton for attaching single-use, expiring reaction buttons to
+ * Messages, to be used by the Client when compact mode is active
+ */
+export class CompactModeHelper
+{
+	private static _instance: CompactModeHelper;
+
+	private readonly _client: Client;
+	private readonly _buttons: { [identifier: string]: SingleUseButton };
+
+	private constructor(client: Client)
+	{
+		if (CompactModeHelper._instance)
+			throw new Error('Cannot create multiple instances of CompactModeHelper');
+
+		this._client = client;
+		this._buttons = {};
+
+		// Handle button clicks
+		this._client.on('messageReactionAdd', (reaction, user) => {
+			const emojiIdentifier: string = reaction.emoji.id || reaction.emoji.name;
+			const buttonIdentifier: string = `${reaction.message.id}:${emojiIdentifier}`;
+
+			if (!(buttonIdentifier in this._buttons)) return;
+			if (user.id !== reaction.message.author.id) return;
+
+			const button: SingleUseButton = this._buttons[buttonIdentifier];
+
+			if (button.consumed || button.expires &lt; Date.now()) return;
+
+			button.consumed = true;
+			button.action();
+		});
+
+		// Clean up expired/consumed buttons
+		this._client.setInterval(() => {
+			for (const identifier in this._buttons)
+			{
+				const button: SingleUseButton = this._buttons[identifier];
+				if (button.consumed || button.expires &lt; Date.now())
+					delete this._buttons[identifier];
+			}
+		}, 30e3);
+	}
+
+	/**
+	 * Create the CompactModeHelper singleton instance
+	 * >**Note:** This is called automatically by the Client.
+	 * You do not need to create your own instance
+	 * @param {Client} client YAMDBF Client instance
+	 * @returns {void}
+	 */
+	public static createInstance(client: Client): void
+	{
+		CompactModeHelper._instance = new CompactModeHelper(client);
+	}
+
+	/**
+	 * Register a single-use reaction button on a Message that will
+	 * execute the given action when clicked by the Message author.
+	 *
+	 * Buttons remain clickable for 30 seconds, or until consumed
+	 * via click by the Message author
+	 * @param {Message} message Message to register a button for
+	 * @param {string} emoji A unicode emoji, or a custom emoji ID
+	 * @param {Function} action Function to execute when the reaction button is cliecked
+	 * @returns {Promise&lt;void>}
+	 */
+	public static async registerButton(message: Message, emoji: string, action: Function): Promise&lt;void>
+	{
+		if (!CompactModeHelper._instance)
+			throw new Error('CompactModeHelper instance has not been created');
+
+		if (typeof emoji !== 'string')
+			throw new TypeError('Emoji must be a unicode string or emoji snowflake');
+
+		await message.react(emoji);
+		CompactModeHelper._instance._buttons[`${message.id}:${emoji}`] =
+			{ expires: Date.now() + 30e3, consumed: false, emoji, action };
+	}
+}
+</code></pre>
+        </article>
+    </section>
 
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="PluginLoader">
-		<span class="type-signature"></span>new <a href='#PluginLoader' style='color: black'>PluginLoader</a><span class="signature">(<span class="param-types">client: <a href="Client.html">Client</a></span>, <span class="param-types">plugins: Array&lt;(PluginConstructor|string)></span>)</span><span class="type-signature"></span>
-	</h4>
-
-    
-
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>client</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd><a href="Client.html">Client</a></dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>plugins</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>Array&lt;(<a href="global.html#PluginConstructor">PluginConstructor</a>|string)></dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/client/PluginLoader.ts#L14">client/PluginLoader.ts, Line 14</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Properties</h3>
-
-        
-            
-<h4 class="name" id="loaded">.<a href='#loaded' style='color: black'>loaded</a><span class="type-signature">: object</span></h4>
-
-<div style="border-left: solid #e6e6e6; padding-left: 10px">
-
-
-
-<div class="description">
-    <p>Object mapping Plugin names to Plugin instances</p>
-</div>
-
-
-
-    <b>Type:</b> 
-<span class="param-type"><dd>object</dd></span>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/client/PluginLoader.ts#L34">client/PluginLoader.ts, Line 34</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 

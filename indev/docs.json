@@ -1307,6 +1307,80 @@
             ]
         },
         {
+            "name": "CompactModeHelper",
+            "description": "<p>Helper singleton for attaching single-use, expiring reaction buttons to\nMessages, to be used by the Client when compact mode is active</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CompactModeHelper",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "createInstance",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Create the CompactModeHelper singleton instance</p>\n<blockquote>\n<p><strong>Note:</strong> This is called automatically by the Client.\nYou do not need to create your own instance</p>\n</blockquote>",
+                    "parameters": [
+                        {
+                            "name": "client",
+                            "type": "Client",
+                            "description": "<p>YAMDBF Client instance</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "registerButton",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Register a single-use reaction button on a Message that will\nexecute the given action when clicked by the Message author.</p>\n<p>Buttons remain clickable for 30 seconds, or until consumed\nvia click by the Message author</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "Message",
+                            "description": "<p>Message to register a button for</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "emoji",
+                            "type": "string",
+                            "description": "<p>A unicode emoji, or a custom emoji ID</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "action",
+                            "type": "function",
+                            "description": "<p>Function to execute when the reaction button is cliecked</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                }
+            ]
+        },
+        {
             "name": "RateLimit",
             "description": "<p>Maintains its own call count and expiry for making sure\nthings only happen a certain number of times within\na given timeframe</p>",
             "extends": [],

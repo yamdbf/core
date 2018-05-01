@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PluginLoader - Documentation</title>
+    <title>CompactModeHelper - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -40,11 +40,11 @@
 	
     
         <h2>
-        PluginLoader
+        CompactModeHelper
         </h2>
         
-            <div class="class-description"><p>Loads plugins and holds loaded plugins in case accessing
-loaded plugins at runtime is desired</p></div>
+            <div class="class-description"><p>Helper singleton for attaching single-use, expiring reaction buttons to
+Messages, to be used by the Client when compact mode is active</p></div>
         
     
 </header>
@@ -58,14 +58,126 @@ loaded plugins at runtime is desired</p></div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="PluginLoader">
-		<span class="type-signature"></span>new <a href='#PluginLoader' style='color: black'>PluginLoader</a><span class="signature">(<span class="param-types">client: <a href="Client.html">Client</a></span>, <span class="param-types">plugins: Array&lt;(PluginConstructor|string)></span>)</span><span class="type-signature"></span>
+    <h4 class="name" id="CompactModeHelper">
+		<span class="type-signature"></span>new <a href='#CompactModeHelper' style='color: black'>CompactModeHelper</a><span class="signature">()</span><span class="type-signature"></span>
 	</h4>
 
     
 
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/CompactModeHelper.ts#L10">command/CompactModeHelper.ts, Line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+	
+        <h3 class="subsection-title">Methods</h3>
+	
+        
+            
+
+    
+
+    <h4 class="name" id=".createInstance">
+		<span class="type-signature">(static) </span>.<a href='#createInstance' style='color: black'>createInstance</a><span class="signature">(<span class="param-types">client: <a href="Client.html">Client</a></span>)</span><span class="type-signature"> &rarr; void</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Create the CompactModeHelper singleton instance</p>
+<blockquote>
+<p><strong>Note:</strong> This is called automatically by the Client.
+You do not need to create your own instance</p>
+</blockquote>
+</div>
 
 
 
@@ -117,31 +229,7 @@ loaded plugins at runtime is desired</p></div>
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>plugins</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><dd>Array&lt;(<a href="global.html#PluginConstructor">PluginConstructor</a>|string)></dd></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
+            <td class="description last"><p>YAMDBF Client instance</p></td>
         </tr>
 
     
@@ -183,7 +271,7 @@ loaded plugins at runtime is desired</p></div>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/client/PluginLoader.ts#L14">client/PluginLoader.ts, Line 14</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/CompactModeHelper.ts#L59">command/CompactModeHelper.ts, Line 59</a>
     </li></ul></dd>
     
 
@@ -206,46 +294,152 @@ loaded plugins at runtime is desired</p></div>
 
 
 
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>void</dd></span>
+
+
+</dd>
+</span>
+
+
+    
 
 
 </div>
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Properties</h3>
 
         
             
-<h4 class="name" id="loaded">.<a href='#loaded' style='color: black'>loaded</a><span class="type-signature">: object</span></h4>
+
+    
+
+    <h4 class="name" id=".registerButton">
+		<span class="type-signature">(static) </span>.<a href='#registerButton' style='color: black'>registerButton</a><span class="signature">(<span class="param-types">message: <a href="Message.html">Message</a></span>, <span class="param-types">emoji: string</span>, <span class="param-types">action: function</span>)</span><span class="type-signature"> &rarr; Promise&lt;void></span>
+	</h4>
+
+    
+
 
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
-
-
 <div class="description">
-    <p>Object mapping Plugin names to Plugin instances</p>
+    <p>Register a single-use reaction button on a Message that will
+execute the given action when clicked by the Message author.</p>
+<p>Buttons remain clickable for 30 seconds, or until consumed
+via click by the Message author</p>
 </div>
 
 
 
-    <b>Type:</b> 
-<span class="param-type"><dd>object</dd></span>
 
 
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="Message.html">Message</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Message to register a button for</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emoji</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A unicode emoji, or a custom emoji ID</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>action</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>function</dd></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to execute when the reaction button is cliecked</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -282,7 +476,7 @@ loaded plugins at runtime is desired</p></div>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/client/PluginLoader.ts#L34">client/PluginLoader.ts, Line 34</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/CompactModeHelper.ts#L75">command/CompactModeHelper.ts, Line 75</a>
     </li></ul></dd>
     
 
@@ -297,11 +491,36 @@ loaded plugins at runtime is desired</p></div>
 
 
 
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>Promise&lt;void></dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
 </div>
 
         
-    
-
     
 
     
