@@ -23,6 +23,7 @@ const Lang_1 = require("../localization/Lang");
 const PluginLoader_1 = require("./PluginLoader");
 const Util_1 = require("../util/Util");
 const Time_1 = require("../util/Time");
+const CompactModeHelper_1 = require("../command/CompactModeHelper");
 const { on, once, registerListeners } = ListenerUtil_1.ListenerUtil;
 /**
  * The YAMDBF Client through which you can access [storage]{@link Client#storage}
@@ -187,6 +188,7 @@ class Client extends Discord.Client {
         this.argsParser = options.argsParser || Util_1.Util.parseArgs;
         Lang_1.Lang.createInstance(this);
         Lang_1.Lang.loadLocalizations();
+        CompactModeHelper_1.CompactModeHelper.createInstance(this);
         if (!this.passive) {
             this._commandLoader = new CommandLoader_1.CommandLoader(this);
             this._dispatcher = new CommandDispatcher_1.CommandDispatcher(this);
