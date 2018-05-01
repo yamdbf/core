@@ -1366,7 +1366,7 @@
                         {
                             "name": "action",
                             "type": "function",
-                            "description": "<p>Function to execute when the reaction button is cliecked</p>",
+                            "description": "<p>Function to execute when the reaction button is clicked</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
