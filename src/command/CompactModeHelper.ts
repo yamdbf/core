@@ -69,7 +69,7 @@ export class CompactModeHelper
 	 * via click by the Message author
 	 * @param {Message} message Message to register a button for
 	 * @param {string} emoji A unicode emoji, or a custom emoji ID
-	 * @param {Function} action Function to execute when the reaction button is cliecked
+	 * @param {Function} action Function to execute when the reaction button is clicked
 	 * @returns {Promise<void>}
 	 */
 	public static async registerButton(message: Message, emoji: string, action: Function): Promise<void>
