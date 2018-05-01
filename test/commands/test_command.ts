@@ -6,7 +6,8 @@ import {
 	Logger,
 	logger,
 	ResourceLoader,
-	Middleware
+	Middleware,
+	CompactModeHelper
 } from '../../bin';
 import * as util from 'util';
 const { using, guildOnly, group, ownerOnly } = CommandDecorators;
@@ -45,12 +46,21 @@ export default class extends Command
 	// @using(localize)
 	@using(resolve('foo: CommandGroup'))
 	@using(expect('foo: CommandGroup'))
-	public action(message: Message, [res, ...args]: [ResourceLoader, string[]]): void
+	public async action(message: Message, [res, ...args]: [ResourceLoader, string[]]): Promise<void>
 	{
 		// message.channel.send(res('FOO_BAR_BAZ'));
 		// message.channel.send(args.join(' ') || 'MISSING ARGS');
 		// this.logger.debug('Command:test', util.inspect(this.group));
 		// // throw new Error('foo');
-		message.channel.send('Test command called');
+		// message.channel.send('Test command called');
+		await CompactModeHelper.registerButton(message, '❌', () => {
+			message.channel.send('X clicked');
+		});
+		await CompactModeHelper.registerButton(message, '✅', () => {
+			message.channel.send('Check clicked');
+		});
+		await CompactModeHelper.registerButton(message, '274295184957898752', () => {
+			message.channel.send('Lul clicked');
+		});
 	}
 }

@@ -41,6 +41,7 @@ import { ResolverConstructor } from '../types/ResolverConstructor';
 import { Util } from '../util/Util';
 import { Time } from '../util/Time';
 import { GuildStorage } from '../storage/GuildStorage';
+import { CompactModeHelper } from '../command/CompactModeHelper';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -267,6 +268,8 @@ export class Client extends Discord.Client
 
 		Lang.createInstance(this);
 		Lang.loadLocalizations();
+
+		CompactModeHelper.createInstance(this);
 
 		if (!this.passive)
 		{
