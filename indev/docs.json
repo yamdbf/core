@@ -228,6 +228,28 @@
                     }
                 },
                 {
+                    "name": "compact",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not compact mode is enabled.</p>\n<blockquote>\n<p><strong>Note:</strong> Compact mode is disabled for selfbots</p>\n</blockquote>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
+                    "name": "buttons",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Button shortcuts for compact mode. Defaults are\n<code>success</code>, <code>fail</code>, and <code>working</code>. These can be overwritten\nvia the <code>buttons</code> field in {@link YAMDBFOptions}</p>",
+                    "type": {
+                        "names": [
+                            "object"
+                        ]
+                    }
+                },
+                {
                     "name": "argsParser",
                     "access": "",
                     "virtual": false,
@@ -958,43 +980,6 @@
                     }
                 },
                 {
-                    "name": "respond",
-                    "access": "protected",
-                    "virtual": false,
-                    "description": "<p>Send provided response to the provided message's channel\nvia edit or send, depending on whether or not the client is\na selfbot</p>",
-                    "parameters": [
-                        {
-                            "name": "message",
-                            "type": "external:Message",
-                            "description": "<p>Discord.js Message object</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "response",
-                            "type": "string",
-                            "description": "<p>String to send</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "options",
-                            "type": "external:MessageOptions",
-                            "description": "<p>Optional Discord.js MessageOptions</p>",
-                            "default": "",
-                            "optional": true,
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<(external:Message|Array.<external:Message>)>",
-                        "description": ""
-                    }
-                },
-                {
                     "name": "_validatePermissions",
                     "access": "private",
                     "virtual": false,
@@ -1345,7 +1330,7 @@
                     "name": "registerButton",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Register a single-use reaction button on a Message that will\nexecute the given action when clicked by the Message author.</p>\n<p>Buttons remain clickable for 30 seconds, or until consumed\nvia click by the Message author</p>",
+                    "description": "<p>Register a single-use reaction button on a Message that will\nexecute the given action when clicked by the Message author.</p>\n<p>Buttons remain clickable for the given lifespan (30 seconds by\ndefault), or until consumed via click by the Message author</p>",
                     "parameters": [
                         {
                             "name": "message",
@@ -1369,6 +1354,14 @@
                             "description": "<p>Function to execute when the reaction button is clicked</p>",
                             "default": "",
                             "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "lifespan",
+                            "type": "number",
+                            "description": "<p>Lifespan of the button in MS</p>",
+                            "default": 30000,
+                            "optional": true,
                             "nullable": ""
                         }
                     ],
@@ -3509,6 +3502,20 @@
             "properties": []
         },
         {
+            "name": "RespondOptions",
+            "description": "<p>Object consisting of {@link external:MessageOptions} and\nan optional <code>button</code> string field for compact mode support</p>",
+            "properties": [
+                {
+                    "name": "button",
+                    "type": "string",
+                    "description": "<p>Unicode emoji string, custom enoji ID, or a key from the\n                               Client's <code>buttons</code> map</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ]
+        },
+        {
             "name": "StorageProviderConstructor",
             "description": "<p>Any class that extends and\nimplements {@link StorageProvider} and provides an interface with a storage\nmedium allowing data to be stored, retrieved, and manipulated. <em>Not\nto be confused with an <strong>instance</strong> of a storage provider.</em></p>",
             "properties": []
@@ -3699,6 +3706,22 @@
                     "description": "<p>Function taking an input string, an optional {@link Command} object,\n                                     and an optional {@link Message} object that returns an array of argument\n                                     strings. Should be used instead of middleware for providing an\n                                     alternative to the default args parsing of splitting input on the\n                                     Command's specified argument separator</p>",
                     "default": "",
                     "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "buttons",
+                    "type": "object",
+                    "description": "<p>Object mapping keys for easy access to unicode emoji strings or custom\n                                emoji id strings. To be used by the Client when compact mode is active<br>\n                                See: {@link Client#buttons}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "description": "<p>Whether or not compact mode should be used</p>",
+                    "default": "",
+                    "optional": "",
                     "nullable": ""
                 }
             ]
