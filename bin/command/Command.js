@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const Util_1 = require("../util/Util");
+const CompactModeHelper_1 = require("./CompactModeHelper");
 /**
  * Command class to extend to create commands users can execute
  * @param {CommandInfo} info - Object containing required command properties
@@ -269,19 +270,16 @@ class Command {
         this._middleware.push(func);
         return this;
     }
-    /**
-     * Send provided response to the provided message's channel
-     * via edit or send, depending on whether or not the client is
-     * a selfbot
-     * @protected
-     * @param {external:Message} message Discord.js Message object
-     * @param {string} response String to send
-     * @param {external:MessageOptions} [options] Optional Discord.js MessageOptions
-     * @returns {Promise<external:Message | external:Message[]>}
-     */
-    respond(message, response, options) {
+    async respond(...args) {
+        const [message, response, options] = args;
         if (this.client.selfbot)
             return message.edit(response, options);
+        if (typeof options !== 'undefined'
+            && typeof options.button !== 'undefined'
+            && (await message.guild.storage.settings.get('compact') || this.client.compact)) {
+            CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons[options.button] || options.button, () => message.channel.send(response));
+            return;
+        }
         return message.channel.send(response, options);
     }
     /**

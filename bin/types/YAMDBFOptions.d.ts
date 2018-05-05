@@ -25,6 +25,10 @@
  * 									 strings. Should be used instead of middleware for providing an
  * 									 alternative to the default args parsing of splitting input on the
  * 									 Command's specified argument separator
+ * @property {object} [buttons] Object mapping keys for easy access to unicode emoji strings or custom
+ * 								emoji id strings. To be used by the Client when compact mode is active<br>
+ * 								See: {@link Client#buttons}
+ * @property {boolean} compact Whether or not compact mode should be used
  */
 import { StorageProviderConstructor } from './StorageProviderConstructor';
 import { PluginConstructor } from './PluginConstructor';
@@ -53,4 +57,8 @@ export declare type YAMDBFOptions = {
     plugins?: (PluginConstructor | string)[];
     customResolvers?: ResolverConstructor[];
     argsParser?: (input: string, command?: Command, message?: Message) => string[];
+    buttons?: {
+        [key: string]: string;
+    };
+    compact?: boolean;
 };

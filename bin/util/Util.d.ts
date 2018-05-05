@@ -136,4 +136,13 @@ export declare class Util {
      * @returns {any[]}
      */
     static flattenArray<T>(array: (T | T[])[]): T[];
+    /**
+     * Assign default properties to the given object via a defaults object
+     * @static
+     * @method mergeDefaults
+     * @param {object} base
+     * @param {object} defaults
+     * @returns {object}
+     */
+    static mergeDefaults<T, U>(base: T, defaults: U): T & U;
 }

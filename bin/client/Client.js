@@ -180,6 +180,26 @@ class Client extends Discord.Client {
         this._customResolvers = options.customResolvers || [];
         this.resolvers._loadResolvers();
         /**
+         * Whether or not compact mode is enabled.
+         *
+         * >**Note:** Compact mode is disabled for selfbots
+         * @type {boolean}
+         */
+        this.compact = options.compact || false;
+        if (this.selfbot)
+            this.compact = false;
+        /**
+         * Button shortcuts for compact mode. Defaults are
+         * `success`, `fail`, and `working`. These can be overwritten
+         * via the `buttons` field in {@link YAMDBFOptions}
+         * @type {object}
+         */
+        this.buttons = Util_1.Util.mergeDefaults({
+            success: '✅',
+            fail: '❌',
+            working: '🕐'
+        }, options.buttons || {});
+        /**
          * The argument parsing function the framework will use to parse
          * command arguments from message content input. Defaults to
          * splitting on {@link Command#argOpts.separator}

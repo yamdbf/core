@@ -46,6 +46,10 @@ export declare class Client extends Discord.Client {
     readonly rateLimitManager: RateLimitManager;
     readonly resolvers: ResolverLoader;
     readonly argsParser: (input: string, command?: Command, message?: Message) => string[];
+    readonly buttons: {
+        [key: string]: string;
+    };
+    readonly compact: boolean;
     readonly _middleware: MiddlewareFunction[];
     readonly _customResolvers: ResolverConstructor[];
     constructor(options: YAMDBFOptions, clientOptions?: ClientOptions);

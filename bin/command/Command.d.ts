@@ -1,8 +1,10 @@
-import { PermissionResolvable, Message, MessageOptions } from 'discord.js';
+import { PermissionResolvable, MessageOptions } from 'discord.js';
 import { Client } from '../client/Client';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
 import { ArgOpts } from '../types/ArgOpts';
+import { Message } from '../types/Message';
+import { RespondOptions } from '../types/RespondOptions';
 /**
  * Command class to extend to create commands users can execute
  * @param {CommandInfo} info - Object containing required command properties
@@ -111,10 +113,11 @@ export declare class Command<T extends Client = Client> {
      * @protected
      * @param {external:Message} message Discord.js Message object
      * @param {string} response String to send
-     * @param {external:MessageOptions} [options] Optional Discord.js MessageOptions
+     * @param {RespondOptions} [options] Optional options for the response
      * @returns {Promise<external:Message | external:Message[]>}
      */
     protected respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>;
+    protected respond(message: Message, response: string, options?: RespondOptions): Promise<void>;
     /**
      * Validate PermissionResolvables in the given array, throwing an error
      * for any that are invalid
