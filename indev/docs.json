@@ -980,6 +980,43 @@
                     }
                 },
                 {
+                    "name": "respond",
+                    "access": "protected",
+                    "virtual": false,
+                    "description": "<p>Send provided response to the provided message's channel\nvia edit or send, depending on whether or not the client is\na selfbot</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "response",
+                            "type": "string",
+                            "description": "<p>String to send</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "options",
+                            "type": "RespondOptions",
+                            "description": "<p>Optional options for the response</p>",
+                            "default": "",
+                            "optional": true,
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<(external:Message|Array.<external:Message>)>",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "_validatePermissions",
                     "access": "private",
                     "virtual": false,

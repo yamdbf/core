@@ -1955,6 +1955,238 @@ are ready for use.</p>
 
     
 
+    <h4 class="name" id="respond">
+		<span class="type-signature">(protected) </span>.<a href='#respond' style='color: black'>respond</a><span class="signature">(<span class="param-types">message: <a href="external-Message.html">Message</a></span>, <span class="param-types">response: string</span>, <span class="param-types">options?: <a href="global.html#RespondOptions">RespondOptions</a></span>)</span><span class="type-signature"> &rarr; Promise&lt;<a href="external-Message.html">Message</a> | <a href="external-Message.html">Message</a>[]></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Send provided response to the provided message's channel
+via edit or send, depending on whether or not the client is
+a selfbot</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="external-Message.html">Message</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Discord.js Message object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>response</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd>string</dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>String to send</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><dd><a href="global.html#RespondOptions">RespondOptions</a></dd></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional options for the response</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/command/Command.ts#L341">command/Command.ts, Line 341</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>Promise&lt;<a href="external-Message.html">Message</a> | <a href="external-Message.html">Message</a>[]></dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
     <h4 class="name" id="use">
 		<span class="type-signature"></span>.<a href='#use' style='color: black'>use</a><span class="signature">(<span class="param-types">func: <a href="global.html#MiddlewareFunction">MiddlewareFunction</a></span>)</span><span class="type-signature"> &rarr; <a href="Command.html">Command</a></span>
 	</h4>
