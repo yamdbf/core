@@ -326,6 +326,8 @@ export class Command<T extends Client = Client>
 		return this;
 	}
 
+	protected async respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>;
+	protected async respond(message: Message, response: string, options?: RespondOptions): Promise<void>;
 	/**
 	 * Send provided response to the provided message's channel
 	 * via edit or send, depending on whether or not the client is
@@ -336,8 +338,6 @@ export class Command<T extends Client = Client>
 	 * @param {RespondOptions} [options] Optional options for the response
 	 * @returns {Promise<external:Message | external:Message[]>}
 	 */
-	protected async respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>;
-	protected async respond(message: Message, response: string, options?: RespondOptions): Promise<void>;
 	protected async respond(...args: any[]): Promise<any>
 	{
 		const [message, response, options]: [Message, string, RespondOptions] = args as any;
