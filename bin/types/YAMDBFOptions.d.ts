@@ -28,7 +28,7 @@
  * @property {object} [buttons] Object mapping keys for easy access to unicode emoji strings or custom
  * 								emoji id strings. To be used by the Client when compact mode is active<br>
  * 								See: {@link Client#buttons}
- * @property {boolean} compact Whether or not compact mode should be used
+ * @property {boolean} [compact=false] Whether or not compact mode should be used
  */
 import { StorageProviderConstructor } from './StorageProviderConstructor';
 import { PluginConstructor } from './PluginConstructor';
