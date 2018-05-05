@@ -106,16 +106,6 @@ export declare class Command<T extends Client = Client> {
      * @returns {Command}
      */
     use(func: MiddlewareFunction): this;
-    /**
-     * Send provided response to the provided message's channel
-     * via edit or send, depending on whether or not the client is
-     * a selfbot
-     * @protected
-     * @param {external:Message} message Discord.js Message object
-     * @param {string} response String to send
-     * @param {RespondOptions} [options] Optional options for the response
-     * @returns {Promise<external:Message | external:Message[]>}
-     */
     protected respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>;
     protected respond(message: Message, response: string, options?: RespondOptions): Promise<void>;
     /**

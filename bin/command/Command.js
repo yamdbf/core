@@ -270,6 +270,16 @@ class Command {
         this._middleware.push(func);
         return this;
     }
+    /**
+     * Send provided response to the provided message's channel
+     * via edit or send, depending on whether or not the client is
+     * a selfbot
+     * @protected
+     * @param {external:Message} message Discord.js Message object
+     * @param {string} response String to send
+     * @param {RespondOptions} [options] Optional options for the response
+     * @returns {Promise<external:Message | external:Message[]>}
+     */
     async respond(...args) {
         const [message, response, options] = args;
         if (this.client.selfbot)
