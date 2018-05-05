@@ -39,6 +39,8 @@ class Test extends Client
 			// disableBase: Util.baseCommandNames
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 			dmHelp: false,
+			compact: true,
+			buttons: { success: '274295184957898752' }
 		});
 
 		Lang.setMetaValue('al_bhed', 'name', 'Al Bhed');

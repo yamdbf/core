@@ -53,14 +53,15 @@ export default class extends Command
 		// this.logger.debug('Command:test', util.inspect(this.group));
 		// // throw new Error('foo');
 		// message.channel.send('Test command called');
-		await CompactModeHelper.registerButton(message, '❌', () => {
-			message.channel.send('X clicked');
-		});
-		await CompactModeHelper.registerButton(message, '✅', () => {
-			message.channel.send('Check clicked');
-		});
-		await CompactModeHelper.registerButton(message, '274295184957898752', () => {
-			message.channel.send('Lul clicked');
-		});
+		// await CompactModeHelper.registerButton(message, '❌', () => {
+		// 	message.channel.send('X clicked');
+		// });
+		// await CompactModeHelper.registerButton(message, '✅', () => {
+		// 	message.channel.send('Check clicked');
+		// });
+		// await CompactModeHelper.registerButton(message, '274295184957898752', () => {
+		// 	message.channel.send('Lul clicked');
+		// });
+		let result = this.respond(message, 'foo bar baz', { button: 'success' });
 	}
 }

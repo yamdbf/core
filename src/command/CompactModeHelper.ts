@@ -65,14 +65,15 @@ export class CompactModeHelper
 	 * Register a single-use reaction button on a Message that will
 	 * execute the given action when clicked by the Message author.
 	 *
-	 * Buttons remain clickable for 30 seconds, or until consumed
-	 * via click by the Message author
+	 * Buttons remain clickable for the given lifespan (30 seconds by
+	 * default), or until consumed via click by the Message author
 	 * @param {Message} message Message to register a button for
 	 * @param {string} emoji A unicode emoji, or a custom emoji ID
 	 * @param {Function} action Function to execute when the reaction button is clicked
+	 * @param {number} [lifespan=30000] Lifespan of the button in MS
 	 * @returns {Promise<void>}
 	 */
-	public static async registerButton(message: Message, emoji: string, action: Function): Promise<void>
+	public static async registerButton(message: Message, emoji: string, action: Function, lifespan: number = 30e3): Promise<void>
 	{
 		if (!CompactModeHelper._instance)
 			throw new Error('CompactModeHelper instance has not been created');
@@ -82,6 +83,6 @@ export class CompactModeHelper
 
 		await message.react(emoji);
 		CompactModeHelper._instance._buttons[`${message.id}:${emoji}`] =
-			{ expires: Date.now() + 30e3, consumed: false, emoji, action };
+			{ expires: Date.now() + lifespan, consumed: false, emoji, action };
 	}
 }

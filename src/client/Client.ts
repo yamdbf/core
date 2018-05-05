@@ -82,6 +82,8 @@ export class Client extends Discord.Client
 	public readonly rateLimitManager: RateLimitManager;
 	public readonly resolvers: ResolverLoader;
 	public readonly argsParser: (input: string, command?: Command, message?: Message) => string[];
+	public readonly buttons: { [key: string]: string };
+	public readonly compact: boolean;
 
 	// Internals
 	public readonly _middleware: MiddlewareFunction[];
@@ -257,6 +259,27 @@ export class Client extends Discord.Client
 		this.resolvers = new ResolverLoader(this);
 		this._customResolvers = options.customResolvers || [];
 		this.resolvers._loadResolvers();
+
+		/**
+		 * Whether or not compact mode is enabled.
+		 *
+		 * >**Note:** Compact mode is disabled for selfbots
+		 * @type {boolean}
+		 */
+		this.compact = options.compact || false;
+		if (this.selfbot) this.compact = false;
+
+		/**
+		 * Button shortcuts for compact mode. Defaults are
+		 * `success`, `fail`, and `working`. These can be overwritten
+		 * via the `buttons` field in {@link YAMDBFOptions}
+		 * @type {object}
+		 */
+		this.buttons = Util.mergeDefaults({
+			success: '✅',
+			fail: '❌',
+			working: '🕐'
+		}, options.buttons || {});
 
 		/**
 		 * The argument parsing function the framework will use to parse

@@ -1,9 +1,12 @@
-import { PermissionResolvable, Permissions, Message, MessageOptions } from 'discord.js';
+import { PermissionResolvable, Permissions, MessageOptions } from 'discord.js';
 import { Client } from '../client/Client';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { CommandInfo } from '../types/CommandInfo';
 import { ArgOpts } from '../types/ArgOpts';
 import { Util } from '../util/Util';
+import { Message } from '../types/Message';
+import { CompactModeHelper } from './CompactModeHelper';
+import { RespondOptions } from '../types/RespondOptions';
 
 /**
  * Command class to extend to create commands users can execute
@@ -330,12 +333,27 @@ export class Command<T extends Client = Client>
 	 * @protected
 	 * @param {external:Message} message Discord.js Message object
 	 * @param {string} response String to send
-	 * @param {external:MessageOptions} [options] Optional Discord.js MessageOptions
+	 * @param {RespondOptions} [options] Optional options for the response
 	 * @returns {Promise<external:Message | external:Message[]>}
 	 */
-	protected respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>
+	protected async respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>;
+	protected async respond(message: Message, response: string, options?: RespondOptions): Promise<void>;
+	protected async respond(...args: any[]): Promise<any>
 	{
+		const [message, response, options]: [Message, string, RespondOptions] = args as any;
+
 		if (this.client.selfbot) return message.edit(response, options);
+		if (typeof options !== 'undefined'
+			&& typeof options.button !== 'undefined'
+			&& (await message.guild.storage.settings.get('compact') || this.client.compact))
+		{
+			CompactModeHelper.registerButton(
+				message,
+				this.client.buttons[options.button] || options.button,
+				() => message.channel.send(response));
+			return;
+		}
+
 		return message.channel.send(response, options);
 	}
 
