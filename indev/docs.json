@@ -3757,8 +3757,8 @@
                     "name": "compact",
                     "type": "boolean",
                     "description": "<p>Whether or not compact mode should be used</p>",
-                    "default": "",
-                    "optional": "",
+                    "default": false,
+                    "optional": true,
                     "nullable": ""
                 }
             ]
