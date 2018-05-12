@@ -1,9 +1,15 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const RateLimit_1 = require("./RateLimit");
 const Util_1 = require("../util/Util");
-const Logger_1 = require("../util/logger/Logger");
+const DeprecatedClassDecorator_1 = require("../util/DeprecatedClassDecorator");
 /**
  * Handles assigning ratelimits to guildmembers and users
  * @deprecated Will be removed in a future release. Use {@link RateLimitManager} instead
@@ -11,9 +17,8 @@ const Logger_1 = require("../util/logger/Logger");
  * 						 **Example:** `1/10m` to limit a command to one use per 10 minutes
  * @param {boolean} global Whether or not this RateLimiter handles global ratelimits
  */
-class RateLimiter {
+let RateLimiter = class RateLimiter {
     constructor(limit, global) {
-        Logger_1.Logger.instance().warn('Deprecation', 'RateLimiter: Use RateLimitManager instead');
         this._limit = Util_1.Util.parseRateLimit(limit);
         this._global = global;
         this._rateLimits = new discord_js_1.Collection();
@@ -50,7 +55,10 @@ class RateLimiter {
     _isGlobal(message) {
         return message ? message.channel.type !== 'text' || this._global : this._global;
     }
-}
+};
+RateLimiter = __decorate([
+    DeprecatedClassDecorator_1.deprecatedClass('Class `RateLimiter` is deprecated. Use `RateLimitManager` instead')
+], RateLimiter);
 exports.RateLimiter = RateLimiter;
 
 //# sourceMappingURL=RateLimiter.js.map
