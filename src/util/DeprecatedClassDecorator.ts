@@ -1,5 +1,5 @@
 export function deprecatedClass(message: string): ClassDecorator;
-export function deprecatedClass<T>(target: T, key: PropertyKey): void;
+export function deprecatedClass<T>(target: T): T;
 /**
  * Logs a deprecation warning for the decorated class if
  * an instance is created
