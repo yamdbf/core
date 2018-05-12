@@ -1380,7 +1380,7 @@
                         {
                             "name": "emoji",
                             "type": "string",
-                            "description": "<p>A unicode emoji, or a custom emoji ID</p>",
+                            "description": "<p>A unicode emoji, custom emoji ID, or a button\n                         key from {@link Client#buttons}</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
