@@ -51,7 +51,8 @@ export { BaseStrings } from './localization/BaseStrings';
 export { ResourceLoader } from './types/ResourceLoader';
 export { ResourceProxy } from './types/ResourceProxy';
 
-export { deprecated } from './util/DeprecatedDecorator';
+export { deprecatedMethod } from './util/DeprecatedMethodDecorator';
+export { deprecatedClass } from './util/DeprecatedClassDecorator';
 
 export { ListenerUtil } from './util/ListenerUtil';
 

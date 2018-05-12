@@ -2,7 +2,7 @@ import { Collection, User } from 'discord.js';
 import { RateLimit } from './RateLimit';
 import { Message } from '../types/Message';
 import { Util } from '../util/Util';
-import { Logger } from '../util/logger/Logger';
+import { deprecatedClass } from '../util/DeprecatedClassDecorator';
 
 /**
  * Handles assigning ratelimits to guildmembers and users
@@ -11,6 +11,7 @@ import { Logger } from '../util/logger/Logger';
  * 						 **Example:** `1/10m` to limit a command to one use per 10 minutes
  * @param {boolean} global Whether or not this RateLimiter handles global ratelimits
  */
+@deprecatedClass('Class `RateLimiter` is deprecated. Use `RateLimitManager` instead')
 export class RateLimiter
 {
 	private readonly _limit: [number, number];
@@ -20,8 +21,6 @@ export class RateLimiter
 
 	public constructor(limit: string, global: boolean)
 	{
-		Logger.instance().warn('Deprecation', 'RateLimiter: Use RateLimitManager instead');
-
 		this._limit = Util.parseRateLimit(limit);
 		this._global = global;
 
