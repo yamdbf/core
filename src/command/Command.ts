@@ -347,7 +347,7 @@ export class Command<T extends Client = Client>
 			&& typeof options.button !== 'undefined'
 			&& (await message.guild.storage.settings.get('compact') || this.client.compact))
 		{
-			await message.clearReactions();
+			if (message.reactions.size > 0) await message.clearReactions();
 			CompactModeHelper.registerButton(
 				message,
 				this.client.buttons[options.button] || options.button,
