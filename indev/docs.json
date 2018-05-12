@@ -3786,10 +3786,31 @@
     ],
     "functions": [
         {
-            "name": "deprecated",
+            "name": "deprecatedClass",
             "access": "",
             "virtual": false,
-            "description": "<p>Logs a deprecation warning for the decorated class method\nwhenever it is called</p>",
+            "description": "<p>Logs a deprecation warning for the decorated class if\nan instance is created</p>",
+            "parameters": [
+                {
+                    "name": "message",
+                    "type": "string",
+                    "description": "<p>Class deprecation message</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                }
+            ],
+            "examples": [],
+            "returns": {
+                "type": "ClassDecorator",
+                "description": ""
+            }
+        },
+        {
+            "name": "deprecatedMethod",
+            "access": "",
+            "virtual": false,
+            "description": "<p>Logs a deprecation warning for the decorated class method\nif it is called within the current process</p>",
             "parameters": [
                 {
                     "name": "message",
