@@ -50,7 +50,8 @@ class CompactModeHelper {
      * Buttons remain clickable for the given lifespan (30 seconds by
      * default), or until consumed via click by the Message author
      * @param {Message} message Message to register a button for
-     * @param {string} emoji A unicode emoji, or a custom emoji ID
+     * @param {string} emoji A unicode emoji, custom emoji ID, or a button
+     * 						 key from {@link Client#buttons}
      * @param {Function} action Function to execute when the reaction button is clicked
      * @param {number} [lifespan=30000] Lifespan of the button in MS
      * @returns {Promise<void>}
@@ -60,6 +61,8 @@ class CompactModeHelper {
             throw new Error('CompactModeHelper instance has not been created');
         if (typeof emoji !== 'string')
             throw new TypeError('Emoji must be a unicode string or emoji snowflake');
+        if (CompactModeHelper._instance._client.buttons[emoji])
+            emoji = CompactModeHelper._instance._client.buttons[emoji];
         await message.react(emoji);
         CompactModeHelper._instance._buttons[`${message.id}:${emoji}`] =
             { expires: Date.now() + lifespan, consumed: false, emoji, action };
