@@ -17,23 +17,23 @@ function deprecatedMethod(...decoratorArgs) {
         warnCache[warning] = true;
         process.emitWarning(warning, 'DeprecationWarning');
     }
-    if (typeof message !== 'string') {
-        const [target, key] = decoratorArgs;
-        message = `\`${target.constructor.name}#${key}()\` is deprecated and will be removed in a future release`;
-        emitDeprecationWarning(message);
-    }
-    else {
-        return function (target, key, descriptor) {
-            if (!descriptor)
-                descriptor = Object.getOwnPropertyDescriptor(target, key);
-            const original = descriptor.value;
-            descriptor.value = function (...args) {
-                emitDeprecationWarning(message);
-                return original.apply(this, args);
-            };
-            return descriptor;
+    function decorate(target, key, descriptor) {
+        if (!descriptor)
+            descriptor = Object.getOwnPropertyDescriptor(target, key);
+        const original = descriptor.value;
+        descriptor.value = function (...args) {
+            emitDeprecationWarning(message);
+            return original.apply(this, args);
         };
+        return descriptor;
     }
+    if (typeof message !== 'string') {
+        const [target, key, descriptor] = decoratorArgs;
+        message = `\`${target.constructor.name}#${key}()\` is deprecated and will be removed in a future release`;
+        return decorate(target, key, descriptor);
+    }
+    else
+        return decorate;
 }
 exports.deprecatedMethod = deprecatedMethod;
 
