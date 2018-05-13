@@ -1,12 +1,12 @@
 export function deprecatedClass(message: string): ClassDecorator;
-export function deprecatedClass<T>(target: T): T;
+export function deprecatedClass<T extends new (...args: any[]) => any>(target: T): T;
 /**
  * Logs a deprecation warning for the decorated class if
  * an instance is created
  * @param {string} [message] Class deprecation message
  * @returns {ClassDecorator}
  */
-export function deprecatedClass<T extends new (...args: any[]) => any>(...decoratorArgs: any[]): any
+export function deprecatedClass<T extends new (...args: any[]) => any>(...decoratorArgs: any[]): ClassDecorator | T
 {
 	if (typeof (deprecatedClass as any).warnCache === 'undefined') (deprecatedClass as any).warnCache = {};
 	const warnCache: { [key: string]: boolean } = (deprecatedClass as any).warnCache;
@@ -35,8 +35,7 @@ export function deprecatedClass<T extends new (...args: any[]) => any>(...decora
 	{
 		const [target]: [T] = decoratorArgs as any;
 		message = `Class \`${target.name}\` is deprecated and will be removed in a future release`;
-
 		return decorate(target);
 	}
-	else return decorate;
+	else return decorate as ClassDecorator;
 }
