@@ -386,7 +386,7 @@ the provided initial object</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L115">util/Util.ts, Line 115</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L117">util/Util.ts, Line 117</a>
     </li></ul></dd>
     
 
@@ -540,7 +540,7 @@ the provided initial object</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L103">util/Util.ts, Line 103</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L105">util/Util.ts, Line 105</a>
     </li></ul></dd>
     
 
@@ -694,7 +694,7 @@ the provided initial object</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L270">util/Util.ts, Line 270</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L272">util/Util.ts, Line 272</a>
     </li></ul></dd>
     
 
@@ -873,7 +873,7 @@ provided path</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L165">util/Util.ts, Line 165</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L167">util/Util.ts, Line 167</a>
     </li></ul></dd>
     
 
@@ -1051,7 +1051,7 @@ provided path</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L287">util/Util.ts, Line 287</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L289">util/Util.ts, Line 289</a>
     </li></ul></dd>
     
 
@@ -1206,7 +1206,7 @@ alphanumeric chars removed</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L90">util/Util.ts, Line 90</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L92">util/Util.ts, Line 92</a>
     </li></ul></dd>
     
 
@@ -1310,7 +1310,7 @@ alphanumeric chars removed</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L257">util/Util.ts, Line 257</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L259">util/Util.ts, Line 259</a>
     </li></ul></dd>
     
 
@@ -1488,7 +1488,7 @@ alphanumeric chars removed</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L76">util/Util.ts, Line 76</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L78">util/Util.ts, Line 78</a>
     </li></ul></dd>
     
 
@@ -1538,7 +1538,7 @@ alphanumeric chars removed</p>
     
 
     <h4 class="name" id=".parseArgs">
-		<span class="type-signature">(static) </span>.<a href='#parseArgs' style='color: black'>parseArgs</a><span class="signature">(<span class="param-types">input: string</span>, <span class="param-types">command: <a href="Command.html">Command</a></span>)</span><span class="type-signature"> &rarr; string[]</span>
+		<span class="type-signature">(static) </span>.<a href='#parseArgs' style='color: black'>parseArgs</a><span class="signature">(<span class="param-types">input: string</span>, <span class="param-types">command?: <a href="Command.html">Command</a></span>)</span><span class="type-signature"> &rarr; string[]</span>
 	</h4>
 
     
@@ -1571,6 +1571,8 @@ alphanumeric chars removed</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1597,6 +1599,14 @@ alphanumeric chars removed</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -1621,10 +1631,21 @@ alphanumeric chars removed</p>
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Command object, used to determine the args separator</p></td>
+            <td class="description last"><p>Command object, used to determine the args separator.
+                              If none is given, <code>' '</code> will be used as the separator</p></td>
         </tr>
 
     
@@ -1831,7 +1852,7 @@ Normal args will convert to <code>'&lt;arg&gt;': 'String'</code></p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L187">util/Util.ts, Line 187</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L189">util/Util.ts, Line 189</a>
     </li></ul></dd>
     
 
@@ -2009,7 +2030,7 @@ Normal args will convert to <code>'&lt;arg&gt;': 'String'</code></p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L142">util/Util.ts, Line 142</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/util/Util.ts#L144">util/Util.ts, Line 144</a>
     </li></ul></dd>
     
 

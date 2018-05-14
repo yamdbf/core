@@ -503,6 +503,39 @@
                     "examples": []
                 },
                 {
+                    "name": "event:unknownCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Emitted whenever a command is called that doesn't exist</p>",
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "description": "<p>The name of the command that was attempted to be called</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>Args passed to the unknown command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Message that triggered the unknown command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
                     "name": "event:blacklistAdd",
                     "access": "",
                     "virtual": false,
