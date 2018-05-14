@@ -351,7 +351,7 @@ export class Command<T extends Client = Client>
 			CompactModeHelper.registerButton(
 				message,
 				this.client.buttons[options.button] || options.button,
-				() => message.channel.send(response));
+				() => message.channel.send(response, options));
 			return;
 		}
 

@@ -97,6 +97,8 @@ export class CommandDispatcher
 			if (dm && this._client.unknownCommandError)
 				message.channel.send(this.unknownCommandError(res));
 
+			// Emit an `unknownCommand` event and return if no
+			// command or shortcut was called
 			if (!commandWasCalled)
 			{
 				const call: RegExp = new RegExp(`^${Util.escape(prefix || '')} *${name}`);
