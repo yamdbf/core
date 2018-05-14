@@ -49,6 +49,9 @@ class CompactModeHelper {
      *
      * Buttons remain clickable for the given lifespan (30 seconds by
      * default), or until consumed via click by the Message author
+     *
+     * >If the Client doesn't have permissions to add reactions the
+     * given action function will be invoked immediately
      * @param {Message} message Message to register a button for
      * @param {string} emoji A unicode emoji, custom emoji ID, or a button
      * 						 key from {@link Client#buttons}
@@ -63,9 +66,24 @@ class CompactModeHelper {
             throw new TypeError('Emoji must be a unicode emoji, custom emoji id, or client button key');
         if (CompactModeHelper._instance._client.buttons[emoji])
             emoji = CompactModeHelper._instance._client.buttons[emoji];
-        await message.react(emoji);
-        CompactModeHelper._instance._buttons[`${message.id}:${emoji}`] =
-            { expires: Date.now() + lifespan, consumed: false, emoji, action };
+        let clientMember;
+        let invokeImmediately = false;
+        if (message.channel.type === 'text')
+            try {
+                clientMember = await message.guild.fetchMember(CompactModeHelper._instance._client.user);
+            }
+            catch (_a) {
+                invokeImmediately = true;
+            }
+        if (clientMember && !clientMember.permissionsIn(message.channel).has('ADD_REACTIONS'))
+            invokeImmediately = true;
+        if (!invokeImmediately) {
+            await message.react(emoji);
+            CompactModeHelper._instance._buttons[`${message.id}:${emoji}`] =
+                { expires: Date.now() + lifespan, consumed: false, emoji, action };
+        }
+        else
+            action();
     }
 }
 exports.CompactModeHelper = CompactModeHelper;

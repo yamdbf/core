@@ -23,6 +23,9 @@ export declare class CompactModeHelper {
      *
      * Buttons remain clickable for the given lifespan (30 seconds by
      * default), or until consumed via click by the Message author
+     *
+     * >If the Client doesn't have permissions to add reactions the
+     * given action function will be invoked immediately
      * @param {Message} message Message to register a button for
      * @param {string} emoji A unicode emoji, custom emoji ID, or a button
      * 						 key from {@link Client#buttons}
