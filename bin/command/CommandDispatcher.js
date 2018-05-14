@@ -59,8 +59,8 @@ class CommandDispatcher {
                 let shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
                 if (shortcuts && prefix && name && shortcuts[name]) {
                     const shortcutName = name;
-                    const call = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
-                    const oldArgsStr = message.content.replace(call, '');
+                    const shortcutCall = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
+                    const oldArgsStr = message.content.replace(shortcutCall, '');
                     const newCommand = `${prefix}${shortcuts[name]}`;
                     message.content = newCommand;
                     [commandWasCalled, command, prefix, name] = await Util_1.Util.wasCommandCalled(message);
@@ -76,10 +76,12 @@ class CommandDispatcher {
             // Emit an `unknownCommand` event and return if no
             // command or shortcut was called
             if (!commandWasCalled) {
-                const call = new RegExp(`^${Util_1.Util.escape(prefix || '')} *${name}`);
-                const argsStr = message.content.replace(call, '');
-                const unknownCommandArgs = this._client.argsParser(argsStr);
-                this._client.emit('unknownCommand', name, unknownCommandArgs, message);
+                if (name) {
+                    const unknownCall = new RegExp(`^${Util_1.Util.escape(prefix || '')} *${name}`);
+                    const unknownArgsStr = message.content.replace(unknownCall, '');
+                    const unknownCommandArgs = this._client.argsParser(unknownArgsStr);
+                    this._client.emit('unknownCommand', name, unknownCommandArgs, message);
+                }
                 return;
             }
         }
@@ -99,7 +101,8 @@ class CommandDispatcher {
             && (message.content.match(clientMention) || []).length === 1)
             message.mentions.users.delete(this._client.user.id);
         // Prepare args
-        const preppedInput = message.content.replace(prefix, '').replace(name, '').trim();
+        const call = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
+        const preppedInput = message.content.replace(call, '').trim();
         let args = this._client.argsParser(preppedInput, command, message);
         let commandResult;
         let middlewarePassed = true;
