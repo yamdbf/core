@@ -80,7 +80,7 @@ export class CompactModeHelper
 			throw new Error('CompactModeHelper instance has not been created');
 
 		if (typeof emoji !== 'string')
-			throw new TypeError('Emoji must be a unicode string or emoji snowflake');
+			throw new TypeError('Emoji must be a unicode emoji, custom emoji id, or client button key');
 
 		if (CompactModeHelper._instance._client.buttons[emoji])
 			emoji = CompactModeHelper._instance._client.buttons[emoji];

@@ -13,6 +13,7 @@ import { ResourceProxy } from '../types/ResourceProxy';
 import { BaseStrings as s } from '../localization/BaseStrings';
 import { Util } from '../util/Util';
 import { format } from 'util';
+import { CompactModeHelper } from './CompactModeHelper';
 
 /**
  * Handles dispatching commands
@@ -132,6 +133,20 @@ export class CommandDispatcher
 		let commandResult: CommandResult;
 		let middlewarePassed: boolean = true;
 		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command._middleware);
+
+		const sendMiddlewareResult: (result: string, error?: boolean) => Promise<any> =
+			async (result, error = false) => {
+				if (await message.guild.storage.settings.get('compact') || this._client.compact)
+				{
+					if (message.reactions.size > 0) await message.clearReactions();
+					return CompactModeHelper.registerButton(
+						message,
+						this._client.buttons['fail'],
+						() => message.channel.send(result, error ? { split: true } : undefined));
+				}
+				else return message.channel.send(result);
+			};
+
 		for (let func of middleware)
 			try
 			{
@@ -139,7 +154,7 @@ export class CommandDispatcher
 				if (result instanceof Promise) result = await result;
 				if (!(result instanceof Array))
 				{
-					if (typeof result === 'string') commandResult = await message.channel.send(result);
+					if (typeof result === 'string') commandResult = await sendMiddlewareResult(result);
 					middlewarePassed = false;
 					break;
 				}
@@ -147,7 +162,7 @@ export class CommandDispatcher
 			}
 			catch (err)
 			{
-				commandResult = await message.channel.send(err.toString(), { split: true });
+				commandResult = await sendMiddlewareResult(err.toString(), true);
 				middlewarePassed = false;
 				break;
 			}

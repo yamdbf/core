@@ -6,6 +6,7 @@ import { ResourceProxy } from '../types/ResourceProxy';
 import { Command } from './Command';
 import { Util } from '../util/Util';
 import { PermissionResolvable } from 'discord.js';
+import { CompactModeHelper } from './CompactModeHelper';
 
 /**
  * Grouping of static decorator methods for the {@link Command}
@@ -39,6 +40,19 @@ export function using(func: MiddlewareFunction): MethodDecorator
 		const original: any = descriptor.value;
 		descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 		{
+			const sendMiddlewareResult: (result: string, error?: boolean) => Promise<any> =
+				async (result, error = false) => {
+					if (await message.guild.storage.settings.get('compact') || this.client.compact)
+					{
+						if (message.reactions.size > 0) await message.clearReactions();
+						return CompactModeHelper.registerButton(
+							message,
+							this.client.buttons['fail'],
+							() => message.channel.send(result, error ? { split: true } : undefined));
+					}
+					else return message.channel.send(result);
+				};
+
 			let middlewarePassed: boolean = true;
 			try
 			{
@@ -47,7 +61,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 				if (result instanceof Promise) result = await result;
 				if (!(result instanceof Array))
 				{
-					if (typeof result === 'string') message.channel.send(result);
+					if (typeof result === 'string') sendMiddlewareResult(result);
 					middlewarePassed = false;
 				}
 				if (middlewarePassed) [message, args] = result;
@@ -55,7 +69,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 			catch (err)
 			{
 				middlewarePassed = false;
-				message.channel.send(err.toString(), { split: true });
+				sendMiddlewareResult(err.toString(), true);
 			}
 			if (middlewarePassed) return await original.apply(this, [message, args]);
 		};

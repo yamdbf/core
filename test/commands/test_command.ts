@@ -30,6 +30,9 @@ export default class extends Command
 			usage: '<prefix>test <test> <foo>',
 			// ratelimit: '2/10s'
 		});
+
+		this.use(resolve('foo: CommandGroup'));
+		this.use(expect('foo: CommandGroup'));
 	}
 
 	public async init(): Promise<void>
@@ -44,8 +47,8 @@ export default class extends Command
 	// @using(resolve(`test: Member, foo: String`))
 	// @using(expect(`test: Member, foo: ['foo', 'bar']`))
 	// @using(localize)
-	@using(resolve('foo: CommandGroup'))
-	@using(expect('foo: CommandGroup'))
+	// @using(resolve('foo: CommandGroup'))
+	// @using(expect('foo: CommandGroup'))
 	public async action(message: Message, [res, ...args]: [ResourceLoader, string[]]): Promise<void>
 	{
 		// message.channel.send(res('FOO_BAR_BAZ'));
