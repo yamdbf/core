@@ -102,10 +102,13 @@ export class CommandDispatcher
 			// command or shortcut was called
 			if (!commandWasCalled)
 			{
-				const call: RegExp = new RegExp(`^${Util.escape(prefix || '')} *${name}`);
-				const argsStr: string = message.content.replace(call, '');
-				const unknownCommandArgs: any[] = this._client.argsParser(argsStr);
-				this._client.emit('unknownCommand', name, unknownCommandArgs, message);
+				if (name)
+				{
+					const call: RegExp = new RegExp(`^${Util.escape(prefix || '')} *${name}`);
+					const argsStr: string = message.content.replace(call, '');
+					const unknownCommandArgs: any[] = this._client.argsParser(argsStr);
+					this._client.emit('unknownCommand', name, unknownCommandArgs, message);
+				}
 				return;
 			}
 		}
