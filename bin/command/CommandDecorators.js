@@ -32,11 +32,11 @@ function using(func) {
             descriptor = Object.getOwnPropertyDescriptor(target, key);
         const original = descriptor.value;
         descriptor.value = async function (message, args) {
-            const sendMiddlewareResult = async (result, error = false) => {
+            const sendMiddlewareResult = async (result, options) => {
                 if (await message.guild.storage.settings.get('compact') || this.client.compact) {
                     if (message.reactions.size > 0)
                         await message.clearReactions();
-                    return CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons['fail'], () => message.channel.send(result, error ? { split: true } : undefined));
+                    return CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons['fail'], () => message.channel.send(result, options));
                 }
                 else
                     return message.channel.send(result);
@@ -55,8 +55,8 @@ function using(func) {
                     [message, args] = result;
             }
             catch (err) {
+                sendMiddlewareResult(err.toString(), { split: true });
                 middlewarePassed = false;
-                sendMiddlewareResult(err.toString(), true);
             }
             if (middlewarePassed)
                 return await original.apply(this, [message, args]);
