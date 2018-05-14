@@ -134,19 +134,21 @@ export class CommandDispatcher
 		let middlewarePassed: boolean = true;
 		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command._middleware);
 
-		const sendMiddlewareResult: (result: string, error?: boolean) => Promise<any> =
-			async (result, error = false) => {
+		// Function to send middleware result, utilizing compact mode if enabled
+		const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
+			async (result, options) => {
 				if (await message.guild.storage.settings.get('compact') || this._client.compact)
 				{
 					if (message.reactions.size > 0) await message.clearReactions();
 					return CompactModeHelper.registerButton(
 						message,
 						this._client.buttons['fail'],
-						() => message.channel.send(result, error ? { split: true } : undefined));
+						() => message.channel.send(result, options));
 				}
 				else return message.channel.send(result);
 			};
 
+		// Run middleware
 		for (let func of middleware)
 			try
 			{
@@ -162,7 +164,7 @@ export class CommandDispatcher
 			}
 			catch (err)
 			{
-				commandResult = await sendMiddlewareResult(err.toString(), true);
+				commandResult = await sendMiddlewareResult(err.toString(), { split: true });
 				middlewarePassed = false;
 				break;
 			}
@@ -172,6 +174,7 @@ export class CommandDispatcher
 		try { commandResult = await command.action(message, args); }
 		catch (err) { this._logger.error(`Dispatch:${command.name}`, err.stack); }
 
+		// Send command result to the channel if it's of a supported type
 		if (commandResult !== null
 			&& typeof commandResult !== 'undefined'
 			&& !(commandResult instanceof Array)

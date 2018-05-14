@@ -5,7 +5,7 @@ import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { ResourceProxy } from '../types/ResourceProxy';
 import { Command } from './Command';
 import { Util } from '../util/Util';
-import { PermissionResolvable } from 'discord.js';
+import { PermissionResolvable, MessageOptions } from 'discord.js';
 import { CompactModeHelper } from './CompactModeHelper';
 
 /**
@@ -40,15 +40,15 @@ export function using(func: MiddlewareFunction): MethodDecorator
 		const original: any = descriptor.value;
 		descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 		{
-			const sendMiddlewareResult: (result: string, error?: boolean) => Promise<any> =
-				async (result, error = false) => {
+			const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
+				async (result, options) => {
 					if (await message.guild.storage.settings.get('compact') || this.client.compact)
 					{
 						if (message.reactions.size > 0) await message.clearReactions();
 						return CompactModeHelper.registerButton(
 							message,
 							this.client.buttons['fail'],
-							() => message.channel.send(result, error ? { split: true } : undefined));
+							() => message.channel.send(result, options));
 					}
 					else return message.channel.send(result);
 				};
@@ -68,8 +68,8 @@ export function using(func: MiddlewareFunction): MethodDecorator
 			}
 			catch (err)
 			{
+				sendMiddlewareResult(err.toString(), { split: true });
 				middlewarePassed = false;
-				sendMiddlewareResult(err.toString(), true);
 			}
 			if (middlewarePassed) return await original.apply(this, [message, args]);
 		};
