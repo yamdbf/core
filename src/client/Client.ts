@@ -616,6 +616,15 @@ export class Client extends Discord.Client
 	 */
 
 	/**
+	 * Emitted whenever a command is called that doesn't exist
+	 * @memberof Client
+	 * @event event:unknownCommand
+	 * @param {string} name The name of the command that was attempted to be called
+	 * @param {any[]} args Args passed to the unknown command
+	 * @param {external:Message} message Message that triggered the unknown command
+	 */
+
+	/**
 	 * Emitted whenever a user is blacklisted
 	 * @memberof Client
 	 * @event event:blacklistAdd

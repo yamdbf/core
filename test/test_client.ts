@@ -13,7 +13,7 @@ import { TestPlugin } from './test_plugin';
 import { EvenNumberResolver } from './EvenNumberResolver';
 const config: any = require('./config.json');
 const logger: Logger = Logger.instance();
-const { once } = ListenerUtil;
+const { once, on } = ListenerUtil;
 
 class Test extends Client
 {
@@ -69,6 +69,12 @@ class Test extends Client
 		// logger.debug('Test', foo, bar.toString());
 		await this.setDefaultSetting('foo', 'bar');
 		this.on('command', (name, args, exec) => console.log(name, args, exec));
+	}
+
+	@on('unknownCommand')
+	private _onUnknownCommand(name: string, args: any[]): void
+	{
+		console.log('Unknown command:', name, args);
 	}
 }
 const test: Test = new Test();

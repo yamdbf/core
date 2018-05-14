@@ -97,7 +97,14 @@ export class CommandDispatcher
 			if (dm && this._client.unknownCommandError)
 				message.channel.send(this.unknownCommandError(res));
 
-			if (!commandWasCalled) return;
+			if (!commandWasCalled)
+			{
+				const call: RegExp = new RegExp(`^${Util.escape(prefix || '')} *${name}`);
+				const argsStr: string = message.content.replace(call, '');
+				const unknownCommandArgs: any[] = this._client.argsParser(argsStr);
+				this._client.emit('unknownCommand', name, unknownCommandArgs, message);
+				return;
+			}
 		}
 
 		let validCall: boolean = false;
