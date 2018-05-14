@@ -289,7 +289,7 @@ class Command {
             && (await message.guild.storage.settings.get('compact') || this.client.compact)) {
             if (message.reactions.size > 0)
                 await message.clearReactions();
-            CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons[options.button] || options.button, () => message.channel.send(response));
+            CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons[options.button] || options.button, () => message.channel.send(response, options));
             return;
         }
         return message.channel.send(response, options);

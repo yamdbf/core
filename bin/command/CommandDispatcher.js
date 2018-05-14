@@ -72,6 +72,8 @@ class CommandDispatcher {
             // Send unknownCommandError in DMs
             if (dm && this._client.unknownCommandError)
                 message.channel.send(this.unknownCommandError(res));
+            // Emit an `unknownCommand` event and return if no
+            // command or shortcut was called
             if (!commandWasCalled) {
                 const call = new RegExp(`^${Util_1.Util.escape(prefix || '')} *${name}`);
                 const argsStr = message.content.replace(call, '');
