@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Lang_1 = require("../localization/Lang");
 const Util_1 = require("../util/Util");
+const CompactModeHelper_1 = require("./CompactModeHelper");
 /**
  * Grouping of static decorator methods for the {@link Command}
  * class and {@link Command#action} method
@@ -31,6 +32,15 @@ function using(func) {
             descriptor = Object.getOwnPropertyDescriptor(target, key);
         const original = descriptor.value;
         descriptor.value = async function (message, args) {
+            const sendMiddlewareResult = async (result, error = false) => {
+                if (await message.guild.storage.settings.get('compact') || this.client.compact) {
+                    if (message.reactions.size > 0)
+                        await message.clearReactions();
+                    return CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons['fail'], () => message.channel.send(result, error ? { split: true } : undefined));
+                }
+                else
+                    return message.channel.send(result);
+            };
             let middlewarePassed = true;
             try {
                 let result = func.call(this, message, args);
@@ -38,7 +48,7 @@ function using(func) {
                     result = await result;
                 if (!(result instanceof Array)) {
                     if (typeof result === 'string')
-                        message.channel.send(result);
+                        sendMiddlewareResult(result);
                     middlewarePassed = false;
                 }
                 if (middlewarePassed)
@@ -46,7 +56,7 @@ function using(func) {
             }
             catch (err) {
                 middlewarePassed = false;
-                message.channel.send(err.toString(), { split: true });
+                sendMiddlewareResult(err.toString(), true);
             }
             if (middlewarePassed)
                 return await original.apply(this, [message, args]);

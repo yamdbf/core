@@ -13,6 +13,7 @@ const Lang_1 = require("../localization/Lang");
 const BaseStrings_1 = require("../localization/BaseStrings");
 const Util_1 = require("../util/Util");
 const util_1 = require("util");
+const CompactModeHelper_1 = require("./CompactModeHelper");
 /**
  * Handles dispatching commands
  * @private
@@ -103,6 +104,15 @@ class CommandDispatcher {
         let commandResult;
         let middlewarePassed = true;
         let middleware = this._client._middleware.concat(command._middleware);
+        const sendMiddlewareResult = async (result, error = false) => {
+            if (await message.guild.storage.settings.get('compact') || this._client.compact) {
+                if (message.reactions.size > 0)
+                    await message.clearReactions();
+                return CompactModeHelper_1.CompactModeHelper.registerButton(message, this._client.buttons['fail'], () => message.channel.send(result, error ? { split: true } : undefined));
+            }
+            else
+                return message.channel.send(result);
+        };
         for (let func of middleware)
             try {
                 let result = func.call(command, message, args);
@@ -110,14 +120,14 @@ class CommandDispatcher {
                     result = await result;
                 if (!(result instanceof Array)) {
                     if (typeof result === 'string')
-                        commandResult = await message.channel.send(result);
+                        commandResult = await sendMiddlewareResult(result);
                     middlewarePassed = false;
                     break;
                 }
                 [message, args] = result;
             }
             catch (err) {
-                commandResult = await message.channel.send(err.toString(), { split: true });
+                commandResult = await sendMiddlewareResult(err.toString(), true);
                 middlewarePassed = false;
                 break;
             }
