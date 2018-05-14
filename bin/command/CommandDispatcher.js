@@ -72,8 +72,13 @@ class CommandDispatcher {
             // Send unknownCommandError in DMs
             if (dm && this._client.unknownCommandError)
                 message.channel.send(this.unknownCommandError(res));
-            if (!commandWasCalled)
+            if (!commandWasCalled) {
+                const call = new RegExp(`^${Util_1.Util.escape(prefix || '')} *${name}`);
+                const argsStr = message.content.replace(call, '');
+                const unknownCommandArgs = this._client.argsParser(argsStr);
+                this._client.emit('unknownCommand', name, unknownCommandArgs, message);
                 return;
+            }
         }
         let validCall = false;
         try {

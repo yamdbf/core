@@ -49,11 +49,13 @@ class Util {
      * @static
      * @method parseArgs
      * @param {string} input Input string to parse args from
-     * @param {Command} command Command object, used to determine the args separator
+     * @param {Command} [command] Command object, used to determine the args separator.
+     * 							  If none is given, `' '` will be used as the separator
      * @returns {string[]}
      */
     static parseArgs(input, command) {
-        return input.split(command.argOpts.separator)
+        return input
+            .split((command && command.argOpts && command.argOpts.separator) || ' ')
             .map(a => a.trim())
             .filter(a => a !== '');
     }

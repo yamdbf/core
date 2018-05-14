@@ -30,10 +30,11 @@ export declare class Util {
      * @static
      * @method parseArgs
      * @param {string} input Input string to parse args from
-     * @param {Command} command Command object, used to determine the args separator
+     * @param {Command} [command] Command object, used to determine the args separator.
+     * 							  If none is given, `' '` will be used as the separator
      * @returns {string[]}
      */
-    static parseArgs(input: string, command: Command): string[];
+    static parseArgs(input: string, command?: Command): string[];
     /**
      * Pads the right side of a string with spaces to the given length
      * @static
