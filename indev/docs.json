@@ -1400,7 +1400,7 @@
                     "name": "registerButton",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Register a single-use reaction button on a Message that will\nexecute the given action when clicked by the Message author.</p>\n<p>Buttons remain clickable for the given lifespan (30 seconds by\ndefault), or until consumed via click by the Message author</p>",
+                    "description": "<p>Register a single-use reaction button on a Message that will\nexecute the given action when clicked by the Message author.</p>\n<p>Buttons remain clickable for the given lifespan (30 seconds by\ndefault), or until consumed via click by the Message author</p>\n<blockquote>\n<p>If the Client doesn't have permissions to add reactions the\ngiven action function will be invoked immediately</p>\n</blockquote>",
                     "parameters": [
                         {
                             "name": "message",
