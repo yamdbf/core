@@ -19,6 +19,32 @@ export class RoleResolver extends Resolver
 		return value instanceof Role;
 	}
 
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<Role | Collection<string, Role>>
+	{
+		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
+
+		let role: Role;
+		const roleRegex: RegExp = /^(?:<@&)?(\d+)>?$/;
+
+		if (roleRegex.test(value))
+		{
+			const id: string = value.match(roleRegex)[1];
+			role = context.guild.roles.get(id);
+			if (!role) return;
+		}
+		else
+		{
+			const normalized: string = Util.normalize(value);
+			let roles: Collection<string, Role> = context.guild.roles.filter(a =>
+				Util.normalize(a.name).includes(normalized));
+
+			if (roles.size === 1) role = roles.first();
+			else return roles;
+		}
+
+		return role;
+	}
+
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<Role>
 	{
 		const lang: string = await Lang.getLangFromMessage(message);
@@ -30,32 +56,30 @@ export class RoleResolver extends Resolver
 
 		const roleRegex: RegExp = /^(?:<@&)?(\d+)>?$/;
 
-		let role: Role;
+		let role: Role | Collection<string, Role> = await this.resolveRaw(value, message);
 		if (roleRegex.test(value))
 		{
-			const id: string = value.match(roleRegex)[1];
-			role = message.guild.roles.get(id);
 			if (!role)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_ID({ name, arg: value, usage, type: 'Role' }));
 		}
 		else
 		{
-			const normalized: string = Util.normalize(value);
-			let roles: Collection<string, Role> = message.guild.roles.filter(a =>
-				Util.normalize(a.name).includes(normalized));
+			if (role instanceof Collection)
+			{
+				if (role.size > 1)
+					throw String(res.RESOLVE_ERR_MULTIPLE_ROLE_RESULTS({
+						name,
+						usage,
+						roles: role.map(r => `\`${r.name}\``).join(', ')
+					}));
 
-			if (roles.size > 1)
-				throw String(res.RESOLVE_ERR_MULTIPLE_ROLE_RESULTS({
-					name,
-					usage,
-					roles: roles.map(r => `\`${r.name}\``).join(', ')
-				}));
+				role = role.first();
+			}
 
-			role = roles.first();
 			if (!role)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'Role' }));
 		}
 
-		return role;
+		return role as Role;
 	}
 }

@@ -14,9 +14,37 @@ export class ChannelResolver extends Resolver
 		super(client, 'Channel', 'TextChannel');
 	}
 
-	public async validate(value: any): Promise<boolean>
+	public validate(value: any): boolean
 	{
 		return value instanceof TextChannel;
+	}
+
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<TextChannel | Collection<string, TextChannel>>
+	{
+		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
+
+		let channel: TextChannel;
+		const channelRegex: RegExp = /^(?:<#)?(\d+)>?$/;
+
+		if (channelRegex.test(value))
+		{
+			const id: string = value.match(channelRegex)[1];
+			channel = <TextChannel> context.guild.channels.get(id);
+			if (!channel) return;
+		}
+		else
+		{
+			const normalized: string = Util.normalize(value);
+			const channels: Collection<string, TextChannel> =
+				(<Collection<string, TextChannel>> context.guild.channels)
+					.filter(a => a.type === 'text')
+					.filter(a => Util.normalize(a.name).includes(normalized));
+
+			if (channels.size === 1) channel = channels.first();
+			else return channels;
+		}
+
+		return channel;
 	}
 
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<TextChannel>
@@ -30,34 +58,30 @@ export class ChannelResolver extends Resolver
 
 		const channelRegex: RegExp = /^(?:<#)?(\d+)>?$/;
 
-		let channel: TextChannel;
+		let channel: TextChannel | Collection<string, TextChannel> = await this.resolveRaw(value, message);
 		if (channelRegex.test(value))
 		{
-			const id: string = value.match(channelRegex)[1];
-			channel = <TextChannel> message.guild.channels.get(id);
 			if (!channel)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_ID({ name, arg: value, usage, type: 'Channel' }));
 		}
 		else
 		{
-			const normalized: string = Util.normalize(value);
-			const channels: Collection<string, TextChannel> =
-				(<Collection<string, TextChannel>> message.guild.channels)
-					.filter(a => a.type === 'text')
-					.filter(a => Util.normalize(a.name).includes(normalized));
+			if (channel instanceof Collection)
+			{
+				if (channel.size > 1)
+					throw String(res.RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS({
+						name,
+						usage,
+						channels: channel.map(c => `\`#${c.name}\``).join(', ')
+					}));
 
-			if (channels.size > 1)
-				throw String(res.RESOLVE_ERR_MULTIPLE_CHANNEL_RESULTS({
-					name,
-					usage,
-					channels: channels.map(c => `\`#${c.name}\``).join(', ')
-				}));
+				channel = channel.first();
+			}
 
-			channel = channels.first();
 			if (!channel)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'Channel' }));
 		}
 
-		return channel;
+		return channel as TextChannel;
 	}
 }

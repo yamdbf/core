@@ -13,9 +13,15 @@ export class CommandGroupResolver extends Resolver
 		super(client, 'CommandGroup');
 	}
 
-	public async validate(value: any): Promise<boolean>
+	public validate(value: any): boolean
 	{
 		return this.client.commands.groups.includes(value);
+	}
+
+	public resolveRaw(value: string): string
+	{
+		return this.client.commands.groups
+			.find(g => Util.normalize(g).includes(Util.normalize(value)));
 	}
 
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<string>
@@ -27,9 +33,7 @@ export class CommandGroupResolver extends Resolver
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
-		const result: string = this.client.commands.groups
-			.find(g => Util.normalize(g).includes(Util.normalize(value)));
-
+		const result: string = this.resolveRaw(value);
 		if (!result)
 			throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'CommandGroup' }));
 

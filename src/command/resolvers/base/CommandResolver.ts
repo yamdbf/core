@@ -12,9 +12,14 @@ export class CommandResolver extends Resolver
 		super(client, 'Command');
 	}
 
-	public async validate(value: any): Promise<boolean>
+	public validate(value: any): boolean
 	{
 		return value instanceof Command;
+	}
+
+	public resolveRaw(value: string): Command
+	{
+		return this.client.commands.resolve(value);
 	}
 
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<Command>
@@ -26,7 +31,7 @@ export class CommandResolver extends Resolver
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
-		const result: Command = this.client.commands.resolve(value);
+		const result: Command = this.resolveRaw(value);
 		if (!result)
 			throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'Command' }));
 

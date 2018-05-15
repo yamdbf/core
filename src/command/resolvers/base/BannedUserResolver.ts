@@ -5,6 +5,7 @@ import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
 import { ResourceProxy } from '../../../types/ResourceProxy';
 import { User, Collection } from 'discord.js';
+import { Util } from '../../../util/Util';
 
 export class BannedUserResolver extends Resolver
 {
@@ -13,9 +14,34 @@ export class BannedUserResolver extends Resolver
 		super(client, 'BannedUser');
 	}
 
-	public async validate(value: any): Promise<boolean>
+	public validate(value: any): boolean
 	{
 		return value instanceof User;
+	}
+
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<User | Collection<string, User>>
+	{
+		let user: User;
+		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
+		const bannedUsers: Collection<string, User> = await context.guild.fetchBans();
+
+		if (idRegex.test(value))
+		{
+			user = bannedUsers.get(value.match(idRegex)[1]);
+			if (!user) return;
+		}
+		else
+		{
+			const normalized: string = Util.normalize(value);
+			let users: Collection<string, User> = bannedUsers.filter(a =>
+				Util.normalize(a.username).includes(normalized)
+					|| Util.normalize(a.tag).includes(normalized));
+
+			if (users.size === 1) user = users.first();
+			else return users;
+		}
+
+		return user;
 	}
 
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<User>
@@ -28,37 +54,31 @@ export class BannedUserResolver extends Resolver
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
-		const normalizeUser: (text: string) => string =
-			text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
 
-		const bannedUsers: Collection<string, User> = await message.guild.fetchBans();
-
-		let user: User;
+		let user: User | Collection<string, User> = await this.resolveRaw(value, message);
 		if (idRegex.test(value))
 		{
-			user = bannedUsers.get(value.match(idRegex)[1]);
 			if (!user)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_ID({ name, arg: value, usage, type: 'BannedUser' }));
 		}
 		else
 		{
-			const normalized: string = normalizeUser(value);
-			let users: Collection<string, User> = bannedUsers.filter(a =>
-				normalizeUser(a.username).includes(normalized)
-					|| normalizeUser(a.tag).includes(normalized));
+			if (user instanceof Collection)
+			{
+				if (user.size > 1)
+					throw String(res.RESOLVE_ERR_MULTIPLE_USER_RESULTS({
+						name,
+						usage,
+						users: user.map(u => `\`${u.tag}\``).join(', ')
+					}));
 
-			if (users.size > 1)
-				throw String(res.RESOLVE_ERR_MULTIPLE_USER_RESULTS({
-					name,
-					usage,
-					users: users.map(u => `\`${u.tag}\``).join(', ')
-				}));
+				user = user.first();
+			}
 
-			user = users.first();
 			if (!user)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'BannedUser' }));
 		}
 
-		return user;
+		return user as User;
 	}
 }

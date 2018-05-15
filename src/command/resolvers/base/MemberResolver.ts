@@ -5,6 +5,7 @@ import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
 import { ResourceProxy } from '../../../types/ResourceProxy';
 import { GuildMember, Collection } from 'discord.js';
+import { Util } from '../../../util/Util';
 
 export class MemberResolver extends Resolver
 {
@@ -18,6 +19,33 @@ export class MemberResolver extends Resolver
 		return value instanceof GuildMember;
 	}
 
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<GuildMember | Collection<string, GuildMember>>
+	{
+		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
+
+		let member: GuildMember;
+		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
+
+		if (idRegex.test(value))
+		{
+			try { member = await context.guild.fetchMember(value.match(idRegex)[1]); } catch {}
+			if (!member) return;
+		}
+		else
+		{
+			const normalized: string = Util.normalize(value);
+			let members: Collection<string, GuildMember> = context.guild.members.filter(a =>
+				Util.normalize(a.displayName).includes(normalized)
+					|| Util.normalize(a.user.username).includes(normalized)
+					|| Util.normalize(a.user.tag).includes(normalized));
+
+			if (members.size === 1) member = members.first();
+			else return members;
+		}
+
+		return member;
+	}
+
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<GuildMember>
 	{
 		const lang: string = await Lang.getLangFromMessage(message);
@@ -28,37 +56,31 @@ export class MemberResolver extends Resolver
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
-		const normalizeUser: (text: string) => string =
-			text => text.toLowerCase().replace(/[^a-z0-9#]+/g, '');
 
-		let member: GuildMember;
+		let member: GuildMember | Collection<string, GuildMember> = await this.resolveRaw(value, message);
 		if (idRegex.test(value))
 		{
-			try { member = await message.guild.fetchMember(value.match(idRegex)[1]); }
-			catch {}
 			if (!member)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_ID({ name, arg: value, usage, type: 'Member' }));
 		}
 		else
 		{
-			const normalized: string = normalizeUser(value);
-			let members: Collection<string, GuildMember> = message.guild.members.filter(a =>
-				normalizeUser(a.displayName).includes(normalized)
-					|| normalizeUser(a.user.username).includes(normalized)
-					|| normalizeUser(a.user.tag).includes(normalized));
+			if (member instanceof Collection)
+			{
+				if (member.size > 1)
+					throw String(res.RESOLVE_ERR_MULTIPLE_USER_RESULTS({
+						name,
+						usage,
+						users: member.map(m => `\`${m.user.tag}\``).join(', ')
+					}));
 
-			if (members.size > 1)
-				throw String(res.RESOLVE_ERR_MULTIPLE_USER_RESULTS({
-					name,
-					usage,
-					users: members.map(m => `\`${m.user.tag}\``).join(', ')
-				}));
+				member = member.first();
+			}
 
-			member = members.first();
 			if (!member)
 				throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'Member' }));
 		}
 
-		return member;
+		return member as GuildMember;
 	}
 }

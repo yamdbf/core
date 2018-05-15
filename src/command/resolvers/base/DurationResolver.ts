@@ -13,9 +13,14 @@ export class DurationResolver extends Resolver
 		super(client, 'Duration');
 	}
 
-	public async validate(value: any): Promise<boolean>
+	public validate(value: any): boolean
 	{
 		return typeof value === 'number' && !isNaN(value) && isFinite(value);
+	}
+
+	public resolveRaw(value: string): number
+	{
+		return Time.parseShorthand(value);
 	}
 
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<number>
@@ -27,7 +32,7 @@ export class DurationResolver extends Resolver
 		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
-		const result: number = Time.parseShorthand(value);
+		const result: number = this.resolveRaw(value);
 		if (!result)
 			throw new Error(res.RESOLVE_ERR_RESOLVE_DURATION({ name, arg: value, usage }));
 

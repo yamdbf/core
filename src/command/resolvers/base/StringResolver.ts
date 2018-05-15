@@ -10,13 +10,18 @@ export class StringResolver extends Resolver
 		super(client, 'String', 'string');
 	}
 
-	public async validate(value: any): Promise<boolean>
+	public validate(value: any): boolean
 	{
 		return typeof value === 'string';
 	}
 
-	public async resolve(message: Message, command: Command, name: string, value: string | string[]): Promise<string>
+	public resolveRaw(value: string | string[]): string
 	{
 		return value instanceof Array ? value.join('\n') : value.toString();
+	}
+
+	public resolve(message: Message, command: Command, name: string, value: string | string[]): string
+	{
+		return this.resolveRaw(value);
 	}
 }
