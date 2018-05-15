@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const CommandDecorators = require("../../CommandDecorators");
+const discord_js_1 = require("discord.js");
 const Command_1 = require("../../Command");
 const Middleware_1 = require("../../middleware/Middleware");
 const { using, localizable } = CommandDecorators;
@@ -52,14 +53,13 @@ Removing individual roles is not possible to keep the command simple to use.`,
         const roleStrings = roles.split(/ *, */).filter(r => r !== '' && r !== ',');
         const foundRoles = [];
         const invalidRoles = [];
-        for (const roleString of roleStrings)
-            try {
-                const role = await roleResolver.resolve(message, this, 'role', roleString);
-                foundRoles.push(role);
-            }
-            catch (_a) {
+        for (const roleString of roleStrings) {
+            const role = await roleResolver.resolveRaw(roleString, message);
+            if (!role || role instanceof discord_js_1.Collection)
                 invalidRoles.push(roleString);
-            }
+            else
+                foundRoles.push(role);
+        }
         if (invalidRoles.length > 0)
             message.channel
                 .send(res.CMD_LIMIT_ERR_INVALID_ROLE({ invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
