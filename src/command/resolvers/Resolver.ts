@@ -44,7 +44,7 @@ export class Resolver
 	 * @param {any} value Value to validate
 	 * @returns {Promise<boolean>}
 	 */
-	public async validate(value: any): Promise<boolean>
+	public validate(value: any): any
 	{
 		throw new Error('Resolvers must implement the `validate` method');
 	}
@@ -53,7 +53,7 @@ export class Resolver
 	 * Method to implement that should accept a string and return
 	 * a resolved value of the type the resolver is meant to resolve.
 	 *
-	 * Resolvers can and should throw errors when invalid input is given.
+	 * This method can and should throw errors when invalid input is given.
 	 * These errors will be sent to Discord as argument errors when using
 	 * the `resolve` middleware. Refer to the base Resolver error strings
 	 * for examples on what these errors should look like if you're trying
@@ -66,8 +66,42 @@ export class Resolver
 	 * @param {string} value Argument value
 	 * @returns {Promise<any>}
 	 */
-	public async resolve(message: Message, command: Command, name: string, value: string): Promise<any>
+	public resolve(message: Message, command: Command, name: string, value: string): any
 	{
 		throw new Error('Resolvers must implement the `resolve` method');
 	}
+
+	/**
+	 * Method recommended to be implemented for resolving data without side-effects.
+	 * Where `resolve()` should throw errors which will be sent to Discord when
+	 * a value cannot be resolved, this method should simply return `undefined`.
+	 *
+	 * All base resolvers will implement this method with this signature so that
+	 * they can be accessed for personal use via `<Client>.resolvers.get('resolver
+	 * name or alias')`.
+	 *
+	 * Some resolvers require additional context in the form of a partial {@link Message}
+	 * object in order to be able to resolve their data type from the given input
+	 * (like needing a guild from the message to be able to resolve a `GuildMember`
+	 * via the `Member` resolver). It's safest to assume that all base resolvers will
+	 * want this context reference as only a small handful do not (specifically String,
+	 * Number, Duration, Command, and CommandGroup). In the case of your own custom
+	 * resolvers, you should know what needs context and what doesn't, so you can get
+	 * away with passing as needed there.
+	 *
+	 * In cases where a full Message object is unavailable but context is known,
+	 * if you have a Guild instance, for example, you can simply pass it like
+	 * ```
+	 * let resolved = <Resolver>.resolveRaw(value, { guild });
+	 * ```
+	 * This is fine for all base resolvers, as the most any of them expect from
+	 * the context is for it to contain a `guild` field with a Guild instance,
+	 * and they will throw an error if the context they require is missing.
+	 *
+	 * >Can be async
+	 * @param {string} value String value to resolve data from
+	 * @param {Partial<Message>} [context] Partial Discord.js Message object
+	 * @returns {Promise<any>}
+	 */
+	public resolveRaw(value: string, context?: Partial<Message>): any {}
 }
