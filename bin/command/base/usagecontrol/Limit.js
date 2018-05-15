@@ -39,10 +39,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
      * Clear all roles limiting the given command
      */
     async clearLimit(message, res, command) {
-        const storage = message.guild.storage;
-        let limitedCommands = await storage.settings.get('limitedCommands') || {};
-        delete limitedCommands[command.name];
-        storage.settings.set('limitedCommands', limitedCommands);
+        await message.guild.storage.settings.remove(`limitedCommands.${command.name}`);
         return this.respond(message, res.CMD_LIMIT_CLEAR_SUCCESS({ commandName: command.name }));
     }
     /**
@@ -69,11 +66,10 @@ Removing individual roles is not possible to keep the command simple to use.`,
         if (foundRoles.length === 0)
             return this.respond(message, res.CMD_LIMIT_ERR_NO_ROLES());
         const storage = message.guild.storage;
-        const limitedCommands = await storage.settings.get('limitedCommands') || {};
-        const newLimit = new Set(limitedCommands[command.name] || []);
+        const newLimit = new Set(await storage.settings.get(`limitedCommands.${command.name}`) || []);
         for (const role of foundRoles)
             newLimit.add(role.id);
-        limitedCommands[command.name] = Array.from(newLimit);
+        await storage.settings.set(`limitedCommands.${command.name}`, Array.from(newLimit));
         return this.respond(message, res.CMD_LIMIT_SUCCESS({
             roles: foundRoles.map(r => `\`${r.name}\``).join(', '),
             commandName: command.name
