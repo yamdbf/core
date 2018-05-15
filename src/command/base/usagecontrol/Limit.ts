@@ -1,5 +1,5 @@
 import * as CommandDecorators from '../../CommandDecorators';
-import { Role } from 'discord.js';
+import { Role, Collection } from 'discord.js';
 import { Command } from '../../Command';
 import { Message } from '../../../types/Message';
 import { ResourceProxy } from '../../../types/ResourceProxy';
@@ -79,12 +79,11 @@ Removing individual roles is not possible to keep the command simple to use.`,
 		const invalidRoles: string[] = [];
 
 		for (const roleString of roleStrings)
-			try
-			{
-				const role: Role = await roleResolver.resolve(message, this, 'role', roleString);
-				foundRoles.push(role);
-			}
-			catch { invalidRoles.push(roleString); }
+		{
+			const role: Role | Collection<string, Role> = await roleResolver.resolveRaw(roleString, message);
+			if (!role || role instanceof Collection) invalidRoles.push(roleString);
+			else foundRoles.push(role);
+		}
 
 		if (invalidRoles.length > 0) message.channel
 			.send(res.CMD_LIMIT_ERR_INVALID_ROLE({ invalidRoles: invalidRoles.map(r => `\`${r}\``).join(', ') }));
