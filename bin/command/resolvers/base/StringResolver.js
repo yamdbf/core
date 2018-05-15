@@ -5,11 +5,14 @@ class StringResolver extends Resolver_1.Resolver {
     constructor(client) {
         super(client, 'String', 'string');
     }
-    async validate(value) {
+    validate(value) {
         return typeof value === 'string';
     }
-    async resolve(message, command, name, value) {
+    resolveRaw(value) {
         return value instanceof Array ? value.join('\n') : value.toString();
+    }
+    resolve(message, command, name, value) {
+        return this.resolveRaw(value);
     }
 }
 exports.StringResolver = StringResolver;

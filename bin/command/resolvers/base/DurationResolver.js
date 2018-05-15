@@ -7,8 +7,11 @@ class DurationResolver extends Resolver_1.Resolver {
     constructor(client) {
         super(client, 'Duration');
     }
-    async validate(value) {
+    validate(value) {
         return typeof value === 'number' && !isNaN(value) && isFinite(value);
+    }
+    resolveRaw(value) {
+        return Time_1.Time.parseShorthand(value);
     }
     async resolve(message, command, name, value) {
         const lang = await Lang_1.Lang.getLangFromMessage(message);
@@ -16,7 +19,7 @@ class DurationResolver extends Resolver_1.Resolver {
         const dm = message.channel.type !== 'text';
         const prefix = !dm ? await message.guild.storage.settings.get('prefix') : '';
         const usage = Lang_1.Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
-        const result = Time_1.Time.parseShorthand(value);
+        const result = this.resolveRaw(value);
         if (!result)
             throw new Error(res.RESOLVE_ERR_RESOLVE_DURATION({ name, arg: value, usage }));
         return result;
