@@ -60,11 +60,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
 	 */
 	public async clearLimit(message: Message, res: ResourceProxy, command: Command): Promise<any>
 	{
-		const storage: GuildStorage = message.guild.storage;
-		let limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
-		delete limitedCommands[command.name];
-		storage.settings.set('limitedCommands', limitedCommands);
-
+		await message.guild.storage.settings.remove(`limitedCommands.${command.name}`);
 		return this.respond(message,
 			res.CMD_LIMIT_CLEAR_SUCCESS({ commandName: command.name }));
 	}
@@ -96,11 +92,11 @@ Removing individual roles is not possible to keep the command simple to use.`,
 		if (foundRoles.length === 0) return this.respond(message, res.CMD_LIMIT_ERR_NO_ROLES());
 
 		const storage: GuildStorage = message.guild.storage;
-		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
-		const newLimit: Set<string> = new Set(limitedCommands[command.name] || []);
+		const newLimit: Set<string> =
+			new Set(await storage.settings.get(`limitedCommands.${command.name}`) || []);
 
 		for (const role of foundRoles) newLimit.add(role.id);
-		limitedCommands[command.name] = Array.from(newLimit);
+		await storage.settings.set(`limitedCommands.${command.name}`, Array.from(newLimit));
 
 		return this.respond(message, res.CMD_LIMIT_SUCCESS({
 			roles: foundRoles.map(r => `\`${r.name}\``).join(', '),
