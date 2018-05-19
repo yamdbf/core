@@ -18,6 +18,11 @@
 	}
 !}}
 
+[RESOLVE_ERR_RESOLVE_BOOLEAN]
+in arg `{{ name }}`: `{{ arg }}` could not be resolved to a boolean.
+Usage: `{{ usage }}
+Boolean examples: `true`, `on`, `yes`, `false`, `off`, `no`
+
 [RESOLVE_ERR_RESOLVE_NUMBER]
 in arg `{{ name }}`: `{{ arg }}` could not be resolved to a number.
 Usage: `{{ usage }}`
