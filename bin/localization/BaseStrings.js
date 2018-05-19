@@ -1,5 +1,5 @@
 "use strict";
-// Generated automatically at Sun Feb 11 2018 00:43:20 GMT-0600 (Central Standard Time)
+// Generated automatically at Sat May 19 2018 04:36:30 GMT-0500 (Central Daylight Time)
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {enum} BaseStrings Enum containing all base framework
@@ -71,6 +71,7 @@ var BaseStrings;
     BaseStrings["EXPECT_ERR_INVALID_OPTION"] = "EXPECT_ERR_INVALID_OPTION";
     BaseStrings["EXPECT_ERR_EXPECTED_TYPE"] = "EXPECT_ERR_EXPECTED_TYPE";
     BaseStrings["RESOLVE_TYPE"] = "RESOLVE_TYPE";
+    BaseStrings["RESOLVE_ERR_RESOLVE_BOOLEAN"] = "RESOLVE_ERR_RESOLVE_BOOLEAN";
     BaseStrings["RESOLVE_ERR_RESOLVE_NUMBER"] = "RESOLVE_ERR_RESOLVE_NUMBER";
     BaseStrings["RESOLVE_ERR_RESOLVE_DURATION"] = "RESOLVE_ERR_RESOLVE_DURATION";
     BaseStrings["RESOLVE_ERR_RESOLVE_TYPE_ID"] = "RESOLVE_ERR_RESOLVE_TYPE_ID";
