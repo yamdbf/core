@@ -23,7 +23,11 @@ export class BannedUserResolver extends Resolver
 	{
 		let user: User;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
-		const bannedUsers: Collection<string, User> = await context.guild.fetchBans();
+
+		type BanInfo = { user: User, reason: string };
+		const bans: Collection<string, BanInfo> = await context.guild.fetchBans();
+		const bannedUsers: Collection<string, User> =
+			new Collection(bans.map(b => [b.user.id, b.user] as [string, User]));
 
 		if (idRegex.test(value))
 		{

@@ -36,9 +36,9 @@ export class ChannelResolver extends Resolver
 		{
 			const normalized: string = Util.normalize(value);
 			const channels: Collection<string, TextChannel> =
-				(<Collection<string, TextChannel>> context.guild.channels)
+				context.guild.channels
 					.filter(a => a.type === 'text')
-					.filter(a => Util.normalize(a.name).includes(normalized));
+					.filter(a => Util.normalize(a.name).includes(normalized)) as Collection<string, TextChannel>;
 
 			if (channels.size === 1) channel = channels.first();
 			else return channels;

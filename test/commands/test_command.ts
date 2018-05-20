@@ -31,8 +31,8 @@ export default class extends Command
 			// ratelimit: '2/10s'
 		});
 
-		this.use(resolve('foo: CommandGroup'));
-		this.use(expect('foo: CommandGroup'));
+		this.use(resolve('foo: BannedUser'));
+		this.use(expect('foo: BannedUser'));
 	}
 
 	public async init(): Promise<void>

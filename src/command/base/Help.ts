@@ -1,4 +1,4 @@
-import { Collection, RichEmbed } from 'discord.js';
+import { Collection, MessageEmbed } from 'discord.js';
 import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { TemplateData } from '../../types/TemplateData';
@@ -33,7 +33,7 @@ export default class extends Command
 
 		let command: Command;
 		let output: string = '';
-		let embed: RichEmbed = new RichEmbed();
+		let embed: MessageEmbed = new MessageEmbed();
 
 		if (!commandName)
 		{

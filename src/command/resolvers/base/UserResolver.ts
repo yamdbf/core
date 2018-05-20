@@ -26,7 +26,7 @@ export class UserResolver extends Resolver
 
 		if (idRegex.test(value))
 		{
-			try { user = await this.client.fetchUser(value.match(idRegex)[1]); } catch {}
+			try { user = await this.client.users.fetch(value.match(idRegex)[1]); } catch {}
 			if (!user) return;
 		}
 		else
