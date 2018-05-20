@@ -82,7 +82,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 				async (result, options) => {
 					if (await message.guild.storage.settings.get('compact') || this.client.compact)
 					{
-						if (message.reactions.size > 0) await message.clearReactions();
+						if (message.reactions.size > 0) await message.reactions.removeAll();
 						return CompactModeHelper.registerButton(
 							message,
 							this.client.buttons['fail'],
