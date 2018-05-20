@@ -216,6 +216,7 @@ export declare class Client extends Discord.Client {
     once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
     once(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
     once(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+    once(event: string, listener: Function): this;
     once(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
     once(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
     once(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
