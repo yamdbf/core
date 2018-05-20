@@ -45,7 +45,7 @@ export default class extends Command
 
 		if (!code) return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
 
-		let start: Message = ts ? <Message> await this.respond(message, '*Compiling...*') : message;
+		let start: Message = ts ? await this.respond(message, '*Compiling...*') as Message : message;
 		let evaled: string | Promise<string | object>;
 		try
 		{

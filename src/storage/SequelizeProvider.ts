@@ -55,7 +55,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 
 		public async keys(): Promise<string[]>
 		{
-			return (<Entry[]> await this._model.findAll()).map(r => r.key);
+			return (await this._model.findAll() as Entry[]).map(r => r.key);
 		}
 
 		public async get(key: string): Promise<string>
@@ -63,7 +63,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 			if (typeof key !== 'string') throw new TypeError('Key must be a string');
 
-			const entry: ReturnedModel = <ReturnedModel> await this._model.findByPrimary(key);
+			const entry: ReturnedModel = await this._model.findByPrimary(key) as ReturnedModel;
 			if (entry === null) return;
 
 			return entry.get('value');

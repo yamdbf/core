@@ -14,7 +14,7 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 
 	const names: string[] = Object.keys(argTypes);
 	const types: (string | string[])[] = names
-		.map(name => (<MappedArgType> argTypes)[name]);
+		.map(name => (argTypes as MappedArgType)[name]);
 
 	return async function(this: Command, message: Message, args: any[]): Promise<[Message, any[]]>
 	{

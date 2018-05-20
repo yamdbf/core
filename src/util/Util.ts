@@ -32,7 +32,7 @@ export class Util
 	 */
 	public static async wasCommandCalled(message: Message): Promise<[boolean, Command, string, string]>
 	{
-		const client: Client = <Client> message.client;
+		const client: Client = message.client as Client;
 		const dm: boolean = message.channel.type !== 'text';
 		const prefixes: string[] = [
 			`<@${client.user.id}>`,

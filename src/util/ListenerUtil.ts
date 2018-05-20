@@ -49,12 +49,12 @@ export class ListenerUtil
 
 		for (const listener of listeners)
 		{
-			if (!(<any> listenerTarget)[listener.method]) continue;
+			if (!(listenerTarget as any)[listener.method]) continue;
 			if (listener.attached) continue;
 
 			listener.attached = true;
 			const eventHandler: (...eventArgs: any[]) => void =
-				(...eventArgs) => (<any> listenerTarget)[listener.method](...eventArgs, ...listener.args);
+				(...eventArgs) => (listenerTarget as any)[listener.method](...eventArgs, ...listener.args);
 
 			emitter[listener.once ? 'once' : 'on'](listener.event, eventHandler);
 		}

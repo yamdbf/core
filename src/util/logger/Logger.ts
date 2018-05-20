@@ -186,7 +186,7 @@ export class Logger
 			? () => this._logLevel
 			: typeof level === 'function'
 				? level
-				: () => <LogLevel> level;
+				: () => level as LogLevel;
 
 		this._transports.push(transport);
 	}
@@ -281,7 +281,7 @@ export class Logger
 	{
 		const timestamp: Date = new Date();
 		for (const t of this._transports)
-			if (level <= (<() => LogLevel> t.level)())
+			if (level <= (t.level as () => LogLevel)())
 				t.transport({ timestamp, type, tag, text });
 	}
 }

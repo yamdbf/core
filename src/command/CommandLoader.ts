@@ -51,7 +51,7 @@ export class CommandLoader
 			const commandInstance: Command = new commandClass();
 
 			if (base && this._client.disableBase
-				.includes(<BaseCommandName> commandInstance.name))
+				.includes(commandInstance.name as BaseCommandName))
 				continue;
 
 			this._logger.info(`Loaded command: ${commandInstance.name}`);

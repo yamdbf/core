@@ -114,7 +114,7 @@ export class CommandDispatcher
 		}
 
 		let validCall: boolean = false;
-		try { validCall = await this.canCallCommand(res, <Command> command, message, dm); }
+		try { validCall = await this.canCallCommand(res, command as Command, message, dm); }
 		catch (err) { message[this._client.selfbot ? 'channel' : 'author'].send(err); }
 		if (!validCall) return;
 
@@ -183,7 +183,7 @@ export class CommandDispatcher
 			&& typeof commandResult !== 'undefined'
 			&& !(commandResult instanceof Array)
 			&& !(commandResult instanceof DMessage))
-			commandResult = await message.channel.send(<string> commandResult);
+			commandResult = await message.channel.send(commandResult as string);
 
 		// commandResult = Util.flattenArray([<Message | Message[]> commandResult]);
 		// TODO: Store command result information for command editing
@@ -305,7 +305,7 @@ export class CommandDispatcher
 	private checkClientPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.clientPermissions.filter(a =>
-			!(<TextChannel> message.channel).permissionsFor(this._client.user).has(a));
+			!(message.channel as TextChannel).permissionsFor(this._client.user).has(a));
 	}
 
 	/**
@@ -314,7 +314,7 @@ export class CommandDispatcher
 	private checkCallerPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return this._client.selfbot || dm ? [] : command.callerPermissions.filter(a =>
-			!(<TextChannel> message.channel).permissionsFor(message.author).has(a));
+			!(message.channel as TextChannel).permissionsFor(message.author).has(a));
 	}
 
 	/**

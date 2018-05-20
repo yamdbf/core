@@ -39,7 +39,7 @@ export class Time
 		difference.toSimplifiedString = () =>
 			timeString.replace(/ays|ours|ins|ecs| /g, '').replace(/,/g, ' ').trim();
 
-		return <Difference> difference;
+		return difference as Difference;
 	}
 
 	/**

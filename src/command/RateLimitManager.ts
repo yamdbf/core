@@ -79,11 +79,11 @@ export class RateLimitManager
 		for (const key of Object.keys(target))
 			if (target[key] instanceof RateLimit)
 			{
-				const rateLimit: RateLimit = <RateLimit> target[key];
+				const rateLimit: RateLimit = target[key] as RateLimit;
 				if ((Date.now() - rateLimit.expires) > (rateLimit.duration + 10e3))
 					delete target[key];
 			}
 			else if (Object.keys(target[key]).length === 0) delete target[key];
-			else this._cleanup(<NestedRateLimit> target[key]);
+			else this._cleanup(target[key] as NestedRateLimit);
 	}
 }

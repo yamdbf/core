@@ -25,7 +25,7 @@ export class CommandRegistry<
 		Object.defineProperty(this, '_client', { value: client });
 
 		this._reserved = [
-			() => this.has(<K> 'limit') ? 'clear' : null
+			() => this.has('limit' as K) ? 'clear' : null
 		];
 	}
 
@@ -54,7 +54,7 @@ export class CommandRegistry<
 	public registerExternal(command: Command<any>): void
 	{
 		this._logger.info(`External command loaded: ${command.name}`);
-		this._registerInternal(<V> command, true);
+		this._registerInternal(command as V, true);
 	}
 
 	/**
@@ -78,16 +78,16 @@ export class CommandRegistry<
 	 */
 	public _registerInternal(command: V, external: boolean = false): void
 	{
-		if (this.has(<K> command.name))
+		if (this.has(command.name as K))
 		{
-			if (!this.get(<K> command.name).external)
+			if (!this.get(command.name as K).external)
 				this._logger.info(`Replacing previously loaded command: ${command.name}`);
 			else
 				this._logger.info(`Replacing externally loaded command: ${command.name}`);
 
-			this.delete(<K> command.name);
+			this.delete(command.name as K);
 		}
-		this.set(<K> command.name, command);
+		this.set(command.name as K, command);
 		command._register(this._client);
 		if (external) command.external = true;
 	}

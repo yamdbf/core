@@ -9,11 +9,11 @@ export type MappedArgType = { [arg: string]: string | string[] };
 export function resolve(argTypes: string | MappedArgType): MiddlewareFunction
 {
 	if (typeof argTypes === 'string') argTypes =
-		<MappedArgType> Util.parseArgTypes(argTypes);
+		Util.parseArgTypes(argTypes) as MappedArgType;
 
 	const names: string[] = Object.keys(argTypes);
 	const types: (string | string[])[] = names
-		.map(name => (<MappedArgType> argTypes)[name]);
+		.map(name => (argTypes as MappedArgType)[name]);
 
 	return async function(this: Command, message: Message, args: any[]): Promise<[Message, any[]]>
 	{
@@ -37,7 +37,7 @@ export function resolve(argTypes: string | MappedArgType): MiddlewareFunction
 
 			if (type instanceof Array) type = 'String';
 
-			if (<string> type === 'Any') continue;
+			if (type as string === 'Any') continue;
 
 			const resolver: Resolver = this.client.resolvers.get(type);
 			if (!resolver)

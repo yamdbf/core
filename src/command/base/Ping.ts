@@ -14,7 +14,7 @@ export default class extends Command
 
 	public async action(message: Message): Promise<void>
 	{
-		let msg = <Message> await message.channel.send('Pong!');
+		let msg = await message.channel.send('Pong!') as Message;
 		msg.edit(`Pong! (${msg.createdTimestamp - message.createdTimestamp}ms)`);
 	}
 }

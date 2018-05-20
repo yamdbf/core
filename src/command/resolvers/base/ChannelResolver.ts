@@ -29,7 +29,7 @@ export class ChannelResolver extends Resolver
 		if (channelRegex.test(value))
 		{
 			const id: string = value.match(channelRegex)[1];
-			channel = <TextChannel> context.guild.channels.get(id);
+			channel = context.guild.channels.get(id) as TextChannel;
 			if (!channel) return;
 		}
 		else

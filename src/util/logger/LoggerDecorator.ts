@@ -23,7 +23,7 @@ import { Logger } from './Logger';
 // // {
 // // 	Object.defineProperty(target.prototype, 'logger',
 // // 		{ value: Logger.instance });
-// // 	return <Loggable<T>> target;
+// // 	return target as Loggable<T>;
 // // }
 
 export function logger(key: string): PropertyDecorator;

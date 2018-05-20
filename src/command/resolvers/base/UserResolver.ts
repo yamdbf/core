@@ -40,7 +40,7 @@ export class UserResolver extends Resolver
 				users = users.concat(new Collection(
 					context.guild.members
 						.filter(a => Util.normalize(a.displayName).includes(normalized))
-						.map(a => <[string, User]> [a.id, a.user])));
+						.map(a => [a.id, a.user] as [string, User])));
 
 			if (users.size === 1) user = users.first();
 			else return users;
