@@ -728,6 +728,7 @@ export class Client extends Discord.Client
 	public once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
 	public once(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
 	public once(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+	public once(event: string, listener: Function): this;
 
 //#endregion
 
