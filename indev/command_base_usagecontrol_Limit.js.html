@@ -89,8 +89,8 @@ Removing individual roles is not possible to keep the command simple to use.`,
 	@localizable
 	public async action(message: Message, [res, clearOrCommand, rolesOrCommand]: [ResourceProxy, Command | string, Command | string]): Promise&lt;any>
 	{
-		if (clearOrCommand === 'clear') return this.clearLimit(message, res, &lt;Command> rolesOrCommand);
-		else return this.limitCommand(message, res, &lt;Command> clearOrCommand, &lt;string> rolesOrCommand);
+		if (clearOrCommand === 'clear') return this.clearLimit(message, res, rolesOrCommand as Command);
+		else return this.limitCommand(message, res, clearOrCommand as Command, rolesOrCommand as string);
 	}
 
 	/**

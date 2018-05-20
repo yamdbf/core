@@ -61,7 +61,7 @@
 // // {
 // // 	Object.defineProperty(target.prototype, 'logger',
 // // 		{ value: Logger.instance });
-// // 	return &lt;Loggable&lt;T>> target;
+// // 	return target as Loggable&lt;T>;
 // // }
 
 export function logger(key: string): PropertyDecorator;

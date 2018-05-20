@@ -70,7 +70,7 @@ class BaseLoggable {}
  * @mixin
  * @property {Logger} logger The Logger instance attached to the Loggable class
  */
-export function Loggable&lt;T extends Constructable>(Base: T = &lt;any> BaseLoggable): Constructable&lt;ILoggable> &amp; T
+export function Loggable&lt;T extends Constructable>(Base: T = BaseLoggable as any): Constructable&lt;ILoggable> &amp; T
 {
 	return class extends Base
 	{
