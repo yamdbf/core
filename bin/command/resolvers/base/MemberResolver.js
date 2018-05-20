@@ -18,7 +18,7 @@ class MemberResolver extends Resolver_1.Resolver {
         const idRegex = /^(?:<@!?)?(\d+)>?$/;
         if (idRegex.test(value)) {
             try {
-                member = await context.guild.fetchMember(value.match(idRegex)[1]);
+                member = await context.guild.members.fetch(value.match(idRegex)[1]);
             }
             catch (_a) { }
             if (!member)

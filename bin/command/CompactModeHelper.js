@@ -70,7 +70,7 @@ class CompactModeHelper {
         let invokeImmediately = false;
         if (message.channel.type === 'text')
             try {
-                clientMember = await message.guild.fetchMember(CompactModeHelper._instance._client.user);
+                clientMember = await message.guild.members.fetch(CompactModeHelper._instance._client.user);
             }
             catch (_a) {
                 invokeImmediately = true;

@@ -455,8 +455,13 @@ class Client extends Discord.Client {
      * @memberof Client
      * @event event:clientReady
      */
+    // on() wrapper to support overload signatures
     on(event, listener) {
         return super.on(event, listener);
+    }
+    // once() wrapper to support overload signatures
+    once(event, listener) {
+        return super.once(event, listener);
     }
 }
 __decorate([

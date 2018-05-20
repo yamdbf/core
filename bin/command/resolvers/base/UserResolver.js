@@ -16,7 +16,7 @@ class UserResolver extends Resolver_1.Resolver {
         const idRegex = /^(?:<@!?)?(\d+)>?$/;
         if (idRegex.test(value)) {
             try {
-                user = await this.client.fetchUser(value.match(idRegex)[1]);
+                user = await this.client.users.fetch(value.match(idRegex)[1]);
             }
             catch (_a) { }
             if (!user)

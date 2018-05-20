@@ -111,7 +111,7 @@ class CommandDispatcher {
         const sendMiddlewareResult = async (result, options) => {
             if (await message.guild.storage.settings.get('compact') || this._client.compact) {
                 if (message.reactions.size > 0)
-                    await message.clearReactions();
+                    await message.reactions.removeAll();
                 return CompactModeHelper_1.CompactModeHelper.registerButton(message, this._client.buttons['fail'], () => message.channel.send(result, options));
             }
             else

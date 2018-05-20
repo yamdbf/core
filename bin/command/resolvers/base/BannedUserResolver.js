@@ -14,7 +14,8 @@ class BannedUserResolver extends Resolver_1.Resolver {
     async resolveRaw(value, context = {}) {
         let user;
         const idRegex = /^(?:<@!?)?(\d+)>?$/;
-        const bannedUsers = await context.guild.fetchBans();
+        const bans = await context.guild.fetchBans();
+        const bannedUsers = new discord_js_1.Collection(bans.map(b => [b.user.id, b.user]));
         if (idRegex.test(value)) {
             user = bannedUsers.get(value.match(idRegex)[1]);
             if (!user)

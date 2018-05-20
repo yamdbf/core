@@ -288,7 +288,7 @@ class Command {
             && typeof options.button !== 'undefined'
             && (await message.guild.storage.settings.get('compact') || this.client.compact)) {
             if (message.reactions.size > 0)
-                await message.clearReactions();
+                await message.reactions.removeAll();
             CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons[options.button] || options.button, () => message.channel.send(response, options));
             return;
         }

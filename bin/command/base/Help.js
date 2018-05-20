@@ -28,7 +28,7 @@ class default_1 extends Command_1.Command {
         const cInfo = (cmd) => Lang_1.Lang.getCommandInfo(cmd, lang);
         let command;
         let output = '';
-        let embed = new discord_js_1.RichEmbed();
+        let embed = new discord_js_1.MessageEmbed();
         if (!commandName) {
             const usableCommands = this.client.commands
                 .filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
