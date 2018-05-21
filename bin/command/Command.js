@@ -8,12 +8,12 @@ const CompactModeHelper_1 = require("./CompactModeHelper");
  * @param {CommandInfo} info - Object containing required command properties
  */
 class Command {
-    constructor(info = null) {
+    constructor(info) {
         /**
          * YAMDBF Client instance
+         * @name Command#client
          * @type {Client}
          */
-        this.client = null;
         /**
          * The name of the command, used by the dispatcher
          * to determine the command being executed
@@ -156,8 +156,6 @@ class Command {
      * @returns {any}
      */
     action(message, args) {
-        message = null;
-        args = null;
         throw new Error(`\`${this.constructor.name}\` has not overloaded the command action method`);
     }
     /**

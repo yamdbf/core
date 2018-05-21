@@ -17,9 +17,11 @@ class CommandRegistry extends discord_js_1.Collection {
     constructor(client) {
         super();
         Object.defineProperty(this, '_client', { value: client });
-        this._reserved = [
-            () => this.has('limit') ? 'clear' : null
-        ];
+        Object.defineProperty(this, '_reserved', {
+            value: [
+                () => this.has('limit') ? 'clear' : null
+            ]
+        });
     }
     /**
      * Contains all [Command groups]{@link Command#group}

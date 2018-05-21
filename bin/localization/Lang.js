@@ -289,9 +289,9 @@ class Lang {
             throw new TypeError('command must be an instance of Command class');
         const paths = [command.name, lang];
         let desc, info, usage;
-        desc = Util_1.Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'desc']) || command.desc;
-        info = Util_1.Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'info']) || command.info;
-        usage = Util_1.Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'usage']) || command.usage;
+        desc = Util_1.Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'desc']) || command.desc || '';
+        info = Util_1.Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'info']) || command.info || '';
+        usage = Util_1.Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'usage']) || command.usage || '';
         return { desc, info, usage };
     }
     /**

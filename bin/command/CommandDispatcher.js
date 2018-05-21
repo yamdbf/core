@@ -44,6 +44,10 @@ class CommandDispatcher {
             return;
         if (this._client.selfbot && message.author.id !== this._client.user.id)
             return;
+        // Fail silently if the guild doesn't have a guild storage,
+        // though this should never happen
+        if (!dm && !this._client.storage.guilds.has(message.guild.id))
+            return;
         // Set `message.guild.storage` if message is not a DM
         if (!dm)
             message.guild.storage = this._client.storage.guilds.get(message.guild.id);

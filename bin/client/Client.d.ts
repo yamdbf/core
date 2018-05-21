@@ -27,11 +27,11 @@ export declare class Client extends Discord.Client {
     private readonly _commandLoader;
     private readonly _dispatcher;
     private _ratelimit;
-    readonly commandsDir: string;
-    readonly localeDir: string;
+    readonly commandsDir: string | null;
+    readonly localeDir: string | null;
     readonly owner: string[];
     readonly defaultLang: string;
-    readonly statusText: string;
+    readonly statusText: string | null;
     readonly readyText: string;
     readonly unknownCommandError: boolean;
     readonly dmHelp: boolean;
@@ -107,7 +107,7 @@ export declare class Client extends Discord.Client {
      * @param {external:Guild} guild The Guild to get the prefix of
      * @returns {Promise<string | null>}
      */
-    getPrefix(guild: Guild): Promise<string>;
+    getPrefix(guild: Guild): Promise<string | null>;
     /**
      * Clean out expired guild storage/settings
      * @returns {Promise<void>}

@@ -215,10 +215,14 @@ class Client extends Discord.Client {
             this._logger.info('Loading base commands...');
             this._commandLoader.loadCommandsFrom(path.join(__dirname, '../command/base'), true);
             // Disable setlang command if there is only one language
-            if (Lang_1.Lang.langNames.length === 1 && !this.disableBase.includes('setlang'))
+            if (Lang_1.Lang.langNames.length === 1
+                && !this.disableBase.includes('setlang')
+                && this.commands.has('setlang'))
                 this.commands.get('setlang').disable();
             // Disable the blacklist command if the client is a selfbot
-            if (this.selfbot && !this.disableBase.includes('blacklist'))
+            if (this.selfbot
+                && !this.disableBase.includes('blacklist')
+                && this.commands.has('blaclist'))
                 this.commands.get('blacklist').disable();
         }
         registerListeners(this);
@@ -273,7 +277,8 @@ class Client extends Discord.Client {
             await this._guildStorageLoader.loadStorages();
     }
     __onGuildDeleteEvent(guild) {
-        this.storage.guilds.get(guild.id).settings.set('YAMDBFInternal.remove', Date.now() + Time_1.Time.parseShorthand('7d'));
+        if (this.storage.guilds.has(guild.id))
+            this.storage.guilds.get(guild.id).settings.set('YAMDBFInternal.remove', Date.now() + Time_1.Time.parseShorthand('7d'));
     }
     //#endregion
     //#region Getters/Setters
@@ -353,7 +358,7 @@ class Client extends Discord.Client {
      * @returns {Promise<string | null>}
      */
     async getPrefix(guild) {
-        if (!guild)
+        if (!guild || !this.storage.guilds.has(guild.id))
             return null;
         return (await this.storage.guilds.get(guild.id).settings.get('prefix')) || null;
     }
@@ -403,6 +408,8 @@ class Client extends Discord.Client {
      * @private
      */
     _reloadCustomCommands() {
+        if (!this.commandsDir)
+            throw new Error('Client is missing `commandsDir`, cannot reload Commands');
         return this._commandLoader.loadCommandsFrom(this.commandsDir);
     }
     /**
