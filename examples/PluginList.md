@@ -13,8 +13,6 @@ on the official YAMDBF Discord server.
 - [log-to-file](https://github.com/kata-codes/yamdbf-log-to-file) (katagatame)
 - [anilist-unofficial](https://github.com/SpaceEEC/yamdbf-anilist-unofficial) (SpaceEEC)
 - [league](https://github.com/SpaceEEC/yamdbf-league) (SpaceEEC)
-- [music](https://github.com/Damon-haHAA/yamdbf-music) (Damon-haHAA)
-  - *May contain memory leaks*
 
 ### Language packs
   - [lang-german](https://github.com/SpaceEEC/yamdbf-lang-german) (SpaceEEC)
