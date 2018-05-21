@@ -10,7 +10,8 @@
         "sourceMap": true,
         "removeComments": false,
         "experimentalDecorators": true,
-        "strictPropertyInitialization": true
+        "strictPropertyInitialization": true,
+        "strictNullChecks": true
     },
 	"exclude": [
 		"node_modules",

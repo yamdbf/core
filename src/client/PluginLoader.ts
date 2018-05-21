@@ -14,7 +14,7 @@ import { PluginConstructor } from '../types/PluginConstructor';
 export class PluginLoader
 {
 	@logger('PluginLoader')
-	private readonly _logger: Logger;
+	private readonly _logger!: Logger;
 	private readonly _client: Client;
 	private readonly _provider: StorageProvider;
 	private _plugins: (PluginConstructor | string)[];
@@ -46,10 +46,10 @@ export class PluginLoader
 
 		for (const [index, plugin] of this._plugins.entries())
 		{
-			let loadedPlugin: Plugin;
+			let loadedPlugin!: Plugin;
 			if (typeof plugin === 'string')
 			{
-				let error: string;
+				let error!: string;
 				if (!/^yamdbf-/.test(plugin))
 				{
 					try { loadedPlugin = new (require(plugin))(this._client); }
@@ -97,7 +97,7 @@ export class PluginLoader
 				continue;
 			}
 
-			let pluginStorage: SharedProviderStorage;
+			let pluginStorage!: SharedProviderStorage;
 			try { pluginStorage = new SharedProviderStorage(this._provider, loadedPlugin.name); }
 			catch { this._logger.warn(`Failed to create storage for Plugin '${loadedPlugin.name}'`); }
 

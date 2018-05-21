@@ -345,9 +345,9 @@ export class Lang
 
 		const paths: string[] = [command.name, lang];
 		let desc: string, info: string, usage: string;
-		desc = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'desc']) || command.desc;
-		info = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'info']) || command.info;
-		usage = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'usage']) || command.usage;
+		desc = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'desc']) || command.desc || '';
+		info = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'info']) || command.info || '';
+		usage = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'usage']) || command.usage || '';
 
 		return { desc, info, usage };
 	}

@@ -56,19 +56,19 @@ const { on, once, registerListeners } = ListenerUtil;
 export class Client extends Discord.Client
 {
 	@logger('Client')
-	private readonly _logger: Logger;
+	private readonly _logger!: Logger;
 	private readonly _token: string;
 	private readonly _plugins: (PluginConstructor | string)[];
 	private readonly _guildStorageLoader: GuildStorageLoader;
-	private readonly _commandLoader: CommandLoader;
-	private readonly _dispatcher: CommandDispatcher;
-	private _ratelimit: string;
+	private readonly _commandLoader!: CommandLoader;
+	private readonly _dispatcher!: CommandDispatcher;
+	private _ratelimit!: string;
 
-	public readonly commandsDir: string;
-	public readonly localeDir: string;
+	public readonly commandsDir: string | null;
+	public readonly localeDir: string | null;
 	public readonly owner: string[];
 	public readonly defaultLang: string;
-	public readonly statusText: string;
+	public readonly statusText: string | null;
 	public readonly readyText: string;
 	public readonly unknownCommandError: boolean;
 	public readonly dmHelp: boolean;
@@ -98,7 +98,7 @@ export class Client extends Discord.Client
 		// Hook logger to provide shard ID in base transport logs
 		if (this.shard) Logger._shard = this.shard.id;
 
-		this._token = options.token;
+		this._token = options.token!;
 
 		/**
 		 * The owner/owners of the bot, represented as an array of IDs.
@@ -118,7 +118,7 @@ export class Client extends Discord.Client
 		 * **See:** {@link Client#passive}
 		 * @type {string}
 		 */
-		this.commandsDir = options.commandsDir ? path.resolve(options.commandsDir) : null;
+		this.commandsDir = options.commandsDir ? path.resolve(options.commandsDir!) : null;
 
 		/**
 		 * Directory to find custom localization files
@@ -144,7 +144,7 @@ export class Client extends Discord.Client
 		 * on `clientReady`
 		 * @type {string}
 		 */
-		this.readyText = options.readyText;
+		this.readyText = options.readyText!;
 
 		/**
 		 * Whether or not a generic 'command not found' message
@@ -304,12 +304,16 @@ export class Client extends Discord.Client
 			this._commandLoader.loadCommandsFrom(path.join(__dirname, '../command/base'), true);
 
 			// Disable setlang command if there is only one language
-			if (Lang.langNames.length === 1 && !this.disableBase.includes('setlang'))
-				this.commands.get('setlang').disable();
+			if (Lang.langNames.length === 1
+				&& !this.disableBase.includes('setlang')
+				&& this.commands.has('setlang'))
+				this.commands.get('setlang')!.disable();
 
 			// Disable the blacklist command if the client is a selfbot
-			if (this.selfbot && !this.disableBase.includes('blacklist'))
-				this.commands.get('blacklist').disable();
+			if (this.selfbot
+				&& !this.disableBase.includes('blacklist')
+				&& this.commands.has('blaclist'))
+				this.commands.get('blacklist')!.disable();
 		}
 
 		registerListeners(this);
@@ -380,7 +384,7 @@ export class Client extends Discord.Client
 		if (this.storage.guilds.has(guild.id))
 		{
 			// Handle guild returning to the same shard in the same session
-			const storage: GuildStorage = this.storage.guilds.get(guild.id);
+			const storage: GuildStorage = this.storage.guilds.get(guild.id)!;
 			if (await storage.settings.exists('YAMDBFInternal.remove'))
 				await storage.settings.remove('YAMDBFInternal.remove');
 		}
@@ -390,8 +394,9 @@ export class Client extends Discord.Client
 	@on('guildDelete')
 	private __onGuildDeleteEvent(guild: Guild): void
 	{
-		this.storage.guilds.get(guild.id).settings.set(
-			'YAMDBFInternal.remove', Date.now() + Time.parseShorthand('7d'));
+		if (this.storage.guilds.has(guild.id))
+			this.storage.guilds.get(guild.id)!.settings.set(
+				'YAMDBFInternal.remove', Date.now() + Time.parseShorthand('7d'));
 	}
 
 //#endregion
@@ -490,10 +495,10 @@ export class Client extends Discord.Client
 	 * @param {external:Guild} guild The Guild to get the prefix of
 	 * @returns {Promise<string | null>}
 	 */
-	public async getPrefix(guild: Guild): Promise<string>
+	public async getPrefix(guild: Guild): Promise<string | null>
 	{
-		if (!guild) return null;
-		return (await this.storage.guilds.get(guild.id).settings.get('prefix')) || null;
+		if (!guild || !this.storage.guilds.has(guild.id)) return null;
+		return (await this.storage.guilds.get(guild.id)!.settings.get('prefix')) || null;
 	}
 
 	/**
@@ -547,6 +552,9 @@ export class Client extends Discord.Client
 	 */
 	public _reloadCustomCommands(): number
 	{
+		if (!this.commandsDir)
+			throw new Error('Client is missing `commandsDir`, cannot reload Commands');
+
 		return this._commandLoader.loadCommandsFrom(this.commandsDir);
 	}
 

@@ -53,7 +53,7 @@ export class ResolverLoader
 	 */
 	public get(name: string): Resolver
 	{
-		return Object.values(this.loaded).find(r => r.name === name || r.aliases.includes(name));
+		return Object.values(this.loaded).find(r => r.name === name || r.aliases.includes(name))!;
 	}
 
 	/**

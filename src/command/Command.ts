@@ -14,37 +14,37 @@ import { RespondOptions } from '../types/RespondOptions';
  */
 export class Command<T extends Client = Client>
 {
-	private _disabled: boolean;
-	private _ratelimit: string;
+	private _disabled!: boolean;
+	private _ratelimit!: string;
 
-	public client: T;
-	public name: string;
-	public desc: string;
-	public usage: string;
-	public info: string;
-	public group: string;
-	public aliases: string[];
-	public guildOnly: boolean;
-	public hidden: boolean;
-	public argOpts: ArgOpts;
-	public callerPermissions: PermissionResolvable[];
-	public clientPermissions: PermissionResolvable[];
-	public roles: string[];
-	public ownerOnly: boolean;
-	public external: boolean;
+	public client!: T;
+	public name!: string;
+	public desc!: string;
+	public usage!: string;
+	public info!: string;
+	public group!: string;
+	public aliases!: string[];
+	public guildOnly!: boolean;
+	public hidden!: boolean;
+	public argOpts!: ArgOpts;
+	public callerPermissions!: PermissionResolvable[];
+	public clientPermissions!: PermissionResolvable[];
+	public roles!: string[];
+	public ownerOnly!: boolean;
+	public external!: boolean;
 
 	// Internals
 	public readonly _middleware: MiddlewareFunction[];
-	public _classloc: string;
+	public _classloc!: string;
 	public _initialized: boolean;
 
-	public constructor(info: CommandInfo = null)
+	public constructor(info?: CommandInfo)
 	{
 		/**
 		 * YAMDBF Client instance
+		 * @name Command#client
 		 * @type {Client}
 		 */
-		this.client = null;
 
 		/**
 		 * The name of the command, used by the dispatcher
@@ -208,8 +208,6 @@ export class Command<T extends Client = Client>
 	 */
 	public action(message: Message, args: any[]): any
 	{
-		message = null;
-		args = null;
 		throw new Error(`\`${this.constructor.name}\` has not overloaded the command action method`);
 	}
 
@@ -345,7 +343,7 @@ export class Command<T extends Client = Client>
 		if (this.client.selfbot) return message.edit(response, options);
 		if (typeof options !== 'undefined'
 			&& typeof options.button !== 'undefined'
-			&& (await message.guild.storage.settings.get('compact') || this.client.compact))
+			&& (await message.guild.storage!.settings.get('compact') || this.client.compact))
 		{
 			if (message.reactions.size > 0) await message.reactions.removeAll();
 			CompactModeHelper.registerButton(

@@ -42,6 +42,6 @@ import { SharedProviderStorage } from '../storage/SharedProviderStorage';
  */
 export class Plugin implements IPlugin
 {
-	public name: string;
+	public name!: string;
 	public init(storage?: SharedProviderStorage): void { throw new Error('Plugins must implement the `init` method'); }
 }

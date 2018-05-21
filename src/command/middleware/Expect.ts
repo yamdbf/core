@@ -21,12 +21,12 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 		const dm: boolean = message.channel.type !== 'text';
 		const lang: string = dm
 			? this.client.defaultLang
-			: await message.guild.storage.settings.get('lang')
+			: await message.guild.storage!.settings.get('lang')
 				|| this.client.defaultLang;
 
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
-		const usage: string = Lang.getCommandInfo(this, lang).usage.replace(/<prefix>/g, prefix);
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
+		const usage: string = Lang.getCommandInfo(this, lang).usage!.replace(/<prefix>/g, prefix);
 
 		for (const [index, name] of names.entries())
 		{

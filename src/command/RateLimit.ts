@@ -6,12 +6,12 @@
  */
 export class RateLimit
 {
-	private _count: number;
-	private _notified: boolean;
+	private _count!: number;
+	private _notified!: boolean;
 
 	public readonly limit: number;
 	public readonly duration: number;
-	public expires: number;
+	public expires!: number;
 
 	public constructor(limit: [number, number])
 	{

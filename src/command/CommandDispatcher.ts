@@ -21,7 +21,7 @@ import { CompactModeHelper } from './CompactModeHelper';
  */
 export class CommandDispatcher
 {
-	@logger private readonly _logger: Logger;
+	@logger private readonly _logger!: Logger;
 	private readonly _client: Client;
 	private _ready: boolean = false;
 
@@ -55,6 +55,10 @@ export class CommandDispatcher
 		if (message.author.bot) return;
 		if (this._client.selfbot && message.author.id !== this._client.user.id) return;
 
+		// Fail silently if the guild doesn't have a guild storage,
+		// though this should never happen
+		if (!dm && !this._client.storage.guilds.has(message.guild.id)) return;
+
 		// Set `message.guild.storage` if message is not a DM
 		if (!dm) message.guild.storage = this._client.storage.guilds.get(message.guild.id);
 
@@ -74,7 +78,7 @@ export class CommandDispatcher
 			if (!dm)
 			{
 				let shortcuts: { [name: string]: string } =
-					await message.guild.storage.settings.get('shortcuts') || {};
+					await message.guild.storage!.settings.get('shortcuts') || {};
 
 				if (shortcuts && prefix && name && shortcuts[name])
 				{
@@ -134,14 +138,14 @@ export class CommandDispatcher
 		type CommandResult = Result | Result[] | Promise<Result> | Promise<Result[]>;
 		type MiddlewareResult = [Message, any[]] | Promise<[Message, any[]]> | string | Error;
 
-		let commandResult: CommandResult;
+		let commandResult!: CommandResult;
 		let middlewarePassed: boolean = true;
 		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command._middleware);
 
 		// Function to send middleware result, utilizing compact mode if enabled
 		const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
 			async (result, options) => {
-				if (await message.guild.storage.settings.get('compact') || this._client.compact)
+				if (await message.guild.storage!.settings.get('compact') || this._client.compact)
 				{
 					if (message.reactions.size > 0) await message.reactions.removeAll();
 					return CompactModeHelper.registerButton(
@@ -198,7 +202,7 @@ export class CommandDispatcher
 	private async isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
 	{
 		if (await this._client.storage.get(`blacklist.${user.id}`)) return true;
-		if (!dm && await message.guild.storage.settings.get(`blacklist.${user.id}`)) return true;
+		if (!dm && await message.guild.storage!.settings.get(`blacklist.${user.id}`)) return true;
 		return false;
 	}
 
@@ -209,10 +213,10 @@ export class CommandDispatcher
 	 */
 	private async canCallCommand(res: ResourceProxy, command: Command, message: Message, dm: boolean): Promise<boolean>
 	{
-		const storage: GuildStorage = !dm ? this._client.storage.guilds.get(message.guild.id) : null;
+		const storage: GuildStorage | null = !dm ? this._client.storage.guilds.get(message.guild.id)! : null;
 
 		if (command.ownerOnly && !this._client.isOwner(message.author)) return false;
-		if (!dm && (await storage.settings.get('disabledGroups') || []).includes(command.group)) return false;
+		if (!dm && (await storage!.settings.get('disabledGroups') || []).includes(command.group)) return false;
 		if (!this.passedRateLimiters(res, message, command)) return false;
 
 		if (dm && command.guildOnly)
@@ -282,7 +286,7 @@ export class CommandDispatcher
 		if (!rateLimit.wasNotified)
 		{
 			const globalLimitString: string = this._client.ratelimit;
-			const globalLimit: RateLimit = globalLimitString
+			const globalLimit: RateLimit | null = globalLimitString
 				? manager.get(globalLimitString, message.author.id, 'global')
 				: null;
 			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return true;
@@ -324,7 +328,7 @@ export class CommandDispatcher
 	{
 		if (dm || this._client.selfbot) return true;
 
-		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
+		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id)!;
 		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
 
 		if (!limitedCommands[command.name]) return true;
@@ -382,7 +386,7 @@ export class CommandDispatcher
 	 */
 	private async failedLimiterError(res: ResourceProxy, command: Command, message: Message): Promise<string>
 	{
-		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id);
+		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id)!;
 		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands');
 		const roles: string[] = message.guild.roles
 			.filter(r => limitedCommands[command.name].includes(r.id))

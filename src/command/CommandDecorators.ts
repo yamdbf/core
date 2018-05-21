@@ -30,19 +30,19 @@ import { CompactModeHelper } from './CompactModeHelper';
  */
 export function using(func: MiddlewareFunction): MethodDecorator
 {
-	return function(target: Command, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
+	return function(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor
 	{
 		if (!target) throw new Error('@using must be used as a method decorator for a Command action method.');
 		if (key !== 'action') throw new Error(
 			`"${target.constructor.name}#${key}" is not a valid method target for @using.`);
 
-		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
+		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key)!;
 		const original: any = descriptor.value;
 		descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 		{
 			const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
 				async (result, options) => {
-					if (await message.guild.storage.settings.get('compact') || this.client.compact)
+					if (await message.guild.storage!.settings.get('compact') || this.client.compact)
 					{
 						if (message.reactions.size > 0) await message.reactions.removeAll();
 						return CompactModeHelper.registerButton(
@@ -99,7 +99,7 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 	if (key !== 'action') throw new Error(
 		`"${target.constructor.name}#${key}" is not a valid method target for @localizable.`);
 
-	if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
+	if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key)!;
 	const original: any = descriptor.value;
 
 	descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
@@ -107,7 +107,7 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 		const dm: boolean = message.channel.type !== 'text';
 		const lang: string = dm
 			? this.client.defaultLang
-			: await message.guild.storage.settings.get('lang')
+			: await message.guild.storage!.settings.get('lang')
 				|| this.client.defaultLang;
 
 		const res: ResourceProxy = Lang.createResourceProxy(lang);

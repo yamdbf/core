@@ -15,18 +15,20 @@ export class CommandRegistry<
 	extends Collection<K, V>
 {
 	@logger('CommandRegistry')
-	private readonly _logger: Logger;
-	private readonly _client: T;
-	private readonly _reserved: ((() => string) | string)[];
+	private readonly _logger!: Logger;
+	private readonly _client!: T;
+	private readonly _reserved!: ((() => string) | string)[];
 
 	public constructor(client: T)
 	{
 		super();
 		Object.defineProperty(this, '_client', { value: client });
 
-		this._reserved = [
-			() => this.has('limit' as K) ? 'clear' : null
-		];
+		Object.defineProperty(this, '_reserved', {
+			value: [
+				() => this.has('limit' as K) ? 'clear' : null
+			]
+		});
 	}
 
 	/**
@@ -80,7 +82,7 @@ export class CommandRegistry<
 	{
 		if (this.has(command.name as K))
 		{
-			if (!this.get(command.name as K).external)
+			if (!this.get(command.name as K)!.external)
 				this._logger.info(`Replacing previously loaded command: ${command.name}`);
 			else
 				this._logger.info(`Replacing externally loaded command: ${command.name}`);
