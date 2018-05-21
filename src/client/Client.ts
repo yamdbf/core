@@ -276,7 +276,7 @@ export class Client extends Discord.Client
 		 * via the `buttons` field in {@link YAMDBFOptions}
 		 * @type {object}
 		 */
-		this.buttons = Util.mergeDefaults({
+		this.buttons = Object.assign({}, {
 			success: '✅',
 			fail: '❌',
 			working: '🕐'

@@ -285,18 +285,4 @@ export class Util
 				: result.push(item);
 		return result;
 	}
-
-	/**
-	 * Assign default properties to the given object via a defaults object
-	 * @static
-	 * @method mergeDefaults
-	 * @param {object} base
-	 * @param {object} defaults
-	 * @returns {object}
-	 */
-	public static mergeDefaults<T, U>(base: T, defaults: U): T & U
-	{
-		for (const key in defaults) (base as any)[key] = defaults[key];
-		return base as T & U;
-	}
 }
