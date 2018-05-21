@@ -51,7 +51,7 @@ import { BaseCommandName } from '../types/BaseCommandName';
 export class CommandLoader
 {
 	@logger('CommandLoader')
-	private readonly _logger: Logger;
+	private readonly _logger!: Logger;
 	private readonly _client: Client;
 	private readonly _commands: CommandRegistry&lt;any>;
 
@@ -109,7 +109,7 @@ export class CommandLoader
 	 */
 	private _findCommandClass(obj: any): typeof Command
 	{
-		let foundClass: typeof Command;
+		let foundClass!: typeof Command;
 		const keys: string[] = Object.keys(obj);
 		if (Object.getPrototypeOf(obj).name === 'Command')
 			foundClass = obj;

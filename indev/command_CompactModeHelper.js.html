@@ -126,7 +126,7 @@ export class CompactModeHelper
 		if (CompactModeHelper._instance._client.buttons[emoji])
 			emoji = CompactModeHelper._instance._client.buttons[emoji];
 
-		let clientMember: GuildMember;
+		let clientMember!: GuildMember;
 		let invokeImmediately: boolean = false;
 
 		if (message.channel.type === 'text')
