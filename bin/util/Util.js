@@ -253,19 +253,6 @@ class Util {
                 : result.push(item);
         return result;
     }
-    /**
-     * Assign default properties to the given object via a defaults object
-     * @static
-     * @method mergeDefaults
-     * @param {object} base
-     * @param {object} defaults
-     * @returns {object}
-     */
-    static mergeDefaults(base, defaults) {
-        for (const key in defaults)
-            base[key] = defaults[key];
-        return base;
-    }
 }
 /**
  * Tangible representation of all base command names
