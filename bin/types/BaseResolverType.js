@@ -5,7 +5,18 @@
  * [expect]{@link module:Middleware.expect}. Can be one of
  * the following string literals:
  * ```
- * 'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role' | 'Any'
+ * 'String'
+ * | 'Number'
+ * | 'Boolean'
+ * | 'Duration'
+ * | 'User'
+ * | 'Member'
+ * | 'BannedUser'
+ * | 'Channel'
+ * | 'Role'
+ * | 'Command'
+ * | 'CommandGroup'
+ * | 'Any'
  * ```
  * or an Array of possible string literal values
  */
