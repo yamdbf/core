@@ -724,7 +724,18 @@ controlling how command arguments will be parsed</p>
 for use with <a href="module-Middleware.html#.resolve"><code>resolve</code></a> and
 <a href="module-Middleware.html#.expect"><code>expect</code></a>. Can be one of
 the following string literals:</p>
-<pre class="prettyprint source"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role' | 'Any'</code></pre><p>or an Array of possible string literal values</p>
+<pre class="prettyprint source"><code>'String'
+| 'Number'
+| 'Boolean'
+| 'Duration'
+| 'User'
+| 'Member'
+| 'BannedUser'
+| 'Channel'
+| 'Role'
+| 'Command'
+| 'CommandGroup'
+| 'Any'</code></pre><p>or an Array of possible string literal values</p>
 </div>
 
 
@@ -2088,8 +2099,8 @@ containing localization overrides for a command's <code>desc</code>,
 
 
 <div class="description">
-    <p>Represents an object passed from <a href="Logger.html"><code>Logger</code></a>
-to any <a href="global.html#TransportFunction"><code>TransportFunction</code></a>s given to it</p>
+    <p>Represents an object passed from the <a href="Logger.html"><code>Logger</code></a>
+to the <a href="global.html#TransportFunction"><code>TransportFunction</code></a> of any <a href="global.html#Transport"><code>Transport</code></a>s given to it</p>
 </div>
 
 
@@ -2568,7 +2579,7 @@ of a Plugin.</em></p>
 <div class="description">
     <p>Any class that extends and
 implements <a href="Resolver.html"><code>Resolver</code></a>. <em>Not to be confused with an <strong>instance</strong>
-of a Plugin.</em></p>
+of a Resolver.</em></p>
 </div>
 
 
@@ -3054,7 +3065,7 @@ to be confused with an <strong>instance</strong> of a storage provider.</em></p>
     <p>Represents an object mapping template
 keys to string values, where the template keys will be replaced with
 the provided values in the source string when given to a Lang resource
-function like <a href="module-Lang.html#.res"><code>Lang.res()</code></a></p>
+function/proxy like <a href="module-Lang.html#.res"><code>Lang.res()</code></a></p>
 </div>
 
 
@@ -3125,8 +3136,7 @@ function like <a href="module-Lang.html#.res"><code>Lang.res()</code></a></p>
 
 
 <div class="description">
-    <p>Represents a transport object for
-the <a href="Logger.html"><code>Logger</code></a>.</p>
+    <p>Represents a transport object for the <a href="Logger.html"><code>Logger</code></a>.</p>
 </div>
 
 
@@ -3297,10 +3307,11 @@ the <a href="Logger.html"><code>Logger</code></a>.</p>
 <div style="border-left: solid #e6e6e6; padding-left: 10px">
 
 <div class="description">
-    <p>Represents a function to be given
-to <a href="Logger.html#addTransport"><code>Logger#addTransport</code></a> that will receive log data. What is done
-with that log data is up to you, but logging to a file or a database
-would be some examples</p>
+    <p>Represents a function to be included
+in a <a href="global.html#Transport"><code>Transport</code></a> object. This function will be given a <a href="global.html#LogData"><code>LogData</code></a>
+object at runtime whenever a logger method is called. What is done with that
+log data is entirely up to you as the developer, but logging to a file.
+to a database, or even to a Discord channel would be some good examples</p>
 </div>
 
 

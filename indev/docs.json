@@ -3314,7 +3314,7 @@
         },
         {
             "name": "BaseResolverType",
-            "description": "<p>Valid argument resolver types\nfor use with [resolve]{@link module:Middleware.resolve} and\n[expect]{@link module:Middleware.expect}. Can be one of\nthe following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String' | 'Number' | 'Duration' | 'User' | 'Member' | 'BannedUser' | 'Channel' | 'Role' | 'Any'</code></pre><p>or an Array of possible string literal values</p>",
+            "description": "<p>Valid argument resolver types\nfor use with [resolve]{@link module:Middleware.resolve} and\n[expect]{@link module:Middleware.expect}. Can be one of\nthe following string literals:</p>\n<pre class=\"prettyprint source\"><code>'String'\n| 'Number'\n| 'Boolean'\n| 'Duration'\n| 'User'\n| 'Member'\n| 'BannedUser'\n| 'Channel'\n| 'Role'\n| 'Command'\n| 'CommandGroup'\n| 'Any'</code></pre><p>or an Array of possible string literal values</p>",
             "properties": []
         },
         {
@@ -3534,7 +3534,7 @@
         },
         {
             "name": "LogData",
-            "description": "<p>Represents an object passed from {@link Logger}\nto any {@link TransportFunction}s given to it</p>",
+            "description": "<p>Represents an object passed from the {@link Logger}\nto the {@link TransportFunction} of any {@link Transport}s given to it</p>",
             "properties": [
                 {
                     "name": "timestamp",
@@ -3587,7 +3587,7 @@
         },
         {
             "name": "ResolverConstructor",
-            "description": "<p>Any class that extends and\nimplements {@link Resolver}. <em>Not to be confused with an <strong>instance</strong>\nof a Plugin.</em></p>",
+            "description": "<p>Any class that extends and\nimplements {@link Resolver}. <em>Not to be confused with an <strong>instance</strong>\nof a Resolver.</em></p>",
             "properties": []
         },
         {
@@ -3621,12 +3621,12 @@
         },
         {
             "name": "TemplateData",
-            "description": "<p>Represents an object mapping template\nkeys to string values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction like [Lang.res()]{@link module:Lang.res}</p>",
+            "description": "<p>Represents an object mapping template\nkeys to string values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction/proxy like [Lang.res()]{@link module:Lang.res}</p>",
             "properties": []
         },
         {
             "name": "Transport",
-            "description": "<p>Represents a transport object for\nthe {@link Logger}.</p>",
+            "description": "<p>Represents a transport object for the {@link Logger}.</p>",
             "properties": [
                 {
                     "name": "transport",
@@ -3648,7 +3648,7 @@
         },
         {
             "name": "TransportFunction",
-            "description": "<p>Represents a function to be given\nto {@link Logger#addTransport} that will receive log data. What is done\nwith that log data is up to you, but logging to a file or a database\nwould be some examples</p>",
+            "description": "<p>Represents a function to be included\nin a {@link Transport} object. This function will be given a {@link LogData}\nobject at runtime whenever a logger method is called. What is done with that\nlog data is entirely up to you as the developer, but logging to a file.\nto a database, or even to a Discord channel would be some good examples</p>",
             "properties": []
         },
         {
