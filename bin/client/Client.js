@@ -476,15 +476,18 @@ __decorate([
 ], Client.prototype, "_logger", void 0);
 __decorate([
     once('ready')
+    // @ts-ignore - Handled via ListenerUtil
 ], Client.prototype, "__onReadyEvent", null);
 __decorate([
     once('continue')
 ], Client.prototype, "__onContinueEvent", null);
 __decorate([
     on('guildCreate')
+    // @ts-ignore - Handled via ListenerUtil
 ], Client.prototype, "__onGuildCreateEvent", null);
 __decorate([
     on('guildDelete')
+    // @ts-ignore - Handled via ListenerUtil
 ], Client.prototype, "__onGuildDeleteEvent", null);
 exports.Client = Client;
 

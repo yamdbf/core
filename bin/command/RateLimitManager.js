@@ -11,7 +11,7 @@ const RateLimit_1 = require("./RateLimit");
 class RateLimitManager {
     constructor() {
         this._ratelimits = {};
-        this._interval = setInterval(() => this._cleanup(this._ratelimits), 30e3);
+        setInterval(() => this._cleanup(this._ratelimits), 30e3);
     }
     /**
      * Get a {@link RateLimit} object for the given target descriptors. This can be

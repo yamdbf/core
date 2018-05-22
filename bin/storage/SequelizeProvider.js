@@ -13,8 +13,6 @@ function SequelizeProvider(url, dialect, debug) {
     return class extends StorageProvider_1.StorageProvider {
         constructor(name) {
             super();
-            this._name = name;
-            this._url = url;
             // Lazy load sequelize
             const seq = require('sequelize');
             this._backend = Database_1.Database.instance(url, debug);

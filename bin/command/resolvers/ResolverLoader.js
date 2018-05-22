@@ -49,7 +49,7 @@ class ResolverLoader {
      */
     _loadResolvers() {
         for (const resolver of this._base.concat(this._client._customResolvers)) {
-            let newResolver = new resolver(this._client);
+            const newResolver = new resolver(this._client);
             this.loaded[newResolver.name] = newResolver;
         }
     }

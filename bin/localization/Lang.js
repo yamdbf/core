@@ -362,7 +362,7 @@ class Lang {
         if (scriptTemplates.test(loadedString)) {
             const proxy = Lang.createResourceProxy(lang);
             const res = new Proxy({}, {
-                get: (target, prop) => {
+                get: (_, prop) => {
                     return (args = data) => proxy[prop](args);
                 }
             });
@@ -415,7 +415,7 @@ class Lang {
      */
     static createResourceProxy(lang) {
         return new Proxy({}, {
-            get: (target, key) => {
+            get: (_, key) => {
                 return (data) => Lang.res(lang, key, data);
             }
         });

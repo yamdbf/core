@@ -11,13 +11,15 @@ const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
 const Util_1 = require("../../util/Util");
 const util_1 = require("util");
-const Discord = require('discord.js'); // tslint:disable-line
-const Yamdbf = require('../../index'); // tslint:disable-line
+// @ts-ignore - Exposed for eval:ts command invocations
+const Discord = require('discord.js');
+// @ts-ignore - Exposed for eval:ts command invocations
+const Yamdbf = require('../../index');
 let ts;
 try {
     ts = require('typescript');
 }
-catch (err) { }
+catch (_a) { }
 class CompilerError extends Error {
     constructor(message) {
         super(message);
@@ -35,7 +37,8 @@ class default_1 extends Command_1.Command {
         });
     }
     async action(message, [res]) {
-        const client = this.client; // tslint:disable-line
+        // @ts-ignore - Exposed for eval command invocations
+        const client = this.client;
         const [, , prefix, name] = await Util_1.Util.wasCommandCalled(message);
         const call = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
         const code = message.content.replace(call, '').trim();

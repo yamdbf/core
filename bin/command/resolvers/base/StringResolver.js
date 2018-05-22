@@ -11,7 +11,7 @@ class StringResolver extends Resolver_1.Resolver {
     resolveRaw(value) {
         return value instanceof Array ? value.join('\n') : value.toString();
     }
-    resolve(message, command, name, value) {
+    resolve(_message, _command, _name, value) {
         return this.resolveRaw(value);
     }
 }

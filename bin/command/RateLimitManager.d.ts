@@ -7,7 +7,6 @@ import { RateLimit } from './RateLimit';
  */
 export declare class RateLimitManager {
     private readonly _ratelimits;
-    private readonly _interval;
     constructor();
     /**
      * Get a {@link RateLimit} object for the given target descriptors. This can be

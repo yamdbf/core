@@ -6,5 +6,5 @@ export declare class StringResolver extends Resolver {
     constructor(client: Client);
     validate(value: any): boolean;
     resolveRaw(value: string | string[]): string;
-    resolve(message: Message, command: Command, name: string, value: string | string[]): string;
+    resolve(_message: Message, _command: Command, _name: string, value: string | string[]): string;
 }
