@@ -58,7 +58,7 @@ export default class extends Command
 	}
 
 	@using(resolve(`action: ['enable', 'on', 'disable', 'off'], ...group: String`))
-	@using(function(message, args: string[])
+	@using(function(this: Command, message, args: string[])
 	{
 		if (args[0])
 			return expect(`action: ['enable', 'on', 'disable', 'off'], ...group: String`)
