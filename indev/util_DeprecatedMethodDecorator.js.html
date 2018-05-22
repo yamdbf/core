@@ -59,7 +59,7 @@ export function deprecatedMethod(...decoratorArgs: any[]): MethodDecorator | Pro
 
 	function decorate(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor
 	{
-		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key);
+		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key)!;
 		const original: any = descriptor.value;
 		descriptor.value = function(...args: any[]): any
 		{

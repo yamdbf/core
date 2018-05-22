@@ -103,7 +103,7 @@ export class GuildStorageLoader
 		const settingsStorageKeys: string[] = await this._settingsProvider.keys();
 		for (const guildID of settingsStorageKeys)
 		{
-			const data: string = await this._settingsProvider.get(guildID);
+			const data: string = (await this._settingsProvider.get(guildID))!;
 			if (!data) continue;
 
 			const parsed: any = JSON.parse(data);

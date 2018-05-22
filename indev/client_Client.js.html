@@ -434,7 +434,7 @@ export class Client extends Discord.Client
 	{
 		if (this.storage.guilds.has(guild.id))
 			this.storage.guilds.get(guild.id)!.settings.set(
-				'YAMDBFInternal.remove', Date.now() + Time.parseShorthand('7d'));
+				'YAMDBFInternal.remove', Date.now() + Time.parseShorthand('7d')!);
 	}
 
 //#endregion

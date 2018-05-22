@@ -1045,7 +1045,7 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "Promise.<(external:Message|Array.<external:Message>)>",
+                        "type": "Promise.<(external:Message|Array.<external:Message>|undefined)>",
                         "description": ""
                     }
                 },
@@ -1323,8 +1323,11 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "",
-                        "description": "<p>Command</p>"
+                        "type": [
+                            "Command",
+                            "undefined"
+                        ],
+                        "description": ""
                     }
                 },
                 {
@@ -2885,7 +2888,7 @@
                     "name": "get",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Async method that gets the value of a key in storage</p>",
+                    "description": "<p>Async method that gets the value of a key in storage,\nreturning undefined if a value doesn't exist</p>",
                     "parameters": [
                         {
                             "name": "key",
@@ -2898,7 +2901,7 @@
                     ],
                     "examples": [],
                     "returns": {
-                        "type": "Promise.<string>",
+                        "type": "Promise.<(string|undefined)>",
                         "description": ""
                     }
                 },

@@ -58,10 +58,11 @@
  * @returns {Promise&lt;string[]>}
  */
 /**
- * Async method that gets the value of a key in storage
+ * Async method that gets the value of a key in storage,
+ * returning undefined if a value doesn't exist
  * @method IStorageProvider#get
  * @param {string} key The name of the key in storage
- * @returns {Promise&lt;string>}
+ * @returns {Promise&lt;string | undefined>}
  */
 /**
  * Async method that sets the value of a key in storage
@@ -86,7 +87,7 @@ export interface IStorageProvider
 {
 	init(): Promise&lt;void>;
 	keys(): Promise&lt;string[]>;
-	get(key: string): Promise&lt;string>;
+	get(key: string): Promise&lt;string | undefined>;
 	set(key: string, value: string): Promise&lt;void>;
 	remove(key: string): Promise&lt;void>;
 	clear(): Promise&lt;void>;
