@@ -4,7 +4,20 @@ const discord_js_1 = require("discord.js");
 const Util_1 = require("../util/Util");
 const CompactModeHelper_1 = require("./CompactModeHelper");
 /**
+ * Action to be executed when the command is called. The following parameters
+ * are what command actions will be passed by the {@link CommandDispatcher} whenever
+ * a command is called. Be sure to receive these in proper order when writing
+ * new commands
+ * @abstract
+ * @method Command#action
+ * @param {external:Message} message Discord.js message object
+ * @param {any[]} args An array containing the args parsed from the command calling message.<br>
+ * 					   Will contain strings unless middleware is used to transform the args
+ * @returns {any}
+ */
+/**
  * Command class to extend to create commands users can execute
+ * @abstract
  * @param {CommandInfo} info - Object containing required command properties
  */
 class Command {
@@ -142,22 +155,10 @@ class Command {
      * are ready for use.
      *
      * >**Note:** Can be async if needed
+     * @abstract
      * @returns {Promise<void>}
      */
     init() { }
-    /**
-     * Action to be executed when the command is called. The following parameters
-     * are what command actions will be passed by the {@link CommandDispatcher} whenever
-     * a command is called. Be sure to receive these in proper order when writing
-     * new commands
-     * @param {external:Message} message Discord.js message object
-     * @param {any[]} args An array containing the args parsed from the command calling message.<br>
-     * 					   Will contain strings unless middleware is used to transform the args
-     * @returns {any}
-     */
-    action(message, args) {
-        throw new Error(`\`${this.constructor.name}\` has not overloaded the command action method`);
-    }
     /**
      * Make necessary asserts for Command validity.
      * Called internally by the command loader

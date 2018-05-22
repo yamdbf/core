@@ -24,11 +24,11 @@ import { IStorageProvider } from './interface/IStorageProvider';
  * by and used within your storage provider constructors as necessary to create a unique
  * storage based on the given string
  */
-export declare class StorageProvider implements IStorageProvider {
-    init(): Promise<void>;
-    keys(): Promise<string[]>;
-    get(key: string): Promise<string | undefined>;
-    set(key: string, value: string): Promise<void>;
-    remove(key: string): Promise<void>;
-    clear(): Promise<void>;
+export declare abstract class StorageProvider implements IStorageProvider {
+    abstract init(): Promise<void>;
+    abstract keys(): Promise<string[]>;
+    abstract get(key: string): Promise<string | undefined>;
+    abstract set(key: string, value: string): Promise<void>;
+    abstract remove(key: string): Promise<void>;
+    abstract clear(): Promise<void>;
 }

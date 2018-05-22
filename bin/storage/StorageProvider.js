@@ -26,12 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * storage based on the given string
  */
 class StorageProvider {
-    async init() { throw new Error('Storage providers must implement the `init` method'); }
-    async keys() { throw new Error('Storage providers must implement the `keys` method'); }
-    async get(key) { throw new Error('Storage providers must implement the `get` method'); }
-    async set(key, value) { throw new Error('Storage providers must implement the `set` method'); }
-    async remove(key) { throw new Error('Storage providers must implement the `remove` method'); }
-    async clear() { throw new Error('Storage providers must implement the `clear` method'); }
 }
 exports.StorageProvider = StorageProvider;
 

@@ -6,10 +6,23 @@ import { ArgOpts } from '../types/ArgOpts';
 import { Message } from '../types/Message';
 import { RespondOptions } from '../types/RespondOptions';
 /**
+ * Action to be executed when the command is called. The following parameters
+ * are what command actions will be passed by the {@link CommandDispatcher} whenever
+ * a command is called. Be sure to receive these in proper order when writing
+ * new commands
+ * @abstract
+ * @method Command#action
+ * @param {external:Message} message Discord.js message object
+ * @param {any[]} args An array containing the args parsed from the command calling message.<br>
+ * 					   Will contain strings unless middleware is used to transform the args
+ * @returns {any}
+ */
+/**
  * Command class to extend to create commands users can execute
+ * @abstract
  * @param {CommandInfo} info - Object containing required command properties
  */
-export declare class Command<T extends Client = Client> {
+export declare abstract class Command<T extends Client = Client> {
     private _disabled;
     private _ratelimit;
     client: T;
@@ -31,6 +44,7 @@ export declare class Command<T extends Client = Client> {
     _classloc: string;
     _initialized: boolean;
     constructor(info?: CommandInfo);
+    abstract action(message: Message, args: any[]): any;
     /**
      * The ratelimit for this command per user
      * @type {string}
@@ -46,20 +60,10 @@ export declare class Command<T extends Client = Client> {
      * are ready for use.
      *
      * >**Note:** Can be async if needed
+     * @abstract
      * @returns {Promise<void>}
      */
     init(): void;
-    /**
-     * Action to be executed when the command is called. The following parameters
-     * are what command actions will be passed by the {@link CommandDispatcher} whenever
-     * a command is called. Be sure to receive these in proper order when writing
-     * new commands
-     * @param {external:Message} message Discord.js message object
-     * @param {any[]} args An array containing the args parsed from the command calling message.<br>
-     * 					   Will contain strings unless middleware is used to transform the args
-     * @returns {any}
-     */
-    action(message: Message, args: any[]): any;
     /**
      * Make necessary asserts for Command validity.
      * Called internally by the command loader

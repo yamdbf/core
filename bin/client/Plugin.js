@@ -40,7 +40,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * to `super()`
  */
 class Plugin {
-    init(storage) { throw new Error('Plugins must implement the `init` method'); }
 }
 exports.Plugin = Plugin;
 

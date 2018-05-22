@@ -39,7 +39,7 @@ import { SharedProviderStorage } from '../storage/SharedProviderStorage';
  * constructor implementation, in which case it must be received and passed
  * to `super()`
  */
-export declare class Plugin implements IPlugin {
-    name: string;
-    init(storage?: SharedProviderStorage): void;
+export declare abstract class Plugin implements IPlugin {
+    abstract name: string;
+    abstract init(storage?: SharedProviderStorage): void;
 }
