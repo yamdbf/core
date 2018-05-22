@@ -27,7 +27,7 @@ import { IStorageProvider } from './interface/IStorageProvider';
 export declare class StorageProvider implements IStorageProvider {
     init(): Promise<void>;
     keys(): Promise<string[]>;
-    get(key: string): Promise<string>;
+    get(key: string): Promise<string | undefined>;
     set(key: string, value: string): Promise<void>;
     remove(key: string): Promise<void>;
     clear(): Promise<void>;

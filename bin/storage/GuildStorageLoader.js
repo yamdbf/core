@@ -46,7 +46,7 @@ class GuildStorageLoader {
     async cleanGuilds() {
         const settingsStorageKeys = await this._settingsProvider.keys();
         for (const guildID of settingsStorageKeys) {
-            const data = await this._settingsProvider.get(guildID);
+            const data = (await this._settingsProvider.get(guildID));
             if (!data)
                 continue;
             const parsed = JSON.parse(data);

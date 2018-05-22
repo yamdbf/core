@@ -24,7 +24,8 @@ class GuildSettings extends SharedProviderStorage_1.SharedProviderStorage {
     async init() {
         try {
             await super.init();
-            let data = JSON.parse(await this._provider.get(this._key));
+            let raw = (await this._provider.get(this._key));
+            let data = JSON.parse(raw);
             const defaults = await this._client.storage.get('defaultGuildSettings');
             for (const key of Object.keys(defaults))
                 if (typeof data[key] === 'undefined')

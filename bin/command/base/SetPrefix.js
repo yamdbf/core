@@ -21,7 +21,7 @@ class default_1 extends Command_1.Command {
     }
     async action(message, [res, prefix]) {
         if (!prefix)
-            return this.respond(message, res.CMD_PREFIX_CURRENT({ prefix: await this.client.getPrefix(message.guild) }));
+            return this.respond(message, res.CMD_PREFIX_CURRENT({ prefix: (await this.client.getPrefix(message.guild)) }));
         if (prefix.length > 10)
             return this.respond(message, res.CMD_PREFIX_ERR_CHAR_LIMIT());
         if (/[\\`]/.test(prefix))

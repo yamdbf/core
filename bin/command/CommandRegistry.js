@@ -50,7 +50,7 @@ class CommandRegistry extends discord_js_1.Collection {
     /**
      * Resolve the given Command name or alias to a registered Command
      * @param {string} input Command name or alias
-     * @returns Command
+     * @returns {Command | undefined}
      */
     resolve(input) {
         input = input ? input.toLowerCase() : input;

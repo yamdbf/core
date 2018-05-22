@@ -43,14 +43,14 @@ class SingleProviderStorage {
             throw new TypeError('Key must be a string');
         if (key.includes('.')) {
             let path = key.split('.');
-            let stringData = await this._storage.get(path.shift());
+            let stringData = (await this._storage.get(path.shift()));
             if (typeof stringData === 'undefined')
                 return;
             let data = JSON.parse(stringData);
             return Util_1.Util.getNestedValue(data, path);
         }
         else {
-            let stringData = await this._storage.get(key);
+            let stringData = (await this._storage.get(key));
             if (typeof stringData === 'undefined')
                 return;
             return JSON.parse(stringData);

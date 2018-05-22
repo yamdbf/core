@@ -40,7 +40,7 @@ class default_1 extends Command_1.Command {
                 .sort()
                 .join('\n');
             const data = {
-                commandList: commandList,
+                commandList,
                 usage: cInfo(this).usage,
                 mentionUsage: cInfo(this).usage
                     .replace('<prefix>', mentionName)

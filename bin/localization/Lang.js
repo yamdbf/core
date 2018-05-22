@@ -323,7 +323,8 @@ class Lang {
             : null;
         const lang = dm
             ? Lang._instance._client.defaultLang
-            : await storage.settings.get('lang') || Lang._instance._client.defaultLang;
+            : (storage && await storage.settings.get('lang'))
+                || Lang._instance._client.defaultLang;
         return lang;
     }
     /**

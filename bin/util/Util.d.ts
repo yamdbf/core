@@ -22,9 +22,9 @@ export declare class Util {
      * @static
      * @method wasCommandCalled
      * @param {Message} message Message to check
-     * @returns {Promise<Tuple<boolean, Command, string, string>>}
+     * @returns {Promise<Tuple<boolean, Command | null, string, string | null>>}
      */
-    static wasCommandCalled(message: Message): Promise<[boolean, Command, string, string]>;
+    static wasCommandCalled(message: Message): Promise<[boolean, Command | null, string, string | null]>;
     /**
      * Split args from the input by the given Command's argument separator
      * @static

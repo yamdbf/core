@@ -15,7 +15,7 @@ class Util {
      * @static
      * @method wasCommandCalled
      * @param {Message} message Message to check
-     * @returns {Promise<Tuple<boolean, Command, string, string>>}
+     * @returns {Promise<Tuple<boolean, Command | null, string, string | null>>}
      */
     static async wasCommandCalled(message) {
         const client = message.client;
@@ -34,7 +34,7 @@ class Util {
         let prefix = prefixes.find(a => message.content.trim().startsWith(a));
         if (dm && typeof prefix === 'undefined')
             prefix = '';
-        if (typeof prefix === 'undefined' && !dm)
+        if (!dm && typeof prefix === 'undefined')
             return [false, null, prefix, null];
         const commandName = message.content.trim().slice(prefix.length).trim().split(' ')[0];
         const command = client.commands.resolve(commandName);

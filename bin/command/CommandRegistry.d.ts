@@ -33,9 +33,9 @@ export declare class CommandRegistry<T extends Client, K extends string = string
     /**
      * Resolve the given Command name or alias to a registered Command
      * @param {string} input Command name or alias
-     * @returns Command
+     * @returns {Command | undefined}
      */
-    resolve(input: string): V;
+    resolve(input: string): V | undefined;
     /**
      * Complete registration of a command and add to the parent
      * collection, erroring on duplicate names and aliases.

@@ -28,5 +28,5 @@ export declare class Time {
      * @param {string} shorthand The shorthand to parse
      * @returns {number}
      */
-    static parseShorthand(shorthand: string): number;
+    static parseShorthand(shorthand: string): number | null;
 }
