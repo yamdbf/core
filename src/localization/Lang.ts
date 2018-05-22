@@ -493,6 +493,6 @@ export class Lang
 			get: (target: any, key: PropertyKey) => {
 				return (data: TemplateData) => Lang.res(lang, key as string, data);
 			}
-		});
+		}) as ResourceProxy;
 	}
 }

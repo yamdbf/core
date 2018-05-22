@@ -36,7 +36,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	}
 
 	@using(resolve(`action: ['get', 'set', 'remove'], name: String, ...content: String`))
-	@using(function(message, args: string[])
+	@using(function(this: Command, message, args: string[])
 	{
 		if (args[0])
 		{

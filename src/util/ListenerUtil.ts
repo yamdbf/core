@@ -106,10 +106,10 @@ export class ListenerUtil
 	 */
 	private static _setListenerMetadata(event: string, once: boolean, ...args: any[]): MethodDecorator
 	{
-		return function<T extends EventEmitter>(target: T, key: string, descriptor: PropertyDescriptor): PropertyDescriptor
+		return function(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor
 		{
 			const listeners: ListenerMetadata[] = Reflect.getMetadata('listeners', target) || [];
-			listeners.push({ event, method: key, once, args });
+			listeners.push({ event, method: key as string, once, args });
 			Reflect.defineMetadata('listeners', listeners, target);
 			return descriptor;
 		};

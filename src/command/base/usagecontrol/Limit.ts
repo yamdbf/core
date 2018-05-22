@@ -30,7 +30,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
 		});
 	}
 
-	@using(function(message, args)
+	@using(function(this: Command, message, args)
 	{
 		if (args[0] === 'clear')
 			return resolve(`clear: String, command: Command`)
@@ -39,7 +39,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
 			return resolve(`command: Command, ...roles: String`)
 				.call(this, message, args);
 	})
-	@using(function(message, args)
+	@using(function(this: Command, message, args)
 	{
 		if (args[0] === 'clear')
 			return expect(`clear: String, command: Command`)
