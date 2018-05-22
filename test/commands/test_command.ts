@@ -1,5 +1,5 @@
 import {
-	Client,
+	// Client,
 	Command,
 	Message,
 	CommandDecorators,
@@ -7,11 +7,20 @@ import {
 	logger,
 	ResourceLoader,
 	Middleware,
-	CompactModeHelper
+	// CompactModeHelper
 } from '../../bin';
-import * as util from 'util';
-const { using, guildOnly, group, ownerOnly } = CommandDecorators;
-const { resolve, expect, localize } = Middleware;
+// import * as util from 'util';
+const {
+	// using,
+	// guildOnly,
+	group,
+	// ownerOnly
+} = CommandDecorators;
+const {
+	resolve,
+	expect,
+	// localize
+} = Middleware;
 
 // @ownerOnly
 // @guildOnly
@@ -49,7 +58,7 @@ export default class extends Command
 	// @using(localize)
 	// @using(resolve('foo: CommandGroup'))
 	// @using(expect('foo: CommandGroup'))
-	public async action(message: Message, [res, ...args]: [ResourceLoader, string[]]): Promise<void>
+	public async action(message: Message, [_res, ..._args]: [ResourceLoader, string[]]): Promise<void>
 	{
 		// message.channel.send(res('FOO_BAR_BAZ'));
 		// message.channel.send(args.join(' ') || 'MISSING ARGS');
@@ -65,6 +74,6 @@ export default class extends Command
 		// await CompactModeHelper.registerButton(message, '274295184957898752', () => {
 		// 	message.channel.send('Lul clicked');
 		// });
-		let result = this.respond(message, 'foo bar baz', { button: 'success' });
+		this.respond(message, 'foo bar baz', { button: 'success' });
 	}
 }

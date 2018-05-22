@@ -23,16 +23,12 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 {
 	return class extends StorageProvider implements IStorageProvider
 	{
-		private readonly _name: string;
-		private readonly _url: string;
 		private readonly _backend: Database;
 		private readonly _model: Sequelize.Model<object, object>;
 
 		public constructor(name: string)
 		{
 			super();
-			this._name = name;
-			this._url = url;
 
 			// Lazy load sequelize
 			const seq: typeof Sequelize = require('sequelize');

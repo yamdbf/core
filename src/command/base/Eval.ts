@@ -5,8 +5,11 @@ import { localizable } from '../CommandDecorators';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { inspect } from 'util';
-const Discord = require('discord.js'); // tslint:disable-line
-const Yamdbf = require('../../index'); // tslint:disable-line
+
+// @ts-ignore - Exposed for eval command invocations
+const Discord = require('discord.js');
+// @ts-ignore - Exposed for eval command invocations
+const Yamdbf = require('../../index');
 
 export default class extends Command
 {
@@ -23,7 +26,8 @@ export default class extends Command
 	@localizable
 	public async action(message: Message, [res]: [ResourceProxy]): Promise<any>
 	{
-		const client: Client = this.client; // tslint:disable-line
+		// @ts-ignore - Exposed for eval command invocations
+		const client: Client = this.client;
 		const [, , prefix, name] = await Util.wasCommandCalled(message);
 		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
 		const code: string = message.content.replace(call, '').trim();

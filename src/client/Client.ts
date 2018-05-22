@@ -322,6 +322,7 @@ export class Client extends Discord.Client
 //#region Event handlers
 
 	@once('ready')
+	// @ts-ignore - Handled via ListenerUtil
 	private async __onReadyEvent(): Promise<void>
 	{
 		await this.storage.init();
@@ -379,6 +380,7 @@ export class Client extends Discord.Client
 	}
 
 	@on('guildCreate')
+	// @ts-ignore - Handled via ListenerUtil
 	private async __onGuildCreateEvent(guild: Guild): Promise<void>
 	{
 		if (this.storage.guilds.has(guild.id))
@@ -392,6 +394,7 @@ export class Client extends Discord.Client
 	}
 
 	@on('guildDelete')
+	// @ts-ignore - Handled via ListenerUtil
 	private __onGuildDeleteEvent(guild: Guild): void
 	{
 		if (this.storage.guilds.has(guild.id))

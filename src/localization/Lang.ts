@@ -429,7 +429,7 @@ export class Lang
 		{
 			const proxy: ResourceProxy = Lang.createResourceProxy(lang);
 			const res: any = new Proxy({}, {
-				get: (target: any, prop: PropertyKey) => {
+				get: (_, prop) => {
 					return (args: TemplateData = data) => proxy[prop as BaseStrings](args);
 				}
 			});
@@ -490,7 +490,7 @@ export class Lang
 	public static createResourceProxy(lang: string): ResourceProxy
 	{
 		return new Proxy({}, {
-			get: (target: any, key: PropertyKey) => {
+			get: (_, key) => {
 				return (data: TemplateData) => Lang.res(lang, key as string, data);
 			}
 		}) as ResourceProxy;

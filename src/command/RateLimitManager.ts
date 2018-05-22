@@ -12,12 +12,11 @@ type NestedRateLimit = { [descriptor: string]: NestedRateLimit | RateLimit };
 export class RateLimitManager
 {
 	private readonly _ratelimits: NestedRateLimit;
-	private readonly _interval: NodeJS.Timer;
 
 	public constructor()
 	{
 		this._ratelimits = {};
-		this._interval = setInterval(() => this._cleanup(this._ratelimits), 30e3);
+		setInterval(() => this._cleanup(this._ratelimits), 30e3);
 	}
 
 	/**

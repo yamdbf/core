@@ -20,7 +20,7 @@ export class StringResolver extends Resolver
 		return value instanceof Array ? value.join('\n') : value.toString();
 	}
 
-	public resolve(message: Message, command: Command, name: string, value: string | string[]): string
+	public resolve(_message: Message, _command: Command, _name: string, value: string | string[]): string
 	{
 		return this.resolveRaw(value);
 	}

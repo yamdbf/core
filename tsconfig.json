@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
-        // "noUnusedLocals": true,
-        // "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "module": "commonjs",
         "target": "es2017",
         "lib": ["es2017"],
