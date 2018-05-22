@@ -79,7 +79,7 @@ export class CommandLoader
 		{
 			delete require.cache[require.resolve(file)];
 			const loadedFile: any = require(file);
-			const commandClass: typeof Command = this._findCommandClass(loadedFile)!;
+			const commandClass: new () => Command = this._findCommandClass(loadedFile)!;
 			if (!commandClass)
 			{
 				this._logger.debug(`Failed to find Command class in file: ${file}`);
@@ -107,9 +107,9 @@ export class CommandLoader
 	 * Recursively search for a Command class within the given object
 	 * @private
 	 */
-	private _findCommandClass(obj: any): typeof Command | undefined
+	private _findCommandClass(obj: any): (new () => Command) | undefined
 	{
-		let foundClass!: typeof Command;
+		let foundClass!: new () => Command;
 		const keys: string[] = Object.keys(obj);
 		if (Object.getPrototypeOf(obj).name === 'Command')
 			foundClass = obj;

@@ -624,33 +624,7 @@
                     }
                 ],
                 "examples": []
-            },
-            "functions": [
-                {
-                    "name": "init",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Method that will be called by the Plugin loader when the\nPlugin is loaded. This is the only method that will be called by\nthe framework automatically, so this should be where anything\nnecessary should be done to make the Plugin operational.</p>\n<p>When <code>init()</code> is called by the PluginLoader, the method will also\nbe passed a {@link SharedProviderStorage} instance that should be\nsaved and set aside for use if you need to use storage for anything\nwithin your plugins</p>\n<blockquote>\n<p>This method can be async if desired or needed</p>\n</blockquote>",
-                    "parameters": [
-                        {
-                            "name": "storage",
-                            "type": "SharedProviderStorage",
-                            "description": "<p>Storage that the plugin can use</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": [
-                            "Promise.<void>",
-                            "void"
-                        ],
-                        "description": ""
-                    }
-                }
-            ]
+            }
         },
         {
             "name": "PluginLoader",
@@ -711,7 +685,7 @@
             "description": "<p>Command class to extend to create commands users can execute</p>",
             "extends": [],
             "access": "",
-            "virtual": false,
+            "virtual": true,
             "fires": "",
             "constructor": {
                 "name": "Command",
@@ -728,6 +702,147 @@
                 ],
                 "examples": []
             },
+            "functions": [
+                {
+                    "name": "action",
+                    "access": "",
+                    "virtual": true,
+                    "description": "<p>Action to be executed when the command is called. The following parameters\nare what command actions will be passed by the {@link CommandDispatcher} whenever\na command is called. Be sure to receive these in proper order when writing\nnew commands</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>An array containing the args parsed from the command calling message.<br>\n                       Will contain strings unless middleware is used to transform the args</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "any",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "init",
+                    "access": "",
+                    "virtual": true,
+                    "description": "<p>Can be included in a command to initlialize any resources a command\nneeds at runtime that require things that are not available within\na command's constructor like the client instance or client/guild storages.</p>\n<p>Will be called after all commands are loaded (including those from\nany loaded plugins) and after all base framework storages (client and guild)\nare ready for use.</p>\n<blockquote>\n<p><strong>Note:</strong> Can be async if needed</p>\n</blockquote>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<void>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "_register",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Make necessary asserts for Command validity.\nCalled internally by the command loader</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "enable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Enable this command if it is disabled</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "disable",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Disable this command if it is enabled</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "use",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Adds a middleware function to be used when the command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do whenever this command\nis called.</p>\n<p>See {@link MiddlewareFunction} for information on how a middleware\nfunction should be represented</p>\n<p>Usage example:</p>\n<pre class=\"prettyprint source\"><code>&lt;Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to this command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<blockquote>\n<p><strong>Note:</strong> Middleware functions should only be added to a command one\ntime each and thus should not be added within any sort of event or loop.\nMultiple separate middleware functions can be added to the via multiple\nseparate calls to this method</p>\n</blockquote>",
+                    "parameters": [
+                        {
+                            "name": "func",
+                            "type": "MiddlewareFunction",
+                            "description": "<p>The middleware function to use</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Command",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "respond",
+                    "access": "protected",
+                    "virtual": false,
+                    "description": "<p>Send provided response to the provided message's channel\nvia edit or send, depending on whether or not the client is\na selfbot</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Discord.js Message object</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "response",
+                            "type": "string",
+                            "description": "<p>String to send</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "options",
+                            "type": "RespondOptions",
+                            "description": "<p>Optional options for the response</p>",
+                            "default": "",
+                            "optional": true,
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<(external:Message|Array.<external:Message>|undefined)>",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "_validatePermissions",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Validate PermissionResolvables in the given array, throwing an error\nfor any that are invalid</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ],
             "properties": [
                 {
                     "name": "client",
@@ -915,147 +1030,6 @@
                             "boolean"
                         ]
                     }
-                }
-            ],
-            "functions": [
-                {
-                    "name": "init",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Can be included in a command to initlialize any resources a command\nneeds at runtime that require things that are not available within\na command's constructor like the client instance or client/guild storages.</p>\n<p>Will be called after all commands are loaded (including those from\nany loaded plugins) and after all base framework storages (client and guild)\nare ready for use.</p>\n<blockquote>\n<p><strong>Note:</strong> Can be async if needed</p>\n</blockquote>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "action",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Action to be executed when the command is called. The following parameters\nare what command actions will be passed by the {@link CommandDispatcher} whenever\na command is called. Be sure to receive these in proper order when writing\nnew commands</p>",
-                    "parameters": [
-                        {
-                            "name": "message",
-                            "type": "external:Message",
-                            "description": "<p>Discord.js message object</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "args",
-                            "type": "Array.<any>",
-                            "description": "<p>An array containing the args parsed from the command calling message.<br>\n                       Will contain strings unless middleware is used to transform the args</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "any",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "_register",
-                    "access": "private",
-                    "virtual": false,
-                    "description": "<p>Make necessary asserts for Command validity.\nCalled internally by the command loader</p>",
-                    "parameters": [],
-                    "examples": []
-                },
-                {
-                    "name": "enable",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Enable this command if it is disabled</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "void",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "disable",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Disable this command if it is enabled</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "void",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "use",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Adds a middleware function to be used when the command is called\nto make modifications to args, determine if the command can\nbe run, or anything else you want to do whenever this command\nis called.</p>\n<p>See {@link MiddlewareFunction} for information on how a middleware\nfunction should be represented</p>\n<p>Usage example:</p>\n<pre class=\"prettyprint source\"><code>&lt;Client>.use((message, args) => [message, args.map(a => a.toUpperCase())]);</code></pre><p>This will add a middleware function to this command that will attempt\nto transform all args to uppercase. This will of course fail if any\nof the args are not a string.</p>\n<blockquote>\n<p><strong>Note:</strong> Middleware functions should only be added to a command one\ntime each and thus should not be added within any sort of event or loop.\nMultiple separate middleware functions can be added to the via multiple\nseparate calls to this method</p>\n</blockquote>",
-                    "parameters": [
-                        {
-                            "name": "func",
-                            "type": "MiddlewareFunction",
-                            "description": "<p>The middleware function to use</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Command",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "respond",
-                    "access": "protected",
-                    "virtual": false,
-                    "description": "<p>Send provided response to the provided message's channel\nvia edit or send, depending on whether or not the client is\na selfbot</p>",
-                    "parameters": [
-                        {
-                            "name": "message",
-                            "type": "external:Message",
-                            "description": "<p>Discord.js Message object</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "response",
-                            "type": "string",
-                            "description": "<p>String to send</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "options",
-                            "type": "RespondOptions",
-                            "description": "<p>Optional options for the response</p>",
-                            "default": "",
-                            "optional": true,
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<(external:Message|Array.<external:Message>|undefined)>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "_validatePermissions",
-                    "access": "private",
-                    "virtual": false,
-                    "description": "<p>Validate PermissionResolvables in the given array, throwing an error\nfor any that are invalid</p>",
-                    "parameters": [],
-                    "examples": []
                 }
             ]
         },
@@ -1750,35 +1724,11 @@
                 ],
                 "examples": []
             },
-            "properties": [
-                {
-                    "name": "name",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Name that servers as an identifier for the resolver</p>",
-                    "type": {
-                        "names": [
-                            "string"
-                        ]
-                    }
-                },
-                {
-                    "name": "aliases",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Additional identifier strings</p>",
-                    "type": {
-                        "names": [
-                            "Array.<string>"
-                        ]
-                    }
-                }
-            ],
             "functions": [
                 {
                     "name": "validate",
                     "access": "",
-                    "virtual": false,
+                    "virtual": true,
                     "description": "<p>Method to implement that should return whether or not the\ngiven value matches the type the resolver is meant to resolve.</p>\n<blockquote>\n<p>Can be async</p>\n</blockquote>",
                     "parameters": [
                         {
@@ -1799,7 +1749,7 @@
                 {
                     "name": "resolve",
                     "access": "",
-                    "virtual": false,
+                    "virtual": true,
                     "description": "<p>Method to implement that should accept a string and return\na resolved value of the type the resolver is meant to resolve.</p>\n<p>This method can and should throw errors when invalid input is given.\nThese errors will be sent to Discord as argument errors when using\nthe <code>resolve</code> middleware. Refer to the base Resolver error strings\nfor examples on what these errors should look like if you're trying\nto keep things in-line with YAMDBF</p>\n<blockquote>\n<p>Can be async</p>\n</blockquote>",
                     "parameters": [
                         {
@@ -1844,7 +1794,7 @@
                 {
                     "name": "resolveRaw",
                     "access": "",
-                    "virtual": false,
+                    "virtual": true,
                     "description": "<p>Method recommended to be implemented for resolving data without side-effects.\nWhere <code>resolve()</code> should throw errors which will be sent to Discord when\na value cannot be resolved, this method should simply return <code>undefined</code>.</p>\n<p>All base resolvers will implement this method with this signature so that\nthey can be accessed for personal use via <code>&lt;Client&gt;.resolvers.get('resolver\nname or alias')</code>.</p>\n<p>Some resolvers require additional context in the form of a partial {@link Message}\nobject in order to be able to resolve their data type from the given input\n(like needing a guild from the message to be able to resolve a <code>GuildMember</code>\nvia the <code>Member</code> resolver). It's safest to assume that all base resolvers will\nwant this context reference as only a small handful do not (specifically String,\nNumber, Duration, Command, and CommandGroup). In the case of your own custom\nresolvers, you should know what needs context and what doesn't, so you can get\naway with passing as needed there.</p>\n<p>In cases where a full Message object is unavailable but context is known,\nif you have a Guild instance, for example, you can simply pass it like</p>\n<pre class=\"prettyprint source\"><code>let resolved = &lt;Resolver>.resolveRaw(value, { guild });</code></pre><p>This is fine for all base resolvers, as the most any of them expect from\nthe context is for it to contain a <code>guild</code> field with a Guild instance,\nand they will throw an error if the context they require is missing.</p>\n<blockquote>\n<p>Can be async</p>\n</blockquote>",
                     "parameters": [
                         {
@@ -1868,6 +1818,30 @@
                     "returns": {
                         "type": "Promise.<any>",
                         "description": ""
+                    }
+                }
+            ],
+            "properties": [
+                {
+                    "name": "name",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Name that servers as an identifier for the resolver</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "aliases",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Additional identifier strings</p>",
+                    "type": {
+                        "names": [
+                            "Array.<string>"
+                        ]
                     }
                 }
             ]
@@ -2858,116 +2832,7 @@
                     }
                 ],
                 "examples": []
-            },
-            "functions": [
-                {
-                    "name": "init",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Async method to be run that will set up the storage provider\nfor use. Calls to other provider methods should not be made\nuntil this method has been called and resolved</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "keys",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Async method returning an array of stored key names</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<Array.<string>>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "get",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Async method that gets the value of a key in storage,\nreturning undefined if a value doesn't exist</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The name of the key in storage</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<(string|undefined)>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "set",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Async method that sets the value of a key in storage</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The name of the key in storage</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        },
-                        {
-                            "name": "value",
-                            "type": "string",
-                            "description": "<p>The value to set in storage</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "remove",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Async method that removes a key and its value from storage</p>",
-                    "parameters": [
-                        {
-                            "name": "key",
-                            "type": "string",
-                            "description": "<p>The name of the key in storage</p>",
-                            "default": "",
-                            "optional": "",
-                            "nullable": ""
-                        }
-                    ],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                },
-                {
-                    "name": "clear",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Async method that removes all keys and their values from storage</p>",
-                    "parameters": [],
-                    "examples": [],
-                    "returns": {
-                        "type": "Promise.<void>",
-                        "description": ""
-                    }
-                }
-            ]
+            }
         },
         {
             "name": "Logger",
