@@ -5,7 +5,7 @@ import DB = require('node-json-db');
 export class JSONProvider extends StorageProvider implements IStorageProvider
 {
 	private readonly _name: string;
-	private _db: DB;
+	private _db!: DB;
 
 	public constructor(name: string)
 	{
@@ -28,7 +28,7 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 		catch { return []; }
 	}
 
-	public async get(key: string): Promise<string>
+	public async get(key: string): Promise<string | undefined>
 	{
 		if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 		if (typeof key !== 'string') throw new TypeError('Key must be a string');

@@ -144,9 +144,9 @@ export class Lang
 		if (Lang.langNames.length > 1
 			&& (!Lang._instance._client.disableBase.includes('setlang')
 			&& Lang._instance._client.commands.has('setlang')
-			&& Lang._instance._client.commands.get('setlang').disabled))
+			&& Lang._instance._client.commands.get('setlang')!.disabled))
 		{
-			Lang._instance._client.commands.get('setlang').enable();
+			Lang._instance._client.commands.get('setlang')!.enable();
 			Lang._logger.info(`Additional langugage loaded, enabled 'setlang' command.`);
 		}
 	}
@@ -177,7 +177,7 @@ export class Lang
 		for (const file of files)
 		{
 			if (!langNameRegex.test(file)) continue;
-			const name: string = file.match(langNameRegex)[1];
+			const name: string = file.match(langNameRegex)![1];
 			if (!langs[name]) langs[name] = [];
 
 			langs[name].push(file);
@@ -377,13 +377,14 @@ export class Lang
 	public static async getLangFromMessage(message: Message): Promise<string>
 	{
 		const dm: boolean = message.channel.type !== 'text';
-		const storage: GuildStorage = !dm
+		const storage: GuildStorage | undefined | null = !dm
 			? Lang._instance._client.storage.guilds.get(message.guild.id)
 			: null;
 
 		const lang: string = dm
 			? Lang._instance._client.defaultLang
-			: await storage.settings.get('lang') || Lang._instance._client.defaultLang;
+			: (storage && await storage.settings.get('lang'))
+				|| Lang._instance._client.defaultLang;
 
 		return lang;
 	}
@@ -433,10 +434,10 @@ export class Lang
 				}
 			});
 
-			for (const scriptData of loadedString.match(scriptTemplates))
+			for (const scriptData of loadedString.match(scriptTemplates)!)
 			{
 				let functionBody: string =
-					scriptData.match(scriptTemplate)[1] || scriptData.match(scriptTemplate)[2];
+					scriptData.match(scriptTemplate)![1] || scriptData.match(scriptTemplate)![2];
 
 				let script: Function = new Function('args', 'res', functionBody);
 

@@ -27,7 +27,7 @@ export default class extends Command
 		{
 			const prefix: string = await this.client.getPrefix(message.guild) || '';
 			let names: string[] = langs.map(l => Lang.getMetaValue(l, 'name') || l);
-			let currentLang: string = await message.guild.storage.settings.get('lang') || 'en_us';
+			let currentLang: string = await message.guild.storage!.settings.get('lang') || 'en_us';
 			currentLang = Lang.getMetaValue(currentLang, 'name') || currentLang;
 			names = names
 				.map((l, i) => `${i + 1}:  ${l}`)
@@ -41,7 +41,7 @@ export default class extends Command
 			return message.channel.send(res.CMD_SETLANG_ERR_INVALID());
 
 		const newLang: string = langs[lang - 1];
-		await message.guild.storage.settings.set('lang', newLang);
+		await message.guild.storage!.settings.set('lang', newLang);
 
 		res = Lang.createResourceProxy(newLang);
 		const langName: string = Lang.getMetaValue(newLang, 'name') || newLang;

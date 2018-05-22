@@ -63,7 +63,7 @@ export default class extends Command
 
 	private _compile(code: string): string
 	{
-		let message: string;
+		let message!: string;
 		if (ts)
 		{
 			const fileName: string = `${__dirname}/eval${Date.now()}.ts`;

@@ -181,7 +181,7 @@ export class Logger
 	 */
 	public addTransport(transport: Transport): void
 	{
-		const level: LogLevel | (() => LogLevel) = transport.level;
+		const level: LogLevel | (() => LogLevel) = transport.level!;
 		transport.level = typeof level === 'undefined'
 			? () => this._logLevel
 			: typeof level === 'function'

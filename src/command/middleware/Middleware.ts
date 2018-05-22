@@ -39,8 +39,7 @@ export class Middleware
 	 * 								   See: [Util.parseArgTypes]{@link module:Util.parseArgTypes}
 	 * @returns {MiddlewareFunction}
 	 */
-	public static resolve: (argTypes: string | MappedArgType) =>
-		MiddlewareFunction = resolve;
+	public static resolve: (argTypes: string | MappedArgType) => MiddlewareFunction = resolve;
 
 	/**
 	 * Takes an object mapping argument names to {@link Resolver} type names
@@ -75,8 +74,7 @@ export class Middleware
 	 * 								   See: [Util.parseArgTypes]{@link module:Util.parseArgTypes}
 	 * @returns {MiddlewareFunction}
 	 */
-	public static expect: (argTypes: string | MappedArgType) =>
-		MiddlewareFunction = expect;
+	public static expect: (argTypes: string | MappedArgType) => MiddlewareFunction = expect;
 
 	/**
 	 * Middleware function that inserts a {@link ResourceProxy} object for the

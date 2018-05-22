@@ -40,9 +40,9 @@ export default class extends Command
 	 */
 	private async listGroups(message: Message, res: ResourceProxy): Promise<void>
 	{
-		const lang: string = await message.guild.storage.settings.get('lang') || this.client.defaultLang;
+		const lang: string = await message.guild.storage!.settings.get('lang') || this.client.defaultLang;
 		const info: string[] = this.client.commands.groups.map(g => Lang.getGroupInfo(g, lang));
-		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
+		const disabledGroups: string[] = await message.guild.storage!.settings.get('disabledGroups') || [];
 
 		const output: string = res.CMD_GROUPS_LIST({
 			groups: this.client.commands.groups.join(', '),
@@ -64,12 +64,12 @@ export default class extends Command
 		};
 
 		if (!this.client.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
-		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
+		const disabledGroups: string[] = await message.guild.storage!.settings.get('disabledGroups') || [];
 		if (group === 'base' || !disabledGroups.includes(group))
 			return this.respond(message, err.ENABLED);
 
 		disabledGroups.splice(disabledGroups.indexOf(group), 1);
-		await message.guild.storage.settings.set('disabledGroups', disabledGroups);
+		await message.guild.storage!.settings.set('disabledGroups', disabledGroups);
 
 		this.respond(message, res.CMD_GROUPS_ENABLE_SUCCESS({ group }));
 	}
@@ -85,12 +85,12 @@ export default class extends Command
 		};
 
 		if (!this.client.commands.groups.includes(group)) return this.respond(message, err.NO_EXIST);
-		const disabledGroups: string[] = await message.guild.storage.settings.get('disabledGroups') || [];
+		const disabledGroups: string[] = await message.guild.storage!.settings.get('disabledGroups') || [];
 		if (group === 'base' || disabledGroups.includes(group))
 			return this.respond(message, err.DISABLED);
 
 		disabledGroups.push(group);
-		await message.guild.storage.settings.set('disabledGroups', disabledGroups);
+		await message.guild.storage!.settings.set('disabledGroups', disabledGroups);
 
 		this.respond(message, res.CMD_GROUPS_DISABLE_SUCCESS({ group }));
 	}

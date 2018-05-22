@@ -54,14 +54,14 @@ export class SingleProviderStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			let stringData: string = await this._storage.get(path.shift());
+			let stringData: string = (await this._storage.get(path.shift()!))!;
 			if (typeof stringData === 'undefined') return;
 			let data: object = JSON.parse(stringData);
 			return Util.getNestedValue(data, path);
 		}
 		else
 		{
-			let stringData: string = await this._storage.get(key);
+			let stringData: string = (await this._storage.get(key))!;
 			if (typeof stringData === 'undefined') return;
 			return JSON.parse(stringData);
 		}
@@ -96,7 +96,7 @@ export class SingleProviderStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			key = path.shift();
+			key = path.shift()!;
 
 			data = await this.get(key);
 			if (typeof data === 'undefined') data = {};
@@ -122,7 +122,7 @@ export class SingleProviderStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			key = path.shift();
+			key = path.shift()!;
 
 			data = await this.get(key);
 			if (typeof data !== 'undefined')

@@ -58,7 +58,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			return (await this._model.findAll() as Entry[]).map(r => r.key);
 		}
 
-		public async get(key: string): Promise<string>
+		public async get(key: string): Promise<string | undefined>
 		{
 			if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 			if (typeof key !== 'string') throw new TypeError('Key must be a string');

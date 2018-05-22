@@ -334,7 +334,7 @@ export class Command<T extends Client = Client>
 	 * @param {external:Message} message Discord.js Message object
 	 * @param {string} response String to send
 	 * @param {RespondOptions} [options] Optional options for the response
-	 * @returns {Promise<external:Message | external:Message[]>}
+	 * @returns {Promise<external:Message | external:Message[] | undefined>}
 	 */
 	protected async respond(...args: any[]): Promise<any>
 	{

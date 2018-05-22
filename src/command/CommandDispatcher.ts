@@ -68,7 +68,7 @@ export class CommandDispatcher
 		const lang: string = await Lang.getLangFromMessage(message);
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
-		type CommandCallData = [boolean, Command, string, string];
+		type CommandCallData = [boolean, Command | null, string, string | null];
 		let [commandWasCalled, command, prefix, name]: CommandCallData =
 			await Util.wasCommandCalled(message);
 
@@ -90,7 +90,7 @@ export class CommandDispatcher
 					message.content = newCommand;
 					[commandWasCalled, command, prefix, name] = await Util.wasCommandCalled(message);
 
-					const shortcutArgs: string[] = this._client.argsParser(oldArgsStr, command, message);
+					const shortcutArgs: string[] = this._client.argsParser(oldArgsStr, command!, message);
 					message.content = format(newCommand, ...shortcutArgs);
 
 					if (!commandWasCalled)
@@ -132,7 +132,7 @@ export class CommandDispatcher
 		// Prepare args
 		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
 		const preppedInput: string = message.content.replace(call, '').trim();
-		let args: string[] = this._client.argsParser(preppedInput, command, message);
+		let args: string[] = this._client.argsParser(preppedInput, command!, message);
 
 		type Result = string | MessageOptions | Message;
 		type CommandResult = Result | Result[] | Promise<Result> | Promise<Result[]>;
@@ -140,7 +140,7 @@ export class CommandDispatcher
 
 		let commandResult!: CommandResult;
 		let middlewarePassed: boolean = true;
-		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command._middleware);
+		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command!._middleware);
 
 		// Function to send middleware result, utilizing compact mode if enabled
 		const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
@@ -179,8 +179,8 @@ export class CommandDispatcher
 
 		if (!middlewarePassed) return;
 
-		try { commandResult = await command.action(message, args); }
-		catch (err) { this._logger.error(`Dispatch:${command.name}`, err.stack); }
+		try { commandResult = await command!.action(message, args); }
+		catch (err) { this._logger.error(`Dispatch:${command!.name}`, err.stack); }
 
 		// Send command result to the channel if it's of a supported type
 		if (commandResult !== null
@@ -193,7 +193,7 @@ export class CommandDispatcher
 		// TODO: Store command result information for command editing
 
 		const dispatchEnd: number = Util.now() - dispatchStart;
-		this._client.emit('command', command.name, args, dispatchEnd, message);
+		this._client.emit('command', command!.name, args, dispatchEnd, message);
 	}
 
 	/**

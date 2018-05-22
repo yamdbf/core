@@ -23,7 +23,7 @@ export default class extends Command
 	@using(resolve(`action: ['add', 'remove'], user: User`))
 	@using(expect(`action: ['add', 'remove'], user: User`))
 	@localizable
-	public async action(message: Message, [res, action, user, global]: [ResourceProxy, string, User, string]): Promise<Message | Message[]>
+	public async action(message: Message, [res, action, user, global]: [ResourceProxy, string, User, string]): Promise<any>
 	{
 		if (action === 'add')
 		{
@@ -46,18 +46,18 @@ export default class extends Command
 				return message.channel.send(res.CMD_BLACKLIST_GLOBALSUCCESS({ user: user.tag }));
 			}
 
-			let member: GuildMember;
+			let member!: GuildMember;
 			try { member = await message.guild.members.fetch(user); }
 			catch (err) {}
 
 			if (member && member.permissions.has('ADMINISTRATOR'))
 				return message.channel.send(res.CMD_BLACKLIST_ERR_BADTARGET());
 
-			const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
+			const guildBlacklist: any = await message.guild.storage!.settings.get('blacklist') || {};
 			if (guildBlacklist[user.id])
 				return message.channel.send(res.CMD_BLACKLIST_ERR_ALREADYBLACKLISTED());
 
-			await message.guild.storage.settings.set(`blacklist.${user.id}`, true);
+			await message.guild.storage!.settings.set(`blacklist.${user.id}`, true);
 			this.client.emit('blacklistAdd', user, false);
 			return message.channel.send(res.CMD_BLACKLIST_SUCCESS({ user: user.tag }));
 		}
@@ -77,11 +77,11 @@ export default class extends Command
 				return message.channel.send(res.CMD_WHITELIST_GLOBALSUCCESS({ user: user.tag }));
 			}
 
-			const guildBlacklist: any = await message.guild.storage.settings.get('blacklist') || {};
+			const guildBlacklist: any = await message.guild.storage!.settings.get('blacklist') || {};
 			if (!guildBlacklist[user.id])
 				return message.channel.send(res.CMD_WHITELIST_ERR_NOTBLACKLISTED());
 
-			await message.guild.storage.settings.remove(`blacklist.${user.id}`);
+			await message.guild.storage!.settings.remove(`blacklist.${user.id}`);
 			this.client.emit('blacklistRemove', user, false);
 			return message.channel.send(res.CMD_WHITELIST_SUCCESS({ user: user.tag }));
 		}

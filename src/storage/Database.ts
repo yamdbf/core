@@ -19,7 +19,7 @@ import * as Sequelize from 'sequelize';
 export class Database
 {
 	@logger('Database')
-	private readonly _logger: Logger;
+	private readonly _logger!: Logger;
 	private static _instance: Database;
 	private _url: string;
 
@@ -84,7 +84,7 @@ export class Database
 			throw new Error('A database url is needed the first time a Database is accessed.');
 
 		if (this._instance) return this._instance;
-		return new Database(url, debug);
+		return new Database(url!, debug);
 	}
 
 	/**

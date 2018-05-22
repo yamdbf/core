@@ -30,8 +30,8 @@ export default class extends Command
 
 		if (!code) return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
 
-		let evaled: string | object;
-		let error: string;
+		let evaled!: string | object;
+		let error!: string;
 
 		try { evaled = await eval(code); }
 		catch (err) { error = err; }

@@ -64,7 +64,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	 */
 	private async listShortcuts(message: Message, res: ResourceProxy): Promise<void>
 	{
-		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
+		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') || {};
 		const names: string[] = Object.keys(shortcuts);
 
 		let output: string;
@@ -80,14 +80,14 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	 */
 	private async setShortcut(message: Message, res: ResourceProxy, name: string, content: string): Promise<any>
 	{
-		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
+		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') || {};
 		if (Object.keys(shortcuts).length >= 50)
 			return this.respond(message, res.CMD_SHORTCUTS_ERR_MAX_SHORTCUTS());
 
 		if (content.length > 500)
 			return this.respond(message, res.CMD_SHORTCUTS_ERR_SET_LENGTH());
 
-		await message.guild.storage.settings.set(`shortcuts.${name}`, content);
+		await message.guild.storage!.settings.set(`shortcuts.${name}`, content);
 
 		content = Util.escapeMarkdown(content, true);
 		return this.respond(message, res.CMD_SHORTCUTS_SET_SUCCESS({ name, content }));
@@ -98,7 +98,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	 */
 	private async getShortcut(message: Message, res: ResourceProxy, name: string): Promise<any>
 	{
-		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
+		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') || {};
 		if (!shortcuts[name])
 			return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
 
@@ -111,11 +111,11 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	 */
 	private async removeShortcut(message: Message, res: ResourceProxy, name: string): Promise<any>
 	{
-		const shortcuts: { [name: string]: string } = await message.guild.storage.settings.get('shortcuts') || {};
+		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') || {};
 		if (!shortcuts[name])
 			return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
 
-		await message.guild.storage.settings.remove(`shortcuts.${name}`);
+		await message.guild.storage!.settings.remove(`shortcuts.${name}`);
 		return this.respond(message, res.CMD_SHORTCUTS_REMOVE_SUCCESS({ name }));
 	}
 }

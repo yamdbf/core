@@ -60,7 +60,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
 	 */
 	public async clearLimit(message: Message, res: ResourceProxy, command: Command): Promise<any>
 	{
-		await message.guild.storage.settings.remove(`limitedCommands.${command.name}`);
+		await message.guild.storage!.settings.remove(`limitedCommands.${command.name}`);
 		return this.respond(message,
 			res.CMD_LIMIT_CLEAR_SUCCESS({ commandName: command.name }));
 	}
@@ -90,7 +90,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
 
 		if (foundRoles.length === 0) return this.respond(message, res.CMD_LIMIT_ERR_NO_ROLES());
 
-		const storage: GuildStorage = message.guild.storage;
+		const storage: GuildStorage = message.guild.storage!;
 		const newLimit: Set<string> =
 			new Set(await storage.settings.get(`limitedCommands.${command.name}`) || []);
 

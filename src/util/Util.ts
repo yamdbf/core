@@ -28,9 +28,9 @@ export class Util
 	 * @static
 	 * @method wasCommandCalled
 	 * @param {Message} message Message to check
-	 * @returns {Promise<Tuple<boolean, Command, string, string>>}
+	 * @returns {Promise<Tuple<boolean, Command | null, string, string | null>>}
 	 */
-	public static async wasCommandCalled(message: Message): Promise<[boolean, Command, string, string]>
+	public static async wasCommandCalled(message: Message): Promise<[boolean, Command | null, string, string | null]>
 	{
 		const client: Client = message.client as Client;
 		const dm: boolean = message.channel.type !== 'text';
@@ -39,23 +39,23 @@ export class Util
 			`<@!${client.user.id}>`
 		];
 
-		const guildStorage: GuildStorage = !dm
+		const guildStorage: GuildStorage | undefined | null = !dm
 			? message.guild.storage || client.storage.guilds.get(message.guild.id)
 			: null;
 
-		if (!dm) prefixes.push(await guildStorage.settings.get('prefix'));
+		if (!dm) prefixes.push(await guildStorage!.settings.get('prefix'));
 		else prefixes.push(await client.storage.get('defaultGuildSettings.prefix'));
 
-		let prefix: string = prefixes.find(a => message.content.trim().startsWith(a));
+		let prefix: string | undefined = prefixes.find(a => message.content.trim().startsWith(a));
 		if (dm && typeof prefix === 'undefined') prefix = '';
-		if (typeof prefix === 'undefined' && !dm) return [false, null, prefix, null];
+		if (!dm && typeof prefix === 'undefined') return [false, null, prefix!, null];
 
-		const commandName: string = message.content.trim().slice(prefix.length).trim().split(' ')[0];
-		const command: Command = client.commands.resolve(commandName);
-		if (!command) return [false, null, prefix, commandName];
-		if (command.disabled) return [false, command, prefix, commandName];
+		const commandName: string = message.content.trim().slice(prefix!.length).trim().split(' ')[0];
+		const command: Command | undefined = client.commands.resolve(commandName);
+		if (!command) return [false, null, prefix!, commandName];
+		if (command.disabled) return [false, command, prefix!, commandName];
 
-		return [true, command, prefix, commandName];
+		return [true, command, prefix!, commandName];
 	}
 
 	/**
@@ -132,7 +132,7 @@ export class Util
 		if (path.length === 0)
 			throw new Error('Missing nested assignment path');
 
-		let first: string = path.shift();
+		let first: string = path.shift()!;
 		if (typeof obj[first] === 'undefined') obj[first] = {};
 		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
 			throw new Error(`Target '${first}' is not valid for nested assignment.`);
@@ -155,7 +155,7 @@ export class Util
 		if (path.length === 0)
 			throw new Error('Missing nested assignment path');
 
-		let first: string = path.shift();
+		let first: string = path.shift()!;
 		if (typeof obj[first] === 'undefined') return;
 		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
 			return;
@@ -178,7 +178,7 @@ export class Util
 		if (typeof obj === 'undefined') return;
 		if (path.length === 0) return obj;
 
-		let first: string = path.shift();
+		let first: string = path.shift()!;
 		if (typeof obj[first] === 'undefined') return;
 		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
 			return;
@@ -215,18 +215,18 @@ export class Util
 			throw new Error(`Input string is incorrectly formatted: ${input}`);
 
 		let output: { [arg: string]: string | string[] } = {};
-		let args: string[] = input.match(argStringRegex);
+		let args: string[] = input.match(argStringRegex)!;
 		for (let arg of args)
 		{
 			let split: string[] = arg.split(':').map(a => a.trim());
-			let name: string = split.shift();
+			let name: string = split.shift()!;
 			arg = split.join(':');
 			if (/(?:\.\.\.)?.+\?/.test(name)) name = `[${name.replace('?', '')}]`;
 			else name = `<${name}>`;
 
 			if (/\[ *(?:(?: *, *)?(['"])(\S+)\1)+ *\]|\[ *\]/.test(arg))
 			{
-				const data: string = arg.match(/\[(.*)\]/)[1];
+				const data: string = arg.match(/\[(.*)\]/)![1];
 				if (!data) throw new Error('String literal array cannot be empty');
 				const values: string[] = data
 					.split(',')
@@ -246,12 +246,15 @@ export class Util
 	public static parseRateLimit(limitString: string): [number, number]
 	{
 		const limitRegex: RegExp = /^(\d+)\/(\d+)(s|m|h|d)?$/;
-		if (!limitRegex.test(limitString)) throw new Error(`Failed to parse a ratelimit from '${limitString}'`);
-		let [limit, duration, post]: (string | number)[] = limitRegex.exec(limitString).slice(1, 4);
+		if (!limitRegex.test(limitString))
+			throw new Error(`Failed to parse a ratelimit from '${limitString}'`);
 
-		if (post) duration = Time.parseShorthand(duration + post);
-		else duration = parseInt(duration);
-		limit = parseInt(limit);
+		let [limit, duration, post]: [string | number, string | number, string] =
+			limitRegex.exec(limitString)!.slice(1, 4) as [string, string, string];
+
+		if (post) duration = Time.parseShorthand(duration + post)!;
+		else duration = parseInt(duration as string);
+		limit = parseInt(limit as string);
 
 		return [limit, duration];
 	}

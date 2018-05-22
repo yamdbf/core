@@ -26,12 +26,12 @@ export default class extends Command
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user.tag} `;
 		const lang: string = dm ? this.client.defaultLang
-			:  await message.guild.storage.settings.get('lang');
+			:  await message.guild.storage!.settings.get('lang');
 
 		const cInfo: (cmd: Command) => LocalizedCommandInfo =
 			(cmd: Command) => Lang.getCommandInfo(cmd, lang);
 
-		let command: Command;
+		let command!: Command;
 		let output: string = '';
 		let embed: MessageEmbed = new MessageEmbed();
 
@@ -51,7 +51,7 @@ export default class extends Command
 					.join('\n');
 
 			const data: TemplateData = {
-				commandList: commandList,
+				commandList,
 				usage: cInfo(this).usage,
 				mentionUsage: cInfo(this).usage
 					.replace('<prefix>', mentionName)

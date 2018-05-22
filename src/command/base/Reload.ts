@@ -9,7 +9,7 @@ import { Logger, logger } from '../../util/logger/Logger';
 export default class extends Command
 {
 	@logger('Command:reload')
-	private readonly _logger: Logger;
+	private readonly _logger!: Logger;
 
 	public constructor()
 	{

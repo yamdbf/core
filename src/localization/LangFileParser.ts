@@ -18,13 +18,13 @@ export class LangFileParser
 	public static parseFile(langName: string, filePath: string, fileContents: string): Language
 	{
 		const lang: Language = new Language(langName);
-		const blocks: string[] = fileContents.match(LangFileParser._parseBlocks);
+		const blocks: string[] = fileContents.match(LangFileParser._parseBlocks)!;
 		if (!blocks)
 			throw new Error(`The given Lang file contains no valid localization strings: ${filePath}`);
 
 		for (const block of blocks)
 		{
-			const match: RegExpMatchArray = block.match(LangFileParser._parseBlock);
+			const match: RegExpMatchArray = block.match(LangFileParser._parseBlock)!;
 			const raw: string = match[1];
 			const key: string = match[2];
 			const value: string = match[3]

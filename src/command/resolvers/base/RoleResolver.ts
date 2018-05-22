@@ -19,7 +19,7 @@ export class RoleResolver extends Resolver
 		return value instanceof Role;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<Role | Collection<string, Role>>
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<Role | Collection<string, Role> | undefined>
 	{
 		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
 
@@ -28,8 +28,8 @@ export class RoleResolver extends Resolver
 
 		if (roleRegex.test(value))
 		{
-			const id: string = value.match(roleRegex)[1];
-			role = context.guild.roles.get(id);
+			const id: string = value.match(roleRegex)![1];
+			role = context.guild.roles.get(id)!;
 			if (!role) return;
 		}
 		else
@@ -51,12 +51,12 @@ export class RoleResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const roleRegex: RegExp = /^(?:<@&)?(\d+)>?$/;
 
-		let role: Role | Collection<string, Role> = await this.resolveRaw(value, message);
+		let role: Role | Collection<string, Role> = (await this.resolveRaw(value, message))!;
 		if (roleRegex.test(value))
 		{
 			if (!role)

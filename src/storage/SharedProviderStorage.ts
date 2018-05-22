@@ -70,7 +70,7 @@ export class SharedProviderStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			return Util.getNestedValue(this._cache[path.shift()], path);
+			return Util.getNestedValue(this._cache[path.shift()!], path);
 		}
 		else return this._cache[key];
 	}
@@ -103,7 +103,7 @@ export class SharedProviderStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			key = path.shift();
+			key = path.shift()!;
 
 			if (typeof this._cache[key] === 'undefined')
 				this._cache[key] = {};
@@ -128,7 +128,7 @@ export class SharedProviderStorage
 		if (key.includes('.'))
 		{
 			let path: string[] = key.split('.');
-			key = path.shift();
+			key = path.shift()!;
 
 			if (typeof this._cache[key] !== 'undefined')
 				Util.removeNestedValue(this._cache[key], path);

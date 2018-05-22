@@ -33,7 +33,8 @@ export class GuildSettings extends SharedProviderStorage
 		try
 		{
 			await super.init();
-			let data: any = JSON.parse(await this._provider.get(this._key));
+			let raw: string = (await this._provider.get(this._key))!;
+			let data: any = JSON.parse(raw);
 
 			const defaults: any = await this._client.storage.get('defaultGuildSettings');
 			for (const key of Object.keys(defaults))

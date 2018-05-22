@@ -22,7 +22,7 @@ export default class extends Command
 	{
 		if (!prefix)
 			return this.respond(message, res.CMD_PREFIX_CURRENT(
-				{ prefix: await this.client.getPrefix(message.guild) }));
+				{ prefix: (await this.client.getPrefix(message.guild))! }));
 
 		if (prefix.length > 10)
 			return this.respond(message, res.CMD_PREFIX_ERR_CHAR_LIMIT());
@@ -35,7 +35,7 @@ export default class extends Command
 		if (this.client.selfbot)
 			for (const guild of this.client.storage.guilds.values())
 				await guild.settings.set('prefix', prefix);
-		else await message.guild.storage.settings.set('prefix', prefix);
+		else await message.guild.storage!.settings.set('prefix', prefix);
 
 		return this.respond(message, res.CMD_PREFIX_SUCCESS({ prefix }));
 	}

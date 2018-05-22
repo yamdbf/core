@@ -5,7 +5,7 @@
  */
 
 export type LocalizedCommandInfo = {
-	desc?: string,
-	info?: string,
-	usage?: string
+	desc: string,
+	info: string,
+	usage: string
 };

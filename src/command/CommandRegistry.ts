@@ -62,9 +62,9 @@ export class CommandRegistry<
 	/**
 	 * Resolve the given Command name or alias to a registered Command
 	 * @param {string} input Command name or alias
-	 * @returns Command
+	 * @returns {Command | undefined}
 	 */
-	public resolve(input: string): V
+	public resolve(input: string): V | undefined
 	{
 		input = input ? input.toLowerCase() : input;
 		return this.find(c => c.name.toLowerCase() === input
@@ -127,7 +127,7 @@ export class CommandRegistry<
 		{
 			if (!name) continue;
 
-			const command: Command = this.resolve(name);
+			const command: Command = this.resolve(name)!;
 			if (command)
 				throw new Error(`Command '${command.name}' is using reserved name or alias: '${name}'`);
 		}
