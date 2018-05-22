@@ -12,7 +12,7 @@ export class EvenNumberResolver extends Resolver
 		return (typeof value === 'number' && !isNaN(value) && isFinite(value)) && (value % 2) === 0;
 	}
 
-	public async resolve(message: Message, command: Command, name: string, value: string): Promise<number>
+	public async resolve(_message: Message, _command: Command, _name: string, value: string): Promise<number>
 	{
 		const result: number = parseFloat(value);
 		if (!(await this.validate(result)))

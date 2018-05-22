@@ -25,12 +25,12 @@ import { IStorageProvider } from './interface/IStorageProvider';
  * by and used within your storage provider constructors as necessary to create a unique
  * storage based on the given string
  */
-export class StorageProvider implements IStorageProvider
+export abstract class StorageProvider implements IStorageProvider
 {
-	public async init(): Promise<void> { throw new Error('Storage providers must implement the `init` method'); }
-	public async keys(): Promise<string[]> { throw new Error('Storage providers must implement the `keys` method'); }
-	public async get(key: string): Promise<string | undefined> { throw new Error('Storage providers must implement the `get` method'); }
-	public async set(key: string, value: string): Promise<void> { throw new Error('Storage providers must implement the `set` method'); }
-	public async remove(key: string): Promise<void> { throw new Error('Storage providers must implement the `remove` method'); }
-	public async clear(): Promise<void> { throw new Error('Storage providers must implement the `clear` method'); }
+	public abstract async init(): Promise<void>;
+	public abstract async keys(): Promise<string[]>;
+	public abstract async get(key: string): Promise<string | undefined>;
+	public abstract async set(key: string, value: string): Promise<void>;
+	public abstract async remove(key: string): Promise<void>;
+	public abstract async clear(): Promise<void>;
 }

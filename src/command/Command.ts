@@ -9,10 +9,24 @@ import { CompactModeHelper } from './CompactModeHelper';
 import { RespondOptions } from '../types/RespondOptions';
 
 /**
+ * Action to be executed when the command is called. The following parameters
+ * are what command actions will be passed by the {@link CommandDispatcher} whenever
+ * a command is called. Be sure to receive these in proper order when writing
+ * new commands
+ * @abstract
+ * @method Command#action
+ * @param {external:Message} message Discord.js message object
+ * @param {any[]} args An array containing the args parsed from the command calling message.<br>
+ * 					   Will contain strings unless middleware is used to transform the args
+ * @returns {any}
+ */
+
+/**
  * Command class to extend to create commands users can execute
+ * @abstract
  * @param {CommandInfo} info - Object containing required command properties
  */
-export class Command<T extends Client = Client>
+export abstract class Command<T extends Client = Client>
 {
 	private _disabled!: boolean;
 	private _ratelimit!: string;
@@ -171,6 +185,9 @@ export class Command<T extends Client = Client>
 		if (info) Object.assign(this, info);
 	}
 
+	// Docs above class
+	public abstract action(message: Message, args: any[]): any;
+
 	/**
 	 * The ratelimit for this command per user
 	 * @type {string}
@@ -192,24 +209,10 @@ export class Command<T extends Client = Client>
 	 * are ready for use.
 	 *
 	 * >**Note:** Can be async if needed
+	 * @abstract
 	 * @returns {Promise<void>}
 	 */
 	public init(): void {}
-
-	/**
-	 * Action to be executed when the command is called. The following parameters
-	 * are what command actions will be passed by the {@link CommandDispatcher} whenever
-	 * a command is called. Be sure to receive these in proper order when writing
-	 * new commands
-	 * @param {external:Message} message Discord.js message object
-	 * @param {any[]} args An array containing the args parsed from the command calling message.<br>
-	 * 					   Will contain strings unless middleware is used to transform the args
-	 * @returns {any}
-	 */
-	public action(message: Message, args: any[]): any
-	{
-		throw new Error(`\`${this.constructor.name}\` has not overloaded the command action method`);
-	}
 
 	/**
 	 * Make necessary asserts for Command validity.

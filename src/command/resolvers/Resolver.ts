@@ -3,6 +3,36 @@ import { Message } from '../../types/Message';
 import { Command } from '../Command';
 
 /**
+ * Method to implement that should return whether or not the
+ * given value matches the type the resolver is meant to resolve.
+ * >Can be async
+ * @abstract
+ * @method Resolver#validate
+ * @param {any} value Value to validate
+ * @returns {Promise<boolean>}
+ */
+
+/**
+ * Method to implement that should accept a string and return
+ * a resolved value of the type the resolver is meant to resolve.
+ *
+ * This method can and should throw errors when invalid input is given.
+ * These errors will be sent to Discord as argument errors when using
+ * the `resolve` middleware. Refer to the base Resolver error strings
+ * for examples on what these errors should look like if you're trying
+ * to keep things in-line with YAMDBF
+ *
+ * >Can be async
+ * @abstract
+ * @method Resolver#resolve
+ * @param {Message} message Discord.js Message instance
+ * @param {Command} command Instance of the Command being called
+ * @param {string} name Argument name
+ * @param {string} value Argument value
+ * @returns {Promise<any>}
+ */
+
+/**
  * Resolver class to extend for creating Command argument resolvers.
  * Custom Resolvers must implement the `validate()` and `resolve()` methods
  * @param {Client} client YAMDBF Client instance
@@ -13,7 +43,7 @@ import { Command } from '../Command';
  * 						pass it to `super()` yourself when creating custom Resolvers
  * @param {...string} aliases Alternative names the Resolver can be identified by
  */
-export class Resolver
+export abstract class Resolver
 {
 	protected client: Client;
 
@@ -37,39 +67,9 @@ export class Resolver
 		this.aliases = aliases;
 	}
 
-	/**
-	 * Method to implement that should return whether or not the
-	 * given value matches the type the resolver is meant to resolve.
-	 * >Can be async
-	 * @param {any} value Value to validate
-	 * @returns {Promise<boolean>}
-	 */
-	public validate(value: any): any
-	{
-		throw new Error('Resolvers must implement the `validate` method');
-	}
-
-	/**
-	 * Method to implement that should accept a string and return
-	 * a resolved value of the type the resolver is meant to resolve.
-	 *
-	 * This method can and should throw errors when invalid input is given.
-	 * These errors will be sent to Discord as argument errors when using
-	 * the `resolve` middleware. Refer to the base Resolver error strings
-	 * for examples on what these errors should look like if you're trying
-	 * to keep things in-line with YAMDBF
-	 *
-	 * >Can be async
-	 * @param {Message} message Discord.js Message instance
-	 * @param {Command} command Instance of the Command being called
-	 * @param {string} name Argument name
-	 * @param {string} value Argument value
-	 * @returns {Promise<any>}
-	 */
-	public resolve(message: Message, command: Command, name: string, value: string): any
-	{
-		throw new Error('Resolvers must implement the `resolve` method');
-	}
+	// Docs above class
+	public abstract validate(value: any): any;
+	public abstract resolve(message: Message, command: Command, name: string, value: string): any;
 
 	/**
 	 * Method recommended to be implemented for resolving data without side-effects.
@@ -99,9 +99,11 @@ export class Resolver
 	 * and they will throw an error if the context they require is missing.
 	 *
 	 * >Can be async
+	 * @abstract
 	 * @param {string} value String value to resolve data from
 	 * @param {Partial<Message>} [context] Partial Discord.js Message object
 	 * @returns {Promise<any>}
 	 */
+	// @ts-ignore - Abstract but optional
 	public resolveRaw(value: string, context?: Partial<Message>): any {}
 }

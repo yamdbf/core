@@ -1,18 +1,18 @@
 import {
 	Client,
-	Command,
-	LogLevel,
-	Logger,
+	// Command,
+	// LogLevel,
+	// Logger,
 	ListenerUtil,
 	// Util,
 	Lang,
-	Providers
+	// Providers
 } from '../bin/';
 // import TestCommand from './commands/test_command';
 import { TestPlugin } from './test_plugin';
 import { EvenNumberResolver } from './EvenNumberResolver';
 const config: any = require('./config.json');
-const logger: Logger = Logger.instance();
+// const logger: Logger = Logger.instance();
 const { once, on } = ListenerUtil;
 
 class Test extends Client
@@ -47,6 +47,7 @@ class Test extends Client
 	}
 
 	@once('pause')
+	// @ts-ignore
 	private async _onPause(): Promise<void>
 	{
 		await this.setDefaultSetting('prefix', '-');
@@ -64,6 +65,7 @@ class Test extends Client
 	// }
 
 	@once('clientReady', 'foo', 1)
+	// @ts-ignore
 	private async _onClientReady(foo: string, bar: number): Promise<void>
 	{
 		// logger.debug('Test', foo, bar.toString());
@@ -72,6 +74,7 @@ class Test extends Client
 	}
 
 	@on('unknownCommand')
+	// @ts-ignore
 	private _onUnknownCommand(name: string, args: any[]): void
 	{
 		console.log('Unknown command:', name, args);
