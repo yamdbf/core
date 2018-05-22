@@ -28,7 +28,7 @@ export class NumberResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const result: number = this.resolveRaw(value);

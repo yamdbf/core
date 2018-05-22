@@ -18,7 +18,7 @@ export class DurationResolver extends Resolver
 		return typeof value === 'number' && !isNaN(value) && isFinite(value);
 	}
 
-	public resolveRaw(value: string): number
+	public resolveRaw(value: string): number | null
 	{
 		return Time.parseShorthand(value);
 	}
@@ -29,10 +29,10 @@ export class DurationResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
-		const result: number = this.resolveRaw(value);
+		const result: number = this.resolveRaw(value)!;
 		if (!result)
 			throw new Error(res.RESOLVE_ERR_RESOLVE_DURATION({ name, arg: value, usage }));
 

@@ -19,7 +19,7 @@ export class ChannelResolver extends Resolver
 		return value instanceof TextChannel;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<TextChannel | Collection<string, TextChannel>>
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<TextChannel | Collection<string, TextChannel> | undefined>
 	{
 		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
 
@@ -28,7 +28,7 @@ export class ChannelResolver extends Resolver
 
 		if (channelRegex.test(value))
 		{
-			const id: string = value.match(channelRegex)[1];
+			const id: string = value.match(channelRegex)![1];
 			channel = context.guild.channels.get(id) as TextChannel;
 			if (!channel) return;
 		}
@@ -53,12 +53,12 @@ export class ChannelResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const channelRegex: RegExp = /^(?:<#)?(\d+)>?$/;
 
-		let channel: TextChannel | Collection<string, TextChannel> = await this.resolveRaw(value, message);
+		let channel: TextChannel | Collection<string, TextChannel> = (await this.resolveRaw(value, message))!;
 		if (channelRegex.test(value))
 		{
 			if (!channel)

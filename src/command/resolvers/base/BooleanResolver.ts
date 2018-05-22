@@ -23,7 +23,7 @@ export class BooleanResolver extends Resolver
 		return isBoolean(value);
 	}
 
-	public resolveRaw(value: string): boolean
+	public resolveRaw(value: string): boolean | undefined
 	{
 		value = value.toLowerCase();
 		if (this.truthy.has(value)) return true;
@@ -36,10 +36,10 @@ export class BooleanResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
-		const result: boolean = this.resolveRaw(value);
+		const result: boolean = this.resolveRaw(value)!;
 		if (!(this.validate(result)))
 			throw new Error(res.RESOLVE_ERR_RESOLVE_BOOLEAN({ name, arg: value, usage }));
 

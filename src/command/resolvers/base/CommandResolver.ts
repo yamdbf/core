@@ -17,7 +17,7 @@ export class CommandResolver extends Resolver
 		return value instanceof Command;
 	}
 
-	public resolveRaw(value: string): Command
+	public resolveRaw(value: string): Command | undefined
 	{
 		return this.client.commands.resolve(value);
 	}
@@ -28,10 +28,10 @@ export class CommandResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
-		const result: Command = this.resolveRaw(value);
+		const result: Command = this.resolveRaw(value)!;
 		if (!result)
 			throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'Command' }));
 

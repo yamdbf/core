@@ -19,14 +19,14 @@ export class UserResolver extends Resolver
 		return value instanceof User;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<User | Collection<string, User>>
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<User | Collection<string, User> | undefined>
 	{
-		let user: User;
+		let user!: User;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 
 		if (idRegex.test(value))
 		{
-			try { user = await this.client.users.fetch(value.match(idRegex)[1]); } catch {}
+			try { user = await this.client.users.fetch(value.match(idRegex)![1]); } catch {}
 			if (!user) return;
 		}
 		else
@@ -55,12 +55,12 @@ export class UserResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 
-		let user: User | Collection<string, User> = await this.resolveRaw(value, message);
+		let user: User | Collection<string, User> = (await this.resolveRaw(value, message))!;
 		if (idRegex.test(value))
 		{
 			if (!user)

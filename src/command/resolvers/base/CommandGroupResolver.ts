@@ -18,7 +18,7 @@ export class CommandGroupResolver extends Resolver
 		return this.client.commands.groups.includes(value);
 	}
 
-	public resolveRaw(value: string): string
+	public resolveRaw(value: string): string | undefined
 	{
 		return this.client.commands.groups
 			.find(g => Util.normalize(g).includes(Util.normalize(value)));
@@ -30,10 +30,10 @@ export class CommandGroupResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
-		const result: string = this.resolveRaw(value);
+		const result: string = this.resolveRaw(value)!;
 		if (!result)
 			throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_TEXT({ name, arg: value, usage, type: 'CommandGroup' }));
 

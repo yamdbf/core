@@ -7,7 +7,7 @@ import TestCommand from './commands/test_command';
 export class TestPlugin extends Plugin implements IPlugin
 {
 	private readonly _client: Client;
-	private _storage: SharedProviderStorage;
+	private _storage!: SharedProviderStorage;
 
 	public name: string = 'TestPlugin';
 
@@ -17,7 +17,7 @@ export class TestPlugin extends Plugin implements IPlugin
 		this._client = client;
 	}
 
-	public async init(storage?: SharedProviderStorage): Promise<void>
+	public async init(storage: SharedProviderStorage): Promise<void>
 	{
 		this._client.commands.registerExternal(new TestCommand());
 		Lang.loadCommandLocalizationsFrom('./commands');

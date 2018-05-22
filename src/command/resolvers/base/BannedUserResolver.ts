@@ -19,19 +19,21 @@ export class BannedUserResolver extends Resolver
 		return value instanceof User;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<User | Collection<string, User>>
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<User | Collection<string, User> | undefined>
 	{
+		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
+
 		let user: User;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 
 		type BanInfo = { user: User, reason: string };
-		const bans: Collection<string, BanInfo> = await context.guild.fetchBans();
+		const bans: Collection<string, BanInfo> = await context.guild!.fetchBans();
 		const bannedUsers: Collection<string, User> =
 			new Collection(bans.map(b => [b.user.id, b.user] as [string, User]));
 
 		if (idRegex.test(value))
 		{
-			user = bannedUsers.get(value.match(idRegex)[1]);
+			user = bannedUsers.get(value.match(idRegex)![1])!;
 			if (!user) return;
 		}
 		else
@@ -54,12 +56,12 @@ export class BannedUserResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 
-		let user: User | Collection<string, User> = await this.resolveRaw(value, message);
+		let user: User | Collection<string, User> = (await this.resolveRaw(value, message))!;
 		if (idRegex.test(value))
 		{
 			if (!user)

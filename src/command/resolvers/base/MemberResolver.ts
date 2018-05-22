@@ -19,16 +19,16 @@ export class MemberResolver extends Resolver
 		return value instanceof GuildMember;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<GuildMember | Collection<string, GuildMember>>
+	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<GuildMember | Collection<string, GuildMember> | undefined>
 	{
 		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
 
-		let member: GuildMember;
+		let member!: GuildMember;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 
 		if (idRegex.test(value))
 		{
-			try { member = await context.guild.members.fetch(value.match(idRegex)[1]); } catch {}
+			try { member = await context.guild.members.fetch(value.match(idRegex)![1]); } catch {}
 			if (!member) return;
 		}
 		else
@@ -52,12 +52,12 @@ export class MemberResolver extends Resolver
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
 		const dm: boolean = message.channel.type !== 'text';
-		const prefix: string = !dm ? await message.guild.storage.settings.get('prefix') : '';
+		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 
-		let member: GuildMember | Collection<string, GuildMember> = await this.resolveRaw(value, message);
+		let member: GuildMember | Collection<string, GuildMember> = (await this.resolveRaw(value, message))!;
 		if (idRegex.test(value))
 		{
 			if (!member)

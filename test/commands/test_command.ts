@@ -19,7 +19,7 @@ const { resolve, expect, localize } = Middleware;
 export default class extends Command
 {
 	@logger('Command:test')
-	private readonly logger: Logger;
+	private readonly logger!: Logger;
 
 	public constructor()
 	{
