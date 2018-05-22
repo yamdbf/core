@@ -41,7 +41,7 @@ class ChannelResolver extends Resolver_1.Resolver {
         const prefix = !dm ? await message.guild.storage.settings.get('prefix') : '';
         const usage = Lang_1.Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
         const channelRegex = /^(?:<#)?(\d+)>?$/;
-        let channel = await this.resolveRaw(value, message);
+        let channel = (await this.resolveRaw(value, message));
         if (channelRegex.test(value)) {
             if (!channel)
                 throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_ID({ name, arg: value, usage, type: 'Channel' }));

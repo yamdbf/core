@@ -6,6 +6,6 @@ import { User, Collection } from 'discord.js';
 export declare class BannedUserResolver extends Resolver {
     constructor(client: Client);
     validate(value: any): boolean;
-    resolveRaw(value: string, context?: Partial<Message>): Promise<User | Collection<string, User>>;
+    resolveRaw(value: string, context?: Partial<Message>): Promise<User | Collection<string, User> | undefined>;
     resolve(message: Message, command: Command, name: string, value: string): Promise<User>;
 }

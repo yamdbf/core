@@ -7,6 +7,6 @@ export declare class BooleanResolver extends Resolver {
     private readonly falsey;
     constructor(client: Client);
     validate(value: any): boolean;
-    resolveRaw(value: string): boolean;
+    resolveRaw(value: string): boolean | undefined;
     resolve(message: Message, command: Command, name: string, value: string): Promise<boolean>;
 }

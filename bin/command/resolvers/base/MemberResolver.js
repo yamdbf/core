@@ -43,7 +43,7 @@ class MemberResolver extends Resolver_1.Resolver {
         const prefix = !dm ? await message.guild.storage.settings.get('prefix') : '';
         const usage = Lang_1.Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
         const idRegex = /^(?:<@!?)?(\d+)>?$/;
-        let member = await this.resolveRaw(value, message);
+        let member = (await this.resolveRaw(value, message));
         if (idRegex.test(value)) {
             if (!member)
                 throw new Error(res.RESOLVE_ERR_RESOLVE_TYPE_ID({ name, arg: value, usage, type: 'Member' }));
