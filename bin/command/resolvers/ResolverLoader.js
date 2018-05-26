@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const NumberResolver_1 = require("./base/NumberResolver");
 const StringResolver_1 = require("./base/StringResolver");
+const BooleanResolver_1 = require("./base/BooleanResolver");
 const DurationResolver_1 = require("./base/DurationResolver");
 const UserResolver_1 = require("./base/UserResolver");
 const MemberResolver_1 = require("./base/MemberResolver");
@@ -24,6 +25,7 @@ class ResolverLoader {
         this._base = [
             NumberResolver_1.NumberResolver,
             StringResolver_1.StringResolver,
+            BooleanResolver_1.BooleanResolver,
             DurationResolver_1.DurationResolver,
             UserResolver_1.UserResolver,
             MemberResolver_1.MemberResolver,
