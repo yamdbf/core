@@ -4,6 +4,7 @@ import { ResolverConstructor } from '../../types/ResolverConstructor';
 
 import { NumberResolver } from './base/NumberResolver';
 import { StringResolver } from './base/StringResolver';
+import { BooleanResolver } from './base/BooleanResolver';
 import { DurationResolver } from './base/DurationResolver';
 import { UserResolver } from './base/UserResolver';
 import { MemberResolver } from './base/MemberResolver';
@@ -35,6 +36,7 @@ export class ResolverLoader
 		this._base = [
 			NumberResolver,
 			StringResolver,
+			BooleanResolver,
 			DurationResolver,
 			UserResolver,
 			MemberResolver,
