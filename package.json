@@ -5,11 +5,11 @@
   "main": "bin/index",
   "typings": "bin/index.d.ts",
   "scripts": {
+	"build": "gulp",
+    "prepublishOnly": "gulp build",
     "docs:stable": "cross-env TYPE=stable jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
     "docs:indev": "cross-env TYPE=indev jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/indev/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/indev/docs.json",
-    "build": "gulp",
     "lint": "gulp lint",
-    "pkg": "gulp pkg",
     "test": "npm run lint -s && npm run build -s",
     "test:client": "node test/client_test.js",
     "localization": "cd scripts && gulp build && gulp build:scripts && node generateDefaultLocalizationMarkdown",

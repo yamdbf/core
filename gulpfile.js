@@ -25,7 +25,6 @@ gulp.task('gh-prebuild', cb => runSequence()('build', 'gh-prebuild-prepare', cb)
 
 gulp.task('pause', cb => setTimeout(() => cb(), 1e3));
 gulp.task('tests', cb => runSequence()('lint', 'build', 'pause', 'build:tests', cb));
-gulp.task('pkg', cb => runSequence()('build', 'pause', 'pause', 'package', cb));
 
 gulp.task('lint', () => {
 	gulp.src('src/**/*.ts')
@@ -52,13 +51,6 @@ gulp.task('build', () => {
 	return tsCompile.js
 		.pipe(gulp_sourcemaps.write('.', { sourceRoot: '../src' }))
 		.pipe(gulp.dest('bin/'));
-});
-
-gulp.task('package', () => {
-	del.sync(['../pkg/yamdbf/**/*.*'], { force: true });
-	gulp.src('bin/**/*.*').pipe(gulp.dest('../pkg/yamdbf/bin'));
-	gulp.src('package.json').pipe(gulp.dest('../pkg/yamdbf'));
-	gulp.src('README.md').pipe(gulp.dest('../pkg/yamdbf'));
 });
 
 gulp.task('gh-prebuild-prepare', () => {

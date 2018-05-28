@@ -1,27 +1,22 @@
 {
     "compilerOptions": {
-        "noImplicitAny": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
         "module": "commonjs",
         "target": "es2017",
         "lib": ["es2017"],
-        "declaration": true,
         "sourceMap": true,
+        "declaration": true,
         "removeComments": false,
         "experimentalDecorators": true,
+        "strict": true,
         "strictPropertyInitialization": true,
-        "strict": true
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
 	"exclude": [
 		"node_modules",
-		"bower_components",
-		"jspm_packages",
-		"tmp",
-		"temp",
 		"bin",
-		"docs",
-		"pkg",
-		"examples"
+		"examples",
+		"scripts"
 	]
 }
