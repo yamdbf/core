@@ -7,7 +7,9 @@ Missing or null value for arg: `{{ name }}`{{!
 Usage: `{{ usage }}`
 
 [EXPECT_ERR_INVALID_OPTION]
-in arg `{{ name }}`: `{{ arg }}` is not a valid option
+## Using the `CLEAN_ARG` template script from from
+## the `resolve` middleware string definitions
+in arg `{{ name }}`: `{{! res.CLEAN_ARG() !}}` is not a valid option
 Usage: `{{ usage }}`
 Valid options for arg `{{ name }}`: {{ type }}
 

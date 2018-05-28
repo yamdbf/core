@@ -18,17 +18,30 @@
 	}
 !}}
 
+[CLEAN_ARG]
+## Simple template script to truncate long input `args.arg`,
+## and overcompensate for URL escaping with an abundance of
+## zero-width spaces without having to fuss with URL parsing/regex
+## because who wants to bother with that?
+##
+## Returns the modified value of `args.arg`
+{{!
+	let { arg } = args;
+	if (arg.length > 50) arg = arg.slice(0, 47) + '...';
+	return arg.split('').join('\u200b');
+!}}
+
 [RESOLVE_ERR_RESOLVE_BOOLEAN]
-in arg `{{ name }}`: `{{ arg }}` could not be resolved to a boolean.
+in arg `{{ name }}`: `{{! res.CLEAN_ARG() !}}` could not be resolved to a boolean.
 Usage: `{{ usage }}`
 Boolean examples: `true`, `on`, `yes`, `false`, `off`, `no`
 
 [RESOLVE_ERR_RESOLVE_NUMBER]
-in arg `{{ name }}`: `{{ arg }}` could not be resolved to a number.
+in arg `{{ name }}`: `{{! res.CLEAN_ARG() !}}` could not be resolved to a number.
 Usage: `{{ usage }}`
 
 [RESOLVE_ERR_RESOLVE_DURATION]
-in arg `{{ name }}`: `{{ arg }}` could not be resolved to a duration.
+in arg `{{ name }}`: `{{! res.CLEAN_ARG() !}}` could not be resolved to a duration.
 Usage: `{{ usage }}`
 Duration examples: `10m`, `2h`, `1.5d`
 
@@ -37,7 +50,7 @@ in arg `{{ name }}`: Failed to find a {{! res.RESOLVE_TYPE() !}} with ID `{{ arg
 Usage: `{{ usage }}`
 
 [RESOLVE_ERR_RESOLVE_TYPE_TEXT]
-in arg `{{ name }}`: Failed to find a {{! res.RESOLVE_TYPE() !}} containing the text `{{ arg }}`
+in arg `{{ name }}`: Failed to find a {{! res.RESOLVE_TYPE() !}} containing the text `{{! res.CLEAN_ARG() !}}`
 Usage: `{{ usage }}`
 
 [RESOLVE_ERR_MULTIPLE_USER_RESULTS]
