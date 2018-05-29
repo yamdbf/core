@@ -26,14 +26,16 @@ making it simple to get a bot up and running with minimal effort and configurati
 - Easy to use storage with support for custom storage providers
   - Ships with a default JSON provider, and other optional providers using Sequelize:
     - Postgres
-	- SQLite
+    - SQLite
+    - MySQL
+    - MSSQL
 - Easy to use Plugin system
 - Full TypeScript support (It's written in it!)
   - Support for decorators for simpler handling of:
-	- Event listeners
+    - Event listeners
     - Command metadata
-	- Command middleware assignment
-	- Attaching Logger for logging/debugging
+    - Command middleware assignment
+    - Attaching Logger for logging/debugging
 
 ## Installation
 Ignore any warnings about unmet peer dependencies as they are all optional unless
@@ -42,15 +44,15 @@ using a Sequelize-based storage provider.
 >**Note:** YAMDBF Requires > Node 8.0.0 to run
 
 - Regular install: `yarn add @yamdbf/core`
-- With a Postgres provider: `yarn add @yamdbf/core pg sequelize`
-- With an SQLite provider: `yarn add @yamdbf/core sqlite3 sequelize`
-- With a MySQL provider: `yarn add @yamdbf/core mysql2 sequelize`
-- With an MSSQL provider: `yarn add @yamdbf/core tedious sequelize`
+- With the Postgres provider: `yarn add @yamdbf/core pg sequelize`
+- With the SQLite provider: `yarn add @yamdbf/core sqlite3 sequelize`
+- With the MySQL provider: `yarn add @yamdbf/core mysql2 sequelize`
+- With the MSSQL provider: `yarn add @yamdbf/core tedious sequelize`
 
->Indev builds can be installed from github with `yarn add yamdbf/coref#indev`.
+>Indev builds can be installed from github with `yarn add yamdbf/core#indev`.
 This requires `git` to be installed and in your path. Also note that until Yarn
 supports submodules in git dependencies, NPM must be used to install YAMDBF indev
-at any point that YAMDBF is reliant on an indev version of Discord.js
+at any point that YAMDBF indev is reliant on an indev version of Discord.js
 
 >NPM can also be used for installation.
 
