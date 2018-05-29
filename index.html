@@ -48,11 +48,12 @@
 
     <section class="readme">
         <article><h2>YAMDBF: Yet Another Modular Discord Bot Framework</h2><p><a href="https://discord.gg/cMXkbXV"><img src="https://discordapp.com/api/guilds/233751981838041090/embed.png" alt="Discord"></a>
-<a href="https://www.npmjs.com/package/yamdbf"><img src="https://img.shields.io/npm/v/yamdbf.svg?maxAge=3600" alt="npm"></a>
-<a href="https://david-dm.org/zajrik/yamdbf"><img src="https://david-dm.org/zajrik/yamdbf/status.svg" alt="David"></a>
-<a href="https://david-dm.org/zajrik/yamdbf?type=peer"><img src="https://david-dm.org/zajrik/yamdbf/peer-status.svg" alt="David"></a>
-<a href="https://travis-ci.org/zajrik/yamdbf"><img src="https://api.travis-ci.org/zajrik/yamdbf.svg" alt="Travis"></a></p>
-<p><a href="https://nodei.co/npm/yamdbf/"><img src="https://nodei.co/npm/yamdbf.png?downloads=true&amp;stars=true" alt="NPM"></a></p>
+<a href="https://www.npmjs.com/package/@yamdbf/core"><img src="https://img.shields.io/npm/v/@yamdbf/core.svg?maxAge=3600" alt="npm"></a>
+<a href="https://david-dm.org/yamdbf/core"><img src="https://david-dm.org/yamdbf/core/status.svg" alt="David"></a>
+<a href="https://david-dm.org/yamdbf/core?type=peer"><img src="https://david-dm.org/yamdbf/core/peer-status.svg" alt="David"></a>
+<a href="https://travis-ci.org/yamdbf/core"><img src="https://api.travis-ci.org/yamdbf/core.svg" alt="Travis"></a></p>
+<!-- Hidden until someday when scoped packages are supported -->
+<!-- [![NPM](https://nodei.co/npm/@yamdbf/core.png?downloads=true&stars=true)](https://nodei.co/npm/yamdbf/) -->
 <p>YAMDBF is a lightweight Discord Bot framework for rapid bot development using <a href="https://discord.js.org">Discord.js</a>,
 making it simple to get a bot up and running with minimal effort and configuration.</p>
 <h2>Features</h2><ul>
@@ -92,15 +93,15 @@ using a Sequelize-based storage provider.</p>
 <p><strong>Note:</strong> YAMDBF Requires &gt; Node 8.0.0 to run</p>
 </blockquote>
 <ul>
-<li>Regular install: <code>npm install --save yamdbf</code>   </li>
-<li>With a Postgres provider: <code>npm install --save yamdbf pg sequelize</code>   </li>
-<li>With an SQLite provider: <code>npm install --save yamdbf sqlite3 sequelize</code></li>
+<li>Regular install: <code>npm install --save @yamdbf/core</code>   </li>
+<li>With a Postgres provider: <code>npm install --save @yamdbf/core pg sequelize</code>   </li>
+<li>With an SQLite provider: <code>npm install --save @yamdbf/core sqlite3 sequelize</code></li>
 </ul>
 <blockquote>
-<p>Indev builds can be installed from github with <code>npm install --save zajrik/yamdbf</code>.
-This requires <code>git</code> to be installed and in your path. NPM 5.3.0 is broken for
-installing dev builds as they have to compile after installation and the compilation
-script will fail on NPM 5.3.0. To be safe, use NPM 5.0.3 via <code>npm install -g npm@5.0.3</code></p>
+<p>Indev builds can be installed from github with <code>npm install --save yamdbf/coref#indev</code>.
+This requires <code>git</code> to be installed and in your path. Also note that until Yarn
+supports submodules in git dependencies, NPM must be used to install YAMDBF indev
+at any point that YAMDBF is reliant on an indev version of Discord.js</p>
 </blockquote>
 <blockquote>
 <p>Documentation for indev builds can be found <a href="https://yamdbf.js.org/indev">here</a>.</p>
@@ -108,10 +109,11 @@ script will fail on NPM 5.3.0. To be safe, use NPM 5.0.3 via <code>npm install -
 <h2>Links</h2><ul>
 <li><a href="https://yamdbf.js.org">YAMDBF Documentation</a></li>
 <li><a href="https://discord.gg/cMXkbXV">YAMDBF Discord server</a></li>
-<li><a href="https://github.com/zajrik/yamdbf">YAMDBF GitHub</a></li>
-<li><a href="https://github.com/zajrik/yamdbf/issues">YAMDBF Issues</a></li>
-<li><a href="https://github.com/zajrik/generator-yamdbf">YAMDBF Generator</a></li>
-<li><a href="https://www.npmjs.com/package/yamdbf">YAMDBF NPM</a></li>
+<li><a href="https://github.com/yamdbf/core">YAMDBF GitHub</a></li>
+<li><a href="https://github.com/yamdbf/core/issues">YAMDBF Issues</a></li>
+<li><a href="https://www.npmjs.com/package/@yamdbf/core">YAMDBF NPM</a></li>
+<li><a href="https://yarnpkg.com/en/package/@yamdbf/core">YAMDBF Yarnpkg</a></li>
+<li><a href="https://patreon.com/zajrik">Zajrik on Patreon</a></li>
 </ul></article>
     </section>
 
