@@ -26,14 +26,14 @@ making it simple to get a bot up and running with minimal effort and configurati
 - Easy to use storage with support for custom storage providers
   - Ships with a default JSON provider, and other optional providers using Sequelize:
     - Postgres
-	- SQLite
+    - SQLite
 - Easy to use Plugin system
 - Full TypeScript support (It's written in it!)
   - Support for decorators for simpler handling of:
-	- Event listeners
+    - Event listeners
     - Command metadata
-	- Command middleware assignment
-	- Attaching Logger for logging/debugging
+    - Command middleware assignment
+    - Attaching Logger for logging/debugging
 
 ## Installation
 Ignore any warnings about unmet peer dependencies as they are all optional unless
@@ -45,10 +45,10 @@ using a Sequelize-based storage provider.
 - With a Postgres provider: `npm install --save @yamdbf/core pg sequelize`   
 - With an SQLite provider: `npm install --save @yamdbf/core sqlite3 sequelize`
 
->Indev builds can be installed from github with `npm install --save yamdbf/coref#indev`.
+>Indev builds can be installed from github with `npm install --save yamdbf/core#indev`.
 This requires `git` to be installed and in your path. Also note that until Yarn
 supports submodules in git dependencies, NPM must be used to install YAMDBF indev
-at any point that YAMDBF is reliant on an indev version of Discord.js
+at any point that YAMDBF indev is reliant on an indev version of Discord.js
 
 >Documentation for indev builds can be found [here](https://yamdbf.js.org/indev).
 
