@@ -1,6 +1,6 @@
 {
   "name": "@yamdbf/core",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Yet Another Modular Discord Bot Framework: A lightweight framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
   "typings": "bin/index.d.ts",
