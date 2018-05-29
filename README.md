@@ -1,12 +1,13 @@
 ## YAMDBF: Yet Another Modular Discord Bot Framework
 
 [![Discord](https://discordapp.com/api/guilds/233751981838041090/embed.png)](https://discord.gg/cMXkbXV)
-[![npm](https://img.shields.io/npm/v/yamdbf.svg?maxAge=3600)](https://www.npmjs.com/package/yamdbf)
-[![David](https://david-dm.org/zajrik/yamdbf/status.svg)](https://david-dm.org/zajrik/yamdbf)
-[![David](https://david-dm.org/zajrik/yamdbf/peer-status.svg)](https://david-dm.org/zajrik/yamdbf?type=peer)
-[![Travis](https://api.travis-ci.org/zajrik/yamdbf.svg)](https://travis-ci.org/zajrik/yamdbf)
+[![npm](https://img.shields.io/npm/v/@yamdbf/core.svg?maxAge=3600)](https://www.npmjs.com/package/@yamdbf/core)
+[![David](https://david-dm.org/yamdbf/core/status.svg)](https://david-dm.org/yamdbf/core)
+[![David](https://david-dm.org/yamdbf/core/peer-status.svg)](https://david-dm.org/yamdbf/core?type=peer)
+[![Travis](https://api.travis-ci.org/yamdbf/core.svg)](https://travis-ci.org/yamdbf/core)
 
-[![NPM](https://nodei.co/npm/yamdbf.png?downloads=true&stars=true)](https://nodei.co/npm/yamdbf/)
+<!-- Hidden until someday when scoped packages are supported -->
+<!-- [![NPM](https://nodei.co/npm/@yamdbf/core.png?downloads=true&stars=true)](https://nodei.co/npm/yamdbf/) -->
 
 YAMDBF is a lightweight Discord Bot framework for rapid bot development using [Discord.js](https://discord.js.org),
 making it simple to get a bot up and running with minimal effort and configuration.
