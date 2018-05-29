@@ -66,7 +66,7 @@ const client = new Client({
     token: config.token,
     owner: config.owner
 }).start();</code></pre><p>And advanced startup where addition or manipulation of default guild settings is desired will look like this:</p>
-<pre class="prettyprint source"><code>const { Client } = require('yamdbf');
+<pre class="prettyprint source"><code>const { Client } = require('@yamdbf/core');
 const config = require('./config.json');
 
 const client = new Client({
