@@ -57,7 +57,7 @@ field and really wasn't needed. <code>owner</code> is now a direct optional fiel
 of user IDs. Despite the config field no longer existing, it's still recommended to store sensitive information like your
 token and owner ID/s in a config file that is not checked in to version control.</p>
 <p>To sum things up, basic startup remains relatively unchanged. You'll notice the owner field in the example:</p>
-<pre class="prettyprint source"><code>const { Client } = require('yamdbf');
+<pre class="prettyprint source"><code>const { Client } = require('@yamdbf/core');
 const config = require('./config.json');
 
 const client = new Client({
