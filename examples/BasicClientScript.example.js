@@ -1,4 +1,4 @@
-const { Client } = require('yamdbf');
+const { Client } = require('@yamdbf/core');
 const config = require('./config.json');
 const path = require('path');
 

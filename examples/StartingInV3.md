@@ -23,7 +23,7 @@ token and owner ID/s in a config file that is not checked in to version control.
 
 To sum things up, basic startup remains relatively unchanged. You'll notice the owner field in the example:
 ```
-const { Client } = require('yamdbf');
+const { Client } = require('@yamdbf/core');
 const config = require('./config.json');
 
 const client = new Client({

@@ -1,4 +1,4 @@
-const { Command } = require('yamdbf');
+const { Command } = require('@yamdbf/core');
 
 module.exports = class extends Command
 {

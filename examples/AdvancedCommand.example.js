@@ -1,4 +1,4 @@
-const { Command, Middleware } = require('yamdbf');
+const { Command, Middleware } = require('@yamdbf/core');
 const { resolve, expect } = Middleware;
 
 module.exports = class extends Command
