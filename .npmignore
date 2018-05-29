@@ -1,0 +1,14 @@
+.vscode/*
+src/*
+test/*
+examples/*
+scripts/*
+
+.gitignore
+.jsdoc.json
+.travis.yml
+
+config.json
+
+gulpfile.js
+yarn.lock

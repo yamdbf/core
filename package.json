@@ -1,16 +1,16 @@
 {
-  "name": "yamdbf",
+  "name": "@yamdbf/core",
   "version": "3.0.1",
   "description": "Yet Another Modular Discord Bot Framework: A lightweight framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
   "typings": "bin/index.d.ts",
   "scripts": {
-    "docs:stable": "TYPE=stable jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
-    "docs:indev": "TYPE=indev jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/indev/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/indev/docs.json",
-    "postinstall": "postinstall-build --only-as-dependency bin \"npm run build -s\"",
     "build": "gulp",
+    "pub": "npm publish --access public",
+    "prepublishOnly": "gulp build",
+    "docs:stable": "cross-env TYPE=stable jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
+    "docs:indev": "cross-env TYPE=indev jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/indev/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/indev/docs.json",
     "lint": "gulp lint",
-    "pkg": "gulp pkg",
     "test": "npm run lint -s && npm run build -s",
     "test:client": "node test/client_test.js",
     "localization": "cd scripts && gulp build && gulp build:scripts && node generateDefaultLocalizationMarkdown",
@@ -20,10 +20,10 @@
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zajrik/yamdbf"
+    "url": "https://github.com/yamdbf/core"
   },
   "bugs": {
-    "url": "https://github.com/zajrik/yamdbf/issues"
+    "url": "https://github.com/yamdbf/core/issues"
   },
   "license": "MIT",
   "keywords": [
@@ -41,7 +41,6 @@
     "discord.js": "github:zajrik/discord.js#11.1-dev",
     "glob": "7.1.1",
     "node-json-db": "0.7.3",
-    "postinstall-build": "^5.0.1",
     "reflect-metadata": "^0.1.10",
     "source-map-support": "^0.4.15"
   },
@@ -56,6 +55,7 @@
     "@types/node": "^8.0.19",
     "@types/node-json-db": "0.0.1",
     "@types/sequelize": "^4.0.68",
+    "cross-env": "^5.1.6",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.4.1",
