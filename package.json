@@ -20,10 +20,10 @@
   "author": "Zackary Campbell <zajrik@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zajrik/yamdbf"
+    "url": "https://github.com/yamdbf/core"
   },
   "bugs": {
-    "url": "https://github.com/zajrik/yamdbf/issues"
+    "url": "https://github.com/yamdbf/core/issues"
   },
   "license": "MIT",
   "keywords": [
