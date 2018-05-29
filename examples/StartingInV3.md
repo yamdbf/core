@@ -36,7 +36,7 @@ const client = new Client({
 
 And advanced startup where addition or manipulation of default guild settings is desired will look like this:
 ```
-const { Client } = require('yamdbf');
+const { Client } = require('@yamdbf/core');
 const config = require('./config.json');
 
 const client = new Client({
