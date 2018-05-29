@@ -1,11 +1,12 @@
 {
-  "name": "yamdbf",
+  "name": "@yamdbf/core",
   "version": "4.0.0",
   "description": "Yet Another Modular Discord Bot Framework: A lightweight framework for quickly creating new Discord.js bots.",
   "main": "bin/index",
   "typings": "bin/index.d.ts",
   "scripts": {
-	"build": "gulp",
+    "build": "gulp",
+    "pub": "npm publish --access public",
     "prepublishOnly": "gulp build",
     "docs:stable": "cross-env TYPE=stable jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/docs.json",
     "docs:indev": "cross-env TYPE=indev jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/indev/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/indev/docs.json",
