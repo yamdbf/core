@@ -81,7 +81,7 @@ export declare class Lang {
      * To be run after loading any localizations
      * @private
      */
-    private static postLoad();
+    private static postLoad;
     /**
      * Load all localization files (`*.lang`) from the given directory.
      * This can be used to manually load custom localizations

@@ -28,5 +28,5 @@ export declare class RateLimiter {
      * Determine whether or not to use the global rate limit collection
      * @private
      */
-    private _isGlobal(message?);
+    private _isGlobal;
 }

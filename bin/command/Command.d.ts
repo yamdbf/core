@@ -117,5 +117,5 @@ export declare abstract class Command<T extends Client = Client> {
      * for any that are invalid
      * @private
      */
-    private _validatePermissions(field, perms);
+    private _validatePermissions;
 }

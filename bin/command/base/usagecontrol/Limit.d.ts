@@ -1,7 +1,7 @@
 import { Command } from '../../Command';
 import { Message } from '../../../types/Message';
 import { ResourceProxy } from '../../../types/ResourceProxy';
-export default class  extends Command {
+export default class extends Command {
     constructor();
     action(message: Message, [res, clearOrCommand, rolesOrCommand]: [ResourceProxy, Command | string, Command | string]): Promise<any>;
     /**

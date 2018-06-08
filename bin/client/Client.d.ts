@@ -53,10 +53,10 @@ export declare class Client extends Discord.Client {
     readonly _middleware: MiddlewareFunction[];
     readonly _customResolvers: ResolverConstructor[];
     constructor(options: YAMDBFOptions, clientOptions?: ClientOptions);
-    private __onReadyEvent();
-    private __onContinueEvent();
-    private __onGuildCreateEvent(guild);
-    private __onGuildDeleteEvent(guild);
+    private __onReadyEvent;
+    private __onContinueEvent;
+    private __onGuildCreateEvent;
+    private __onGuildDeleteEvent;
     /**
      * The global ratelimit for all command usage per user
      * @type {string}

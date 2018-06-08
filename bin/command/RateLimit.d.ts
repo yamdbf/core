@@ -15,7 +15,7 @@ export declare class RateLimit {
      * Sets this RateLimit to default values
      * @private
      */
-    private _reset();
+    private _reset;
     /**
      * Returns whether or not this rate limit has been capped out
      * for its current expiry period while incrementing calls

@@ -55,3 +55,21 @@ export { MiddlewareFunction } from './types/MiddlewareFunction';
 export { StorageProviderConstructor } from './types/StorageProviderConstructor';
 export { YAMDBFOptions } from './types/YAMDBFOptions';
 export declare const version: string;
+/** @external {Client} See: {@link https://discord.js.org/#/docs/main/stable/class/Client} */
+/** @external {ClientOptions} See: {@link https://discord.js.org/#/docs/main/stable/typedef/ClientOptions} */
+/** @external {Collection} See: {@link https://discord.js.org/#/docs/main/stable/class/Collection} */
+/** @external {Guild} See: {@link https://discord.js.org/#/docs/main/stable/class/Guild} */
+/** @external {Message} See: {@link https://discord.js.org/#/docs/main/stable/class/Message} */
+/** @external {MessageOptions} See: {@link https://discord.js.org/#/docs/main/stable/typedef/MessageOptions} */
+/** @external {PermissionResolvable} See: {@link https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable} */
+/** @external {Role} See: {@link https://discord.js.org/#/docs/main/stable/class/Role} */
+/** @external {User} See: {@link https://discord.js.org/#/docs/main/stable/class/User} */
+/**
+ * @typedef {Array<any>} Tuple Represents an array of fixed length where the the item in
+ * the specified position is of the specified type.
+ *
+ * Example:
+ * ```
+ * ['foo', 10] === [string, number] === Tuple<string, number>
+ * ```
+ */

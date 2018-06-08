@@ -20,5 +20,5 @@ export declare enum LogLevel {
     INFO = 2,
     WARN = 3,
     ERROR = 4,
-    DEBUG = 5,
+    DEBUG = 5
 }

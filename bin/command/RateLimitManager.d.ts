@@ -49,5 +49,5 @@ export declare class RateLimitManager {
      * Clean up expired RateLimits
      * @private
      */
-    private _cleanup(target);
+    private _cleanup;
 }

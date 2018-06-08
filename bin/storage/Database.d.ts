@@ -1,4 +1,3 @@
-/// <reference types="sequelize" />
 import * as Sequelize from 'sequelize';
 /**
  * >**Note:** This won't do anything for you if you're not using

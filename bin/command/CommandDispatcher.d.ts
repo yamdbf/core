@@ -15,67 +15,67 @@ export declare class CommandDispatcher {
     /**
      * Handle received messages
      */
-    private handleMessage(message);
+    private handleMessage;
     /**
      * Check if the calling user is blacklisted
      */
-    private isBlacklisted(user, message, dm);
+    private isBlacklisted;
     /**
      * Return whether or not the command is allowed to be called based
      * on whatever circumstances are present at call-time, throwing
      * appropriate errors as necessary for unsatisfied conditions
      */
-    private canCallCommand(res, command, message, dm);
+    private canCallCommand;
     /**
      * Return whether or not the message author passed global
      * and command-specific ratelimits for the given command
      */
-    private passedRateLimiters(res, message, command);
+    private passedRateLimiters;
     /**
      * Check global or command-specific ratelimits for the given message
      * author, notify them if they exceed ratelimits, and return whether
      * or not the user is ratelimited
      */
-    private isRateLimited(res, message, command, global?);
+    private isRateLimited;
     /**
      * Return permissions the client is missing to execute the given command
      */
-    private checkClientPermissions(command, message, dm);
+    private checkClientPermissions;
     /**
      * Return the permissions the caller is missing to call the given command
      */
-    private checkCallerPermissions(command, message, dm);
+    private checkCallerPermissions;
     /**
      * Return whether or not the message author passes the role limiter
      */
-    private passedRoleLimiter(command, message, dm);
+    private passedRoleLimiter;
     /**
      * Return whether or not the user has one of the roles specified
      * in the command's requisite roles
      */
-    private hasRoles(command, message, dm);
+    private hasRoles;
     /**
      * Return an error for unknown commands in DMs
      */
-    private unknownCommandError(res);
+    private unknownCommandError;
     /**
      * Return an error for guild only commands
      */
-    private guildOnlyError(res);
+    private guildOnlyError;
     /**
      * Return an error for missing caller permissions
      */
-    private missingClientPermissionsError(res, missing);
+    private missingClientPermissionsError;
     /**
      * Return an error for missing caller permissions
      */
-    private missingCallerPermissionsError(res, missing);
+    private missingCallerPermissionsError;
     /**
      * Return an error for failing a command limiter
      */
-    private failedLimiterError(res, command, message);
+    private failedLimiterError;
     /**
      * Return an error for missing roles
      */
-    private missingRolesError(res, command);
+    private missingRolesError;
 }

@@ -60,5 +60,5 @@ export declare class ListenerUtil {
      * metadata for a class method
      * @private
      */
-    private static _setListenerMetadata(event, once, ...args);
+    private static _setListenerMetadata;
 }

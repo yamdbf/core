@@ -68,7 +68,7 @@ export declare class Logger {
      * method calls with the given tag
      * @private
      */
-    private static taggedInstance(tag);
+    private static taggedInstance;
     /**
      * Set the level of output that will be logged
      * @param {LogLevel} level The level of logging to output
@@ -142,5 +142,5 @@ export declare class Logger {
      * Send log data to all transports
      * @private
      */
-    private _write(level, type, tag, text);
+    private _write;
 }

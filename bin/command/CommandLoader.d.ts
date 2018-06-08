@@ -19,5 +19,5 @@ export declare class CommandLoader {
      * Recursively search for a Command class within the given object
      * @private
      */
-    private _findCommandClass(obj);
+    private _findCommandClass;
 }
