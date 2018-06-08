@@ -34,7 +34,7 @@ export function deprecatedMethod(...decoratorArgs: any[]): MethodDecorator | Pro
 	if (typeof message !== 'string')
 	{
 		const [target, key, descriptor]: [object, PropertyKey, PropertyDescriptor] = decoratorArgs as any;
-		message = `\`${target.constructor.name}#${key}()\` is deprecated and will be removed in a future release`;
+		message = `\`${target.constructor.name}#${key as string}()\` is deprecated and will be removed in a future release`;
 		return decorate(target, key, descriptor);
 	}
 	else return decorate;

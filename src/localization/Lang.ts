@@ -13,7 +13,7 @@ import { Language } from './Language';
 import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Util } from '../util/Util';
-import { BaseStrings } from '..';
+import { BaseStrings } from './BaseStrings';
 
 /**
  * Module providing localization support throughout the framework.

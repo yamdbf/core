@@ -34,7 +34,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 	{
 		if (!target) throw new Error('@using must be used as a method decorator for a Command action method.');
 		if (key !== 'action') throw new Error(
-			`"${target.constructor.name}#${key}" is not a valid method target for @using.`);
+			`"${target.constructor.name}#${key as string}" is not a valid method target for @using.`);
 
 		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key)!;
 		const original: any = descriptor.value;

@@ -8,15 +8,16 @@
         "removeComments": false,
         "experimentalDecorators": true,
         "strict": true,
+        "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "noImplicitAny": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true
     },
-	"exclude": [
-		"node_modules",
-		"bin",
-		"examples",
-		"scripts"
-	]
+    "exclude": [
+        "node_modules",
+        "bin",
+        "examples",
+        "scripts"
+    ]
 }
