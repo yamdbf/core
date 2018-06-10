@@ -102,7 +102,7 @@ export declare class Middleware {
      * after user input related things as to not interfere with the other middleware
      * and their inputs
      * @static
-     * @method localize
+     * @method localizeLoader
      * @returns {MiddlewareFunction}
      */
     static localizeLoader: MiddlewareFunction;
