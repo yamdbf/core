@@ -188,5 +188,5 @@ export declare class Lang {
      * @param {string} Lang The language to create a ResourceProxy for
      * @returns {ResourceProxy}
      */
-    static createResourceProxy(lang: string): ResourceProxy;
+    static createResourceProxy<T = {}>(lang: string): ResourceProxy<T>;
 }
