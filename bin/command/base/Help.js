@@ -37,8 +37,7 @@ class default_1 extends Command_1.Command {
                 .map(c => c.name.length)
                 .reduce((a, b) => Math.max(a, b));
             let commandList = usableCommands.map(c => `${Util_1.Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
-                .sort()
-                .join('\n');
+                .sort();
             const data = {
                 commandList,
                 usage: cInfo(this).usage,
@@ -47,16 +46,11 @@ class default_1 extends Command_1.Command {
             };
             output = res.CMD_HELP_COMMAND_LIST(data);
             if (output.length >= 1024) {
-                commandList = '';
                 let mappedCommands = usableCommands
                     .sort((a, b) => a.name < b.name ? -1 : 1)
                     .map(c => (c.guildOnly ? '*' : ' ') + Util_1.Util.padRight(c.name, widest + 2));
-                for (let i = 0; i < mappedCommands.length; i++) {
-                    commandList += mappedCommands[i];
-                    if ((i + 1) % 3 === 0)
-                        commandList += '\n';
-                }
-                data.commandList = commandList;
+                data.commandList = mappedCommands;
+                data.namesOnly = true;
                 output = res.CMD_HELP_COMMAND_LIST(data);
             }
         }

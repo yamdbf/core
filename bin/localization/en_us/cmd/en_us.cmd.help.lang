@@ -1,7 +1,20 @@
 [CMD_HELP_COMMAND_LIST]
+## <namesOnly?: boolean, commandList: string[], usage: string, mentionUsage: string>
 Available commands: (Commands marked with `*` are server-only)
 ```ldif
-{{ commandList }}
+{{!
+	if (args.namesOnly)
+	{
+		let list = '';
+		for (let i = 0; i < args.commandList.length; i++)
+		{
+			list += args.commandList[i];
+			if ((i + 1) % 3 === 0) list += '\n';		
+		}
+		return list;
+	}
+	else return args.commandList.join('\n');
+!}}
 ## A newline after the end of this codeblock gives
 ## weird spacing between it and the last line.
 ## I don't recommend using one
@@ -18,7 +31,8 @@ not have permission to view it.
 [Owner Only]
 
 [CMD_HELP_ALIASES]
-## 'Aliases: foo, bar' | 'Alias: foo'
+## <aliases: string[]>
+## outputs: 'Aliases: foo, bar' | 'Alias: foo'
 {{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
 
 [CMD_HELP_CODEBLOCK]
