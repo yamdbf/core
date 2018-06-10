@@ -106,7 +106,7 @@ Middleware.localize = Localize_1.localize;
  * because those are based around user input whereas this should be handled
  * after user input related things as to not interfere with the other middleware
  * and their inputs
- * @deprecated Use [loclize]{@link module:Middleware.localize} instead.
+ * @deprecated Use [localize]{@link module:Middleware.localize} instead.
  * @static
  * @method localizeLoader
  * @returns {MiddlewareFunction}

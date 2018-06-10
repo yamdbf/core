@@ -173,6 +173,7 @@ export declare class Lang {
     /**
      * Takes a language string and returns a function that loads string
      * resources for that specific language
+     * @deprecated Use {@link module:Lang.createResourceProxy} instead
      * @static
      * @method createResourceLoader
      * @param {string} lang The language to create a loader for
