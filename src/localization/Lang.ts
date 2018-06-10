@@ -14,6 +14,7 @@ import { Message } from '../types/Message';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Util } from '../util/Util';
 import { BaseStrings } from './BaseStrings';
+import { deprecatedMethod } from '../util/DeprecatedMethodDecorator';
 
 /**
  * Module providing localization support throughout the framework.
@@ -474,6 +475,7 @@ export class Lang
 	 * @param {string} lang The language to create a loader for
 	 * @returns {ResourceLoader}
 	 */
+	@deprecatedMethod('`Lang.createResourceLoader()` is deprecated. Use `Lang.createResourceProxy()` instead')
 	public static createResourceLoader(lang: string): ResourceLoader
 	{
 		return (key, data) => Lang.res(lang, key, data);
