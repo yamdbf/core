@@ -528,13 +528,13 @@ export class Lang
 	 * @param {string} Lang The language to create a ResourceProxy for
 	 * @returns {ResourceProxy}
 	 */
-	public static createResourceProxy(lang: string): ResourceProxy
+	public static createResourceProxy&lt;T = {}>(lang: string): ResourceProxy&lt;T>
 	{
 		return new Proxy({}, {
 			get: (_, key) => {
 				return (data: TemplateData) => Lang.res(lang, key as string, data);
 			}
-		}) as ResourceProxy;
+		}) as ResourceProxy&lt;T>;
 	}
 }
 </code></pre>
