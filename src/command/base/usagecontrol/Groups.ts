@@ -45,9 +45,9 @@ export default class extends Command
 		const disabledGroups: string[] = await message.guild.storage!.settings.get('disabledGroups') || [];
 
 		const output: string = res.CMD_GROUPS_LIST({
-			groups: this.client.commands.groups.join(', '),
-			disabledGroups: disabledGroups.join(', '),
-			info: info.join('::::')
+			groups: this.client.commands.groups,
+			disabledGroups,
+			info
 		});
 
 		this.respond(message, output);
