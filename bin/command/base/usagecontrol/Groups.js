@@ -37,9 +37,9 @@ class default_1 extends Command_1.Command {
         const info = this.client.commands.groups.map(g => Lang_1.Lang.getGroupInfo(g, lang));
         const disabledGroups = await message.guild.storage.settings.get('disabledGroups') || [];
         const output = res.CMD_GROUPS_LIST({
-            groups: this.client.commands.groups.join(', '),
-            disabledGroups: disabledGroups.join(', '),
-            info: info.join('::::')
+            groups: this.client.commands.groups,
+            disabledGroups,
+            info
         });
         this.respond(message, output);
     }

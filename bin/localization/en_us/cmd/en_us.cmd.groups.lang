@@ -1,4 +1,5 @@
 [CMD_GROUPS_LIST]
+## <groups: string[], info: string[], disabledGroups: string[]>
 **Command groups:** (Groups marked with ***** are disabled)
 ```ldif
 {{!
@@ -8,9 +9,7 @@
 		return `${text}${' '.repeat(pad)}`;
 	}
 
-	let groups = args.groups.split(', ');
-	let info = args.info.split('::::');
-	let disabled = args.disabledGroups.split(', ');
+	let { groups, info, disabledGroups: disabled } = args;
 	
 	let widest = groups
 		.map(g => g.length)
