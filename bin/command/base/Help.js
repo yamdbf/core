@@ -68,7 +68,7 @@ class default_1 extends Command_1.Command {
                     commandName: command.name,
                     desc: info.desc,
                     aliasText: command.aliases.length > 0
-                        ? res.CMD_HELP_ALIASES({ aliases: command.aliases.join(', ') })
+                        ? res.CMD_HELP_ALIASES({ aliases: command.aliases })
                         : '',
                     usage: info.usage,
                     info: info.info ? `\n${info.info}` : ''

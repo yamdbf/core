@@ -33,7 +33,7 @@ not have permission to view it.
 [CMD_HELP_ALIASES]
 ## <aliases: string[]>
 ## outputs: 'Aliases: foo, bar' | 'Alias: foo'
-{{! args.aliases.split(',').length > 1 ? 'Aliases' : 'Alias' !}}: {{ aliases }}
+{{! args.aliases.length > 1 ? 'Aliases' : 'Alias' !}}: {{! args.aliases.join(', ') !}}
 
 [CMD_HELP_CODEBLOCK]
 ## I feel ldif is the best codeblock language for
