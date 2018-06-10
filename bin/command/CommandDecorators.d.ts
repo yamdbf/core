@@ -34,6 +34,7 @@ export declare function using(func: MiddlewareFunction): MethodDecorator;
  * any other usages of middleware via [@using()]{@link module:CommandDecorators.using}.
  * Middleware added via {@link Command#use} is evaluated before
  * middleware added via `@using()`.
+ * @deprecated in favor of [localize]{@link module:Middleware.localize}. Will be removed in a future release
  * @static
  * @name localizable
  * @type {MethodDecorator}

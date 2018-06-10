@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Util_1 = require("./Util");
 /**
  * Logs a deprecation warning for the decorated class if
  * an instance is created
@@ -7,20 +8,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @returns {ClassDecorator}
  */
 function deprecatedClass(...decoratorArgs) {
-    if (typeof deprecatedClass.warnCache === 'undefined')
-        deprecatedClass.warnCache = {};
-    const warnCache = deprecatedClass.warnCache;
     let message = decoratorArgs[0];
-    function emitDeprecationWarning(warning) {
-        if (warnCache[warning])
-            return;
-        warnCache[warning] = true;
-        process.emitWarning(warning, 'DeprecationWarning');
-    }
     function decorate(target) {
         return class extends target {
             constructor(...args) {
-                emitDeprecationWarning(message);
+                Util_1.Util.emitDeprecationWarning(deprecatedClass, message);
                 super(...args);
             }
         };

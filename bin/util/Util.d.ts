@@ -137,4 +137,13 @@ export declare class Util {
      * @returns {any[]}
      */
     static flattenArray<T>(array: (T | T[])[]): T[];
+    /**
+     * Emit a deprecation warning message for the given target
+     * @static
+     * @method emitDeprecationWarning
+     * @param {any} target Deprecation target
+     * @param {string} message Deprecation message
+     * @returns {void}
+     */
+    static emitDeprecationWarning(target: any, message: string): void;
 }

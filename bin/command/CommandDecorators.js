@@ -77,11 +77,13 @@ exports.using = using;
  * any other usages of middleware via [@using()]{@link module:CommandDecorators.using}.
  * Middleware added via {@link Command#use} is evaluated before
  * middleware added via `@using()`.
+ * @deprecated in favor of [localize]{@link module:Middleware.localize}. Will be removed in a future release
  * @static
  * @name localizable
  * @type {MethodDecorator}
  */
 function localizable(target, key, descriptor) {
+    Util_1.Util.emitDeprecationWarning(localizable, '`CommandDecorators.localizable` is deprecated. Use `Middleware.localize` instead');
     if (!target)
         throw new Error('@localizable must be used as a method decorator for a Command action method.');
     if (key !== 'action')

@@ -253,6 +253,23 @@ class Util {
                 : result.push(item);
         return result;
     }
+    /**
+     * Emit a deprecation warning message for the given target
+     * @static
+     * @method emitDeprecationWarning
+     * @param {any} target Deprecation target
+     * @param {string} message Deprecation message
+     * @returns {void}
+     */
+    static emitDeprecationWarning(target, message) {
+        if (typeof target._warnCache === 'undefined')
+            Object.defineProperty(target, '_warnCache', { value: {} });
+        const warnCache = target._warnCache;
+        if (warnCache[message])
+            return;
+        warnCache[message] = true;
+        process.emitWarning(message, 'DeprecationWarning');
+    }
 }
 /**
  * Tangible representation of all base command names

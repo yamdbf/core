@@ -13,6 +13,7 @@ const Command_1 = require("../command/Command");
 const Logger_1 = require("../util/logger/Logger");
 const LangFileParser_1 = require("./LangFileParser");
 const Util_1 = require("../util/Util");
+const DeprecatedMethodDecorator_1 = require("../util/DeprecatedMethodDecorator");
 /**
  * Module providing localization support throughout the framework.
  * Allows client output to be translated to other languages
@@ -424,6 +425,9 @@ class Lang {
 __decorate([
     Logger_1.logger('Lang')
 ], Lang, "_logger", void 0);
+__decorate([
+    DeprecatedMethodDecorator_1.deprecatedMethod('`Lang.createResourceLoader()` is deprecated. Use `Lang.createResourceProxy()` instead')
+], Lang, "createResourceLoader", null);
 exports.Lang = Lang;
 
 //# sourceMappingURL=Lang.js.map
