@@ -45,10 +45,9 @@ export default class extends Command
 				.map(c => c.name.length)
 				.reduce((a, b) => Math.max(a, b));
 
-			let commandList: string = usableCommands.map(c =>
+			let commandList: string[] = usableCommands.map(c =>
 				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
-					.sort()
-					.join('\n');
+					.sort();
 
 			const data: TemplateData = {
 				commandList,
@@ -60,17 +59,13 @@ export default class extends Command
 			output = res.CMD_HELP_COMMAND_LIST(data);
 			if (output.length >= 1024)
 			{
-				commandList = '';
 				let mappedCommands: string[] = usableCommands
 					.sort((a, b) => a.name < b.name ? -1 : 1)
 					.map(c => (c.guildOnly ? '*' : ' ') + Util.padRight(c.name, widest + 2));
 
-				for (let i: number = 0; i < mappedCommands.length; i++)
-				{
-					commandList += mappedCommands[i];
-					if ((i + 1) % 3 === 0) commandList += '\n';
-				}
-				data.commandList = commandList;
+				data.commandList = mappedCommands;
+				data.namesOnly = true;
+
 				output = res.CMD_HELP_COMMAND_LIST(data);
 			}
 		}
