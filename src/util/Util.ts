@@ -288,4 +288,24 @@ export class Util
 				: result.push(item);
 		return result;
 	}
+
+	/**
+	 * Emit a deprecation warning message for the given target
+	 * @static
+	 * @method emitDeprecationWarning
+	 * @param {any} target Deprecation target
+	 * @param {string} message Deprecation message
+	 * @returns {void}
+	 */
+	public static emitDeprecationWarning(target: any, message: string): void
+	{
+		if (typeof target._warnCache === 'undefined')
+			Object.defineProperty(target, '_warnCache', { value: {} });
+
+		const warnCache: { [key: string]: boolean } = target._warnCache;
+		if (warnCache[message]) return;
+		warnCache[message] = true;
+
+		process.emitWarning(message, 'DeprecationWarning');
+	}
 }

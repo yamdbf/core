@@ -1,3 +1,5 @@
+import { Util } from './Util';
+
 export function deprecatedMethod(message: string): MethodDecorator;
 export function deprecatedMethod(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor;
 /**
@@ -8,16 +10,7 @@ export function deprecatedMethod(target: object, key: PropertyKey, descriptor: P
  */
 export function deprecatedMethod(...decoratorArgs: any[]): MethodDecorator | PropertyDescriptor
 {
-	if (typeof (deprecatedMethod as any).warnCache === 'undefined') (deprecatedMethod as any).warnCache = {};
-	const warnCache: { [key: string]: boolean } = (deprecatedMethod as any).warnCache;
 	let message: string = decoratorArgs[0];
-
-	function emitDeprecationWarning(warning: string): void
-	{
-		if (warnCache[warning]) return;
-		warnCache[warning] = true;
-		process.emitWarning(warning, 'DeprecationWarning');
-	}
 
 	function decorate(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor
 	{
@@ -25,7 +18,7 @@ export function deprecatedMethod(...decoratorArgs: any[]): MethodDecorator | Pro
 		const original: any = descriptor.value;
 		descriptor.value = function(...args: any[]): any
 		{
-			emitDeprecationWarning(message);
+			Util.emitDeprecationWarning(deprecatedMethod, message);
 			return original.apply(this, args);
 		};
 		return descriptor;

@@ -1,3 +1,5 @@
+import { Util } from './Util';
+
 export function deprecatedClass(message: string): ClassDecorator;
 export function deprecatedClass<T extends new (...args: any[]) => any>(target: T): T;
 /**
@@ -8,16 +10,7 @@ export function deprecatedClass<T extends new (...args: any[]) => any>(target: T
  */
 export function deprecatedClass<T extends new (...args: any[]) => any>(...decoratorArgs: any[]): ClassDecorator | T
 {
-	if (typeof (deprecatedClass as any).warnCache === 'undefined') (deprecatedClass as any).warnCache = {};
-	const warnCache: { [key: string]: boolean } = (deprecatedClass as any).warnCache;
 	let message: string = decoratorArgs[0];
-
-	function emitDeprecationWarning(warning: string): void
-	{
-		if (warnCache[warning]) return;
-		warnCache[warning] = true;
-		process.emitWarning(warning, 'DeprecationWarning');
-	}
 
 	function decorate(target: T): T
 	{
@@ -25,7 +18,7 @@ export function deprecatedClass<T extends new (...args: any[]) => any>(...decora
 		{
 			public constructor(...args: any[])
 			{
-				emitDeprecationWarning(message);
+				Util.emitDeprecationWarning(deprecatedClass, message);
 				super(...args);
 			}
 		};
