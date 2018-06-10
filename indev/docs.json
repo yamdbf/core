@@ -3489,7 +3489,7 @@
         },
         {
             "name": "TemplateData",
-            "description": "<p>Represents an object mapping template\nkeys to string values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction/proxy like [Lang.res()]{@link module:Lang.res}</p>",
+            "description": "<p>Represents an object mapping template\nkeys to values, where the template keys will be replaced with\nthe provided values in the source string when given to a Lang resource\nfunction/proxy like [Lang.res()]{@link module:Lang.res}</p>",
             "properties": []
         },
         {
