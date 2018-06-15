@@ -63,7 +63,7 @@ class CommandDispatcher {
                 let shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
                 if (shortcuts && prefix && name && shortcuts[name]) {
                     const shortcutName = name;
-                    const shortcutCall = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
+                    const shortcutCall = new RegExp(`^${Util_1.Util.escape(prefix)} *${Util_1.Util.escape(name)}`);
                     const oldArgsStr = message.content.replace(shortcutCall, '');
                     const newCommand = `${prefix}${shortcuts[name]}`;
                     message.content = newCommand;
@@ -81,7 +81,7 @@ class CommandDispatcher {
             // command or shortcut was called
             if (!commandWasCalled) {
                 if (name) {
-                    const unknownCall = new RegExp(`^${Util_1.Util.escape(prefix || '')} *${name}`);
+                    const unknownCall = new RegExp(`^${Util_1.Util.escape(prefix || '')} *${Util_1.Util.escape(name)}`);
                     const unknownArgsStr = message.content.replace(unknownCall, '');
                     const unknownCommandArgs = this._client.argsParser(unknownArgsStr);
                     this._client.emit('unknownCommand', name, unknownCommandArgs, message);
@@ -105,7 +105,7 @@ class CommandDispatcher {
             && (message.content.match(clientMention) || []).length === 1)
             message.mentions.users.delete(this._client.user.id);
         // Prepare args
-        const call = new RegExp(`^${Util_1.Util.escape(prefix)} *${name}`);
+        const call = new RegExp(`^${Util_1.Util.escape(prefix)} *${Util_1.Util.escape(name)}`);
         const preppedInput = message.content.replace(call, '').trim();
         let args = this._client.argsParser(preppedInput, command, message);
         let commandResult;
