@@ -83,7 +83,7 @@ export class CommandDispatcher
 				if (shortcuts && prefix && name && shortcuts[name])
 				{
 					const shortcutName: string = name;
-					const shortcutCall: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
+					const shortcutCall: RegExp = new RegExp(`^${Util.escape(prefix)} *${Util.escape(name)}`);
 					const oldArgsStr: string = message.content.replace(shortcutCall, '');
 					const newCommand: string = `${prefix}${shortcuts[name]}`;
 
@@ -108,7 +108,7 @@ export class CommandDispatcher
 			{
 				if (name)
 				{
-					const unknownCall: RegExp = new RegExp(`^${Util.escape(prefix || '')} *${name}`);
+					const unknownCall: RegExp = new RegExp(`^${Util.escape(prefix || '')} *${Util.escape(name)}`);
 					const unknownArgsStr: string = message.content.replace(unknownCall, '');
 					const unknownCommandArgs: any[] = this._client.argsParser(unknownArgsStr);
 					this._client.emit('unknownCommand', name, unknownCommandArgs, message);
@@ -130,7 +130,7 @@ export class CommandDispatcher
 			message.mentions.users.delete(this._client.user.id);
 
 		// Prepare args
-		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
+		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${Util.escape(name!)}`);
 		const preppedInput: string = message.content.replace(call, '').trim();
 		let args: string[] = this._client.argsParser(preppedInput, command!, message);
 
