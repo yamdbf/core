@@ -31,6 +31,7 @@ export class Lang
 	private readonly _groupInfo: { [group: string]: { [lang: string]: string } };
 	private readonly _langs: { [lang: string]: Language };
 	private readonly _meta: { [lang: string]: { [key: string]: any } };
+	private _fallbackLang!: string;
 
 	private static _instance: Lang;
 
@@ -134,6 +135,20 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 		return Lang._instance._meta[lang] || {};
+	}
+
+	/**
+	 * Set the language to try when a string cannot be found for
+	 * the current language
+	 * @static
+	 * @method setFallbackLang
+	 * @param {string} lang Fallback language to set
+	 * @returns {void}
+	 */
+	public static setFallbackLang(lang: string): void
+	{
+		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
+		Lang._instance._fallbackLang = lang;
 	}
 
 	/**
@@ -403,14 +418,24 @@ export class Lang
 	 */
 	public static res(lang: string, key: string, data: TemplateData = {}): string
 	{
-		if (!Lang.langs[lang]) return `${lang}::${key}`;
+		if (!Lang.langs[lang]
+			&& Lang._instance._fallbackLang
+			&& Lang.langs[Lang._instance._fallbackLang])
+			return `${lang}::${key}`;
 
 		const maybeTemplates: RegExp = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
 		const scriptTemplate: RegExp = /^{{!([\s\S]+?)!}}[\t ]*?\n?|{{!([\s\S]+?)!}}/m;
 		const strings: { [key: string]: string } = Lang.langs[lang].strings;
 		let loadedString: string = strings[key];
 
-		if (!loadedString) return `${lang}::${key}`;
+		// Try loading string via the fallback language if it's set
+		if (!loadedString)
+		{
+			if (Lang._instance._fallbackLang && Lang.langs[Lang._instance._fallbackLang])
+				loadedString = Lang.langs[Lang._instance._fallbackLang].strings[key];
+
+			if (!loadedString) return `${lang}::${key}`;
+		}
 
 		// Don't bother running scripts and stuff if no data is passed,
 		// clean out maybe templates, replace escaped new lines with real
