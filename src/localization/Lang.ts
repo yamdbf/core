@@ -411,7 +411,14 @@ export class Lang
 		let loadedString: string = strings[key];
 
 		if (!loadedString) return `${lang}::${key}`;
-		if (typeof data === 'undefined') return loadedString;
+
+		// Don't bother running scripts and stuff if no data is passed,
+		// clean out maybe templates, replace escaped new lines with real
+		// ones and return the loaded string
+		if (typeof data === 'undefined')
+			return loadedString
+				.replace(maybeTemplates, '')
+				.replace(/\\n/g, '\n');
 
 		// Handle templates
 		for (const template of Object.keys(data))
