@@ -112,6 +112,19 @@ class Lang {
         return Lang._instance._meta[lang] || {};
     }
     /**
+     * Set the language to try when a string cannot be found for
+     * the current language
+     * @static
+     * @method setFallbackLang
+     * @param {string} lang Fallback language to set
+     * @returns {void}
+     */
+    static setFallbackLang(lang) {
+        if (!Lang._instance)
+            throw new Error('Lang singleton instance has not been created');
+        Lang._instance._fallbackLang = lang;
+    }
+    /**
      * To be run after loading any localizations
      * @private
      */
@@ -340,16 +353,28 @@ class Lang {
      * @returns {string}
      */
     static res(lang, key, data = {}) {
-        if (!Lang.langs[lang])
+        if (!Lang.langs[lang]
+            && Lang._instance._fallbackLang
+            && Lang.langs[Lang._instance._fallbackLang])
             return `${lang}::${key}`;
         const maybeTemplates = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
         const scriptTemplate = /^{{!([\s\S]+?)!}}[\t ]*?\n?|{{!([\s\S]+?)!}}/m;
         const strings = Lang.langs[lang].strings;
         let loadedString = strings[key];
-        if (!loadedString)
-            return `${lang}::${key}`;
+        // Try loading string via the fallback language if it's set
+        if (!loadedString) {
+            if (Lang._instance._fallbackLang && Lang.langs[Lang._instance._fallbackLang])
+                loadedString = Lang.langs[Lang._instance._fallbackLang].strings[key];
+            if (!loadedString)
+                return `${lang}::${key}`;
+        }
+        // Don't bother running scripts and stuff if no data is passed,
+        // clean out maybe templates, replace escaped new lines with real
+        // ones and return the loaded string
         if (typeof data === 'undefined')
-            return loadedString;
+            return loadedString
+                .replace(maybeTemplates, '')
+                .replace(/\\n/g, '\n');
         // Handle templates
         for (const template of Object.keys(data)) {
             // Skip maybe templates so they can be removed properly later

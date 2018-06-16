@@ -18,6 +18,7 @@ export declare class Lang {
     private readonly _groupInfo;
     private readonly _langs;
     private readonly _meta;
+    private _fallbackLang;
     private static _instance;
     private constructor();
     /**
@@ -77,6 +78,15 @@ export declare class Lang {
     static getMetadata(lang: string): {
         [key: string]: any;
     };
+    /**
+     * Set the language to try when a string cannot be found for
+     * the current language
+     * @static
+     * @method setFallbackLang
+     * @param {string} lang Fallback language to set
+     * @returns {void}
+     */
+    static setFallbackLang(lang: string): void;
     /**
      * To be run after loading any localizations
      * @private
