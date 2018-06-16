@@ -4,10 +4,12 @@ import { Language } from './Language';
  * @private
  */
 export declare class LangFileParser {
-    private static readonly _parseBlock;
-    private static readonly _parseBlocks;
-    private static readonly _stripComments;
-    private static readonly _trimNewlines;
+    private static readonly _block;
+    private static readonly _blocks;
+    private static readonly _comments;
+    private static readonly _outerNewLines;
+    private static readonly _scriptTemplate;
+    private static readonly _scriptTemplates;
     /**
      * Parse a given language file string and return a Language
      * object containing all the parsed values

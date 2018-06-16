@@ -20,6 +20,7 @@ export declare class Lang {
     private readonly _meta;
     private _fallbackLang;
     private static _instance;
+    private static _maybeTemplates;
     private constructor();
     /**
      * Contains all loaded languages and their strings.

@@ -357,23 +357,23 @@ class Lang {
             && Lang._instance._fallbackLang
             && Lang.langs[Lang._instance._fallbackLang])
             return `${lang}::${key}`;
-        const maybeTemplates = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
-        const scriptTemplate = /^{{!([\s\S]+?)!}}[\t ]*?\n?|{{!([\s\S]+?)!}}/m;
-        const strings = Lang.langs[lang].strings;
-        let loadedString = strings[key];
+        let node = Lang.langs[lang].strings[key];
         // Try loading string via the fallback language if it's set
-        if (!loadedString) {
-            if (Lang._instance._fallbackLang && Lang.langs[Lang._instance._fallbackLang])
-                loadedString = Lang.langs[Lang._instance._fallbackLang].strings[key];
-            if (!loadedString)
+        // and the given string can't be found for the given language
+        if (!node) {
+            if (Lang._instance._fallbackLang
+                && Lang.langs[Lang._instance._fallbackLang])
+                node = Lang.langs[Lang._instance._fallbackLang].strings[key];
+            if (!node)
                 return `${lang}::${key}`;
         }
-        // Don't bother running scripts and stuff if no data is passed,
-        // clean out maybe templates, replace escaped new lines with real
+        let loadedString = node.value;
+        // Don't bother running scripts and stuff if no data is passed.
+        // Clean out maybe templates, replace escaped new lines with real
         // ones and return the loaded string
         if (typeof data === 'undefined')
             return loadedString
-                .replace(maybeTemplates, '')
+                .replace(Lang._maybeTemplates, '')
                 .replace(/\\n/g, '\n');
         // Handle templates
         for (const template of Object.keys(data)) {
@@ -383,41 +383,35 @@ class Lang {
                 continue;
             loadedString = loadedString.replace(new RegExp(`{{ *${template} *\\??}}`, 'g'), () => data[template]);
         }
-        // Handle script templates
-        const scriptTemplates = new RegExp(scriptTemplate, 'gm');
-        if (scriptTemplates.test(loadedString)) {
+        // Run embedded Lang string node scripts if any
+        if (node.scripts.length > 0) {
             const proxy = Lang.createResourceProxy(lang);
             const res = new Proxy({}, {
                 get: (_, prop) => {
                     return (args = data) => proxy[prop](args);
                 }
             });
-            for (const scriptData of loadedString.match(scriptTemplates)) {
-                let functionBody = scriptData.match(scriptTemplate)[1] || scriptData.match(scriptTemplate)[2];
-                let script = new Function('args', 'res', functionBody);
+            for (const script in node.scripts) {
+                const loadedScript = node.scripts[script];
                 let result;
                 try {
-                    result = script(data, res);
+                    result = loadedScript.func(data, res);
                 }
                 catch (err) {
                     throw new Error(`in embedded localization script for: ${lang}::${key}\n${err}`);
                 }
-                // Try to coerce an implicit return
-                if (typeof result === 'undefined')
-                    try {
-                        functionBody = `return ${functionBody.replace(/^[\s]+/, '')}`;
-                        script = new Function('args', 'res', functionBody);
-                        result = script(data, res);
-                    }
-                    catch (_a) { }
-                if (/^{{!([\s\S]+)!}}[\t ]*\n/.test(scriptData) && result !== '')
-                    loadedString = loadedString.replace(scriptData, () => `${result}\n`);
+                // Try coerced implicit return if it exists
+                if (typeof result === 'undefined'
+                    && loadedScript.implicitReturnFunc)
+                    result = loadedScript.implicitReturnFunc(data, res);
+                if ((new RegExp(`^{{! ${script} !}}[\\t ]*\\n`)).test(loadedScript.raw) && result !== '')
+                    loadedString = loadedString.replace(`{{! ${script} !}}`, () => `${result}\n`);
                 else
-                    loadedString = loadedString.replace(scriptData, () => result);
+                    loadedString = loadedString.replace(`{{! ${script} !}}`, () => result);
             }
         }
         return loadedString
-            .replace(maybeTemplates, '')
+            .replace(Lang._maybeTemplates, '')
             .replace(/\\n/g, '\n');
     }
     /**
@@ -448,6 +442,7 @@ class Lang {
         });
     }
 }
+Lang._maybeTemplates = /^{{ *[a-zA-Z]+ *\?}}[\t ]*\n|{{ *[a-zA-Z]+ *\?}}/gm;
 __decorate([
     Logger_1.logger('Lang')
 ], Lang, "_logger", void 0);
