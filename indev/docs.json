@@ -1905,6 +1905,30 @@
             ]
         },
         {
+            "name": "CompiledTemplateScript",
+            "description": "<p>A compiled localization template script, including an implicit\nreturn coercion if it was syntactically possible to create one</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CompiledTemplateScript",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "_functionWrap",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Wrap the given code in a function body to prevent vm.Script\nthrowing errors on top-level returns which are valid in the\ncontext of a template script</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
             "name": "LangFileParser",
             "description": "<p>Class for parsing <code>.lang</code> files</p>",
             "extends": [],
@@ -1929,6 +1953,20 @@
             ]
         },
         {
+            "name": "LangStringNode",
+            "description": "<p>Represents a localization string parsed and compiled from a .lang file</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "LangStringNode",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            }
+        },
+        {
             "name": "Language",
             "description": "<p>Holds the localization strings for a given language</p>",
             "extends": [],
@@ -1946,7 +1984,7 @@
                     "name": "concat",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Concatenate another Language object's strings of the\nsame language with this Language object's strings,\nsaving them to this Language object's <code>strings</code> value</p>",
+                    "description": "<p>Concatenate another Language object's strings of the\nsame language with this Language object's strings,\nadding them to this Language object's <code>strings</code> object</p>",
                     "parameters": [],
                     "examples": []
                 }
