@@ -14,8 +14,8 @@ class ScriptClient extends Client
 		logger.setLogLevel(LogLevel.DEBUG);
 		logger.log('Script', 'Building localization string list');
 		let localizationStrings: string[] = [];
-		for (const raw of Object.keys(Lang.langs['en_us'].raw))
-			localizationStrings.push(Lang.langs['en_us'].raw[raw]);
+		for (const key of Object.keys(Lang.langs['en_us'].strings))
+			localizationStrings.push(Lang.langs['en_us'].strings[key].raw);
 
 		type CommandInfo = {
 			[commandName: string]: {
@@ -26,6 +26,7 @@ class ScriptClient extends Client
 				}
 			}
 		};
+
 		let commandHelptextStrings: CommandInfo = {};
 		for (const command of this.commands.values())
 		{
