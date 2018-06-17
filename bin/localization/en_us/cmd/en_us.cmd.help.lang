@@ -1,5 +1,5 @@
 [CMD_HELP_COMMAND_LIST]
-## <namesOnly?: boolean, commandList: string[], usage: string, mentionUsage: string>
+##! <namesOnly?: boolean, commandList: string[], usage: string, mentionUsage: string>
 Available commands: (Commands marked with `*` are server-only)
 ```ldif
 {{!
@@ -31,7 +31,7 @@ not have permission to view it.
 [Owner Only]
 
 [CMD_HELP_ALIASES]
-## <aliases: string[]>
+##! <aliases: string[]>
 ## outputs: 'Aliases: foo, bar' | 'Alias: foo'
 {{! args.aliases.length > 1 ? 'Aliases' : 'Alias' !}}: {{! args.aliases.join(', ') !}}
 

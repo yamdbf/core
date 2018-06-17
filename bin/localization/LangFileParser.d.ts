@@ -12,7 +12,7 @@ export declare class LangFileParser {
     private static readonly _scriptTemplates;
     /**
      * Parse a given language file string and return a Language
-     * object containing all the parsed values
+     * object containing all the parsed nodes
      */
     static parseFile(langName: string, filePath: string, fileContents: string): Language;
 }

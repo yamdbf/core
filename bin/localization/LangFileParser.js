@@ -10,7 +10,7 @@ const LangStringNode_1 = require("./LangStringNode");
 class LangFileParser {
     /**
      * Parse a given language file string and return a Language
-     * object containing all the parsed values
+     * object containing all the parsed nodes
      */
     static parseFile(langName, filePath, fileContents) {
         const lang = new Language_1.Language(langName);
@@ -36,7 +36,7 @@ class LangFileParser {
                     value = value.replace(templates[script], `{{! ${script} !}}`);
                 }
             }
-            lang.strings[key] = new LangStringNode_1.LangStringNode(key, value, raw, scripts);
+            lang.strings[key] = new LangStringNode_1.LangStringNode(langName, key, value, raw, scripts);
         }
         return lang;
     }
