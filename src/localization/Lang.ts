@@ -441,7 +441,10 @@ export class Lang
 
 		let loadedString: string = node.value;
 
-		// Don't bother running scripts and stuff if no data is passed.
+		// Run the argsValidator for the node if it exists
+		if (typeof node.argsValidator !== 'undefined') node.argsValidator(data);
+
+		// Don't bother running scripts and stuff if no args are passed.
 		// Clean out maybe templates, replace escaped new lines with real
 		// ones and return the loaded string
 		if (typeof data === 'undefined')

@@ -19,7 +19,7 @@ export class LangFileParser
 
 	/**
 	 * Parse a given language file string and return a Language
-	 * object containing all the parsed values
+	 * object containing all the parsed nodes
 	 */
 	public static parseFile(langName: string, filePath: string, fileContents: string): Language
 	{
@@ -57,7 +57,7 @@ export class LangFileParser
 				}
 			}
 
-			lang.strings[key] = new LangStringNode(key, value, raw, scripts);
+			lang.strings[key] = new LangStringNode(langName, key, value, raw, scripts);
 		}
 
 		return lang;
