@@ -158,7 +158,7 @@ Command group &quot;{{ group }}&quot; is already disabled or is not allowed to b
 **Disabled command group &quot;{{ group }}&quot;**
 
 [CMD_HELP_COMMAND_LIST]
-## &lt;namesOnly?: boolean, commandList: string[], usage: string, mentionUsage: string>
+##! &lt;namesOnly?: boolean, commandList: string[], usage: string, mentionUsage: string>
 Available commands: (Commands marked with `*` are server-only)
 ```ldif
 {{!
@@ -190,7 +190,7 @@ not have permission to view it.
 [Owner Only]
 
 [CMD_HELP_ALIASES]
-## &lt;aliases: string[]>
+##! &lt;aliases: string[]>
 ## outputs: 'Aliases: foo, bar' | 'Alias: foo'
 {{! args.aliases.length > 1 ? 'Aliases' : 'Alias' !}}: {{! args.aliases.join(', ') !}}
 

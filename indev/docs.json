@@ -1946,7 +1946,7 @@
                     "name": "parseFile",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Parse a given language file string and return a Language\nobject containing all the parsed values</p>",
+                    "description": "<p>Parse a given language file string and return a Language\nobject containing all the parsed nodes</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -1954,7 +1954,7 @@
         },
         {
             "name": "LangStringNode",
-            "description": "<p>Represents a localization string parsed and compiled from a .lang file</p>",
+            "description": "<p>Represents a localization string parsed and compiled from a .lang file,\ncapable of validating arguments it expects at runtime</p>",
             "extends": [],
             "access": "private",
             "virtual": false,
