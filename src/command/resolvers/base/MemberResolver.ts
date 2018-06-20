@@ -39,7 +39,7 @@ export class MemberResolver extends Resolver
 					|| Util.normalize(a.user.username).includes(normalized)
 					|| Util.normalize(a.user.tag).includes(normalized));
 
-			if (members.size === 1) member = members.first();
+			if (members.size === 1) member = members.first()!;
 			else return members;
 		}
 
@@ -74,7 +74,7 @@ export class MemberResolver extends Resolver
 						users: member.map(m => `\`${m.user.tag}\``).join(', ')
 					}));
 
-				member = member.first();
+				member = member.first()!;
 			}
 
 			if (!member)

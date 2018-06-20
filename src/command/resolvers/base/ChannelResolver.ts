@@ -40,7 +40,7 @@ export class ChannelResolver extends Resolver
 					.filter(a => a.type === 'text')
 					.filter(a => Util.normalize(a.name).includes(normalized)) as Collection<string, TextChannel>;
 
-			if (channels.size === 1) channel = channels.first();
+			if (channels.size === 1) channel = channels.first()!;
 			else return channels;
 		}
 
@@ -75,7 +75,7 @@ export class ChannelResolver extends Resolver
 						channels: channel.map(c => `\`#${c.name}\``).join(', ')
 					}));
 
-				channel = channel.first();
+				channel = channel.first()!;
 			}
 
 			if (!channel)

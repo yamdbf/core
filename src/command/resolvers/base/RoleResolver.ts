@@ -38,7 +38,7 @@ export class RoleResolver extends Resolver
 			let roles: Collection<string, Role> = context.guild.roles.filter(a =>
 				Util.normalize(a.name).includes(normalized));
 
-			if (roles.size === 1) role = roles.first();
+			if (roles.size === 1) role = roles.first()!;
 			else return roles;
 		}
 
@@ -73,7 +73,7 @@ export class RoleResolver extends Resolver
 						roles: role.map(r => `\`${r.name}\``).join(', ')
 					}));
 
-				role = role.first();
+				role = role.first()!;
 			}
 
 			if (!role)

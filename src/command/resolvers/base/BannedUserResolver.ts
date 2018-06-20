@@ -43,7 +43,7 @@ export class BannedUserResolver extends Resolver
 				Util.normalize(a.username).includes(normalized)
 					|| Util.normalize(a.tag).includes(normalized));
 
-			if (users.size === 1) user = users.first();
+			if (users.size === 1) user = users.first()!;
 			else return users;
 		}
 
@@ -78,7 +78,7 @@ export class BannedUserResolver extends Resolver
 						users: user.map(u => `\`${u.tag}\``).join(', ')
 					}));
 
-				user = user.first();
+				user = user.first()!;
 			}
 
 			if (!user)

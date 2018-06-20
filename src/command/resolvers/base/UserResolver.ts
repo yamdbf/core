@@ -42,7 +42,7 @@ export class UserResolver extends Resolver
 						.filter(a => Util.normalize(a.displayName).includes(normalized))
 						.map(a => [a.id, a.user] as [string, User])));
 
-			if (users.size === 1) user = users.first();
+			if (users.size === 1) user = users.first()!;
 			else return users;
 		}
 
@@ -77,7 +77,7 @@ export class UserResolver extends Resolver
 						users: user.map(u => `\`${u.tag}\``).join(', ')
 					}));
 
-				user = user.first();
+				user = user.first()!;
 			}
 
 			if (!user)
