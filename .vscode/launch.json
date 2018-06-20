@@ -7,6 +7,21 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Launch With TS-Node",
+			"cwd": "${workspaceRoot}/test",
+			"runtimeArgs": [
+				"--nolazy",
+				"-r",
+				"${workspaceRoot}/node_modules/ts-node/register"
+			],
+			"args": [
+				"${workspaceRoot}/test/test_client.ts"
+			],
+			"console": "integratedTerminal"
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Launch Program",
 			"program": "${workspaceRoot}/test/test_client.js",
 			"cwd": "${workspaceRoot}/test",

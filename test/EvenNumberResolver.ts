@@ -1,4 +1,4 @@
-import { Resolver, Client, Command, Message } from '../bin/';
+import { Resolver, Client, Command, Message } from '../src/';
 
 export class EvenNumberResolver extends Resolver
 {

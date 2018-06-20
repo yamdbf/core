@@ -7,7 +7,7 @@ import {
 	// Util,
 	Lang,
 	// Providers
-} from '../bin/';
+} from '../src/';
 // import TestCommand from './commands/test_command';
 import { TestPlugin } from './test_plugin';
 import { EvenNumberResolver } from './EvenNumberResolver';
@@ -40,7 +40,8 @@ class Test extends Client
 			// 	.filter(n => n !== 'help' && n !== 'eval')
 			dmHelp: false,
 			compact: true,
-			buttons: { success: '274295184957898752' }
+			buttons: { success: '274295184957898752' },
+			tsNode: true
 		});
 
 		Lang.setMetaValue('al_bhed', 'name', 'Al Bhed');

@@ -1,7 +1,7 @@
-import { IPlugin } from '../bin/client/interface/IPlugin';
-import { Plugin } from '../bin/client/Plugin';
-import { Lang, Client, Logger } from '../bin';
-import { SharedProviderStorage } from '../bin/storage/SharedProviderStorage';
+import { IPlugin } from '../src/client/interface/IPlugin';
+import { Plugin } from '../src/client/Plugin';
+import { Lang, Client, Logger } from '../src';
+import { SharedProviderStorage } from '../src/storage/SharedProviderStorage';
 import TestCommand from './commands/test_command';
 
 export class TestPlugin extends Plugin implements IPlugin

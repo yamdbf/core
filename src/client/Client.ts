@@ -85,6 +85,7 @@ export class Client extends Discord.Client
 	public readonly argsParser: (input: string, command?: Command, message?: Message) => string[];
 	public readonly buttons: { [key: string]: string };
 	public readonly compact: boolean;
+	public readonly tsNode: boolean;
 
 	// Internals
 	public readonly _middleware: MiddlewareFunction[];
@@ -289,6 +290,13 @@ export class Client extends Discord.Client
 		 * @type {Function}
 		 */
 		this.argsParser = options.argsParser || Util.parseArgs;
+
+		/**
+		 * Whether or not ts-node is in use, allowing the Client
+		 * to attempt to load .ts files when loading Commands
+		 * @type {boolean}
+		 */
+		this.tsNode = options.tsNode || false;
 
 		Lang.createInstance(this);
 		Lang.loadLocalizations();

@@ -29,6 +29,8 @@
  * 								emoji id strings. To be used by the Client when compact mode is active<br>
  * 								See: {@link Client#buttons}
  * @property {boolean} [compact=false] Whether or not compact mode should be used
+ * @property {boolean} [tsNode=false] Whether or not ts-node is being used, allowing the CommandLoader to
+ * 									  attempt to load .ts files when loading Commands
  */
 
 import { StorageProviderConstructor } from './StorageProviderConstructor';
@@ -61,4 +63,5 @@ export type YAMDBFOptions = {
 	argsParser?: (input: string, command?: Command, message?: Message) => string[];
 	buttons?: { [key: string]: string };
 	compact?: boolean;
+	tsNode?: boolean;
 };

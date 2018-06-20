@@ -6,9 +6,9 @@ import {
 	Logger,
 	logger,
 	ResourceLoader,
-	Middleware,
+	// Middleware,
 	// CompactModeHelper
-} from '../../bin';
+} from '../../src';
 // import * as util from 'util';
 const {
 	// using,
@@ -16,11 +16,11 @@ const {
 	group,
 	// ownerOnly
 } = CommandDecorators;
-const {
-	resolve,
-	expect,
-	// localize
-} = Middleware;
+// const {
+// 	resolve,
+// 	expect,
+// 	// localize
+// } = Middleware;
 
 // @ownerOnly
 // @guildOnly
@@ -40,14 +40,14 @@ export default class extends Command
 			// ratelimit: '2/10s'
 		});
 
-		this.use(resolve('foo: BannedUser'));
-		this.use(expect('foo: BannedUser'));
+		// this.use(resolve('foo: BannedUser'));
+		// this.use(expect('foo: BannedUser'));
 	}
 
 	public async init(): Promise<void>
 	{
 		await this.logger.debug(await this.client.storage.get('defaultGuildSettings.prefix'));
-		await this.logger.debug(await this.client.storage.guilds.first().settings.get('prefix'));
+		await this.logger.debug(await this.client.storage.guilds.first()!.settings.get('prefix'));
 		await this.logger.debug('Test command initialized.');
 		// throw new Error('foooo');
 	}
@@ -74,6 +74,7 @@ export default class extends Command
 		// await CompactModeHelper.registerButton(message, '274295184957898752', () => {
 		// 	message.channel.send('Lul clicked');
 		// });
-		this.respond(message, 'foo bar baz', { button: 'success' });
+		// this.respond(message, 'foo bar bazz', { button: 'success' });
+		this.respond(message, 'foo bar baz');
 	}
 }
