@@ -261,6 +261,17 @@
                     }
                 },
                 {
+                    "name": "tsNode",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Whether or not ts-node is in use, allowing the Client\nto attempt to load .ts files when loading Commands</p>",
+                    "type": {
+                        "names": [
+                            "boolean"
+                        ]
+                    }
+                },
+                {
                     "name": "ratelimit",
                     "access": "",
                     "virtual": false,
@@ -3725,6 +3736,14 @@
                     "name": "compact",
                     "type": "boolean",
                     "description": "<p>Whether or not compact mode should be used</p>",
+                    "default": false,
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "tsNode",
+                    "type": "boolean",
+                    "description": "<p>Whether or not ts-node is being used, allowing the CommandLoader to\n                                      attempt to load .ts files when loading Commands</p>",
                     "default": false,
                     "optional": true,
                     "nullable": ""
