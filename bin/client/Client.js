@@ -206,6 +206,12 @@ class Client extends Discord.Client {
          * @type {Function}
          */
         this.argsParser = options.argsParser || Util_1.Util.parseArgs;
+        /**
+         * Whether or not ts-node is in use, allowing the Client
+         * to attempt to load .ts files when loading Commands
+         * @type {boolean}
+         */
+        this.tsNode = options.tsNode || false;
         Lang_1.Lang.createInstance(this);
         Lang_1.Lang.loadLocalizations();
         CompactModeHelper_1.CompactModeHelper.createInstance(this);

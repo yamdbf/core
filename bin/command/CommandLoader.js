@@ -26,7 +26,18 @@ class CommandLoader {
      */
     loadCommandsFrom(dir, base = false) {
         dir = path.resolve(dir);
-        const commandFiles = glob.sync(`${dir}/**/*.js`);
+        let commandFiles = glob.sync(`${dir}/**/*.js`);
+        if (this._client.tsNode) {
+            commandFiles.push(...glob.sync(`${dir}/**/!(*.d).ts`));
+            const filteredCommandFiles = commandFiles.filter(f => {
+                const file = f.match('/([^\/]+?)\.[j|t]s$')[1];
+                if (f.endsWith('.ts'))
+                    return true;
+                if (f.endsWith('.js'))
+                    return !commandFiles.find(cf => cf.endsWith(`${file}.ts`));
+            });
+            commandFiles = filteredCommandFiles;
+        }
         const loadedCommands = [];
         this._logger.debug(`Loading commands in: ${dir}`);
         for (const file of commandFiles) {

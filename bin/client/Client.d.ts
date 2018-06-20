@@ -50,6 +50,7 @@ export declare class Client extends Discord.Client {
         [key: string]: string;
     };
     readonly compact: boolean;
+    readonly tsNode: boolean;
     readonly _middleware: MiddlewareFunction[];
     readonly _customResolvers: ResolverConstructor[];
     constructor(options: YAMDBFOptions, clientOptions?: ClientOptions);
