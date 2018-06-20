@@ -12,3 +12,5 @@ config.json
 
 gulpfile.js
 yarn.lock
+tsconfig.json
+tslint.json
