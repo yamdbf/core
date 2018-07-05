@@ -32,6 +32,7 @@ function using(func) {
             descriptor = Object.getOwnPropertyDescriptor(target, key);
         const original = descriptor.value;
         descriptor.value = async function (message, args) {
+            // Send the middleware result to the channel, utilizing compact mode if enabled
             const sendMiddlewareResult = async (result, options) => {
                 if (await message.guild.storage.settings.get('compact') || this.client.compact) {
                     if (message.reactions.size > 0)
@@ -41,6 +42,7 @@ function using(func) {
                 else
                     return message.channel.send(result);
             };
+            // Run the given middleware function
             let middlewarePassed = true;
             try {
                 let result = func.call(this, message, args);

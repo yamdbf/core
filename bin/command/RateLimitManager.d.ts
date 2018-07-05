@@ -46,7 +46,7 @@ export declare class RateLimitManager {
      */
     call(limit: string, ...descriptors: string[]): boolean;
     /**
-     * Clean up expired RateLimits
+     * Recursively clean up expired ratelimits within the given target object
      * @private
      */
     private _cleanup;

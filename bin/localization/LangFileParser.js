@@ -26,6 +26,7 @@ class LangFileParser {
                 .replace(LangFileParser._comments, '')
                 .replace(LangFileParser._outerNewLines, '')
                 .trim();
+            // Process template scripts and replace with script token stubs
             if (LangFileParser._scriptTemplates.test(value)) {
                 const templates = value.match(LangFileParser._scriptTemplates);
                 for (const script in templates) {

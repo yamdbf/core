@@ -37,15 +37,15 @@ export declare class CommandRegistry<T extends Client, K extends string = string
      */
     resolve(input: string): V | undefined;
     /**
-     * Complete registration of a command and add to the parent
-     * collection, erroring on duplicate names and aliases.
+     * Complete registration of a command and add to the parent collection.
+     *
      * This is an internal method and should not be used. Use
      * `registerExternal()` instead
      * @private
      */
     _registerInternal(command: V, external?: boolean): void;
     /**
-     * Check for duplicate aliases. Used internally
+     * Check for duplicate aliases, erroring on any. Used internally
      * @private
      */
     _checkDuplicateAliases(): void;

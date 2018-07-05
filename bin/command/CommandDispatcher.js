@@ -89,6 +89,7 @@ class CommandDispatcher {
                 return;
             }
         }
+        // Determine if the command call was valid, returning the error and exiting if not
         let validCall = false;
         try {
             validCall = await this.canCallCommand(res, command, message, dm);
@@ -142,6 +143,7 @@ class CommandDispatcher {
             }
         if (!middlewarePassed)
             return;
+        // Run the command
         try {
             commandResult = await command.action(message, args);
         }

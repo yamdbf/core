@@ -58,8 +58,8 @@ class CommandRegistry extends discord_js_1.Collection {
             || !!c.aliases.find(a => a.toLowerCase() === input));
     }
     /**
-     * Complete registration of a command and add to the parent
-     * collection, erroring on duplicate names and aliases.
+     * Complete registration of a command and add to the parent collection.
+     *
      * This is an internal method and should not be used. Use
      * `registerExternal()` instead
      * @private
@@ -78,7 +78,7 @@ class CommandRegistry extends discord_js_1.Collection {
             command.external = true;
     }
     /**
-     * Check for duplicate aliases. Used internally
+     * Check for duplicate aliases, erroring on any. Used internally
      * @private
      */
     _checkDuplicateAliases() {
@@ -91,7 +91,10 @@ class CommandRegistry extends discord_js_1.Collection {
                 if (!command.external)
                     throw new Error(`Commands may not share aliases: ${name}, ${duplicate.name} (shared alias: "${alias}")`);
                 else
-                    throw new Error(`External command "${duplicate.name}" has conflicting alias with "${name}" (shared alias: "${alias}")`);
+                    throw new Error([
+                        `External command "${duplicate.name}" has conflicting alias`,
+                        `with "${name}" (shared alias: "${alias}")`
+                    ].join(' '));
             }
     }
     /**

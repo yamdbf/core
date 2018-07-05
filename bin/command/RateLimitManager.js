@@ -61,7 +61,7 @@ class RateLimitManager {
         return this.get(limit, ...descriptors).call();
     }
     /**
-     * Clean up expired RateLimits
+     * Recursively clean up expired ratelimits within the given target object
      * @private
      */
     async _cleanup(target) {

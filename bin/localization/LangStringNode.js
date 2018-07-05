@@ -13,7 +13,9 @@ class LangStringNode {
         this.raw = raw;
         this.scripts = scripts;
         this.args = {};
+        // Handle the args directive for this node if any
         if (LangStringNode._argsDirective.test(raw)) {
+            // Don't allow invalid args directives
             if (!LangStringNode._validArgsDirective.test(raw))
                 throw new TypeError(`in string \`${lang}::${key}\`: Malformed args directive`);
             const directive = raw.match(LangStringNode._argsDirective)[1];
@@ -55,6 +57,7 @@ class LangStringNode {
                 for (const argKey in this.args) {
                     const arg = this.args[argKey];
                     const expectedType = `${arg.type}${arg.isArray ? '[]' : ''}`;
+                    // Allow undefined values if the arg is optional, otherwise error
                     if (arg.isOptional && typeof args[argKey] === 'undefined')
                         continue;
                     if (typeof args[argKey] === 'undefined')
@@ -62,9 +65,11 @@ class LangStringNode {
                             `String \`${lang}::${key}\`, arg \`${argKey}\`:`,
                             `Expected type \`${expectedType}\`, got undefined`
                         ].join(' '));
+                    // Handle array types
                     if (arg.isArray) {
                         if (!Array.isArray(args[argKey]))
                             throw new TypeError(`String \`${lang}::${key}\`, arg \`${argKey}\`: Expected Array`);
+                        // Validate the type of all values within the array given for array types
                         for (const val of args[argKey])
                             validateType(arg.type, val, argKey, true);
                     }

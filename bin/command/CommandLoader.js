@@ -26,7 +26,9 @@ class CommandLoader {
      */
     loadCommandsFrom(dir, base = false) {
         dir = path.resolve(dir);
+        // Glob all the javascript files in the directory
         let commandFiles = glob.sync(`${dir}/**/*.js`);
+        // Glob typescript files if `tsNode` is enabled
         if (this._client.tsNode) {
             commandFiles.push(...glob.sync(`${dir}/**/!(*.d).ts`));
             const filteredCommandFiles = commandFiles.filter(f => {
@@ -40,15 +42,18 @@ class CommandLoader {
         }
         const loadedCommands = [];
         this._logger.debug(`Loading commands in: ${dir}`);
+        // Load and instantiate every globbed command
         for (const file of commandFiles) {
+            // Delete the cached command file for hot-reloading
             delete require.cache[require.resolve(file)];
             const loadedFile = require(file);
             const commandClass = this._findCommandClass(loadedFile);
             if (!commandClass) {
-                this._logger.debug(`Failed to find Command class in file: ${file}`);
+                this._logger.warn(`Failed to find Command class in file: ${file}`);
                 continue;
             }
             const commandInstance = new commandClass();
+            // Don't load disabled base commands
             if (base && this._client.disableBase
                 .includes(commandInstance.name))
                 continue;
@@ -56,6 +61,7 @@ class CommandLoader {
             commandInstance._classloc = file;
             loadedCommands.push(commandInstance);
         }
+        // Register all of the loaded commands
         for (const command of loadedCommands)
             this._commands._registerInternal(command);
         return loadedCommands.length;

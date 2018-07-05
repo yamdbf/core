@@ -19,6 +19,7 @@ class CompiledTemplateScript {
         // disabling tslint and TypeScript errors. Don't judge me.
         this.func._testScript = new vm_1.Script(CompiledTemplateScript._functionWrap(raw));
         delete this.func._testScript;
+        // Attempt to create the coerced implicit return function
         try {
             const functionBody = `return ${raw.replace(/^[\s]+/, '')}`;
             const implicitReturnFunc = new Function('args', 'res', functionBody);
