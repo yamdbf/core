@@ -1319,7 +1319,7 @@
                     "name": "_registerInternal",
                     "access": "private",
                     "virtual": false,
-                    "description": "<p>Complete registration of a command and add to the parent\ncollection, erroring on duplicate names and aliases.\nThis is an internal method and should not be used. Use\n<code>registerExternal()</code> instead</p>",
+                    "description": "<p>Complete registration of a command and add to the parent collection.</p>\n<p>This is an internal method and should not be used. Use\n<code>registerExternal()</code> instead</p>",
                     "parameters": [],
                     "examples": []
                 },
@@ -1327,7 +1327,7 @@
                     "name": "_checkDuplicateAliases",
                     "access": "private",
                     "virtual": false,
-                    "description": "<p>Check for duplicate aliases. Used internally</p>",
+                    "description": "<p>Check for duplicate aliases, erroring on any. Used internally</p>",
                     "parameters": [],
                     "examples": []
                 },
@@ -1621,7 +1621,7 @@
                     "name": "_cleanup",
                     "access": "private",
                     "virtual": false,
-                    "description": "<p>Clean up expired RateLimits</p>",
+                    "description": "<p>Recursively clean up expired ratelimits within the given target object</p>",
                     "parameters": [],
                     "examples": []
                 }

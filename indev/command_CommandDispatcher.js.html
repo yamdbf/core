@@ -155,6 +155,7 @@ export class CommandDispatcher
 			}
 		}
 
+		// Determine if the command call was valid, returning the error and exiting if not
 		let validCall: boolean = false;
 		try { validCall = await this.canCallCommand(res, command as Command, message, dm); }
 		catch (err) { message[this._client.selfbot ? 'channel' : 'author'].send(err); }
@@ -217,6 +218,7 @@ export class CommandDispatcher
 
 		if (!middlewarePassed) return;
 
+		// Run the command
 		try { commandResult = await command!.action(message, args); }
 		catch (err) { this._logger.error(`Dispatch:${command!.name}`, err.stack); }
 

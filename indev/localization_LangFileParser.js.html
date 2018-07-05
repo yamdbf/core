@@ -79,6 +79,7 @@ export class LangFileParser
 				.replace(LangFileParser._outerNewLines, '')
 				.trim();
 
+			// Process template scripts and replace with script token stubs
 			if (LangFileParser._scriptTemplates.test(value))
 			{
 				const templates: RegExpMatchArray = value.match(LangFileParser._scriptTemplates)!;
