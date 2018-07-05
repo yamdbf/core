@@ -70,7 +70,7 @@ export class RateLimitManager
 	}
 
 	/**
-	 * Clean up expired RateLimits
+	 * Recursively clean up expired ratelimits within the given target object
 	 * @private
 	 */
 	private async _cleanup(target: NestedRateLimit): Promise<void>

@@ -18,9 +18,12 @@ export class LangStringNode
 
 	private static readonly _argsDirective: RegExp = /^(##! *<[^>]+?>)/m;
 	private static readonly _validArgsDirective: RegExp = /^##! *(?!< *, *)<(?:(?: *, *)?\w+\?? *: *\w+(?:\[\])?)+>/m;
+
 	private static readonly _argList: RegExp = /<([^>]+?)>/;
+
 	private static readonly _allArgs: RegExp = /\w+\?? *: *\w+(?:\[\])?/g;
 	private static readonly _singleArg: RegExp = /(\w+\??) *: *(\w+(?:\[\])?)/;
+
 	private static readonly _validArgTypes: string[] = ['string', 'number', 'boolean', 'any'];
 
 	public constructor(lang: string, key: string, value: string, raw: string, scripts: CompiledTemplateScript[])
@@ -32,8 +35,10 @@ export class LangStringNode
 		this.scripts = scripts;
 		this.args = {};
 
+		// Handle the args directive for this node if any
 		if (LangStringNode._argsDirective.test(raw))
 		{
+			// Don't allow invalid args directives
 			if (!LangStringNode._validArgsDirective.test(raw))
 				throw new TypeError(`in string \`${lang}::${key}\`: Malformed args directive`);
 
@@ -86,6 +91,7 @@ export class LangStringNode
 					const arg: { isOptional: boolean, isArray: boolean, type: string } = this.args[argKey];
 					const expectedType: string = `${arg.type}${arg.isArray ? '[]' : ''}`;
 
+					// Allow undefined values if the arg is optional, otherwise error
 					if (arg.isOptional && typeof args[argKey] === 'undefined') continue;
 					if (typeof args[argKey] === 'undefined')
 						throw new TypeError([
@@ -93,11 +99,13 @@ export class LangStringNode
 							`Expected type \`${expectedType}\`, got undefined`
 						].join(' '));
 
+					// Handle array types
 					if (arg.isArray)
 					{
 						if (!Array.isArray(args[argKey]))
 							throw new TypeError(`String \`${lang}::${key}\`, arg \`${argKey}\`: Expected Array`);
 
+						// Validate the type of all values within the array given for array types
 						for (const val of args[argKey] as Array<any>)
 							validateType(arg.type, val, argKey, true);
 					}

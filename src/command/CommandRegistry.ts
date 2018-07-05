@@ -72,8 +72,8 @@ export class CommandRegistry<
 	}
 
 	/**
-	 * Complete registration of a command and add to the parent
-	 * collection, erroring on duplicate names and aliases.
+	 * Complete registration of a command and add to the parent collection.
+	 *
 	 * This is an internal method and should not be used. Use
 	 * `registerExternal()` instead
 	 * @private
@@ -95,7 +95,7 @@ export class CommandRegistry<
 	}
 
 	/**
-	 * Check for duplicate aliases. Used internally
+	 * Check for duplicate aliases, erroring on any. Used internally
 	 * @private
 	 */
 	public _checkDuplicateAliases(): void
@@ -107,12 +107,15 @@ export class CommandRegistry<
 				const name: string = command.name;
 
 				if (!duplicate) continue;
-				if (!command.external) throw new Error(
-					`Commands may not share aliases: ${name}, ${duplicate.name} (shared alias: "${alias}")`);
+				if (!command.external)
+					throw new Error(
+						`Commands may not share aliases: ${name}, ${duplicate.name} (shared alias: "${alias}")`);
 
-				else throw new Error(
-					`External command "${
-						duplicate.name}" has conflicting alias with "${name}" (shared alias: "${alias}")`);
+				else
+					throw new Error([
+						`External command "${duplicate.name}" has conflicting alias`,
+						`with "${name}" (shared alias: "${alias}")`
+					].join(' '));
 			}
 	}
 

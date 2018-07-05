@@ -40,6 +40,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 		const original: any = descriptor.value;
 		descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 		{
+			// Send the middleware result to the channel, utilizing compact mode if enabled
 			const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
 				async (result, options) => {
 					if (await message.guild.storage!.settings.get('compact') || this.client.compact)
@@ -53,6 +54,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 					else return message.channel.send(result);
 				};
 
+			// Run the given middleware function
 			let middlewarePassed: boolean = true;
 			try
 			{
@@ -71,6 +73,7 @@ export function using(func: MiddlewareFunction): MethodDecorator
 				sendMiddlewareResult(err.toString(), { split: true });
 				middlewarePassed = false;
 			}
+
 			if (middlewarePassed) return await original.apply(this, [message, args]);
 		};
 		return descriptor;

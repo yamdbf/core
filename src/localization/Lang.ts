@@ -467,7 +467,7 @@ export class Lang
 		if (node.scripts.length > 0)
 		{
 			const proxy: ResourceProxy = Lang.createResourceProxy(lang);
-			const res: any = new Proxy({}, {
+			const dataForwardProxy: any = new Proxy({}, {
 				get: (_, prop) => {
 					return (args: TemplateData = data) => proxy[prop as BaseStrings](args);
 				}
@@ -478,14 +478,15 @@ export class Lang
 				const loadedScript: CompiledTemplateScript = node.scripts[script];
 
 				let result: string;
-				try { result = loadedScript.func(data, res); }
+				try { result = loadedScript.func(data, dataForwardProxy); }
 				catch (err) { throw new Error(`in embedded localization script for: ${lang}::${key}\n${err}`); }
 
 				// Try coerced implicit return if it exists
 				if (typeof result === 'undefined'
 					&& loadedScript.implicitReturnFunc)
-					result = loadedScript.implicitReturnFunc!(data, res);
+					result = loadedScript.implicitReturnFunc!(data, dataForwardProxy);
 
+				// If the script occupies its own line, follow script result with a line break
 				if ((new RegExp(`^{{! ${script} !}}[\\t ]*\\n`)).test(loadedScript.raw) && result !== '')
 					loadedString = loadedString.replace(`{{! ${script} !}}`, () => `${result}\n`);
 				else

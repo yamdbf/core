@@ -24,6 +24,7 @@ export class CompiledTemplateScript
 		(this.func as any)._testScript = new Script(CompiledTemplateScript._functionWrap(raw));
 		delete (this.func as any)._testScript;
 
+		// Attempt to create the coerced implicit return function
 		try
 		{
 			const functionBody: string = `return ${raw.replace(/^[\s]+/, '')}`;
