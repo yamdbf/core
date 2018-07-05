@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const CommandDecorators_1 = require("../CommandDecorators");
+const Middleware_1 = require("../middleware/Middleware");
 const Lang_1 = require("../../localization/Lang");
 const Util_1 = require("../../util/Util");
 const Command_1 = require("../Command");
@@ -97,7 +98,7 @@ class default_1 extends Command_1.Command {
     }
 }
 __decorate([
-    CommandDecorators_1.localizable
+    CommandDecorators_1.using(Middleware_1.Middleware.localize)
 ], default_1.prototype, "action", null);
 exports.default = default_1;
 

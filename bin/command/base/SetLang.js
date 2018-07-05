@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
 const Lang_1 = require("../../localization/Lang");
-const Resolve_1 = require("../middleware/Resolve");
+const Middleware_1 = require("../middleware/Middleware");
 class default_1 extends Command_1.Command {
     constructor() {
         super({
@@ -43,8 +43,8 @@ class default_1 extends Command_1.Command {
     }
 }
 __decorate([
-    CommandDecorators_1.using(Resolve_1.resolve('lang?: Number')),
-    CommandDecorators_1.localizable
+    CommandDecorators_1.using(Middleware_1.Middleware.resolve('lang?: Number')),
+    CommandDecorators_1.using(Middleware_1.Middleware.localize)
 ], default_1.prototype, "action", null);
 exports.default = default_1;
 

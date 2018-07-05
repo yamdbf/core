@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../../Command");
 const Middleware_1 = require("../../middleware/Middleware");
 const CommandDecorators_1 = require("../../CommandDecorators");
-const { resolve, expect } = Middleware_1.Middleware;
+const { resolve, expect, localize } = Middleware_1.Middleware;
 class default_1 extends Command_1.Command {
     constructor() {
         super({
@@ -74,7 +74,7 @@ class default_1 extends Command_1.Command {
 __decorate([
     CommandDecorators_1.using(resolve(`action: ['add', 'remove'], user: User`)),
     CommandDecorators_1.using(expect(`action: ['add', 'remove'], user: User`)),
-    CommandDecorators_1.localizable
+    CommandDecorators_1.using(localize)
 ], default_1.prototype, "action", null);
 exports.default = default_1;
 

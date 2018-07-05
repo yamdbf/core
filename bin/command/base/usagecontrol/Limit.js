@@ -6,12 +6,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const CommandDecorators = require("../../CommandDecorators");
 const discord_js_1 = require("discord.js");
 const Command_1 = require("../../Command");
 const Middleware_1 = require("../../middleware/Middleware");
-const { using, localizable } = CommandDecorators;
-const { expect, resolve } = Middleware_1.Middleware;
+const CommandDecorators_1 = require("../../CommandDecorators");
+const { expect, resolve, localize } = Middleware_1.Middleware;
 class default_1 extends Command_1.Command {
     constructor() {
         super({
@@ -77,7 +76,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
     }
 }
 __decorate([
-    using(function (message, args) {
+    CommandDecorators_1.using(function (message, args) {
         if (args[0] === 'clear')
             return resolve(`clear: String, command: Command`)
                 .call(this, message, args);
@@ -85,7 +84,7 @@ __decorate([
             return resolve(`command: Command, ...roles: String`)
                 .call(this, message, args);
     }),
-    using(function (message, args) {
+    CommandDecorators_1.using(function (message, args) {
         if (args[0] === 'clear')
             return expect(`clear: String, command: Command`)
                 .call(this, message, args);
@@ -93,7 +92,7 @@ __decorate([
             return expect(`command: Command, ...roles: String`)
                 .call(this, message, args);
     }),
-    localizable
+    CommandDecorators_1.using(localize)
 ], default_1.prototype, "action", null);
 exports.default = default_1;
 

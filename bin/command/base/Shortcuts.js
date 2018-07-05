@@ -10,7 +10,7 @@ const Command_1 = require("../Command");
 const CommandDecorators_1 = require("../CommandDecorators");
 const Middleware_1 = require("../middleware/Middleware");
 const discord_js_1 = require("discord.js");
-const { resolve, expect, } = Middleware_1.Middleware;
+const { resolve, expect, localize } = Middleware_1.Middleware;
 class default_1 extends Command_1.Command {
     constructor() {
         super({
@@ -108,7 +108,7 @@ __decorate([
         else
             return [message, args];
     }),
-    CommandDecorators_1.localizable
+    CommandDecorators_1.using(localize)
 ], default_1.prototype, "action", null);
 exports.default = default_1;
 
