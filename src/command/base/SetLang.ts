@@ -1,9 +1,9 @@
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { localizable, using } from '../CommandDecorators';
+import { using } from '../CommandDecorators';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Lang } from '../../localization/Lang';
-import { resolve } from '../middleware/Resolve';
+import { Middleware } from '../middleware/Middleware';
 
 export default class extends Command
 {
@@ -18,8 +18,8 @@ export default class extends Command
 		});
 	}
 
-	@using(resolve('lang?: Number'))
-	@localizable
+	@using(Middleware.resolve('lang?: Number'))
+	@using(Middleware.localize)
 	public async action(message: Message, [res, lang]: [ResourceProxy, number]): Promise<any>
 	{
 		let langs: string[] = Lang.langNames;

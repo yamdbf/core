@@ -1,4 +1,3 @@
-import * as CommandDecorators from '../../CommandDecorators';
 import { Role, Collection } from 'discord.js';
 import { Command } from '../../Command';
 import { Message } from '../../../types/Message';
@@ -6,8 +5,8 @@ import { ResourceProxy } from '../../../types/ResourceProxy';
 import { Middleware } from '../../middleware/Middleware';
 import { GuildStorage } from '../../../storage/GuildStorage';
 import { Resolver } from '../../resolvers/Resolver';
-const { using, localizable } = CommandDecorators;
-const { expect, resolve } = Middleware;
+import { using } from '../../CommandDecorators';
+const { expect, resolve, localize } = Middleware;
 
 export default class extends Command
 {
@@ -48,7 +47,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
 			return expect(`command: Command, ...roles: String`)
 				.call(this, message, args);
 	})
-	@localizable
+	@using(localize)
 	public async action(message: Message, [res, clearOrCommand, rolesOrCommand]: [ResourceProxy, Command | string, Command | string]): Promise<any>
 	{
 		if (clearOrCommand === 'clear') return this.clearLimit(message, res, rolesOrCommand as Command);

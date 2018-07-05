@@ -1,10 +1,10 @@
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { localizable, using } from '../CommandDecorators';
+import { using } from '../CommandDecorators';
 import { Middleware } from '../middleware/Middleware';
 import { Util } from 'discord.js';
 import { ResourceProxy } from '../../types/ResourceProxy';
-const { resolve, expect, } = Middleware;
+const { resolve, expect, localize } = Middleware;
 
 export default class extends Command
 {
@@ -50,7 +50,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 		}
 		else return [message, args];
 	})
-	@localizable
+	@using(localize)
 	public async action(message: Message, [res, action, name, content]: [ResourceProxy, string, string, string]): Promise<any>
 	{
 		if (!action) return this.listShortcuts(message, res);

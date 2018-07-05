@@ -2,9 +2,9 @@ import { User, GuildMember } from 'discord.js';
 import { Command } from '../../Command';
 import { Message } from '../../../types/Message';
 import { Middleware } from '../../middleware/Middleware';
-import { using, localizable } from '../../CommandDecorators';
+import { using } from '../../CommandDecorators';
 import { ResourceProxy } from '../../../types/ResourceProxy';
-const { resolve, expect } = Middleware;
+const { resolve, expect, localize } = Middleware;
 
 export default class extends Command
 {
@@ -22,7 +22,7 @@ export default class extends Command
 
 	@using(resolve(`action: ['add', 'remove'], user: User`))
 	@using(expect(`action: ['add', 'remove'], user: User`))
-	@localizable
+	@using(localize)
 	public async action(message: Message, [res, action, user, global]: [ResourceProxy, string, User, string]): Promise<any>
 	{
 		if (action === 'add')

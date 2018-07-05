@@ -2,7 +2,8 @@ import * as fs from 'fs';
 import { Client } from '../../client/Client';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { localizable } from '../CommandDecorators';
+import { using } from '../CommandDecorators';
+import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { inspect } from 'util';
@@ -37,7 +38,7 @@ export default class extends Command
 		});
 	}
 
-	@localizable
+	@using(Middleware.localize)
 	public async action(message: Message, [res]: [ResourceProxy]): Promise<any>
 	{
 		// @ts-ignore - Exposed for eval command invocations

@@ -3,7 +3,8 @@ import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { TemplateData } from '../../types/TemplateData';
 import { Message } from '../../types/Message';
-import { localizable } from '../CommandDecorators';
+import { using } from '../CommandDecorators';
+import { Middleware } from '../middleware/Middleware';
 import { Lang } from '../../localization/Lang';
 import { Util } from '../../util/Util';
 import { Command } from '../Command';
@@ -20,7 +21,7 @@ export default class extends Command
 		});
 	}
 
-	@localizable
+	@using(Middleware.localize)
 	public async action(message: Message, [res, commandName]: [ResourceProxy, string]): Promise<void>
 	{
 		const dm: boolean = message.channel.type !== 'text';

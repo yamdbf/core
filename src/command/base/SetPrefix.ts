@@ -1,6 +1,7 @@
 import { Command } from '../Command';
 import { Message } from '../../types/Message';
-import { localizable } from '../CommandDecorators';
+import { using } from '../CommandDecorators';
+import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 
 export default class extends Command
@@ -17,7 +18,7 @@ export default class extends Command
 		});
 	}
 
-	@localizable
+	@using(Middleware.localize)
 	public async action(message: Message, [res, prefix]: [ResourceProxy, string]): Promise<any>
 	{
 		if (!prefix)

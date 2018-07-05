@@ -1,7 +1,8 @@
 import { Collection } from 'discord.js';
 import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { localizable } from '../CommandDecorators';
+import { using } from '../CommandDecorators';
+import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { Logger, logger } from '../../util/logger/Logger';
@@ -21,7 +22,7 @@ export default class extends Command
 		});
 	}
 
-	@localizable
+	@using(Middleware.localize)
 	public action(message: Message, [res]: [ResourceProxy]): Promise<Message | Message[]>
 	{
 		this._logger.log(`Reloading commands from: $${this.client.commandsDir}`);

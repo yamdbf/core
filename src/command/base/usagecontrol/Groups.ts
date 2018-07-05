@@ -1,10 +1,10 @@
 import { Message } from '../../../types/Message';
 import { Command } from '../../Command';
-import { localizable, using } from '../../CommandDecorators';
+import { using } from '../../CommandDecorators';
 import { ResourceProxy } from '../../../types/ResourceProxy';
 import { Middleware } from '../../middleware/Middleware';
 import { Lang } from '../../../localization/Lang';
-const { resolve, expect, } = Middleware;
+const { resolve, expect, localize } = Middleware;
 
 export default class extends Command
 {
@@ -27,7 +27,7 @@ export default class extends Command
 				.call(this, message, args);
 		else return [message, args];
 	})
-	@localizable
+	@using(localize)
 	public async action(message: Message, [res, action, group]: [ResourceProxy, string, string]): Promise<any>
 	{
 		if (!action) return this.listGroups(message, res);
