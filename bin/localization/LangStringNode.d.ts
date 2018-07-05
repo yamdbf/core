@@ -13,7 +13,8 @@ export declare class LangStringNode {
     readonly scripts: CompiledTemplateScript[];
     readonly args: {
         [key: string]: {
-            optional: boolean;
+            isOptional: boolean;
+            isArray: boolean;
             type: string;
         };
     };

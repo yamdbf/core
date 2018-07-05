@@ -44,28 +44,32 @@ class LangStringNode {
                 const rawType = isArrayType(argType) ? argType.slice(0, -2) : argType;
                 if (!LangStringNode._validArgTypes.includes(rawType))
                     throw new TypeError(`in string \`${lang}::${key}\`: Type \`${argType}\` is not a valid arg type`);
-                this.args[rawKey] = { optional: isOptionalArg(argKey), type: argType };
+                this.args[rawKey] = {
+                    isOptional: isOptionalArg(argKey),
+                    isArray: isArrayType(argType),
+                    type: rawType
+                };
             }
             // Create and assign the args validator for this node
             this.argsValidator = args => {
                 for (const argKey in this.args) {
                     const arg = this.args[argKey];
-                    const rawType = isArrayType(arg.type) ? arg.type.slice(0, -2) : arg.type;
-                    if (arg.optional && typeof args[argKey] === 'undefined')
+                    const expectedType = `${arg.type}${arg.isArray ? '[]' : ''}`;
+                    if (arg.isOptional && typeof args[argKey] === 'undefined')
                         continue;
                     if (typeof args[argKey] === 'undefined')
                         throw new TypeError([
                             `String \`${lang}::${key}\`, arg \`${argKey}\`:`,
-                            `Expected type \`${arg.type}\`, got undefined`
+                            `Expected type \`${expectedType}\`, got undefined`
                         ].join(' '));
-                    if (isArrayType(arg.type)) {
+                    if (arg.isArray) {
                         if (!Array.isArray(args[argKey]))
                             throw new TypeError(`String \`${lang}::${key}\`, arg \`${argKey}\`: Expected Array`);
                         for (const val of args[argKey])
-                            validateType(rawType, val, argKey, true);
+                            validateType(arg.type, val, argKey, true);
                     }
                     else
-                        validateType(rawType, args[argKey], argKey, false);
+                        validateType(arg.type, args[argKey], argKey, false);
                 }
             };
         }
