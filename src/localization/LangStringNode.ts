@@ -13,7 +13,7 @@ export class LangStringNode
 	public readonly value: string;
 	public readonly raw: string;
 	public readonly scripts: CompiledTemplateScript[];
-	public readonly args: { [key: string]: { optional: boolean, type: string } };
+	public readonly args: { [key: string]: { isOptional: boolean, isArray: boolean, type: string } };
 	public readonly argsValidator: ((args: TemplateData) => void) | undefined;
 
 	private static readonly _argsDirective: RegExp = /^(##! *<[^>]+?>)/m;
@@ -72,32 +72,36 @@ export class LangStringNode
 				if (!LangStringNode._validArgTypes.includes(rawType))
 					throw new TypeError(`in string \`${lang}::${key}\`: Type \`${argType}\` is not a valid arg type`);
 
-				this.args[rawKey] = { optional: isOptionalArg(argKey), type: argType };
+				this.args[rawKey] = {
+					isOptional: isOptionalArg(argKey),
+					isArray: isArrayType(argType),
+					type: rawType
+				};
 			}
 
 			// Create and assign the args validator for this node
 			this.argsValidator = args => {
 				for (const argKey in this.args)
 				{
-					const arg: { optional: boolean, type: string } = this.args[argKey];
-					const rawType: string = isArrayType(arg.type) ? arg.type.slice(0, -2) : arg.type;
+					const arg: { isOptional: boolean, isArray: boolean, type: string } = this.args[argKey];
+					const expectedType: string = `${arg.type}${arg.isArray ? '[]' : ''}`;
 
-					if (arg.optional && typeof args[argKey] === 'undefined') continue;
+					if (arg.isOptional && typeof args[argKey] === 'undefined') continue;
 					if (typeof args[argKey] === 'undefined')
 						throw new TypeError([
 							`String \`${lang}::${key}\`, arg \`${argKey}\`:`,
-							`Expected type \`${arg.type}\`, got undefined`
+							`Expected type \`${expectedType}\`, got undefined`
 						].join(' '));
 
-					if (isArrayType(arg.type))
+					if (arg.isArray)
 					{
 						if (!Array.isArray(args[argKey]))
 							throw new TypeError(`String \`${lang}::${key}\`, arg \`${argKey}\`: Expected Array`);
 
 						for (const val of args[argKey] as Array<any>)
-							validateType(rawType, val, argKey, true);
+							validateType(arg.type, val, argKey, true);
 					}
-					else validateType(rawType, args[argKey], argKey, false);
+					else validateType(arg.type, args[argKey], argKey, false);
 				}
 			};
 		}
