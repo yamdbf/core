@@ -29,11 +29,7 @@ class default_1 extends Command_1.Command {
             return this.respond(message, res.CMD_PREFIX_ERR_INVALID_CHARS());
         if (prefix === 'clear')
             prefix = '';
-        if (this.client.selfbot)
-            for (const guild of this.client.storage.guilds.values())
-                await guild.settings.set('prefix', prefix);
-        else
-            await message.guild.storage.settings.set('prefix', prefix);
+        await message.guild.storage.settings.set('prefix', prefix);
         return this.respond(message, res.CMD_PREFIX_SUCCESS({ prefix }));
     }
 }

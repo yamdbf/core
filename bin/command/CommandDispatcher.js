@@ -38,11 +38,8 @@ class CommandDispatcher {
     async handleMessage(message) {
         const dispatchStart = Util_1.Util.now();
         const dm = message.channel.type !== 'text';
-        // Don't continue for bots and don't continue
-        // for other users when the client is a selfbot
+        // Dismiss messages from bots
         if (message.author.bot)
-            return;
-        if (this._client.selfbot && message.author.id !== this._client.user.id)
             return;
         // Fail silently if the guild doesn't have a guild storage,
         // though this should never happen
@@ -95,7 +92,7 @@ class CommandDispatcher {
             validCall = await this.canCallCommand(res, command, message, dm);
         }
         catch (err) {
-            message[this._client.selfbot ? 'channel' : 'author'].send(err);
+            message.author.send(err);
         }
         if (!validCall)
             return;
@@ -259,13 +256,13 @@ class CommandDispatcher {
      * Return the permissions the caller is missing to call the given command
      */
     checkCallerPermissions(command, message, dm) {
-        return this._client.selfbot || dm ? [] : command.callerPermissions.filter(a => !message.channel.permissionsFor(message.author).has(a));
+        return dm ? [] : command.callerPermissions.filter(a => !message.channel.permissionsFor(message.author).has(a));
     }
     /**
      * Return whether or not the message author passes the role limiter
      */
     async passedRoleLimiter(command, message, dm) {
-        if (dm || this._client.selfbot)
+        if (dm)
             return true;
         const storage = this._client.storage.guilds.get(message.guild.id);
         const limitedCommands = await storage.settings.get('limitedCommands') || {};
@@ -280,7 +277,8 @@ class CommandDispatcher {
      * in the command's requisite roles
      */
     hasRoles(command, message, dm) {
-        return this._client.selfbot || command.roles.length === 0 || dm
+        return dm
+            || command.roles.length === 0
             || message.member.roles.filter(role => command.roles.includes(role.name)).size > 0;
     }
     /**

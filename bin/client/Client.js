@@ -86,22 +86,17 @@ class Client extends Discord.Client {
          * use the `help` command. `true` by default
          * @type {boolean}
          */
-        this.unknownCommandError = typeof options.unknownCommandError === 'undefined' ?
-            true : options.unknownCommandError;
+        this.unknownCommandError = typeof options.unknownCommandError !== 'undefined'
+            ? options.unknownCommandError
+            : true;
         /**
          * Whether or not the help command should send its output
          * in a DM to the command caller
          * @type {boolean}
          */
-        this.dmHelp = typeof options.dmHelp === 'undefined' ? true : options.dmHelp;
-        /**
-         * Whether or not the client is a selfbot
-         * @type {boolean}
-         */
-        this.selfbot = options.selfbot || false;
-        // Set dmHelp to false if the client is a selfbot
-        if (this.selfbot)
-            this.dmHelp = false;
+        this.dmHelp = typeof options.dmHelp !== 'undefined'
+            ? options.dmHelp
+            : true;
         /**
          * Whether or not this client is passive. Passive clients
          * will not register a command dispatcher or a message
@@ -180,14 +175,12 @@ class Client extends Discord.Client {
         this._customResolvers = options.customResolvers || [];
         this.resolvers._loadResolvers();
         /**
-         * Whether or not compact mode is enabled.
-         *
-         * >**Note:** Compact mode is disabled for selfbots
+         * Whether or not compact mode is enabled
          * @type {boolean}
          */
-        this.compact = options.compact || false;
-        if (this.selfbot)
-            this.compact = false;
+        this.compact = typeof options.compact !== 'undefined'
+            ? options.compact
+            : false;
         /**
          * Button shortcuts for compact mode. Defaults are
          * `success`, `fail`, and `working`. These can be overwritten
@@ -225,11 +218,6 @@ class Client extends Discord.Client {
                 && !this.disableBase.includes('setlang')
                 && this.commands.has('setlang'))
                 this.commands.get('setlang').disable();
-            // Disable the blacklist command if the client is a selfbot
-            if (this.selfbot
-                && !this.disableBase.includes('blacklist')
-                && this.commands.has('blaclist'))
-                this.commands.get('blacklist').disable();
         }
         registerListeners(this);
     }
@@ -271,6 +259,12 @@ class Client extends Discord.Client {
         if (typeof this.readyText !== 'undefined')
             this._logger.log(this.readyText);
         this.emit('clientReady');
+        if (!this.user.bot)
+            this._logger.warn([
+                'Userbots are no longer supported and no precautions are',
+                'taken to protect your account from accidentally abusing',
+                'the Discord API. Creating a userbot is NOT recommended.'
+            ].join(' '));
     }
     async __onGuildCreateEvent(guild) {
         if (this.storage.guilds.has(guild.id)) {

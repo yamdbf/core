@@ -92,7 +92,7 @@ class default_1 extends Command_1.Command {
             }
         }
         catch (_a) {
-            if (!dm && !this.client.selfbot)
+            if (!dm)
                 message.reply(res.CMD_HELP_REPLY_FAIL());
         }
     }

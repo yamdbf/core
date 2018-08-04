@@ -270,9 +270,8 @@ class Command {
         return this;
     }
     /**
-     * Send provided response to the provided message's channel
-     * via edit or send, depending on whether or not the client is
-     * a selfbot
+     * Send provided response to the provided message's channel,
+     * leveraging compact mode mechanics if enabled
      * @protected
      * @param {external:Message} message Discord.js Message object
      * @param {string} response String to send
@@ -281,8 +280,6 @@ class Command {
      */
     async respond(...args) {
         const [message, response, options] = args;
-        if (this.client.selfbot)
-            return message.edit(response, options);
         if (typeof options !== 'undefined'
             && typeof options.button !== 'undefined'
             && (await message.guild.storage.settings.get('compact') || this.client.compact)) {

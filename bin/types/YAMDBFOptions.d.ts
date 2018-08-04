@@ -11,7 +11,6 @@
  * @property {string} [readyText='Client ready!'] See: {@link Client#readyText}
  * @property {boolean} [unknownCommandError=true] See: {@link Client#unknownCommandError}
  * @property {boolean} [dmHelp=true] See: {@link Client#dmHelp}
- * @property {boolean} [selfbot=false] See: {@link Client#selfbot}
  * @property {boolean} [passive=false] See: {@link Client#passive}
  * @property {boolean} [pause=false] See: {@link Client#pause}
  * @property {string[]} [disableBase=[]] See: {@link Client#disableBase}
@@ -50,7 +49,6 @@ export declare type YAMDBFOptions = {
     readyText?: string;
     unknownCommandError?: boolean;
     dmHelp?: boolean;
-    selfbot?: boolean;
     passive?: boolean;
     pause?: boolean;
     disableBase?: BaseCommandName[];
