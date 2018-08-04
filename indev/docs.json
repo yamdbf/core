@@ -118,17 +118,6 @@
                     }
                 },
                 {
-                    "name": "selfbot",
-                    "access": "",
-                    "virtual": false,
-                    "description": "<p>Whether or not the client is a selfbot</p>",
-                    "type": {
-                        "names": [
-                            "boolean"
-                        ]
-                    }
-                },
-                {
                     "name": "passive",
                     "access": "",
                     "virtual": false,
@@ -231,7 +220,7 @@
                     "name": "compact",
                     "access": "",
                     "virtual": false,
-                    "description": "<p>Whether or not compact mode is enabled.</p>\n<blockquote>\n<p><strong>Note:</strong> Compact mode is disabled for selfbots</p>\n</blockquote>",
+                    "description": "<p>Whether or not compact mode is enabled</p>",
                     "type": {
                         "names": [
                             "boolean"
@@ -812,7 +801,7 @@
                     "name": "respond",
                     "access": "protected",
                     "virtual": false,
-                    "description": "<p>Send provided response to the provided message's channel\nvia edit or send, depending on whether or not the client is\na selfbot</p>",
+                    "description": "<p>Send provided response to the provided message's channel,\nleveraging compact mode mechanics if enabled</p>",
                     "parameters": [
                         {
                             "name": "message",
@@ -3649,14 +3638,6 @@
                     "type": "boolean",
                     "description": "<p>See: {@link Client#dmHelp}</p>",
                     "default": true,
-                    "optional": true,
-                    "nullable": ""
-                },
-                {
-                    "name": "selfbot",
-                    "type": "boolean",
-                    "description": "<p>See: {@link Client#selfbot}</p>",
-                    "default": false,
                     "optional": true,
                     "nullable": ""
                 },
