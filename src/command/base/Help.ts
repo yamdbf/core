@@ -110,6 +110,6 @@ export default class extends Command
 				else message.reply(res.CMD_HELP_REPLY_ALL());
 			}
 		}
-		catch { if (!dm && !this.client.selfbot) message.reply(res.CMD_HELP_REPLY_FAIL()); }
+		catch { if (!dm) message.reply(res.CMD_HELP_REPLY_FAIL()); }
 	}
 }

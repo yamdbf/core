@@ -21,8 +21,6 @@ class Test extends Client
 	{
 		super({
 			token: config.token,
-			// token: config.selfbotToken,
-			// selfbot: true,
 			owner: config.owner,
 			readyText: 'Test client ready',
 			statusText: 'Foo bar baz',
