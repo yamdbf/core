@@ -79,6 +79,15 @@ exports.Guild = Guild_1.Guild;
 var Message_1 = require("./types/Message");
 exports.Message = Message_1.Message;
 exports.version = require(path.join(__dirname, '..', 'package')).version;
+const discord_js_1 = require("discord.js");
+// Add a getter for GuildStorage to the base Guild class
+discord_js_1.Structures.extend('Guild', Guild => {
+    return class extends Guild {
+        get storage() {
+            return this.client.storage.guilds.get(this.id);
+        }
+    };
+});
 /** @external {Client} See: {@link https://discord.js.org/#/docs/main/stable/class/Client} */
 /** @external {ClientOptions} See: {@link https://discord.js.org/#/docs/main/stable/typedef/ClientOptions} */
 /** @external {Collection} See: {@link https://discord.js.org/#/docs/main/stable/class/Collection} */
