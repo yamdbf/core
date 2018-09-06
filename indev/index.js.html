@@ -107,6 +107,21 @@ export { YAMDBFOptions } from './types/YAMDBFOptions';
 
 export const version: string = require(path.join(__dirname, '..', 'package')).version;
 
+import { Structures } from 'discord.js';
+import { GuildStorage } from './storage/GuildStorage';
+import { Client } from './client/Client';
+
+// Add a getter for GuildStorage to the base Guild class
+Structures.extend('Guild', Guild => {
+	return class extends Guild
+	{
+		public get storage(): GuildStorage
+		{
+			return (this.client as Client).storage.guilds.get(this.id)!;
+		}
+	};
+});
+
 /** @external {Client} See: {@link https://discord.js.org/#/docs/main/stable/class/Client} */
 /** @external {ClientOptions} See: {@link https://discord.js.org/#/docs/main/stable/typedef/ClientOptions} */
 /** @external {Collection} See: {@link https://discord.js.org/#/docs/main/stable/class/Collection} */

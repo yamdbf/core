@@ -95,9 +95,6 @@ export class CommandDispatcher
 		// though this should never happen
 		if (!dm &amp;&amp; !this._client.storage.guilds.has(message.guild.id)) return;
 
-		// Set `message.guild.storage` if message is not a DM
-		if (!dm) message.guild.storage = this._client.storage.guilds.get(message.guild.id);
-
 		// Don't bother with anything else if author is blacklisted
 		if (await this.isBlacklisted(message.author, message, dm)) return;
 
