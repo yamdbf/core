@@ -12,12 +12,13 @@ import {
 	MessageReaction,
 	Role,
 	User,
-	UserResolvable,
-	ClientUserSettings,
 	Snowflake,
-	ClientUserGuildSettings,
 	GuildEmoji,
-	RateLimitData
+	RateLimitData,
+	TextChannel,
+	VoiceState,
+	Presence,
+	Speaking
 } from 'discord.js';
 
 import { Command } from '../command/Command';
@@ -567,9 +568,6 @@ export class Client extends Discord.Client
 	public on(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
 	public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 	public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-	public on(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
-	public on(event: 'clientUserSettingsUpdate', listener: (clientUserSettings: ClientUserSettings) => void): this;
-	public on(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
 	public on(event: 'debug' | 'warn', listener: (info: string) => void): this;
 	public on(event: 'disconnect', listener: (event: any) => void): this;
 	public on(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
@@ -579,21 +577,24 @@ export class Client extends Discord.Client
 	public on(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: Guild) => void): this;
 	public on(event: 'guildMemberAdd' | 'guildMemberAvailable' | 'guildMemberRemove', listener: (member: GuildMember) => void): this;
 	public on(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: Guild) => void): this;
-	public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
-	public on(event: 'guildMemberUpdate' | 'presenceUpdate' | 'voiceStateUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+	public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
+	public on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 	public on(event: 'guildUpdate', listener: (oldGuild: Guild, newGuild: Guild) => void): this;
+	public on(event: 'guildIntegrationsUpdate', listener: (guild: Guild) => void): this;
 	public on(event: 'message' | 'messageDelete' | 'messageReactionRemoveAll', listener: (message: Message) => void): this;
 	public on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
 	public on(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 	public on(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
+	public on(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
 	public on(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
 	public on(event: 'ready' | 'reconnecting', listener: () => void): this;
 	public on(event: 'resumed', listener: (replayed: number) => void): this;
 	public on(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 	public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
 	public on(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
-	public on(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
 	public on(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+	public on(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
+	public on(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
 	public on(event: string, listener: Function): this;
 
 //#endregion
@@ -675,9 +676,6 @@ export class Client extends Discord.Client
 	public once(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
 	public once(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
 	public once(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-	public once(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
-	public once(event: 'clientUserSettingsUpdate', listener: (clientUserSettings: ClientUserSettings) => void): this;
-	public once(event: 'clientUserGuildSettingsUpdate', listener: (clientUserGuildSettings: ClientUserGuildSettings) => void): this;
 	public once(event: 'debug' | 'warn', listener: (info: string) => void): this;
 	public once(event: 'disconnect', listener: (event: any) => void): this;
 	public once(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
@@ -687,21 +685,24 @@ export class Client extends Discord.Client
 	public once(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: Guild) => void): this;
 	public once(event: 'guildMemberAdd' | 'guildMemberAvailable' | 'guildMemberRemove', listener: (member: GuildMember) => void): this;
 	public once(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: Guild) => void): this;
-	public once(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: boolean) => void): this;
-	public once(event: 'guildMemberUpdate' | 'presenceUpdate' | 'voiceStateUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+	public once(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
+	public once(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
 	public once(event: 'guildUpdate', listener: (oldGuild: Guild, newGuild: Guild) => void): this;
+	public once(event: 'guildIntegrationsUpdate', listener: (guild: Guild) => void): this;
 	public once(event: 'message' | 'messageDelete' | 'messageReactionRemoveAll', listener: (message: Message) => void): this;
 	public once(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
 	public once(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
 	public once(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
+	public once(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
 	public once(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
 	public once(event: 'ready' | 'reconnecting', listener: () => void): this;
 	public once(event: 'resumed', listener: (replayed: number) => void): this;
 	public once(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 	public once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
 	public once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
-	public once(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
 	public once(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
+	public once(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
+	public once(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
 	public once(event: string, listener: Function): this;
 
 //#endregion
