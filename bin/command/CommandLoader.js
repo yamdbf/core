@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const glob = require("glob");
 const path = require("path");
 const Logger_1 = require("../util/logger/Logger");
+const Command_1 = require("./Command");
 /**
  * Handles loading all commands from the given Client's commandsDir
  * @private
@@ -73,14 +74,14 @@ class CommandLoader {
     _findCommandClass(obj) {
         let foundClass;
         const keys = Object.keys(obj);
-        if (Object.getPrototypeOf(obj).name === 'Command')
+        if (Command_1.Command.prototype.isPrototypeOf(obj.prototype))
             foundClass = obj;
         else if (keys.length > 0)
             for (const key of keys) {
                 foundClass = this._findCommandClass(obj[key]);
                 if (!foundClass)
                     continue;
-                if (Object.getPrototypeOf(foundClass).name === 'Command')
+                if (Command_1.Command.prototype.isPrototypeOf(obj.prototype))
                     break;
             }
         return foundClass;
