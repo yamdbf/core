@@ -104,7 +104,7 @@ export class CommandLoader
 		else if (keys.length > 0)
 			for (const key of keys)
 				if (Command.prototype.isPrototypeOf(obj[key].prototype))
-					foundClasses.push(this._findCommandClasses(obj[key])!);
+					foundClasses.push(this._findCommandClasses(obj[key]));
 
 		return Util.flattenArray(foundClasses);
 	}
