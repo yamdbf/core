@@ -22,10 +22,13 @@ const {
 // 	// localize
 // } = Middleware;
 
+// @ts-ignore
+class TestCommandClass extends Command {}
+
 // @ownerOnly
 // @guildOnly
 @group('test')
-export default class extends Command
+export default class extends TestCommandClass
 {
 	@logger('Command:test')
 	private readonly logger!: Logger;

@@ -94,7 +94,7 @@ export class CommandLoader
 	{
 		let foundClass!: new () => Command;
 		const keys: string[] = Object.keys(obj);
-		if (Object.getPrototypeOf(obj).name === 'Command')
+		if (Command.prototype.isPrototypeOf(obj.prototype))
 			foundClass = obj;
 
 		else if (keys.length > 0)
@@ -102,7 +102,7 @@ export class CommandLoader
 			{
 				foundClass = this._findCommandClass(obj[key])!;
 				if (!foundClass) continue;
-				if (Object.getPrototypeOf(foundClass).name === 'Command') break;
+				if (Command.prototype.isPrototypeOf(obj.prototype)) break;
 			}
 
 		return foundClass;

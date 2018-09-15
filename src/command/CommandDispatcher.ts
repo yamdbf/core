@@ -306,7 +306,7 @@ export class CommandDispatcher
 	private checkClientPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.clientPermissions.filter(a =>
-			!(message.channel as TextChannel).permissionsFor(this._client.user).has(a));
+			!(message.channel as TextChannel).permissionsFor(this._client.user)!.has(a));
 	}
 
 	/**
@@ -315,7 +315,7 @@ export class CommandDispatcher
 	private checkCallerPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.callerPermissions.filter(a =>
-			!(message.channel as TextChannel).permissionsFor(message.author).has(a));
+			!(message.channel as TextChannel).permissionsFor(message.author)!.has(a));
 	}
 
 	/**
