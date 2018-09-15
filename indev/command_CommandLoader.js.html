@@ -43,6 +43,7 @@ import { Logger, logger } from '../util/logger/Logger';
 import { CommandRegistry } from './CommandRegistry';
 import { Command } from './Command';
 import { BaseCommandName } from '../types/BaseCommandName';
+import { Util } from '../util/Util';
 
 /**
  * Handles loading all commands from the given Client's commandsDir
@@ -90,31 +91,34 @@ export class CommandLoader
 		const loadedCommands: Command[] = [];
 		this._logger.debug(`Loading commands in: ${dir}`);
 
-		// Load and instantiate every globbed command
+		// Load and instantiate every command from the globbed files
 		for (const file of commandFiles)
 		{
 			// Delete the cached command file for hot-reloading
 			delete require.cache[require.resolve(file)];
 
 			const loadedFile: any = require(file);
-			const commandClass: new () => Command = this._findCommandClass(loadedFile)!;
+			const commandClasses: (new () => Command)[] = this._findCommandClasses(loadedFile)!;
 
-			if (!commandClass)
+			if (commandClasses.length === 0)
 			{
 				this._logger.warn(`Failed to find Command class in file: ${file}`);
 				continue;
 			}
 
-			const commandInstance: Command = new commandClass();
+			for (const commandClass of commandClasses)
+			{
+				const commandInstance: Command = new commandClass();
 
-			// Don't load disabled base commands
-			if (base &amp;&amp; this._client.disableBase
-				.includes(commandInstance.name as BaseCommandName))
-				continue;
+				// Don't load disabled base commands
+				if (base &amp;&amp; this._client.disableBase
+					.includes(commandInstance.name as BaseCommandName))
+					continue;
 
-			this._logger.info(`Loaded command: ${commandInstance.name}`);
-			commandInstance._classloc = file;
-			loadedCommands.push(commandInstance);
+				this._logger.info(`Loaded command: ${commandInstance.name}`);
+				commandInstance._classloc = file;
+				loadedCommands.push(commandInstance);
+			}
 		}
 
 		// Register all of the loaded commands
@@ -125,25 +129,22 @@ export class CommandLoader
 	}
 
 	/**
-	 * Recursively search for a Command class within the given object
+	 * Recursively search for Command classes within the given object
 	 * @private
 	 */
-	private _findCommandClass(obj: any): (new () => Command) | undefined
+	private _findCommandClasses(obj: any): (new () => Command)[]
 	{
-		let foundClass!: new () => Command;
+		const foundClasses: ((new () => Command) | (new () => Command)[])[] = [];
 		const keys: string[] = Object.keys(obj);
 		if (Command.prototype.isPrototypeOf(obj.prototype))
-			foundClass = obj;
+			foundClasses.push(obj);
 
 		else if (keys.length > 0)
 			for (const key of keys)
-			{
-				foundClass = this._findCommandClass(obj[key])!;
-				if (!foundClass) continue;
-				if (Command.prototype.isPrototypeOf(obj.prototype)) break;
-			}
+				if (Command.prototype.isPrototypeOf(obj[key].prototype))
+					foundClasses.push(this._findCommandClasses(obj[key])!);
 
-		return foundClass;
+		return Util.flattenArray(foundClasses);
 	}
 }
 </code></pre>

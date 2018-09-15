@@ -1221,10 +1221,10 @@
                     }
                 },
                 {
-                    "name": "_findCommandClass",
+                    "name": "_findCommandClasses",
                     "access": "private",
                     "virtual": false,
-                    "description": "<p>Recursively search for a Command class within the given object</p>",
+                    "description": "<p>Recursively search for Command classes within the given object</p>",
                     "parameters": [],
                     "examples": []
                 }
