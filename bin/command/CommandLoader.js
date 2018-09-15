@@ -10,6 +10,7 @@ const glob = require("glob");
 const path = require("path");
 const Logger_1 = require("../util/logger/Logger");
 const Command_1 = require("./Command");
+const Util_1 = require("../util/Util");
 /**
  * Handles loading all commands from the given Client's commandsDir
  * @private
@@ -43,24 +44,26 @@ class CommandLoader {
         }
         const loadedCommands = [];
         this._logger.debug(`Loading commands in: ${dir}`);
-        // Load and instantiate every globbed command
+        // Load and instantiate every command from the globbed files
         for (const file of commandFiles) {
             // Delete the cached command file for hot-reloading
             delete require.cache[require.resolve(file)];
             const loadedFile = require(file);
-            const commandClass = this._findCommandClass(loadedFile);
-            if (!commandClass) {
+            const commandClasses = this._findCommandClasses(loadedFile);
+            if (commandClasses.length === 0) {
                 this._logger.warn(`Failed to find Command class in file: ${file}`);
                 continue;
             }
-            const commandInstance = new commandClass();
-            // Don't load disabled base commands
-            if (base && this._client.disableBase
-                .includes(commandInstance.name))
-                continue;
-            this._logger.info(`Loaded command: ${commandInstance.name}`);
-            commandInstance._classloc = file;
-            loadedCommands.push(commandInstance);
+            for (const commandClass of commandClasses) {
+                const commandInstance = new commandClass();
+                // Don't load disabled base commands
+                if (base && this._client.disableBase
+                    .includes(commandInstance.name))
+                    continue;
+                this._logger.info(`Loaded command: ${commandInstance.name}`);
+                commandInstance._classloc = file;
+                loadedCommands.push(commandInstance);
+            }
         }
         // Register all of the loaded commands
         for (const command of loadedCommands)
@@ -68,23 +71,19 @@ class CommandLoader {
         return loadedCommands.length;
     }
     /**
-     * Recursively search for a Command class within the given object
+     * Recursively search for Command classes within the given object
      * @private
      */
-    _findCommandClass(obj) {
-        let foundClass;
+    _findCommandClasses(obj) {
+        const foundClasses = [];
         const keys = Object.keys(obj);
         if (Command_1.Command.prototype.isPrototypeOf(obj.prototype))
-            foundClass = obj;
+            foundClasses.push(obj);
         else if (keys.length > 0)
-            for (const key of keys) {
-                foundClass = this._findCommandClass(obj[key]);
-                if (!foundClass)
-                    continue;
-                if (Command_1.Command.prototype.isPrototypeOf(obj.prototype))
-                    break;
-            }
-        return foundClass;
+            for (const key of keys)
+                if (Command_1.Command.prototype.isPrototypeOf(obj[key].prototype))
+                    foundClasses.push(this._findCommandClasses(obj[key]));
+        return Util_1.Util.flattenArray(foundClasses);
     }
 }
 __decorate([

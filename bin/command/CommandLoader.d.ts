@@ -16,8 +16,8 @@ export declare class CommandLoader {
      */
     loadCommandsFrom(dir: string, base?: boolean): number;
     /**
-     * Recursively search for a Command class within the given object
+     * Recursively search for Command classes within the given object
      * @private
      */
-    private _findCommandClass;
+    private _findCommandClasses;
 }
