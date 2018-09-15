@@ -25,6 +25,20 @@ const {
 // @ts-ignore
 class TestCommandClass extends Command {}
 
+export class TestCommandTwo extends TestCommandClass
+{
+	public constructor()
+	{
+		super({
+			name: 'test2',
+			desc: 'test command 2',
+			usage: '<prefix>test2 <test> <foo>',
+		});
+	}
+
+	public action() {}
+}
+
 // @ownerOnly
 // @guildOnly
 @group('test')
