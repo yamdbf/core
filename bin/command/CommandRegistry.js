@@ -23,6 +23,9 @@ class CommandRegistry extends discord_js_1.Collection {
             ]
         });
     }
+    static get [Symbol.species]() {
+        return discord_js_1.Collection;
+    }
     /**
      * Contains all [Command groups]{@link Command#group}
      * @readonly
