@@ -31,6 +31,10 @@ export class CommandRegistry<
 		});
 	}
 
+	public static get [Symbol.species]() {
+		return Collection;
+	}
+
 	/**
 	 * Contains all [Command groups]{@link Command#group}
 	 * @readonly
