@@ -391,7 +391,7 @@ export class Lang
 	 * @static
 	 * @method getLangFromMessage
 	 * @param {Message} message
-	 * @returns {string}
+	 * @returns {Promise<string>}
 	 */
 	public static async getLangFromMessage(message: Message): Promise<string>
 	{
