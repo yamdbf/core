@@ -166,7 +166,7 @@ export declare class Lang {
      * @static
      * @method getLangFromMessage
      * @param {Message} message
-     * @returns {string}
+     * @returns {Promise<string>}
      */
     static getLangFromMessage(message: Message): Promise<string>;
     /**

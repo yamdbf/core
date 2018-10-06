@@ -328,7 +328,7 @@ class Lang {
      * @static
      * @method getLangFromMessage
      * @param {Message} message
-     * @returns {string}
+     * @returns {Promise<string>}
      */
     static async getLangFromMessage(message) {
         const dm = message.channel.type !== 'text';
