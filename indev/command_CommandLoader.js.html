@@ -98,7 +98,7 @@ export class CommandLoader
 			delete require.cache[require.resolve(file)];
 
 			const loadedFile: any = require(file);
-			const commandClasses: (new () => Command)[] = this._findCommandClasses(loadedFile)!;
+			const commandClasses: (new () => Command)[] = this._findCommandClasses(loadedFile);
 
 			if (commandClasses.length === 0)
 			{
