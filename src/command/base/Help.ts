@@ -50,8 +50,13 @@ export default class extends Command
 				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
 					.sort();
 
+			const shortcuts: { [name: string]: string } =
+				await message.guild.storage!.settings.get('shortcuts') || {};
+
 			const data: TemplateData = {
+				isGuild: !dm,
 				commandList,
+				shortcuts: Object.keys(shortcuts),
 				usage: cInfo(this).usage,
 				mentionUsage: cInfo(this).usage
 					.replace('<prefix>', mentionName)
