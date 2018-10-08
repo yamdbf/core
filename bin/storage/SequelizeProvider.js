@@ -18,8 +18,9 @@ function SequelizeProvider(url, dialect, debug) {
             this._backend = Database_1.Database.instance(url, debug);
             this._model = this._backend.db.define(name, {
                 key: { type: seq.STRING, allowNull: false, primaryKey: true },
-                value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect) ?
-                    seq.TEXT : seq.TEXT('long')
+                value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect)
+                    ? seq.TEXT
+                    : seq.TEXT('long')
             }, { timestamps: false, freezeTableName: true });
         }
         async init() {
