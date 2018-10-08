@@ -39,8 +39,11 @@ class default_1 extends Command_1.Command {
                 .reduce((a, b) => Math.max(a, b));
             let commandList = usableCommands.map(c => `${Util_1.Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
                 .sort();
+            const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
             const data = {
+                isGuild: !dm,
                 commandList,
+                shortcuts: Object.keys(shortcuts),
                 usage: cInfo(this).usage,
                 mentionUsage: cInfo(this).usage
                     .replace('<prefix>', mentionName)
