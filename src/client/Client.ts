@@ -18,7 +18,8 @@ import {
 	TextChannel,
 	VoiceState,
 	Presence,
-	Speaking
+	Speaking,
+	PermissionResolvable
 } from 'discord.js';
 
 import { Command } from '../command/Command';
@@ -504,6 +505,25 @@ export class Client extends Discord.Client
 	{
 		if (!guild || !this.storage.guilds.has(guild.id)) return null;
 		return (await this.storage.guilds.get(guild.id)!.settings.get('prefix')) || null;
+	}
+
+	/**
+	 * Generate a bot invite URL based on the permissions included
+	 * in all of the commands the client currently has loaded.
+	 *
+	 * >**Note:** This should be run after `clientReady` to ensure
+	 * no command permissions are missing from the permissions set
+	 * that will be used to generate the URL
+	 * @returns {Promise<string>}
+	 */
+	public createBotInvite(): Promise<string>
+	{
+		const perms: Set<PermissionResolvable> = new Set();
+		for (const command of this.commands.values())
+			for (const perm of command.clientPermissions)
+				perms.add(perm);
+
+		return this.generateInvite(Array.from(perms));
 	}
 
 	/**
