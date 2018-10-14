@@ -109,6 +109,16 @@ export declare class Client extends Discord.Client {
      */
     getPrefix(guild: Guild): Promise<string | null>;
     /**
+     * Generate a bot invite URL based on the permissions included
+     * in all of the commands the client currently has loaded.
+     *
+     * >**Note:** This should be run after `clientReady` to ensure
+     * no command permissions are missing from the permissions set
+     * that will be used to generate the URL
+     * @returns {Promise<string>}
+     */
+    createBotInvite(): Promise<string>;
+    /**
      * Clean out expired guild storage/settings
      * @returns {Promise<void>}
      */
