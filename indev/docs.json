@@ -411,6 +411,18 @@
                     }
                 },
                 {
+                    "name": "createBotInvite",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Generate a bot invite URL based on the permissions included\nin all of the commands the client currently has loaded.</p>\n<blockquote>\n<p><strong>Note:</strong> This should be run after <code>clientReady</code> to ensure\nno command permissions are missing from the permissions set\nthat will be used to generate the URL</p>\n</blockquote>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "Promise.<string>",
+                        "description": ""
+                    }
+                },
+                {
                     "name": "sweepStorages",
                     "access": "",
                     "virtual": false,
