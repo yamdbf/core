@@ -349,8 +349,8 @@ class Client extends Discord.Client {
      * @param {string} key The default settings key to check for
      * @returns {Promise<boolean>}
      */
-    async defaultSettingExists(key) {
-        return await this.storage.exists(`defaultGuildSettings.${key}`);
+    defaultSettingExists(key) {
+        return this.storage.exists(`defaultGuildSettings.${key}`);
     }
     /**
      * Shortcut to return the command prefix for the provided guild
