@@ -491,9 +491,9 @@ export class Client extends Discord.Client
 	 * @param {string} key The default settings key to check for
 	 * @returns {Promise<boolean>}
 	 */
-	public async defaultSettingExists(key: string): Promise<boolean>
+	public defaultSettingExists(key: string): Promise<boolean>
 	{
-		return await this.storage.exists(`defaultGuildSettings.${key}`);
+		return this.storage.exists(`defaultGuildSettings.${key}`);
 	}
 
 	/**
