@@ -111,12 +111,7 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 
 	descriptor.value = async function(this: Command, message: Message, args: any[]): Promise<any>
 	{
-		const dm: boolean = message.channel.type !== 'text';
-		const lang: string = dm
-			? this.client.defaultLang
-			: await message.guild.storage!.settings.get('lang')
-				|| this.client.defaultLang;
-
+		const lang: string = await Lang.getLangFromMessage(message);
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 		return await original.apply(this, [message, [res, ...args]]);
 	};
