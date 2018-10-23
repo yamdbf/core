@@ -215,9 +215,10 @@ class Command {
         if (!this.action || !(this.action instanceof Function))
             throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
         // Default guildOnly to true if permissions/roles are given
-        if (!this.guildOnly && (this.callerPermissions.length
-            || this.clientPermissions.length
-            || this.roles.length))
+        if (!this.guildOnly
+            && (this.callerPermissions.length
+                || this.clientPermissions.length
+                || this.roles.length))
             this.guildOnly = true;
     }
     /**
