@@ -94,11 +94,7 @@ function localizable(target, key, descriptor) {
         descriptor = Object.getOwnPropertyDescriptor(target, key);
     const original = descriptor.value;
     descriptor.value = async function (message, args) {
-        const dm = message.channel.type !== 'text';
-        const lang = dm
-            ? this.client.defaultLang
-            : await message.guild.storage.settings.get('lang')
-                || this.client.defaultLang;
+        const lang = await Lang_1.Lang.getLangFromMessage(message);
         const res = Lang_1.Lang.createResourceProxy(lang);
         return await original.apply(this, [message, [res, ...args]]);
     };
