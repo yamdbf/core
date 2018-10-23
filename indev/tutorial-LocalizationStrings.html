@@ -158,7 +158,7 @@ Command group &quot;{{ group }}&quot; is already disabled or is not allowed to b
 **Disabled command group &quot;{{ group }}&quot;**
 
 [CMD_HELP_COMMAND_LIST]
-##! &lt;namesOnly?: boolean, commandList: string[], usage: string, mentionUsage: string>
+##! &lt;namesOnly?: boolean, isGuild: boolean, commandList: string[], shortcuts: string[], usage: string, mentionUsage: string>
 Available commands: (Commands marked with `*` are server-only)
 ```ldif
 {{!
@@ -173,6 +173,9 @@ Available commands: (Commands marked with `*` are server-only)
         return list;
     }
     else return args.commandList.join('\n');
+!}}{{!
+    if (args.isGuild && args.shortcuts.length > 0)
+        return `\`\`\`Available shortcuts:\n\`\`\`ldif\n${args.shortcuts.join(', ')}\n`;
 !}}
 ## A newline after the end of this codeblock gives
 ## weird spacing between it and the last line.
