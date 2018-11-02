@@ -1,6 +1,7 @@
 import {
 	// Client,
 	Command,
+	CommandLock,
 	Message,
 	CommandDecorators,
 	Logger,
@@ -57,6 +58,8 @@ export default class extends TestCommandClass
 			// ratelimit: '2/10s'
 		});
 
+		this.lock = new CommandLock('help', 'ping');
+
 		// this.use(resolve('foo: BannedUser'));
 		// this.use(expect('foo: BannedUser'));
 	}
@@ -77,6 +80,7 @@ export default class extends TestCommandClass
 	// @using(expect('foo: CommandGroup'))
 	public async action(message: Message, [_res, ..._args]: [ResourceLoader, string[]]): Promise<void>
 	{
+		await new Promise(r => setTimeout(r, 15e3));
 		// message.channel.send(res('FOO_BAR_BAZ'));
 		// message.channel.send(args.join(' ') || 'MISSING ARGS');
 		// this.logger.debug('Command:test', util.inspect(this.group));

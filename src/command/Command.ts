@@ -7,6 +7,7 @@ import { Util } from '../util/Util';
 import { Message } from '../types/Message';
 import { CompactModeHelper } from './CompactModeHelper';
 import { RespondOptions } from '../types/RespondOptions';
+import { CommandLock } from './CommandLock';
 
 /**
  * Action to be executed when the command is called. The following parameters
@@ -46,6 +47,8 @@ export abstract class Command<T extends Client = Client>
 	public roles!: string[];
 	public ownerOnly!: boolean;
 	public external!: boolean;
+	public lock!: CommandLock;
+	public lockTimeout!: number;
 
 	// Internals
 	public readonly _middleware: MiddlewareFunction[];
@@ -177,6 +180,20 @@ export abstract class Command<T extends Client = Client>
 		 * @type {boolean}
 		 */
 
+		/**
+		 * The CommmandLock this command uses. Must be assigned manually if
+		 * locking functionality is desired
+		 * @name Command#lock
+		 * @type {CommandLock}
+		 */
+
+		/**
+		 * Time until command locks will be cancelled if a command
+		 * does not finish in time
+		 * @name Command#lockTimeout
+		 * @type {number}
+		 */
+
 		// Middleware function storage for the Command instance
 		this._middleware = [];
 
@@ -237,6 +254,7 @@ export abstract class Command<T extends Client = Client>
 		if (typeof this.external === 'undefined') this.external = false;
 		if (typeof this._disabled === 'undefined') this._disabled = false;
 		if (typeof this._classloc === 'undefined') this._classloc = '<External Command>';
+		if (typeof this.lockTimeout === 'undefined') this.lockTimeout = 30e3;
 
 		// Make necessary asserts
 		if (!this.name) throw new Error(`A command is missing a name:\n${this._classloc}`);
@@ -260,6 +278,9 @@ export abstract class Command<T extends Client = Client>
 		if (this.roles && !Array.isArray(this.roles))
 			throw new TypeError(`\`roles\` for Command "${this.name}" must be an array`);
 
+		if (typeof this.lockTimeout !== 'undefined' && typeof this.lockTimeout !== 'number')
+			throw new TypeError(`\`lockTimeout\` for Command "${this.name}" must be a number`);
+
 		if (!this.action || !(this.action instanceof Function))
 			throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 
@@ -269,6 +290,9 @@ export abstract class Command<T extends Client = Client>
 				|| this.clientPermissions.length
 				|| this.roles.length))
 			this.guildOnly = true;
+
+		if (typeof this.lock !== 'undefined' && !this.guildOnly)
+			throw new Error(`Command "${this.name} has a defined lock but is not guildOnly`);
 	}
 
 	/**

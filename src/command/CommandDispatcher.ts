@@ -1,4 +1,4 @@
-import { PermissionResolvable, TextChannel, User, MessageOptions, Message as DMessage } from 'discord.js';
+import { PermissionResolvable, TextChannel, User, MessageOptions, Message as DMessage, Guild } from 'discord.js';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { Logger, logger } from '../util/logger/Logger';
 import { Message } from '../types/Message';
@@ -14,6 +14,7 @@ import { BaseStrings as s } from '../localization/BaseStrings';
 import { Util } from '../util/Util';
 import { format } from 'util';
 import { CompactModeHelper } from './CompactModeHelper';
+import { CommandLock } from './CommandLock';
 
 /**
  * Handles dispatching commands
@@ -23,11 +24,13 @@ export class CommandDispatcher
 {
 	@logger private readonly _logger!: Logger;
 	private readonly _client: Client;
+	private _locks: { [guild: string]: { [command: string]: CommandLock } };
 	private _ready: boolean = false;
 
 	public constructor(client: Client)
 	{
 		this._client = client;
+		this._locks = {};
 
 		if (!this._client.passive)
 			this._client.on('message', message =>
@@ -175,6 +178,25 @@ export class CommandDispatcher
 
 		if (!middlewarePassed) return;
 
+		// Return an error if the command is locked
+		if (this.isLocked(command!, message, args))
+		{
+			const currentLock: CommandLock = this.getCurrentLock(command!, message.guild);
+			message.channel.send(currentLock.getError(lang, message, args));
+			return;
+		}
+
+		// Set up the command lock for this command if it exists
+		const lock: CommandLock = command!.lock;
+		let lockTimeout: NodeJS.Timer;
+		if (lock)
+		{
+			Util.assignNestedValue(this._locks, [message.guild.id, command!.name], lock);
+			lock.lock(message, args);
+			if (command!.lockTimeout > 0)
+				lockTimeout = this._client.setTimeout(() => lock.free(message, args), command!.lockTimeout);
+		}
+
 		// Run the command
 		try { commandResult = await command!.action(message, args); }
 		catch (err) { this._logger.error(`Dispatch:${command!.name}`, err.stack); }
@@ -189,8 +211,44 @@ export class CommandDispatcher
 		// commandResult = Util.flattenArray([<Message | Message[]> commandResult]);
 		// TODO: Store command result information for command editing
 
+		// Clean up the command lock after execution has finished
+		if (lock)
+		{
+			Util.removeNestedValue(this._locks, [message.guild.id, command!.name]);
+			if (lockTimeout!) this._client.clearTimeout(lockTimeout!);
+			lock.free(message, args);
+		}
+
 		const dispatchEnd: number = Util.now() - dispatchStart;
 		this._client.emit('command', command!.name, args, dispatchEnd, message);
+	}
+
+	/**
+	 * Return whether or not the given command is locked, either directly
+	 * or as a sibling of another command
+	 */
+	private isLocked(command: Command, message: Message, args: any): boolean
+	{
+		const lock: CommandLock = this.getCurrentLock(command, message.guild);
+		return lock ? lock.isLocked(message, args) : false;
+	}
+
+	/**
+	 * Return the lock that is preventing the command from being called.
+	 * This can be the command's own lock, or the lock of another command
+	 * that the given command is a sibling of
+	 */
+	private getCurrentLock(command: Command, guild: Guild): CommandLock
+	{
+		const locks: { [command: string]: CommandLock } = this._locks[guild.id] || {};
+		let lock: CommandLock = locks[command.name];
+		if (lock) return lock;
+
+		for (const commaandName of Object.keys(locks))
+			if (locks[commaandName].siblings.includes(command.name))
+				lock = locks[commaandName];
+
+		return lock;
 	}
 
 	/**
