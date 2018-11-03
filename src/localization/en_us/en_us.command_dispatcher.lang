@@ -41,3 +41,6 @@ That command is for servers only. Try saying "help" to view a list of commands.
 ```css
 {{ roles }}
 ```
+
+[DISPATCHER_ERR_COMMAND_LOCKED]
+This command is currently busy.
