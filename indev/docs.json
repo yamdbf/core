@@ -1022,6 +1022,28 @@
                     }
                 },
                 {
+                    "name": "lock",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The CommmandLock this command uses. Must be assigned manually if\nlocking functionality is desired</p>",
+                    "type": {
+                        "names": [
+                            "CommandLock"
+                        ]
+                    }
+                },
+                {
+                    "name": "lockTimeout",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Time until command locks will be cancelled if a command\ndoes not finish in time</p>",
+                    "type": {
+                        "names": [
+                            "number"
+                        ]
+                    }
+                },
+                {
                     "name": "ratelimit",
                     "access": "",
                     "virtual": false,
@@ -1072,6 +1094,22 @@
                     "access": "",
                     "virtual": false,
                     "description": "<p>Handle received messages</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "isLocked",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return whether or not the given command is locked, either directly\nor as a sibling of another command</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "getCurrentLock",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Return the lock that is preventing the command from being called.\nThis can be the command's own lock, or the lock of another command\nthat the given command is a sibling of</p>",
                     "parameters": [],
                     "examples": []
                 },
@@ -1239,6 +1277,155 @@
                     "description": "<p>Recursively search for Command classes within the given object</p>",
                     "parameters": [],
                     "examples": []
+                }
+            ]
+        },
+        {
+            "name": "CommandLock",
+            "description": "<p>Class to be used by a command that should prevent others from using\nit when in use by anyone else. CommandLocks can define sibling commands\nby name that will also be locked when the command is locked.</p>\n<blockquote>\n<p>To use this (or your own extension class) on a Command, create a new\ninstance and assign it to your Command's <code>lock</code> field in your Command\nconstructor.</p>\n</blockquote>\n<p>By default a command will be locked for a maximum of 30 seconds if\nsomething goes wrong and a command fails to finish. This can be\nchanged by setting <code>lockTimeout</code> in your CommandInfo to a desired\ntime in ms, or <code>0</code> to disable the lock timeout entirely.</p>\n<p><strong>NOTE:</strong> Command locks only apply within a guild context. You must\ndeclare set <code>guildOnly</code> to <code>true</code> to be able to utilize a CommandLock\nfor that command.</p>\n<blockquote>\n<p>By extending this class and overriding <code>lock()</code>, <code>isLocked()</code>, <code>free()</code>,\nand <code>getError()</code> with your own definitions you can effectively define your own\nlock behavior. These methods will be passed the same Message context and\narguments as your Command so you can define any behavior you desire, like\nlocking multiple commands that operate on a given user while one of the\ncommands is in use.</p>\n</blockquote>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "CommandLock",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "siblings",
+                        "type": "string",
+                        "description": "<p>Associated commands to lock</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "lock",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Sets the lock</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "Message",
+                            "description": "<p>Message that triggered the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>Arguments passed to the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "isLocked",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns whether or not this lock is active</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "Message",
+                            "description": "<p>Message that triggered the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>Arguments passed to the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "free",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Frees this lock. Called automatically when the command finishes,\nor when the lockTimeout fires</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "Message",
+                            "description": "<p>Message that triggered the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>Arguments passed to the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "getError",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Get an error string describing the effects of this lock. Defaults\nto <code>'This command is currently in use.</code> for en_us.</p>\n<blockquote>\n<p>When defining your own lock behavior, consider using details\nrelated to the conditions under which your commands are locked.</p>\n</blockquote>",
+                    "parameters": [
+                        {
+                            "name": "lang",
+                            "type": "string",
+                            "description": "<p>The language to use for the error string</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "message",
+                            "type": "Message",
+                            "description": "<p>Message that triggered the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        },
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>Arguments passed to the command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "string",
+                        "description": ""
+                    }
                 }
             ]
         },
