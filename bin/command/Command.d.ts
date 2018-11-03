@@ -5,6 +5,7 @@ import { CommandInfo } from '../types/CommandInfo';
 import { ArgOpts } from '../types/ArgOpts';
 import { Message } from '../types/Message';
 import { RespondOptions } from '../types/RespondOptions';
+import { CommandLock } from './CommandLock';
 /**
  * Action to be executed when the command is called. The following parameters
  * are what command actions will be passed by the {@link CommandDispatcher} whenever
@@ -40,6 +41,8 @@ export declare abstract class Command<T extends Client = Client> {
     roles: string[];
     ownerOnly: boolean;
     external: boolean;
+    lock: CommandLock;
+    lockTimeout: number;
     readonly _middleware: MiddlewareFunction[];
     _classloc: string;
     _initialized: boolean;

@@ -130,6 +130,18 @@ class Command {
          * @name Command#external
          * @type {boolean}
          */
+        /**
+         * The CommmandLock this command uses. Must be assigned manually if
+         * locking functionality is desired
+         * @name Command#lock
+         * @type {CommandLock}
+         */
+        /**
+         * Time until command locks will be cancelled if a command
+         * does not finish in time
+         * @name Command#lockTimeout
+         * @type {number}
+         */
         // Middleware function storage for the Command instance
         this._middleware = [];
         this._initialized = false;
@@ -193,6 +205,8 @@ class Command {
             this._disabled = false;
         if (typeof this._classloc === 'undefined')
             this._classloc = '<External Command>';
+        if (typeof this.lockTimeout === 'undefined')
+            this.lockTimeout = 30e3;
         // Make necessary asserts
         if (!this.name)
             throw new Error(`A command is missing a name:\n${this._classloc}`);
@@ -212,6 +226,8 @@ class Command {
             this._validatePermissions('clientPermissions', this.clientPermissions);
         if (this.roles && !Array.isArray(this.roles))
             throw new TypeError(`\`roles\` for Command "${this.name}" must be an array`);
+        if (typeof this.lockTimeout !== 'undefined' && typeof this.lockTimeout !== 'number')
+            throw new TypeError(`\`lockTimeout\` for Command "${this.name}" must be a number`);
         if (!this.action || !(this.action instanceof Function))
             throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
         // Default guildOnly to true if permissions/roles are given
@@ -220,6 +236,8 @@ class Command {
                 || this.clientPermissions.length
                 || this.roles.length))
             this.guildOnly = true;
+        if (typeof this.lock !== 'undefined' && !this.guildOnly)
+            throw new Error(`Command "${this.name} has a defined lock but is not guildOnly`);
     }
     /**
      * Whether or not this command is disabled

@@ -22,6 +22,7 @@ class CommandDispatcher {
     constructor(client) {
         this._ready = false;
         this._client = client;
+        this._locks = {};
         if (!this._client.passive)
             this._client.on('message', message => { if (this._ready)
                 this.handleMessage(message); });
@@ -137,6 +138,21 @@ class CommandDispatcher {
             }
         if (!middlewarePassed)
             return;
+        // Return an error if the command is locked
+        if (!dm && this.isLocked(command, message, args)) {
+            const currentLock = this.getCurrentLock(command, message.guild);
+            message.channel.send(currentLock.getError(lang, message, args));
+            return;
+        }
+        // Set up the command lock for this command if it exists
+        const lock = command.lock;
+        let lockTimeout;
+        if (!dm && lock) {
+            Util_1.Util.assignNestedValue(this._locks, [message.guild.id, command.name], lock);
+            lock.lock(message, args);
+            if (command.lockTimeout > 0)
+                lockTimeout = this._client.setTimeout(() => lock.free(message, args), command.lockTimeout);
+        }
         // Run the command
         try {
             commandResult = await command.action(message, args);
@@ -152,8 +168,38 @@ class CommandDispatcher {
             commandResult = await message.channel.send(commandResult);
         // commandResult = Util.flattenArray([<Message | Message[]> commandResult]);
         // TODO: Store command result information for command editing
+        // Clean up the command lock after execution has finished
+        if (!dm && lock) {
+            Util_1.Util.removeNestedValue(this._locks, [message.guild.id, command.name]);
+            if (lockTimeout)
+                this._client.clearTimeout(lockTimeout);
+            lock.free(message, args);
+        }
         const dispatchEnd = Util_1.Util.now() - dispatchStart;
         this._client.emit('command', command.name, args, dispatchEnd, message);
+    }
+    /**
+     * Return whether or not the given command is locked, either directly
+     * or as a sibling of another command
+     */
+    isLocked(command, message, args) {
+        const lock = this.getCurrentLock(command, message.guild);
+        return lock ? lock.isLocked(message, args) : false;
+    }
+    /**
+     * Return the lock that is preventing the command from being called.
+     * This can be the command's own lock, or the lock of another command
+     * that the given command is a sibling of
+     */
+    getCurrentLock(command, guild) {
+        const locks = this._locks[guild.id] || {};
+        let lock = locks[command.name];
+        if (lock)
+            return lock;
+        for (const commandName of Object.keys(locks))
+            if (locks[commandName].siblings.includes(command.name))
+                lock = locks[commandName];
+        return lock;
     }
     /**
      * Check if the calling user is blacklisted

@@ -5,6 +5,7 @@ export { IPlugin } from './client/interface/IPlugin';
 export { PluginLoader } from './client/PluginLoader';
 export { PluginConstructor } from './types/PluginConstructor';
 export { Command } from './command/Command';
+export { CommandLock } from './command/CommandLock';
 export { CommandDispatcher } from './command/CommandDispatcher';
 export { CommandLoader } from './command/CommandLoader';
 export { CommandRegistry } from './command/CommandRegistry';

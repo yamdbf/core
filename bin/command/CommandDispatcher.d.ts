@@ -6,6 +6,7 @@ import { Client } from '../client/Client';
 export declare class CommandDispatcher {
     private readonly _logger;
     private readonly _client;
+    private _locks;
     private _ready;
     constructor(client: Client);
     /**
@@ -16,6 +17,17 @@ export declare class CommandDispatcher {
      * Handle received messages
      */
     private handleMessage;
+    /**
+     * Return whether or not the given command is locked, either directly
+     * or as a sibling of another command
+     */
+    private isLocked;
+    /**
+     * Return the lock that is preventing the command from being called.
+     * This can be the command's own lock, or the lock of another command
+     * that the given command is a sibling of
+     */
+    private getCurrentLock;
     /**
      * Check if the calling user is blacklisted
      */

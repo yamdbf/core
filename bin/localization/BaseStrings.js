@@ -1,5 +1,5 @@
 "use strict";
-// Generated automatically at Mon May 28 2018 01:03:14 GMT-0500 (Central Daylight Time)
+// Generated automatically at Thu Nov 01 2018 22:04:12 GMT-0500 (Central Daylight Time)
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {enum} BaseStrings Enum containing all base framework
@@ -67,6 +67,7 @@ var BaseStrings;
     BaseStrings["DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS"] = "DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS";
     BaseStrings["DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS"] = "DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS";
     BaseStrings["DISPATCHER_ERR_MISSING_ROLES"] = "DISPATCHER_ERR_MISSING_ROLES";
+    BaseStrings["DISPATCHER_ERR_COMMAND_LOCKED"] = "DISPATCHER_ERR_COMMAND_LOCKED";
     BaseStrings["EXPECT_ERR_MISSING_VALUE"] = "EXPECT_ERR_MISSING_VALUE";
     BaseStrings["EXPECT_ERR_INVALID_OPTION"] = "EXPECT_ERR_INVALID_OPTION";
     BaseStrings["EXPECT_ERR_EXPECTED_TYPE"] = "EXPECT_ERR_EXPECTED_TYPE";
