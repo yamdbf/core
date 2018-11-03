@@ -179,7 +179,7 @@ export class CommandDispatcher
 		if (!middlewarePassed) return;
 
 		// Return an error if the command is locked
-		if (this.isLocked(command!, message, args))
+		if (!dm && this.isLocked(command!, message, args))
 		{
 			const currentLock: CommandLock = this.getCurrentLock(command!, message.guild);
 			message.channel.send(currentLock.getError(lang, message, args));
@@ -189,7 +189,7 @@ export class CommandDispatcher
 		// Set up the command lock for this command if it exists
 		const lock: CommandLock = command!.lock;
 		let lockTimeout: NodeJS.Timer;
-		if (lock)
+		if (!dm && lock)
 		{
 			Util.assignNestedValue(this._locks, [message.guild.id, command!.name], lock);
 			lock.lock(message, args);
@@ -212,7 +212,7 @@ export class CommandDispatcher
 		// TODO: Store command result information for command editing
 
 		// Clean up the command lock after execution has finished
-		if (lock)
+		if (!dm && lock)
 		{
 			Util.removeNestedValue(this._locks, [message.guild.id, command!.name]);
 			if (lockTimeout!) this._client.clearTimeout(lockTimeout!);
@@ -244,9 +244,9 @@ export class CommandDispatcher
 		let lock: CommandLock = locks[command.name];
 		if (lock) return lock;
 
-		for (const commaandName of Object.keys(locks))
-			if (locks[commaandName].siblings.includes(command.name))
-				lock = locks[commaandName];
+		for (const commandName of Object.keys(locks))
+			if (locks[commandName].siblings.includes(command.name))
+				lock = locks[commandName];
 
 		return lock;
 	}

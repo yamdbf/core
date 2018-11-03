@@ -55,6 +55,7 @@ export default class extends TestCommandClass
 			aliases: ['testing', 'testo'],
 			desc: 'test command',
 			usage: '<prefix>test <test> <foo>',
+			guildOnly: true
 			// ratelimit: '2/10s'
 		});
 

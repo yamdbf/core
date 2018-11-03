@@ -13,10 +13,12 @@ import { BaseStrings as s } from '../localization/BaseStrings';
  *
  * By default a command will be locked for a maximum of 30 seconds if
  * something goes wrong and a command fails to finish. This can be
- * changed by settings `lockTimeout` in your CommandOptions to a
- * desired time in ms, or `0` to disable the lock timeout entirely.
+ * changed by setting `lockTimeout` in your CommandInfo to a desired
+ * time in ms, or `0` to disable the lock timeout entirely.
  *
- * Command locks only apply within a guild context.
+ * **NOTE:** Command locks only apply within a guild context. You must
+ * declare set `guildOnly` to `true` to be able to utilize a CommandLock
+ * for that command.
  *
  * >By extending this class and overriding `lock()`, `isLocked()`, `free()`,
  * and `getError()` with your own definitions you can effectively define your own

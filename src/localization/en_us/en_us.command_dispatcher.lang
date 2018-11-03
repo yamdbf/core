@@ -43,4 +43,4 @@ That command is for servers only. Try saying "help" to view a list of commands.
 ```
 
 [DISPATCHER_ERR_COMMAND_LOCKED]
-This command is currently in use.
+This command is currently busy.
