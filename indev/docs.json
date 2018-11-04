@@ -3537,6 +3537,14 @@
                     "default": "",
                     "optional": true,
                     "nullable": ""
+                },
+                {
+                    "name": "lockTimeout",
+                    "type": "number",
+                    "description": "<p>The time until command locks will expire automatically</p>",
+                    "default": 30000,
+                    "optional": true,
+                    "nullable": ""
                 }
             ]
         },
