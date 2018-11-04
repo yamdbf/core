@@ -1,5 +1,5 @@
 import { Client } from '../client/Client';
-import { Message, GuildMember } from 'discord.js';
+import { Message, GuildMember, User } from 'discord.js';
 
 type SingleUseButton = { expires: number, consumed: boolean, emoji: string, action: Function };
 
@@ -92,8 +92,14 @@ export class CompactModeHelper
 		let invokeImmediately: boolean = false;
 
 		if (message.channel.type === 'text')
-			try { clientMember = await message.guild.members.fetch(CompactModeHelper._instance._client.user); }
+		{
+			try
+			{
+				const clientUser: User = CompactModeHelper._instance._client.user;
+				clientMember = message.guild.members.get(clientUser.id) || await message.guild.members.fetch(clientUser);
+			}
 			catch { invokeImmediately = true; }
+		}
 
 		if (clientMember && !clientMember.permissionsIn(message.channel).has('ADD_REACTIONS'))
 			invokeImmediately = true;

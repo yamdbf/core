@@ -47,7 +47,7 @@ export default class extends Command
 			}
 
 			let member!: GuildMember;
-			try { member = await message.guild.members.fetch(user); }
+			try { member = message.guild.members.get(user.id) || await message.guild.members.fetch(user); }
 			catch (err) {}
 
 			if (member && member.permissions.has('ADMINISTRATOR'))

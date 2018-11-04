@@ -26,7 +26,11 @@ export class UserResolver extends Resolver
 
 		if (idRegex.test(value))
 		{
-			try { user = await this.client.users.fetch(value.match(idRegex)![1]); } catch {}
+			try
+			{
+				const userID: string = value.match(idRegex)![1];
+				user = this.client.users.get(userID) || await this.client.users.fetch(userID);
+			} catch {}
 			if (!user) return;
 		}
 		else

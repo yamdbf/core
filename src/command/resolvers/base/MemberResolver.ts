@@ -28,7 +28,11 @@ export class MemberResolver extends Resolver
 
 		if (idRegex.test(value))
 		{
-			try { member = await context.guild.members.fetch(value.match(idRegex)![1]); } catch {}
+			try
+			{
+				const userID: string = value.match(idRegex)![1];
+				member = context.guild.members.get(userID) || await context.guild.members.fetch(userID);
+			} catch {}
 			if (!member) return;
 		}
 		else
