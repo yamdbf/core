@@ -16,6 +16,7 @@
  * @property {string[]} [roles=[]] See: {@link Command#roles}
  * @property {boolean} [ownerOnly=false] See: {@link Command#ownerOnly}
  * @property {string} [ratelimit] Sets a rate limit on calls to this command for every user
+ * @property {number} [lockTimeout=30000] The time until command locks will expire automatically
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 
