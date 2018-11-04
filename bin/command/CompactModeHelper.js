@@ -68,13 +68,15 @@ class CompactModeHelper {
             emoji = CompactModeHelper._instance._client.buttons[emoji];
         let clientMember;
         let invokeImmediately = false;
-        if (message.channel.type === 'text')
+        if (message.channel.type === 'text') {
             try {
-                clientMember = await message.guild.members.fetch(CompactModeHelper._instance._client.user);
+                const clientUser = CompactModeHelper._instance._client.user;
+                clientMember = message.guild.members.get(clientUser.id) || await message.guild.members.fetch(clientUser);
             }
             catch (_a) {
                 invokeImmediately = true;
             }
+        }
         if (clientMember && !clientMember.permissionsIn(message.channel).has('ADD_REACTIONS'))
             invokeImmediately = true;
         if (!invokeImmediately) {

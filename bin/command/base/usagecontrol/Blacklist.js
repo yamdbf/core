@@ -39,7 +39,7 @@ class default_1 extends Command_1.Command {
             }
             let member;
             try {
-                member = await message.guild.members.fetch(user);
+                member = message.guild.members.get(user.id) || await message.guild.members.fetch(user);
             }
             catch (err) { }
             if (member && member.permissions.has('ADMINISTRATOR'))
