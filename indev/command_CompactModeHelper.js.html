@@ -133,7 +133,7 @@ export class CompactModeHelper
 		{
 			try
 			{
-				const clientUser: User = CompactModeHelper._instance._client.user;
+				const clientUser: User = CompactModeHelper._instance._client.user!;
 				clientMember = message.guild.members.get(clientUser.id) || await message.guild.members.fetch(clientUser);
 			}
 			catch { invokeImmediately = true; }
