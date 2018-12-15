@@ -332,7 +332,7 @@ export class Client extends Discord.Client
 		else this.__onContinueEvent();
 
 		if (this.statusText)
-			this.user.setActivity(this.statusText);
+			this.user!.setActivity(this.statusText);
 	}
 
 	@once('continue')
@@ -374,7 +374,7 @@ export class Client extends Discord.Client
 
 		this.emit('clientReady');
 
-		if (!this.user.bot)
+		if (!this.user!.bot)
 			this._logger.warn([
 				'Userbots are no longer supported and no precautions are',
 				'taken to protect your account from accidentally abusing',

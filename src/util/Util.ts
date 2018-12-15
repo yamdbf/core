@@ -35,8 +35,8 @@ export class Util
 		const client: Client = message.client as Client;
 		const dm: boolean = message.channel.type !== 'text';
 		const prefixes: string[] = [
-			`<@${client.user.id}>`,
-			`<@!${client.user.id}>`
+			`<@${client.user!.id}>`,
+			`<@!${client.user!.id}>`
 		];
 
 		const guildStorage: GuildStorage | undefined | null = !dm

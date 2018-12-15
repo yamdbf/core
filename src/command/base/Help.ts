@@ -25,7 +25,7 @@ export default class extends Command
 	public async action(message: Message, [res, commandName]: [ResourceProxy, string]): Promise<void>
 	{
 		const dm: boolean = message.channel.type !== 'text';
-		const mentionName: string = `@${this.client.user.tag} `;
+		const mentionName: string = `@${this.client.user!.tag} `;
 		const lang: string = dm ? this.client.defaultLang
 			:  await message.guild.storage!.settings.get('lang');
 

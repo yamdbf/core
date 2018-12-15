@@ -122,11 +122,11 @@ export class CommandDispatcher
 		if (!validCall) return;
 
 		// Remove clientuser from message.mentions if only mentioned one time as a prefix
-		const clientMention: RegExp = new RegExp(`<@!?${this._client.user.id}>`, 'g');
+		const clientMention: RegExp = new RegExp(`<@!?${this._client.user!.id}>`, 'g');
 		const startsWithClientMention: RegExp = new RegExp(`^${clientMention.source}`);
 		if (startsWithClientMention.test(message.content)
 			&& (message.content.match(clientMention) || []).length === 1)
-			message.mentions.users.delete(this._client.user.id);
+			message.mentions.users.delete(this._client.user!.id);
 
 		// Prepare args
 		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${Util.escape(name!)}`);
@@ -364,7 +364,7 @@ export class CommandDispatcher
 	private checkClientPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.clientPermissions.filter(a =>
-			!(message.channel as TextChannel).permissionsFor(this._client.user)!.has(a));
+			!(message.channel as TextChannel).permissionsFor(this._client.user!)!.has(a));
 	}
 
 	/**
