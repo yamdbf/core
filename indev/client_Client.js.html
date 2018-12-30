@@ -668,6 +668,7 @@ export class Client extends Discord.Client
 
 	public on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
 	public on(event: 'unknownCommand', listener: (name: string, args: any[], message: Message) => void): this;
+	public on(event: 'noCommand', listener: (message: Message) => void): this;
 	public on(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
 	public on(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
 	public on(event: 'pause', listener: () => void): this;
@@ -691,6 +692,13 @@ export class Client extends Discord.Client
 	 * @param {string} name The name of the command that was attempted to be called
 	 * @param {any[]} args Args passed to the unknown command
 	 * @param {external:Message} message Message that triggered the unknown command
+	 */
+
+	/**
+	 * Emitted whenever a message is received that does not contain a command or unknown command
+	 * @memberof Client
+	 * @event event:noCommand
+	 * @param {external:Message} message Message that did not contain a command or unknown command
 	 */
 
 	/**
@@ -777,6 +785,7 @@ export class Client extends Discord.Client
 
 	public once(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
 	public once(event: 'unknownCommand', listener: (name: string, args: any[], message: Message) => void): this;
+	public once(event: 'noCommand', listener: (message: Message) => void): this;
 	public once(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
 	public once(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
 	public once(event: 'pause', listener: () => void): this;

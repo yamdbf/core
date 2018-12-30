@@ -548,6 +548,23 @@
                     "examples": []
                 },
                 {
+                    "name": "event:noCommand",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Emitted whenever a message is received that does not contain a command or unknown command</p>",
+                    "parameters": [
+                        {
+                            "name": "message",
+                            "type": "external:Message",
+                            "description": "<p>Message that did not contain a command or unknown command</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": []
+                },
+                {
                     "name": "event:blacklistAdd",
                     "access": "",
                     "virtual": false,
