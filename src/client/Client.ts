@@ -5,6 +5,7 @@ import * as path from 'path';
 import {
 	Channel,
 	ClientOptions,
+	ClientApplication,
 	Collection,
 	Guild,
 	GuildMember,
@@ -321,6 +322,14 @@ export class Client extends Discord.Client
 	// @ts-ignore - Handled via ListenerUtil
 	private async __onReadyEvent(): Promise<void>
 	{
+		// Set default owner (OAuth Application owner) if none exists
+		if (this.owner.length < 1)
+		{
+			const app: ClientApplication = await this.fetchApplication();
+			if (typeof app.owner !== 'undefined')
+				this.owner[0] = app.owner.id;
+		}
+
 		await this.storage.init();
 
 		// Load defaultGuildSettings into storage the first time the client is run
