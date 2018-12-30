@@ -78,6 +78,13 @@ class Test extends Client
 	{
 		console.log('Unknown command:', name, args);
 	}
+
+	@on('noCommand')
+	// @ts-ignore
+	private _onNoCommand(message: Message): void
+	{
+		console.log('No command in message ', message.id);
+	}
 }
 const test: Test = new Test();
 test.start();
