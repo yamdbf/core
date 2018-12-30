@@ -23,9 +23,15 @@ class CommandDispatcher {
         this._ready = false;
         this._client = client;
         this._locks = {};
-        if (!this._client.passive)
-            this._client.on('message', message => { if (this._ready)
-                this.handleMessage(message); });
+        if (!this._client.passive) {
+            this._client.on('message', async (message) => {
+                if (this._ready) {
+                    const wasCommandCalled = await this.handleMessage(message);
+                    if (!wasCommandCalled)
+                        this._client.emit('noCommand', message);
+                }
+            });
+        }
     }
     /**
      * Set the dispatcher as ready to receive and dispatch commands
@@ -41,14 +47,14 @@ class CommandDispatcher {
         const dm = message.channel.type !== 'text';
         // Dismiss messages from bots
         if (message.author.bot)
-            return;
+            return false;
         // Fail silently if the guild doesn't have a guild storage,
         // though this should never happen
         if (!dm && !this._client.storage.guilds.has(message.guild.id))
-            return;
+            return false;
         // Don't bother with anything else if author is blacklisted
         if (await this.isBlacklisted(message.author, message, dm))
-            return;
+            return false;
         const lang = await Lang_1.Lang.getLangFromMessage(message);
         const res = Lang_1.Lang.createResourceProxy(lang);
         let [commandWasCalled, command, prefix, name] = await Util_1.Util.wasCommandCalled(message);
@@ -80,8 +86,10 @@ class CommandDispatcher {
                     const unknownArgsStr = message.content.replace(unknownCall, '');
                     const unknownCommandArgs = this._client.argsParser(unknownArgsStr);
                     this._client.emit('unknownCommand', name, unknownCommandArgs, message);
+                    return true;
                 }
-                return;
+                else
+                    return false;
             }
         }
         // Determine if the command call was valid, returning the error and exiting if not
@@ -93,7 +101,7 @@ class CommandDispatcher {
             message.author.send(err);
         }
         if (!validCall)
-            return;
+            return true;
         // Remove clientuser from message.mentions if only mentioned one time as a prefix
         const clientMention = new RegExp(`<@!?${this._client.user.id}>`, 'g');
         const startsWithClientMention = new RegExp(`^${clientMention.source}`);
@@ -137,12 +145,12 @@ class CommandDispatcher {
                 break;
             }
         if (!middlewarePassed)
-            return;
+            return true;
         // Return an error if the command is locked
         if (!dm && this.isLocked(command, message, args)) {
             const currentLock = this.getCurrentLock(command, message.guild);
             message.channel.send(currentLock.getError(lang, message, args));
-            return;
+            return true;
         }
         // Set up the command lock for this command if it exists
         const lock = command.lock;
@@ -177,6 +185,7 @@ class CommandDispatcher {
         }
         const dispatchEnd = Util_1.Util.now() - dispatchStart;
         this._client.emit('command', command.name, args, dispatchEnd, message);
+        return true;
     }
     /**
      * Return whether or not the given command is locked, either directly

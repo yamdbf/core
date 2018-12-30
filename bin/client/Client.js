@@ -452,6 +452,12 @@ class Client extends Discord.Client {
      * @param {external:Message} message Message that triggered the unknown command
      */
     /**
+     * Emitted whenever a message is received that does not contain a command or unknown command
+     * @memberof Client
+     * @event event:noCommand
+     * @param {external:Message} message Message that did not contain a command or unknown command
+     */
+    /**
      * Emitted whenever a user is blacklisted
      * @memberof Client
      * @event event:blacklistAdd
