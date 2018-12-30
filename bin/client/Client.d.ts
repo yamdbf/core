@@ -191,6 +191,7 @@ export declare class Client extends Discord.Client {
     on(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
     on(event: string, listener: Function): this;
     on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
+    on(event: 'unknownCommand', listener: (name: string, args: any[], message: Message) => void): this;
     on(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
     on(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
     on(event: 'pause', listener: () => void): this;
@@ -228,6 +229,7 @@ export declare class Client extends Discord.Client {
     once(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
     once(event: string, listener: Function): this;
     once(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
+    once(event: 'unknownCommand', listener: (name: string, args: any[], message: Message) => void): this;
     once(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
     once(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
     once(event: 'pause', listener: () => void): this;
