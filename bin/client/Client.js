@@ -223,6 +223,12 @@ class Client extends Discord.Client {
     }
     //#region Event handlers
     async __onReadyEvent() {
+        // Set default owner (OAuth Application owner) if none exists
+        if (this.owner.length < 1) {
+            const app = await this.fetchApplication();
+            if (typeof app.owner !== 'undefined')
+                this.owner[0] = app.owner.id;
+        }
         await this.storage.init();
         // Load defaultGuildSettings into storage the first time the client is run
         if (!await this.storage.exists('defaultGuildSettings'))
