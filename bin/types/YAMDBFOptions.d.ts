@@ -3,7 +3,7 @@
  * passed to a Client on construction
  * @property {string} [token] Token needed to connect the Client to Discord
  * @property {string[]} [owner=[]] Can also be a single string<br>See: {@link Client#owner}
- * @property {string} [provider] See: {@link Client#provider}
+ * @property {StorageProviderConstructor} [provider] See: {@link Client#provider}
  * @property {string} [commandsDir] See: {@link Client#commandsDir}
  * @property {string} [localeDir] See: {@link Client#localeDir}
  * @property {string} [defaultLang] See: {@link Client#defaultLang}
