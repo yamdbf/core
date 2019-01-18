@@ -3803,7 +3803,7 @@
                 },
                 {
                     "name": "provider",
-                    "type": "string",
+                    "type": "StorageProviderConstructor",
                     "description": "<p>See: {@link Client#provider}</p>",
                     "default": "",
                     "optional": true,
