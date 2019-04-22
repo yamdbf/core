@@ -66,7 +66,7 @@ export class CompactModeHelper
 			const buttonIdentifier: string = `${reaction.message.id}:${emojiIdentifier}`;
 
 			if (!(buttonIdentifier in this._buttons)) return;
-			if (user.id !== reaction.message.author.id) return;
+			if (user.id !== reaction.message.author!.id) return;
 
 			const button: SingleUseButton = this._buttons[buttonIdentifier];
 
@@ -134,7 +134,7 @@ export class CompactModeHelper
 			try
 			{
 				const clientUser: User = CompactModeHelper._instance._client.user!;
-				clientMember = message.guild.members.get(clientUser.id) || await message.guild.members.fetch(clientUser);
+				clientMember = message.guild!.members.get(clientUser.id) || await message.guild!.members.fetch(clientUser);
 			}
 			catch { invokeImmediately = true; }
 		}

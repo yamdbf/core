@@ -77,7 +77,7 @@ export class RateLimiter
 	 */
 	public get(message: Message, userOverride?: User): RateLimit
 	{
-		const user: User = userOverride ? userOverride : message.author;
+		const user: User = userOverride ? userOverride : message.author!;
 		if (this._isGlobal(message))
 		{
 			if (!this._globalLimits.has(user.id))
