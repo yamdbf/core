@@ -27,14 +27,14 @@ export default class extends Command
 	{
 		if (action === 'add')
 		{
-			if (user.id === message.author.id)
+			if (user.id === message.author!.id)
 				return message.channel.send(res.CMD_BLACKLIST_ERR_NOSELF());
 
 			if (user.bot) return message.channel.send(res.CMD_BLACKLIST_ERR_NOBOT());
 
 			if (global === 'global')
 			{
-				if (!this.client.isOwner(message.author))
+				if (!this.client.isOwner(message.author!))
 					return message.channel.send(res.CMD_BLACKLIST_ERR_OWNERONLY());
 
 				const globalBlacklist: any = await this.client.storage.get('blacklist') || {};
@@ -65,7 +65,7 @@ export default class extends Command
 		{
 			if (global === 'global')
 			{
-				if (!this.client.isOwner(message.author))
+				if (!this.client.isOwner(message.author!))
 					return message.channel.send(res.CMD_WHITELIST_ERR_OWNERONLY());
 
 				const globalBlacklist: any = await this.client.storage.get('blacklist') || {};

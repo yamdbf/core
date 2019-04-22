@@ -49,9 +49,10 @@ export class RateLimitManager
 	{
 		let rateLimit: RateLimit = Util.getNestedValue(this._ratelimits, [...descriptors, limit]);
 		if (rateLimit) return rateLimit;
-		let parsedLimit: [number, number] = Util.parseRateLimit(limit);
-		rateLimit = new RateLimit(parsedLimit);
+
+		rateLimit = new RateLimit(Util.parseRateLimit(limit));
 		Util.assignNestedValue(this._ratelimits, [...descriptors, limit], rateLimit);
+
 		return rateLimit;
 	}
 

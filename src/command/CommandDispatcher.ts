@@ -37,7 +37,7 @@ export class CommandDispatcher
 			this._client.on('message', async message => {
 				if (this._ready)
 				{
-					const wasCommandCalled: boolean = await this.handleMessage(message);
+					const wasCommandCalled: boolean = await this.handleMessage(message as Message);
 					if (!wasCommandCalled) this._client.emit('noCommand', message);
 				}
 			});
@@ -59,6 +59,9 @@ export class CommandDispatcher
 	{
 		const dispatchStart: number = Util.now();
 		const dm: boolean = message.channel.type !== 'text';
+
+		// Dismiss messages with no author
+		if (!message.author) return false;
 
 		// Dismiss messages from bots
 		if (message.author.bot) return false;
@@ -214,7 +217,7 @@ export class CommandDispatcher
 			&& typeof commandResult !== 'undefined'
 			&& !(commandResult instanceof Array)
 			&& !(commandResult instanceof DMessage))
-			commandResult = await message.channel.send(commandResult as string);
+			commandResult = await message.channel.send(commandResult as string) as CommandResult;
 
 		// commandResult = Util.flattenArray([<Message | Message[]> commandResult]);
 		// TODO: Store command result information for command editing
@@ -280,7 +283,7 @@ export class CommandDispatcher
 	{
 		const storage: GuildStorage | null = !dm ? this._client.storage.guilds.get(message.guild.id)! : null;
 
-		if (command.ownerOnly && !this._client.isOwner(message.author)) return false;
+		if (command.ownerOnly && !this._client.isOwner(message.author!)) return false;
 		if (!dm && (await storage!.settings.get('disabledGroups') || []).includes(command.group)) return false;
 		if (!this.passedRateLimiters(res, message, command)) return false;
 
@@ -323,10 +326,10 @@ export class CommandDispatcher
 			const manager: RateLimitManager = this._client.rateLimitManager;
 			const limit: string = command.ratelimit;
 			const identifier: string = command.ratelimit ? command.name : 'global';
-			const descriptors: string[] = [message.author.id, identifier];
+			const descriptors: string[] = [message.author!.id, identifier];
 
 			if (!(limit && !manager.call(limit, ...descriptors)) && this._client.ratelimit)
-				manager.call(this._client.ratelimit, message.author.id, 'global');
+				manager.call(this._client.ratelimit, message.author!.id, 'global');
 		}
 
 		return passedAllLimiters;
@@ -344,7 +347,7 @@ export class CommandDispatcher
 		if (!limit) return false;
 
 		const identifier: string = command.ratelimit ? !global ? command.name : 'global' : 'global';
-		const descriptors: string[] = [message.author.id, identifier];
+		const descriptors: string[] = [message.author!.id, identifier];
 		const rateLimit: RateLimit = manager.get(limit, ...descriptors);
 		if (!rateLimit.isLimited) return false;
 
@@ -352,7 +355,7 @@ export class CommandDispatcher
 		{
 			const globalLimitString: string = this._client.ratelimit;
 			const globalLimit: RateLimit | null = globalLimitString
-				? manager.get(globalLimitString, message.author.id, 'global')
+				? manager.get(globalLimitString, message.author!.id, 'global')
 				: null;
 			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return true;
 
@@ -383,7 +386,7 @@ export class CommandDispatcher
 	private checkCallerPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.callerPermissions.filter(a =>
-			!(message.channel as TextChannel).permissionsFor(message.author)!.has(a));
+			!(message.channel as TextChannel).permissionsFor(message.author!)!.has(a));
 	}
 
 	/**
@@ -399,7 +402,7 @@ export class CommandDispatcher
 		if (!limitedCommands[command.name]) return true;
 		if (limitedCommands[command.name].length === 0) return true;
 
-		return message.member.roles.filter(role =>
+		return message.member!.roles.filter(role =>
 			limitedCommands[command.name].includes(role.id)).size > 0;
 	}
 
@@ -411,7 +414,7 @@ export class CommandDispatcher
 	{
 		return dm
 			|| command.roles.length === 0
-			|| message.member.roles.filter(role =>
+			|| message.member!.roles.filter(role =>
 				command.roles.includes(role.name)).size > 0;
 	}
 

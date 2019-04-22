@@ -54,7 +54,7 @@ export class CommandLock
 	// @ts-ignore - Args will be passed by the framework regardless
 	public lock(message: Message, args: any[]): void
 	{
-		this._locks[message.guild.id] = true;
+		this._locks[message.guild!.id] = true;
 	}
 
 	/**
@@ -66,7 +66,7 @@ export class CommandLock
 	// @ts-ignore - Args will be passed by the framework regardless
 	public isLocked(message: Message, args: any[]): boolean
 	{
-		return this._locks[message.guild.id] || false;
+		return this._locks[message.guild!.id] || false;
 	}
 
 	/**
@@ -79,7 +79,7 @@ export class CommandLock
 	// @ts-ignore - Args will be passed by the framework regardless
 	public free(message: Message, args: any[]): void
 	{
-		delete this._locks[message.guild.id];
+		delete this._locks[message.guild!.id];
 	}
 
 	/**

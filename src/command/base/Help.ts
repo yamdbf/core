@@ -39,7 +39,7 @@ export default class extends Command
 		if (!commandName)
 		{
 			const usableCommands: Collection<string, Command> = this.client.commands
-				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
+				.filter(c => !(!this.client.isOwner(message.author!) && c.ownerOnly))
 				.filter(c => !c.hidden && !c.disabled);
 
 			const widest: number = usableCommands
@@ -79,7 +79,7 @@ export default class extends Command
 		else
 		{
 			command = this.client.commands
-				.filter(c => !c.disabled && !(!this.client.isOwner(message.author) && c.ownerOnly))
+				.filter(c => !c.disabled && !(!this.client.isOwner(message.author!) && c.ownerOnly))
 				.find(c => c.name === commandName || c.aliases.includes(commandName));
 
 			if (!command) output = res.CMD_HELP_UNKNOWN_COMMAND();
@@ -108,7 +108,7 @@ export default class extends Command
 		try
 		{
 			if (!this.client.dmHelp) await this.respond(message, '', { embed });
-			else await message.author.send({ embed });
+			else await message.author!.send({ embed });
 
 			if (!dm && this.client.dmHelp)
 			{
