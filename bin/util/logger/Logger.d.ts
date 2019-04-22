@@ -21,7 +21,7 @@ export declare class Logger {
      * in a shard process
      * @internal
      */
-    static _shard: number;
+    static _shard: string;
     private constructor();
     /**
      * `LogLevel.NONE` enum shortcut
