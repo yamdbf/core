@@ -64,7 +64,7 @@ export class Logger
 	 * in a shard process
 	 * @internal
 	 */
-	public static _shard: number;
+	public static _shard: string;
 
 	private constructor()
 	{
@@ -105,7 +105,7 @@ export class Logger
 			[LogType.DEBUG]: createWrapper(colors.magenta)
 		};
 
-		const zeroPad: (n: number) => string = n => `0${n}`.slice(-2);
+		const zeroPad: (n: number | string) => string = n => `0${n}`.slice(-2);
 		const shard: () => string = () => {
 			const isSharded: boolean = typeof Logger._shard !== 'undefined';
 			const shardNum: string = (Logger._shard || 0) &lt; 10 ? zeroPad(Logger._shard || 0) : Logger._shard.toString();
