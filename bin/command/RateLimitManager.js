@@ -43,8 +43,7 @@ class RateLimitManager {
         let rateLimit = Util_1.Util.getNestedValue(this._ratelimits, [...descriptors, limit]);
         if (rateLimit)
             return rateLimit;
-        let parsedLimit = Util_1.Util.parseRateLimit(limit);
-        rateLimit = new RateLimit_1.RateLimit(parsedLimit);
+        rateLimit = new RateLimit_1.RateLimit(Util_1.Util.parseRateLimit(limit));
         Util_1.Util.assignNestedValue(this._ratelimits, [...descriptors, limit], rateLimit);
         return rateLimit;
     }

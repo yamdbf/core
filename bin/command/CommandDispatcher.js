@@ -45,6 +45,9 @@ class CommandDispatcher {
     async handleMessage(message) {
         const dispatchStart = Util_1.Util.now();
         const dm = message.channel.type !== 'text';
+        // Dismiss messages with no author
+        if (!message.author)
+            return false;
         // Dismiss messages from bots
         if (message.author.bot)
             return false;

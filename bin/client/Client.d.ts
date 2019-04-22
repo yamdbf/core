@@ -12,6 +12,7 @@ import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { BaseCommandName } from '../types/BaseCommandName';
 import { PluginLoader } from './PluginLoader';
 import { ResolverConstructor } from '../types/ResolverConstructor';
+import { Message as YAMDBFMessage } from '../types/Message';
 /**
  * The YAMDBF Client through which you can access [storage]{@link Client#storage}
  * and any of the properties available on a typical Discord.js Client instance
@@ -44,7 +45,7 @@ export declare class Client extends Discord.Client {
     readonly commands: CommandRegistry<this>;
     readonly rateLimitManager: RateLimitManager;
     readonly resolvers: ResolverLoader;
-    readonly argsParser: (input: string, command?: Command, message?: Message) => string[];
+    readonly argsParser: (input: string, command?: Command, message?: YAMDBFMessage) => string[];
     readonly buttons: {
         [key: string]: string;
     };
