@@ -26,7 +26,7 @@ export class Logger
 	 * in a shard process
 	 * @internal
 	 */
-	public static _shard: number;
+	// public static _shard: number;
 
 	private constructor()
 	{
@@ -68,12 +68,12 @@ export class Logger
 		};
 
 		const zeroPad: (n: number) => string = n => `0${n}`.slice(-2);
-		const shard: () => string = () => {
-			const isSharded: boolean = typeof Logger._shard !== 'undefined';
-			const shardNum: string = (Logger._shard || 0) < 10 ? zeroPad(Logger._shard || 0) : Logger._shard.toString();
-			const shardTag: string = `[${wrapColor(colors.cyan, `SHARD_${shardNum}`)}]`;
-			return isSharded ? shardTag : '';
-		};
+		// const shard: () => string = () => {
+		// 	const isSharded: boolean = typeof Logger._shard !== 'undefined';
+		// 	const shardNum: string = (Logger._shard || 0) < 10 ? zeroPad(Logger._shard || 0) : Logger._shard.toString();
+		// 	const shardTag: string = `[${wrapColor(colors.cyan, `SHARD_${shardNum}`)}]`;
+		// 	return isSharded ? shardTag : '';
+		// };
 
 		const transport: TransportFunction = data => {
 			let { type, tag, text } = data;
@@ -86,7 +86,7 @@ export class Logger
 			type = typeColorWrappers[type](type);
 			tag = wrapColor(colors.cyan, tag);
 
-			process.stdout.write(`[${t}]${shard()}[${type}][${tag}]: ${text}\n`);
+			process.stdout.write(`[${t}]` /**${shard()}*/ + `[${type}][${tag}]: ${text}\n`);
 		};
 
 		this.addTransport({ transport });
