@@ -486,6 +486,7 @@ export class Lang
 					&& loadedScript.implicitReturnFunc)
 					result = loadedScript.implicitReturnFunc!(data, dataForwardProxy);
 
+				// Set the result to an empty string if the script returns nothing
 				if (typeof result === 'undefined')
 					result = '';
 
