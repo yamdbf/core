@@ -407,6 +407,8 @@ class Lang {
                 if (typeof result === 'undefined'
                     && loadedScript.implicitReturnFunc)
                     result = loadedScript.implicitReturnFunc(data, dataForwardProxy);
+                if (typeof result === 'undefined')
+                    result = '';
                 // If the script occupies its own line, follow script result with a line break
                 if ((new RegExp(`^{{! ${script} !}}[\\t ]*\\n`)).test(loadedScript.raw) && result !== '')
                     loadedString = loadedString.replace(`{{! ${script} !}}`, () => `${result}\n`);
