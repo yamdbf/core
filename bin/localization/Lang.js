@@ -407,6 +407,7 @@ class Lang {
                 if (typeof result === 'undefined'
                     && loadedScript.implicitReturnFunc)
                     result = loadedScript.implicitReturnFunc(data, dataForwardProxy);
+                // Set the result to an empty string if the script returns nothing
                 if (typeof result === 'undefined')
                     result = '';
                 // If the script occupies its own line, follow script result with a line break
