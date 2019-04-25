@@ -5,17 +5,20 @@ import { Database } from './Database';
 import * as Sequelize from 'sequelize';
 
 /**
- * Represents an entry in a `SequelizeProvider` db table
- * following the Model the provider uses
+ * Represents a Sequelize Model instance which represents a single
+ * db table entry from the table controlled by the `SequelizeProvider`.
  */
-type Entry = { key: string, value: string };
+interface Entry extends Sequelize.Model
+{
+	key: string;
+	value: string;
+}
 
 /**
- * Represents a Model entry returned from `<Sequelize>.findByPrimary()`.
- * Guaranteed to return a string in this representation because a
- * `StorageProvider` is guaranteed to only store, and thus retrieve, strings
+ * Represents a Model cast type that makes fixes some issues
+ * with Model methods that have `this` types declared
  */
-type ReturnedModel = { get(key: string): string };
+type SequelizeModel = (new () => Sequelize.Model) & typeof Sequelize.Model;
 
 export enum Dialect { Postgres, SQLite, MSSQL, MySQL }
 
@@ -24,7 +27,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 	return class extends StorageProvider implements IStorageProvider
 	{
 		private readonly _backend: Database;
-		private readonly _model: Sequelize.Model<object, object>;
+		private readonly _model: SequelizeModel;
 
 		public constructor(name: string)
 		{
@@ -34,13 +37,21 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			const seq: typeof Sequelize = require('sequelize');
 
 			this._backend = Database.instance(url, debug);
-			this._model = this._backend.db.define(name, {
+			this._model = class extends seq.Model {};
+
+			this._model.init(
+				{
 					key: { type: seq.STRING, allowNull: false, primaryKey: true },
 					value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect)
 						? seq.TEXT
 						: seq.TEXT('long')
 				},
-				{ timestamps: false, freezeTableName: true }
+				{
+					modelName: name,
+					timestamps: false,
+					freezeTableName: true,
+					sequelize: this._backend.db
+				}
 			);
 		}
 
@@ -60,10 +71,10 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 			if (typeof key !== 'string') throw new TypeError('Key must be a string');
 
-			const entry: ReturnedModel = await this._model.findByPrimary(key) as ReturnedModel;
+			const entry: Entry = await this._model.findByPk(key) as Entry;
 			if (entry === null) return;
 
-			return entry.get('value');
+			return entry.value;
 		}
 
 		public async set(key: string, value: string): Promise<void>
@@ -80,7 +91,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 		{
 			if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 			if (typeof key !== 'string') throw new TypeError('Key must be a string');
-			await this._model.destroy({ where: { key } });
+			await (this._model as SequelizeModel).destroy({ where: { key } });
 		}
 
 		public async clear(): Promise<void>

@@ -34,7 +34,7 @@ export class Database
 		this._url = url;
 
 		// Lazy load sequelize
-		const seq: typeof Sequelize = require('sequelize');
+		const seq: typeof Sequelize.Sequelize = require('sequelize').Sequelize;
 		const logging: (...args: any[]) => void =
 			(...args) => { if (debug) this._logger.debug(args[0], ...args.slice(1)); };
 
