@@ -16,12 +16,19 @@ function SequelizeProvider(url, dialect, debug) {
             // Lazy load sequelize
             const seq = require('sequelize');
             this._backend = Database_1.Database.instance(url, debug);
-            this._model = this._backend.db.define(name, {
+            this._model = class extends seq.Model {
+            };
+            this._model.init({
                 key: { type: seq.STRING, allowNull: false, primaryKey: true },
                 value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect)
                     ? seq.TEXT
                     : seq.TEXT('long')
-            }, { timestamps: false, freezeTableName: true });
+            }, {
+                modelName: name,
+                timestamps: false,
+                freezeTableName: true,
+                sequelize: this._backend.db
+            });
         }
         async init() {
             await this._backend.init();
@@ -35,10 +42,10 @@ function SequelizeProvider(url, dialect, debug) {
                 throw new TypeError('Key must be provided');
             if (typeof key !== 'string')
                 throw new TypeError('Key must be a string');
-            const entry = await this._model.findByPrimary(key);
+            const entry = await this._model.findByPk(key);
             if (entry === null)
                 return;
-            return entry.get('value');
+            return entry.value;
         }
         async set(key, value) {
             if (typeof key === 'undefined')

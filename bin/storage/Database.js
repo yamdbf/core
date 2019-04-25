@@ -29,7 +29,7 @@ class Database {
         Database._instance = this;
         this._url = url;
         // Lazy load sequelize
-        const seq = require('sequelize');
+        const seq = require('sequelize').Sequelize;
         const logging = (...args) => { if (debug)
             this._logger.debug(args[0], ...args.slice(1)); };
         /**

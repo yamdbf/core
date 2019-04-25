@@ -45,11 +45,11 @@
     "source-map-support": "^0.5.0"
   },
   "peerDependencies": {
-    "mysql2": "1.4.2",
-    "pg": "6.4.2",
-    "sequelize": "4.2.1",
-    "sqlite3": "3.1.8",
-    "tedious": "2.0.0"
+    "mysql2": "1.6.5",
+    "pg": "7.10.0",
+    "sequelize": "5.7.5",
+    "sqlite3": "4.0.6",
+    "tedious": "6.1.1"
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",
@@ -67,6 +67,8 @@
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "zajrik/minami",
     "run-sequence": "^1.2.2",
+    "sequelize": "5.7.5",
+    "sqlite3": "^4.0.6",
     "ts-node": "^6.1.1",
     "tslint": "^5.4.3",
     "typescript": "^2.9.1"
