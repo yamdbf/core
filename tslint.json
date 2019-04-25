@@ -43,7 +43,7 @@
 			false
 		],
 		"variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
-		"interface-name": [true, "always-prefix"],
+		// "interface-name": [true, "always-prefix"],
 		"no-conditional-assignment": true,
 		"use-isnan": true,
 		"no-trailing-whitespace": true,
