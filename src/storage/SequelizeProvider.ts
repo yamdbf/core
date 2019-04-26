@@ -8,7 +8,7 @@ import * as Sequelize from 'sequelize';
  * Represents a Sequelize Model instance which represents a single
  * db table entry from the table controlled by the `SequelizeProvider`.
  */
-interface Entry extends Sequelize.Model
+interface StorageEntry extends Sequelize.Model
 {
 	key: string;
 	value: string;
@@ -63,7 +63,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 
 		public async keys(): Promise<string[]>
 		{
-			return (await this._model.findAll() as Entry[]).map(r => r.key);
+			return (await this._model.findAll() as StorageEntry[]).map(r => r.key);
 		}
 
 		public async get(key: string): Promise<string | undefined>
@@ -71,7 +71,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			if (typeof key === 'undefined') throw new TypeError('Key must be provided');
 			if (typeof key !== 'string') throw new TypeError('Key must be a string');
 
-			const entry: Entry = await this._model.findByPk(key) as Entry;
+			const entry: StorageEntry = await this._model.findByPk(key) as StorageEntry;
 			if (entry === null) return;
 
 			return entry.value;
