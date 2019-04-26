@@ -80,7 +80,7 @@ export default class extends Command
 		{
 			command = this.client.commands
 				.filter(c => !c.disabled && !(!this.client.isOwner(message.author!) && c.ownerOnly))
-				.find(c => c.name === commandName || c.aliases.includes(commandName));
+				.find(c => c.name === commandName || c.aliases.includes(commandName))!;
 
 			if (!command) output = res.CMD_HELP_UNKNOWN_COMMAND();
 			else

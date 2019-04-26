@@ -107,7 +107,7 @@ export class CommandRegistry<
 		for (const command of this.values())
 			for (const alias of command.aliases)
 			{
-				const duplicate: V = this.filter(c => c !== command).find(c => c.aliases.includes(alias));
+				const duplicate: V = this.filter(c => c !== command).find(c => c.aliases.includes(alias))!;
 				const name: string = command.name;
 
 				if (!duplicate) continue;
