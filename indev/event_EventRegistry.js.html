@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Collection - Documentation</title>
+    <title>event/EventRegistry.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,95 +33,56 @@
 
 
 
-
-<section>
-
-<header>
-	
     
-        <h2>
-        Collection
-        </h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Event } from './Event';
+import { Client } from '../client/Client';
+import { EventDispatcher } from './EventDispatcher';
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>See: <a href="https://discord.js.org/#/docs/main/stable/class/Collection">https://discord.js.org/#/docs/main/stable/class/Collection</a></p></div>
-        
+/**
+ * Class for registering Event handlers
+ * @private
+ */
+export class EventRegistry
+{
+	private readonly _dispatcher: EventDispatcher;
 
-        
+	public events!: { [event: string]: Function[] };
 
+	public constructor(client: Client)
+	{
+		this._dispatcher = new EventDispatcher(client, this);
+		this.clearRegisteredEvents();
+	}
 
-<dl class="details">
+	/**
+	 * Clear all registered events registered with the registry and dispatcher
+	 */
+	public clearRegisteredEvents(): void
+	{
+		this.events = {};
+		this._dispatcher.clearListenedEvents();
+	}
 
-    
+	/**
+	 * Register the given Event instance with the registry and dispatcher
+	 */
+	public register(event: Event): void
+	{
+		const eventName: string = event.name;
 
-    
+		if (typeof this.events[eventName] === 'undefined')
+			this.events[eventName] = [];
 
-    
+		this.events[eventName].push((...args: any[]) => event.action(...args));
+		this._dispatcher.listen(eventName);
+	}
+}
+</code></pre>
+        </article>
+    </section>
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/index.ts#L93">index.ts, Line 93</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 

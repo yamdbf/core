@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Collection - Documentation</title>
+    <title>event/EventDispatcher.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,95 +33,72 @@
 
 
 
-
-<section>
-
-<header>
-	
     
-        <h2>
-        Collection
-        </h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Client } from '../client/Client';
+import { EventRegistry } from './EventRegistry';
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>See: <a href="https://discord.js.org/#/docs/main/stable/class/Collection">https://discord.js.org/#/docs/main/stable/class/Collection</a></p></div>
-        
+/**
+ * Registers event handlers with the YAMDBF Client and handles
+ * the creation of dispatch functions for those events
+ * @private
+ */
+export class EventDispatcher
+{
+	private _client: Client;
+	private _registry: EventRegistry;
+	private _listenedEvents: string[];
+	private _listenedEventFns: { [event: string]: ((...args: any[]) => void)[] };
 
-        
+	public constructor(client: Client, registry: EventRegistry)
+	{
+		this._client = client;
+		this._registry = registry;
+		this._listenedEvents = [];
+		this._listenedEventFns = {};
+	}
 
+	/**
+	 * Clear all events that currently have registered listeners
+	 */
+	public clearListenedEvents(): void
+	{
+		this._listenedEvents = [];
+		for (const event in this._listenedEventFns)
+		{
+			for (const fn of this._listenedEventFns[event])
+				this._client.removeListener(event, fn);
 
-<dl class="details">
+			delete this._listenedEventFns[event];
+		}
+	}
 
-    
+	/**
+	 * Begin listening to the given event, dispatching events to the handlers
+	 * stored in the registry for the given event
+	 */
+	public listen(event: string): void
+	{
+		if (this._listenedEvents.includes(event)) return;
+		if (typeof this._listenedEventFns[event] === 'undefined')
+			this._listenedEventFns[event] = [];
 
-    
+		const eventFn: (...args: any[]) => void = (...args) => {
+			for (const e of this._registry.events[event])
+				e(...args);
+		};
 
-    
+		this._listenedEvents.push(event);
+		this._listenedEventFns[event].push(eventFn);
 
-    
+		this._client.on(event, eventFn);
+	}
+}
+</code></pre>
+        </article>
+    </section>
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/index.ts#L93">index.ts, Line 93</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 

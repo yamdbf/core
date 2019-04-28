@@ -56,11 +56,26 @@
                     }
                 },
                 {
+                    "name": "eventsDir",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Directory to find Event class files. Optional\nif client is passive.<br>\n<strong>See:</strong> {@link Client#passive}</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
                     "name": "localeDir",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Directory to find custom localization files</p>",
-                    "type": ""
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
                 },
                 {
                     "name": "defaultLang",
@@ -158,6 +173,17 @@
                     "type": {
                         "names": [
                             "RateLimitManager"
+                        ]
+                    }
+                },
+                {
+                    "name": "eventLoader",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The EventLoader the client uses to load events. The client will load events\nfrom the <code>eventsdir</code> directory passed in your <code>YAMDBFOptions</code>.</p>\n<p>Can be used by plugins to register directories to load custom event handlers from</p>",
+                    "type": {
+                        "names": [
+                            "EventLoader"
                         ]
                     }
                 },
@@ -460,6 +486,14 @@
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Reload custom commands. Used internally by the <code>reload</code> command</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "_reloadEvents",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Reload Events from all registered event source directories</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -2115,6 +2149,200 @@
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Load resolvers from _base and client._customResolvers.\nUsed internally</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "Event",
+            "description": "<p>Event class to extend when writing your own custom event handlers</p>",
+            "extends": [],
+            "access": "",
+            "virtual": true,
+            "fires": "",
+            "constructor": {
+                "name": "Event",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "description": "<p>Name of the Client event this event handler\n                          will handle</p>",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "action",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Method to be implemented that will be executed whenever the event this handler\nis for is emitted by the Client</p>",
+                    "parameters": [
+                        {
+                            "name": "args",
+                            "type": "Array.<any>",
+                            "description": "<p>The args your event handler will be receiving\n                         from the event it handles</p>",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "_register",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Receive the client instance and save it</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "EventDispatcher",
+            "description": "<p>Registers event handlers with the YAMDBF Client and handles\nthe creation of dispatch functions for those events</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "EventDispatcher",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "clearListenedEvents",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Clear all events that currently have registered listeners</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "listen",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Begin listening to the given event, dispatching events to the handlers\nstored in the registry for the given event</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "EventLoader",
+            "description": "<p>Handles loading and registering Event class event handlers from\nregistered source directories.</p>",
+            "extends": [],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "EventLoader",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "addSourceDir",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Registers a source directory to load Event class event handlers from.\nDoes nothing if the directory is already registered. Events will be loaded\nby the Client after the <code>continue</code> event is emitted at runtime</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "void",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "hasSources",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Returns whether or not the EventLoader has any registered source directories</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "boolean",
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "loadFromSources",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Loads or reloads all Events from all registered sources. Allows for hot-reloading</p>",
+                    "parameters": [],
+                    "examples": [],
+                    "returns": {
+                        "type": "number",
+                        "description": "<p>The total number of loaded or reloaded events</p>"
+                    }
+                },
+                {
+                    "name": "_clearEvents",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Unregisters and clears all loaded Event class event handlers</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "_loadEventsFrom",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Load events from the given directory</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "_findEventClasses",
+                    "access": "private",
+                    "virtual": false,
+                    "description": "<p>Recursively search for Event classes within the given object</p>",
+                    "parameters": [],
+                    "examples": []
+                }
+            ]
+        },
+        {
+            "name": "EventRegistry",
+            "description": "<p>Class for registering Event handlers</p>",
+            "extends": [],
+            "access": "private",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "EventRegistry",
+                "description": "",
+                "parameters": [],
+                "examples": []
+            },
+            "functions": [
+                {
+                    "name": "clearRegisteredEvents",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Clear all registered events registered with the registry and dispatcher</p>",
+                    "parameters": [],
+                    "examples": []
+                },
+                {
+                    "name": "register",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>Register the given Event instance with the registry and dispatcher</p>",
                     "parameters": [],
                     "examples": []
                 }
@@ -3813,6 +4041,14 @@
                     "name": "commandsDir",
                     "type": "string",
                     "description": "<p>See: {@link Client#commandsDir}</p>",
+                    "default": "",
+                    "optional": true,
+                    "nullable": ""
+                },
+                {
+                    "name": "eventsDir",
+                    "type": "string",
+                    "description": "<p>See: {@link Client#eventsDir}</p>",
                     "default": "",
                     "optional": true,
                     "nullable": ""

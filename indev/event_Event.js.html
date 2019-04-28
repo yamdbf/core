@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Collection - Documentation</title>
+    <title>event/Event.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,95 +33,53 @@
 
 
 
-
-<section>
-
-<header>
-	
     
-        <h2>
-        Collection
-        </h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Client } from '../client/Client';
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>See: <a href="https://discord.js.org/#/docs/main/stable/class/Collection">https://discord.js.org/#/docs/main/stable/class/Collection</a></p></div>
-        
+/**
+ * Method to be implemented that will be executed whenever the event this handler
+ * is for is emitted by the Client
+ * @abstact
+ * @method Event#action
+ * @param {any[]} args - The args your event handler will be receiving
+ * 						 from the event it handles
+ * @returns {void}
+ */
 
-        
+/**
+ * Event class to extend when writing your own custom event handlers
+ * @abstract
+ * @param {string} name - Name of the Client event this event handler
+ * 						  will handle
+ */
+export abstract class Event&lt;T extends Client = Client>
+{
+	public name: string;
+	public client!: T;
 
+	public constructor(name: string)
+	{
+		this.name = name;
+	}
 
-<dl class="details">
+	/**
+	 * Receive the client instance and save it
+	 * @private
+	 */
+	public _register(client: T): void
+	{
+		this.client = client;
+	}
 
-    
+	// Docs above class
+	public abstract action(...args: any[]): void;
+}
+</code></pre>
+        </article>
+    </section>
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/index.ts#L93">index.ts, Line 93</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 

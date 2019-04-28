@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Collection - Documentation</title>
+    <title>EventLoader - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -40,8 +40,11 @@
 	
     
         <h2>
-        Collection
+        EventLoader
         </h2>
+        
+            <div class="class-description"><p>Handles loading and registering Event class event handlers from
+registered source directories.</p></div>
         
     
 </header>
@@ -50,10 +53,30 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>See: <a href="https://discord.js.org/#/docs/main/stable/class/Collection">https://discord.js.org/#/docs/main/stable/class/Collection</a></p></div>
-        
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="EventLoader">
+		<span class="type-signature"></span>new <a href='#EventLoader' style='color: black'>EventLoader</a><span class="signature">()</span><span class="type-signature"></span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+
+
+
+
+
+
+
+
+
+
 
 
 <dl class="details">
@@ -86,7 +109,7 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
 		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/index.ts#L93">index.ts, Line 93</a>
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/event/EventLoader.ts#L13">event/EventLoader.ts, Line 13</a>
     </li></ul></dd>
     
 
@@ -98,7 +121,21 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
     
     </div>
 
@@ -116,6 +153,329 @@
 
     
 
+    
+	
+        <h3 class="subsection-title">Methods</h3>
+	
+        
+            
+
+    
+
+    <h4 class="name" id="addSourceDir">
+		<span class="type-signature"></span>.<a href='#addSourceDir' style='color: black'>addSourceDir</a><span class="signature">()</span><span class="type-signature"> &rarr; void</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Registers a source directory to load Event class event handlers from.
+Does nothing if the directory is already registered. Events will be loaded
+by the Client after the <code>continue</code> event is emitted at runtime</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/event/EventLoader.ts#L34">event/EventLoader.ts, Line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>void</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id="hasSources">
+		<span class="type-signature"></span>.<a href='#hasSources' style='color: black'>hasSources</a><span class="signature">()</span><span class="type-signature"> &rarr; boolean</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Returns whether or not the EventLoader has any registered source directories</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/event/EventLoader.ts#L45">event/EventLoader.ts, Line 45</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>boolean</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
+            
+
+    
+
+    <h4 class="name" id="loadFromSources">
+		<span class="type-signature"></span>.<a href='#loadFromSources' style='color: black'>loadFromSources</a><span class="signature">()</span><span class="type-signature"> &rarr; number</span>
+	</h4>
+
+    
+
+
+<div style="border-left: solid #e6e6e6; padding-left: 10px">
+
+<div class="description">
+    <p>Loads or reloads all Events from all registered sources. Allows for hot-reloading</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+		
+        <a href="https://github.com/zajrik/yamdbf/blob/master/src/event/EventLoader.ts#L54">event/EventLoader.ts, Line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		<b>Returns:</b>
+	
+
+        
+<div class="param-desc">
+    <p>The total number of loaded or reloaded events</p>
+</div>
+
+
+
+<span class="param-type">
+	<dd>
+<span class="param-type"><dd>number</dd></span>
+
+
+</dd>
+</span>
+
+
+    
+
+
+</div>
+
+        
     
 
     

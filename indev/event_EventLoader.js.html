@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Collection - Documentation</title>
+    <title>event/EventLoader.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -33,95 +33,161 @@
 
 
 
-
-<section>
-
-<header>
-	
     
-        <h2>
-        Collection
-        </h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import * as glob from 'glob';
+import * as path from 'path';
+import { Event } from './Event';
+import { Util } from '../util/Util';
+import { Client } from '../client/Client';
+import { EventRegistry } from './EventRegistry';
+import { logger, Logger } from '../util/logger/Logger';
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description"><p>See: <a href="https://discord.js.org/#/docs/main/stable/class/Collection">https://discord.js.org/#/docs/main/stable/class/Collection</a></p></div>
-        
+/**
+ * Handles loading and registering Event class event handlers from
+ * registered source directories.
+ */
+export class EventLoader
+{
+	@logger('EventLoader')
+	private readonly _logger!: Logger;
+	private readonly _client: Client;
+	private readonly _sources: string[];
+	private readonly _registry: EventRegistry;
 
-        
+	public constructor(client: Client)
+	{
+		this._client = client;
+		this._sources = [];
+		this._registry = new EventRegistry(client);
+	}
 
+	/**
+	 * Registers a source directory to load Event class event handlers from.
+	 * Does nothing if the directory is already registered. Events will be loaded
+	 * by the Client after the `continue` event is emitted at runtime
+	 * @returns {void}
+	 */
+	public addSourceDir(dir: string): void
+	{
+		const resolvedDir = path.resolve(dir);
+		if (this._sources.includes(resolvedDir)) return;
+		this._sources.push(resolvedDir);
+	}
 
-<dl class="details">
+	/**
+	 * Returns whether or not the EventLoader has any registered source directories
+	 * @returns {boolean}
+	 */
+	public hasSources(): boolean
+	{
+		return this._sources.length > 0;
+	}
 
-    
+	/**
+	 * Loads or reloads all Events from all registered sources. Allows for hot-reloading
+	 * @returns {number} The total number of loaded or reloaded events
+	 */
+	public loadFromSources(): number
+	{
+		this._clearEvents();
 
-    
+		let loadedEvents: number = 0;
+		for (const source of this._sources)
+			loadedEvents += this._loadEventsFrom(source);
 
-    
+		return loadedEvents;
+	}
 
-    
+	/**
+	 * Unregisters and clears all loaded Event class event handlers
+	 * @private
+	 */
+	private _clearEvents(): void
+	{
+		this._registry.clearRegisteredEvents();
+	}
 
-    
+	/**
+	 * Load events from the given directory
+	 * @private
+	 */
+	private _loadEventsFrom(dir: string): number
+	{
+		// Glob all the javascript files in the directory
+		let eventFiles: string[] = glob.sync(`${dir}/**/*.js`);
 
-    
+		// Glob typescript files if `tsNode` is enabled
+		if (this._client.tsNode)
+		{
+			eventFiles.push(...glob.sync(`${dir}/**/!(*.d).ts`));
+			const filteredEventFiles = eventFiles.filter(f => {
+				const file: string = f.match(/\/([^\/]+?)\.[j|t]s$/)![1];
+				if (f.endsWith('.ts')) return true;
+				if (f.endsWith('.js'))
+					return !eventFiles.find(cf => cf.endsWith(`${file}.ts`));
+			});
+			eventFiles = filteredEventFiles;
+		}
 
-    
+		const loadedEvents: Event[] = [];
+		this._logger.debug(`Loading events in: ${dir}`);
 
-    
+		// Load and instantiate every event from the globbed files
+		for (const file of eventFiles)
+		{
+			// Delete the cached event file for hot-reloading
+			delete require.cache[require.resolve(file)];
 
-    
+			const loadedFile: any = require(file);
+			const eventClasses: (new () => Event)[] = this._findEventClasses(loadedFile);
 
-    
+			if (eventClasses.length === 0)
+			{
+				this._logger.warn(`Failed to find Event class in file: ${file}`);
+				continue;
+			}
 
-    
+			for (const eventClass of eventClasses)
+			{
+				const eventInstance: Event = new eventClass();
 
-    
+				this._logger.info(`Loaded Event handler for event: ${eventInstance.name}`);
+				loadedEvents.push(eventInstance);
+			}
+		}
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-		
-        <a href="https://github.com/zajrik/yamdbf/blob/master/src/index.ts#L93">index.ts, Line 93</a>
-    </li></ul></dd>
-    
+		// Register all of the loaded events
+		for (const event of loadedEvents)
+			this._registry.register(event);
 
-    
+		return loadedEvents.length;
+	}
 
-    
+	/**
+	 * Recursively search for Event classes within the given object
+	 * @private
+	 */
+	private _findEventClasses(obj: any): (new () => Event)[]
+	{
+		const foundClasses: ((new () => Event) | (new () => Event)[])[] = [];
+		const keys: string[] = Object.keys(obj);
+		if (Event.prototype.isPrototypeOf(obj.prototype))
+			foundClasses.push(obj);
 
-    
-</dl>
+		else if (keys.length > 0)
+			for (const key of keys)
+				if (Event.prototype.isPrototypeOf(obj[key].prototype))
+					foundClasses.push(this._findEventClasses(obj[key]));
 
+		return Util.flattenArray(foundClasses);
+	}
+}
+</code></pre>
+        </article>
+    </section>
 
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 
