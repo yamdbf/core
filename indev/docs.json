@@ -2184,7 +2184,7 @@
                     "description": "<p>Method to be implemented that will be executed whenever the event this handler\nis for is emitted by the Client</p>",
                     "parameters": [
                         {
-                            "name": "args",
+                            "name": "...args",
                             "type": "Array.<any>",
                             "description": "<p>The args your event handler will be receiving\n                         from the event it handles</p>",
                             "default": "",
