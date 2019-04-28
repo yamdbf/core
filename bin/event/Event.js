@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * is for is emitted by the Client
  * @abstact
  * @method Event#action
- * @param {any[]} args - The args your event handler will be receiving
+ * @param {any[]} ...args - The args your event handler will be receiving
  * 						 from the event it handles
  * @returns {void}
  */

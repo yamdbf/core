@@ -4,7 +4,7 @@ import { Client } from '../client/Client';
  * is for is emitted by the Client
  * @abstact
  * @method Event#action
- * @param {any[]} args - The args your event handler will be receiving
+ * @param {any[]} ...args - The args your event handler will be receiving
  * 						 from the event it handles
  * @returns {void}
  */
