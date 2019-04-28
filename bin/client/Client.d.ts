@@ -13,6 +13,7 @@ import { BaseCommandName } from '../types/BaseCommandName';
 import { PluginLoader } from './PluginLoader';
 import { ResolverConstructor } from '../types/ResolverConstructor';
 import { Message as YAMDBFMessage } from '../types/Message';
+import { EventLoader } from '../event/EventLoader';
 /**
  * The YAMDBF Client through which you can access [storage]{@link Client#storage}
  * and any of the properties available on a typical Discord.js Client instance
@@ -29,6 +30,7 @@ export declare class Client extends Discord.Client {
     private readonly _dispatcher;
     private _ratelimit;
     readonly commandsDir: string | null;
+    readonly eventsDir: string | null;
     readonly localeDir: string | null;
     readonly owner: string[];
     readonly defaultLang: string;
@@ -44,6 +46,7 @@ export declare class Client extends Discord.Client {
     readonly storage: ClientStorage;
     readonly commands: CommandRegistry<this>;
     readonly rateLimitManager: RateLimitManager;
+    readonly eventLoader: EventLoader;
     readonly resolvers: ResolverLoader;
     readonly argsParser: (input: string, command?: Command, message?: YAMDBFMessage) => string[];
     readonly buttons: {
@@ -160,6 +163,11 @@ export declare class Client extends Discord.Client {
      * @private
      */
     _reloadCustomCommands(): number;
+    /**
+     * Reload Events from all registered event source directories
+     * @private
+     */
+    _reloadEvents(): number;
     on(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
     on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
     on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;

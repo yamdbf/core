@@ -24,6 +24,7 @@ const PluginLoader_1 = require("./PluginLoader");
 const Util_1 = require("../util/Util");
 const Time_1 = require("../util/Time");
 const CompactModeHelper_1 = require("../command/CompactModeHelper");
+const EventLoader_1 = require("../event/EventLoader");
 const { on, once, registerListeners } = ListenerUtil_1.ListenerUtil;
 /**
  * The YAMDBF Client through which you can access [storage]{@link Client#storage}
@@ -59,7 +60,15 @@ class Client extends Discord.Client {
          */
         this.commandsDir = options.commandsDir ? path.resolve(options.commandsDir) : null;
         /**
+         * Directory to find Event class files. Optional
+         * if client is passive.<br>
+         * **See:** {@link Client#passive}
+         * @type {string}
+         */
+        this.eventsDir = options.eventsDir ? path.resolve(options.eventsDir) : null;
+        /**
          * Directory to find custom localization files
+         * @type {string}
          */
         this.localeDir = options.localeDir ? path.resolve(options.localeDir) : null;
         /**
@@ -136,6 +145,14 @@ class Client extends Discord.Client {
          * @type {RateLimitManager}
          */
         this.rateLimitManager = new RateLimitManager_1.RateLimitManager();
+        /**
+         * The EventLoader the client uses to load events. The client will load events
+         * from the `eventsdir` directory passed in your `YAMDBFOptions`.
+         *
+         * Can be used by plugins to register directories to load custom event handlers from
+         * @type {EventLoader}
+         */
+        this.eventLoader = new EventLoader_1.EventLoader(this);
         // Set the logger level if provided
         if (typeof options.logLevel !== 'undefined')
             this._logger.setLogLevel(options.logLevel);
@@ -211,6 +228,8 @@ class Client extends Discord.Client {
         if (!this.passive) {
             this._commandLoader = new CommandLoader_1.CommandLoader(this);
             this._dispatcher = new CommandDispatcher_1.CommandDispatcher(this);
+            if (this.eventsDir)
+                this.eventLoader.addSourceDir(this.eventsDir);
             this._logger.info('Loading base commands...');
             this._commandLoader.loadCommandsFrom(path.join(__dirname, '../command/base'), true);
             // Disable setlang command if there is only one language
@@ -261,6 +280,10 @@ class Client extends Discord.Client {
             const commands = this.commands.size;
             const groups = this.commands.groups.length;
             this._logger.info(`Command dispatcher ready -- ${commands} commands in ${groups} groups`);
+            if (this.eventLoader.hasSources()) {
+                this._logger.info('Loading events from registered sources...');
+                this.eventLoader.loadFromSources();
+            }
         }
         if (typeof this.readyText !== 'undefined')
             this._logger.log(this.readyText);
@@ -433,6 +456,13 @@ class Client extends Discord.Client {
         if (!this.commandsDir)
             throw new Error('Client is missing `commandsDir`, cannot reload Commands');
         return this._commandLoader.loadCommandsFrom(this.commandsDir);
+    }
+    /**
+     * Reload Events from all registered event source directories
+     * @private
+     */
+    _reloadEvents() {
+        return this.eventLoader.loadFromSources();
     }
     /**
      * Emitted whenever a command is successfully called

@@ -1,4 +1,8 @@
 [CMD_RELOAD_SUCCESS]
-Reloaded {{ number }} command{{!
-	parseInt(args.number) === 1 ? '' : 's'
-!}}. ({{ time }} ms) -- Check the logger for relevant information.
+Reloaded {{ commandNumber }} command{{!
+	parseInt(args.commandNumber) === 1 ? '' : 's'
+!}}. ({{ commandTime }} ms)
+Reloaded {{ eventNumber }} event{{!
+	parseInt(args.eventNumber) === 1 ? '' : 's'
+!}}. ({{ eventTime }} ms)
+Check the logger for relevant information.
