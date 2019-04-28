@@ -6,7 +6,9 @@ import { Client } from '../client/Client';
  * @abstact
  * @method Event#action
  * @param {any[]} ...args - The args your event handler will be receiving
- * 						 from the event it handles
+ * 							from the event it handles. This can be any number
+ * 							of arguments and obviously they can be received
+ * 							individually or as a rest parameter without issue
  * @returns {void}
  */
 
@@ -14,7 +16,7 @@ import { Client } from '../client/Client';
  * Event class to extend when writing your own custom event handlers
  * @abstract
  * @param {string} name - Name of the Client event this event handler
- * 						  will handle
+ * 						  will handle when emitted
  */
 export abstract class Event<T extends Client = Client>
 {
