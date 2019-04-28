@@ -6,14 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @abstact
  * @method Event#action
  * @param {any[]} ...args - The args your event handler will be receiving
- * 						 from the event it handles
+ * 							from the event it handles. This can be any number
+ * 							of arguments and obviously they can be received
+ * 							individually or as a rest parameter without issue
  * @returns {void}
  */
 /**
  * Event class to extend when writing your own custom event handlers
  * @abstract
  * @param {string} name - Name of the Client event this event handler
- * 						  will handle
+ * 						  will handle when emitted
  */
 class Event {
     constructor(name) {
