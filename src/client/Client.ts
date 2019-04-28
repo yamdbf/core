@@ -47,6 +47,7 @@ import { Time } from '../util/Time';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Message as YAMDBFMessage } from '../types/Message';
 import { CompactModeHelper } from '../command/CompactModeHelper';
+import { EventLoader } from '../event/EventLoader';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -69,6 +70,7 @@ export class Client extends Discord.Client
 	private _ratelimit!: string;
 
 	public readonly commandsDir: string | null;
+	public readonly eventsDir: string | null;
 	public readonly localeDir: string | null;
 	public readonly owner: string[];
 	public readonly defaultLang: string;
@@ -84,6 +86,7 @@ export class Client extends Discord.Client
 	public readonly storage: ClientStorage;
 	public readonly commands: CommandRegistry<this>;
 	public readonly rateLimitManager: RateLimitManager;
+	public readonly eventLoader!: EventLoader;
 	public readonly resolvers: ResolverLoader;
 	public readonly argsParser: (input: string, command?: Command, message?: YAMDBFMessage) => string[];
 	public readonly buttons: { [key: string]: string };
@@ -125,7 +128,16 @@ export class Client extends Discord.Client
 		this.commandsDir = options.commandsDir ? path.resolve(options.commandsDir!) : null;
 
 		/**
+		 * Directory to find Event class files. Optional
+		 * if client is passive.<br>
+		 * **See:** {@link Client#passive}
+		 * @type {string}
+		 */
+		this.eventsDir = options.eventsDir ? path.resolve(options.eventsDir!) : null;
+
+		/**
 		 * Directory to find custom localization files
+		 * @type {string}
 		 */
 		this.localeDir = options.localeDir ? path.resolve(options.localeDir) : null;
 
@@ -211,6 +223,15 @@ export class Client extends Discord.Client
 		 * @type {RateLimitManager}
 		 */
 		this.rateLimitManager = new RateLimitManager();
+
+		/**
+		 * The EventLoader the client uses to load events. The client will load events
+		 * from the `eventsdir` directory passed in your `YAMDBFOptions`.
+		 *
+		 * Can be used by plugins to register directories to load custom event handlers from
+		 * @type {EventLoader}
+		 */
+		this.eventLoader = new EventLoader(this);
 
 		// Set the logger level if provided
 		if (typeof options.logLevel !== 'undefined')
@@ -304,6 +325,9 @@ export class Client extends Discord.Client
 			this._commandLoader = new CommandLoader(this);
 			this._dispatcher = new CommandDispatcher(this);
 
+			if (this.eventsDir)
+				this.eventLoader.addSourceDir(this.eventsDir);
+
 			this._logger.info('Loading base commands...');
 			this._commandLoader.loadCommandsFrom(path.join(__dirname, '../command/base'), true);
 
@@ -377,6 +401,12 @@ export class Client extends Discord.Client
 			const groups: number = this.commands.groups.length;
 			this._logger.info(
 				`Command dispatcher ready -- ${commands} commands in ${groups} groups` );
+
+			if (this.eventLoader.hasSources())
+			{
+				this._logger.info('Loading events from registered sources...');
+				this.eventLoader.loadFromSources();
+			}
 		}
 
 		if (typeof this.readyText !== 'undefined')
@@ -591,6 +621,15 @@ export class Client extends Discord.Client
 			throw new Error('Client is missing `commandsDir`, cannot reload Commands');
 
 		return this._commandLoader.loadCommandsFrom(this.commandsDir);
+	}
+
+	/**
+	 * Reload Events from all registered event source directories
+	 * @private
+	 */
+	public _reloadEvents(): number
+	{
+		return this.eventLoader.loadFromSources();
 	}
 
 //#region Discord.js on() events

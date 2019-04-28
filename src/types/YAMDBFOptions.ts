@@ -5,6 +5,7 @@
  * @property {string[]} [owner=[]] Can also be a single string<br>See: {@link Client#owner}
  * @property {StorageProviderConstructor} [provider] See: {@link Client#provider}
  * @property {string} [commandsDir] See: {@link Client#commandsDir}
+ * @property {string} [eventsDir] See: {@link Client#eventsDir}
  * @property {string} [localeDir] See: {@link Client#localeDir}
  * @property {string} [defaultLang] See: {@link Client#defaultLang}
  * @property {string} [statusText=null] See: {@link Client#statusText}
@@ -45,6 +46,7 @@ export type YAMDBFOptions = {
 	owner?: string | string[];
 	provider?: StorageProviderConstructor;
 	commandsDir?: string;
+	eventsDir?: string;
 	localeDir?: string;
 	defaultLang?: string;
 	statusText?: string;

@@ -9,7 +9,7 @@ import {
 	ResourceLoader,
 	// Middleware,
 	// CompactModeHelper
-} from '../../src';
+} from '../../bin';
 // import * as util from 'util';
 const {
 	// using,

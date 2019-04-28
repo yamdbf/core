@@ -14,6 +14,9 @@ export { CommandLoader } from './command/CommandLoader';
 export { CommandRegistry } from './command/CommandRegistry';
 export { CompactModeHelper } from './command/CompactModeHelper';
 
+export { Event } from './event/Event';
+export { EventLoader } from './event/EventLoader';
+
 export { ClientStorage } from './storage/ClientStorage';
 export { GuildStorage } from './storage/GuildStorage';
 export { GuildSettings } from './storage/GuildSettings';

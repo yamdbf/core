@@ -16,7 +16,7 @@ export default class extends Command
 	{
 		super({
 			name: 'reload',
-			desc: 'Reload all custom commands',
+			desc: 'Reload all custom commands and all events',
 			usage: '<prefix>reload',
 			ownerOnly: true
 		});
@@ -27,7 +27,7 @@ export default class extends Command
 	{
 		this._logger.log(`Reloading commands from: $${this.client.commandsDir}`);
 
-		const start: number = Util.now();
+		const commandStart: number = Util.now();
 
 		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
 		const reloaded: number = this.client._reloadCustomCommands();
@@ -41,9 +41,16 @@ export default class extends Command
 		// Re-disable previously disabled commands
 		for (const command of toDisable.values()) command.disable();
 
-		const end: number = Util.now();
-		const num: string = reloaded.toString();
-		const time: string = (end - start).toFixed(3);
-		return this.respond(message, res.CMD_RELOAD_SUCCESS({ number: num, time }));
+		const commandEnd: number = Util.now();
+		const commandNumber: string = reloaded.toString();
+
+		// Reload events
+		const eventStart: number = Util.now();
+		const eventNumber: string = this.client._reloadEvents().toString();
+		const eventEnd: number = Util.now();
+
+		const commandTime: string = (commandEnd - commandStart).toFixed(3);
+		const eventTime: string = (eventEnd - eventStart).toFixed(3);
+		return this.respond(message, res.CMD_RELOAD_SUCCESS({ commandNumber, commandTime, eventNumber, eventTime }));
 	}
 }

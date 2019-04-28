@@ -6,8 +6,8 @@ import {
 	ListenerUtil,
 	// Util,
 	Lang,
-	Providers
-} from '../src/';
+	Providers,
+} from '../bin/';
 // import TestCommand from './commands/test_command';
 import { TestPlugin } from './test_plugin';
 import { EvenNumberResolver } from './EvenNumberResolver';
@@ -26,6 +26,7 @@ class Test extends Client
 			statusText: 'Foo bar baz',
 			provider: Providers.SQLiteProvider('sqlite://./db.sqlite'),
 			commandsDir: './commands',
+			eventsDir: './events',
 			localeDir: './locale',
 			// defaultLang: 'al_bhed',
 			pause: true,
@@ -39,7 +40,7 @@ class Test extends Client
 			dmHelp: false,
 			compact: true,
 			buttons: { success: '274295184957898752' },
-			tsNode: true
+			// tsNode: true
 		});
 
 		Lang.setMetaValue('al_bhed', 'name', 'Al Bhed');
@@ -64,27 +65,25 @@ class Test extends Client
 	// }
 
 	@once('clientReady', 'foo', 1)
-	// @ts-ignore
-	private async _onClientReady(foo: string, bar: number): Promise<void>
+	public async _onClientReady(foo: string, bar: number): Promise<void>
 	{
 		// logger.debug('Test', foo, bar.toString());
-		await this.setDefaultSetting('foo', 'bar');
+		await this.setDefaultSetting(foo, bar);
 		this.on('command', (name, args, exec) => console.log(name, args, exec));
 	}
 
 	@on('unknownCommand')
-	// @ts-ignore
-	private _onUnknownCommand(name: string, args: any[]): void
+	public _onUnknownCommand(name: string, args: any[]): void
 	{
 		console.log('Unknown command:', name, args);
 	}
 
-	@on('noCommand')
-	// @ts-ignore
-	private _onNoCommand(message: Message): void
-	{
-		console.log('No command in message ', message.id);
-	}
+	// @on('noCommand')
+	// // @ts-ignore
+	// private _onNoCommand(message: Message): void
+	// {
+	// 	console.log('No command in message ', message.id);
+	// }
 }
 const test: Test = new Test();
 test.start();
