@@ -2168,7 +2168,7 @@
                     {
                         "name": "name",
                         "type": "string",
-                        "description": "<p>Name of the Client event this event handler\n                          will handle</p>",
+                        "description": "<p>Name of the Client event this event handler\n                          will handle when emitted</p>",
                         "default": "",
                         "optional": "",
                         "nullable": ""
@@ -2186,7 +2186,7 @@
                         {
                             "name": "...args",
                             "type": "Array.<any>",
-                            "description": "<p>The args your event handler will be receiving\n                         from the event it handles</p>",
+                            "description": "<p>The args your event handler will be receiving\n                            from the event it handles. This can be any number\n                            of arguments and obviously they can be received\n                            individually or as a rest parameter without issue</p>",
                             "default": "",
                             "optional": "",
                             "nullable": ""
