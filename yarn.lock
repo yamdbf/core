@@ -89,14 +89,14 @@
   integrity sha1-9eYLNuizWSrAR/QnWV3j8tZZK4Y=
 
 "@types/node@*":
-  version "11.13.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.7.tgz#85dbb71c510442d00c0631f99dae957ce44fd104"
-  integrity sha512-suFHr6hcA9mp8vFrZTgrmqW2ZU3mbWsryQtQlY/QvwTISCw7nw/j+bCQPPohqmskhmqa5wLNuMHTTsc+xf1MQg==
+  version "11.13.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.8.tgz#e5d71173c95533be9842b2c798978f095f912aab"
+  integrity sha512-szA3x/3miL90ZJxUCzx9haNbK5/zmPieGraZEe4WI+3srN0eGLiT22NXeMHmyhNEopn+IrxqMc7wdVwvPl8meg==
 
 "@types/node@^8.0.19":
-  version "8.10.46"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.46.tgz#12161db48a775e8c69c1cfff2be545610381056f"
-  integrity sha512-PfnRbk836fFs9T9QnZh0G1k9oC6YXCqIK3LX6vU/6oiXtEBSFCiJFj6UnLZtqIIHTsgMn8Dojq3yhmpwY7QWcw==
+  version "8.10.47"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.47.tgz#e19b2f50f68697013db9e8abb5ad3ddc30faaa0b"
+  integrity sha512-HshJQ2myCc05qYuR99HvJRK5rWOPwKLumVDrpizY58OJUVEgRwd7RtxqDOOi350VGxFI8hrCtjR7IaDfo0S12Q==
 
 "@types/sequelize@^4.0.68":
   version "4.27.48"
@@ -784,7 +784,7 @@ diff@^3.1.0, diff@^3.2.0:
 
 discord.js@discordjs/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/de79bba965c5d5200c1ccdc3b8c7d581b23d4a23"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/0d9bc8664dc2dc3b3bf7d35ba7b9050f2797a211"
   dependencies:
     form-data "^2.3.3"
     node-fetch "^2.3.0"
@@ -2226,9 +2226,9 @@ nice-try@^1.0.4:
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
 node-fetch@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
-  integrity sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.4.1.tgz#b2e38f1117b8acbedbe0524f041fb3177188255d"
+  integrity sha512-P9UbpFK87NyqBZzUuDBDz4f6Yiys8xm8j7ACDbi6usvFm6KItklQUKjeoqTrYS/S1k6I8oaOC2YLLDr/gg26Mw==
 
 node-json-db@0.7.3:
   version "0.7.3"
@@ -2557,9 +2557,9 @@ pretty-hrtime@^1.0.0:
   integrity sha1-t+PqQkNaTJsnWdmeDyAesZWALuE=
 
 prism-media@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.0.1.tgz#3d033c214f9d79ca157bae7985938be65f521c02"
-  integrity sha512-Unmeibfk7b8wiiQFPlCC0GgCRaAejSpe2ElgfDkMi9ZmsqzeTbUnmiLNjyqONeKK+HMYINYHOgJFox5l7FU7YA==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.0.2.tgz#1e0f097f67d799211177a50d5276fdd2ef1c7fd7"
+  integrity sha512-KCu3SlT1EtS0lvF74NGLSTzr5jrkRajE9n+S2jnUvvdiN5SpjsGj0/HgR1QK9+985Yv8cxjwZnpFRaj+SimDGA==
 
 process-nextick-args@^2.0.0, process-nextick-args@~2.0.0:
   version "2.0.0"
@@ -2834,10 +2834,10 @@ sequelize-pool@^1.0.2:
   dependencies:
     bluebird "^3.5.3"
 
-sequelize@5.7.5:
-  version "5.7.5"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-5.7.5.tgz#4de46dd47d240229e1da23600ff31d39dd655b00"
-  integrity sha512-bk+hui2E81YF/4x1JipZJL8vy31hBUwR/RMqnG6+P94eIXHh2SAxPSzxRBhW8ATN7ODqauAAsARunKf/Ou1lww==
+sequelize@^5.7.6:
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-5.8.0.tgz#0fca122327df5d3955de5fc0b36c32e833f18440"
+  integrity sha512-ejIW3nToLKUYOyFQNW+GAwbJyu9WiyzwpWdByPwmmfZ/q/1+/L51AHETVJmIiw6QAelF8NeUjAkq3ve/hoIyPQ==
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"

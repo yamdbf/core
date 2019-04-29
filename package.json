@@ -47,7 +47,8 @@
   "peerDependencies": {
     "mysql2": "1.6.5",
     "pg": "7.10.0",
-    "sequelize": "5.7.5",
+    "sequelize": "5.7.6",
+    "sequelize-typescript": "1.0.0-alpha.9",
     "sqlite3": "4.0.6",
     "tedious": "6.1.1"
   },
@@ -67,7 +68,7 @@
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "zajrik/minami",
     "run-sequence": "^1.2.2",
-    "sequelize": "5.7.5",
+    "sequelize": "^5.7.6",
     "sqlite3": "^4.0.6",
     "ts-node": "^6.1.1",
     "tslint": "^5.4.3",

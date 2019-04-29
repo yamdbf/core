@@ -2,6 +2,7 @@ import { StorageProviderConstructor } from '../types/StorageProviderConstructor'
 import { IStorageProvider } from './interface/IStorageProvider';
 import { StorageProvider } from './StorageProvider';
 import { Database } from './Database';
+import { Util } from '../util/Util';
 import * as Sequelize from 'sequelize';
 
 /**
@@ -34,17 +35,23 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			super();
 
 			// Lazy load sequelize
-			const seq: typeof Sequelize = require('sequelize');
+			const packages: string[] = ['sequelize-typescript', 'sequelize'];
+			const seq: typeof Sequelize = Util.lazyLoad<typeof Sequelize>(...packages);
 
 			this._backend = Database.instance(url, debug);
 			this._model = class extends seq.Model {};
 
+			const dataTypes: typeof Sequelize.DataTypes =
+				(seq as any)['DataTypes']
+					? (seq as any)['DataTypes']
+					: (seq as any)['DataType'];
+
 			this._model.init(
 				{
-					key: { type: seq.STRING, allowNull: false, primaryKey: true },
+					key: { type: dataTypes.STRING, allowNull: false, primaryKey: true },
 					value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect)
-						? seq.TEXT
-						: seq.TEXT('long')
+						? dataTypes.TEXT
+						: dataTypes.TEXT('long')
 				},
 				{
 					modelName: name,
