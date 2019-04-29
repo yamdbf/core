@@ -270,6 +270,26 @@ class Util {
         warnCache[message] = true;
         process.emitWarning(message, 'DeprecationWarning');
     }
+    /**
+     * Attempts to lazy-load any of the given packages in order,
+     * returning the entire namespace of the first package to be
+     * loaded. Errors if no given package was found
+     * @returns {any} The first package namespace to be found
+     */
+    static lazyLoad(...packages) {
+        let pkg;
+        for (const p of packages) {
+            try {
+                pkg = require(p);
+            }
+            catch (_a) { }
+            if (pkg)
+                break;
+        }
+        if (!pkg)
+            throw new Error(`Failed to lazy-load any of these packages: ${packages.join(', ')}`);
+        return pkg;
+    }
 }
 /**
  * Tangible representation of all base command names

@@ -146,4 +146,11 @@ export declare class Util {
      * @returns {void}
      */
     static emitDeprecationWarning(target: any, message: string): void;
+    /**
+     * Attempts to lazy-load any of the given packages in order,
+     * returning the entire namespace of the first package to be
+     * loaded. Errors if no given package was found
+     * @returns {any} The first package namespace to be found
+     */
+    static lazyLoad<T>(...packages: string[]): T;
 }

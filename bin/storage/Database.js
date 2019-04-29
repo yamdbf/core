@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Logger_1 = require("../util/logger/Logger");
+const Util_1 = require("../util/Util");
 /**
  * >**Note:** This won't do anything for you if you're not using
  * a `StorageProvider` for your client that uses Sequelize
@@ -29,7 +30,8 @@ class Database {
         Database._instance = this;
         this._url = url;
         // Lazy load sequelize
-        const seq = require('sequelize').Sequelize;
+        const packages = ['sequelize-typescript', 'sequelize'];
+        const seq = Util_1.Util.lazyLoad(...packages).Sequelize;
         const logging = (...args) => { if (debug)
             this._logger.debug(args[0], ...args.slice(1)); };
         /**

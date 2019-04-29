@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const StorageProvider_1 = require("./StorageProvider");
 const Database_1 = require("./Database");
+const Util_1 = require("../util/Util");
 var Dialect;
 (function (Dialect) {
     Dialect[Dialect["Postgres"] = 0] = "Postgres";
@@ -14,15 +15,19 @@ function SequelizeProvider(url, dialect, debug) {
         constructor(name) {
             super();
             // Lazy load sequelize
-            const seq = require('sequelize');
+            const packages = ['sequelize-typescript', 'sequelize'];
+            const seq = Util_1.Util.lazyLoad(...packages);
             this._backend = Database_1.Database.instance(url, debug);
             this._model = class extends seq.Model {
             };
+            const dataTypes = seq['DataTypes']
+                ? seq['DataTypes']
+                : seq['DataType'];
             this._model.init({
-                key: { type: seq.STRING, allowNull: false, primaryKey: true },
+                key: { type: dataTypes.STRING, allowNull: false, primaryKey: true },
                 value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect)
-                    ? seq.TEXT
-                    : seq.TEXT('long')
+                    ? dataTypes.TEXT
+                    : dataTypes.TEXT('long')
             }, {
                 modelName: name,
                 timestamps: false,
