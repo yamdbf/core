@@ -1,10 +1,11 @@
 language: node_js
 node_js:
-  - "7"
+  - "11"
 dist: trusty
 cache:
+  yarn: true
   directories:
     - node_modules
 before_install:
   - npm explore npm -g -- npm install node-gyp@latest
-install: npm install
+install: yarn
