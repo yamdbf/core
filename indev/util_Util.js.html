@@ -346,6 +346,27 @@ export class Util
 
 		process.emitWarning(message, 'DeprecationWarning');
 	}
+
+	/**
+	 * Attempts to lazy-load any of the given packages in order,
+	 * returning the entire namespace of the first package to be
+	 * loaded. Errors if no given package was found
+	 * @returns {any} The first package namespace to be found
+	 */
+	public static lazyLoad&lt;T>(...packages: string[]): T
+	{
+		let pkg!: T;
+
+		for (const p of packages)
+		{
+			try { pkg = require(p); } catch {}
+			if (pkg) break;
+		}
+
+		if (!pkg) throw new Error(`Failed to lazy-load any of these packages: ${packages.join(', ')}`);
+
+		return pkg;
+	}
 }
 </code></pre>
         </article>
