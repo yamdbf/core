@@ -2206,6 +2206,30 @@
                     "parameters": [],
                     "examples": []
                 }
+            ],
+            "properties": [
+                {
+                    "name": "name",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The name of the event this Event handler handles</p>",
+                    "type": {
+                        "names": [
+                            "string"
+                        ]
+                    }
+                },
+                {
+                    "name": "client",
+                    "access": "",
+                    "virtual": false,
+                    "description": "<p>The YAMDBF Client instance</p>",
+                    "type": {
+                        "names": [
+                            "Client"
+                        ]
+                    }
+                }
             ]
         },
         {
