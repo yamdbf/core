@@ -122,7 +122,10 @@ export class EventLoader
 
 		// Register all of the loaded events
 		for (const event of loadedEvents)
+		{
+			event._register(this._client);
 			this._registry.register(event);
+		}
 
 		return loadedEvents.length;
 	}
