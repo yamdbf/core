@@ -16,8 +16,8 @@ interface StorageEntry extends Sequelize.Model
 }
 
 /**
- * Represents a Model cast type that makes fixes some issues
- * with Model methods that have `this` types declared
+ * Represents a Model cast type that fixes some issues with Model
+ * methods that have `this` types declared
  */
 type SequelizeModel = (new () => Sequelize.Model) & typeof Sequelize.Model;
 

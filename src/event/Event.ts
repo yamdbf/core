@@ -25,6 +25,10 @@ export abstract class Event<T extends Client = Client>
 
 	public constructor(name: string)
 	{
+		/**
+		 * The name of the event this Event handler handles
+		 * @type {string}
+		 */
 		this.name = name;
 	}
 
@@ -34,6 +38,10 @@ export abstract class Event<T extends Client = Client>
 	 */
 	public _register(client: T): void
 	{
+		/**
+		 * The YAMDBF Client instance
+		 * @type {Client}
+		 */
 		this.client = client;
 	}
 
