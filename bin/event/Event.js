@@ -19,6 +19,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 class Event {
     constructor(name) {
+        /**
+         * The name of the event this Event handler handles
+         * @type {string}
+         */
         this.name = name;
     }
     /**
@@ -26,6 +30,10 @@ class Event {
      * @private
      */
     _register(client) {
+        /**
+         * The YAMDBF Client instance
+         * @type {Client}
+         */
         this.client = client;
     }
 }
