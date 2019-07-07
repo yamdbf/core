@@ -6,6 +6,7 @@ import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { inspect } from 'util';
+import { FileOptions } from 'discord.js';
 
 // @ts-ignore - Exposed for eval command invocations
 const Discord = require('discord.js');
@@ -35,16 +36,49 @@ export default class extends Command
 
 		if (!code) return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
 
-		let evaled!: string | object;
+		let result!: string | object;
 		let error!: string;
+		let output: string;
 
-		try { evaled = await eval(code); }
+		try { result = await eval(code); }
 		catch (err) { error = err; }
 
 		if (error) return this.respond(message, res.CMD_EVAL_ERROR({ code, error: this._clean(error) }));
-		if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
+		if (typeof result !== 'string') result = inspect(result, { depth: 0 });
 
-		return this.respond(message, res.CMD_EVAL_RESULT({ code, result: this._clean(evaled) }));
+		result = this._clean(result);
+		output = res.CMD_EVAL_RESULT({ code, result });
+
+		if (output.length > 2000)
+		{
+			const outputFile: Buffer = Buffer.from(result);
+			const outputFileSize: number = outputFile.byteLength / 1024 / 1024;
+
+			if (outputFileSize > 10)
+			{
+				const size: string = outputFileSize.toFixed(2) + ' MB';
+				error = res.CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_FILESIZE({ size });
+				output = res.CMD_EVAL_ERROR({ code, error });
+				return this.respond( message, output);
+			}
+
+			result = res.CMD_EVAL_ERR_OUTPUT_LENGTH();
+			output = res.CMD_EVAL_RESULT({ code, result });
+			const files: FileOptions[] = [{ attachment: outputFile, name: 'output.txt' }];
+
+			try
+			{
+				return await this.respond(message, output, { files });
+			}
+			catch
+			{
+				error = res.CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_UNKNOWN();
+				output = res.CMD_EVAL_ERROR({ code, error });
+				return this.respond(message, output);
+			}
+		}
+
+		return this.respond(message, output);
 	}
 
 	private _clean(text: string): string
