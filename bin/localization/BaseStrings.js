@@ -1,5 +1,5 @@
 "use strict";
-// Generated automatically at Thu Nov 01 2018 22:04:12 GMT-0500 (Central Daylight Time)
+// Generated automatically at Sat Jul 06 2019 23:15:52 GMT-0500 (Central Daylight Time)
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {enum} BaseStrings Enum containing all base framework
@@ -23,6 +23,9 @@ var BaseStrings;
     BaseStrings["CMD_EVAL_ERR_NOCODE"] = "CMD_EVAL_ERR_NOCODE";
     BaseStrings["CMD_EVAL_RESULT"] = "CMD_EVAL_RESULT";
     BaseStrings["CMD_EVAL_ERROR"] = "CMD_EVAL_ERROR";
+    BaseStrings["CMD_EVAL_ERR_OUTPUT_LENGTH"] = "CMD_EVAL_ERR_OUTPUT_LENGTH";
+    BaseStrings["CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_FILESIZE"] = "CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_FILESIZE";
+    BaseStrings["CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_UNKNOWN"] = "CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_UNKNOWN";
     BaseStrings["CMD_GROUPS_LIST"] = "CMD_GROUPS_LIST";
     BaseStrings["CMD_GROUPS_ERR_NOEXIST"] = "CMD_GROUPS_ERR_NOEXIST";
     BaseStrings["CMD_GROUPS_ERR_ENABLED"] = "CMD_GROUPS_ERR_ENABLED";
