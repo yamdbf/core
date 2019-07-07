@@ -5,5 +5,5 @@
  */
 
 export type ArgOpts = {
-	separator?: string;
+	separator?: string | null;
 };

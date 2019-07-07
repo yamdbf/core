@@ -55,7 +55,10 @@ export default class extends TestCommandClass
 			aliases: ['testing', 'testo'],
 			desc: 'test command',
 			usage: '<prefix>test <test> <foo>',
-			guildOnly: true
+			guildOnly: true,
+			argOpts: {
+				separator: ''
+			}
 			// ratelimit: '2/10s'
 		});
 
@@ -81,22 +84,7 @@ export default class extends TestCommandClass
 	// @using(expect('foo: CommandGroup'))
 	public async action(message: Message, [_res, ..._args]: [ResourceLoader, string[]]): Promise<void>
 	{
-		await new Promise(r => setTimeout(r, 15e3));
-		// message.channel.send(res('FOO_BAR_BAZ'));
-		// message.channel.send(args.join(' ') || 'MISSING ARGS');
-		// this.logger.debug('Command:test', util.inspect(this.group));
-		// // throw new Error('foo');
-		// message.channel.send('Test command called');
-		// await CompactModeHelper.registerButton(message, '❌', () => {
-		// 	message.channel.send('X clicked');
-		// });
-		// await CompactModeHelper.registerButton(message, '✅', () => {
-		// 	message.channel.send('Check clicked');
-		// });
-		// await CompactModeHelper.registerButton(message, '274295184957898752', () => {
-		// 	message.channel.send('Lul clicked');
-		// });
-		// this.respond(message, 'foo bar bazz', { button: 'success' });
+		console.log(_res, _args);
 		this.respond(message, 'foo bar baz');
 	}
 }

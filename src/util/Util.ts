@@ -69,10 +69,24 @@ export class Util
 	 */
 	public static parseArgs(input: string, command?: Command): string[]
 	{
-		return input
-			.split((command && command.argOpts && command.argOpts.separator) || ' ')
+		let delimiter: string | null = ' ';
+		let output: string[];
+
+		if (command && command.argOpts)
+		{
+			if (typeof command.argOpts.separator === 'undefined') delimiter = ' ';
+			else if (command.argOpts.separator === null) delimiter = null;
+			else delimiter = command.argOpts.separator;
+		}
+
+		if (delimiter === null) output = [input];
+		else if (delimiter === '') output = input.split(delimiter);
+		else output = input
+			.split(delimiter as string)
 			.map(a => a.trim())
 			.filter(a => a !== '');
+
+		return output!;
 	}
 
 	/**
