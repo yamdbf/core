@@ -54,10 +54,26 @@ class Util {
      * @returns {string[]}
      */
     static parseArgs(input, command) {
-        return input
-            .split((command && command.argOpts && command.argOpts.separator) || ' ')
-            .map(a => a.trim())
-            .filter(a => a !== '');
+        let delimiter = ' ';
+        let output;
+        if (command && command.argOpts) {
+            if (typeof command.argOpts.separator === 'undefined')
+                delimiter = ' ';
+            else if (command.argOpts.separator === null)
+                delimiter = null;
+            else
+                delimiter = command.argOpts.separator;
+        }
+        if (delimiter === null)
+            output = [input];
+        else if (delimiter === '')
+            output = input.split(delimiter);
+        else
+            output = input
+                .split(delimiter)
+                .map(a => a.trim())
+                .filter(a => a !== '');
+        return output;
     }
     /**
      * Pads the right side of a string with spaces to the given length

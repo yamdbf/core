@@ -4,5 +4,5 @@
  * @property {string} [separator=' '] The charactor to separate args by
  */
 export declare type ArgOpts = {
-    separator?: string;
+    separator?: string | null;
 };
