@@ -6,9 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
-const glob = require("glob");
-const path = require("path");
+const FileSystem = require("fs");
+const Glob = require("glob");
+const Path = require("path");
 const Command_1 = require("../command/Command");
 const Logger_1 = require("../util/logger/Logger");
 const LangFileParser_1 = require("./LangFileParser");
@@ -152,10 +152,10 @@ class Lang {
         const langNameRegex = /\/([^\/\.]+)(?:\.[^\/]+)?\.lang$/;
         let langs = {};
         let files = [];
-        dir = path.resolve(dir);
-        files.push(...glob.sync(`${dir}/**/*.lang`));
+        const path = Path.resolve(dir);
+        files.push(...Glob.sync(`${path}/**/*.lang`));
         if (files.length === 0)
-            throw new Error(`Failed to find any localization files in: ${dir}`);
+            throw new Error(`Failed to find any localization files in: ${path}`);
         for (const file of files) {
             if (!langNameRegex.test(file))
                 continue;
@@ -168,7 +168,7 @@ class Lang {
             for (const file of langs[lang]) {
                 if (!langNameRegex.test(file))
                     continue;
-                const contents = fs
+                const contents = FileSystem
                     .readFileSync(file)
                     .toString()
                     .replace(/\r\n/g, '\n');
@@ -193,7 +193,7 @@ class Lang {
         if (!Lang._instance)
             throw new Error('Lang singleton instance has not been created');
         Lang.setMetaValue('en_us', 'name', 'English');
-        Lang.loadLocalizationsFrom(path.join(__dirname, './en_us'));
+        Lang.loadLocalizationsFrom(Path.join(__dirname, './en_us'));
         if (Lang._instance._client.localeDir)
             Lang.loadLocalizationsFrom(Lang._instance._client.localeDir);
         Lang._logger.info(`Loaded string localizations for ${Object.keys(Lang.langs).length} languages.`);
@@ -212,8 +212,8 @@ class Lang {
         if (!Lang._instance)
             throw new Error('Lang singleton instance has not been created');
         let files = [];
-        dir = path.resolve(dir);
-        files.push(...glob.sync(`${dir}/**/*.lang.json`));
+        dir = Path.resolve(dir);
+        files.push(...Glob.sync(`${dir}/**/*.lang.json`));
         if (files.length === 0)
             return;
         for (const file of files) {
@@ -248,8 +248,8 @@ class Lang {
     static loadGroupLocalizationsFrom(dir) {
         if (!Lang._instance)
             throw new Error('Lang singleton instance has not been created');
-        dir = path.resolve(dir);
-        const file = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
+        dir = Path.resolve(dir);
+        const file = Glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
         if (!file)
             return;
         let groupInfo;
@@ -274,7 +274,7 @@ class Lang {
     static loadCommandLocalizations() {
         if (!Lang._instance)
             throw new Error('Lang singleton instance has not been created');
-        Lang.loadGroupLocalizationsFrom(path.join(__dirname, './en_us'));
+        Lang.loadGroupLocalizationsFrom(Path.join(__dirname, './en_us'));
         if (!Lang._instance._client.commandsDir)
             return;
         Lang.loadCommandLocalizationsFrom(Lang._instance._client.commandsDir);

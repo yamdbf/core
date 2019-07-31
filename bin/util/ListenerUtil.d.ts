@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import 'reflect-metadata';
 import { EventEmitter } from 'events';
 /**
