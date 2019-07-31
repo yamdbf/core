@@ -1,5 +1,5 @@
-import * as glob from 'glob';
-import * as path from 'path';
+import * as Glob from 'glob';
+import * as Path from 'path';
 import { Client } from '../client/Client';
 import { Logger, logger } from '../util/logger/Logger';
 import { CommandRegistry } from './CommandRegistry';
@@ -26,21 +26,21 @@ export class CommandLoader
 
 	/**
 	 * Load commands from the given directory
-	 * @param {string} dir Directory to load from
+	 * @param {string} path Directory to load from
 	 * @param {boolean} [base=false] Whether or not the commands being loaded are base commands
 	 * @returns {number} The number of Commands loaded from the directory
 	 */
 	public loadCommandsFrom(dir: string, base: boolean = false): number
 	{
-		dir = path.resolve(dir);
+		const path: string = Path.resolve(dir);
 
 		// Glob all the javascript files in the directory
-		let commandFiles: string[] = glob.sync(`${dir}/**/*.js`);
+		let commandFiles: string[] = Glob.sync(`${path}/**/*.js`);
 
 		// Glob typescript files if `tsNode` is enabled
 		if (this._client.tsNode)
 		{
-			commandFiles.push(...glob.sync(`${dir}/**/!(*.d).ts`));
+			commandFiles.push(...Glob.sync(`${path}/**/!(*.d).ts`));
 			const filteredCommandFiles = commandFiles.filter(f => {
 				const file: string = f.match('/([^\/]+?)\.[j|t]s$')![1];
 				if (f.endsWith('.ts')) return true;
@@ -51,7 +51,7 @@ export class CommandLoader
 		}
 
 		const loadedCommands: Command[] = [];
-		this._logger.debug(`Loading commands in: ${dir}`);
+		this._logger.debug(`Loading commands in: ${path}`);
 
 		// Load and instantiate every command from the globbed files
 		for (const file of commandFiles)
