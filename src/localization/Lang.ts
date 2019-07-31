@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as glob from 'glob';
-import * as path from 'path';
+import * as FileSystem from 'fs';
+import * as Glob from 'glob';
+import * as Path from 'path';
 import { Client } from '../client/Client';
 import { Command } from '../command/Command';
 import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
@@ -187,11 +187,11 @@ export class Lang
 		let langs: { [key: string]: string[] } = {};
 		let files: string[] = [];
 
-		dir = path.resolve(dir);
-		files.push(...glob.sync(`${dir}/**/*.lang`));
+		const path: string = Path.resolve(dir);
+		files.push(...Glob.sync(`${path}/**/*.lang`));
 
 		if (files.length === 0)
-			throw new Error(`Failed to find any localization files in: ${dir}`);
+			throw new Error(`Failed to find any localization files in: ${path}`);
 
 		for (const file of files)
 		{
@@ -207,7 +207,7 @@ export class Lang
 			for (const file of langs[lang])
 			{
 				if (!langNameRegex.test(file)) continue;
-				const contents: string = fs
+				const contents: string = FileSystem
 					.readFileSync(file)
 					.toString()
 					.replace(/\r\n/g, '\n');
@@ -238,7 +238,7 @@ export class Lang
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
 		Lang.setMetaValue('en_us', 'name', 'English');
-		Lang.loadLocalizationsFrom(path.join(__dirname, './en_us'));
+		Lang.loadLocalizationsFrom(Path.join(__dirname, './en_us'));
 		if (Lang._instance._client.localeDir)
 			Lang.loadLocalizationsFrom(Lang._instance._client.localeDir);
 
@@ -260,8 +260,8 @@ export class Lang
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
 		let files: string[] = [];
-		dir = path.resolve(dir);
-		files.push(...glob.sync(`${dir}/**/*.lang.json`));
+		dir = Path.resolve(dir);
+		files.push(...Glob.sync(`${dir}/**/*.lang.json`));
 
 		if (files.length === 0) return;
 
@@ -303,8 +303,8 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
-		dir = path.resolve(dir);
-		const file: string = glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
+		dir = Path.resolve(dir);
+		const file: string = Glob.sync(`${dir}/**/commandgroups.lang.json`)[0];
 
 		if (!file) return;
 
@@ -332,7 +332,7 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
-		Lang.loadGroupLocalizationsFrom(path.join(__dirname, './en_us'));
+		Lang.loadGroupLocalizationsFrom(Path.join(__dirname, './en_us'));
 
 		if (!Lang._instance._client.commandsDir) return;
 		Lang.loadCommandLocalizationsFrom(Lang._instance._client.commandsDir);
