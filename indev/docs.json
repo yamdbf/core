@@ -1299,7 +1299,7 @@
                     "description": "<p>Load commands from the given directory</p>",
                     "parameters": [
                         {
-                            "name": "dir",
+                            "name": "path",
                             "type": "string",
                             "description": "<p>Directory to load from</p>",
                             "default": "",
