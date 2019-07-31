@@ -6,8 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const glob = require("glob");
-const path = require("path");
+const Glob = require("glob");
+const Path = require("path");
 const Logger_1 = require("../util/logger/Logger");
 const Command_1 = require("./Command");
 const Util_1 = require("../util/Util");
@@ -22,17 +22,17 @@ class CommandLoader {
     }
     /**
      * Load commands from the given directory
-     * @param {string} dir Directory to load from
+     * @param {string} path Directory to load from
      * @param {boolean} [base=false] Whether or not the commands being loaded are base commands
      * @returns {number} The number of Commands loaded from the directory
      */
     loadCommandsFrom(dir, base = false) {
-        dir = path.resolve(dir);
+        const path = Path.resolve(dir);
         // Glob all the javascript files in the directory
-        let commandFiles = glob.sync(`${dir}/**/*.js`);
+        let commandFiles = Glob.sync(`${path}/**/*.js`);
         // Glob typescript files if `tsNode` is enabled
         if (this._client.tsNode) {
-            commandFiles.push(...glob.sync(`${dir}/**/!(*.d).ts`));
+            commandFiles.push(...Glob.sync(`${path}/**/!(*.d).ts`));
             const filteredCommandFiles = commandFiles.filter(f => {
                 const file = f.match('/([^\/]+?)\.[j|t]s$')[1];
                 if (f.endsWith('.ts'))
@@ -43,7 +43,7 @@ class CommandLoader {
             commandFiles = filteredCommandFiles;
         }
         const loadedCommands = [];
-        this._logger.debug(`Loading commands in: ${dir}`);
+        this._logger.debug(`Loading commands in: ${path}`);
         // Load and instantiate every command from the globbed files
         for (const file of commandFiles) {
             // Delete the cached command file for hot-reloading
