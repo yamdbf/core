@@ -72,6 +72,7 @@ export class Logger
 			throw new Error('Cannot create multiple instances of Logger singleton. Use Logger.instance() instead');
 
 		Logger._instance = this;
+
 		this._logLevel = LogLevel.DEBUG;
 		this._transports = [];
 		this._baseTransportRemoved = false;
@@ -79,7 +80,8 @@ export class Logger
 		// Create and add base transport
 
 		type Color = [number, number];
-		const colors: { [name: string]: Color } = {
+		type Colors = 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'grey';
+		const colors: { [key in Colors]: Color } = {
 			red: [31, 39],
 			green: [32, 39],
 			yellow: [33, 39],
@@ -178,8 +180,10 @@ export class Logger
 	 */
 	public static instance(tag?: string): Logger
 	{
-		if (tag) return Logger.taggedInstance(tag);
-		else return Logger._instance || new Logger();
+		if (typeof tag !== 'undefined')
+			return Logger.taggedInstance(tag);
+
+		return Logger._instance || new Logger();
 	}
 
 	/**
