@@ -19,9 +19,9 @@ const Logger_1 = require("./Logger");
  */
 function logger(...args) {
     if (typeof args[0] === 'string')
-        return (target, key) => {
+        return ((target, key) => {
             Object.defineProperty(target, key, { value: Logger_1.Logger.instance(args[0]) });
-        };
+        });
     Object.defineProperty(args[0], args[1], { value: Logger_1.Logger.instance() });
 }
 exports.logger = logger;

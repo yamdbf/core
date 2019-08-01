@@ -70,10 +70,9 @@ class Logger {
      * @returns {Logger}
      */
     static instance(tag) {
-        if (tag)
+        if (typeof tag !== 'undefined')
             return Logger.taggedInstance(tag);
-        else
-            return Logger._instance || new Logger();
+        return Logger._instance || new Logger();
     }
     /**
      * Returns an instance proxy that prefixes logging
