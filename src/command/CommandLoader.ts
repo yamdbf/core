@@ -26,7 +26,7 @@ export class CommandLoader
 
 	/**
 	 * Load commands from the given directory
-	 * @param {string} path Directory to load from
+	 * @param {string} dir Directory to load from
 	 * @param {boolean} [base=false] Whether or not the commands being loaded are base commands
 	 * @returns {number} The number of Commands loaded from the directory
 	 */
