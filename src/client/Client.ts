@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import * as Discord from 'discord.js';
-import * as path from 'path';
+import * as Path from 'path';
 
 import {
 	Channel,
@@ -125,7 +125,7 @@ export class Client extends Discord.Client
 		 * **See:** {@link Client#passive}
 		 * @type {string}
 		 */
-		this.commandsDir = options.commandsDir ? path.resolve(options.commandsDir!) : null;
+		this.commandsDir = options.commandsDir ? Path.resolve(options.commandsDir!) : null;
 
 		/**
 		 * Directory to find Event class files. Optional
@@ -133,13 +133,13 @@ export class Client extends Discord.Client
 		 * **See:** {@link Client#passive}
 		 * @type {string}
 		 */
-		this.eventsDir = options.eventsDir ? path.resolve(options.eventsDir!) : null;
+		this.eventsDir = options.eventsDir ? Path.resolve(options.eventsDir!) : null;
 
 		/**
 		 * Directory to find custom localization files
 		 * @type {string}
 		 */
-		this.localeDir = options.localeDir ? path.resolve(options.localeDir) : null;
+		this.localeDir = options.localeDir ? Path.resolve(options.localeDir) : null;
 
 		/**
 		 * Default language to use for localization
@@ -329,7 +329,7 @@ export class Client extends Discord.Client
 				this.eventLoader.addSourceDir(this.eventsDir);
 
 			this._logger.info('Loading base commands...');
-			this._commandLoader.loadCommandsFrom(path.join(__dirname, '../command/base'), true);
+			this._commandLoader.loadCommandsFrom(Path.join(__dirname, '../command/base'), true);
 
 			// Disable setlang command if there is only one language
 			if (Lang.langNames.length === 1
