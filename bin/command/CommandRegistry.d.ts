@@ -11,13 +11,13 @@ export declare class CommandRegistry<T extends Client, K extends string = string
     private readonly _client;
     private readonly _reserved;
     constructor(client: T);
-    static readonly [Symbol.species]: typeof Collection;
+    static get [Symbol.species](): typeof Collection;
     /**
      * Contains all [Command groups]{@link Command#group}
      * @readonly
      * @type {string[]}
      */
-    readonly groups: string[];
+    get groups(): string[];
     /**
      * Register an external command and add it to the `<Client>.commands`
      * [collection]{@link external:Collection}, erroring on duplicate

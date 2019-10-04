@@ -30,7 +30,7 @@ export declare class Database {
      * connection
      * @type {Sequelize}
      */
-    static readonly db: Sequelize.Sequelize;
+    static get db(): Sequelize.Sequelize;
     /**
      * As long as a Sequelize-using storage provider is being used,
      * this will return the Database instance holding the Sequelize

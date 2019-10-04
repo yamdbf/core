@@ -17,7 +17,7 @@ class Language {
     concat(lang) {
         if (lang.name !== this.name)
             throw new Error('Cannot concatenate strings for different languages.');
-        this.strings = Object.assign({}, this.strings, lang.strings);
+        this.strings = Object.assign(Object.assign({}, this.strings), lang.strings);
     }
 }
 exports.Language = Language;

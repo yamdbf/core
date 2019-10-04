@@ -80,12 +80,12 @@ class LangStringNode {
         }
     }
 }
+exports.LangStringNode = LangStringNode;
 LangStringNode._argsDirective = /^(##! *<[^>]+?>)/m;
 LangStringNode._validArgsDirective = /^##! *(?!< *, *)<(?:(?: *, *)?\w+\?? *: *\w+(?:\[\])?)+>/m;
 LangStringNode._argList = /<([^>]+?)>/;
 LangStringNode._allArgs = /\w+\?? *: *\w+(?:\[\])?/g;
 LangStringNode._singleArg = /(\w+\??) *: *(\w+(?:\[\])?)/;
 LangStringNode._validArgTypes = ['string', 'number', 'boolean', 'any'];
-exports.LangStringNode = LangStringNode;
 
 //# sourceMappingURL=LangStringNode.js.map

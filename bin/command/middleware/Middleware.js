@@ -10,6 +10,7 @@ const LocalizeLoader_1 = require("./LocalizeLoader");
  */
 class Middleware {
 }
+exports.Middleware = Middleware;
 /**
  * Takes an object mapping argument names to {@link Resolver} type names
  * and resolves args to their specified type. An argument list string
@@ -112,6 +113,5 @@ Middleware.localize = Localize_1.localize;
  * @returns {MiddlewareFunction}
  */
 Middleware.localizeLoader = LocalizeLoader_1.localizeLoader;
-exports.Middleware = Middleware;
 
 //# sourceMappingURL=Middleware.js.map

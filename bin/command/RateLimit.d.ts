@@ -28,19 +28,19 @@ export declare class RateLimit {
      * for the current expiry period
      * @type {boolean}
      */
-    readonly isLimited: boolean;
+    get isLimited(): boolean;
     /**
      * The remaining number of uses this RateLimit has for
      * this expiry period
      * @type {number}
      */
-    readonly remaining: number;
+    get remaining(): number;
     /**
      * Whether or not this RateLimit was flagged for having had
      * a notification given for being capped for this expiry period
      * @type {boolean}
      */
-    readonly wasNotified: boolean;
+    get wasNotified(): boolean;
     /**
      * Flag this RateLimit as having had a notification given
      * for being capped for this expiry period

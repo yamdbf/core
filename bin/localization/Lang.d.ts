@@ -31,7 +31,7 @@ export declare class Lang {
      * @name langs
      * @type {object}
      */
-    static readonly langs: {
+    static get langs(): {
         [lang: string]: Language;
     };
     /**
@@ -40,7 +40,7 @@ export declare class Lang {
      * @name langNames
      * @type {string[]}
      */
-    static readonly langNames: string[];
+    static get langNames(): string[];
     /**
      * Create the singleton instance.
      * Called automatically by the YAMDBF Client at startup

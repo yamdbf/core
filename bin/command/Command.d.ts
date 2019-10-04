@@ -52,7 +52,8 @@ export declare abstract class Command<T extends Client = Client> {
      * The ratelimit for this command per user
      * @type {string}
      */
-    ratelimit: string;
+    get ratelimit(): string;
+    set ratelimit(value: string);
     /**
      * Can be included in a command to initlialize any resources a command
      * needs at runtime that require things that are not available within
@@ -77,7 +78,7 @@ export declare abstract class Command<T extends Client = Client> {
      * Whether or not this command is disabled
      * @type {boolean}
      */
-    readonly disabled: boolean;
+    get disabled(): boolean;
     /**
      * Enable this command if it is disabled
      * @returns {void}

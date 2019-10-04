@@ -17,6 +17,7 @@ const JSONProvider_1 = require("./JSONProvider");
  */
 class Providers {
 }
+exports.Providers = Providers;
 /**
  * Factory method that returns a StorageProvider class for
  * a Postgres database via the given Postgres url. The given
@@ -82,6 +83,5 @@ Providers.SQLiteProvider = (path, debug = false) => SequelizeProvider_1.Sequeliz
  * @type {StorageProviderConstructor}
  */
 Providers.JSONProvider = JSONProvider_1.JSONProvider;
-exports.Providers = Providers;
 
 //# sourceMappingURL=Providers.js.map

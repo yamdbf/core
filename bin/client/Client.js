@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const Discord = require("discord.js");
-const path = require("path");
+const Path = require("path");
 const CommandDispatcher_1 = require("../command/CommandDispatcher");
 const CommandLoader_1 = require("../command/CommandLoader");
 const CommandRegistry_1 = require("../command/CommandRegistry");
@@ -35,12 +35,13 @@ const { on, once, registerListeners } = ListenerUtil_1.ListenerUtil;
  */
 class Client extends Discord.Client {
     constructor(options, clientOptions) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
         super(clientOptions);
         Reflect.defineMetadata('YAMDBFClient', true, this);
         // Hook logger to provide shard ID(s) in base transport logs
         if (this.shard)
             Logger_1.Logger._shard = this.shard.ids.join('-');
-        this._token = options.token || process.env.DISCORD_TOKEN;
+        this._token = (_a = options.token, (_a !== null && _a !== void 0 ? _a : process.env.DISCORD_TOKEN));
         /**
          * The owner/owners of the bot, represented as an array of IDs.
          * These IDs determine who is allowed to use commands flagged as
@@ -58,29 +59,29 @@ class Client extends Discord.Client {
          * **See:** {@link Client#passive}
          * @type {string}
          */
-        this.commandsDir = options.commandsDir ? path.resolve(options.commandsDir) : null;
+        this.commandsDir = options.commandsDir ? Path.resolve(options.commandsDir) : null;
         /**
          * Directory to find Event class files. Optional
          * if client is passive.<br>
          * **See:** {@link Client#passive}
          * @type {string}
          */
-        this.eventsDir = options.eventsDir ? path.resolve(options.eventsDir) : null;
+        this.eventsDir = options.eventsDir ? Path.resolve(options.eventsDir) : null;
         /**
          * Directory to find custom localization files
          * @type {string}
          */
-        this.localeDir = options.localeDir ? path.resolve(options.localeDir) : null;
+        this.localeDir = options.localeDir ? Path.resolve(options.localeDir) : null;
         /**
          * Default language to use for localization
          * @type {string}
          */
-        this.defaultLang = options.defaultLang || 'en_us';
+        this.defaultLang = (_b = options.defaultLang, (_b !== null && _b !== void 0 ? _b : 'en_us'));
         /**
          * Status text for the client
          * @type {string}
          */
-        this.statusText = options.statusText || null;
+        this.statusText = (_c = options.statusText, (_c !== null && _c !== void 0 ? _c : null));
         /**
          * Text to output when the client is ready. If not
          * provided nothing will be logged, giving the
@@ -95,17 +96,13 @@ class Client extends Discord.Client {
          * use the `help` command. `true` by default
          * @type {boolean}
          */
-        this.unknownCommandError = typeof options.unknownCommandError !== 'undefined'
-            ? options.unknownCommandError
-            : true;
+        this.unknownCommandError = (_d = options.unknownCommandError, (_d !== null && _d !== void 0 ? _d : true));
         /**
          * Whether or not the help command should send its output
          * in a DM to the command caller
          * @type {boolean}
          */
-        this.dmHelp = typeof options.dmHelp !== 'undefined'
-            ? options.dmHelp
-            : true;
+        this.dmHelp = (_e = options.dmHelp, (_e !== null && _e !== void 0 ? _e : true));
         /**
          * Whether or not this client is passive. Passive clients
          * will not register a command dispatcher or a message
@@ -114,7 +111,7 @@ class Client extends Discord.Client {
          * actions based on whatever the framework user wants
          * @type {boolean}
          */
-        this.passive = options.passive || false;
+        this.passive = (_f = options.passive, (_f !== null && _f !== void 0 ? _f : false));
         /**
          * Whether or not the client will pause after loading Client
          * Storage, giving the opportunity to add/change default
@@ -129,13 +126,13 @@ class Client extends Discord.Client {
          * the settings for all guilds
          * @type {boolean}
          */
-        this.pause = options.pause || false;
+        this.pause = (_g = options.pause, (_g !== null && _g !== void 0 ? _g : false));
         /**
          * Array of base command names to skip when loading commands. Base commands
          * may only be disabled by name, not by alias
          * @type {BaseCommandName[]}
          */
-        this.disableBase = options.disableBase || [];
+        this.disableBase = (_h = options.disableBase, (_h !== null && _h !== void 0 ? _h : []));
         // Set the global ratelimit if provided
         if (options.ratelimit)
             this.ratelimit = options.ratelimit;
@@ -161,9 +158,9 @@ class Client extends Discord.Client {
          * Defaults to {@link JSONProvider}
          * @type {StorageProvider}
          */
-        this.provider = options.provider || JSONProvider_1.JSONProvider;
+        this.provider = (_j = options.provider, (_j !== null && _j !== void 0 ? _j : JSONProvider_1.JSONProvider));
         // Plugins to load
-        this._plugins = options.plugins || [];
+        this._plugins = (_k = options.plugins, (_k !== null && _k !== void 0 ? _k : []));
         /**
          * Loads plugins and contains loaded plugins in case
          * accessing a loaded plugin at runtime is desired
@@ -189,7 +186,7 @@ class Client extends Discord.Client {
          * @type {ResolverLoader}
          */
         this.resolvers = new ResolverLoader_1.ResolverLoader(this);
-        this._customResolvers = options.customResolvers || [];
+        this._customResolvers = (_l = options.customResolvers, (_l !== null && _l !== void 0 ? _l : []));
         this.resolvers._loadResolvers();
         /**
          * Whether or not compact mode is enabled
@@ -208,20 +205,20 @@ class Client extends Discord.Client {
             success: '✅',
             fail: '❌',
             working: '🕐'
-        }, options.buttons || {});
+        }, (_m = options.buttons, (_m !== null && _m !== void 0 ? _m : {})));
         /**
          * The argument parsing function the framework will use to parse
          * command arguments from message content input. Defaults to
          * splitting on {@link Command#argOpts.separator}
          * @type {Function}
          */
-        this.argsParser = options.argsParser || Util_1.Util.parseArgs;
+        this.argsParser = (_o = options.argsParser, (_o !== null && _o !== void 0 ? _o : Util_1.Util.parseArgs));
         /**
          * Whether or not ts-node is in use, allowing the Client
          * to attempt to load .ts files when loading Commands
          * @type {boolean}
          */
-        this.tsNode = options.tsNode || false;
+        this.tsNode = (_p = options.tsNode, (_p !== null && _p !== void 0 ? _p : false));
         Lang_1.Lang.createInstance(this);
         Lang_1.Lang.loadLocalizations();
         CompactModeHelper_1.CompactModeHelper.createInstance(this);
@@ -231,7 +228,7 @@ class Client extends Discord.Client {
             if (this.eventsDir)
                 this.eventLoader.addSourceDir(this.eventsDir);
             this._logger.info('Loading base commands...');
-            this._commandLoader.loadCommandsFrom(path.join(__dirname, '../command/base'), true);
+            this._commandLoader.loadCommandsFrom(Path.join(__dirname, '../command/base'), true);
             // Disable setlang command if there is only one language
             if (Lang_1.Lang.langNames.length === 1
                 && !this.disableBase.includes('setlang')
@@ -387,9 +384,10 @@ class Client extends Discord.Client {
      * @returns {Promise<string | null>}
      */
     async getPrefix(guild) {
+        var _a;
         if (!guild || !this.storage.guilds.has(guild.id))
             return null;
-        return (await this.storage.guilds.get(guild.id).settings.get('prefix')) || null;
+        return _a = (await this.storage.guilds.get(guild.id).settings.get('prefix')), (_a !== null && _a !== void 0 ? _a : null);
     }
     /**
      * Generate a bot invite URL based on the permissions included
@@ -534,18 +532,15 @@ __decorate([
 ], Client.prototype, "_logger", void 0);
 __decorate([
     once('ready')
-    // @ts-ignore - Handled via ListenerUtil
 ], Client.prototype, "__onReadyEvent", null);
 __decorate([
     once('continue')
 ], Client.prototype, "__onContinueEvent", null);
 __decorate([
     on('guildCreate')
-    // @ts-ignore - Handled via ListenerUtil
 ], Client.prototype, "__onGuildCreateEvent", null);
 __decorate([
     on('guildDelete')
-    // @ts-ignore - Handled via ListenerUtil
 ], Client.prototype, "__onGuildDeleteEvent", null);
 exports.Client = Client;
 

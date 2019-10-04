@@ -231,7 +231,7 @@ class Lang {
                 for (const lang of Object.keys(localizations[command])) {
                     if (typeof Util_1.Util.getNestedValue(Lang._instance._commandInfo, [command, lang]) === 'undefined')
                         Util_1.Util.assignNestedValue(Lang._instance._commandInfo, [command, lang], {});
-                    Lang._instance._commandInfo[command][lang] = Object.assign({}, Lang._instance._commandInfo[command][lang], localizations[command][lang]);
+                    Lang._instance._commandInfo[command][lang] = Object.assign(Object.assign({}, Lang._instance._commandInfo[command][lang]), localizations[command][lang]);
                 }
         }
         Lang.postLoad();

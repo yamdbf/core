@@ -199,6 +199,7 @@ class Logger {
                 t.transport({ timestamp, type, tag, text });
     }
 }
+exports.Logger = Logger;
 /**
  * `LogLevel.NONE` enum shortcut
  * @type {LogLevel}
@@ -229,6 +230,5 @@ Logger.ERROR = LogLevel_1.LogLevel.ERROR;
  * @type LogLevel
  */
 Logger.DEBUG = LogLevel_1.LogLevel.DEBUG;
-exports.Logger = Logger;
 
 //# sourceMappingURL=Logger.js.map

@@ -65,7 +65,8 @@ export declare class Client extends Discord.Client {
      * The global ratelimit for all command usage per user
      * @type {string}
      */
-    ratelimit: string;
+    get ratelimit(): string;
+    set ratelimit(value: string);
     /**
      * Starts the login process, culminating in the `clientReady` event
      * @returns {Client}

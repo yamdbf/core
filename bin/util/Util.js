@@ -307,6 +307,7 @@ class Util {
         return pkg;
     }
 }
+exports.Util = Util;
 /**
  * Tangible representation of all base command names
  * @static
@@ -314,6 +315,5 @@ class Util {
  * @type {BaseCommandName[]}
  */
 Util.baseCommandNames = require('./static/baseCommandNames.json');
-exports.Util = Util;
 
 //# sourceMappingURL=Util.js.map

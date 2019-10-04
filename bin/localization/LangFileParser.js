@@ -42,12 +42,12 @@ class LangFileParser {
         return lang;
     }
 }
+exports.LangFileParser = LangFileParser;
 LangFileParser._block = /(\[(\w+)\]\n([\s\S]*?))(?=\n\n+?(?:## *.*\n)*\[\w+\]\n.+|\n*?$)/;
 LangFileParser._blocks = new RegExp(LangFileParser._block, 'g');
 LangFileParser._comments = /^(?!$)\s*##.*\n|##.*$/gm;
 LangFileParser._outerNewLines = /^\n|\n$/g;
 LangFileParser._scriptTemplate = /^{{!([\s\S]+?)!}}[\t ]*?\n?|{{!([\s\S]+?)!}}/m;
 LangFileParser._scriptTemplates = new RegExp(LangFileParser._scriptTemplate, 'gm');
-exports.LangFileParser = LangFileParser;
 
 //# sourceMappingURL=LangFileParser.js.map
