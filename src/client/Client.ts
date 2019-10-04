@@ -105,7 +105,7 @@ export class Client extends Discord.Client
 		// Hook logger to provide shard ID(s) in base transport logs
 		if (this.shard) Logger._shard = this.shard.ids.join('-');
 
-		this._token = options.token! || process.env.DISCORD_TOKEN!;
+		this._token = options.token! ?? process.env.DISCORD_TOKEN!;
 
 		/**
 		 * The owner/owners of the bot, represented as an array of IDs.
@@ -145,13 +145,13 @@ export class Client extends Discord.Client
 		 * Default language to use for localization
 		 * @type {string}
 		 */
-		this.defaultLang = options.defaultLang || 'en_us';
+		this.defaultLang = options.defaultLang ?? 'en_us';
 
 		/**
 		 * Status text for the client
 		 * @type {string}
 		 */
-		this.statusText = options.statusText || null;
+		this.statusText = options.statusText ?? null;
 
 		/**
 		 * Text to output when the client is ready. If not
@@ -168,18 +168,14 @@ export class Client extends Discord.Client
 		 * use the `help` command. `true` by default
 		 * @type {boolean}
 		 */
-		this.unknownCommandError = typeof options.unknownCommandError !== 'undefined'
-			? options.unknownCommandError
-			: true;
+		this.unknownCommandError = options.unknownCommandError ?? true;
 
 		/**
 		 * Whether or not the help command should send its output
 		 * in a DM to the command caller
 		 * @type {boolean}
 		 */
-		this.dmHelp = typeof options.dmHelp !== 'undefined'
-			? options.dmHelp
-			: true;
+		this.dmHelp = options.dmHelp ?? true;
 
 		/**
 		 * Whether or not this client is passive. Passive clients
@@ -189,7 +185,7 @@ export class Client extends Discord.Client
 		 * actions based on whatever the framework user wants
 		 * @type {boolean}
 		 */
-		this.passive = options.passive || false;
+		this.passive = options.passive ?? false;
 
 		/**
 		 * Whether or not the client will pause after loading Client
@@ -205,14 +201,14 @@ export class Client extends Discord.Client
 		 * the settings for all guilds
 		 * @type {boolean}
 		 */
-		this.pause = options.pause || false;
+		this.pause = options.pause ?? false;
 
 		/**
 		 * Array of base command names to skip when loading commands. Base commands
 		 * may only be disabled by name, not by alias
 		 * @type {BaseCommandName[]}
 		 */
-		this.disableBase = options.disableBase || [];
+		this.disableBase = options.disableBase ?? [];
 
 		// Set the global ratelimit if provided
 		if (options.ratelimit) this.ratelimit = options.ratelimit;
@@ -242,10 +238,10 @@ export class Client extends Discord.Client
 		 * Defaults to {@link JSONProvider}
 		 * @type {StorageProvider}
 		 */
-		this.provider = options.provider || JSONProvider;
+		this.provider = options.provider ?? JSONProvider;
 
 		// Plugins to load
-		this._plugins = options.plugins || [];
+		this._plugins = options.plugins ?? [];
 
 		/**
 		 * Loads plugins and contains loaded plugins in case
@@ -277,7 +273,7 @@ export class Client extends Discord.Client
 		 * @type {ResolverLoader}
 		 */
 		this.resolvers = new ResolverLoader(this);
-		this._customResolvers = options.customResolvers || [];
+		this._customResolvers = options.customResolvers ?? [];
 		this.resolvers._loadResolvers();
 
 		/**
@@ -298,7 +294,7 @@ export class Client extends Discord.Client
 			success: '✅',
 			fail: '❌',
 			working: '🕐'
-		}, options.buttons || {});
+		}, options.buttons ?? {});
 
 		/**
 		 * The argument parsing function the framework will use to parse
@@ -306,14 +302,14 @@ export class Client extends Discord.Client
 		 * splitting on {@link Command#argOpts.separator}
 		 * @type {Function}
 		 */
-		this.argsParser = options.argsParser || Util.parseArgs;
+		this.argsParser = options.argsParser ?? Util.parseArgs;
 
 		/**
 		 * Whether or not ts-node is in use, allowing the Client
 		 * to attempt to load .ts files when loading Commands
 		 * @type {boolean}
 		 */
-		this.tsNode = options.tsNode || false;
+		this.tsNode = options.tsNode ?? false;
 
 		Lang.createInstance(this);
 		Lang.loadLocalizations();
@@ -544,7 +540,7 @@ export class Client extends Discord.Client
 	public async getPrefix(guild: Guild): Promise<string | null>
 	{
 		if (!guild || !this.storage.guilds.has(guild.id)) return null;
-		return (await this.storage.guilds.get(guild.id)!.settings.get('prefix')) || null;
+		return (await this.storage.guilds.get(guild.id)!.settings.get('prefix')) ?? null;
 	}
 
 	/**
