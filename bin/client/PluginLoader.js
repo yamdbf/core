@@ -45,7 +45,7 @@ class PluginLoader {
                         error = `${err}, trying 'yamdbf-${plugin}'...`;
                     }
                     try {
-                        loadedPlugin = loadedPlugin || new (require(`yamdbf-${plugin}`))(this._client);
+                        loadedPlugin = (loadedPlugin !== null && loadedPlugin !== void 0 ? loadedPlugin : new (require(`yamdbf-${plugin}`))(this._client));
                     }
                     catch (err) {
                         error = error
@@ -53,7 +53,7 @@ class PluginLoader {
                             : `${err}, trying '@yamdbf/${plugin}'...`;
                     }
                     try {
-                        loadedPlugin = loadedPlugin || new (require(`@yamdbf/${plugin}`))(this._client);
+                        loadedPlugin = (loadedPlugin !== null && loadedPlugin !== void 0 ? loadedPlugin : new (require(`@yamdbf/${plugin}`))(this._client));
                     }
                     catch (err) {
                         error = error ? `${error}\n${err}` : err;
