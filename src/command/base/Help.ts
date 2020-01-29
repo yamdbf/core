@@ -51,7 +51,7 @@ export default class extends Command
 					.sort();
 
 			const shortcuts: { [name: string]: string } = !dm
-				? await message.guild.storage!.settings.get('shortcuts') || {}
+				? await message.guild.storage!.settings.get('shortcuts') ?? {}
 				: {};
 
 			const data: TemplateData = {
@@ -101,7 +101,7 @@ export default class extends Command
 		}
 
 		output = dm ? output.replace(/<prefix>/g, '')
-			: output.replace(/<prefix>/g, await this.client.getPrefix(message.guild) || '');
+			: output.replace(/<prefix>/g, await this.client.getPrefix(message.guild) ?? '');
 
 		embed.setColor(11854048).setDescription(output);
 
