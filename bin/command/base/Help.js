@@ -22,6 +22,7 @@ class default_1 extends Command_1.Command {
         });
     }
     async action(message, [res, commandName]) {
+        var _a, _b;
         const dm = message.channel.type !== 'text';
         const mentionName = `@${this.client.user.tag} `;
         const lang = dm ? this.client.defaultLang
@@ -40,8 +41,7 @@ class default_1 extends Command_1.Command {
             let commandList = usableCommands.map(c => `${Util_1.Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
                 .sort();
             const shortcuts = !dm
-                ? await message.guild.storage.settings.get('shortcuts') || {}
-                : {};
+                ? (_a = await message.guild.storage.settings.get('shortcuts'), (_a !== null && _a !== void 0 ? _a : {})) : {};
             const data = {
                 isGuild: !dm,
                 commandList,
@@ -82,7 +82,7 @@ class default_1 extends Command_1.Command {
             }
         }
         output = dm ? output.replace(/<prefix>/g, '')
-            : output.replace(/<prefix>/g, await this.client.getPrefix(message.guild) || '');
+            : output.replace(/<prefix>/g, (_b = await this.client.getPrefix(message.guild), (_b !== null && _b !== void 0 ? _b : '')));
         embed.setColor(11854048).setDescription(output);
         try {
             if (!this.client.dmHelp)
@@ -96,7 +96,7 @@ class default_1 extends Command_1.Command {
                     message.reply(res.CMD_HELP_REPLY_ALL());
             }
         }
-        catch (_a) {
+        catch (_c) {
             if (!dm)
                 message.reply(res.CMD_HELP_REPLY_FAIL());
         }

@@ -51,7 +51,8 @@ Of course the eval command is owner-only, but this should give you an idea of ho
      * List command shortcuts
      */
     async listShortcuts(message, res) {
-        const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
+        var _a;
+        const shortcuts = (_a = await message.guild.storage.settings.get('shortcuts'), (_a !== null && _a !== void 0 ? _a : {}));
         const names = Object.keys(shortcuts);
         let output;
         if (names.length === 0)
@@ -64,7 +65,8 @@ Of course the eval command is owner-only, but this should give you an idea of ho
      * Set command shortcut content
      */
     async setShortcut(message, res, name, content) {
-        const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
+        var _a;
+        const shortcuts = (_a = await message.guild.storage.settings.get('shortcuts'), (_a !== null && _a !== void 0 ? _a : {}));
         if (Object.keys(shortcuts).length >= 50)
             return this.respond(message, res.CMD_SHORTCUTS_ERR_MAX_SHORTCUTS());
         if (content.length > 500)
@@ -77,7 +79,8 @@ Of course the eval command is owner-only, but this should give you an idea of ho
      * Get command shortcut content
      */
     async getShortcut(message, res, name) {
-        const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
+        var _a;
+        const shortcuts = (_a = await message.guild.storage.settings.get('shortcuts'), (_a !== null && _a !== void 0 ? _a : {}));
         if (!shortcuts[name])
             return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
         const content = discord_js_1.Util.escapeMarkdown(shortcuts[name], true);
@@ -87,7 +90,8 @@ Of course the eval command is owner-only, but this should give you an idea of ho
      * Remove a command shortcut
      */
     async removeShortcut(message, res, name) {
-        const shortcuts = await message.guild.storage.settings.get('shortcuts') || {};
+        var _a;
+        const shortcuts = (_a = await message.guild.storage.settings.get('shortcuts'), (_a !== null && _a !== void 0 ? _a : {}));
         if (!shortcuts[name])
             return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
         await message.guild.storage.settings.remove(`shortcuts.${name}`);
