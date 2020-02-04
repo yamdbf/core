@@ -127,7 +127,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 
 		await message.guild.storage!.settings.set(`shortcuts.${name}`, content);
 
-		content = Util.escapeMarkdown(content, true);
+		content = Util.escapeMarkdown(content, { codeBlock: true, codeBlockContent: true });
 		return this.respond(message, res.CMD_SHORTCUTS_SET_SUCCESS({ name, content }));
 	}
 
@@ -140,7 +140,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 		if (!shortcuts[name])
 			return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
 
-		const content: string = Util.escapeMarkdown(shortcuts[name], true);
+		const content: string = Util.escapeMarkdown(shortcuts[name], { codeBlock: true, codeBlockContent: true });
 		return this.respond(message, res.CMD_SHORTCUTS_GET_CONTENT({ name, content }));
 	}
 

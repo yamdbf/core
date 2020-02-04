@@ -193,7 +193,7 @@ export class CommandDispatcher
 		// Function to send middleware result, utilizing compact mode if enabled
 		const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise&lt;any> =
 			async (result, options) => {
-				if (await message.guild.storage!.settings.get('compact') || this._client.compact)
+				if (await message.guild?.storage?.settings.get('compact') || this._client.compact)
 				{
 					if (message.reactions.size > 0) await message.reactions.removeAll();
 					return CompactModeHelper.registerButton(
