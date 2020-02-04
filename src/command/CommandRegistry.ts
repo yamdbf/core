@@ -32,7 +32,7 @@ export class CommandRegistry<
 	}
 
 	public static get [Symbol.species]() {
-		return Collection;
+		return Collection as any;
 	}
 
 	/**

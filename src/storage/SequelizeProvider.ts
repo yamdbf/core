@@ -51,7 +51,7 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 					key: { type: dataTypes.STRING, allowNull: false, primaryKey: true },
 					value: [Dialect.Postgres, Dialect.SQLite, Dialect.MSSQL].includes(dialect)
 						? dataTypes.TEXT
-						: dataTypes.TEXT('long')
+						: dataTypes.TEXT({ length: 'long' })
 				},
 				{
 					modelName: name,

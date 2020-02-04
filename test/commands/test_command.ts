@@ -35,9 +35,13 @@ export class TestCommandTwo extends TestCommandClass
 			desc: 'test command 2',
 			usage: '<prefix>test2 <test> <foo>',
 		});
+
+		this.use((message, args) => "bbbbbbb");
 	}
 
-	public action() {}
+	public action() {
+		console.log('aaaaa');
+	}
 }
 
 // @ownerOnly
@@ -55,14 +59,16 @@ export default class extends TestCommandClass
 			aliases: ['testing', 'testo'],
 			desc: 'test command',
 			usage: '<prefix>test <test> <foo>',
-			guildOnly: true,
+			// guildOnly: true,
 			argOpts: {
 				separator: ''
 			}
 			// ratelimit: '2/10s'
 		});
 
-		this.lock = new CommandLock('help', 'ping');
+		this.use((message, args) => [message, args]);
+
+		// this.lock = new CommandLock('help', 'ping');
 
 		// this.use(resolve('foo: BannedUser'));
 		// this.use(expect('foo: BannedUser'));

@@ -2,27 +2,25 @@
 	// See https://go.microsoft.com/fwlink/?LinkId=733558
 	// for the documentation about the tasks.json format
 	"version": "2.0.0",
-	"command": "gulp",
+	"command": "npx",
 	"type": "shell",
 	"tasks": [
 		{
 			"label": "build:vscode",
-			"args": [],
+			"args": ["gulp", "build"],
 			"group": "build",
 			"isBackground": false,
 			"problemMatcher": ["$tsc"]
 		},
 		{
 			"label": "tests",
-			"args": ["tests"],
-			"command": "gulp",
+			"args": ["gulp", "tests"],
 			"type": "shell",
 			"problemMatcher": ["$tsc"]
 		},
 		{
 			"label": "docs",
-			"args": ["docs"],
-			"command": "gulp",
+			"args": ["gulp", "docs"],
 			"type": "shell"
 		}
 	]
