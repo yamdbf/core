@@ -11,7 +11,7 @@ export declare class CommandRegistry<T extends Client, K extends string = string
     private readonly _client;
     private readonly _reserved;
     constructor(client: T);
-    static get [Symbol.species](): typeof Collection;
+    static get [Symbol.species](): any;
     /**
      * Contains all [Command groups]{@link Command#group}
      * @readonly

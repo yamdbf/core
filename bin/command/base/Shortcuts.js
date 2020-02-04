@@ -72,7 +72,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
         if (content.length > 500)
             return this.respond(message, res.CMD_SHORTCUTS_ERR_SET_LENGTH());
         await message.guild.storage.settings.set(`shortcuts.${name}`, content);
-        content = discord_js_1.Util.escapeMarkdown(content, true);
+        content = discord_js_1.Util.escapeMarkdown(content, { codeBlock: true, codeBlockContent: true });
         return this.respond(message, res.CMD_SHORTCUTS_SET_SUCCESS({ name, content }));
     }
     /**
@@ -83,7 +83,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
         const shortcuts = (_a = await message.guild.storage.settings.get('shortcuts'), (_a !== null && _a !== void 0 ? _a : {}));
         if (!shortcuts[name])
             return this.respond(message, res.CMD_SHORTCUTS_ERR_MISSING({ name }));
-        const content = discord_js_1.Util.escapeMarkdown(shortcuts[name], true);
+        const content = discord_js_1.Util.escapeMarkdown(shortcuts[name], { codeBlock: true, codeBlockContent: true });
         return this.respond(message, res.CMD_SHORTCUTS_GET_CONTENT({ name, content }));
     }
     /**

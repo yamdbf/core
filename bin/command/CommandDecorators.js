@@ -34,7 +34,8 @@ function using(func) {
         descriptor.value = async function (message, args) {
             // Send the middleware result to the channel, utilizing compact mode if enabled
             const sendMiddlewareResult = async (result, options) => {
-                if (await message.guild.storage.settings.get('compact') || this.client.compact) {
+                var _a, _b;
+                if (await ((_b = (_a = message.guild) === null || _a === void 0 ? void 0 : _a.storage) === null || _b === void 0 ? void 0 : _b.settings.get('compact')) || this.client.compact) {
                     if (message.reactions.size > 0)
                         await message.reactions.removeAll();
                     return CompactModeHelper_1.CompactModeHelper.registerButton(message, this.client.buttons['fail'], () => message.channel.send(result, options));
