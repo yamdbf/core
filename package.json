@@ -55,7 +55,7 @@
   "devDependencies": {
     "@types/chalk": "^0.4.31",
     "@types/glob": "^5.0.30",
-    "@types/node": "^8.0.19",
+    "@types/node": "^14.11.8",
     "@types/node-json-db": "0.0.1",
     "@types/sequelize": "^4.0.68",
     "cross-env": "^5.1.3",
