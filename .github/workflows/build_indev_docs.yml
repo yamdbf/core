@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
 
-      - name: Install Node v12
+      - name: Install Node v8.9.3
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 8.9.3
 
       - name: Install dependencies
         run: |
