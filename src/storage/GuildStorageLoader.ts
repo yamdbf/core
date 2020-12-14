@@ -1,6 +1,7 @@
+/* eslint-disable no-await-in-loop */
 import { Client } from '../client/Client';
-import { StorageProvider } from './StorageProvider';
 import { GuildStorage } from '../storage/GuildStorage';
+import { StorageProvider } from './StorageProvider';
 import { Util } from '../util/Util';
 
 /**
@@ -38,12 +39,13 @@ export class GuildStorageLoader
 	 */
 	public async loadStorages(): Promise<void>
 	{
-		for (const guild of this._client.guilds.values())
+		for (const guild of this._client.guilds.cache.values())
 		{
 			if (this._client.storage.guilds.has(guild.id)) continue;
 
 			const storage: GuildStorage = new GuildStorage(
-				this._client, guild, this._storageProvider, this._settingsProvider);
+				this._client, guild, this._storageProvider, this._settingsProvider
+			);
 
 			await storage.init();
 

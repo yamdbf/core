@@ -5,4 +5,4 @@
  * function/proxy like [Lang.res()]{@link module:Lang.res}
  */
 
-export type TemplateData = { [key: string]: any };
+export interface TemplateData { [key: string]: any }

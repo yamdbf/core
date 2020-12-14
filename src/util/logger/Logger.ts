@@ -1,7 +1,7 @@
-import { TransportFunction } from '../../types/TransportFunction';
-import { Transport } from '../../types/Transport';
 import { LogLevel } from '../../types/LogLevel';
 import { LogType } from './LogType';
+import { Transport } from '../../types/Transport';
+import { TransportFunction } from '../../types/TransportFunction';
 export { logger } from './LoggerDecorator';
 
 /**
@@ -60,7 +60,7 @@ export class Logger
 		const createWrapper: (color: Color) => ColorWrapper =
 			color => (...text) => wrapColor(color, ...text);
 
-		type LogTypeColorWrappers = { [type: string]: ColorWrapper };
+		interface LogTypeColorWrappers { [type: string]: ColorWrapper }
 		const typeColorWrappers: LogTypeColorWrappers = {
 			[LogType.LOG]: createWrapper(colors.green),
 			[LogType.INFO]: createWrapper(colors.blue),
@@ -70,15 +70,18 @@ export class Logger
 		};
 
 		const zeroPad: (n: number | string) => string = n => `0${n}`.slice(-2);
-		const shard: () => string = () => {
+		const shard: () => string = () =>
+		{
 			const isSharded: boolean = typeof Logger._shard !== 'undefined';
 			const shardNum: string = (Logger._shard || 0) < 10 ? zeroPad(Logger._shard || 0) : Logger._shard.toString();
 			const shardTag: string = `[${wrapColor(colors.cyan, `SHARD_${shardNum}`)}]`;
 			return isSharded ? shardTag : '';
 		};
 
-		const transport: TransportFunction = data => {
-			let { type, tag, text } = data;
+		const transport: TransportFunction = data =>
+		{
+			let { type, tag } = data;
+			const { text } = data;
 			const d: Date = data.timestamp;
 			const h: string = zeroPad(d.getHours());
 			const m: string = zeroPad(d.getMinutes());
@@ -92,7 +95,6 @@ export class Logger
 		};
 
 		this.addTransport({ transport });
-
 	}
 
 	/**
@@ -143,7 +145,7 @@ export class Logger
 	public static instance(tag?: string): Logger
 	{
 		if (typeof tag !== 'undefined')
-			return Logger.taggedInstance(tag);
+			return Logger._taggedInstance(tag);
 
 		return Logger._instance || new Logger();
 	}
@@ -153,10 +155,11 @@ export class Logger
 	 * method calls with the given tag
 	 * @private
 	 */
-	private static taggedInstance(tag: string): Logger
+	private static _taggedInstance(tag: string): Logger
 	{
 		return new Proxy(Logger.instance(), {
-			get: (target: any, key: PropertyKey) => {
+			get: (target: any, key: PropertyKey) =>
+			{
 				switch (key)
 				{
 					case 'log': case 'info': case 'warn': case 'error': case 'debug':
@@ -190,7 +193,7 @@ export class Logger
 			? () => this._logLevel
 			: typeof level === 'function'
 				? level
-				: () => level as LogLevel;
+				: () => level;
 
 		this._transports.push(transport);
 	}

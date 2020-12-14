@@ -4,7 +4,7 @@
  * of a Plugin.*
  */
 
-import { Plugin } from '../client/Plugin';
 import { Client } from '../client/Client';
+import { Plugin } from '../client/Plugin';
 
 export type PluginConstructor = new (client: Client) => Plugin;

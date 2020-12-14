@@ -1,53 +1,45 @@
+/* eslint-disable no-await-in-loop */
+// /* eslint-disable indent */
 import 'reflect-metadata';
 import * as Discord from 'discord.js';
 import * as Path from 'path';
 
+// eslint-disable-next-line no-duplicate-imports
 import {
-	Channel,
+	ClientEvents,
 	ClientOptions,
 	ClientApplication,
-	Collection,
 	Guild,
-	GuildMember,
 	Message,
-	MessageReaction,
-	Role,
 	User,
-	Snowflake,
-	GuildEmoji,
-	RateLimitData,
-	TextChannel,
-	VoiceState,
-	Presence,
-	Speaking,
 	PermissionResolvable
 } from 'discord.js';
 
+import { Logger, logger } from '../util/logger/Logger';
+import { BaseCommandName } from '../types/BaseCommandName';
+import { ClientStorage } from '../storage/ClientStorage';
 import { Command } from '../command/Command';
 import { CommandDispatcher } from '../command/CommandDispatcher';
 import { CommandLoader } from '../command/CommandLoader';
 import { CommandRegistry } from '../command/CommandRegistry';
-import { ResolverLoader } from '../command/resolvers/ResolverLoader';
-import { RateLimitManager } from '../command/RateLimitManager';
-import { JSONProvider } from '../storage/JSONProvider';
-import { ClientStorage } from '../storage/ClientStorage';
-import { GuildStorageLoader } from '../storage/GuildStorageLoader';
-import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
-import { YAMDBFOptions } from '../types/YAMDBFOptions';
-import { MiddlewareFunction } from '../types/MiddlewareFunction';
-import { BaseCommandName } from '../types/BaseCommandName';
-import { Logger, logger } from '../util/logger/Logger';
-import { ListenerUtil } from '../util/ListenerUtil';
-import { Lang } from '../localization/Lang';
-import { PluginLoader } from './PluginLoader';
-import { PluginConstructor } from '../types/PluginConstructor';
-import { ResolverConstructor } from '../types/ResolverConstructor';
-import { Util } from '../util/Util';
-import { Time } from '../util/Time';
-import { GuildStorage } from '../storage/GuildStorage';
-import { Message as YAMDBFMessage } from '../types/Message';
 import { CompactModeHelper } from '../command/CompactModeHelper';
 import { EventLoader } from '../event/EventLoader';
+import { GuildStorage } from '../storage/GuildStorage';
+import { GuildStorageLoader } from '../storage/GuildStorageLoader';
+import { JSONProvider } from '../storage/JSONProvider';
+import { Lang } from '../localization/Lang';
+import { ListenerUtil } from '../util/ListenerUtil';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { PluginConstructor } from '../types/PluginConstructor';
+import { PluginLoader } from './PluginLoader';
+import { RateLimitManager } from '../command/RateLimitManager';
+import { ResolverConstructor } from '../types/ResolverConstructor';
+import { ResolverLoader } from '../command/resolvers/ResolverLoader';
+import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
+import { Time } from '../util/Time';
+import { Util } from '../util/Util';
+import { Message as YAMDBFMessage } from '../types/Message';
+import { YAMDBFOptions } from '../types/YAMDBFOptions';
 
 const { on, once, registerListeners } = ListenerUtil;
 
@@ -62,6 +54,7 @@ export class Client extends Discord.Client
 {
 	@logger('Client')
 	private readonly _logger!: Logger;
+
 	private readonly _token: string;
 	private readonly _plugins: (PluginConstructor | string)[];
 	private readonly _guildStorageLoader: GuildStorageLoader;
@@ -97,6 +90,7 @@ export class Client extends Discord.Client
 	public readonly _middleware: MiddlewareFunction[];
 	public readonly _customResolvers: ResolverConstructor[];
 
+	// eslint-disable-next-line complexity
 	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
 	{
 		super(clientOptions);
@@ -125,7 +119,7 @@ export class Client extends Discord.Client
 		 * **See:** {@link Client#passive}
 		 * @type {string}
 		 */
-		this.commandsDir = options.commandsDir ? Path.resolve(options.commandsDir!) : null;
+		this.commandsDir = options.commandsDir ? Path.resolve(options.commandsDir) : null;
 
 		/**
 		 * Directory to find Event class files. Optional
@@ -133,7 +127,7 @@ export class Client extends Discord.Client
 		 * **See:** {@link Client#passive}
 		 * @type {string}
 		 */
-		this.eventsDir = options.eventsDir ? Path.resolve(options.eventsDir!) : null;
+		this.eventsDir = options.eventsDir ? Path.resolve(options.eventsDir) : null;
 
 		/**
 		 * Directory to find custom localization files
@@ -290,11 +284,12 @@ export class Client extends Discord.Client
 		 * via the `buttons` field in {@link YAMDBFOptions}
 		 * @type {object}
 		 */
-		this.buttons = Object.assign({}, {
+		this.buttons = {
 			success: '✅',
 			fail: '❌',
-			working: '🕐'
-		}, options.buttons ?? {});
+			working: '🕐',
+			...options.buttons ?? {}
+		};
 
 		/**
 		 * The argument parsing function the framework will use to parse
@@ -337,11 +332,10 @@ export class Client extends Discord.Client
 		registerListeners(this);
 	}
 
-//#region Event handlers
+	// #region Event handlers
 
-	@once('ready')
 	// @ts-ignore - Handled via ListenerUtil
-	private async __onReadyEvent(): Promise<void>
+	@once('ready') private async __onReadyEvent(): Promise<void>
 	{
 		// Set default owner (OAuth Application owner) if none exists
 		if (this.owner.length < 1)
@@ -365,8 +359,7 @@ export class Client extends Discord.Client
 			this.user!.setActivity(this.statusText);
 	}
 
-	@once('continue')
-	private async __onContinueEvent(): Promise<void>
+	@once('continue') private async __onContinueEvent(): Promise<void>
 	{
 		await this._guildStorageLoader.init();
 		await this._guildStorageLoader.loadStorages();
@@ -396,7 +389,8 @@ export class Client extends Discord.Client
 			const commands: number = this.commands.size;
 			const groups: number = this.commands.groups.length;
 			this._logger.info(
-				`Command dispatcher ready -- ${commands} commands in ${groups} groups` );
+				`Command dispatcher ready -- ${commands} commands in ${groups} groups`
+			);
 
 			if (this.eventLoader.hasSources())
 			{
@@ -418,9 +412,8 @@ export class Client extends Discord.Client
 			].join(' '));
 	}
 
-	@on('guildCreate')
 	// @ts-ignore - Handled via ListenerUtil
-	private async __onGuildCreateEvent(guild: Guild): Promise<void>
+	@on('guildCreate') private async __onGuildCreateEvent(guild: Guild): Promise<void>
 	{
 		if (this.storage.guilds.has(guild.id))
 		{
@@ -432,18 +425,18 @@ export class Client extends Discord.Client
 		else await this._guildStorageLoader.loadStorages();
 	}
 
-	@on('guildDelete')
 	// @ts-ignore - Handled via ListenerUtil
-	private __onGuildDeleteEvent(guild: Guild): void
+	@on('guildDelete') private __onGuildDeleteEvent(guild: Guild): void
 	{
 		if (this.storage.guilds.has(guild.id))
 			this.storage.guilds.get(guild.id)!.settings.set(
-				'YAMDBFInternal.remove', Date.now() + Time.parseShorthand('7d')!);
+				'YAMDBFInternal.remove', Date.now() + Time.parseShorthand('7d')!
+			);
 	}
 
-//#endregion
+	// #endregion
 
-//#region Getters/Setters
+	// #region Getters/Setters
 
 	/**
 	 * The global ratelimit for all command usage per user
@@ -456,7 +449,7 @@ export class Client extends Discord.Client
 		this._ratelimit = value;
 	}
 
-//#endregion
+	// #endregion
 
 	/**
 	 * Starts the login process, culminating in the `clientReady` event
@@ -527,7 +520,7 @@ export class Client extends Discord.Client
 	 * @param {string} key The default settings key to check for
 	 * @returns {Promise<boolean>}
 	 */
-	public defaultSettingExists(key: string): Promise<boolean>
+	public async defaultSettingExists(key: string): Promise<boolean>
 	{
 		return this.storage.exists(`defaultGuildSettings.${key}`);
 	}
@@ -540,7 +533,7 @@ export class Client extends Discord.Client
 	public async getPrefix(guild: Guild): Promise<string | null>
 	{
 		if (!guild || !this.storage.guilds.has(guild.id)) return null;
-		return (await this.storage.guilds.get(guild.id)!.settings.get('prefix')) ?? null;
+		return await this.storage.guilds.get(guild.id)!.settings.get('prefix') ?? null;
 	}
 
 	/**
@@ -552,14 +545,14 @@ export class Client extends Discord.Client
 	 * that will be used to generate the URL
 	 * @returns {Promise<string>}
 	 */
-	public createBotInvite(): Promise<string>
+	public async createBotInvite(): Promise<string>
 	{
 		const perms: Set<PermissionResolvable> = new Set();
 		for (const command of this.commands.values())
 			for (const perm of command.clientPermissions)
 				perms.add(perm);
 
-		return this.generateInvite(Array.from(perms));
+		return this.generateInvite({ permissions: Array.from(perms) });
 	}
 
 	/**
@@ -628,50 +621,29 @@ export class Client extends Discord.Client
 		return this.eventLoader.loadFromSources();
 	}
 
-//#region Discord.js on() events
+	// #region Discord.js on() events
 
-	public on(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
-	public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
-	public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-	public on(event: 'debug' | 'warn', listener: (info: string) => void): this;
-	public on(event: 'disconnect', listener: (event: any) => void): this;
-	public on(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
-	public on(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
-	public on(event: 'error', listener: (error: Error) => void): this;
-	public on(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: Guild, user: User) => void): this;
-	public on(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: Guild) => void): this;
-	public on(event: 'guildMemberAdd' | 'guildMemberAvailable' | 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-	public on(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: Guild) => void): this;
-	public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
-	public on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
-	public on(event: 'guildUpdate', listener: (oldGuild: Guild, newGuild: Guild) => void): this;
-	public on(event: 'guildIntegrationsUpdate', listener: (guild: Guild) => void): this;
-	public on(event: 'message' | 'messageDelete' | 'messageReactionRemoveAll', listener: (message: Message) => void): this;
-	public on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
-	public on(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
-	public on(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
-	public on(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
-	public on(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
-	public on(event: 'ready' | 'reconnecting', listener: () => void): this;
-	public on(event: 'resumed', listener: (replayed: number) => void): this;
-	public on(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
-	public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
-	public on(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
-	public on(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
-	public on(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
-	public on(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
-	public on(event: string, listener: Function): this;
+	public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): this;
+	public on<S extends string | symbol>(
+		event: Exclude<S, keyof ClientEvents>,
+		listener: (...args: any[]) => void,
+	): this;
 
-//#endregion
+	// #endregion
 
-	public on(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
-	public on(event: 'unknownCommand', listener: (name: string, args: any[], message: Message) => void): this;
+	public on(
+		event: 'command',
+		listener: (name: string, args: any[], execTime: number, message: Message) => void
+	): this;
+
+	public on(
+		event: 'unknownCommand',
+		listener: (name: string, args: any[], message: Message) => void
+	): this;
+
 	public on(event: 'noCommand', listener: (message: Message) => void): this;
-	public on(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
-	public on(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
-	public on(event: 'pause', listener: () => void): this;
-	public on(event: 'continue', listener: () => void): this;
-	public on(event: 'clientReady', listener: () => void): this;
+	public on(event: 'blacklistAdd' | 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
+	public on(event: 'pause' | 'continue' | 'clientReady', listener: () => void): this;
 
 	/**
 	 * Emitted whenever a command is successfully called
@@ -738,60 +710,33 @@ export class Client extends Discord.Client
 	 */
 
 	// on() wrapper to support overload signatures
-	public on(event: string, listener: Function): this
+	public on(event: string, listener: (...args: any[]) => void): this
 	{
 		return super.on(event, listener);
 	}
 
-//#region
+	// #region Discord.js once() events
 
-//#region Discord.js once() events
+	public once<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): this;
+	public once<S extends string | symbol>(
+		event: Exclude<S, keyof ClientEvents>,
+		listener: (...args: any[]) => void,
+	): this;
 
-	public once(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
-	public once(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
-	public once(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-	public once(event: 'debug' | 'warn', listener: (info: string) => void): this;
-	public once(event: 'disconnect', listener: (event: any) => void): this;
-	public once(event: 'emojiCreate' | 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
-	public once(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
-	public once(event: 'error', listener: (error: Error) => void): this;
-	public once(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: Guild, user: User) => void): this;
-	public once(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: Guild) => void): this;
-	public once(event: 'guildMemberAdd' | 'guildMemberAvailable' | 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-	public once(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: Guild) => void): this;
-	public once(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
-	public once(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
-	public once(event: 'guildUpdate', listener: (oldGuild: Guild, newGuild: Guild) => void): this;
-	public once(event: 'guildIntegrationsUpdate', listener: (guild: Guild) => void): this;
-	public once(event: 'message' | 'messageDelete' | 'messageReactionRemoveAll', listener: (message: Message) => void): this;
-	public once(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, Message>) => void): this;
-	public once(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: User) => void): this;
-	public once(event: 'messageUpdate', listener: (oldMessage: Message, newMessage: Message) => void): this;
-	public once(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
-	public once(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
-	public once(event: 'ready' | 'reconnecting', listener: () => void): this;
-	public once(event: 'resumed', listener: (replayed: number) => void): this;
-	public once(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
-	public once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
-	public once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: User) => void): this;
-	public once(event: 'userUpdate', listener: (oldUser: User, newUser: User) => void): this;
-	public once(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
-	public once(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
-	public once(event: string, listener: Function): this;
+	// #endregion
 
-//#endregion
+	public once(
+		event: 'command',
+		listener: (name: string, args: any[], execTime: number, message: Message) => void
+	): this;
 
-	public once(event: 'command', listener: (name: string, args: any[], execTime: number, message: Message) => void): this;
 	public once(event: 'unknownCommand', listener: (name: string, args: any[], message: Message) => void): this;
 	public once(event: 'noCommand', listener: (message: Message) => void): this;
-	public once(event: 'blacklistAdd', listener: (user: User, global: boolean) => void): this;
-	public once(event: 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
-	public once(event: 'pause', listener: () => void): this;
-	public once(event: 'continue', listener: () => void): this;
-	public once(event: 'clientReady', listener: () => void): this;
+	public once(event: 'blacklistAdd' | 'blacklistRemove', listener: (user: User, global: boolean) => void): this;
+	public once(event: 'pause' | 'continue' | 'clientReady', listener: () => void): this;
 
-	// once() wrapper to support overload signatures
-	public once(event: string, listener: Function): this
+	// Once() wrapper to support overload signatures
+	public once(event: string, listener: (...args: any[]) => void): this
 	{
 		return super.once(event, listener);
 	}

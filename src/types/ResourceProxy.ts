@@ -19,8 +19,8 @@
  * ```
  */
 
-import { TemplateData } from '../types/TemplateData';
 import { BaseStrings } from '..';
+import { TemplateData } from '../types/TemplateData';
 
 export type ResourceProxy<T = {}> = {
 	[key in BaseStrings]: (data?: TemplateData) => string

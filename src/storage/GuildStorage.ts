@@ -1,8 +1,8 @@
-import { SharedProviderStorage } from './SharedProviderStorage';
-import { StorageProvider } from './StorageProvider';
-import { GuildSettings } from './GuildSettings';
 import { Client } from '../client/Client';
 import { Guild } from 'discord.js';
+import { GuildSettings } from './GuildSettings';
+import { SharedProviderStorage } from './SharedProviderStorage';
+import { StorageProvider } from './StorageProvider';
 
 /**
  * Class containing asynchronous methods for storing, retrieving, and
@@ -18,7 +18,12 @@ export class GuildStorage extends SharedProviderStorage
 {
 	public readonly settings: GuildSettings;
 
-	public constructor(client: Client, guild: Guild, storageProvider: StorageProvider, settingsProvider: StorageProvider)
+	public constructor(
+		client: Client,
+		guild: Guild,
+		storageProvider: StorageProvider,
+		settingsProvider: StorageProvider
+	)
 	{
 		super(storageProvider, guild.id);
 

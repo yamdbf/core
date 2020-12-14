@@ -5,14 +5,14 @@ import { EventEmitter } from 'events';
  * Represents metadata used to build an event listener
  * and assign it to a class method at runtime
  */
-type ListenerMetadata =
+interface ListenerMetadata
 {
 	event: string;
 	method: string;
 	once: boolean;
 	args: any[];
 	attached?: boolean;
-};
+}
 
 /**
  * Contains static decorator methods for declaring class methods (within a class extending `EventEmitter`)
@@ -106,6 +106,7 @@ export class ListenerUtil
 	 */
 	private static _setListenerMetadata(event: string, once: boolean, ...args: any[]): MethodDecorator
 	{
+		// eslint-disable-next-line func-names
 		return function(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor
 		{
 			const listeners: ListenerMetadata[] = Reflect.getMetadata('listeners', target) || [];

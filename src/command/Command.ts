@@ -1,13 +1,14 @@
+/* eslint-disable complexity */
 import { PermissionResolvable, Permissions, MessageOptions } from 'discord.js';
-import { Client } from '../client/Client';
-import { MiddlewareFunction } from '../types/MiddlewareFunction';
-import { CommandInfo } from '../types/CommandInfo';
 import { ArgOpts } from '../types/ArgOpts';
-import { Util } from '../util/Util';
-import { Message } from '../types/Message';
-import { CompactModeHelper } from './CompactModeHelper';
-import { RespondOptions } from '../types/RespondOptions';
+import { Client } from '../client/Client';
+import { CommandInfo } from '../types/CommandInfo';
 import { CommandLock } from './CommandLock';
+import { CompactModeHelper } from './CompactModeHelper';
+import { Message } from '../types/Message';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { RespondOptions } from '../types/RespondOptions';
+import { Util } from '../util/Util';
 
 /**
  * Action to be executed when the command is called. The following parameters
@@ -281,7 +282,7 @@ export abstract class Command<T extends Client = Client>
 		if (typeof this.lockTimeout !== 'undefined' && typeof this.lockTimeout !== 'number')
 			throw new TypeError(`\`lockTimeout\` for Command "${this.name}" must be a number`);
 
-		if (!this.action || !(this.action instanceof Function))
+		if (typeof this.action === 'undefined' || !(this.action instanceof Function))
 			throw new TypeError(`Command "${this.name}".action: expected Function, got: ${typeof this.action}`);
 
 		// Default guildOnly to true if permissions/roles are given
@@ -354,6 +355,7 @@ export abstract class Command<T extends Client = Client>
 
 	protected async respond(message: Message, response: string, options?: MessageOptions): Promise<Message | Message[]>;
 	protected async respond(message: Message, response: string, options?: RespondOptions): Promise<void>;
+
 	/**
 	 * Send provided response to the provided message's channel,
 	 * leveraging compact mode mechanics if enabled
@@ -371,11 +373,12 @@ export abstract class Command<T extends Client = Client>
 			&& typeof options.button !== 'undefined'
 			&& (await message.guild.storage!.settings.get('compact') || this.client.compact))
 		{
-			if (message.reactions.size > 0) await message.reactions.removeAll();
+			if (message.reactions.cache.size > 0) await message.reactions.removeAll();
 			CompactModeHelper.registerButton(
 				message,
 				this.client.buttons[options.button] || options.button,
-				() => message.channel.send(response, options));
+				async () => message.channel.send(response, options)
+			);
 			return;
 		}
 
@@ -389,7 +392,7 @@ export abstract class Command<T extends Client = Client>
 	 */
 	private _validatePermissions(field: string, perms: PermissionResolvable[]): void
 	{
-		let errString: (i: number, err: any) => string = (i, err) =>
+		const errString: (i: number, err: any) => string = (i, err) =>
 			`Command "${this.name}" permission "${perms[i]}" in ${field}[${i}] is not a valid permission.\n\n${err}`;
 
 		for (const [index, perm] of perms.entries())

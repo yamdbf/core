@@ -10,7 +10,8 @@
  * @property {Function} toSimplifiedString() Returns duration formatted as `#d #h #m #s`
  */
 
-export type Difference = {
+export interface Difference
+{
 	raw: number;
 	days?: number;
 	hours?: number;
@@ -19,4 +20,4 @@ export type Difference = {
 	ms: number;
 	toString(): string;
 	toSimplifiedString?(): string;
-};
+}

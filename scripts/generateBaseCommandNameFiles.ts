@@ -36,6 +36,7 @@ export type BaseCommandName = ${commands.map(c => `'${c}'`).join('\n\t| ')};
 	}
 }
 logger.log('Script', 'Starting base command names file builder');
+// @ts-ignore Needed to run the script
 const script: ScriptClient = new ScriptClient();
 
 process.on('unhandledRejection', (err: any) => logger.error(err));

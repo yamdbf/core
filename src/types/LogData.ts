@@ -8,4 +8,10 @@
  * @property {string} text The text content of this log
  */
 
-export type LogData = { timestamp: Date, type: string, tag: string, text: string };
+export interface LogData
+{
+	timestamp: Date;
+	type: string;
+	tag: string;
+	text: string;
+}

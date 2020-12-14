@@ -1,3 +1,4 @@
+/* eslint-disable no-new-func */
 import { Script } from 'vm';
 
 /**
@@ -17,7 +18,8 @@ export class CompiledTemplateScript
 
 		// Defer syntax error handling to the vm Script because
 		// it will actually detail the code in question in the error
-		try { this.func = new Function('args', 'res', raw); } catch {}
+		try { this.func = new Function('args', 'res', raw); }
+		catch {}
 
 		// Because --noUnusedLocals, no-unused-expression, and I dislike
 		// disabling tslint and TypeScript errors. Don't judge me.
@@ -39,7 +41,7 @@ export class CompiledTemplateScript
 	 * throwing errors on top-level returns which are valid in the
 	 * context of a template script
 	 */
-	private static _functionWrap(code: string)
+	private static _functionWrap(code: string): string
 	{
 		return `function _(args, res) {\n${code}\n}`;
 	}

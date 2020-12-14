@@ -1,13 +1,13 @@
 import { Collection, MessageEmbed } from 'discord.js';
+import { Command } from '../Command';
+import { Lang } from '../../localization/Lang';
 import { LocalizedCommandInfo } from '../../types/LocalizedCommandInfo';
+import { Message } from '../../types/Message';
+import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { TemplateData } from '../../types/TemplateData';
-import { Message } from '../../types/Message';
-import { using } from '../CommandDecorators';
-import { Middleware } from '../middleware/Middleware';
-import { Lang } from '../../localization/Lang';
 import { Util } from '../../util/Util';
-import { Command } from '../Command';
+import { using } from '../CommandDecorators';
 
 export default class extends Command
 {
@@ -16,7 +16,7 @@ export default class extends Command
 		super({
 			name: 'help',
 			desc: 'Provides information on bot commands',
-			usage: `<prefix>help [command]`,
+			usage: '<prefix>help [command]',
 			info: 'Will DM command help information to the user to keep clutter down in guild channels'
 		});
 	}
@@ -27,28 +27,28 @@ export default class extends Command
 		const dm: boolean = message.channel.type !== 'text';
 		const mentionName: string = `@${this.client.user!.tag} `;
 		const lang: string = dm ? this.client.defaultLang
-			:  await message.guild.storage!.settings.get('lang');
+			: await message.guild.storage!.settings.get('lang');
 
 		const cInfo: (cmd: Command) => LocalizedCommandInfo =
 			(cmd: Command) => Lang.getCommandInfo(cmd, lang);
 
 		let command!: Command;
 		let output: string = '';
-		let embed: MessageEmbed = new MessageEmbed();
+		const embed: MessageEmbed = new MessageEmbed();
 
 		if (!commandName)
 		{
 			const usableCommands: Collection<string, Command> = this.client.commands
-				.filter(c => !(!this.client.isOwner(message.author!) && c.ownerOnly))
+				.filter(c => !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.filter(c => !c.hidden && !c.disabled);
 
 			const widest: number = usableCommands
 				.map(c => c.name.length)
 				.reduce((a, b) => Math.max(a, b));
 
-			let commandList: string[] = usableCommands.map(c =>
-				`${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
-					.sort();
+			const commandList: string[] = usableCommands
+				.map(c => `${Util.padRight(c.name, widest + 1)}${c.guildOnly ? '*' : ' '}: ${cInfo(c).desc}`)
+				.sort();
 
 			const shortcuts: { [name: string]: string } = !dm
 				? await message.guild.storage!.settings.get('shortcuts') ?? {}
@@ -66,7 +66,7 @@ export default class extends Command
 			output = res.CMD_HELP_COMMAND_LIST(data);
 			if (output.length >= 1024)
 			{
-				let mappedCommands: string[] = usableCommands
+				const mappedCommands: string[] = usableCommands
 					.sort((a, b) => a.name < b.name ? -1 : 1)
 					.map(c => (c.guildOnly ? '*' : ' ') + Util.padRight(c.name, widest + 2));
 
@@ -79,7 +79,7 @@ export default class extends Command
 		else
 		{
 			command = this.client.commands
-				.filter(c => !c.disabled && !(!this.client.isOwner(message.author!) && c.ownerOnly))
+				.filter(c => !c.disabled && !(!this.client.isOwner(message.author) && c.ownerOnly))
 				.find(c => c.name === commandName || c.aliases.includes(commandName))!;
 
 			if (!command) output = res.CMD_HELP_UNKNOWN_COMMAND();
@@ -108,7 +108,7 @@ export default class extends Command
 		try
 		{
 			if (!this.client.dmHelp) await this.respond(message, '', { embed });
-			else await message.author!.send({ embed });
+			else await message.author.send({ embed });
 
 			if (!dm && this.client.dmHelp)
 			{

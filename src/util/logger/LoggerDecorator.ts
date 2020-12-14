@@ -28,6 +28,7 @@ import { Logger } from './Logger';
 
 export function logger(key: string): PropertyDecorator;
 export function logger<T>(target: T, key: string): void;
+
 /**
  * Property decorator that will automatically assign
  * the Logger singleton instance to the decorated
@@ -47,7 +48,8 @@ export function logger<T>(target: T, key: string): void;
 export function logger(...args: any[]): PropertyDecorator | void
 {
 	if (typeof args[0] === 'string')
-		return (<T>(target: T, key: string) => {
+		return (<T>(target: T, key: string) =>
+		{
 			Object.defineProperty(target, key, { value: Logger.instance(args[0]) });
 		}) as PropertyDecorator;
 

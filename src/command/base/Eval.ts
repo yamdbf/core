@@ -1,16 +1,19 @@
 import { Client } from '../../client/Client';
-import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { using } from '../CommandDecorators';
+import { FileOptions } from 'discord.js';
+import { Message } from '../../types/Message';
 import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { inspect } from 'util';
-import { FileOptions } from 'discord.js';
+import { using } from '../CommandDecorators';
 
 // @ts-ignore - Exposed for eval command invocations
+// eslint-disable-next-line @typescript-eslint/typedef, @typescript-eslint/no-unused-vars
 const Discord = require('discord.js');
+
 // @ts-ignore - Exposed for eval command invocations
+// eslint-disable-next-line @typescript-eslint/typedef, @typescript-eslint/no-unused-vars
 const Yamdbf = require('../../index');
 
 export default class extends Command
@@ -29,6 +32,7 @@ export default class extends Command
 	public async action(message: Message, [res]: [ResourceProxy]): Promise<any>
 	{
 		// @ts-ignore - Exposed for eval command invocations
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const client: Client = this.client;
 		const [, , prefix, name] = await Util.wasCommandCalled(message);
 		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
@@ -40,6 +44,7 @@ export default class extends Command
 		let error!: string;
 		let output: string;
 
+		// eslint-disable-next-line no-eval
 		try { result = await eval(code); }
 		catch (err) { error = err; }
 
@@ -56,10 +61,10 @@ export default class extends Command
 
 			if (outputFileSize > 10)
 			{
-				const size: string = outputFileSize.toFixed(2) + ' MB';
+				const size: string = `${outputFileSize.toFixed(2)} MB`;
 				error = res.CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_FILESIZE({ size });
 				output = res.CMD_EVAL_ERROR({ code, error });
-				return this.respond( message, output);
+				return this.respond(message, output);
 			}
 
 			result = res.CMD_EVAL_ERR_OUTPUT_LENGTH();
@@ -87,7 +92,7 @@ export default class extends Command
 			.replace(/`/g, `\`${String.fromCharCode(8203)}`)
 			.replace(/@/g, `@${String.fromCharCode(8203)}`)
 			.replace(/[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g, '[REDACTED]')
-			.replace(/email: '[^']+'/g, `email: '[REDACTED]'`)
+			.replace(/email: '[^']+'/g, 'email: \'[REDACTED]\'')
 			: text;
 	}
 }

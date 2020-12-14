@@ -1,3 +1,4 @@
+/* eslint-disable no-undefined */
 import { IStorageProvider } from './interface/IStorageProvider';
 import { StorageProvider } from './StorageProvider';
 import DB = require('node-json-db');
@@ -22,7 +23,7 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 	{
 		try
 		{
-			let data: object = this._db.getData('/');
+			const data: object = this._db.getData('/');
 			return Object.keys(data);
 		}
 		catch { return []; }
@@ -35,7 +36,7 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 
 		try
 		{
-			let data: string = this._db.getData(`/${key}`);
+			const data: string = this._db.getData(`/${key}`);
 			return data;
 		}
 		catch { return undefined; }
@@ -57,12 +58,16 @@ export class JSONProvider extends StorageProvider implements IStorageProvider
 		if (typeof key !== 'string') throw new TypeError('Key must be a string');
 
 		try { this._db.delete(`/${key}`); }
-		catch { return; }
+		catch { }
 	}
 
 	public async clear(): Promise<void>
 	{
-		try { for (const key of await this.keys()) this._db.delete(`/${key}`); }
-		catch { return; }
+		try
+		{
+			for (const key of await this.keys())
+				this._db.delete(`/${key}`);
+		}
+		catch { }
 	}
 }

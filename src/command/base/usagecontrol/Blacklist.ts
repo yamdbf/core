@@ -1,9 +1,10 @@
+/* eslint-disable complexity */
 import { User, GuildMember } from 'discord.js';
 import { Command } from '../../Command';
 import { Message } from '../../../types/Message';
 import { Middleware } from '../../middleware/Middleware';
-import { using } from '../../CommandDecorators';
 import { ResourceProxy } from '../../../types/ResourceProxy';
+import { using } from '../../CommandDecorators';
 const { resolve, expect, localize } = Middleware;
 
 export default class extends Command
@@ -14,27 +15,30 @@ export default class extends Command
 			name: 'blacklist',
 			desc: 'Blacklist a user from calling commands',
 			aliases: ['bl'],
-			usage: `<prefix>blacklist <action> <user> ['global']`,
+			usage: '<prefix>blacklist <action> <user> [\'global\']',
 			info: 'If global, this will block the user from calling commands in ANY server and DMs',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 
-	@using(resolve(`action: ['add', 'remove'], user: User`))
-	@using(expect(`action: ['add', 'remove'], user: User`))
+	@using(resolve('action: [\'add\', \'remove\'], user: User'))
+	@using(expect('action: [\'add\', \'remove\'], user: User'))
 	@using(localize)
-	public async action(message: Message, [res, action, user, global]: [ResourceProxy, string, User, string]): Promise<any>
+	public async action(
+		message: Message,
+		[res, action, user, global]: [ResourceProxy, string, User, string]
+	): Promise<any>
 	{
 		if (action === 'add')
 		{
-			if (user.id === message.author!.id)
+			if (user.id === message.author.id)
 				return message.channel.send(res.CMD_BLACKLIST_ERR_NOSELF());
 
 			if (user.bot) return message.channel.send(res.CMD_BLACKLIST_ERR_NOBOT());
 
 			if (global === 'global')
 			{
-				if (!this.client.isOwner(message.author!))
+				if (!this.client.isOwner(message.author))
 					return message.channel.send(res.CMD_BLACKLIST_ERR_OWNERONLY());
 
 				const globalBlacklist: any = await this.client.storage.get('blacklist') || {};
@@ -47,7 +51,7 @@ export default class extends Command
 			}
 
 			let member!: GuildMember;
-			try { member = message.guild.members.get(user.id) || await message.guild.members.fetch(user); }
+			try { member = message.guild.members.cache.get(user.id) || await message.guild.members.fetch(user); }
 			catch (err) {}
 
 			if (member && member.permissions.has('ADMINISTRATOR'))
@@ -65,7 +69,7 @@ export default class extends Command
 		{
 			if (global === 'global')
 			{
-				if (!this.client.isOwner(message.author!))
+				if (!this.client.isOwner(message.author))
 					return message.channel.send(res.CMD_WHITELIST_ERR_OWNERONLY());
 
 				const globalBlacklist: any = await this.client.storage.get('blacklist') || {};

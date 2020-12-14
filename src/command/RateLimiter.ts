@@ -1,6 +1,6 @@
 import { Collection, User } from 'discord.js';
-import { RateLimit } from './RateLimit';
 import { Message } from '../types/Message';
+import { RateLimit } from './RateLimit';
 import { Util } from '../util/Util';
 import { deprecatedClass } from '../util/DeprecatedClassDecorator';
 
@@ -39,23 +39,21 @@ export class RateLimiter
 	 */
 	public get(message: Message, userOverride?: User): RateLimit
 	{
-		const user: User = userOverride ? userOverride : message.author!;
+		const user: User = userOverride ? userOverride : message.author;
 		if (this._isGlobal(message))
 		{
 			if (!this._globalLimits.has(user.id))
 				this._globalLimits.set(user.id, new RateLimit(this._limit));
 			return this._globalLimits.get(user.id)!;
 		}
-		else
-		{
-			if (!this._rateLimits.has(message.guild.id))
-				this._rateLimits.set(message.guild.id, new Collection<string, RateLimit>());
 
-			if (!this._rateLimits.get(message.guild.id)!.has(user.id))
-				this._rateLimits.get(message.guild.id)!.set(user.id, new RateLimit(this._limit));
+		if (!this._rateLimits.has(message.guild.id))
+			this._rateLimits.set(message.guild.id, new Collection<string, RateLimit>());
 
-			return this._rateLimits.get(message.guild.id)!.get(user.id)!;
-		}
+		if (!this._rateLimits.get(message.guild.id)!.has(user.id))
+			this._rateLimits.get(message.guild.id)!.set(user.id, new RateLimit(this._limit));
+
+		return this._rateLimits.get(message.guild.id)!.get(user.id)!;
 	}
 
 	/**

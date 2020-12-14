@@ -1,21 +1,21 @@
-import { Resolver } from '../Resolver';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
 import { isBoolean } from 'util';
 
 export class BooleanResolver extends Resolver
 {
-	private readonly truthy: Set<string>;
-	private readonly falsey: Set<string>;
+	private readonly _truthy: Set<string>;
+	private readonly _falsey: Set<string>;
 
 	public constructor(client: Client)
 	{
 		super(client, 'Boolean', 'boolean');
-		this.truthy = new Set(['true', 'on', 'y', 'yes', 'enable']);
-		this.falsey = new Set(['false', 'off', 'n', 'no', 'disable']);
+		this._truthy = new Set(['true', 'on', 'y', 'yes', 'enable']);
+		this._falsey = new Set(['false', 'off', 'n', 'no', 'disable']);
 	}
 
 	public validate(value: any): boolean
@@ -25,9 +25,10 @@ export class BooleanResolver extends Resolver
 
 	public resolveRaw(value: string): boolean | undefined
 	{
+		// eslint-disable-next-line no-param-reassign
 		value = value.toLowerCase();
-		if (this.truthy.has(value)) return true;
-		if (this.falsey.has(value)) return false;
+		if (this._truthy.has(value)) return true;
+		if (this._falsey.has(value)) return false;
 	}
 
 	public async resolve(message: Message, command: Command, name: string, value: string): Promise<boolean>
@@ -40,7 +41,7 @@ export class BooleanResolver extends Resolver
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const result: boolean = this.resolveRaw(value)!;
-		if (!(this.validate(result)))
+		if (!this.validate(result))
 			throw new Error(res.RESOLVE_ERR_RESOLVE_BOOLEAN({ name, arg: value, usage }));
 
 		return result;

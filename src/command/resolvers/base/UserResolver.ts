@@ -1,9 +1,9 @@
 import { User, Collection } from 'discord.js';
-import { Resolver } from '../Resolver';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
 import { Util } from '../../../util/Util';
 
@@ -19,7 +19,10 @@ export class UserResolver extends Resolver
 		return value instanceof User;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<User | Collection<string, User> | undefined>
+	public async resolveRaw(
+		value: string,
+		context: Partial<Message> = {}
+	): Promise<User | Collection<string, User> | undefined>
 	{
 		let user!: User;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
@@ -29,22 +32,26 @@ export class UserResolver extends Resolver
 			try
 			{
 				const userID: string = value.match(idRegex)![1];
-				user = this.client.users.get(userID) || await this.client.users.fetch(userID);
-			} catch {}
-			if (!user) return;
+				user = this.client.users.cache.get(userID) || await this.client.users.fetch(userID);
+			}
+			catch {}
+
+			if (!user)
+				return;
 		}
 		else
 		{
 			const normalized: string = Util.normalize(value);
-			let users: Collection<string, User> = this.client.users.filter(a =>
+			let users: Collection<string, User> = this.client.users.cache.filter(a =>
 				Util.normalize(a.username).includes(normalized)
 					|| Util.normalize(a.tag).includes(normalized));
 
 			if (context.guild)
 				users = users.concat(new Collection(
-					context.guild.members
+					context.guild.members.cache
 						.filter(a => Util.normalize(a.displayName).includes(normalized))
-						.map(a => [a.id, a.user] as [string, User])));
+						.map(a => [a.id, a.user] as [string, User])
+				));
 
 			if (users.size === 1) user = users.first()!;
 			else return users;

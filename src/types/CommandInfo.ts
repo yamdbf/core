@@ -18,10 +18,11 @@
  * @property {number} [lockTimeout=30000] The time until command locks will expire automatically
  */
 
-import { PermissionResolvable } from 'discord.js';
 import { ArgOpts } from './ArgOpts';
+import { PermissionResolvable } from 'discord.js';
 
-export type CommandInfo = {
+export interface CommandInfo
+{
 	name: string;
 	desc: string;
 	usage: string;
@@ -37,4 +38,4 @@ export type CommandInfo = {
 	ownerOnly?: boolean;
 	ratelimit?: string;
 	lockTimeout?: number;
-};
+}

@@ -1,5 +1,6 @@
-import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
+/* eslint-disable no-param-reassign */
 import { StorageProvider } from './StorageProvider';
+import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 import { Util } from '../util/Util';
 
 /**
@@ -19,6 +20,7 @@ export class SingleProviderStorage
 
 	public constructor(name: string, provider: StorageProviderConstructor)
 	{
+		// eslint-disable-next-line new-cap
 		this._storage = new provider(name);
 	}
 
@@ -38,7 +40,7 @@ export class SingleProviderStorage
 	 */
 	public async keys(): Promise<string[]>
 	{
-		return await this._storage.keys();
+		return this._storage.keys();
 	}
 
 	/**
@@ -53,18 +55,16 @@ export class SingleProviderStorage
 
 		if (key.includes('.'))
 		{
-			let path: string[] = key.split('.');
-			let stringData: string = (await this._storage.get(path.shift()!))!;
+			const path: string[] = key.split('.');
+			const stringData: string = (await this._storage.get(path.shift()!))!;
 			if (typeof stringData === 'undefined') return;
-			let data: object = JSON.parse(stringData);
+			const data: object = JSON.parse(stringData);
 			return Util.getNestedValue(data, path);
 		}
-		else
-		{
-			let stringData: string = (await this._storage.get(key))!;
-			if (typeof stringData === 'undefined') return;
-			return JSON.parse(stringData);
-		}
+
+		const stringData: string = (await this._storage.get(key))!;
+		if (typeof stringData === 'undefined') return;
+		return JSON.parse(stringData);
 	}
 
 	/**
@@ -95,7 +95,7 @@ export class SingleProviderStorage
 		let data: any;
 		if (key.includes('.'))
 		{
-			let path: string[] = key.split('.');
+			const path: string[] = key.split('.');
 			key = path.shift()!;
 
 			data = await this.get(key);
@@ -121,7 +121,7 @@ export class SingleProviderStorage
 		let data: any;
 		if (key.includes('.'))
 		{
-			let path: string[] = key.split('.');
+			const path: string[] = key.split('.');
 			key = path.shift()!;
 
 			data = await this.get(key);

@@ -1,7 +1,7 @@
-import { Util } from '../util/Util';
 import { RateLimit } from './RateLimit';
+import { Util } from '../util/Util';
 
-type NestedRateLimit = { [descriptor: string]: NestedRateLimit | RateLimit };
+interface NestedRateLimit { [descriptor: string]: NestedRateLimit | RateLimit }
 
 /**
  * Handles creation and retrieval of {@link RateLimit} objects for the given interval
@@ -16,7 +16,7 @@ export class RateLimitManager
 	public constructor()
 	{
 		this._ratelimits = {};
-		setInterval(() => this._cleanup(this._ratelimits), 30e3);
+		setInterval((async () => this._cleanup(this._ratelimits)) as any, 30e3);
 	}
 
 	/**
@@ -80,7 +80,7 @@ export class RateLimitManager
 			if (target[key] instanceof RateLimit)
 			{
 				const rateLimit: RateLimit = target[key] as RateLimit;
-				if ((Date.now() - rateLimit.expires) > (rateLimit.duration + 10e3))
+				if (Date.now() - rateLimit.expires > rateLimit.duration + 10e3)
 					delete target[key];
 			}
 			else if (Object.keys(target[key]).length === 0) delete target[key];

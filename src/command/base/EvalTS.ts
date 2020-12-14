@@ -1,20 +1,25 @@
+/* eslint-disable max-classes-per-file */
 import * as fs from 'fs';
 import { Client } from '../../client/Client';
-import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { using } from '../CommandDecorators';
+import { Message } from '../../types/Message';
 import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
 import { inspect } from 'util';
+import { using } from '../CommandDecorators';
 
-// @ts-ignore - Exposed for eval:ts command invocations
+// @ts-ignore - Exposed for eval command invocations
+// eslint-disable-next-line @typescript-eslint/typedef, @typescript-eslint/no-unused-vars
 const Discord = require('discord.js');
-// @ts-ignore - Exposed for eval:ts command invocations
+
+// @ts-ignore - Exposed for eval command invocations
+// eslint-disable-next-line @typescript-eslint/typedef, @typescript-eslint/no-unused-vars
 const Yamdbf = require('../../index');
 
 let ts: any;
-try { ts = require('typescript'); } catch {}
+try { ts = require('typescript'); }
+catch {}
 
 class CompilerError extends Error
 {
@@ -33,7 +38,11 @@ export default class extends Command
 			name: 'eval:ts',
 			desc: 'Evaluate provided Typescript code',
 			usage: '<prefix>eval:ts <...code>',
-			info: 'Runs pretty slowly due to having to run diagnostics before compiling. If Typescript is not installed the provided code will be evaluated as Javascript and diagnostics/compilation will be skipped.',
+			info: [
+				'Runs pretty slowly due to having to run diagnostics before compiling.',
+				'If Typescript is not installed the provided code will be evaluated as',
+				'Javascript and diagnostics/compilation will be skipped.'
+			].join(' '),
 			ownerOnly: true
 		});
 	}
@@ -42,6 +51,7 @@ export default class extends Command
 	public async action(message: Message, [res]: [ResourceProxy]): Promise<any>
 	{
 		// @ts-ignore - Exposed for eval command invocations
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const client: Client = this.client;
 		const [, , prefix, name] = await Util.wasCommandCalled(message);
 		const call: RegExp = new RegExp(`^${Util.escape(prefix)} *${name}`);
@@ -49,11 +59,12 @@ export default class extends Command
 
 		if (!code) return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
 
-		let start: Message = ts ? await this.respond(message, '*Compiling...*') as Message : message;
+		const start: Message = ts ? await this.respond(message, '*Compiling...*') as Message : message;
 		let evaled: string | Promise<string | object>;
 		try
 		{
 			const compiled: string = this._compile(code);
+			// eslint-disable-next-line no-eval
 			evaled = await eval(compiled);
 		}
 		catch (err)
@@ -76,18 +87,24 @@ export default class extends Command
 			let diagnostics: any[] = ts.getPreEmitDiagnostics(program);
 			if (diagnostics.length > 0)
 			{
-				diagnostics = diagnostics.map(d =>
-				{
-					const messageText: string = ts.flattenDiagnosticMessageText(d.messageText, '\n');
-					const { line, character } = d.file.getLineAndCharacterOfPosition(d.start);
-					return `\n(${line + 1},${character + 1}): ${messageText} (${d.code})`;
-				})
-				.filter(d => !d.includes('Cannot find name'));
-				if (diagnostics.length > 0) message = diagnostics.join('');
+				diagnostics = diagnostics
+					.map(d =>
+					{
+						const messageText: string = ts.flattenDiagnosticMessageText(d.messageText, '\n');
+						const { line, character } = d.file.getLineAndCharacterOfPosition(d.start);
+						return `\n(${line as number + 1},${character as number + 1}): ${messageText} (${d.code})`;
+					})
+					.filter(d => !d.includes('Cannot find name'));
+
+				if (diagnostics.length > 0)
+					message = diagnostics.join('');
 			}
 			fs.unlinkSync(fileName);
 		}
-		if (message) throw new CompilerError(message);
+
+		if (message)
+			throw new CompilerError(message);
+
 		return ts
 			? ts.transpileModule(code, { compilerOptions: { module: ts.ModuleKind.CommonJS } })
 				.outputText
@@ -101,7 +118,7 @@ export default class extends Command
 			.replace(/`/g, `\`${String.fromCharCode(8203)}`)
 			.replace(/@/g, `@${String.fromCharCode(8203)}`)
 			.replace(/[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g, '[REDACTED]')
-			.replace(/email: '[^']+'/g, `email: '[REDACTED]'`)
+			.replace(/email: '[^']+'/g, 'email: \'[REDACTED]\'')
 			: text;
 	}
 }

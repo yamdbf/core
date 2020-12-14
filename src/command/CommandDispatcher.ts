@@ -1,20 +1,24 @@
-import { PermissionResolvable, TextChannel, User, MessageOptions, Message as DMessage, Guild } from 'discord.js';
-import { MiddlewareFunction } from '../types/MiddlewareFunction';
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-param-reassign */
+/* eslint-disable require-atomic-updates */
+/* eslint-disable complexity */
 import { Logger, logger } from '../util/logger/Logger';
-import { Message } from '../types/Message';
-import { GuildStorage } from '../storage/GuildStorage';
-import { Command } from '../command/Command';
+import { PermissionResolvable, TextChannel, User, MessageOptions, Message as DMessage, Guild } from 'discord.js';
 import { Client } from '../client/Client';
-import { RateLimitManager } from './RateLimitManager';
-import { RateLimit } from './RateLimit';
-import { Time } from '../util/Time';
+import { Command } from '../command/Command';
+import { CommandLock } from './CommandLock';
+import { CompactModeHelper } from './CompactModeHelper';
+import { GuildStorage } from '../storage/GuildStorage';
 import { Lang } from '../localization/Lang';
+import { Message } from '../types/Message';
+import { MiddlewareFunction } from '../types/MiddlewareFunction';
+import { RateLimit } from './RateLimit';
+import { RateLimitManager } from './RateLimitManager';
 import { ResourceProxy } from '../types/ResourceProxy';
-import { BaseStrings as s } from '../localization/BaseStrings';
+import { Time } from '../util/Time';
 import { Util } from '../util/Util';
 import { format } from 'util';
-import { CompactModeHelper } from './CompactModeHelper';
-import { CommandLock } from './CommandLock';
+import { BaseStrings as s } from '../localization/BaseStrings';
 
 /**
  * Handles dispatching commands
@@ -34,13 +38,15 @@ export class CommandDispatcher
 
 		if (!this._client.passive)
 		{
-			this._client.on('message', async message => {
+			this._client.on('message', (async (message: Message) =>
+			{
 				if (this._ready)
 				{
-					const wasCommandCalled: boolean = await this.handleMessage(message as Message);
-					if (!wasCommandCalled) this._client.emit('noCommand', message);
+					const wasCommandCalled: boolean = await this._handleMessage(message);
+					if (!wasCommandCalled)
+						this._client.emit('noCommand', message);
 				}
-			});
+			}) as any);
 		}
 	}
 
@@ -55,7 +61,7 @@ export class CommandDispatcher
 	/**
 	 * Handle received messages
 	 */
-	private async handleMessage(message: Message): Promise<boolean>
+	private async _handleMessage(message: Message): Promise<boolean>
 	{
 		const dispatchStart: number = Util.now();
 		const dm: boolean = message.channel.type !== 'text';
@@ -71,7 +77,7 @@ export class CommandDispatcher
 		if (!dm && !this._client.storage.guilds.has(message.guild.id)) return false;
 
 		// Don't bother with anything else if author is blacklisted
-		if (await this.isBlacklisted(message.author, message, dm)) return false;
+		if (await this._isBlacklisted(message.author, message, dm)) return false;
 
 		const lang: string = await Lang.getLangFromMessage(message);
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
@@ -85,7 +91,7 @@ export class CommandDispatcher
 			// Handle shortcuts
 			if (!dm)
 			{
-				let shortcuts: { [name: string]: string } =
+				const shortcuts: { [name: string]: string } =
 					await message.guild.storage!.settings.get('shortcuts') || {};
 
 				if (shortcuts && prefix && name && shortcuts[name])
@@ -108,7 +114,7 @@ export class CommandDispatcher
 
 			// Send unknownCommandError in DMs
 			if (dm && this._client.unknownCommandError)
-				message.channel.send(this.unknownCommandError(res));
+				message.channel.send(this._unknownCommandError(res));
 
 			// Emit an `unknownCommand` event and return if no
 			// command or shortcut was called
@@ -122,13 +128,14 @@ export class CommandDispatcher
 					this._client.emit('unknownCommand', name, unknownCommandArgs, message);
 					return true;
 				}
-				else return false;
+
+				return false;
 			}
 		}
 
 		// Determine if the command call was valid, returning the error and exiting if not
 		let validCall: boolean = false;
-		try { validCall = await this.canCallCommand(res, command as Command, message, dm); }
+		try { validCall = await this._canCallCommand(res, command as Command, message, dm); }
 		catch (err) { message.author.send(err); }
 		if (!validCall) return true;
 
@@ -150,34 +157,42 @@ export class CommandDispatcher
 
 		let commandResult!: CommandResult;
 		let middlewarePassed: boolean = true;
-		let middleware: MiddlewareFunction[] = this._client._middleware.concat(command!._middleware);
+		const middleware: MiddlewareFunction[] = this._client._middleware.concat(command!._middleware);
 
 		// Function to send middleware result, utilizing compact mode if enabled
 		const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
-			async (result, options) => {
+			async (result, options) =>
+			{
 				if (await message.guild?.storage?.settings.get('compact') || this._client.compact)
 				{
-					if (message.reactions.size > 0) await message.reactions.removeAll();
+					if (message.reactions.cache.size > 0) await message.reactions.removeAll();
 					return CompactModeHelper.registerButton(
 						message,
-						this._client.buttons['fail'],
-						() => message.channel.send(result, options));
+						this._client.buttons.fail,
+						async () => message.channel.send(result, options!)
+					);
 				}
-				else return message.channel.send(result);
+
+				return message.channel.send(result);
 			};
 
 		// Run middleware
-		for (let func of middleware)
+		for (const func of middleware)
 			try
 			{
 				let result: MiddlewareResult = func.call(command, message, args);
-				if (result instanceof Promise) result = await result;
+				if (result instanceof Promise)
+					result = await result;
+
 				if (!(result instanceof Array))
 				{
-					if (typeof result === 'string') commandResult = await sendMiddlewareResult(result);
+					if (typeof result === 'string')
+						commandResult = await sendMiddlewareResult(result);
+
 					middlewarePassed = false;
 					break;
 				}
+
 				[message, args] = result;
 			}
 			catch (err)
@@ -190,9 +205,9 @@ export class CommandDispatcher
 		if (!middlewarePassed) return true;
 
 		// Return an error if the command is locked
-		if (!dm && this.isLocked(command!, message, args))
+		if (!dm && this._isLocked(command!, message, args))
 		{
-			const currentLock: CommandLock = this.getCurrentLock(command!, message.guild);
+			const currentLock: CommandLock = this._getCurrentLock(command!, message.guild);
 			message.channel.send(currentLock.getError(lang, message, args));
 			return true;
 		}
@@ -240,9 +255,9 @@ export class CommandDispatcher
 	 * Return whether or not the given command is locked, either directly
 	 * or as a sibling of another command
 	 */
-	private isLocked(command: Command, message: Message, args: any): boolean
+	private _isLocked(command: Command, message: Message, args: any): boolean
 	{
-		const lock: CommandLock = this.getCurrentLock(command, message.guild);
+		const lock: CommandLock = this._getCurrentLock(command, message.guild);
 		return lock ? lock.isLocked(message, args) : false;
 	}
 
@@ -251,7 +266,7 @@ export class CommandDispatcher
 	 * This can be the command's own lock, or the lock of another command
 	 * that the given command is a sibling of
 	 */
-	private getCurrentLock(command: Command, guild: Guild): CommandLock
+	private _getCurrentLock(command: Command, guild: Guild): CommandLock
 	{
 		const locks: { [command: string]: CommandLock } = this._locks[guild.id] || {};
 		let lock: CommandLock = locks[command.name];
@@ -267,7 +282,7 @@ export class CommandDispatcher
 	/**
 	 * Check if the calling user is blacklisted
 	 */
-	private async isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
+	private async _isBlacklisted(user: User, message: Message, dm: boolean): Promise<boolean>
 	{
 		if (await this._client.storage.get(`blacklist.${user.id}`)) return true;
 		if (!dm && await message.guild.storage!.settings.get(`blacklist.${user.id}`)) return true;
@@ -279,34 +294,34 @@ export class CommandDispatcher
 	 * on whatever circumstances are present at call-time, throwing
 	 * appropriate errors as necessary for unsatisfied conditions
 	 */
-	private async canCallCommand(res: ResourceProxy, command: Command, message: Message, dm: boolean): Promise<boolean>
+	private async _canCallCommand(res: ResourceProxy, command: Command, message: Message, dm: boolean): Promise<boolean>
 	{
 		const storage: GuildStorage | null = !dm ? this._client.storage.guilds.get(message.guild.id)! : null;
 
-		if (command.ownerOnly && !this._client.isOwner(message.author!)) return false;
+		if (command.ownerOnly && !this._client.isOwner(message.author)) return false;
 		if (!dm && (await storage!.settings.get('disabledGroups') || []).includes(command.group)) return false;
-		if (!this.passedRateLimiters(res, message, command)) return false;
+		if (!this._passedRateLimiters(res, message, command)) return false;
 
 		if (dm && command.guildOnly)
-			throw this.guildOnlyError(res);
+			throw this._guildOnlyError(res);
 
-		const missingClientPermissions: PermissionResolvable[] = this.checkClientPermissions(command, message, dm);
+		const missingClientPermissions: PermissionResolvable[] = this._checkClientPermissions(command, message, dm);
 		if (missingClientPermissions.length > 0)
 		{
 			// Explicitly send this error to the channel rather than throwing
-			message.channel.send(this.missingClientPermissionsError(res, missingClientPermissions));
+			message.channel.send(this._missingClientPermissionsError(res, missingClientPermissions));
 			return false;
 		}
 
-		const missingCallerPermissions: PermissionResolvable[] = this.checkCallerPermissions(command, message, dm);
+		const missingCallerPermissions: PermissionResolvable[] = this._checkCallerPermissions(command, message, dm);
 		if (missingCallerPermissions.length > 0)
-			throw this.missingCallerPermissionsError(res, missingCallerPermissions);
+			throw this._missingCallerPermissionsError(res, missingCallerPermissions);
 
-		if (!(await this.passedRoleLimiter(command, message, dm)))
-			throw await this.failedLimiterError(res, command, message);
+		if (!await this._passedRoleLimiter(command, message, dm))
+			throw await this._failedLimiterError(res, command, message);
 
-		if (!this.hasRoles(command, message, dm))
-			throw this.missingRolesError(res, command);
+		if (!this._hasRoles(command, message, dm))
+			throw this._missingRolesError(res, command);
 
 		return true;
 	}
@@ -315,10 +330,10 @@ export class CommandDispatcher
 	 * Return whether or not the message author passed global
 	 * and command-specific ratelimits for the given command
 	 */
-	private passedRateLimiters(res: ResourceProxy, message: Message, command: Command): boolean
+	private _passedRateLimiters(res: ResourceProxy, message: Message, command: Command): boolean
 	{
-		const passedGlobal: boolean = !this.isRateLimited(res, message, command, true);
-		const passedCommand: boolean = !this.isRateLimited(res, message, command);
+		const passedGlobal: boolean = !this._isRateLimited(res, message, command, true);
+		const passedCommand: boolean = !this._isRateLimited(res, message, command);
 		const passedAllLimiters: boolean = passedGlobal && passedCommand;
 
 		if (passedAllLimiters)
@@ -326,10 +341,10 @@ export class CommandDispatcher
 			const manager: RateLimitManager = this._client.rateLimitManager;
 			const limit: string = command.ratelimit;
 			const identifier: string = command.ratelimit ? command.name : 'global';
-			const descriptors: string[] = [message.author!.id, identifier];
+			const descriptors: string[] = [message.author.id, identifier];
 
 			if (!(limit && !manager.call(limit, ...descriptors)) && this._client.ratelimit)
-				manager.call(this._client.ratelimit, message.author!.id, 'global');
+				manager.call(this._client.ratelimit, message.author.id, 'global');
 		}
 
 		return passedAllLimiters;
@@ -340,14 +355,14 @@ export class CommandDispatcher
 	 * author, notify them if they exceed ratelimits, and return whether
 	 * or not the user is ratelimited
 	 */
-	private isRateLimited(res: ResourceProxy, message: Message, command: Command, global: boolean = false): boolean
+	private _isRateLimited(res: ResourceProxy, message: Message, command: Command, global: boolean = false): boolean
 	{
 		const manager: RateLimitManager = this._client.rateLimitManager;
 		const limit: string = command.ratelimit || this._client.ratelimit;
 		if (!limit) return false;
 
 		const identifier: string = command.ratelimit ? !global ? command.name : 'global' : 'global';
-		const descriptors: string[] = [message.author!.id, identifier];
+		const descriptors: string[] = [message.author.id, identifier];
 		const rateLimit: RateLimit = manager.get(limit, ...descriptors);
 		if (!rateLimit.isLimited) return false;
 
@@ -355,7 +370,7 @@ export class CommandDispatcher
 		{
 			const globalLimitString: string = this._client.ratelimit;
 			const globalLimit: RateLimit | null = globalLimitString
-				? manager.get(globalLimitString, message.author!.id, 'global')
+				? manager.get(globalLimitString, message.author.id, 'global')
 				: null;
 			if (globalLimit && globalLimit.isLimited && globalLimit.wasNotified) return true;
 
@@ -374,7 +389,7 @@ export class CommandDispatcher
 	/**
 	 * Return permissions the client is missing to execute the given command
 	 */
-	private checkClientPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
+	private _checkClientPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.clientPermissions.filter(a =>
 			!(message.channel as TextChannel).permissionsFor(this._client.user!)!.has(a));
@@ -383,45 +398,48 @@ export class CommandDispatcher
 	/**
 	 * Return the permissions the caller is missing to call the given command
 	 */
-	private checkCallerPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
+	private _checkCallerPermissions(command: Command, message: Message, dm: boolean): PermissionResolvable[]
 	{
 		return dm ? [] : command.callerPermissions.filter(a =>
-			!(message.channel as TextChannel).permissionsFor(message.author!)!.has(a));
+			!(message.channel as TextChannel).permissionsFor(message.author)!.has(a));
 	}
 
 	/**
 	 * Return whether or not the message author passes the role limiter
 	 */
-	private async passedRoleLimiter(command: Command, message: Message, dm: boolean): Promise<boolean>
+	private async _passedRoleLimiter(command: Command, message: Message, dm: boolean): Promise<boolean>
 	{
-		if (dm) return true;
+		if (dm)
+			return true;
 
 		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id)!;
 		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands') || {};
 
-		if (!limitedCommands[command.name]) return true;
-		if (limitedCommands[command.name].length === 0) return true;
+		if (!limitedCommands[command.name])
+			return true;
 
-		return message.member!.roles.filter(role =>
-			limitedCommands[command.name].includes(role.id)).size > 0;
+		if (limitedCommands[command.name].length === 0)
+			return true;
+
+		return message.member!.roles.cache.filter(role => limitedCommands[command.name].includes(role.id)).size > 0;
 	}
 
 	/**
 	 * Return whether or not the user has one of the roles specified
 	 * in the command's requisite roles
 	 */
-	private hasRoles(command: Command, message: Message, dm: boolean): boolean
+	private _hasRoles(command: Command, message: Message, dm: boolean): boolean
 	{
 		return dm
 			|| command.roles.length === 0
-			|| message.member!.roles.filter(role =>
+			|| message.member!.roles.cache.filter(role =>
 				command.roles.includes(role.name)).size > 0;
 	}
 
 	/**
 	 * Return an error for unknown commands in DMs
 	 */
-	private unknownCommandError(res: ResourceProxy): string
+	private _unknownCommandError(res: ResourceProxy): string
 	{
 		return res.DISPATCHER_ERR_UNKNOWN_COMMAND();
 	}
@@ -429,7 +447,7 @@ export class CommandDispatcher
 	/**
 	 * Return an error for guild only commands
 	 */
-	private guildOnlyError(res: ResourceProxy): string
+	private _guildOnlyError(res: ResourceProxy): string
 	{
 		return res.DISPATCHER_ERR_GUILD_ONLY();
 	}
@@ -437,7 +455,7 @@ export class CommandDispatcher
 	/**
 	 * Return an error for missing caller permissions
 	 */
-	private missingClientPermissionsError(res: ResourceProxy, missing: PermissionResolvable[]): string
+	private _missingClientPermissionsError(res: ResourceProxy, missing: PermissionResolvable[]): string
 	{
 		return res.DISPATCHER_ERR_MISSING_CLIENT_PERMISSIONS({ missing: missing.join(', ') });
 	}
@@ -445,7 +463,7 @@ export class CommandDispatcher
 	/**
 	 * Return an error for missing caller permissions
 	 */
-	private missingCallerPermissionsError(res: ResourceProxy, missing: PermissionResolvable[]): string
+	private _missingCallerPermissionsError(res: ResourceProxy, missing: PermissionResolvable[]): string
 	{
 		return res.DISPATCHER_ERR_MISSING_CALLER_PERMISSIONS({ missing: missing.join(', ') });
 	}
@@ -453,21 +471,21 @@ export class CommandDispatcher
 	/**
 	 * Return an error for failing a command limiter
 	 */
-	private async failedLimiterError(res: ResourceProxy, command: Command, message: Message): Promise<string>
+	private async _failedLimiterError(res: ResourceProxy, command: Command, message: Message): Promise<string>
 	{
 		const storage: GuildStorage = this._client.storage.guilds.get(message.guild.id)!;
 		const limitedCommands: { [name: string]: string[] } = await storage.settings.get('limitedCommands');
-		const roles: string[] = message.guild.roles
+		const roles: string[] = message.guild.roles.cache
 			.filter(r => limitedCommands[command.name].includes(r.id))
 			.map(r => r.name);
 
-		return res.DISPATCHER_ERR_MISSING_ROLES({ roles: roles.join(', ')});
+		return res.DISPATCHER_ERR_MISSING_ROLES({ roles: roles.join(', ') });
 	}
 
 	/**
 	 * Return an error for missing roles
 	 */
-	private missingRolesError(res: ResourceProxy, command: Command): string
+	private _missingRolesError(res: ResourceProxy, command: Command): string
 	{
 		return res.DISPATCHER_ERR_MISSING_ROLES({ roles: command.roles.join(', ') });
 	}

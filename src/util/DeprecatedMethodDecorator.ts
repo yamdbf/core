@@ -1,7 +1,10 @@
+/* eslint-disable func-names */
+/* eslint-disable no-param-reassign */
 import { Util } from './Util';
 
 export function deprecatedMethod(message: string): MethodDecorator;
 export function deprecatedMethod(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor;
+
 /**
  * Logs a deprecation warning for the decorated class method
  * if it is called within the current process
@@ -27,8 +30,10 @@ export function deprecatedMethod(...decoratorArgs: any[]): MethodDecorator | Pro
 	if (typeof message !== 'string')
 	{
 		const [target, key, descriptor]: [object, PropertyKey, PropertyDescriptor] = decoratorArgs as any;
-		message = `\`${target.constructor.name}#${key as string}()\` is deprecated and will be removed in a future release`;
+		message =
+			`\`${target.constructor.name}#${key as string}()\` is deprecated and will be removed in a future release`;
 		return decorate(target, key, descriptor);
 	}
-	else return decorate;
+
+	return decorate;
 }

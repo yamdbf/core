@@ -8,6 +8,7 @@ npm-debug*
 /test/**/*.js*
 test_*.js
 /scripts/**/*.js
+/scripts/**/*.js.map
 /scripts/**/*.d.ts
 /scripts/storage
 *.sqlite

@@ -4,8 +4,9 @@
  * `info`, and `usage` fields
  */
 
-export type LocalizedCommandInfo = {
-	desc: string,
-	info: string,
-	usage: string
-};
+export interface LocalizedCommandInfo
+{
+	desc: string;
+	info: string;
+	usage: string;
+}

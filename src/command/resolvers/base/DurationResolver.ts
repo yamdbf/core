@@ -1,10 +1,10 @@
-import { Resolver } from '../Resolver';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
-import { Time } from '../../../util/Time';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
+import { Time } from '../../../util/Time';
 
 export class DurationResolver extends Resolver
 {

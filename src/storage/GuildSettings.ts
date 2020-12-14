@@ -1,8 +1,8 @@
-import { SharedProviderStorage } from './SharedProviderStorage';
-import { Guild } from 'discord.js';
-import { StorageProvider } from './StorageProvider';
 import { Client } from '../client/Client';
+import { Guild } from 'discord.js';
 import { Logger } from '../util/logger/Logger';
+import { SharedProviderStorage } from './SharedProviderStorage';
+import { StorageProvider } from './StorageProvider';
 
 /**
  * Class containing asynchronous methods for storing, retrieving, and
@@ -33,8 +33,8 @@ export class GuildSettings extends SharedProviderStorage
 		try
 		{
 			await super.init();
-			let raw: string = (await this._provider.get(this._key))!;
-			let data: any = JSON.parse(raw);
+			const raw: string = (await this._provider.get(this._key))!;
+			const data: any = JSON.parse(raw);
 
 			const defaults: any = await this._client.storage.get('defaultGuildSettings');
 			for (const key of Object.keys(defaults))

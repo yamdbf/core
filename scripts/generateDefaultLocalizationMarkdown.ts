@@ -71,6 +71,7 @@ class ScriptClient extends Client
 	}
 }
 logger.log('Script', 'Starting localization markdown builder');
+// @ts-ignore Needed to run the script
 const script: ScriptClient = new ScriptClient();
 
 process.on('unhandledRejection', (err: any) => logger.error(err));

@@ -1,10 +1,10 @@
 import * as Glob from 'glob';
 import * as Path from 'path';
-import { Client } from '../client/Client';
 import { Logger, logger } from '../util/logger/Logger';
-import { CommandRegistry } from './CommandRegistry';
-import { Command } from './Command';
 import { BaseCommandName } from '../types/BaseCommandName';
+import { Client } from '../client/Client';
+import { Command } from './Command';
+import { CommandRegistry } from './CommandRegistry';
 import { Util } from '../util/Util';
 
 /**
@@ -15,6 +15,7 @@ export class CommandLoader
 {
 	@logger('CommandLoader')
 	private readonly _logger!: Logger;
+
 	private readonly _client: Client;
 	private readonly _commands: CommandRegistry<any>;
 
@@ -41,11 +42,14 @@ export class CommandLoader
 		if (this._client.tsNode)
 		{
 			commandFiles.push(...Glob.sync(`${path}/**/!(*.d).ts`));
-			const filteredCommandFiles = commandFiles.filter(f => {
-				const file: string = f.match('/([^\/]+?)\.[j|t]s$')![1];
+			const filteredCommandFiles: string[] = commandFiles.filter(f =>
+			{
+				const file: string = f.match(/\/([^/]+?)\.[j|t]s$/)![1];
 				if (f.endsWith('.ts')) return true;
 				if (f.endsWith('.js'))
 					return !commandFiles.find(cf => cf.endsWith(`${file}.ts`));
+
+				return false;
 			});
 			commandFiles = filteredCommandFiles;
 		}
@@ -68,9 +72,9 @@ export class CommandLoader
 				continue;
 			}
 
-			for (const commandClass of commandClasses)
+			for (const CommandClass of commandClasses)
 			{
-				const commandInstance: Command = new commandClass();
+				const commandInstance: Command = new CommandClass();
 
 				// Don't load disabled base commands
 				if (base && this._client.disableBase

@@ -1,9 +1,10 @@
-import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
+/* eslint-disable max-classes-per-file */
+import * as Sequelize from 'sequelize';
+import { Database } from './Database';
 import { IStorageProvider } from './interface/IStorageProvider';
 import { StorageProvider } from './StorageProvider';
-import { Database } from './Database';
+import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 import { Util } from '../util/Util';
-import * as Sequelize from 'sequelize';
 
 /**
  * Represents a Sequelize Model instance which represents a single
@@ -42,9 +43,9 @@ export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean)
 			this._model = class extends seq.Model {};
 
 			const dataTypes: typeof Sequelize.DataTypes =
-				(seq as any)['DataTypes']
-					? (seq as any)['DataTypes']
-					: (seq as any)['DataType'];
+				(seq as any).DataTypes
+					? (seq as any).DataTypes
+					: (seq as any).DataType;
 
 			this._model.init(
 				{

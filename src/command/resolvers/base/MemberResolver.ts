@@ -1,10 +1,10 @@
-import { Resolver } from '../Resolver';
+import { Collection, GuildMember } from 'discord.js';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
-import { GuildMember, Collection } from 'discord.js';
 import { Util } from '../../../util/Util';
 
 export class MemberResolver extends Resolver
@@ -19,7 +19,10 @@ export class MemberResolver extends Resolver
 		return value instanceof GuildMember;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<GuildMember | Collection<string, GuildMember> | undefined>
+	public async resolveRaw(
+		value: string,
+		context: Partial<Message> = {}
+	): Promise<GuildMember | Collection<string, GuildMember> | undefined>
 	{
 		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
 
@@ -31,14 +34,17 @@ export class MemberResolver extends Resolver
 			try
 			{
 				const userID: string = value.match(idRegex)![1];
-				member = context.guild.members.get(userID) || await context.guild.members.fetch(userID);
-			} catch {}
-			if (!member) return;
+				member = context.guild.members.cache.get(userID) || await context.guild.members.fetch(userID);
+			}
+			catch {}
+
+			if (!member)
+				return;
 		}
 		else
 		{
 			const normalized: string = Util.normalize(value);
-			let members: Collection<string, GuildMember> = context.guild.members.filter(a =>
+			const members: Collection<string, GuildMember> = context.guild.members.cache.filter(a =>
 				Util.normalize(a.displayName).includes(normalized)
 					|| Util.normalize(a.user.username).includes(normalized)
 					|| Util.normalize(a.user.tag).includes(normalized));

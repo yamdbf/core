@@ -1,21 +1,22 @@
+/* eslint-disable complexity */
+/* eslint-disable no-param-reassign */
 import * as FileSystem from 'fs';
 import * as Glob from 'glob';
 import * as Path from 'path';
+import { Logger, logger } from '../util/logger/Logger';
+import { BaseStrings } from './BaseStrings';
 import { Client } from '../client/Client';
 import { Command } from '../command/Command';
+import { GuildStorage } from '../storage/GuildStorage';
+import { LangFileParser } from './LangFileParser';
+import { LangStringNode } from './LangStringNode';
+import { Language } from './Language';
 import { LocalizedCommandInfo } from '../types/LocalizedCommandInfo';
+import { Message } from '../types/Message';
 import { ResourceLoader } from '../types/ResourceLoader';
 import { ResourceProxy } from '../types/ResourceProxy';
 import { TemplateData } from '../types/TemplateData';
-import { Logger, logger } from '../util/logger/Logger';
-import { LangFileParser } from './LangFileParser';
-import { Language } from './Language';
-import { Message } from '../types/Message';
-import { GuildStorage } from '../storage/GuildStorage';
 import { Util } from '../util/Util';
-import { BaseStrings } from './BaseStrings';
-import { LangStringNode } from './LangStringNode';
-import { CompiledTemplateScript } from './CompiledTemplateScript';
 import { deprecatedMethod } from '../util/DeprecatedMethodDecorator';
 
 /**
@@ -75,12 +76,13 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
-		let langs: Set<string> = new Set();
+		const langs: Set<string> = new Set();
 		for (const commandName of Object.keys(Lang._instance._commandInfo))
 			for (const lang of Object.keys(Lang._instance._commandInfo[commandName]))
 				langs.add(lang);
 
-		for (const lang of Object.keys(Lang.langs)) langs.add(lang);
+		for (const lang of Object.keys(Lang.langs))
+			langs.add(lang);
 
 		return Array.from(langs);
 	}
@@ -158,7 +160,7 @@ export class Lang
 	 * To be run after loading any localizations
 	 * @private
 	 */
-	private static postLoad(): void
+	private static _postLoad(): void
 	{
 		if (Lang.langNames.length > 1
 			&& (!Lang._instance._client.disableBase.includes('setlang')
@@ -166,7 +168,7 @@ export class Lang
 			&& Lang._instance._client.commands.get('setlang')!.disabled))
 		{
 			Lang._instance._client.commands.get('setlang')!.enable();
-			Lang._logger.info(`Additional langugage loaded, enabled 'setlang' command.`);
+			Lang._logger.info('Additional langugage loaded, enabled \'setlang\' command.');
 		}
 	}
 
@@ -183,9 +185,9 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
-		const langNameRegex: RegExp = /\/([^\/\.]+)(?:\.[^\/]+)?\.lang$/;
-		let langs: { [key: string]: string[] } = {};
-		let files: string[] = [];
+		const langNameRegex: RegExp = /\/([^/.]+)(?:\.[^/]+)?\.lang$/;
+		const langs: { [key: string]: string[] } = {};
+		const files: string[] = [];
 
 		const path: string = Path.resolve(dir);
 		files.push(...Glob.sync(`${path}/**/*.lang`));
@@ -202,6 +204,7 @@ export class Lang
 			langs[name].push(file);
 		}
 
+		// eslint-disable-next-line guard-for-in
 		for (const lang in langs)
 		{
 			for (const file of langs[lang])
@@ -222,7 +225,7 @@ export class Lang
 			}
 		}
 
-		Lang.postLoad();
+		Lang._postLoad();
 	}
 
 	/**
@@ -259,7 +262,7 @@ export class Lang
 	{
 		if (!Lang._instance) throw new Error('Lang singleton instance has not been created');
 
-		let files: string[] = [];
+		const files: string[] = [];
 		dir = Path.resolve(dir);
 		files.push(...Glob.sync(`${dir}/**/*.lang.json`));
 
@@ -268,7 +271,7 @@ export class Lang
 		for (const file of files)
 		{
 			// Ignore reserved commandgroups.lang.json
-			if (/commandgroups\.lang\.json$/.test(file)) continue;
+			if (file.endsWith('commandgroups.lang.json')) continue;
 
 			let localizations: { [command: string]: { [lang: string]: LocalizedCommandInfo } };
 			try { localizations = require(file); }
@@ -287,7 +290,7 @@ export class Lang
 				}
 		}
 
-		Lang.postLoad();
+		Lang._postLoad();
 	}
 
 	/**
@@ -317,7 +320,8 @@ export class Lang
 				Util.assignNestedValue(
 					Lang._instance._groupInfo,
 					[group, lang],
-					groupInfo[group][lang]);
+					groupInfo[group][lang]
+				);
 	}
 
 	/**
@@ -363,10 +367,11 @@ export class Lang
 			throw new TypeError('command must be an instance of Command class');
 
 		const paths: string[] = [command.name, lang];
-		let desc: string, info: string, usage: string;
-		desc = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'desc']) || command.desc || '';
-		info = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'info']) || command.info || '';
-		usage = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'usage']) || command.usage || '';
+		const desc: string = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'desc']) || command.desc || '';
+		const info: string = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'info']) || command.info || '';
+		const usage: string = Util.getNestedValue(Lang._instance._commandInfo, [...paths, 'usage'])
+			|| command.usage
+			|| '';
 
 		return { desc, info, usage };
 	}
@@ -402,7 +407,7 @@ export class Lang
 
 		const lang: string = dm
 			? Lang._instance._client.defaultLang
-			: (storage && await storage.settings.get('lang'))
+			: await storage?.settings.get('lang')
 				|| Lang._instance._client.defaultLang;
 
 		return lang;
@@ -457,10 +462,11 @@ export class Lang
 		{
 			// Skip maybe templates so they can be removed properly later
 			if (new RegExp(`{{ *${template} *\\?}}`, 'g').test(loadedString)
-				&& (data[template] === '' || data[template] === undefined)) continue;
+				&& (data[template] === '' || typeof data[template] === 'undefined')) continue;
 
 			loadedString = loadedString.replace(
-				new RegExp(`{{ *${template} *\\??}}`, 'g'), () => data[template]);
+				new RegExp(`{{ *${template} *\\??}}`, 'g'), () => data[template]
+			);
 		}
 
 		// Run embedded Lang string node scripts if any
@@ -468,15 +474,12 @@ export class Lang
 		{
 			const proxy: ResourceProxy = Lang.createResourceProxy(lang);
 			const dataForwardProxy: any = new Proxy({}, {
-				get: (_, prop) => {
-					return (args: TemplateData = data) => proxy[prop as BaseStrings](args);
-				}
+				get: (_, prop) =>
+					(args: TemplateData = data) => proxy[prop as BaseStrings](args)
 			});
 
-			for (const script in node.scripts)
+			for (const [script, loadedScript] of node.scripts.entries())
 			{
-				const loadedScript: CompiledTemplateScript = node.scripts[script];
-
 				let result: string;
 				try { result = loadedScript.func(data, dataForwardProxy); }
 				catch (err) { throw new Error(`in embedded localization script for: ${lang}::${key}\n${err}`); }
@@ -484,14 +487,14 @@ export class Lang
 				// Try coerced implicit return if it exists
 				if (typeof result === 'undefined'
 					&& loadedScript.implicitReturnFunc)
-					result = loadedScript.implicitReturnFunc!(data, dataForwardProxy);
+					result = loadedScript.implicitReturnFunc(data, dataForwardProxy);
 
 				// Set the result to an empty string if the script returns nothing
 				if (typeof result === 'undefined')
 					result = '';
 
 				// If the script occupies its own line, follow script result with a line break
-				if ((new RegExp(`^{{! ${script} !}}[\\t ]*\\n`)).test(loadedScript.raw) && result !== '')
+				if (new RegExp(`^{{! ${script} !}}[\\t ]*\\n`).test(loadedScript.raw) && result !== '')
 					loadedString = loadedString.replace(`{{! ${script} !}}`, () => `${result}\n`);
 				else
 					loadedString = loadedString.replace(`{{! ${script} !}}`, () => result);
@@ -529,9 +532,8 @@ export class Lang
 	public static createResourceProxy<T = {}>(lang: string): ResourceProxy<T>
 	{
 		return new Proxy({}, {
-			get: (_, key) => {
-				return (data: TemplateData) => Lang.res(lang, key as string, data);
-			}
+			get: (_, key) =>
+				(data: TemplateData) => Lang.res(lang, key as string, data)
 		}) as ResourceProxy<T>;
 	}
 }

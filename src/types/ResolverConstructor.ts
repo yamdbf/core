@@ -4,7 +4,7 @@
  * of a Resolver.*
  */
 
-import { Resolver } from '../command/resolvers/Resolver';
 import { Client } from '../client/Client';
+import { Resolver } from '../command/resolvers/Resolver';
 
 export type ResolverConstructor = new (client: Client) => Resolver;

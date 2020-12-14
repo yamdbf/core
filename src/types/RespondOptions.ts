@@ -7,4 +7,4 @@
 
 import { MessageOptions } from 'discord.js';
 
-export type RespondOptions = MessageOptions & { button?: string } ;
+export type RespondOptions = MessageOptions & { button?: string };

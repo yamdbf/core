@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import 'source-map-support/register';
 import * as path from 'path';
 
@@ -78,15 +79,14 @@ import { GuildStorage } from './storage/GuildStorage';
 import { Client } from './client/Client';
 
 // Add a getter for GuildStorage to the base Guild class
-Structures.extend('Guild', Guild => {
-	return class extends Guild
+Structures.extend('Guild', Guild =>
+	class extends Guild
 	{
 		public get storage(): GuildStorage
 		{
 			return (this.client as Client).storage.guilds.get(this.id)!;
 		}
-	};
-});
+	});
 
 /** @external {Client} See: {@link https://discord.js.org/#/docs/main/stable/class/Client} */
 /** @external {ClientOptions} See: {@link https://discord.js.org/#/docs/main/stable/typedef/ClientOptions} */
@@ -94,7 +94,10 @@ Structures.extend('Guild', Guild => {
 /** @external {Guild} See: {@link https://discord.js.org/#/docs/main/stable/class/Guild} */
 /** @external {Message} See: {@link https://discord.js.org/#/docs/main/stable/class/Message} */
 /** @external {MessageOptions} See: {@link https://discord.js.org/#/docs/main/stable/typedef/MessageOptions} */
-/** @external {PermissionResolvable} See: {@link https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable} */
+/**
+ * @external {PermissionResolvable}
+ * See: {@link https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable}
+ */
 /** @external {Role} See: {@link https://discord.js.org/#/docs/main/stable/class/Role} */
 /** @external {User} See: {@link https://discord.js.org/#/docs/main/stable/class/User} */
 

@@ -1,8 +1,8 @@
 import { Command } from '../Command';
 import { Message } from '../../types/Message';
-import { using } from '../CommandDecorators';
 import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
+import { using } from '../CommandDecorators';
 
 export default class extends Command
 {
@@ -13,7 +13,10 @@ export default class extends Command
 			desc: 'Set or check command prefix',
 			aliases: ['prefix'],
 			usage: '<prefix>setprefix [prefix]',
-			info: 'Prefixes may be 1-10 characters in length and may not include backslashes or backticks. Use "clear" to clear the prefix and allow commands to be called without a prefix.',
+			info: [
+				'Prefixes may be 1-10 characters in length and may not include backslashes',
+				'or backticks. Use "clear" to clear the prefix and allow commands to be called without a prefix.'
+			].join(' '),
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
@@ -23,7 +26,8 @@ export default class extends Command
 	{
 		if (!prefix)
 			return this.respond(message, res.CMD_PREFIX_CURRENT(
-				{ prefix: (await this.client.getPrefix(message.guild))! }));
+				{ prefix: (await this.client.getPrefix(message.guild))! }
+			));
 
 		if (prefix.length > 10)
 			return this.respond(message, res.CMD_PREFIX_ERR_CHAR_LIMIT());
@@ -31,7 +35,9 @@ export default class extends Command
 		if (/[\\`]/.test(prefix))
 			return this.respond(message, res.CMD_PREFIX_ERR_INVALID_CHARS());
 
-		if (prefix === 'clear') prefix = '';
+		if (prefix === 'clear')
+			// eslint-disable-next-line no-param-reassign
+			prefix = '';
 
 		await message.guild.storage!.settings.set('prefix', prefix);
 

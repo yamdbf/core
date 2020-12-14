@@ -1,8 +1,8 @@
-import { Resolver } from '../Resolver';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
 
 export class NumberResolver extends Resolver
@@ -32,7 +32,7 @@ export class NumberResolver extends Resolver
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 
 		const result: number = this.resolveRaw(value);
-		if (!(this.validate(result)))
+		if (!this.validate(result))
 			throw new Error(res.RESOLVE_ERR_RESOLVE_NUMBER({ name, arg: value, usage }));
 
 		return result;

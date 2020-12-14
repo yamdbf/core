@@ -1,5 +1,5 @@
-import { Message } from 'discord.js';
 import { Lang } from '../localization/Lang';
+import { Message } from 'discord.js';
 import { BaseStrings as s } from '../localization/BaseStrings';
 
 /**
@@ -30,7 +30,7 @@ import { BaseStrings as s } from '../localization/BaseStrings';
  */
 export class CommandLock
 {
-	private _locks: { [guild: string]: boolean };
+	private _locks: { [guild: string]: boolean } = {};
 
 	/**
 	 * Associated commands that will also be locked when the
@@ -42,7 +42,6 @@ export class CommandLock
 	public constructor(...siblings: string[])
 	{
 		this.siblings = siblings;
-		this._locks = {};
 	}
 
 	/**
@@ -52,6 +51,7 @@ export class CommandLock
 	 * @returns {void}
 	 */
 	// @ts-ignore - Args will be passed by the framework regardless
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public lock(message: Message, args: any[]): void
 	{
 		this._locks[message.guild!.id] = true;
@@ -64,6 +64,7 @@ export class CommandLock
 	 * @returns {boolean}
 	 */
 	// @ts-ignore - Args will be passed by the framework regardless
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public isLocked(message: Message, args: any[]): boolean
 	{
 		return this._locks[message.guild!.id] || false;
@@ -77,6 +78,7 @@ export class CommandLock
 	 * @returns {void}
 	 */
 	// @ts-ignore - Args will be passed by the framework regardless
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public free(message: Message, args: any[]): void
 	{
 		delete this._locks[message.guild!.id];
@@ -94,6 +96,7 @@ export class CommandLock
 	 * @returns {string}
 	 */
 	// @ts-ignore - Message and args will be passed by the framework regardless
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public getError(lang: string, message: Message, args: any[]): string
 	{
 		return Lang.res(lang, s.DISPATCHER_ERR_COMMAND_LOCKED);

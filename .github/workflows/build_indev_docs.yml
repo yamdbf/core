@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
 
-      - name: Install Node v10
+      - name: Install Node v14
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
 
       - name: Install dependencies
         run: |
@@ -25,13 +25,18 @@ jobs:
       - name: Clone gh-pages branch
         run: git clone https://${{ github.actor }}:${{ secrets.DOCS_TOKEN }}@github.com/${{ github.repository }}.git -b gh-pages ../yamdbf-docs
 
-      - name: Build docs
+      - name: Build project and run localization doc generation script
         run: |
           npm run build
-          npm run docs:indev
+          npm run localization
 
-      - name: Build localization string list
-        run: npm run localization
+      - name: Switch to node v8.9.3
+        uses: actions/setup-node@v1
+        with:
+          node-version: 8.9.3
+
+      - name: Build docs
+          npm run docs:indev
 
       - name: Check if commit is needed
         id: git_status

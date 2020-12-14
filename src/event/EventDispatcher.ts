@@ -27,7 +27,7 @@ export class EventDispatcher
 	public clearListenedEvents(): void
 	{
 		this._listenedEvents = [];
-		for (const event in this._listenedEventFns)
+		for (const event of Object.keys(this._listenedEventFns))
 		{
 			for (const fn of this._listenedEventFns[event])
 				this._client.removeListener(event, fn);
@@ -46,7 +46,8 @@ export class EventDispatcher
 		if (typeof this._listenedEventFns[event] === 'undefined')
 			this._listenedEventFns[event] = [];
 
-		const eventFn: (...args: any[]) => void = (...args) => {
+		const eventFn: (...args: any[]) => void = (...args) =>
+		{
 			for (const e of this._registry.events[event])
 				e(...args);
 		};

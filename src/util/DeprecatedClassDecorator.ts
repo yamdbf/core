@@ -1,7 +1,9 @@
+/* eslint-disable space-before-function-paren */
 import { Util } from './Util';
 
 export function deprecatedClass(message: string): ClassDecorator;
 export function deprecatedClass<T extends new (...args: any[]) => any>(target: T): T;
+
 /**
  * Logs a deprecation warning for the decorated class if
  * an instance is created
@@ -30,5 +32,6 @@ export function deprecatedClass<T extends new (...args: any[]) => any>(...decora
 		message = `Class \`${target.name}\` is deprecated and will be removed in a future release`;
 		return decorate(target);
 	}
-	else return decorate as ClassDecorator;
+
+	return decorate as ClassDecorator;
 }

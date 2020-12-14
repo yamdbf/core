@@ -1,5 +1,5 @@
-import { Event } from './Event';
 import { Client } from '../client/Client';
+import { Event } from './Event';
 import { EventDispatcher } from './EventDispatcher';
 
 /**

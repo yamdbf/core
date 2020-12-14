@@ -1,7 +1,7 @@
-import { Resolver } from '../Resolver';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
 import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 
 export class StringResolver extends Resolver
 {

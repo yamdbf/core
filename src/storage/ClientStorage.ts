@@ -1,7 +1,7 @@
-import { SingleProviderStorage } from './SingleProviderStorage';
-import { GuildStorage } from './GuildStorage';
 import { Client } from '../client/Client';
 import { Collection } from 'discord.js';
+import { GuildStorage } from './GuildStorage';
+import { SingleProviderStorage } from './SingleProviderStorage';
 
 /**
  * Class containing asynchronous methods for storing, retrieving, and

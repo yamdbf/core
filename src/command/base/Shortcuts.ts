@@ -1,9 +1,9 @@
-import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { using } from '../CommandDecorators';
+import { Message } from '../../types/Message';
 import { Middleware } from '../middleware/Middleware';
-import { Util } from 'discord.js';
 import { ResourceProxy } from '../../types/ResourceProxy';
+import { Util } from 'discord.js';
+import { using } from '../CommandDecorators';
 const { resolve, expect, localize } = Middleware;
 
 export default class extends Command
@@ -13,7 +13,7 @@ export default class extends Command
 		super({
 			name: 'shortcuts',
 			desc: 'Configure or list command shortcuts',
-			usage: `<prefix>shortcuts ['get'|'set'|'remove'] [name] [...content]`,
+			usage: '<prefix>shortcuts [\'get\'|\'set\'|\'remove\'] [name] [...content]',
 			info: `Shortcuts allow creating and calling preconfigured command+argument sets, or simple aliases
 
 Example:
@@ -35,34 +35,38 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 		});
 	}
 
-	@using(resolve(`action: ['get', 'set', 'remove'], name: String, ...content: String`))
-	@using(function(this: Command, message, args: string[])
+	@using(resolve('action: [\'get\', \'set\', \'remove\'], name: String, ...content: String'))
+	// eslint-disable-next-line func-names
+	@using(function(this: Command, message: Message, args: string[])
 	{
 		if (args[0])
 		{
 			if (args[0] === 'set')
-				return expect(`action: ['get', 'set', 'remove'], name: String, ...content: String`)
+				return expect('action: [\'get\', \'set\', \'remove\'], name: String, ...content: String')
 					.call(this, message, args);
 
-			else
-				return expect(`action: ['get', 'set', 'remove'], name: String`)
-					.call(this, message, args);
+			return expect('action: [\'get\', \'set\', \'remove\'], name: String')
+				.call(this, message, args);
 		}
-		else return [message, args];
+
+		return [message, args];
 	})
 	@using(localize)
-	public async action(message: Message, [res, action, name, content]: [ResourceProxy, string, string, string]): Promise<any>
+	public async action(
+		message: Message,
+		[res, action, name, content]: [ResourceProxy, string, string, string]
+	): Promise<any>
 	{
-		if (!action) return this.listShortcuts(message, res);
-		else if (action === 'set') return this.setShortcut(message, res, name, content);
-		else if (action === 'get') return this.getShortcut(message, res, name);
-		else if (action === 'remove') return this.removeShortcut(message, res, name);
+		if (!action) return this._listShortcuts(message, res);
+		else if (action === 'set') return this._setShortcut(message, res, name, content);
+		else if (action === 'get') return this._getShortcut(message, res, name);
+		else if (action === 'remove') return this._removeShortcut(message, res, name);
 	}
 
 	/**
 	 * List command shortcuts
 	 */
-	private async listShortcuts(message: Message, res: ResourceProxy): Promise<void>
+	private async _listShortcuts(message: Message, res: ResourceProxy): Promise<void>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') ?? {};
 		const names: string[] = Object.keys(shortcuts);
@@ -78,7 +82,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	/**
 	 * Set command shortcut content
 	 */
-	private async setShortcut(message: Message, res: ResourceProxy, name: string, content: string): Promise<any>
+	private async _setShortcut(message: Message, res: ResourceProxy, name: string, content: string): Promise<any>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') ?? {};
 		if (Object.keys(shortcuts).length >= 50)
@@ -89,6 +93,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 
 		await message.guild.storage!.settings.set(`shortcuts.${name}`, content);
 
+		// eslint-disable-next-line no-param-reassign
 		content = Util.escapeMarkdown(content, { codeBlock: true, codeBlockContent: true });
 		return this.respond(message, res.CMD_SHORTCUTS_SET_SUCCESS({ name, content }));
 	}
@@ -96,7 +101,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	/**
 	 * Get command shortcut content
 	 */
-	private async getShortcut(message: Message, res: ResourceProxy, name: string): Promise<any>
+	private async _getShortcut(message: Message, res: ResourceProxy, name: string): Promise<any>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') ?? {};
 		if (!shortcuts[name])
@@ -109,7 +114,7 @@ Of course the eval command is owner-only, but this should give you an idea of ho
 	/**
 	 * Remove a command shortcut
 	 */
-	private async removeShortcut(message: Message, res: ResourceProxy, name: string): Promise<any>
+	private async _removeShortcut(message: Message, res: ResourceProxy, name: string): Promise<any>
 	{
 		const shortcuts: { [name: string]: string } = await message.guild.storage!.settings.get('shortcuts') ?? {};
 		if (!shortcuts[name])

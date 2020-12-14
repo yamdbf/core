@@ -1,7 +1,7 @@
-import { Client } from '../client/Client';
 import { Message, GuildMember, User } from 'discord.js';
+import { Client } from '../client/Client';
 
-type SingleUseButton = { expires: number, consumed: boolean, emoji: string, action: Function };
+interface SingleUseButton { expires: number, consumed: boolean, emoji: string, action: Function }
 
 /**
  * Helper singleton for attaching single-use, expiring reaction buttons to
@@ -23,12 +23,13 @@ export class CompactModeHelper
 		this._buttons = {};
 
 		// Handle button clicks
-		this._client.on('messageReactionAdd', (reaction, user) => {
+		this._client.on('messageReactionAdd', (reaction, user) =>
+		{
 			const emojiIdentifier: string = reaction.emoji.id || reaction.emoji.name;
 			const buttonIdentifier: string = `${reaction.message.id}:${emojiIdentifier}`;
 
 			if (!(buttonIdentifier in this._buttons)) return;
-			if (user.id !== reaction.message.author!.id) return;
+			if (user.id !== reaction.message.author.id) return;
 
 			const button: SingleUseButton = this._buttons[buttonIdentifier];
 
@@ -39,8 +40,9 @@ export class CompactModeHelper
 		});
 
 		// Clean up expired/consumed buttons
-		this._client.setInterval(() => {
-			for (const identifier in this._buttons)
+		this._client.setInterval(() =>
+		{
+			for (const identifier of Object.keys(this._buttons))
 			{
 				const button: SingleUseButton = this._buttons[identifier];
 				if (button.consumed || button.expires < Date.now())
@@ -77,7 +79,12 @@ export class CompactModeHelper
 	 * @param {number} [lifespan=30000] Lifespan of the button in MS
 	 * @returns {Promise<void>}
 	 */
-	public static async registerButton(message: Message, emoji: string, action: Function, lifespan: number = 30e3): Promise<void>
+	public static async registerButton(
+		message: Message,
+		emoji: string,
+		action: Function,
+		lifespan: number = 30e3
+	): Promise<void>
 	{
 		if (!CompactModeHelper._instance)
 			throw new Error('CompactModeHelper instance has not been created');
@@ -86,6 +93,7 @@ export class CompactModeHelper
 			throw new TypeError('Emoji must be a unicode emoji, custom emoji id, or client button key');
 
 		if (CompactModeHelper._instance._client.buttons[emoji])
+			// eslint-disable-next-line no-param-reassign
 			emoji = CompactModeHelper._instance._client.buttons[emoji];
 
 		let clientMember!: GuildMember;
@@ -96,7 +104,8 @@ export class CompactModeHelper
 			try
 			{
 				const clientUser: User = CompactModeHelper._instance._client.user!;
-				clientMember = message.guild!.members.get(clientUser.id) || await message.guild!.members.fetch(clientUser);
+				clientMember = message.guild!.members.cache.get(clientUser.id)
+					|| await message.guild!.members.fetch(clientUser);
 			}
 			catch { invokeImmediately = true; }
 		}
@@ -107,6 +116,7 @@ export class CompactModeHelper
 		if (!invokeImmediately)
 		{
 			await message.react(emoji);
+			// eslint-disable-next-line require-atomic-updates
 			CompactModeHelper._instance._buttons[`${message.id}:${emoji}`] =
 				{ expires: Date.now() + lifespan, consumed: false, emoji, action };
 		}

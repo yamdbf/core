@@ -33,15 +33,16 @@
  * 									  attempt to load .ts files when loading Commands
  */
 
-import { StorageProviderConstructor } from './StorageProviderConstructor';
-import { PluginConstructor } from './PluginConstructor';
-import { ResolverConstructor } from './ResolverConstructor';
 import { BaseCommandName } from './BaseCommandName';
+import { Command } from '../command/Command';
 import { LogLevel } from './LogLevel';
 import { Message } from './Message';
-import { Command } from '../command/Command';
+import { PluginConstructor } from './PluginConstructor';
+import { ResolverConstructor } from './ResolverConstructor';
+import { StorageProviderConstructor } from './StorageProviderConstructor';
 
-export type YAMDBFOptions = {
+export interface YAMDBFOptions
+{
 	token?: string;
 	owner?: string | string[];
 	provider?: StorageProviderConstructor;
@@ -64,4 +65,4 @@ export type YAMDBFOptions = {
 	buttons?: { [key: string]: string };
 	compact?: boolean;
 	tsNode?: boolean;
-};
+}

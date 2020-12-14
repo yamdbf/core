@@ -1,16 +1,21 @@
-import { MiddlewareFunction } from '../../types/MiddlewareFunction';
-import { Message } from '../../types/Message';
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-invalid-this */
+/* eslint-disable func-names */
 import { Command } from '../Command';
 import { Lang } from '../../localization/Lang';
-import { Util } from '../../util/Util';
 import { MappedArgType } from './Resolve';
+import { Message } from '../../types/Message';
+import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { Resolver } from '../resolvers/Resolver';
 import { ResourceProxy } from '../../types/ResourceProxy';
+import { Util } from '../../util/Util';
 import { BaseStrings as s } from '../../localization/BaseStrings';
 
 export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 {
-	if (typeof argTypes === 'string') argTypes = Util.parseArgTypes(argTypes);
+	if (typeof argTypes === 'string')
+		argTypes = Util.parseArgTypes(argTypes);
 
 	const names: string[] = Object.keys(argTypes);
 	const types: (string | string[])[] = names
@@ -26,7 +31,7 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
-		const usage: string = Lang.getCommandInfo(this, lang).usage!.replace(/<prefix>/g, prefix);
+		const usage: string = Lang.getCommandInfo(this, lang).usage.replace(/<prefix>/g, prefix);
 
 		for (const [index, name] of names.entries())
 		{
@@ -58,9 +63,10 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 			if (!resolver)
 				throw new Error(`in arg \`${name}\`: Type \`${type}\` is not a valid argument type.`);
 
-			if (!(await resolver.validate(arg)))
-				throw new Error(Lang.res('en_us', s.EXPECT_ERR_EXPECTED_TYPE,
-					{ name, expected: type, type: arg === 'Infinity' ? arg : arg.constructor.name }));
+			if (!await resolver.validate(arg))
+				throw new Error(Lang.res('en_us', s.EXPECT_ERR_EXPECTED_TYPE, {
+					name, expected: type, type: arg === 'Infinity' ? arg : arg.constructor.name
+				}));
 		}
 
 		return [message, args];

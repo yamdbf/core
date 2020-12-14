@@ -1,6 +1,6 @@
 import { Client } from '../../client/Client';
-import { Message } from '../../types/Message';
 import { Command } from '../Command';
+import { Message } from '../../types/Message';
 
 /**
  * Method to implement that should return whether or not the
@@ -105,5 +105,6 @@ export abstract class Resolver
 	 * @returns {Promise<any>}
 	 */
 	// @ts-ignore - Abstract but optional
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public resolveRaw(value: string, context?: Partial<Message>): any {}
 }

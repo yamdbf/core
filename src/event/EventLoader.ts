@@ -1,10 +1,10 @@
 import * as glob from 'glob';
 import * as path from 'path';
-import { Event } from './Event';
-import { Util } from '../util/Util';
-import { Client } from '../client/Client';
-import { EventRegistry } from './EventRegistry';
 import { logger, Logger } from '../util/logger/Logger';
+import { Client } from '../client/Client';
+import { Event } from './Event';
+import { EventRegistry } from './EventRegistry';
+import { Util } from '../util/Util';
 
 /**
  * Handles loading and registering Event class event handlers from
@@ -14,6 +14,7 @@ export class EventLoader
 {
 	@logger('EventLoader')
 	private readonly _logger!: Logger;
+
 	private readonly _client: Client;
 	private readonly _sources: string[];
 	private readonly _registry: EventRegistry;
@@ -33,7 +34,7 @@ export class EventLoader
 	 */
 	public addSourceDir(dir: string): void
 	{
-		const resolvedDir = path.resolve(dir);
+		const resolvedDir: string = path.resolve(dir);
 		if (this._sources.includes(resolvedDir)) return;
 		this._sources.push(resolvedDir);
 	}
@@ -84,11 +85,14 @@ export class EventLoader
 		if (this._client.tsNode)
 		{
 			eventFiles.push(...glob.sync(`${dir}/**/!(*.d).ts`));
-			const filteredEventFiles = eventFiles.filter(f => {
-				const file: string = f.match(/\/([^\/]+?)\.[j|t]s$/)![1];
+			const filteredEventFiles: string[] = eventFiles.filter(f =>
+			{
+				const file: string = f.match(/\/([^/]+?)\.[j|t]s$/)![1];
 				if (f.endsWith('.ts')) return true;
 				if (f.endsWith('.js'))
-					return !eventFiles.find(cf => cf.endsWith(`${file}.ts`));
+					return !eventFiles.some(cf => cf.endsWith(`${file}.ts`));
+
+				return false;
 			});
 			eventFiles = filteredEventFiles;
 		}
@@ -111,9 +115,9 @@ export class EventLoader
 				continue;
 			}
 
-			for (const eventClass of eventClasses)
+			for (const EventClass of eventClasses)
 			{
-				const eventInstance: Event = new eventClass();
+				const eventInstance: Event = new EventClass();
 
 				this._logger.info(`Loaded Event handler for event: ${eventInstance.name}`);
 				loadedEvents.push(eventInstance);

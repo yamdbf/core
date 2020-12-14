@@ -64,7 +64,7 @@ export class RateLimit
 	 */
 	public get isLimited(): boolean
 	{
-		return (this._count >= this.limit) && (Date.now() < this.expires);
+		return this._count >= this.limit && Date.now() < this.expires;
 	}
 
 	/**
@@ -74,7 +74,7 @@ export class RateLimit
 	 */
 	public get remaining(): number
 	{
-		return (((this.limit - this._count) === 0) && !this.isLimited)
+		return this.limit - this._count === 0 && !this.isLimited
 			? this.limit
 			: this.limit - this._count;
 	}

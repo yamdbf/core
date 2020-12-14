@@ -1,5 +1,5 @@
-import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { resolve, MappedArgType } from './Resolve';
+import { MiddlewareFunction } from '../../types/MiddlewareFunction';
 import { expect } from './Expect';
 import { localize } from './Localize';
 import { localizeLoader } from './LocalizeLoader';

@@ -1,10 +1,10 @@
-import { Resolver } from '../Resolver';
+import { TextChannel, Collection } from 'discord.js';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
-import { TextChannel, Collection } from 'discord.js';
 import { Util } from '../../../util/Util';
 
 export class ChannelResolver extends Resolver
@@ -19,7 +19,10 @@ export class ChannelResolver extends Resolver
 		return value instanceof TextChannel;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<TextChannel | Collection<string, TextChannel> | undefined>
+	public async resolveRaw(
+		value: string,
+		context: Partial<Message> = {}
+	): Promise<TextChannel | Collection<string, TextChannel> | undefined>
 	{
 		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
 
@@ -29,14 +32,14 @@ export class ChannelResolver extends Resolver
 		if (channelRegex.test(value))
 		{
 			const id: string = value.match(channelRegex)![1];
-			channel = context.guild.channels.get(id) as TextChannel;
+			channel = context.guild.channels.cache.get(id) as TextChannel;
 			if (!channel) return;
 		}
 		else
 		{
 			const normalized: string = Util.normalize(value);
 			const channels: Collection<string, TextChannel> =
-				context.guild.channels
+				context.guild.channels.cache
 					.filter(a => a.type === 'text')
 					.filter(a => Util.normalize(a.name).includes(normalized)) as Collection<string, TextChannel>;
 

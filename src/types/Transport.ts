@@ -5,10 +5,11 @@
  * 								to the Logger's log level if none is provided
  */
 
-import { TransportFunction } from './TransportFunction';
 import { LogLevel } from './LogLevel';
+import { TransportFunction } from './TransportFunction';
 
-export type Transport = {
+export interface Transport
+{
 	transport: TransportFunction;
 	level?: LogLevel | (() => LogLevel);
-};
+}

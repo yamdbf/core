@@ -1,6 +1,6 @@
-import { Language } from './Language';
 import { CompiledTemplateScript } from './CompiledTemplateScript';
 import { LangStringNode } from './LangStringNode';
+import { Language } from './Language';
 
 /**
  * Class for parsing `.lang` files
@@ -45,6 +45,7 @@ export class LangFileParser
 			if (LangFileParser._scriptTemplates.test(value))
 			{
 				const templates: RegExpMatchArray = value.match(LangFileParser._scriptTemplates)!;
+				// eslint-disable-next-line guard-for-in
 				for (const script in templates)
 				{
 					const scriptData: string = templates[script];

@@ -1,10 +1,10 @@
-import { Resolver } from '../Resolver';
+import { Collection, Role } from 'discord.js';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
-import { Role, Collection } from 'discord.js';
 import { Util } from '../../../util/Util';
 
 export class RoleResolver extends Resolver
@@ -19,7 +19,10 @@ export class RoleResolver extends Resolver
 		return value instanceof Role;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<Role | Collection<string, Role> | undefined>
+	public async resolveRaw(
+		value: string,
+		context: Partial<Message> = {}
+	): Promise<Role | Collection<string, Role> | undefined>
 	{
 		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
 
@@ -29,13 +32,13 @@ export class RoleResolver extends Resolver
 		if (roleRegex.test(value))
 		{
 			const id: string = value.match(roleRegex)![1];
-			role = context.guild.roles.get(id)!;
+			role = context.guild.roles.cache.get(id)!;
 			if (!role) return;
 		}
 		else
 		{
 			const normalized: string = Util.normalize(value);
-			let roles: Collection<string, Role> = context.guild.roles.filter(a =>
+			const roles: Collection<string, Role> = context.guild.roles.cache.filter(a =>
 				Util.normalize(a.name).includes(normalized));
 
 			if (roles.size === 1) role = roles.first()!;

@@ -1,6 +1,6 @@
-import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 import { SequelizeProvider, Dialect } from './SequelizeProvider';
 import { JSONProvider } from './JSONProvider';
+import { StorageProviderConstructor } from '../types/StorageProviderConstructor';
 
 /**
  * Contains static storage providers and static factory methods

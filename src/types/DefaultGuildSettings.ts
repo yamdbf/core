@@ -5,8 +5,9 @@
  * @property {string[]} [disabledGroups=[]] Command groups to ignore
  */
 
-export type DefaultGuildSettings = {
+export interface DefaultGuildSettings
+{
 	[key: string]: any;
 	prefix: string;
 	disabledGroups: string[];
-};
+}

@@ -18,7 +18,6 @@
     "exclude": [
         "node_modules",
         "bin",
-        "examples",
-        "scripts"
+        "examples"
     ]
 }

@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-mixed-operators */
 import { BaseCommandName } from '../types/BaseCommandName';
+import { Client } from '../client/Client';
+import { Command } from '../command/Command';
 import { GuildStorage } from '../storage/GuildStorage';
 import { Message } from '../types/Message';
-import { Command } from '../command/Command';
-import { Client } from '../client/Client';
 import { Time } from './Time';
 
 /**
@@ -50,7 +52,9 @@ export class Util
 		if (dm && typeof prefix === 'undefined') prefix = '';
 		if (!dm && typeof prefix === 'undefined') return [false, null, prefix!, null];
 
-		const commandName: string = message.content.trim().slice(prefix!.length).trim().split(' ')[0];
+		const commandName: string = message.content.trim().slice(prefix!.length)
+			.trim()
+			.split(' ')[0];
 		const command: Command | undefined = client.commands.resolve(commandName);
 		if (!command) return [false, null, prefix!, commandName];
 		if (command.disabled) return [false, command, prefix!, commandName];
@@ -82,7 +86,7 @@ export class Util
 		if (delimiter === null) output = [input];
 		else if (delimiter === '') output = input.split(delimiter);
 		else output = input
-			.split(delimiter as string)
+			.split(delimiter)
 			.map(a => a.trim())
 			.filter(a => a !== '');
 
@@ -99,7 +103,7 @@ export class Util
 	 */
 	public static padRight(text: string, length: number): string
 	{
-		let pad: number = Math.max(0, Math.min(length, length - text.length));
+		const pad: number = Math.max(0, Math.min(length, length - text.length));
 		return `${text}${' '.repeat(pad)}`;
 	}
 
@@ -146,7 +150,7 @@ export class Util
 		if (path.length === 0)
 			throw new Error('Missing nested assignment path');
 
-		let first: string = path.shift()!;
+		const first: string = path.shift()!;
 		if (typeof obj[first] === 'undefined') obj[first] = {};
 		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
 			throw new Error(`Target '${first}' is not valid for nested assignment.`);
@@ -169,7 +173,7 @@ export class Util
 		if (path.length === 0)
 			throw new Error('Missing nested assignment path');
 
-		let first: string = path.shift()!;
+		const first: string = path.shift()!;
 		if (typeof obj[first] === 'undefined') return;
 		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
 			return;
@@ -192,7 +196,7 @@ export class Util
 		if (typeof obj === 'undefined') return;
 		if (path.length === 0) return obj;
 
-		let first: string = path.shift()!;
+		const first: string = path.shift()!;
 		if (typeof obj[first] === 'undefined') return;
 		if (path.length > 1 && (typeof obj[first] !== 'object' || obj[first] instanceof Array))
 			return;
@@ -224,15 +228,15 @@ export class Util
 	 */
 	public static parseArgTypes(input: string): { [arg: string]: string | string[] }
 	{
-		let argStringRegex: RegExp = /(?:\.\.\.)?\w+\?? *: *(?:\[.*?\](?= *, *)|(?:\[.*?\] *$)|\w+)/g;
+		const argStringRegex: RegExp = /(?:\.\.\.)?\w+\?? *: *(?:\[.*?\](?= *, *)|(?:\[.*?\] *$)|\w+)/g;
 		if (!argStringRegex.test(input))
 			throw new Error(`Input string is incorrectly formatted: ${input}`);
 
-		let output: { [arg: string]: string | string[] } = {};
-		let args: string[] = input.match(argStringRegex)!;
+		const output: { [arg: string]: string | string[] } = {};
+		const args: string[] = input.match(argStringRegex)!;
 		for (let arg of args)
 		{
-			let split: string[] = arg.split(':').map(a => a.trim());
+			const split: string[] = arg.split(':').map(a => a.trim());
 			let name: string = split.shift()!;
 			arg = split.join(':');
 			if (/(?:\.\.\.)?.+\?/.test(name)) name = `[${name.replace('?', '')}]`;
@@ -263,12 +267,14 @@ export class Util
 		if (!limitRegex.test(limitString))
 			throw new Error(`Failed to parse a ratelimit from '${limitString}'`);
 
-		let [limit, duration, post]: [string | number, string | number, string] =
-			limitRegex.exec(limitString)!.slice(1, 4) as [string, string, string];
+		const parsedLimit: RegExpExecArray = limitRegex.exec(limitString)!;
+
+		let [limit, duration]: [string | number, string | number] = parsedLimit.slice(1, 3) as [string, string];
+		const [post]: [string] = parsedLimit.slice(3, 4) as [string];
 
 		if (post) duration = Time.parseShorthand(duration + post)!;
-		else duration = parseInt(duration as string);
-		limit = parseInt(limit as string);
+		else duration = parseInt(duration);
+		limit = parseInt(limit);
 
 		return [limit, duration];
 	}
@@ -283,7 +289,7 @@ export class Util
 	{
 		type NSFunction = (hr?: [number, number]) => number;
 		const ns: NSFunction = (hr = process.hrtime()) => hr[0] * 1e9 + hr[1];
-		return (ns() - (ns() - (process.uptime() * 1e9))) / 1e6;
+		return (ns() - (ns() - process.uptime() * 1e9)) / 1e6;
 	}
 
 	/**
@@ -335,7 +341,8 @@ export class Util
 
 		for (const p of packages)
 		{
-			try { pkg = require(p); } catch {}
+			try { pkg = require(p); }
+			catch {}
 			if (pkg) break;
 		}
 

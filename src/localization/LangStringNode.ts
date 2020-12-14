@@ -54,7 +54,8 @@ export class LangStringNode
 
 			// Throw a type error if the given type is not valid
 			const validateType: (type: string, val: any, arg: string, array: boolean) => void =
-				(type, val, arg, array) => {
+				(type, val, arg, array) =>
+				{
 					if (type === 'any') return;
 					if (typeof val === type) return;
 
@@ -85,7 +86,9 @@ export class LangStringNode
 			}
 
 			// Create and assign the args validator for this node
-			this.argsValidator = args => {
+			this.argsValidator = args =>
+			{
+				// eslint-disable-next-line guard-for-in
 				for (const argKey in this.args)
 				{
 					const arg: { isOptional: boolean, isArray: boolean, type: string } = this.args[argKey];
@@ -106,7 +109,7 @@ export class LangStringNode
 							throw new TypeError(`String \`${lang}::${key}\`, arg \`${argKey}\`: Expected Array`);
 
 						// Validate the type of all values within the array given for array types
-						for (const val of args[argKey] as Array<any>)
+						for (const val of args[argKey] as any[])
 							validateType(arg.type, val, argKey, true);
 					}
 					else validateType(arg.type, args[argKey], argKey, false);

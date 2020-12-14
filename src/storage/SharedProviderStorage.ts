@@ -1,6 +1,7 @@
+/* eslint-disable no-param-reassign */
+import { Logger } from '../util/logger/Logger';
 import { StorageProvider } from './StorageProvider';
 import { Util } from '../util/Util';
-import { Logger } from '../util/logger/Logger';
 
 /**
  * Simple async key/value storage abstraction operating on top
@@ -69,10 +70,11 @@ export class SharedProviderStorage
 
 		if (key.includes('.'))
 		{
-			let path: string[] = key.split('.');
+			const path: string[] = key.split('.');
 			return Util.getNestedValue(this._cache[path.shift()!], path);
 		}
-		else return this._cache[key];
+
+		return this._cache[key];
 	}
 
 	/**
@@ -102,7 +104,7 @@ export class SharedProviderStorage
 
 		if (key.includes('.'))
 		{
-			let path: string[] = key.split('.');
+			const path: string[] = key.split('.');
 			key = path.shift()!;
 
 			if (typeof this._cache[key] === 'undefined')
@@ -127,7 +129,7 @@ export class SharedProviderStorage
 
 		if (key.includes('.'))
 		{
-			let path: string[] = key.split('.');
+			const path: string[] = key.split('.');
 			key = path.shift()!;
 
 			if (typeof this._cache[key] !== 'undefined')

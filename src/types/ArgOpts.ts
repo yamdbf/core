@@ -4,6 +4,7 @@
  * @property {string} [separator=' '] The charactor to separate args by
  */
 
-export type ArgOpts = {
+export interface ArgOpts
+{
 	separator?: string | null;
-};
+}

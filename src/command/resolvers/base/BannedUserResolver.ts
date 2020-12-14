@@ -1,10 +1,10 @@
-import { Resolver } from '../Resolver';
+import { User, Collection } from 'discord.js';
 import { Client } from '../../../client/Client';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Resolver } from '../Resolver';
 import { ResourceProxy } from '../../../types/ResourceProxy';
-import { User, Collection } from 'discord.js';
 import { Util } from '../../../util/Util';
 
 export class BannedUserResolver extends Resolver
@@ -19,15 +19,18 @@ export class BannedUserResolver extends Resolver
 		return value instanceof User;
 	}
 
-	public async resolveRaw(value: string, context: Partial<Message> = {}): Promise<User | Collection<string, User> | undefined>
+	public async resolveRaw(
+		value: string,
+		context: Partial<Message> = {}
+	): Promise<User | Collection<string, User> | undefined>
 	{
 		if (!context.guild) throw new Error('Cannot resolve given value: missing context');
 
 		let user: User;
 		const idRegex: RegExp = /^(?:<@!?)?(\d+)>?$/;
 
-		type BanInfo = { user: User, reason: string };
-		const bans: Collection<string, BanInfo> = await context.guild!.fetchBans();
+		interface BanInfo { user: User, reason: string }
+		const bans: Collection<string, BanInfo> = await context.guild.fetchBans();
 		const bannedUsers: Collection<string, User> =
 			new Collection(bans.map(b => [b.user.id, b.user] as [string, User]));
 
@@ -39,7 +42,7 @@ export class BannedUserResolver extends Resolver
 		else
 		{
 			const normalized: string = Util.normalize(value);
-			let users: Collection<string, User> = bannedUsers.filter(a =>
+			const users: Collection<string, User> = bannedUsers.filter(a =>
 				Util.normalize(a.username).includes(normalized)
 					|| Util.normalize(a.tag).includes(normalized));
 

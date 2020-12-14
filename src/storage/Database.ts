@@ -1,6 +1,6 @@
+import * as Sequelize from 'sequelize';
 import { Logger, logger } from '../util/logger/Logger';
 import { Util } from '../util/Util';
-import * as Sequelize from 'sequelize';
 
 /**
  * >**Note:** This won't do anything for you if you're not using
@@ -21,6 +21,7 @@ export class Database
 {
 	@logger('Database')
 	private readonly _logger!: Logger;
+
 	private static _instance: Database;
 	private _url: string;
 
@@ -36,7 +37,7 @@ export class Database
 
 		// Lazy load sequelize
 		const packages: string[] = ['sequelize-typescript', 'sequelize'];
-		const seq: typeof Sequelize.Sequelize = Util.lazyLoad<typeof Sequelize>(...packages).Sequelize;
+		const Seq: typeof Sequelize.Sequelize = Util.lazyLoad<typeof Sequelize>(...packages).Sequelize;
 
 		const logging: (...args: any[]) => void =
 			(...args) => { if (debug) this._logger.debug(args[0], ...args.slice(1)); };
@@ -46,7 +47,7 @@ export class Database
 		 * your chosen storage provider
 		 * @type {Sequelize}
 		 */
-		this.db = new seq(this._url, { logging });
+		this.db = new Seq(this._url, { logging });
 	}
 
 	/**

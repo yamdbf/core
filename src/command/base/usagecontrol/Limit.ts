@@ -1,10 +1,11 @@
+/* eslint-disable func-names */
 import { Role, Collection } from 'discord.js';
 import { Command } from '../../Command';
-import { Message } from '../../../types/Message';
-import { ResourceProxy } from '../../../types/ResourceProxy';
-import { Middleware } from '../../middleware/Middleware';
 import { GuildStorage } from '../../../storage/GuildStorage';
+import { Message } from '../../../types/Message';
+import { Middleware } from '../../middleware/Middleware';
 import { Resolver } from '../../resolvers/Resolver';
+import { ResourceProxy } from '../../../types/ResourceProxy';
 import { using } from '../../CommandDecorators';
 const { expect, resolve, localize } = Middleware;
 
@@ -15,10 +16,12 @@ export default class extends Command
 		super({
 			name: 'limit',
 			desc: 'Limit commands to certain roles',
-			usage: `<prefix>limit <command> <roles, ...> | <prefix>limit <'clear'> <command>`,
+			usage: '<prefix>limit <command> <roles, ...> | <prefix>limit <\'clear\'> <command>',
 			info: `Multiple roles can be passed to the command as a comma-separated list.
 
-If a role is unable to be found and you know it exists, it could be that there are multiple roles containing the given role name search text. Consider refining your search, or using an @mention for the role you want to use.
+If a role is unable to be found and you know it exists, it could be that there are multiple roles
+containing the given role name search text. Consider refining your search, or using an @mention for
+the role you want to use.
 
 Limiting a command will add the given roles to set of roles the command is limited to.
 
@@ -29,29 +32,34 @@ Removing individual roles is not possible to keep the command simple to use.`,
 		});
 	}
 
-	@using(function(this: Command, message, args)
+	@using(function(this: Command, message: Message, args: any[])
 	{
 		if (args[0] === 'clear')
-			return resolve(`clear: String, command: Command`)
+			return resolve('clear: String, command: Command')
 				.call(this, message, args);
-		else
-			return resolve(`command: Command, ...roles: String`)
-				.call(this, message, args);
+
+		return resolve('command: Command, ...roles: String')
+			.call(this, message, args);
 	})
-	@using(function(this: Command, message, args)
+	@using(function(this: Command, message: Message, args: any[])
 	{
 		if (args[0] === 'clear')
-			return expect(`clear: String, command: Command`)
+			return expect('clear: String, command: Command')
 				.call(this, message, args);
-		else
-			return expect(`command: Command, ...roles: String`)
-				.call(this, message, args);
+
+		return expect('command: Command, ...roles: String')
+			.call(this, message, args);
 	})
 	@using(localize)
-	public async action(message: Message, [res, clearOrCommand, rolesOrCommand]: [ResourceProxy, Command | string, Command | string]): Promise<any>
+	public async action(
+		message: Message,
+		[res, clearOrCommand, rolesOrCommand]: [ResourceProxy, Command | string, Command | string]
+	): Promise<any>
 	{
-		if (clearOrCommand === 'clear') return this.clearLimit(message, res, rolesOrCommand as Command);
-		else return this.limitCommand(message, res, clearOrCommand as Command, rolesOrCommand as string);
+		if (clearOrCommand === 'clear')
+			return this.clearLimit(message, res, rolesOrCommand as Command);
+
+		return this.limitCommand(message, res, clearOrCommand as Command, rolesOrCommand as string);
 	}
 
 	/**
@@ -79,6 +87,7 @@ Removing individual roles is not possible to keep the command simple to use.`,
 
 		for (const roleString of roleStrings)
 		{
+			// eslint-disable-next-line no-await-in-loop
 			const role: Role | Collection<string, Role> = await roleResolver.resolveRaw(roleString, message);
 			if (!role || role instanceof Collection) invalidRoles.push(roleString);
 			else foundRoles.push(role);
@@ -93,7 +102,9 @@ Removing individual roles is not possible to keep the command simple to use.`,
 		const newLimit: Set<string> =
 			new Set(await storage.settings.get(`limitedCommands.${command.name}`) || []);
 
-		for (const role of foundRoles) newLimit.add(role.id);
+		for (const role of foundRoles)
+			newLimit.add(role.id);
+
 		await storage.settings.set(`limitedCommands.${command.name}`, Array.from(newLimit));
 
 		return this.respond(message, res.CMD_LIMIT_SUCCESS({

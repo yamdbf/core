@@ -1,12 +1,14 @@
-import { Lang } from '../localization/Lang';
+/* eslint-disable func-names */
+/* eslint-disable no-param-reassign */
+import { PermissionResolvable, MessageOptions } from 'discord.js';
 import { ArgOpts } from '../types/ArgOpts';
+import { Command } from './Command';
+import { CompactModeHelper } from './CompactModeHelper';
+import { Lang } from '../localization/Lang';
 import { Message } from '../types/Message';
 import { MiddlewareFunction } from '../types/MiddlewareFunction';
 import { ResourceProxy } from '../types/ResourceProxy';
-import { Command } from './Command';
 import { Util } from '../util/Util';
-import { PermissionResolvable, MessageOptions } from 'discord.js';
-import { CompactModeHelper } from './CompactModeHelper';
 
 /**
  * Grouping of static decorator methods for the {@link Command}
@@ -32,9 +34,13 @@ export function using(func: MiddlewareFunction): MethodDecorator
 {
 	return function(target: object, key: PropertyKey, descriptor: PropertyDescriptor): PropertyDescriptor
 	{
-		if (!target) throw new Error('@using must be used as a method decorator for a Command action method.');
-		if (key !== 'action') throw new Error(
-			`"${target.constructor.name}#${key as string}" is not a valid method target for @using.`);
+		if (!target)
+			throw new Error('@using must be used as a method decorator for a Command action method.');
+
+		if (key !== 'action')
+			throw new Error(
+				`"${target.constructor.name}#${key as string}" is not a valid method target for @using.`
+			);
 
 		if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key)!;
 		const original: any = descriptor.value;
@@ -42,16 +48,19 @@ export function using(func: MiddlewareFunction): MethodDecorator
 		{
 			// Send the middleware result to the channel, utilizing compact mode if enabled
 			const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise<any> =
-				async (result, options) => {
+				async (result, options) =>
+				{
 					if (await message.guild?.storage?.settings.get('compact') || this.client.compact)
 					{
-						if (message.reactions.size > 0) await message.reactions.removeAll();
+						if (message.reactions.cache.size > 0) await message.reactions.removeAll();
 						return CompactModeHelper.registerButton(
 							message,
-							this.client.buttons['fail'],
-							() => message.channel.send(result, options));
+							this.client.buttons.fail,
+							async () => message.channel.send(result, options!)
+						);
 					}
-					else return message.channel.send(result);
+
+					return message.channel.send(result);
 				};
 
 			// Run the given middleware function
@@ -60,13 +69,21 @@ export function using(func: MiddlewareFunction): MethodDecorator
 			{
 				let result: Promise<[Message, any[]]> | [Message, any[]] =
 					func.call(this, message, args);
-				if (result instanceof Promise) result = await result;
+
+				if (result instanceof Promise)
+					result = await result;
+
 				if (!(result instanceof Array))
 				{
-					if (typeof result === 'string') sendMiddlewareResult(result);
+					if (typeof result === 'string')
+						sendMiddlewareResult(result);
+
 					middlewarePassed = false;
 				}
-				if (middlewarePassed) [message, args] = result;
+
+				if (middlewarePassed)
+					// eslint-disable-next-line require-atomic-updates
+					[message, args] = result;
 			}
 			catch (err)
 			{
@@ -74,7 +91,9 @@ export function using(func: MiddlewareFunction): MethodDecorator
 				middlewarePassed = false;
 			}
 
-			if (middlewarePassed) return await original.apply(this, [message, args]);
+			if (middlewarePassed)
+				// eslint-disable-next-line no-return-await
+				return await original.apply(this, [message, args]);
 		};
 		return descriptor;
 	};
@@ -102,9 +121,13 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 	Util.emitDeprecationWarning(localizable,
 		'`CommandDecorators.localizable` is deprecated. Use `Middleware.localize` instead');
 
-	if (!target) throw new Error('@localizable must be used as a method decorator for a Command action method.');
-	if (key !== 'action') throw new Error(
-		`"${target.constructor.name}#${key}" is not a valid method target for @localizable.`);
+	if (!target)
+		throw new Error('@localizable must be used as a method decorator for a Command action method.');
+
+	if (key !== 'action')
+		throw new Error(
+			`"${target.constructor.name}#${key}" is not a valid method target for @localizable.`
+		);
 
 	if (!descriptor) descriptor = Object.getOwnPropertyDescriptor(target, key)!;
 	const original: any = descriptor.value;
@@ -113,10 +136,42 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
 	{
 		const lang: string = await Lang.getLangFromMessage(message);
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
+		// eslint-disable-next-line no-return-await
 		return await original.apply(this, [message, [res, ...args]]);
 	};
 
 	return descriptor;
+}
+
+/**
+ * Set an arbitrary value to an arbitrary key on a command class
+ * @private
+ */
+function _setMetaData(key: string, value: any): ClassDecorator
+{
+	return function<T extends Function>(target: T): T
+	{
+		Object.defineProperty(target.prototype, key, {
+			value,
+			configurable: true,
+			enumerable: true,
+			writable: true
+		});
+		return target;
+	};
+}
+
+/**
+ * Set a boolean flag metadata on a command class
+ * @private
+ */
+function _setFlagMetaData<T extends Function>(target: T, flag: string): T
+{
+	Object.defineProperty(target.prototype, flag, {
+		value: true,
+		enumerable: true,
+	});
+	return target;
 }
 
 /**
@@ -283,35 +338,4 @@ export function guildOnly<T extends Function>(target: T): T
 export function hidden<T extends Function>(target: T): T
 {
 	return _setFlagMetaData(target, 'hidden');
-}
-
-/**
- * Set a boolean flag metadata on a command class
- * @private
- */
-function _setFlagMetaData<T extends Function>(target: T, flag: string): T
-{
-	Object.defineProperty(target.prototype, flag, {
-		value: true,
-		enumerable: true,
-	});
-	return target;
-}
-
-/**
- * Set an arbitrary value to an arbitrary key on a command class
- * @private
- */
-function _setMetaData(key: string, value: any): ClassDecorator
-{
-	return function<T extends Function>(target: T): T
-	{
-		Object.defineProperty(target.prototype, key, {
-			value: value,
-			configurable: true,
-			enumerable: true,
-			writable: true
-		});
-		return target;
-	};
 }

@@ -1,9 +1,11 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable complexity */
+import { Logger, logger } from '../util/logger/Logger';
 import { Client } from './Client';
 import { Plugin } from './Plugin';
-import { Logger, logger } from '../util/logger/Logger';
-import { StorageProvider } from '../storage/StorageProvider';
-import { SharedProviderStorage } from '../storage/SharedProviderStorage';
 import { PluginConstructor } from '../types/PluginConstructor';
+import { SharedProviderStorage } from '../storage/SharedProviderStorage';
+import { StorageProvider } from '../storage/StorageProvider';
 
 /**
  * Loads plugins and holds loaded plugins in case accessing
@@ -15,6 +17,7 @@ export class PluginLoader
 {
 	@logger('PluginLoader')
 	private readonly _logger!: Logger;
+
 	private readonly _client: Client;
 	private readonly _provider: StorageProvider;
 	private _plugins: (PluginConstructor | string)[];
@@ -50,7 +53,7 @@ export class PluginLoader
 			if (typeof plugin === 'string')
 			{
 				let error!: string;
-				if (!/^yamdbf-/.test(plugin))
+				if (!plugin.startsWith('yamdbf-'))
 				{
 					try { loadedPlugin = new (require(plugin))(this._client); }
 					catch (err) { error = `${err}, trying 'yamdbf-${plugin}'...`; }
@@ -72,13 +75,15 @@ export class PluginLoader
 					catch (err) { error = err; }
 				}
 
-				if (!loadedPlugin) {
+				if (!loadedPlugin)
+				{
 					this._logger.warn(`Failed to load plugin '${plugin}':\n\n${error}\n`);
 					continue;
 				}
 			}
 			else
 			{
+				// eslint-disable-next-line new-cap
 				try { loadedPlugin = new plugin(this._client); }
 				catch (err)
 				{
@@ -115,6 +120,8 @@ export class PluginLoader
 			this._logger.info(`Plugin '${loadedPlugin.name}' loaded, initializing...`);
 			try
 			{
+				// Disabled because init is allowed to be async, just not guaranteed to be
+				// eslint-disable-next-line @typescript-eslint/await-thenable
 				await loadedPlugin.init(pluginStorage);
 				this._logger.info(`Plugin '${loadedPlugin.name}' initialized.`);
 			}

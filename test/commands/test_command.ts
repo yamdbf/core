@@ -1,7 +1,7 @@
 import {
 	// Client,
 	Command,
-	CommandLock,
+	// CommandLock,
 	Message,
 	CommandDecorators,
 	Logger,
@@ -36,7 +36,7 @@ export class TestCommandTwo extends TestCommandClass
 			usage: '<prefix>test2 <test> <foo>',
 		});
 
-		this.use((message, args) => "bbbbbbb");
+		this.use(() => "bbbbbbb" as any);
 	}
 
 	public action() {

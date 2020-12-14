@@ -1,11 +1,11 @@
+import { Logger, logger } from '../../util/logger/Logger';
 import { Collection } from 'discord.js';
-import { Message } from '../../types/Message';
 import { Command } from '../Command';
-import { using } from '../CommandDecorators';
+import { Message } from '../../types/Message';
 import { Middleware } from '../middleware/Middleware';
 import { ResourceProxy } from '../../types/ResourceProxy';
 import { Util } from '../../util/Util';
-import { Logger, logger } from '../../util/logger/Logger';
+import { using } from '../CommandDecorators';
 
 export default class extends Command
 {
@@ -23,7 +23,7 @@ export default class extends Command
 	}
 
 	@using(Middleware.localize)
-	public action(message: Message, [res]: [ResourceProxy]): Promise<Message | Message[]>
+	public async action(message: Message, [res]: [ResourceProxy]): Promise<Message | Message[]>
 	{
 		this._logger.log(`Reloading commands from: $${this.client.commandsDir}`);
 
@@ -32,14 +32,15 @@ export default class extends Command
 		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
 		const reloaded: number = this.client._reloadCustomCommands();
 
-		this._logger.log(`Re-initializing reloaded commands...`);
+		this._logger.log('Re-initializing reloaded commands...');
 		this.client.commands._initCommands();
 
 		const toDisable: Collection<string, Command> =
 			this.client.commands.filter(c => disabled.includes(c.name));
 
 		// Re-disable previously disabled commands
-		for (const command of toDisable.values()) command.disable();
+		for (const command of toDisable.values())
+			command.disable();
 
 		const commandEnd: number = Util.now();
 		const commandNumber: string = reloaded.toString();
