@@ -36,7 +36,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Logger } from './Logger';
+            <pre class="prettyprint source linenums"><code>/* eslint-disable @typescript-eslint/no-extraneous-class */
+/* eslint-disable max-classes-per-file */
+import { Logger } from './Logger';
 
 export type Constructable&lt;T = {}> = new (...args: any[]) => T;
 export interface ILoggable

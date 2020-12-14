@@ -102,7 +102,7 @@ export class RateLimit
 	 */
 	public get isLimited(): boolean
 	{
-		return (this._count >= this.limit) &amp;&amp; (Date.now() &lt; this.expires);
+		return this._count >= this.limit &amp;&amp; Date.now() &lt; this.expires;
 	}
 
 	/**
@@ -112,7 +112,7 @@ export class RateLimit
 	 */
 	public get remaining(): number
 	{
-		return (((this.limit - this._count) === 0) &amp;&amp; !this.isLimited)
+		return this.limit - this._count === 0 &amp;&amp; !this.isLimited
 			? this.limit
 			: this.limit - this._count;
 	}

@@ -36,12 +36,13 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Message } from '../../../types/Message';
+            <pre class="prettyprint source linenums"><code>/* eslint-disable func-names */
 import { Command } from '../../Command';
-import { using } from '../../CommandDecorators';
-import { ResourceProxy } from '../../../types/ResourceProxy';
-import { Middleware } from '../../middleware/Middleware';
 import { Lang } from '../../../localization/Lang';
+import { Message } from '../../../types/Message';
+import { Middleware } from '../../middleware/Middleware';
+import { ResourceProxy } from '../../../types/ResourceProxy';
+import { using } from '../../CommandDecorators';
 const { resolve, expect, localize } = Middleware;
 
 export default class extends Command
@@ -51,32 +52,33 @@ export default class extends Command
 		super({
 			name: 'groups',
 			desc: 'Configure or list command groups',
-			usage: `&lt;prefix>groups ['enable'|'on'|'disable'|'off'] [...group]`,
-			info: `A '*' denotes a disabled group when listing all command groups.`,
+			usage: '&lt;prefix>groups [\'enable\'|\'on\'|\'disable\'|\'off\'] [...group]',
+			info: 'A \'*\' denotes a disabled group when listing all command groups.',
 			callerPermissions: ['ADMINISTRATOR']
 		});
 	}
 
-	@using(resolve(`action: ['enable', 'on', 'disable', 'off'], ...group: String`))
-	@using(function(this: Command, message, args: string[])
+	@using(resolve('action: [\'enable\', \'on\', \'disable\', \'off\'], ...group: String'))
+	@using(function(this: Command, message: Message, args: string[])
 	{
 		if (args[0])
-			return expect(`action: ['enable', 'on', 'disable', 'off'], ...group: String`)
+			return expect('action: [\'enable\', \'on\', \'disable\', \'off\'], ...group: String')
 				.call(this, message, args);
-		else return [message, args];
+
+		return [message, args];
 	})
 	@using(localize)
 	public async action(message: Message, [res, action, group]: [ResourceProxy, string, string]): Promise&lt;any>
 	{
-		if (!action) return this.listGroups(message, res);
-		else if (['enable', 'on'].includes(action)) return this.enableGroup(message, res, group);
-		else if (['disable', 'off'].includes(action)) return this.disableGroup(message, res, group);
+		if (!action) return this._listGroups(message, res);
+		else if (['enable', 'on'].includes(action)) return this._enableGroup(message, res, group);
+		else if (['disable', 'off'].includes(action)) return this._disableGroup(message, res, group);
 	}
 
 	/**
 	 * List command groups
 	 */
-	private async listGroups(message: Message, res: ResourceProxy): Promise&lt;void>
+	private async _listGroups(message: Message, res: ResourceProxy): Promise&lt;void>
 	{
 		const lang: string = await message.guild.storage!.settings.get('lang') || this.client.defaultLang;
 		const info: string[] = this.client.commands.groups.map(g => Lang.getGroupInfo(g, lang));
@@ -94,7 +96,7 @@ export default class extends Command
 	/**
 	 * Enable a command group
 	 */
-	private async enableGroup(message: Message, res: ResourceProxy, group: string): Promise&lt;any>
+	private async _enableGroup(message: Message, res: ResourceProxy, group: string): Promise&lt;any>
 	{
 		const err: { [error: string]: string } = {
 			NO_EXIST: res.CMD_GROUPS_ERR_NOEXIST({ group }),
@@ -115,7 +117,7 @@ export default class extends Command
 	/**
 	 * Disable a command group
 	 */
-	private async disableGroup(message: Message, res: ResourceProxy, group: string): Promise&lt;any>
+	private async _disableGroup(message: Message, res: ResourceProxy, group: string): Promise&lt;any>
 	{
 		const err: { [error: string]: string } = {
 			NO_EXIST: res.CMD_GROUPS_ERR_NOEXIST({ group }),

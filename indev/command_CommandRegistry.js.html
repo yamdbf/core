@@ -36,10 +36,10 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Client } from '../client/Client';
-import { Command } from './Command';
+            <pre class="prettyprint source linenums"><code>import { Logger, logger } from '../util/logger/Logger';
+import { Client } from '../client/Client';
 import { Collection } from 'discord.js';
-import { Logger, logger } from '../util/logger/Logger';
+import { Command } from './Command';
 
 /**
  * @classdesc Stores loaded Commands in a Collection keyed by each Command's `name` property
@@ -54,6 +54,7 @@ export class CommandRegistry&lt;
 {
 	@logger('CommandRegistry')
 	private readonly _logger!: Logger;
+
 	private readonly _client!: T;
 	private readonly _reserved!: ((() => string) | string)[];
 
@@ -69,7 +70,8 @@ export class CommandRegistry&lt;
 		});
 	}
 
-	public static get [Symbol.species]() {
+	public static get [Symbol.species](): any
+	{
 		return Collection as any;
 	}
 
@@ -108,9 +110,10 @@ export class CommandRegistry&lt;
 	 */
 	public resolve(input: string): V | undefined
 	{
+		// eslint-disable-next-line no-param-reassign
 		input = input ? input.toLowerCase() : input;
 		return this.find(c => c.name.toLowerCase() === input
-			|| !!c.aliases.find(a => a.toLowerCase() === input));
+			|| Boolean(c.aliases.find(a => a.toLowerCase() === input)));
 	}
 
 	/**
@@ -148,10 +151,13 @@ export class CommandRegistry&lt;
 				const duplicate: V = this.filter(c => c !== command).find(c => c.aliases.includes(alias))!;
 				const name: string = command.name;
 
-				if (!duplicate) continue;
+				if (!duplicate)
+					continue;
+
 				if (!command.external)
 					throw new Error(
-						`Commands may not share aliases: ${name}, ${duplicate.name} (shared alias: "${alias}")`);
+						`Commands may not share aliases: ${name}, ${duplicate.name} (shared alias: "${alias}")`
+					);
 
 				else
 					throw new Error([
@@ -191,6 +197,7 @@ export class CommandRegistry&lt;
 			if (command._initialized) continue;
 			try
 			{
+				// eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
 				await command.init();
 				command._initialized = true;
 			}
@@ -199,7 +206,8 @@ export class CommandRegistry&lt;
 				success = false;
 				this._logger.error(
 					`Command "${command.name}" errored during initialization: \n\n${err.stack}`,
-					command.external ? '\n\nPlease report this error to the command author.\n' : '\n');
+					command.external ? '\n\nPlease report this error to the command author.\n' : '\n'
+				);
 			}
 		}
 		return success;

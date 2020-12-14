@@ -37,8 +37,8 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import { Client } from '../../client/Client';
-import { Message } from '../../types/Message';
 import { Command } from '../Command';
+import { Message } from '../../types/Message';
 
 /**
  * Method to implement that should return whether or not the
@@ -143,6 +143,7 @@ export abstract class Resolver
 	 * @returns {Promise&lt;any>}
 	 */
 	// @ts-ignore - Abstract but optional
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public resolveRaw(value: string, context?: Partial&lt;Message>): any {}
 }
 </code></pre>

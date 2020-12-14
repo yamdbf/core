@@ -36,21 +36,20 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Resolver } from './Resolver';
-import { Client } from '../../client/Client';
-import { ResolverConstructor } from '../../types/ResolverConstructor';
-
-import { NumberResolver } from './base/NumberResolver';
-import { StringResolver } from './base/StringResolver';
+            <pre class="prettyprint source linenums"><code>import { BannedUserResolver } from './base/BannedUserResolver';
 import { BooleanResolver } from './base/BooleanResolver';
-import { DurationResolver } from './base/DurationResolver';
-import { UserResolver } from './base/UserResolver';
-import { MemberResolver } from './base/MemberResolver';
-import { BannedUserResolver } from './base/BannedUserResolver';
 import { ChannelResolver } from './base/ChannelResolver';
-import { RoleResolver } from './base/RoleResolver';
+import { Client } from '../../client/Client';
 import { CommandGroupResolver } from './base/CommandGroupResolver';
 import { CommandResolver } from './base/CommandResolver';
+import { DurationResolver } from './base/DurationResolver';
+import { MemberResolver } from './base/MemberResolver';
+import { NumberResolver } from './base/NumberResolver';
+import { Resolver } from './Resolver';
+import { ResolverConstructor } from '../../types/ResolverConstructor';
+import { RoleResolver } from './base/RoleResolver';
+import { StringResolver } from './base/StringResolver';
+import { UserResolver } from './base/UserResolver';
 
 /**
  * Loads and stores Command argument {@link Resolver}s
@@ -105,6 +104,7 @@ export class ResolverLoader
 	{
 		for (const resolver of this._base.concat(this._client._customResolvers))
 		{
+			// eslint-disable-next-line new-cap
 			const newResolver: Resolver = new resolver(this._client);
 			this.loaded[newResolver.name] = newResolver;
 		}

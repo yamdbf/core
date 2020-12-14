@@ -1141,7 +1141,7 @@
                     "examples": []
                 },
                 {
-                    "name": "handleMessage",
+                    "name": "_handleMessage",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Handle received messages</p>",
@@ -1149,7 +1149,7 @@
                     "examples": []
                 },
                 {
-                    "name": "isLocked",
+                    "name": "_isLocked",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return whether or not the given command is locked, either directly\nor as a sibling of another command</p>",
@@ -1157,7 +1157,7 @@
                     "examples": []
                 },
                 {
-                    "name": "getCurrentLock",
+                    "name": "_getCurrentLock",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return the lock that is preventing the command from being called.\nThis can be the command's own lock, or the lock of another command\nthat the given command is a sibling of</p>",
@@ -1165,7 +1165,7 @@
                     "examples": []
                 },
                 {
-                    "name": "isBlacklisted",
+                    "name": "_isBlacklisted",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Check if the calling user is blacklisted</p>",
@@ -1173,7 +1173,7 @@
                     "examples": []
                 },
                 {
-                    "name": "canCallCommand",
+                    "name": "_canCallCommand",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return whether or not the command is allowed to be called based\non whatever circumstances are present at call-time, throwing\nappropriate errors as necessary for unsatisfied conditions</p>",
@@ -1181,7 +1181,7 @@
                     "examples": []
                 },
                 {
-                    "name": "passedRateLimiters",
+                    "name": "_passedRateLimiters",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return whether or not the message author passed global\nand command-specific ratelimits for the given command</p>",
@@ -1189,7 +1189,7 @@
                     "examples": []
                 },
                 {
-                    "name": "isRateLimited",
+                    "name": "_isRateLimited",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Check global or command-specific ratelimits for the given message\nauthor, notify them if they exceed ratelimits, and return whether\nor not the user is ratelimited</p>",
@@ -1197,7 +1197,7 @@
                     "examples": []
                 },
                 {
-                    "name": "checkClientPermissions",
+                    "name": "_checkClientPermissions",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return permissions the client is missing to execute the given command</p>",
@@ -1205,7 +1205,7 @@
                     "examples": []
                 },
                 {
-                    "name": "checkCallerPermissions",
+                    "name": "_checkCallerPermissions",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return the permissions the caller is missing to call the given command</p>",
@@ -1213,7 +1213,7 @@
                     "examples": []
                 },
                 {
-                    "name": "passedRoleLimiter",
+                    "name": "_passedRoleLimiter",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return whether or not the message author passes the role limiter</p>",
@@ -1221,7 +1221,7 @@
                     "examples": []
                 },
                 {
-                    "name": "hasRoles",
+                    "name": "_hasRoles",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return whether or not the user has one of the roles specified\nin the command's requisite roles</p>",
@@ -1229,7 +1229,7 @@
                     "examples": []
                 },
                 {
-                    "name": "unknownCommandError",
+                    "name": "_unknownCommandError",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return an error for unknown commands in DMs</p>",
@@ -1237,7 +1237,7 @@
                     "examples": []
                 },
                 {
-                    "name": "guildOnlyError",
+                    "name": "_guildOnlyError",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return an error for guild only commands</p>",
@@ -1245,7 +1245,7 @@
                     "examples": []
                 },
                 {
-                    "name": "missingClientPermissionsError",
+                    "name": "_missingClientPermissionsError",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return an error for missing caller permissions</p>",
@@ -1253,7 +1253,7 @@
                     "examples": []
                 },
                 {
-                    "name": "missingCallerPermissionsError",
+                    "name": "_missingCallerPermissionsError",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return an error for missing caller permissions</p>",
@@ -1261,7 +1261,7 @@
                     "examples": []
                 },
                 {
-                    "name": "failedLimiterError",
+                    "name": "_failedLimiterError",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return an error for failing a command limiter</p>",
@@ -1269,7 +1269,7 @@
                     "examples": []
                 },
                 {
-                    "name": "missingRolesError",
+                    "name": "_missingRolesError",
                     "access": "",
                     "virtual": false,
                     "description": "<p>Return an error for missing roles</p>",
@@ -3376,7 +3376,7 @@
                     }
                 },
                 {
-                    "name": "taggedInstance",
+                    "name": "_taggedInstance",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Returns an instance proxy that prefixes logging\nmethod calls with the given tag</p>",

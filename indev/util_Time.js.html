@@ -53,15 +53,15 @@ export class Time
 	 */
 	public static difference(a: number, b: number): Difference
 	{
-		let difference: Partial&lt;Difference> = {};
+		const difference: Partial&lt;Difference> = {};
 		let ms: number = a - b;
 		difference.raw = ms;
 
-		let days: number = Math.floor(ms / 864e5);
-		let hours: number = Math.floor((ms % 864e5) / 36e5);
-		let mins: number = Math.floor(((ms % 864e5) % 36e5) / 6e4);
-		let secs: number = Math.floor((((ms % 864e5) % 36e5) % 6e4) / 1000);
-		ms = (((ms % 864e5) % 36e5) % 6e5) % 1000;
+		const days: number = Math.floor(ms / 864e5);
+		const hours: number = Math.floor(ms % 864e5 / 36e5);
+		const mins: number = Math.floor(ms % 864e5 % 36e5 / 6e4);
+		const secs: number = Math.floor(ms % 864e5 % 36e5 % 6e4 / 1000);
+		ms = ms % 864e5 % 36e5 % 6e5 % 1000;
 
 		let timeString: string = '';
 		if (days) { difference.days = days; timeString += `${days} days${hours ? ', ' : ' '}`; }
@@ -75,7 +75,8 @@ export class Time
 
 		// Returns the time string as '#d #h #m #s'
 		difference.toSimplifiedString = () =>
-			timeString.replace(/ays|ours|ins|ecs| /g, '').replace(/,/g, ' ').trim();
+			timeString.replace(/ays|ours|ins|ecs| /g, '').replace(/,/g, ' ')
+				.trim();
 
 		return difference as Difference;
 	}
@@ -102,16 +103,17 @@ export class Time
 	 */
 	public static parseShorthand(shorthand: string): number | null
 	{
-		let duration!: number | null, match: RegExpMatchArray;
+		let duration!: number | null,
+			match: RegExpMatchArray;
 		if (/^\d+(?:\.\d+)?(?:s(?:ecs?)?|m(?:ins?)?|h(?:rs?|ours?)?|d(?:ays?)?)$/.test(shorthand))
 		{
 			match = shorthand.match(/^(\d+(?:\.\d+)?)(s|m|h|d)/)!;
 			duration = parseFloat(match[1]);
 			duration = match[2] === 's'
 				? duration * 1000 : match[2] === 'm'
-				? duration * 1000 * 60 : match[2] === 'h'
-				? duration * 1000 * 60 * 60 : match[2] === 'd'
-				? duration * 1000 * 60 * 60 * 24 : null;
+					? duration * 1000 * 60 : match[2] === 'h'
+						? duration * 1000 * 60 * 60 : match[2] === 'd'
+							? duration * 1000 * 60 * 60 * 24 : null;
 		}
 		return duration;
 	}
