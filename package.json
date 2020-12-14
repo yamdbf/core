@@ -35,10 +35,10 @@
     "discordapp"
   ],
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=14.0.0"
   },
   "dependencies": {
-    "discord.js": "discordjs/discord.js",
+    "discord.js": "^12.5.1",
     "glob": "7.1.2",
     "node-json-db": "0.7.3",
     "reflect-metadata": "^0.1.10",
@@ -77,7 +77,7 @@
     "typescript": "^3.7.2"
   },
   "eslintConfig": {
-	"extends": "@discord-samba",
-	"ignorePatterns": "test/*"
+    "extends": "@discord-samba",
+    "ignorePatterns": "test/*"
   }
 }
