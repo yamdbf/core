@@ -1,0 +1,37 @@
+name: Publish Dev Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      
+      - name: Install Node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build package
+        run: npx gulp build
+
+      - name: Generate dev version
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor}}@users.noreply.github.com"
+          npm version $(cat package.json | grep -oP '"version": "\K[^"]+(?=")')-dev.$(git rev-parse --verify HEAD)
+
+      - name: Publish to NPM
+        run: npm publish --tag dev --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

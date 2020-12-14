@@ -1,8 +1,9 @@
+.github/*
 .vscode/*
-src/*
-test/*
 examples/*
+src/*
 scripts/*
+test/*
 
 .gitignore
 .jsdoc.json
