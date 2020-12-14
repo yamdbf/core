@@ -36,7 +36,7 @@ jobs:
           node-version: 8.9.3
 
       - name: Build docs
-          npm run docs:indev
+        run: npm run docs:indev
 
       - name: Check if commit is needed
         id: git_status
