@@ -1,4 +1,4 @@
-name: Publish Dev Build
+name: Publish Indev Build
 
 on:
   push:
@@ -25,13 +25,13 @@ jobs:
       - name: Build package
         run: npx gulp build
 
-      - name: Generate dev version
+      - name: Generate indev version
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor}}@users.noreply.github.com"
-          npm version $(cat package.json | grep -oP '"version": "\K[^"]+(?=")')-dev.$(git rev-parse --verify HEAD)
+          npm version $(cat package.json | grep -oP '"version": "\K[^"]+(?=")')-indev.$(git rev-parse --verify HEAD)
 
       - name: Publish to NPM
-        run: npm publish --tag dev --access public
+        run: npm publish --tag indev --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

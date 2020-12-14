@@ -43,20 +43,16 @@ using a Sequelize-based storage provider.
 
 >**Note:** YAMDBF Requires > Node 8.0.0 to run
 
-- Regular install: `yarn add @yamdbf/core`
-- With the Postgres provider: `yarn add @yamdbf/core pg sequelize`
-- With the SQLite provider: `yarn add @yamdbf/core sqlite3 sequelize`
-- With the MySQL provider: `yarn add @yamdbf/core mysql2 sequelize`
-- With the MSSQL provider: `yarn add @yamdbf/core tedious sequelize`
+- Regular install: `npm install --save @yamdbf/core`
+- With the Postgres provider: `npm install --save @yamdbf/core pg sequelize`
+- With the SQLite provider: `npm install --save @yamdbf/core sqlite3 sequelize`
+- With the MySQL provider: `npm install --save @yamdbf/core mysql2 sequelize`
+- With the MSSQL provider: `npm install --save @yamdbf/core tedious sequelize`
 
->Indev builds can be installed from github with `yarn add yamdbf/core#indev`.
-This requires `git` to be installed and in your path. Also note that until Yarn
-supports submodules in git dependencies, NPM must be used to install YAMDBF indev
-at any point that YAMDBF indev is reliant on an indev version of Discord.js
 
->NPM can also be used for installation.
-
->Documentation for indev builds can be found [here](https://yamdbf.js.org/indev).
+>Indev builds can be installed from NPM: `npm install --save @yamdbf/core@indev`  
+Documentation for indev builds can be found [here](https://yamdbf.js.org/indev).  
+Indev builds currently require >= Node 14.0.0 to run.
 
 ## Links
 - [YAMDBF Documentation](https://yamdbf.js.org)
