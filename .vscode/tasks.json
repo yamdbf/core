@@ -17,11 +17,6 @@
 			"args": ["gulp", "tests"],
 			"type": "shell",
 			"problemMatcher": ["$tsc"]
-		},
-		{
-			"label": "docs",
-			"args": ["gulp", "docs"],
-			"type": "shell"
 		}
 	]
 }

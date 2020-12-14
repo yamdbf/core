@@ -12,7 +12,6 @@
     "docs:indev": "cross-env TYPE=indev jsdoc -R README.md -c .jsdoc.json -u examples -r bin -d ../yamdbf-docs/indev/ && jsdoc -c .jsdoc.json -t templates/haruki -r bin -d console > ../yamdbf-docs/indev/docs.json",
     "lint": "gulp lint",
     "test": "npm run lint -s && npm run build -s",
-    "test:client": "node test/client_test.js",
     "localization": "cd scripts && gulp build && gulp build:scripts && node generateDefaultLocalizationMarkdown",
     "basestrings": "cd scripts && gulp build && gulp build:scripts && node generateLocalizationStringsEnum",
     "basecommands": "cd scripts && gulp build && gulp build:scripts && node generateBaseCommandNameFiles"
@@ -71,8 +70,8 @@
     "jsdoc": "zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "zajrik/minami",
-    "run-sequence": "^1.2.2",
     "sequelize": "^5.7.6",
+    "sqlite3": "^5.0.0",
     "ts-node": "^6.1.1",
     "typescript": "^3.7.2"
   },

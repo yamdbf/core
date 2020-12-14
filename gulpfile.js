@@ -1,23 +1,12 @@
-/* eslint-disable @typescript-eslint/typedef, no-return-assign, @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/typedef */
 const gulp = require('gulp');
 const typescript = require('gulp-typescript');
 const sourcemaps = require('gulp-sourcemaps');
 const eslint = require('gulp-eslint');
 const del = require('del');
 const path = require('path');
-const { execSync } = require('child_process');
 
 const project = typescript.createProject('tsconfig.json');
-
-let _runSequence;
-
-const runSequence = () => _runSequence = _runSequence || require('run-sequence');
-
-gulp.task('build:docs', () => execSync('npm run docs:indev'));
-gulp.task('docs', cb => runSequence()('build', 'build:docs', cb));
-gulp.task('gh-prebuild', cb => runSequence()('build', 'gh-prebuild-prepare', cb));
-
-gulp.task('pause', cb => setTimeout(() => cb(), 1e3));
 
 gulp.task('lint', () =>
 	gulp.src('src/**/*.ts')
@@ -41,19 +30,6 @@ gulp.task('build', () =>
 	return tsCompile.js
 		.pipe(sourcemaps.write('.', { sourceRoot: '../src' }))
 		.pipe(gulp.dest('bin/'));
-});
-
-gulp.task('gh-prebuild-prepare', () =>
-{
-	del.sync([
-		'../yamdbf-prebuilt/**',
-		'../yamdbf-prebuilt/.*',
-		'!../yamdbf-prebuilt',
-		'!../yamdbf-prebuilt/.git',
-		'!../yamdbf-prebuilt/.git/**'
-	], { force: true });
-	gulp.src('bin/**/*.*').pipe(gulp.dest('../yamdbf-prebuilt/bin'));
-	gulp.src('package.json').pipe(gulp.dest('../yamdbf-prebuilt'));
 });
 
 gulp.task('build:tests', () =>
@@ -88,5 +64,7 @@ gulp.task('build:scripts', () =>
 });
 
 gulp.task('default', gulp.series('build'));
+
 gulp.task('build:vscode', gulp.series('lint', 'build'));
+gulp.task('pause', cb => setTimeout(cb, 1e3));
 gulp.task('tests', gulp.series('lint', 'build', 'pause', 'build:tests'));

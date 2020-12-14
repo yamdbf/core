@@ -1,4 +1,4 @@
-// Generated automatically at Sat Jul 06 2019 23:15:52 GMT-0500 (Central Daylight Time)
+// Generated automatically at Sun Dec 13 2020 23:14:46 GMT-0600 (Central Standard Time)
 
 /**
  * @typedef {enum} BaseStrings Enum containing all base framework

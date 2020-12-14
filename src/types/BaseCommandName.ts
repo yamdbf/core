@@ -1,4 +1,4 @@
-// Generated automatically at Sun Feb 11 2018 00:42:58 GMT-0600 (Central Standard Time)
+// Generated automatically at Sun Dec 13 2020 23:15:18 GMT-0600 (Central Standard Time)
 
 /**
  * @typedef {string} BaseCommandName String representing a name of a base command. Valid names are:
