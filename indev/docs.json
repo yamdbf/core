@@ -482,7 +482,7 @@
                     }
                 },
                 {
-                    "name": "_reloadCustomCommands",
+                    "name": "reloadCustomCommands",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Reload custom commands. Used internally by the <code>reload</code> command</p>",
@@ -490,7 +490,7 @@
                     "examples": []
                 },
                 {
-                    "name": "_reloadEvents",
+                    "name": "reloadEvents",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Reload Events from all registered event source directories</p>",
@@ -734,7 +734,7 @@
             ],
             "functions": [
                 {
-                    "name": "_loadPlugins",
+                    "name": "loadPlugins",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Loads the plugins passed in the YAMDBF Client options.\nCalled internally by the YAMDBF Client at startup</p>",
@@ -808,7 +808,7 @@
                     }
                 },
                 {
-                    "name": "_register",
+                    "name": "register",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Make necessary asserts for Command validity.\nCalled internally by the command loader</p>",
@@ -1555,7 +1555,7 @@
                     }
                 },
                 {
-                    "name": "_registerInternal",
+                    "name": "registerInternal",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Complete registration of a command and add to the parent collection.</p>\n<p>This is an internal method and should not be used. Use\n<code>registerExternal()</code> instead</p>",
@@ -1563,7 +1563,7 @@
                     "examples": []
                 },
                 {
-                    "name": "_checkDuplicateAliases",
+                    "name": "checkDuplicateAliases",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Check for duplicate aliases, erroring on any. Used internally</p>",
@@ -1571,7 +1571,7 @@
                     "examples": []
                 },
                 {
-                    "name": "_checkReservedCommandNames",
+                    "name": "checkReservedCommandNames",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Check for commands with reserved names. Used internally</p>",
@@ -1579,7 +1579,7 @@
                     "examples": []
                 },
                 {
-                    "name": "_initCommands",
+                    "name": "initCommands",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Run the <code>init()</code> method of all loaded commands.\nThis is an internal method and should not be used</p>",
@@ -2145,7 +2145,7 @@
                     }
                 },
                 {
-                    "name": "_loadResolvers",
+                    "name": "loadResolvers",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Load resolvers from _base and client._customResolvers.\nUsed internally</p>",
@@ -2199,7 +2199,7 @@
                     }
                 },
                 {
-                    "name": "_register",
+                    "name": "register",
                     "access": "private",
                     "virtual": false,
                     "description": "<p>Receive the client instance and save it</p>",

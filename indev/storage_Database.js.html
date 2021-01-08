@@ -73,8 +73,10 @@ export class Database
 		Database._instance = this;
 		this._url = url;
 
-		// Lazy load sequelize
 		const packages: string[] = ['sequelize-typescript', 'sequelize'];
+
+		// Lazy load sequelize
+		// eslint-disable-next-line @typescript-eslint/naming-convention
 		const Seq: typeof Sequelize.Sequelize = Util.lazyLoad&lt;typeof Sequelize>(...packages).Sequelize;
 
 		const logging: (...args: any[]) => void =

@@ -195,7 +195,7 @@ export class CommandDispatcher
 
 		let commandResult!: CommandResult;
 		let middlewarePassed: boolean = true;
-		const middleware: MiddlewareFunction[] = this._client._middleware.concat(command!._middleware);
+		const middleware: MiddlewareFunction[] = this._client.middleware.concat(command!.middleware);
 
 		// Function to send middleware result, utilizing compact mode if enabled
 		const sendMiddlewareResult: (result: string, options?: MessageOptions) => Promise&lt;any> =

@@ -80,7 +80,7 @@ export class PluginLoader
 	 * Called internally by the YAMDBF Client at startup
 	 * @private
 	 */
-	public async _loadPlugins(): Promise&lt;void>
+	public async loadPlugins(): Promise&lt;void>
 	{
 		await this._provider.init();
 		this._logger.debug('Plugin storage provider initialized.');

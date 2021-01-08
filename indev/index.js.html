@@ -117,8 +117,8 @@ import { GuildStorage } from './storage/GuildStorage';
 import { Client } from './client/Client';
 
 // Add a getter for GuildStorage to the base Guild class
-Structures.extend('Guild', Guild =>
-	class extends Guild
+Structures.extend('Guild', guild =>
+	class extends guild
 	{
 		public get storage(): GuildStorage
 		{
