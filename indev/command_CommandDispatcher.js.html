@@ -252,7 +252,7 @@ export class CommandDispatcher
 
 		// Set up the command lock for this command if it exists
 		const lock: CommandLock = command!.lock;
-		let lockTimeout: NodeJS.Timer;
+		let lockTimeout!: NodeJS.Timer;
 		if (!dm &amp;&amp; lock)
 		{
 			Util.assignNestedValue(this._locks, [message.guild.id, command!.name], lock);
@@ -279,7 +279,10 @@ export class CommandDispatcher
 		if (!dm &amp;&amp; lock)
 		{
 			Util.removeNestedValue(this._locks, [message.guild.id, command!.name]);
-			if (lockTimeout!) this._client.clearTimeout(lockTimeout!);
+
+			if (typeof lockTimeout !== 'undefined')
+				this._client.clearTimeout(lockTimeout);
+
 			lock.free(message, args);
 		}
 
