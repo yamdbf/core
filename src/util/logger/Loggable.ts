@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 /* eslint-disable max-classes-per-file */
 import { Logger } from './Logger';
