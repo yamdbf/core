@@ -62,9 +62,9 @@ export class ResolverLoader
 	 * Used internally
 	 * @private
 	 */
-	public _loadResolvers(): void
+	public loadResolvers(): void
 	{
-		for (const resolver of this._base.concat(this._client._customResolvers))
+		for (const resolver of this._base.concat(this._client.customResolvers))
 		{
 			// eslint-disable-next-line new-cap
 			const newResolver: Resolver = new resolver(this._client);

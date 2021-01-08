@@ -24,6 +24,7 @@ type SequelizeModel = (new () => Sequelize.Model) & typeof Sequelize.Model;
 
 export enum Dialect { Postgres, SQLite, MSSQL, MySQL }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function SequelizeProvider(url: string, dialect: Dialect, debug: boolean): StorageProviderConstructor
 {
 	return class extends StorageProvider implements IStorageProvider

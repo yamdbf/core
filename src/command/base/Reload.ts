@@ -30,10 +30,10 @@ export default class extends Command
 		const commandStart: number = Util.now();
 
 		const disabled: string[] = this.client.commands.filter(c => c.disabled).map(c => c.name);
-		const reloaded: number = this.client._reloadCustomCommands();
+		const reloaded: number = this.client.reloadCustomCommands();
 
 		this._logger.log('Re-initializing reloaded commands...');
-		this.client.commands._initCommands();
+		this.client.commands.initCommands();
 
 		const toDisable: Collection<string, Command> =
 			this.client.commands.filter(c => disabled.includes(c.name));
@@ -47,7 +47,7 @@ export default class extends Command
 
 		// Reload events
 		const eventStart: number = Util.now();
-		const eventNumber: string = this.client._reloadEvents().toString();
+		const eventNumber: string = this.client.reloadEvents().toString();
 		const eventEnd: number = Util.now();
 
 		const commandTime: string = (commandEnd - commandStart).toFixed(3);

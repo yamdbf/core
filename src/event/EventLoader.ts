@@ -115,6 +115,7 @@ export class EventLoader
 				continue;
 			}
 
+			// eslint-disable-next-line @typescript-eslint/naming-convention
 			for (const EventClass of eventClasses)
 			{
 				const eventInstance: Event = new EventClass();
@@ -127,7 +128,7 @@ export class EventLoader
 		// Register all of the loaded events
 		for (const event of loadedEvents)
 		{
-			event._register(this._client);
+			event.register(this._client);
 			this._registry.register(event);
 		}
 

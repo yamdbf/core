@@ -62,7 +62,7 @@ export class CommandRegistry<
 	public registerExternal(command: Command<any>): void
 	{
 		this._logger.info(`External command loaded: ${command.name}`);
-		this._registerInternal(command as V, true);
+		this.registerInternal(command as V, true);
 	}
 
 	/**
@@ -85,7 +85,7 @@ export class CommandRegistry<
 	 * `registerExternal()` instead
 	 * @private
 	 */
-	public _registerInternal(command: V, external: boolean = false): void
+	public registerInternal(command: V, external: boolean = false): void
 	{
 		if (this.has(command.name as K))
 		{
@@ -97,7 +97,7 @@ export class CommandRegistry<
 			this.delete(command.name as K);
 		}
 		this.set(command.name as K, command);
-		command._register(this._client);
+		command.register(this._client);
 		if (external) command.external = true;
 	}
 
@@ -105,7 +105,7 @@ export class CommandRegistry<
 	 * Check for duplicate aliases, erroring on any. Used internally
 	 * @private
 	 */
-	public _checkDuplicateAliases(): void
+	public checkDuplicateAliases(): void
 	{
 		for (const command of this.values())
 			for (const alias of command.aliases)
@@ -133,7 +133,7 @@ export class CommandRegistry<
 	 * Check for commands with reserved names. Used internally
 	 * @private
 	 */
-	public _checkReservedCommandNames(): void
+	public checkReservedCommandNames(): void
 	{
 		const reserved: string[] = this._reserved.map(r => typeof r !== 'string' ? r() : r);
 		for (const name of reserved)
@@ -151,17 +151,17 @@ export class CommandRegistry<
 	 * This is an internal method and should not be used
 	 * @private
 	 */
-	public async _initCommands(): Promise<boolean>
+	public async initCommands(): Promise<boolean>
 	{
 		let success: boolean = true;
 		for (const command of this.values())
 		{
-			if (command._initialized) continue;
+			if (command.initialized) continue;
 			try
 			{
 				// eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
 				await command.init();
-				command._initialized = true;
+				command.initialized = true;
 			}
 			catch (err)
 			{

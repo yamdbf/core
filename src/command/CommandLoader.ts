@@ -72,6 +72,7 @@ export class CommandLoader
 				continue;
 			}
 
+			// eslint-disable-next-line @typescript-eslint/naming-convention
 			for (const CommandClass of commandClasses)
 			{
 				const commandInstance: Command = new CommandClass();
@@ -82,14 +83,14 @@ export class CommandLoader
 					continue;
 
 				this._logger.info(`Loaded command: ${commandInstance.name}`);
-				commandInstance._classloc = file;
+				commandInstance.classloc = file;
 				loadedCommands.push(commandInstance);
 			}
 		}
 
 		// Register all of the loaded commands
 		for (const command of loadedCommands)
-			this._commands._registerInternal(command);
+			this._commands.registerInternal(command);
 
 		return loadedCommands.length;
 	}

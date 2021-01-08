@@ -87,8 +87,8 @@ export class Client extends Discord.Client
 	public readonly tsNode: boolean;
 
 	// Internals
-	public readonly _middleware: MiddlewareFunction[];
-	public readonly _customResolvers: ResolverConstructor[];
+	public readonly middleware: MiddlewareFunction[];
+	public readonly customResolvers: ResolverConstructor[];
 
 	// eslint-disable-next-line complexity
 	public constructor(options: YAMDBFOptions, clientOptions?: ClientOptions)
@@ -245,7 +245,7 @@ export class Client extends Discord.Client
 		this.plugins = new PluginLoader(this, this._plugins);
 
 		// Middleware function storage for the client instance
-		this._middleware = [];
+		this.middleware = [];
 
 		/**
 		 * Client-specific storage. Also contains a `guilds` Collection property containing
@@ -267,8 +267,8 @@ export class Client extends Discord.Client
 		 * @type {ResolverLoader}
 		 */
 		this.resolvers = new ResolverLoader(this);
-		this._customResolvers = options.customResolvers ?? [];
-		this.resolvers._loadResolvers();
+		this.customResolvers = options.customResolvers ?? [];
+		this.resolvers.loadResolvers();
 
 		/**
 		 * Whether or not compact mode is enabled
@@ -335,6 +335,7 @@ export class Client extends Discord.Client
 	// #region Event handlers
 
 	// @ts-ignore - Handled via ListenerUtil
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	@once('ready') private async __onReadyEvent(): Promise<void>
 	{
 		// Set default owner (OAuth Application owner) if none exists
@@ -359,6 +360,7 @@ export class Client extends Discord.Client
 			this.user!.setActivity(this.statusText);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	@once('continue') private async __onContinueEvent(): Promise<void>
 	{
 		await this._guildStorageLoader.init();
@@ -366,7 +368,7 @@ export class Client extends Discord.Client
 		await this._guildStorageLoader.cleanGuilds();
 
 		this._logger.info('Loading plugins...');
-		await this.plugins._loadPlugins();
+		await this.plugins.loadPlugins();
 
 		if (!this.passive)
 		{
@@ -376,11 +378,11 @@ export class Client extends Discord.Client
 				this._commandLoader.loadCommandsFrom(this.commandsDir);
 			}
 
-			this.commands._checkDuplicateAliases();
-			this.commands._checkReservedCommandNames();
+			this.commands.checkDuplicateAliases();
+			this.commands.checkReservedCommandNames();
 
 			this._logger.info('Initializing commands...');
-			const initSuccess: boolean = await this.commands._initCommands();
+			const initSuccess: boolean = await this.commands.initCommands();
 			this._logger.info(`Commands initialized${initSuccess ? '' : ' with errors'}.`);
 
 			Lang.loadCommandLocalizations();
@@ -413,6 +415,7 @@ export class Client extends Discord.Client
 	}
 
 	// @ts-ignore - Handled via ListenerUtil
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	@on('guildCreate') private async __onGuildCreateEvent(guild: Guild): Promise<void>
 	{
 		if (this.storage.guilds.has(guild.id))
@@ -426,6 +429,7 @@ export class Client extends Discord.Client
 	}
 
 	// @ts-ignore - Handled via ListenerUtil
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	@on('guildDelete') private __onGuildDeleteEvent(guild: Guild): void
 	{
 		if (this.storage.guilds.has(guild.id))
@@ -596,7 +600,7 @@ export class Client extends Discord.Client
 	 */
 	public use(func: MiddlewareFunction): this
 	{
-		this._middleware.push(func);
+		this.middleware.push(func);
 		return this;
 	}
 
@@ -604,7 +608,7 @@ export class Client extends Discord.Client
 	 * Reload custom commands. Used internally by the `reload` command
 	 * @private
 	 */
-	public _reloadCustomCommands(): number
+	public reloadCustomCommands(): number
 	{
 		if (!this.commandsDir)
 			throw new Error('Client is missing `commandsDir`, cannot reload Commands');
@@ -616,7 +620,7 @@ export class Client extends Discord.Client
 	 * Reload Events from all registered event source directories
 	 * @private
 	 */
-	public _reloadEvents(): number
+	public reloadEvents(): number
 	{
 		return this.eventLoader.loadFromSources();
 	}

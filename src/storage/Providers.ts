@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { SequelizeProvider, Dialect } from './SequelizeProvider';
 import { JSONProvider } from './JSONProvider';
 import { StorageProviderConstructor } from '../types/StorageProviderConstructor';

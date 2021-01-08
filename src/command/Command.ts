@@ -52,9 +52,9 @@ export abstract class Command<T extends Client = Client>
 	public lockTimeout!: number;
 
 	// Internals
-	public readonly _middleware: MiddlewareFunction[];
-	public _classloc!: string;
-	public _initialized: boolean;
+	public readonly middleware: MiddlewareFunction[];
+	public classloc!: string;
+	public initialized: boolean;
 
 	public constructor(info?: CommandInfo)
 	{
@@ -196,9 +196,9 @@ export abstract class Command<T extends Client = Client>
 		 */
 
 		// Middleware function storage for the Command instance
-		this._middleware = [];
+		this.middleware = [];
 
-		this._initialized = false;
+		this.initialized = false;
 
 		if (info) Object.assign(this, info);
 	}
@@ -237,7 +237,7 @@ export abstract class Command<T extends Client = Client>
 	 * Called internally by the command loader
 	 * @private
 	 */
-	public _register(client: T): void
+	public register(client: T): void
 	{
 		this.client = client;
 
@@ -254,11 +254,11 @@ export abstract class Command<T extends Client = Client>
 		if (typeof this.ownerOnly === 'undefined') this.ownerOnly = false;
 		if (typeof this.external === 'undefined') this.external = false;
 		if (typeof this._disabled === 'undefined') this._disabled = false;
-		if (typeof this._classloc === 'undefined') this._classloc = '<External Command>';
+		if (typeof this.classloc === 'undefined') this.classloc = '<External Command>';
 		if (typeof this.lockTimeout === 'undefined') this.lockTimeout = 30e3;
 
 		// Make necessary asserts
-		if (!this.name) throw new Error(`A command is missing a name:\n${this._classloc}`);
+		if (!this.name) throw new Error(`A command is missing a name:\n${this.classloc}`);
 		if (!this.desc) throw new Error(`A description must be provided for Command: ${this.name}`);
 		if (!this.usage) throw new Error(`Usage information must be provided for Command: ${this.name}`);
 		if (this.aliases && !Array.isArray(this.aliases))
@@ -349,7 +349,7 @@ export abstract class Command<T extends Client = Client>
 	 */
 	public use(func: MiddlewareFunction): this
 	{
-		this._middleware.push(func);
+		this.middleware.push(func);
 		return this;
 	}
 

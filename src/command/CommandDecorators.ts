@@ -147,6 +147,7 @@ export function localizable(target: Command, key: string, descriptor: PropertyDe
  * Set an arbitrary value to an arbitrary key on a command class
  * @private
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 function _setMetaData(key: string, value: any): ClassDecorator
 {
 	return function<T extends Function>(target: T): T
@@ -165,6 +166,7 @@ function _setMetaData(key: string, value: any): ClassDecorator
  * Set a boolean flag metadata on a command class
  * @private
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 function _setFlagMetaData<T extends Function>(target: T, flag: string): T
 {
 	Object.defineProperty(target.prototype, flag, {
