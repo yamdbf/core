@@ -23,7 +23,7 @@ export function expect(argTypes: string | MappedArgType): MiddlewareFunction
 
 	return async function(this: Command, message: Message, args: any[]): Promise<[Message, any[]]>
 	{
-		const dm: boolean = message.channel.type !== 'text';
+		const dm: boolean = message.channel.type === 'dm';
 		const lang: string = dm
 			? this.client.defaultLang
 			: await message.guild.storage!.settings.get('lang')

@@ -65,7 +65,7 @@ export class UserResolver extends Resolver
 		const lang: string = await Lang.getLangFromMessage(message);
 		const res: ResourceProxy = Lang.createResourceProxy(lang);
 
-		const dm: boolean = message.channel.type !== 'text';
+		const dm: boolean = message.channel.type === 'dm';
 		const prefix: string = !dm ? await message.guild.storage!.settings.get('prefix') : '';
 		const usage: string = Lang.getCommandInfo(command, lang).usage.replace(/<prefix>/g, prefix);
 

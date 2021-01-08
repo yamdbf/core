@@ -62,6 +62,6 @@ export class RateLimiter
 	 */
 	private _isGlobal(message?: Message): boolean
 	{
-		return message ? message.channel.type !== 'text' || this._global : this._global;
+		return message ? message.channel.type === 'dm' || this._global : this._global;
 	}
 }

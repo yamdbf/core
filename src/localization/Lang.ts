@@ -400,7 +400,7 @@ export class Lang
 	 */
 	public static async getLangFromMessage(message: Message): Promise<string>
 	{
-		const dm: boolean = message.channel.type !== 'text';
+		const dm: boolean = message.channel.type === 'dm';
 		const storage: GuildStorage | undefined | null = !dm
 			? Lang._instance._client.storage.guilds.get(message.guild.id)
 			: null;

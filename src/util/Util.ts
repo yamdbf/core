@@ -35,7 +35,7 @@ export class Util
 	public static async wasCommandCalled(message: Message): Promise<[boolean, Command | null, string, string | null]>
 	{
 		const client: Client = message.client as Client;
-		const dm: boolean = message.channel.type !== 'text';
+		const dm: boolean = message.channel.type === 'dm';
 		const prefixes: string[] = [
 			`<@${client.user!.id}>`,
 			`<@!${client.user!.id}>`

@@ -64,7 +64,7 @@ export class CommandDispatcher
 	private async _handleMessage(message: Message): Promise<boolean>
 	{
 		const dispatchStart: number = Util.now();
-		const dm: boolean = message.channel.type !== 'text';
+		const dm: boolean = message.channel.type === 'dm';
 
 		// Dismiss messages with no author
 		if (!message.author) return false;
