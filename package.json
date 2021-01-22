@@ -39,7 +39,7 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "glob": "7.1.2",
-    "node-json-db": "0.7.3",
+    "node-json-db": "1.1.0",
     "reflect-metadata": "^0.1.10",
     "source-map-support": "^0.5.0"
   },
