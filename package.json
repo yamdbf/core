@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@discord-samba/eslint-config": "github:discord-samba/eslint-config",
-    "@types/chalk": "^0.4.31",
+    "@types/chalk": "^2.2.0",
     "@types/glob": "^5.0.30",
     "@types/node": "^14.14.22",
     "@types/node-json-db": "0.0.1",
