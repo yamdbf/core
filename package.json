@@ -68,7 +68,7 @@
     "jsdoc": "zajrik/jsdoc",
     "jsdoc-strip-async-await": "^0.1.0",
     "minami": "zajrik/minami",
-    "sequelize": "^5.7.6",
+    "sequelize": "^6.4.0",
     "sqlite3": "^5.0.0",
     "ts-node": "^6.1.1",
     "typescript": "^3.7.2"
