@@ -34,3 +34,6 @@ to upload because file size exceeded 10 MB ({{ size }})
 [CMD_EVAL_ERR_OUTPUT_LENGTH_FAIL_UNKNOWN]
 The output was too long but the output file failed
 to upload for an unknown reason
+
+[CMD_EVAL_ERR_MISSING_TS]
+Missing TypeScript dependency. Install TypeScript or disable this command

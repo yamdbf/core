@@ -50,6 +50,10 @@ export default class extends Command
 	@using(Middleware.localize)
 	public async action(message: Message, [res]: [ResourceProxy]): Promise<any>
 	{
+		// Error out if TS is not installed
+		if (typeof ts === 'undefined')
+			return this.respond(message, res.CMD_EVAL_ERR_MISSING_TS());
+
 		// @ts-ignore - Exposed for eval command invocations
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const client: Client = this.client;
@@ -59,7 +63,7 @@ export default class extends Command
 
 		if (!code) return this.respond(message, res.CMD_EVAL_ERR_NOCODE());
 
-		const start: Message = ts ? await this.respond(message, '*Compiling...*') as Message : message;
+		const start: Message = await this.respond(message, '*Compiling...*') as Message;
 		let evaled: string | Promise<string | object>;
 		try
 		{
@@ -79,28 +83,29 @@ export default class extends Command
 	private _compile(code: string): string
 	{
 		let message!: string;
-		if (ts)
-		{
-			const fileName: string = `${__dirname}/eval${Date.now()}.ts`;
-			fs.writeFileSync(fileName, code);
-			const program: any = ts.createProgram([fileName], { module: ts.ModuleKind.CommonJS });
-			let diagnostics: any[] = ts.getPreEmitDiagnostics(program);
-			if (diagnostics.length > 0)
-			{
-				diagnostics = diagnostics
-					.map(d =>
-					{
-						const messageText: string = ts.flattenDiagnosticMessageText(d.messageText, '\n');
-						const { line, character } = d.file.getLineAndCharacterOfPosition(d.start);
-						return `\n(${line as number + 1},${character as number + 1}): ${messageText} (${d.code})`;
-					})
-					.filter(d => !d.includes('Cannot find name'));
 
-				if (diagnostics.length > 0)
-					message = diagnostics.join('');
-			}
-			fs.unlinkSync(fileName);
+		const fileName: string = `${__dirname}/eval${Date.now()}.ts`;
+		fs.writeFileSync(fileName, code);
+
+		const program: any = ts.createProgram([fileName], { module: ts.ModuleKind.CommonJS });
+		const diagnostics: any[] = ts.getPreEmitDiagnostics(program);
+
+		if (diagnostics.length > 0)
+		{
+			const mappedDiagnostics: string[] = diagnostics
+				.map(d =>
+				{
+					const messageText: string = ts.flattenDiagnosticMessageText(d.messageText, '\n');
+					const { line, character } = d.file.getLineAndCharacterOfPosition(d.start);
+					return `\n(${line as number + 1},${character as number + 1}): ${messageText} (${d.code})`;
+				})
+				.filter(d => !d.includes('Cannot find name'));
+
+			if (mappedDiagnostics.length > 0)
+				message = mappedDiagnostics.join('');
 		}
+
+		fs.unlinkSync(fileName);
 
 		if (message)
 			throw new CompilerError(message);
