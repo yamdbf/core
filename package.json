@@ -71,7 +71,7 @@
     "sequelize": "^5.7.6",
     "sqlite3": "^5.0.0",
     "ts-node": "^6.1.1",
-    "typescript": "^3.7.2"
+    "typescript": "^4.3.4"
   },
   "eslintConfig": {
     "extends": "@discord-samba",
